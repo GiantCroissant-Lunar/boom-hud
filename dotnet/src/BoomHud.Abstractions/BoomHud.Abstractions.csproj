@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Abstractions</AssemblyName>
+    <RootNamespace>BoomHud.Abstractions</RootNamespace>
+    <Description>Core types and interfaces for BoomHud UI code generation</Description>
+    <PackageTags>ui;code-generation;terminal-gui;avalonia;maui</PackageTags>
+  </PropertyGroup>
+
+  <!-- Enable DisposePattern source generator via local props (targets plate-shared set) -->
+  <Import Project="..\..\source-generators\DisposePattern.BoomHud.props"
+          Condition="'$(BoomHud_EnableDisposePattern)' == 'true'" />
+
+</Project>

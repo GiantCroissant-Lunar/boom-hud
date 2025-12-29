@@ -1,0 +1,93 @@
+using System.Collections.Generic;
+using BoomHud.Abstractions.IR;
+
+namespace BoomHud.Abstractions.Generation;
+
+/// <summary>
+/// Interface for backend code generators.
+/// </summary>
+public interface IBackendGenerator
+{
+    /// <summary>
+    /// Name of the target framework.
+    /// </summary>
+    string TargetFramework { get; }
+
+    /// <summary>
+    /// Capability manifest for this backend.
+    /// </summary>
+    Capabilities.ICapabilityManifest Capabilities { get; }
+
+    /// <summary>
+    /// Generates code for the given HUD document.
+    /// </summary>
+    /// <param name="document">The HUD document to generate code for.</param>
+    /// <param name="options">Generation options.</param>
+    /// <returns>The generation result containing files and diagnostics.</returns>
+    GenerationResult Generate(HudDocument document, GenerationOptions options);
+}
+
+/// <summary>
+/// Options for code generation.
+/// </summary>
+public sealed record GenerationOptions
+{
+    /// <summary>
+    /// Root namespace for generated code.
+    /// </summary>
+    public string Namespace { get; init; } = "Generated";
+
+    /// <summary>
+    /// Output directory for generated files.
+    /// </summary>
+    public string OutputDirectory { get; init; } = ".";
+
+    /// <summary>
+    /// Policy for handling missing capabilities.
+    /// </summary>
+    public MissingCapabilityPolicy MissingCapabilityPolicy { get; init; } = MissingCapabilityPolicy.Warn;
+
+    /// <summary>
+    /// Whether to generate comments in output.
+    /// </summary>
+    public bool IncludeComments { get; init; } = true;
+
+    /// <summary>
+    /// Whether to generate nullable annotations.
+    /// </summary>
+    public bool UseNullableAnnotations { get; init; } = true;
+
+    /// <summary>
+    /// Optional design theme (e.g., from Figma variables or design tokens).
+    /// Backends may use this to emit shared resources or token-based styling.
+    /// </summary>
+    public ThemeDocument? Theme { get; init; }
+    public IReadOnlyDictionary<string, string> DescriptionReplacements { get; init; }
+        = new Dictionary<string, string>();
+}
+
+/// <summary>
+/// Policy for handling missing capabilities.
+/// </summary>
+public enum MissingCapabilityPolicy
+{
+    /// <summary>
+    /// Fail generation with an error.
+    /// </summary>
+    Error,
+
+    /// <summary>
+    /// Emit a warning and continue with fallback.
+    /// </summary>
+    Warn,
+
+    /// <summary>
+    /// Silently use fallback behavior.
+    /// </summary>
+    Silent,
+
+    /// <summary>
+    /// Skip the unsupported feature entirely.
+    /// </summary>
+    Skip
+}
