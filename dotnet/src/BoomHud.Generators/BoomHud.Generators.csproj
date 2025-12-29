@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Generators</AssemblyName>
+    <RootNamespace>BoomHud.Generators</RootNamespace>
+    <Description>Shared generator infrastructure for BoomHud backends</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
