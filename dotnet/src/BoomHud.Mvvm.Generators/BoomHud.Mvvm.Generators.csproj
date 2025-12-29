@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <AssemblyName>BoomHud.Mvvm.Generators</AssemblyName>
+    <RootNamespace>BoomHud.Mvvm.Generators</RootNamespace>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <NoWarn>$(NoWarn);RS2008</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CompilerVisibleProperty Include="BoomHudMvvmFlavor" />
+    <CompilerVisibleProperty Include="BoomHudMvvmGenerateConcreteViewModels" />
+    <CompilerVisibleProperty Include="BoomHudMvvmNamespace" />
+  </ItemGroup>
+
+</Project>

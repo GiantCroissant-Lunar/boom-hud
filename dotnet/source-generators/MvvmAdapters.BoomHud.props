@@ -1,0 +1,13 @@
+<Project>
+  <ItemGroup>
+    <CompilerVisibleProperty Include="BoomHudMvvmFlavor" />
+    <CompilerVisibleProperty Include="BoomHudMvvmGenerateConcreteViewModels" />
+    <CompilerVisibleProperty Include="BoomHudMvvmNamespace" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+</Project>

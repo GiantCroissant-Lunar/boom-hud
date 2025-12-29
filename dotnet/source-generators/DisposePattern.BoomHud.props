@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup>
+    <!-- In-repo analyzer + attributes from plate-shared DisposePattern set -->
+    <ProjectReference Include="..\..\..\..\plate-shared\dotnet\source-generators\General.DisposePattern.Set\General.DisposePattern\General.DisposePattern.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\..\..\plate-shared\dotnet\source-generators\General.DisposePattern.Set\General.DisposePattern.Attributes\General.DisposePattern.Attributes.csproj" />
+  </ItemGroup>
+</Project>
