@@ -1,0 +1,15 @@
+# IDE and editor
+.vscode/
+.vs/
+
+# Local environment and tools
+.agent/
+.nuke/
+.venv/
+ref-projects/
+
+# Build artifacts
+[Bb][Ii][Nn]/
+[Oo][Bb][Jj]/
+build/
+*.log
