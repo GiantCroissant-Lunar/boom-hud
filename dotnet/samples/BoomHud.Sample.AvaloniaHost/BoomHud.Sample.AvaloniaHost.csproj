@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>BoomHud.Sample.AvaloniaHost</AssemblyName>
+    <RootNamespace>BoomHud.Sample.AvaloniaHost</RootNamespace>
+    <Description>Sample Avalonia desktop app that hosts a BoomHud-generated HUD.</Description>
+    <NoWarn>CA1822;CA1305;CA0067</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.10" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <!-- Link generated Avalonia views from the generation sample -->
+  <ItemGroup>
+    <AvaloniaXaml Include="..\BoomHud.Sample.Generation\Generated\Avalonia\**\*.axaml" />
+    <Compile Include="..\BoomHud.Sample.Generation\Generated\Avalonia\**\*.axaml.cs" />
+  </ItemGroup>
+
+  <Import Project="..\..\source-generators\MvvmAdapters.BoomHud.props"
+          Condition="'$(BoomHud_EnableMvvmAdapters)' == 'true'" />
+
+</Project>

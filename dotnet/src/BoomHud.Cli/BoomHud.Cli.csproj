@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>BoomHud.Cli</AssemblyName>
+    <RootNamespace>BoomHud.Cli</RootNamespace>
+    <Description>Command-line tool for BoomHud code generation</Description>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>boom-hud</ToolCommandName>
+    <PackageId>BoomHud.Tool</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
+    <ProjectReference Include="..\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
+    <ProjectReference Include="..\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+  </ItemGroup>
+
+</Project>

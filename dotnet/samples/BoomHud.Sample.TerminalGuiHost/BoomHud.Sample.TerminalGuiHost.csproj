@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>BoomHud.Sample.TerminalGuiHost</AssemblyName>
+    <RootNamespace>BoomHud.Sample.TerminalGuiHost</RootNamespace>
+    <Description>Sample console app that hosts a BoomHud-generated Terminal.Gui v2 HUD.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Terminal.Gui" Version="2.0.0" />
+  </ItemGroup>
+
+  <!-- Include generated Terminal.Gui HUD code from the generation sample -->
+  <ItemGroup>
+    <Compile Include="..\BoomHud.Sample.Generation\Generated\TerminalGui\**\*.g.cs" />
+  </ItemGroup>
+
+  <!-- NOTE: HUD code is generated via BoomHud.Sample.Generation; regeneration is currently manual
+       to allow hand-tuning of generated Terminal.Gui code for Terminal.Gui 2.0.0 quirks. -->
+
+  <Import Project="..\..\source-generators\MvvmAdapters.BoomHud.props"
+          Condition="'$(BoomHud_EnableMvvmAdapters)' == 'true'" />
+
+</Project>

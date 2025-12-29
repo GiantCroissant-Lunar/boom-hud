@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>BoomHud.Sample.Generation</AssemblyName>
+    <RootNamespace>BoomHud.Sample.Generation</RootNamespace>
+    <Description>Sample app that consumes BoomHud to generate Terminal.Gui and Avalonia code from Figma JSON.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="design\status-bar.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Do not compile generated outputs; they are consumed by other sample projects -->
+  <ItemGroup>
+    <Compile Remove="Generated\**\*.cs" />
+    <Compile Remove="Generated*\**\*.cs" />
+  </ItemGroup>
+
+</Project>

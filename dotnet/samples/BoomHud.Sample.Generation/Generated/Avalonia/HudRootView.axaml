@@ -1,0 +1,99 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BoomHud.Sample.Generated.HudRootView">
+    <StackPanel x:Name="hudRoot" Orientation="Vertical" Spacing="8">
+        <Border x:Name="statusBar" Padding="2,0,2,0">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Border x:Name="leftGroup">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock x:Name="healthLabel">
+                            HP:
+                        </TextBlock>
+                        <TextBlock x:Name="healthValueBindHealth" Text="{Binding Health}">
+                        </TextBlock>
+                        <TextBlock x:Name="manaLabel">
+                            MP:
+                        </TextBlock>
+                        <TextBlock x:Name="manaValueBindMana" Text="{Binding Mana}">
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="centerGroup">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock x:Name="locationLabel">
+                            Location:
+                        </TextBlock>
+                        <TextBlock x:Name="locationValueBindLocation" Text="{Binding Location}">
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="rightGroup">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock x:Name="timeLabel">
+                            Time:
+                        </TextBlock>
+                        <TextBlock x:Name="timeValueBindTime" Text="{Binding Time}">
+                        </TextBlock>
+                        <TextBlock x:Name="fpsLabel">
+                            FPS:
+                        </TextBlock>
+                        <TextBlock x:Name="fpsValueBindFps" Text="{Binding Fps}">
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Border x:Name="mainRow">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border x:Name="partyPanel">
+                    <StackPanel Orientation="Vertical" Spacing="4">
+                        <Border x:Name="partySlot1">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock x:Name="party1NameBindParty1name" Text="{Binding Party1Name}">
+                                </TextBlock>
+                                <TextBlock x:Name="party1HealthBindParty1health" Text="{Binding Party1Health}">
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="partySlot2">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock x:Name="party2NameBindParty2name" Text="{Binding Party2Name}">
+                                </TextBlock>
+                                <TextBlock x:Name="party2HealthBindParty2health" Text="{Binding Party2Health}">
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="partySlot3">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock x:Name="party3NameBindParty3name" Text="{Binding Party3Name}">
+                                </TextBlock>
+                                <TextBlock x:Name="party3HealthBindParty3health" Text="{Binding Party3Health}">
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="miniMap" Width="200" Height="100" Padding="4,4,4,4" Background="#0C3F19" BorderBrush="#CCF2CC" BorderThickness="1">
+                    <StackPanel Orientation="Vertical" Spacing="4">
+                        <TextBlock x:Name="minimapLabel">
+                            Minimap
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Border x:Name="chatPanel">
+            <StackPanel Orientation="Vertical" Spacing="2">
+                <TextBlock x:Name="chatLine1BindChatline1" Text="{Binding ChatLine1}">
+                </TextBlock>
+                <TextBlock x:Name="chatLine2BindChatline2" Text="{Binding ChatLine2}">
+                </TextBlock>
+                <TextBlock x:Name="chatLine3BindChatline3" Text="{Binding ChatLine3}">
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

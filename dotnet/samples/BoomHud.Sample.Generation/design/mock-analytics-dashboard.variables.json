@@ -1,0 +1,79 @@
+{
+  "variableCollections": {
+    "c-light": {
+      "id": "c-light",
+      "name": "Light",
+      "defaultModeId": "m-light",
+      "modes": [
+        {
+          "modeId": "m-light",
+          "name": "Light"
+        }
+      ],
+      "variableIds": [
+        "v-color-surface",
+        "v-color-sidebar",
+        "v-color-card",
+        "v-font-body",
+        "v-radius-card"
+      ]
+    }
+  },
+  "variables": {
+    "v-color-surface": {
+      "id": "v-color-surface",
+      "name": "color/surface/default",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "m-light": {
+          "r": 0.08,
+          "g": 0.08,
+          "b": 0.12,
+          "a": 1.0
+        }
+      }
+    },
+    "v-color-sidebar": {
+      "id": "v-color-sidebar",
+      "name": "color/surface/sidebar",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "m-light": {
+          "r": 0.12,
+          "g": 0.12,
+          "b": 0.18,
+          "a": 1.0
+        }
+      }
+    },
+    "v-color-card": {
+      "id": "v-color-card",
+      "name": "color/surface/card",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "m-light": {
+          "r": 0.16,
+          "g": 0.16,
+          "b": 0.24,
+          "a": 1.0
+        }
+      }
+    },
+    "v-font-body": {
+      "id": "v-font-body",
+      "name": "font/size/body",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "m-light": 14.0
+      }
+    },
+    "v-radius-card": {
+      "id": "v-radius-card",
+      "name": "dimension/radius/card",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "m-light": 8.0
+      }
+    }
+  }
+}

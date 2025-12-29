@@ -1,0 +1,136 @@
+{
+  "name": "Status Bar HUD",
+  "version": "1.1.0",
+  "document": {
+    "id": "0:0",
+    "name": "Document",
+    "type": "DOCUMENT",
+    "children": [
+      {
+        "id": "0:1",
+        "name": "Main Page",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "1:1",
+            "name": "Status Bar",
+            "type": "FRAME",
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 16,
+            "paddingLeft": 2,
+            "paddingRight": 2,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "children": [
+              {
+                "id": "1:2",
+                "name": "Background",
+                "type": "RECTANGLE",
+                "absoluteBoundingBox": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 800,
+                  "height": 24
+                },
+                "fills": [
+                  {
+                    "type": "SOLID",
+                    "visible": true,
+                    "color": { "r": 0.0, "g": 0.0, "b": 0.0, "a": 1.0 }
+                  }
+                ]
+              },
+              {
+                "id": "1:3",
+                "name": "Left Group",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 4,
+                "children": [
+                  {
+                    "id": "1:3:1",
+                    "name": "Health Label",
+                    "type": "TEXT",
+                    "characters": "HP:"
+                  },
+                  {
+                    "id": "1:3:2",
+                    "name": "Health Value [bind: Health]",
+                    "type": "TEXT",
+                    "characters": "100/100"
+                  },
+                  {
+                    "id": "1:3:3",
+                    "name": "Mana Label",
+                    "type": "TEXT",
+                    "characters": "MP:"
+                  },
+                  {
+                    "id": "1:3:4",
+                    "name": "Mana Value [bind: Mana]",
+                    "type": "TEXT",
+                    "characters": "50/100"
+                  }
+                ]
+              },
+              {
+                "id": "1:4",
+                "name": "Center Group",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 4,
+                "children": [
+                  {
+                    "id": "1:4:1",
+                    "name": "Location Label",
+                    "type": "TEXT",
+                    "characters": "Location:"
+                  },
+                  {
+                    "id": "1:4:2",
+                    "name": "Location Value [bind: Location]",
+                    "type": "TEXT",
+                    "characters": "Town Square"
+                  }
+                ]
+              },
+              {
+                "id": "1:5",
+                "name": "Right Group",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 4,
+                "children": [
+                  {
+                    "id": "1:5:1",
+                    "name": "Time Label",
+                    "type": "TEXT",
+                    "characters": "Time:"
+                  },
+                  {
+                    "id": "1:5:2",
+                    "name": "Time Value [bind: Time]",
+                    "type": "TEXT",
+                    "characters": "12:34"
+                  },
+                  {
+                    "id": "1:5:3",
+                    "name": "Fps Label",
+                    "type": "TEXT",
+                    "characters": "FPS:"
+                  },
+                  {
+                    "id": "1:5:4",
+                    "name": "Fps Value [bind: Fps]",
+                    "type": "TEXT",
+                    "characters": "60"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

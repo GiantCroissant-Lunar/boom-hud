@@ -1,0 +1,677 @@
+{
+  "version": "1.0",
+  "schema": "mock-figma-export",
+  "document": {
+    "id": "0:0",
+    "name": "Document",
+    "type": "DOCUMENT",
+    "children": [
+      {
+        "id": "1:1",
+        "name": "Page 1",
+        "type": "CANVAS",
+        "backgroundColor": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "prototypeStartNodeID": "5:100",
+        "children": [
+          {
+            "id": "2:1",
+            "name": "App / Main Frame",
+            "type": "FRAME",
+            "layoutMode": "VERTICAL",
+            "primaryAxisSizingMode": "AUTO",
+            "counterAxisSizingMode": "FIXED",
+            "paddingTop": 24,
+            "paddingRight": 24,
+            "paddingBottom": 24,
+            "paddingLeft": 24,
+            "itemSpacing": 16,
+            "clipsContent": true,
+            "backgrounds": [
+              {
+                "type": "SOLID",
+                "visible": true,
+                "opacity": 1,
+                "color": {
+                  "r": 0.08,
+                  "g": 0.08,
+                  "b": 0.12,
+                  "a": 1
+                }
+              }
+            ],
+            "fills": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.08,
+                  "g": 0.08,
+                  "b": 0.12,
+                  "a": 1
+                }
+              }
+            ],
+            "strokes": [
+              {
+                "type": "SOLID",
+                "color": {
+                  "r": 0.2,
+                  "g": 0.2,
+                  "b": 0.25,
+                  "a": 1
+                }
+              }
+            ],
+            "strokeWeight": 0,
+            "absoluteBoundingBox": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 1024
+            },
+            "children": [
+              {
+                "id": "3:1",
+                "name": "Top Bar",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "primaryAxisAlignItems": "SPACE_BETWEEN",
+                "counterAxisAlignItems": "CENTER",
+                "paddingTop": 16,
+                "paddingRight": 16,
+                "paddingBottom": 16,
+                "paddingLeft": 16,
+                "itemSpacing": 12,
+                "backgrounds": [
+                  {
+                    "type": "SOLID",
+                    "color": {
+                      "r": 1,
+                      "g": 1,
+                      "b": 1,
+                      "a": 1
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "3:2",
+                    "name": "Logo",
+                    "type": "VECTOR",
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.2,
+                          "g": 0.2,
+                          "b": 0.22,
+                          "a": 1
+                        }
+                      }
+                    ],
+                    "absoluteBoundingBox": {
+                      "x": 32,
+                      "y": 32,
+                      "width": 120,
+                      "height": 32
+                    }
+                  },
+                  {
+                    "id": "3:3",
+                    "name": "Search",
+                    "type": "COMPONENT",
+                    "componentId": "100:search-input",
+                    "absoluteBoundingBox": {
+                      "x": 200,
+                      "y": 28,
+                      "width": 320,
+                      "height": 40
+                    },
+                    "overrides": {
+                      "placeholder": "Search projects, people, files...",
+                      "icon": "search"
+                    }
+                  },
+                  {
+                    "id": "3:4",
+                    "name": "User Menu",
+                    "type": "INSTANCE",
+                    "componentId": "101:user-menu",
+                    "absoluteBoundingBox": {
+                      "x": 1200,
+                      "y": 24,
+                      "width": 200,
+                      "height": 48
+                    },
+                    "variantProperties": {
+                      "theme": "light",
+                      "state": "default"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "4:1",
+                "name": "Content",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 24,
+                "counterAxisAlignItems": "STRETCH",
+                "children": [
+                  {
+                    "id": "4:2",
+                    "name": "Sidebar",
+                    "type": "FRAME",
+                    "layoutMode": "VERTICAL",
+                    "primaryAxisSizingMode": "AUTO",
+                    "counterAxisSizingMode": "FIXED",
+                    "paddingTop": 16,
+                    "paddingRight": 16,
+                    "paddingBottom": 16,
+                    "paddingLeft": 16,
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.12,
+                          "g": 0.12,
+                          "b": 0.18,
+                          "a": 1
+                        }
+                      }
+                    ],
+                    "strokes": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.28,
+                          "g": 0.3,
+                          "b": 0.4,
+                          "a": 1
+                        }
+                      }
+                    ],
+                    "strokeWeight": 1,
+                    "absoluteBoundingBox": {
+                      "x": 0,
+                      "y": 96,
+                      "width": 280,
+                      "height": 928
+                    },
+                    "children": [
+                      {
+                        "id": "4:3",
+                        "name": "Nav Item / Active",
+                        "type": "INSTANCE",
+                        "componentId": "102:nav-item",
+                        "variantProperties": {
+                          "state": "active"
+                        },
+                        "overrides": {
+                          "label": "Dashboard",
+                          "icon": "layout-dashboard"
+                        }
+                      },
+                      {
+                        "id": "4:4",
+                        "name": "Nav Item",
+                        "type": "INSTANCE",
+                        "componentId": "102:nav-item",
+                        "variantProperties": {
+                          "state": "default"
+                        },
+                        "overrides": {
+                          "label": "Projects",
+                          "badgeCount": 12
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "4:10",
+                    "name": "Main Column",
+                    "type": "FRAME",
+                    "layoutMode": "VERTICAL",
+                    "itemSpacing": 16,
+                    "paddingTop": 16,
+                    "paddingRight": 16,
+                    "paddingBottom": 16,
+                    "paddingLeft": 16,
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.12,
+                          "g": 0.12,
+                          "b": 0.18,
+                          "a": 1
+                        }
+                      }
+                    ],
+                    "strokes": [
+                      {
+                        "type": "SOLID",
+                        "color": {
+                          "r": 0.28,
+                          "g": 0.3,
+                          "b": 0.4,
+                          "a": 1
+                        }
+                      }
+                    ],
+                    "strokeWeight": 1,
+                    "absoluteBoundingBox": {
+                      "x": 304,
+                      "y": 96,
+                      "width": 1032,
+                      "height": 928
+                    },
+                    "children": [
+                      {
+                        "id": "4:11",
+                        "name": "Title Row",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 12,
+                        "children": [
+                          {
+                            "id": "4:12",
+                            "name": "Page Title",
+                            "type": "TEXT",
+                            "characters": "Analytics overview",
+                            "style": {
+                              "fontFamily": "Inter",
+                              "fontWeight": 600,
+                              "fontSize": 28,
+                              "lineHeightPx": 36,
+                              "textCase": "TITLE"
+                            }
+                          },
+                          {
+                            "id": "4:13",
+                            "name": "Tag / Beta",
+                            "type": "INSTANCE",
+                            "componentId": "103:tag",
+                            "overrides": {
+                              "label": "BETA",
+                              "color": "orange"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "4:20",
+                        "name": "KPI Row",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 16,
+                        "paddingTop": 16,
+                        "paddingRight": 16,
+                        "paddingBottom": 16,
+                        "paddingLeft": 16,
+                        "fills": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.16,
+                              "g": 0.16,
+                              "b": 0.24,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokes": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.32,
+                              "g": 0.34,
+                              "b": 0.46,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokeWeight": 1,
+                        "children": [
+                          {
+                            "id": "4:21",
+                            "name": "KPI Card / Revenue",
+                            "type": "INSTANCE",
+                            "componentId": "200:kpi-card",
+                            "overrides": {
+                              "title": "MRR",
+                              "value": "$120,420",
+                              "delta": "+8.2%",
+                              "deltaDirection": "up"
+                            }
+                          },
+                          {
+                            "id": "4:22",
+                            "name": "KPI Card / Users",
+                            "type": "INSTANCE",
+                            "componentId": "200:kpi-card",
+                            "overrides": {
+                              "title": "Active users",
+                              "value": "12,893",
+                              "delta": "-1.1%",
+                              "deltaDirection": "down"
+                            }
+                          },
+                          {
+                            "id": "4:23",
+                            "name": "KPI Card / Churn",
+                            "type": "INSTANCE",
+                            "componentId": "200:kpi-card",
+                            "overrides": {
+                              "title": "Churn",
+                              "value": "3.42%",
+                              "delta": "-0.3 pt",
+                              "deltaDirection": "up"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "4:30",
+                        "name": "Charts Row",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 16,
+                        "paddingTop": 16,
+                        "paddingRight": 16,
+                        "paddingBottom": 16,
+                        "paddingLeft": 16,
+                        "fills": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.16,
+                              "g": 0.16,
+                              "b": 0.24,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokes": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.32,
+                              "g": 0.34,
+                              "b": 0.46,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokeWeight": 1,
+                        "children": [
+                          {
+                            "id": "4:31",
+                            "name": "Revenue Chart",
+                            "type": "COMPONENT",
+                            "componentId": "300:chart-card",
+                            "overrides": {
+                              "title": "Revenue (last 12 months)",
+                              "dataset": [
+                                {
+                                  "month": "Jan",
+                                  "value": 8200
+                                },
+                                {
+                                  "month": "Feb",
+                                  "value": 9100
+                                },
+                                {
+                                  "month": "Mar",
+                                  "value": 10400
+                                },
+                                {
+                                  "month": "Apr",
+                                  "value": 9800
+                                },
+                                {
+                                  "month": "May",
+                                  "value": 11300
+                                },
+                                {
+                                  "month": "Jun",
+                                  "value": 12020
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "id": "4:32",
+                            "name": "Users by Plan",
+                            "type": "COMPONENT",
+                            "componentId": "300:chart-card",
+                            "variantProperties": {
+                              "chartType": "donut"
+                            },
+                            "overrides": {
+                              "title": "Users by plan",
+                              "dataset": [
+                                {
+                                  "plan": "Free",
+                                  "value": 4823
+                                },
+                                {
+                                  "plan": "Pro",
+                                  "value": 6231
+                                },
+                                {
+                                  "plan": "Enterprise",
+                                  "value": 1839
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "4:40",
+                        "name": "Table",
+                        "type": "FRAME",
+                        "layoutMode": "VERTICAL",
+                        "itemSpacing": 8,
+                        "paddingTop": 16,
+                        "paddingRight": 16,
+                        "paddingBottom": 16,
+                        "paddingLeft": 16,
+                        "fills": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.16,
+                              "g": 0.16,
+                              "b": 0.24,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokes": [
+                          {
+                            "type": "SOLID",
+                            "color": {
+                              "r": 0.32,
+                              "g": 0.34,
+                              "b": 0.46,
+                              "a": 1
+                            }
+                          }
+                        ],
+                        "strokeWeight": 1,
+                        "children": [
+                          {
+                            "id": "4:41",
+                            "name": "Header Row",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL",
+                            "itemSpacing": 12,
+                            "children": [
+                              {
+                                "id": "4:42",
+                                "name": "Col / Project",
+                                "type": "TEXT",
+                                "characters": "Project"
+                              },
+                              {
+                                "id": "4:43",
+                                "name": "Col / Owner",
+                                "type": "TEXT",
+                                "characters": "Owner"
+                              },
+                              {
+                                "id": "4:44",
+                                "name": "Col / MRR",
+                                "type": "TEXT",
+                                "characters": "MRR"
+                              },
+                              {
+                                "id": "4:45",
+                                "name": "Col / Status",
+                                "type": "TEXT",
+                                "characters": "Status"
+                              }
+                            ]
+                          },
+                          {
+                            "id": "4:50",
+                            "name": "Row 1",
+                            "type": "INSTANCE",
+                            "componentId": "400:table-row",
+                            "overrides": {
+                              "project": "Onboarding flow revamp",
+                              "owner": "Alice",
+                              "mrr": "$32,120",
+                              "status": {
+                                "label": "At risk",
+                                "tone": "critical"
+                              }
+                            }
+                          },
+                          {
+                            "id": "4:51",
+                            "name": "Row 2",
+                            "type": "INSTANCE",
+                            "componentId": "400:table-row",
+                            "overrides": {
+                              "project": "Billing cleanup",
+                              "owner": "Bob",
+                              "mrr": "$11,894",
+                              "status": {
+                                "label": "On track",
+                                "tone": "success"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "components": {
+    "100:search-input": {
+      "key": "search-input-key",
+      "name": "Form / Search Input",
+      "description": "Search input with icon and placeholder",
+      "remote": false
+    },
+    "101:user-menu": {
+      "key": "user-menu-key",
+      "name": "Top Bar / User Menu",
+      "description": "Avatar, name, and dropdown caret"
+    },
+    "102:nav-item": {
+      "key": "nav-item-key",
+      "name": "Sidebar / Nav Item",
+      "description": "Navigation item with icon and label"
+    },
+    "103:tag": {
+      "key": "tag-key",
+      "name": "Tag",
+      "description": "Label for annotation or status"
+    },
+    "200:kpi-card": {
+      "key": "kpi-card-key",
+      "name": "Analytics / KPI Card",
+      "description": "Metric with delta"
+    },
+    "300:chart-card": {
+      "key": "chart-card-key",
+      "name": "Analytics / Chart Card",
+      "description": "Area/line/donut chart plus header"
+    },
+    "400:table-row": {
+      "key": "table-row-key",
+      "name": "Table / Row",
+      "description": "Data row with hover state"
+    }
+  },
+  "componentSets": {
+    "500:nav-item-set": {
+      "key": "nav-item-set-key",
+      "name": "Sidebar / Nav Item",
+      "description": "Variants for default, active, disabled",
+      "components": [
+        "102:nav-item"
+      ]
+    }
+  },
+  "styles": {
+    "S:heading-xl": {
+      "key": "style-heading-xl",
+      "name": "Heading / XL",
+      "styleType": "TEXT",
+      "fontFamily": "Inter",
+      "fontWeight": 600,
+      "fontSize": 28,
+      "lineHeightPx": 36
+    },
+    "S:body-sm": {
+      "key": "style-body-sm",
+      "name": "Body / SM",
+      "styleType": "TEXT",
+      "fontFamily": "Inter",
+      "fontWeight": 400,
+      "fontSize": 14,
+      "lineHeightPx": 20
+    },
+    "S:surface": {
+      "key": "style-surface",
+      "name": "Surface / Default",
+      "styleType": "FILL",
+      "paints": [
+        {
+          "type": "SOLID",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          }
+        }
+      ]
+    }
+  },
+  "meta": {
+    "fileName": "Mock Analytics Dashboard",
+    "exportedAt": "2025-12-10T08:00:00Z",
+    "generator": "chatgpt-mock-figma-export",
+    "notes": [
+      "This is synthetic data for parser testing.",
+      "Structure loosely mimics Figma REST API formats."
+    ]
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "name": "HUD Dashboard",
+  "version": "1.0.0",
+  "document": {
+    "id": "0:0",
+    "name": "Document",
+    "type": "DOCUMENT",
+    "children": [
+      {
+        "id": "0:1",
+        "name": "HUD Page",
+        "type": "CANVAS",
+        "children": [
+          {
+            "id": "1:1",
+            "name": "HUD Root",
+            "type": "FRAME",
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "children": [
+              {
+                "id": "1:2",
+                "name": "Status Bar",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 16,
+                "paddingLeft": 2,
+                "paddingRight": 2,
+                "paddingTop": 0,
+                "paddingBottom": 0,
+                "children": [
+                  {
+                    "id": "1:2:2",
+                    "name": "Left Group",
+                    "type": "FRAME",
+                    "layoutMode": "HORIZONTAL",
+                    "itemSpacing": 4,
+                    "children": [
+                      {
+                        "id": "1:2:2:1",
+                        "name": "Health Label",
+                        "type": "TEXT",
+                        "characters": "HP:"
+                      },
+                      {
+                        "id": "1:2:2:2",
+                        "name": "Health Value [bind: Health]",
+                        "type": "TEXT",
+                        "characters": "100/100"
+                      },
+                      {
+                        "id": "1:2:2:3",
+                        "name": "Mana Label",
+                        "type": "TEXT",
+                        "characters": "MP:"
+                      },
+                      {
+                        "id": "1:2:2:4",
+                        "name": "Mana Value [bind: Mana]",
+                        "type": "TEXT",
+                        "characters": "50/100"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "1:2:3",
+                    "name": "Center Group",
+                    "type": "FRAME",
+                    "layoutMode": "HORIZONTAL",
+                    "itemSpacing": 4,
+                    "children": [
+                      {
+                        "id": "1:2:3:1",
+                        "name": "Location Label",
+                        "type": "TEXT",
+                        "characters": "Location:"
+                      },
+                      {
+                        "id": "1:2:3:2",
+                        "name": "Location Value [bind: Location]",
+                        "type": "TEXT",
+                        "characters": "Town Square"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "1:2:4",
+                    "name": "Right Group",
+                    "type": "FRAME",
+                    "layoutMode": "HORIZONTAL",
+                    "itemSpacing": 4,
+                    "children": [
+                      {
+                        "id": "1:2:4:1",
+                        "name": "Time Label",
+                        "type": "TEXT",
+                        "characters": "Time:"
+                      },
+                      {
+                        "id": "1:2:4:2",
+                        "name": "Time Value [bind: Time]",
+                        "type": "TEXT",
+                        "characters": "12:34"
+                      },
+                      {
+                        "id": "1:2:4:3",
+                        "name": "Fps Label",
+                        "type": "TEXT",
+                        "characters": "FPS:"
+                      },
+                      {
+                        "id": "1:2:4:4",
+                        "name": "Fps Value [bind: Fps]",
+                        "type": "TEXT",
+                        "characters": "60"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "1:3",
+                "name": "Main Row",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL",
+                "itemSpacing": 8,
+                "children": [
+                  {
+                    "id": "1:3:1",
+                    "name": "Party Panel",
+                    "type": "FRAME",
+                    "layoutMode": "VERTICAL",
+                    "itemSpacing": 4,
+                    "children": [
+                      {
+                        "id": "1:3:1:1",
+                        "name": "Party Slot 1",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 4,
+                        "children": [
+                          {
+                            "id": "1:3:1:1:1",
+                            "name": "Party1 Name [bind: Party1Name]",
+                            "type": "TEXT",
+                            "characters": "Alice"
+                          },
+                          {
+                            "id": "1:3:1:1:2",
+                            "name": "Party1 Health [bind: Party1Health]",
+                            "type": "TEXT",
+                            "characters": "120/150"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "1:3:1:2",
+                        "name": "Party Slot 2",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 4,
+                        "children": [
+                          {
+                            "id": "1:3:1:2:1",
+                            "name": "Party2 Name [bind: Party2Name]",
+                            "type": "TEXT",
+                            "characters": "Bob"
+                          },
+                          {
+                            "id": "1:3:1:2:2",
+                            "name": "Party2 Health [bind: Party2Health]",
+                            "type": "TEXT",
+                            "characters": "80/120"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "1:3:1:3",
+                        "name": "Party Slot 3",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL",
+                        "itemSpacing": 4,
+                        "children": [
+                          {
+                            "id": "1:3:1:3:1",
+                            "name": "Party3 Name [bind: Party3Name]",
+                            "type": "TEXT",
+                            "characters": "Cara"
+                          },
+                          {
+                            "id": "1:3:1:3:2",
+                            "name": "Party3 Health [bind: Party3Health]",
+                            "type": "TEXT",
+                            "characters": "200/200"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "1:3:2",
+                    "name": "Mini Map",
+                    "type": "FRAME",
+                    "layoutMode": "VERTICAL",
+                    "itemSpacing": 4,
+                    "paddingLeft": 4,
+                    "paddingRight": 4,
+                    "paddingTop": 4,
+                    "paddingBottom": 4,
+                    "absoluteBoundingBox": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 200,
+                      "height": 100
+                    },
+                    "fills": [
+                      {
+                        "type": "SOLID",
+                        "visible": true,
+                        "opacity": 1,
+                        "color": { "r": 0.05, "g": 0.25, "b": 0.10, "a": 1.0 }
+                      }
+                    ],
+                    "strokes": [
+                      {
+                        "type": "SOLID",
+                        "visible": true,
+                        "opacity": 1,
+                        "color": { "r": 0.80, "g": 0.95, "b": 0.80, "a": 1.0 }
+                      }
+                    ],
+                    "strokeWeight": 1,
+                    "children": [
+                      {
+                        "id": "1:3:2:1",
+                        "name": "Minimap Label",
+                        "type": "TEXT",
+                        "characters": "Minimap"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "1:4",
+                "name": "Chat Panel",
+                "type": "FRAME",
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 2,
+                "children": [
+                  {
+                    "id": "1:4:1",
+                    "name": "Chat Line 1 [bind: ChatLine1]",
+                    "type": "TEXT",
+                    "characters": "[System] Welcome to the dungeon."
+                  },
+                  {
+                    "id": "1:4:2",
+                    "name": "Chat Line 2 [bind: ChatLine2]",
+                    "type": "TEXT",
+                    "characters": "[Alice] Let's go left."
+                  },
+                  {
+                    "id": "1:4:3",
+                    "name": "Chat Line 3 [bind: ChatLine3]",
+                    "type": "TEXT",
+                    "characters": "[Bob] Pulling in 3...2...1..."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

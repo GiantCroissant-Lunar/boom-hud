@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:BoomHud.Sample.Generated"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BoomHud.Sample.Generated.AppMainFrameView">
+    <StackPanel x:Name="appMainFrame" Width="1440" Height="1024" Orientation="Vertical" Spacing="16" Background="#14141E">
+        <StackPanel x:Name="topBar" VerticalAlignment="Center" Orientation="Horizontal" Spacing="12">
+            <TextBlock x:Name="logo" Width="120" Height="32" Background="#333338" />
+            <StackPanel x:Name="search" Width="320" Height="40" Orientation="Vertical" />
+            <StackPanel x:Name="userMenu" Width="200" Height="48" Orientation="Vertical" />
+        </StackPanel>
+        <StackPanel x:Name="content" Orientation="Horizontal" Spacing="24">
+            <StackPanel x:Name="sidebar" Width="280" Height="928" Orientation="Vertical" Background="#1E1E2D">
+                <StackPanel x:Name="navItemActive" Orientation="Vertical" />
+                <StackPanel x:Name="navItem" Orientation="Vertical" />
+            </StackPanel>
+            <StackPanel x:Name="mainColumn" Width="1032" Height="928" Orientation="Vertical" Spacing="16" Background="#1E1E2D">
+                <StackPanel x:Name="titleRow" Orientation="Horizontal" Spacing="12">
+                    <TextBlock x:Name="pageTitle" FontSize="28" FontWeight="Bold">
+                        Analytics overview
+                    </TextBlock>
+                    <StackPanel x:Name="tagBeta" Orientation="Vertical" />
+                </StackPanel>
+                <StackPanel x:Name="kpiRow" Orientation="Horizontal" Spacing="16" Background="#28283D">
+                    <StackPanel x:Name="kpiCardRevenue" Orientation="Vertical" />
+                    <StackPanel x:Name="kpiCardUsers" Orientation="Vertical" />
+                    <StackPanel x:Name="kpiCardChurn" Orientation="Vertical" />
+                </StackPanel>
+                <StackPanel x:Name="chartsRow" Orientation="Horizontal" Spacing="16" Background="#28283D">
+                    <StackPanel x:Name="revenueChart" Orientation="Vertical" />
+                    <StackPanel x:Name="usersByPlan" Orientation="Vertical" />
+                </StackPanel>
+                <StackPanel x:Name="table" Orientation="Vertical" Spacing="8" Background="#28283D">
+                    <StackPanel x:Name="headerRow" Orientation="Horizontal" Spacing="12">
+                        <TextBlock x:Name="colProject">
+                            Project
+                        </TextBlock>
+                        <TextBlock x:Name="colOwner">
+                            Owner
+                        </TextBlock>
+                        <TextBlock x:Name="colMrr">
+                            MRR
+                        </TextBlock>
+                        <TextBlock x:Name="colStatus">
+                            Status
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="row1" Orientation="Vertical" />
+                    <StackPanel x:Name="row2" Orientation="Vertical" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

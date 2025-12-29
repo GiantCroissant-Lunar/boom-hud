@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BoomHud.Sample.Generated.AppMainFrameView">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="light.color.surface.defaultBrush" Color="#14141F" />
+        <SolidColorBrush x:Key="light.color.surface.sidebarBrush" Color="#1F1F2E" />
+        <SolidColorBrush x:Key="light.color.surface.cardBrush" Color="#29293D" />
+        <x:Double x:Key="light.dimension.radius.card">8</x:Double>
+        <x:Double x:Key="light.font.size.bodyFontSize">14</x:Double>
+    </UserControl.Resources>
+    <StackPanel x:Name="appMainFrame" Width="1440" Height="1024" Orientation="Vertical" Spacing="16" Background="#14141E">
+        <Border x:Name="topBar" Padding="16,16,16,16" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock x:Name="logo" Width="120" Height="32" Background="#333338" />
+                <Border x:Name="search" Width="320" Height="40">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="searchPlaceholder">
+                            Search projects, people, files...
+                        </TextBlock>
+                        <TextBlock x:Name="searchIcon">
+                            search
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="userMenu" Width="200" Height="48" />
+            </StackPanel>
+        </Border>
+        <Border x:Name="content">
+            <StackPanel Orientation="Horizontal" Spacing="24">
+                <Border x:Name="sidebar" Width="280" Height="928" Padding="16,16,16,16" Background="#1E1E2D" BorderBrush="#474C66" BorderThickness="1">
+                    <StackPanel Orientation="Vertical">
+                        <Border x:Name="navItemActive">
+                            <StackPanel>
+                                <TextBlock x:Name="navItemActiveLabel">
+                                    Dashboard
+                                </TextBlock>
+                                <TextBlock x:Name="navItemActiveIcon">
+                                    layout-dashboard
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="navItem">
+                            <StackPanel>
+                                <TextBlock x:Name="navItemLabel">
+                                    Projects
+                                </TextBlock>
+                                <TextBlock x:Name="navItemBadgecount">
+                                    12
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="mainColumn" Width="1032" Height="928" Padding="16,16,16,16" Background="#1E1E2D" BorderBrush="#474C66" BorderThickness="1">
+                    <StackPanel Orientation="Vertical" Spacing="16">
+                        <Border x:Name="titleRow">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock x:Name="pageTitle" FontSize="28" FontWeight="Bold">
+                                    Analytics overview
+                                </TextBlock>
+                                <Border x:Name="tagBeta">
+                                    <StackPanel>
+                                        <TextBlock x:Name="tagBetaLabel">
+                                            BETA
+                                        </TextBlock>
+                                        <TextBlock x:Name="tagBetaColor">
+                                            orange
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="kpiRow" Padding="16,16,16,16" Background="#28283D" BorderBrush="#515675" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <Border x:Name="kpiCardRevenue">
+                                    <StackPanel>
+                                        <TextBlock x:Name="kpiCardRevenueTitle">
+                                            MRR
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardRevenueValue">
+                                            $120,420
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardRevenueDelta">
+                                            +8.2%
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardRevenueDeltadirection">
+                                            up
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="kpiCardUsers">
+                                    <StackPanel>
+                                        <TextBlock x:Name="kpiCardUsersTitle">
+                                            Active users
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardUsersValue">
+                                            12,893
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardUsersDelta">
+                                            -1.1%
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardUsersDeltadirection">
+                                            down
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="kpiCardChurn">
+                                    <StackPanel>
+                                        <TextBlock x:Name="kpiCardChurnTitle">
+                                            Churn
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardChurnValue">
+                                            3.42%
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardChurnDelta">
+                                            -0.3 pt
+                                        </TextBlock>
+                                        <TextBlock x:Name="kpiCardChurnDeltadirection">
+                                            up
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="chartsRow" Padding="16,16,16,16" Background="#28283D" BorderBrush="#515675" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <Border x:Name="revenueChart">
+                                    <StackPanel>
+                                        <TextBlock x:Name="revenueChartTitle">
+                                            Revenue (last 12 months)
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="usersByPlan">
+                                    <StackPanel>
+                                        <TextBlock x:Name="usersByPlanTitle">
+                                            Users by plan
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="table" Padding="16,16,16,16" Background="#28283D" BorderBrush="#515675" BorderThickness="1">
+                            <StackPanel Orientation="Vertical" Spacing="8">
+                                <Border x:Name="headerRow">
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <TextBlock x:Name="colProject">
+                                            Project
+                                        </TextBlock>
+                                        <TextBlock x:Name="colOwner">
+                                            Owner
+                                        </TextBlock>
+                                        <TextBlock x:Name="colMrr">
+                                            MRR
+                                        </TextBlock>
+                                        <TextBlock x:Name="colStatus">
+                                            Status
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="row1">
+                                    <StackPanel>
+                                        <TextBlock x:Name="row1Project">
+                                            Onboarding flow revamp
+                                        </TextBlock>
+                                        <TextBlock x:Name="row1Owner">
+                                            Alice
+                                        </TextBlock>
+                                        <TextBlock x:Name="row1Mrr">
+                                            $32,120
+                                        </TextBlock>
+                                        <TextBlock x:Name="row1Status">
+                                            At risk
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="row2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="row2Project">
+                                            Billing cleanup
+                                        </TextBlock>
+                                        <TextBlock x:Name="row2Owner">
+                                            Bob
+                                        </TextBlock>
+                                        <TextBlock x:Name="row2Mrr">
+                                            $11,894
+                                        </TextBlock>
+                                        <TextBlock x:Name="row2Status">
+                                            On track
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

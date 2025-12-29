@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Tests.Unit</AssemblyName>
+    <RootNamespace>BoomHud.Tests.Unit</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>
