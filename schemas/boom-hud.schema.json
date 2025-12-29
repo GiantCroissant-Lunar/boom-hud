@@ -1,0 +1,413 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/boom-hud.schema.json",
+  "title": "BoomHud Component Definition",
+  "description": "Schema for BoomHud declarative UI component definitions",
+  "type": "object",
+  "required": ["component"],
+  "properties": {
+    "component": {
+      "type": "string",
+      "description": "Name of the component being defined"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "layout": {
+      "$ref": "#/$defs/layoutSpec"
+    },
+    "style": {
+      "$ref": "#/$defs/styleSpec"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/componentNode"
+      }
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "version": { "type": "string" },
+        "author": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "componentNode": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this component instance"
+        },
+        "type": {
+          "$ref": "#/$defs/componentType"
+        },
+        "visible": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "$ref": "#/$defs/binding" }
+          ],
+          "default": true
+        },
+        "enabled": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "$ref": "#/$defs/binding" }
+          ],
+          "default": true
+        },
+        "layout": {
+          "$ref": "#/$defs/layoutSpec"
+        },
+        "style": {
+          "$ref": "#/$defs/styleSpec"
+        },
+        "bind": {
+          "$ref": "#/$defs/bindingMap"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/componentNode"
+          }
+        },
+        "tooltip": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/binding" }
+          ]
+        },
+        "value": {
+          "description": "Static value for the component (type-specific)"
+        },
+        "text": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/binding" }
+          ]
+        },
+        "command": {
+          "type": "string",
+          "description": "Command binding path for interactive components"
+        },
+        "commandParameter": {
+          "description": "Parameter to pass to the command"
+        },
+        "items": {
+          "$ref": "#/$defs/binding",
+          "description": "Collection binding for list components"
+        },
+        "selectedItem": {
+          "$ref": "#/$defs/binding",
+          "description": "Selected item binding (two-way)"
+        },
+        "itemTemplate": {
+          "$ref": "#/$defs/componentNode",
+          "description": "Template for list items"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required capabilities for this component"
+        }
+      }
+    },
+    "componentType": {
+      "type": "string",
+      "enum": [
+        "label",
+        "button",
+        "textInput",
+        "textArea",
+        "checkbox",
+        "radioButton",
+        "progressBar",
+        "slider",
+        "icon",
+        "image",
+        "container",
+        "scrollView",
+        "panel",
+        "tabView",
+        "splitView",
+        "listBox",
+        "listView",
+        "treeView",
+        "dataGrid",
+        "stack",
+        "grid",
+        "dock",
+        "spacer"
+      ]
+    },
+    "layoutSpec": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "stack", "grid", "dock", "absolute"],
+          "default": "vertical"
+        },
+        "width": {
+          "$ref": "#/$defs/dimension"
+        },
+        "height": {
+          "$ref": "#/$defs/dimension"
+        },
+        "minWidth": {
+          "$ref": "#/$defs/dimension"
+        },
+        "minHeight": {
+          "$ref": "#/$defs/dimension"
+        },
+        "maxWidth": {
+          "$ref": "#/$defs/dimension"
+        },
+        "maxHeight": {
+          "$ref": "#/$defs/dimension"
+        },
+        "gap": {
+          "$ref": "#/$defs/spacing"
+        },
+        "padding": {
+          "$ref": "#/$defs/spacing"
+        },
+        "margin": {
+          "$ref": "#/$defs/spacing"
+        },
+        "align": {
+          "$ref": "#/$defs/alignment"
+        },
+        "justify": {
+          "$ref": "#/$defs/justification"
+        },
+        "weight": {
+          "type": "number",
+          "description": "Flex weight for proportional sizing",
+          "minimum": 0
+        },
+        "columns": {
+          "type": "integer",
+          "description": "Number of columns for grid layout",
+          "minimum": 1
+        },
+        "rows": {
+          "type": "integer",
+          "description": "Number of rows for grid layout",
+          "minimum": 1
+        },
+        "columnDefinitions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dimension" }
+        },
+        "rowDefinitions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dimension" }
+        },
+        "gridColumn": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gridRow": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gridColumnSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "gridRowSpan": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "dock": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right", "fill"]
+        }
+      }
+    },
+    "dimension": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(\\d+(\\.\\d+)?(px|%|cell|em|rem|\\*)|auto|fill)$",
+          "examples": ["100px", "50%", "1cell", "auto", "fill", "2*"]
+        },
+        {
+          "type": "number",
+          "description": "Numeric value in default units (px for pixel-based, cells for TUI)"
+        }
+      ]
+    },
+    "spacing": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+)?(px|cell)?$"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "top": { "type": "number" },
+            "right": { "type": "number" },
+            "bottom": { "type": "number" },
+            "left": { "type": "number" },
+            "horizontal": { "type": "number" },
+            "vertical": { "type": "number" }
+          }
+        }
+      ]
+    },
+    "alignment": {
+      "type": "string",
+      "enum": ["start", "center", "end", "stretch"]
+    },
+    "justification": {
+      "type": "string",
+      "enum": ["start", "center", "end", "spaceBetween", "spaceAround", "spaceEvenly"]
+    },
+    "styleSpec": {
+      "type": "object",
+      "properties": {
+        "foreground": {
+          "$ref": "#/$defs/color"
+        },
+        "background": {
+          "$ref": "#/$defs/color"
+        },
+        "fontSize": {
+          "type": "number"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["normal", "bold", "light"]
+        },
+        "fontStyle": {
+          "type": "string",
+          "enum": ["normal", "italic"]
+        },
+        "border": {
+          "$ref": "#/$defs/borderSpec"
+        },
+        "borderRadius": {
+          "type": "number"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "class": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          ],
+          "description": "Named style class(es) to apply"
+        }
+      }
+    },
+    "color": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+          "description": "Hex color"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "black", "white", "red", "green", "blue", "yellow", "cyan", "magenta",
+            "gray", "darkGray", "lightGray",
+            "darkRed", "darkGreen", "darkBlue", "darkYellow", "darkCyan", "darkMagenta",
+            "transparent"
+          ],
+          "description": "Named color (TUI-compatible)"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "r": { "type": "integer", "minimum": 0, "maximum": 255 },
+            "g": { "type": "integer", "minimum": 0, "maximum": 255 },
+            "b": { "type": "integer", "minimum": 0, "maximum": 255 },
+            "a": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 }
+          },
+          "required": ["r", "g", "b"]
+        }
+      ]
+    },
+    "borderSpec": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["none", "single", "double", "rounded", "thick"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "style": {
+              "type": "string",
+              "enum": ["none", "single", "double", "rounded", "thick", "solid", "dashed"]
+            },
+            "color": { "$ref": "#/$defs/color" },
+            "width": { "type": "number" }
+          }
+        }
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Property path to bind to (e.g., 'Player.Health')"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["oneWay", "twoWay", "oneTime"],
+          "default": "oneWay"
+        },
+        "converter": {
+          "type": "string",
+          "description": "Name of converter to apply"
+        },
+        "converterParameter": {
+          "description": "Parameter for the converter"
+        },
+        "format": {
+          "type": "string",
+          "description": "String format (e.g., '{0:N0} HP')"
+        },
+        "fallback": {
+          "description": "Fallback value if binding fails"
+        }
+      }
+    },
+    "bindingMap": {
+      "type": "object",
+      "description": "Map of property names to binding paths or binding objects",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string", "description": "Simple binding path" },
+          { "$ref": "#/$defs/binding" }
+        ]
+      }
+    }
+  }
+}
