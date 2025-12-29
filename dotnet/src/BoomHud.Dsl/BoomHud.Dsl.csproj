@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Dsl</AssemblyName>
+    <RootNamespace>BoomHud.Dsl</RootNamespace>
+    <Description>Figma JSON parser for BoomHud component definitions</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
