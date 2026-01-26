@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/states.schema.json",
+  "title": "BoomHud Snapshot States Manifest",
+  "description": "Defines viewport and VM states for snapshot generation. See RFC-0015.",
+  "type": "object",
+  "required": ["states"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Manifest version",
+      "enum": ["1.0"],
+      "default": "1.0"
+    },
+    "viewport": {
+      "$ref": "#/$defs/viewport",
+      "description": "Viewport configuration for all snapshots"
+    },
+    "defaults": {
+      "$ref": "#/$defs/defaults",
+      "description": "Default settings for all states"
+    },
+    "states": {
+      "type": "array",
+      "description": "States to render (in order). Each state produces one snapshot image.",
+      "items": {
+        "$ref": "#/$defs/state"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "viewport": {
+      "type": "object",
+      "description": "Viewport configuration for snapshot rendering",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "description": "Viewport width in pixels",
+          "default": 1280,
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "description": "Viewport height in pixels",
+          "default": 720,
+          "minimum": 1
+        },
+        "scale": {
+          "type": "number",
+          "description": "Scale factor (1 = 100%)",
+          "default": 1.0,
+          "minimum": 0.1
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaults": {
+      "type": "object",
+      "description": "Default settings for all states",
+      "properties": {
+        "waitFrames": {
+          "type": "integer",
+          "description": "Default number of frames to wait before capture (allows layout to settle)",
+          "default": 2,
+          "minimum": 0
+        },
+        "background": {
+          "type": "string",
+          "description": "Default background color (hex, e.g., '#1a1a2e')"
+        }
+      },
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "description": "A single snapshot state with ViewModel bindings",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "State name (used for filename, e.g., 'Default' → '000_Default.png')"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description for documentation"
+        },
+        "vm": {
+          "type": "object",
+          "description": "ViewModel property values to apply before rendering. Structure matches the generated IViewModel interface hierarchy.",
+          "additionalProperties": true
+        },
+        "waitFrames": {
+          "type": "integer",
+          "description": "Override frames to wait before capture (defaults to manifest.defaults.waitFrames)",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "version": "1.0",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "defaults": {
+        "waitFrames": 2,
+        "background": "#1a1a2e"
+      },
+      "states": [
+        {
+          "name": "Default",
+          "description": "Initial state with no data"
+        },
+        {
+          "name": "Loading",
+          "vm": {
+            "IsLoading": true,
+            "Progress": 0.5
+          }
+        },
+        {
+          "name": "Ready",
+          "vm": {
+            "IsLoading": false,
+            "PlayerName": "Hero",
+            "Health": 100,
+            "MaxHealth": 100
+          }
+        }
+      ]
+    }
+  ]
+}

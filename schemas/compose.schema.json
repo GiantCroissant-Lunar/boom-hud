@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/compose.schema.json",
+  "title": "BoomHud Compose Manifest",
+  "description": "Composition manifest for combining multiple design sources into a single generation run.",
+  "type": "object",
+  "required": ["sources"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Manifest version",
+      "enum": ["1.0"],
+      "default": "1.0"
+    },
+    "root": {
+      "type": "string",
+      "description": "Name of the root component/document to use as the composition root. If omitted, uses the first source's document name."
+    },
+    "sources": {
+      "type": "array",
+      "description": "List of source file paths (relative to manifest location). Order matters: first source provides default root if not specified.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "tokens": {
+      "type": "string",
+      "description": "Path to token registry file (relative to manifest). If omitted, uses standard auto-discovery (ui/tokens.ir.json)."
+    },
+    "targets": {
+      "type": "array",
+      "description": "Target backends to generate for. If omitted, must be specified via CLI --target.",
+      "items": {
+        "type": "string",
+        "enum": ["godot", "avalonia", "terminalGui"]
+      }
+    },
+    "output": {
+      "type": "string",
+      "description": "Output directory (relative to manifest). If omitted, uses CLI --output or current directory."
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Namespace for generated code. If omitted, uses CLI --namespace."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "version": "1.0",
+      "root": "MainHud",
+      "sources": [
+        "components/main-hud.ir.json",
+        "components/mini-map.ir.json",
+        "components/inventory.ir.json"
+      ],
+      "tokens": "tokens.ir.json",
+      "targets": ["godot"],
+      "output": "generated/",
+      "namespace": "MyGame.Hud"
+    }
+  ]
+}

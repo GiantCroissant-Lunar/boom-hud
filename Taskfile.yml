@@ -1,0 +1,118 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  agent:sync:
+    desc: Sync all tool-specific directories from .agent
+    cmds:
+      - task: agent:sync-skills
+      - task: agent:sync-rules
+      - task: agent:sync-workflows
+      - task: agent:sync-commands
+      - task: agent:sync-opencode
+
+  agent:sync-skills:
+    desc: Sync skill stubs/copies from .agent/skills to tool-specific directories
+    cmds:
+      - python scripts/sync_skills.py
+
+  agent:sync-rules:
+    desc: Sync rules from .agent/rules to tool-specific directories
+    cmds:
+      - python scripts/sync_rules.py
+
+  agent:sync-workflows:
+    desc: Sync workflows from .agent/workflows to tool-specific directories
+    cmds:
+      - python scripts/sync_workflows.py
+
+  agent:sync-commands:
+    desc: Sync commands from .agent/commands to tool-specific directories
+    cmds:
+      - python scripts/sync_commands.py
+
+  agent:sync-opencode:
+    desc: Generate opencode.json from .agent/adapters/opencode/permissions.yaml
+    cmds:
+      - python scripts/sync_opencode.py
+
+  # ============================================================================
+  # DTO Generation (schema → quicktype → *.g.cs)
+  # ============================================================================
+
+  generate:dto:
+    desc: Regenerate all DTOs from JSON schemas using quicktype
+    deps:
+      - generate:dto:compose
+      - generate:dto:states
+      - generate:dto:tokens
+
+  generate:dto:compose:
+    desc: Generate ComposeManifestDto from compose.schema.json
+    cmds:
+      - >-
+        npx quicktype
+        --src schemas/compose.schema.json
+        --src-lang schema
+        --lang csharp
+        --namespace BoomHud.Abstractions.Composition.Generated
+        --features complete
+        --array-type list
+        --any-type object
+        --no-combine-classes
+        --out dotnet/src/BoomHud.Abstractions/Composition/Generated/ComposeManifestDto.g.cs
+    sources:
+      - schemas/compose.schema.json
+    generates:
+      - dotnet/src/BoomHud.Abstractions/Composition/Generated/ComposeManifestDto.g.cs
+
+  generate:dto:states:
+    desc: Generate StatesManifestDto from states.schema.json
+    cmds:
+      - >-
+        npx quicktype
+        --src schemas/states.schema.json
+        --src-lang schema
+        --lang csharp
+        --namespace BoomHud.Abstractions.Snapshots.Generated
+        --features complete
+        --array-type list
+        --any-type object
+        --no-combine-classes
+        --out dotnet/src/BoomHud.Abstractions/Snapshots/Generated/StatesManifestDto.g.cs
+    sources:
+      - schemas/states.schema.json
+    generates:
+      - dotnet/src/BoomHud.Abstractions/Snapshots/Generated/StatesManifestDto.g.cs
+
+  generate:dto:tokens:
+    desc: Generate TokensDto from tokens.schema.json
+    cmds:
+      - >-
+        npx quicktype
+        --src schemas/tokens.schema.json
+        --src-lang schema
+        --lang csharp
+        --namespace BoomHud.Abstractions.Tokens.Generated
+        --features complete
+        --array-type list
+        --any-type object
+        --no-combine-classes
+        --out dotnet/src/BoomHud.Abstractions/Tokens/Generated/TokensDto.g.cs
+    sources:
+      - schemas/tokens.schema.json
+    generates:
+      - dotnet/src/BoomHud.Abstractions/Tokens/Generated/TokensDto.g.cs
+
+  # ============================================================================
+  # CI Verification
+  # ============================================================================
+
+  verify:no-dto-leak:
+    desc: Verify CLI does not reference Generated namespaces
+    cmds:
+      - pwsh -NoProfile -File scripts/verify-no-dto-leak.ps1
