@@ -1,10 +1,13 @@
 // Token Registry for BoomHud
 // Loads and provides access to design tokens from tokens.ir.json
+// Domain wrapper that maps from Generated DTOs to domain types
 
 namespace BoomHud.Abstractions.Tokens;
 
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BoomHud.Abstractions.Tokens.Generated;
 
 /// <summary>
 /// Design token registry loaded from tokens.ir.json.
@@ -82,6 +85,7 @@ public sealed class TokenRegistry
 
     /// <summary>
     /// Loads a token registry from JSON string.
+    /// Maps from Generated DTOs to domain types.
     /// </summary>
     public static TokenRegistry LoadFromJson(string json, string? sourcePath = null)
     {
@@ -94,61 +98,97 @@ public sealed class TokenRegistry
             Version = dto.Version ?? "1.0"
         };
 
-        // Load colors
+        // Map colors: DTO → domain
         if (dto.Colors != null)
         {
-            foreach (var (name, token) in dto.Colors)
+            foreach (var (name, tokenDto) in dto.Colors)
             {
-                registry._colors[name] = token;
+                registry._colors[name] = new ColorToken(
+                    tokenDto.Value,
+                    tokenDto.Description,
+                    tokenDto.Deprecated,
+                    tokenDto.Aliases?.AsReadOnly());
             }
         }
 
-        // Load spacing
+        // Map spacing: DTO → domain
         if (dto.Spacing != null)
         {
-            foreach (var (name, token) in dto.Spacing)
+            foreach (var (name, tokenDto) in dto.Spacing)
             {
-                registry._spacing[name] = token;
+                registry._spacing[name] = new SpacingToken(
+                    tokenDto.Value,
+                    tokenDto.Description,
+                    tokenDto.Deprecated);
             }
         }
 
-        // Load typography
+        // Map typography: DTO → domain
         if (dto.Typography != null)
         {
-            foreach (var (name, token) in dto.Typography)
+            foreach (var (name, tokenDto) in dto.Typography)
             {
-                registry._typography[name] = token;
+                registry._typography[name] = new TypographyToken(
+                    tokenDto.FontFamily,
+                    tokenDto.FontSize,
+                    ParseFontWeight(tokenDto.FontWeight),
+                    tokenDto.LineHeight,
+                    tokenDto.LetterSpacing,
+                    tokenDto.Description,
+                    tokenDto.Deprecated);
             }
         }
 
-        // Load radii
+        // Map radii: DTO → domain
         if (dto.Radii != null)
         {
-            foreach (var (name, token) in dto.Radii)
+            foreach (var (name, tokenDto) in dto.Radii)
             {
-                registry._radii[name] = token;
+                registry._radii[name] = new RadiusToken(
+                    tokenDto.Value,
+                    tokenDto.Description,
+                    tokenDto.Deprecated);
             }
         }
 
-        // Load shadows
+        // Map shadows: DTO → domain
         if (dto.Shadows != null)
         {
-            foreach (var (name, token) in dto.Shadows)
+            foreach (var (name, tokenDto) in dto.Shadows)
             {
-                registry._shadows[name] = token;
+                registry._shadows[name] = new ShadowToken(
+                    tokenDto.ValueAsString,
+                    tokenDto.Description,
+                    tokenDto.Deprecated);
             }
         }
 
-        // Load opacity
+        // Map opacity: DTO → domain
         if (dto.Opacity != null)
         {
-            foreach (var (name, token) in dto.Opacity)
+            foreach (var (name, tokenDto) in dto.Opacity)
             {
-                registry._opacity[name] = token;
+                registry._opacity[name] = new OpacityToken(
+                    tokenDto.Value,
+                    tokenDto.Description,
+                    tokenDto.Deprecated);
             }
         }
 
         return registry;
+    }
+
+    private static object? ParseFontWeight(JsonElement? element)
+    {
+        if (element is null || element.Value.ValueKind == JsonValueKind.Null)
+            return null;
+
+        return element.Value.ValueKind switch
+        {
+            JsonValueKind.Number => element.Value.GetDouble(),
+            JsonValueKind.String => element.Value.GetString(),
+            _ => element.Value.GetRawText()
+        };
     }
 
     /// <summary>
@@ -171,11 +211,11 @@ public sealed class TokenRegistry
         return category.ToLowerInvariant() switch
         {
             "colors" => _colors.TryGetValue(name, out var c) ? new TokenValue(tokenRef, c.Value, TokenCategory.Color, c.Deprecated) : null,
-            "spacing" => _spacing.TryGetValue(name, out var s) ? new TokenValue(tokenRef, s.Value.ToString(System.Globalization.CultureInfo.InvariantCulture), TokenCategory.Spacing, s.Deprecated) : null,
+            "spacing" => _spacing.TryGetValue(name, out var s) ? new TokenValue(tokenRef, s.Value.ToString(CultureInfo.InvariantCulture), TokenCategory.Spacing, s.Deprecated) : null,
             "typography" => _typography.TryGetValue(name, out var t) ? new TokenValue(tokenRef, t, TokenCategory.Typography, t.Deprecated) : null,
-            "radii" => _radii.TryGetValue(name, out var r) ? new TokenValue(tokenRef, r.Value.ToString(System.Globalization.CultureInfo.InvariantCulture), TokenCategory.Radius, r.Deprecated) : null,
-            "shadows" => _shadows.TryGetValue(name, out var sh) ? new TokenValue(tokenRef, sh.ValueAsString, TokenCategory.Shadow, sh.Deprecated) : null,
-            "opacity" => _opacity.TryGetValue(name, out var o) ? new TokenValue(tokenRef, o.Value.ToString(System.Globalization.CultureInfo.InvariantCulture), TokenCategory.Opacity, o.Deprecated) : null,
+            "radii" => _radii.TryGetValue(name, out var r) ? new TokenValue(tokenRef, r.Value.ToString(CultureInfo.InvariantCulture), TokenCategory.Radius, r.Deprecated) : null,
+            "shadows" => _shadows.TryGetValue(name, out var sh) ? new TokenValue(tokenRef, sh.Value, TokenCategory.Shadow, sh.Deprecated) : null,
+            "opacity" => _opacity.TryGetValue(name, out var o) ? new TokenValue(tokenRef, o.Value.ToString(CultureInfo.InvariantCulture), TokenCategory.Opacity, o.Deprecated) : null,
             _ => null
         };
     }
@@ -245,129 +285,59 @@ public enum TokenCategory
     Opacity
 }
 
-#region Token DTOs
+#region Domain Types
 
-internal sealed class TokenRegistryDto
-{
-    [JsonPropertyName("version")]
-    public string? Version { get; set; }
+/// <summary>
+/// Color token (domain type).
+/// </summary>
+public sealed record ColorToken(
+    string Value,
+    string? Description = null,
+    bool Deprecated = false,
+    IReadOnlyList<string>? Aliases = null);
 
-    [JsonPropertyName("colors")]
-    public Dictionary<string, ColorToken>? Colors { get; set; }
+/// <summary>
+/// Spacing token (domain type).
+/// </summary>
+public sealed record SpacingToken(
+    double Value,
+    string? Description = null,
+    bool Deprecated = false);
 
-    [JsonPropertyName("spacing")]
-    public Dictionary<string, SpacingToken>? Spacing { get; set; }
+/// <summary>
+/// Typography token (domain type).
+/// </summary>
+public sealed record TypographyToken(
+    string? FontFamily = null,
+    double? FontSize = null,
+    object? FontWeight = null,
+    double? LineHeight = null,
+    double? LetterSpacing = null,
+    string? Description = null,
+    bool Deprecated = false);
 
-    [JsonPropertyName("typography")]
-    public Dictionary<string, TypographyToken>? Typography { get; set; }
+/// <summary>
+/// Radius token (domain type).
+/// </summary>
+public sealed record RadiusToken(
+    double Value,
+    string? Description = null,
+    bool Deprecated = false);
 
-    [JsonPropertyName("radii")]
-    public Dictionary<string, RadiusToken>? Radii { get; set; }
+/// <summary>
+/// Shadow token (domain type).
+/// </summary>
+public sealed record ShadowToken(
+    string Value,
+    string? Description = null,
+    bool Deprecated = false);
 
-    [JsonPropertyName("shadows")]
-    public Dictionary<string, ShadowToken>? Shadows { get; set; }
-
-    [JsonPropertyName("opacity")]
-    public Dictionary<string, OpacityToken>? Opacity { get; set; }
-}
-
-public sealed class ColorToken
-{
-    [JsonPropertyName("value")]
-    public string Value { get; set; } = "";
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-
-    [JsonPropertyName("aliases")]
-    public List<string>? Aliases { get; set; }
-}
-
-public sealed class SpacingToken
-{
-    [JsonPropertyName("value")]
-    public double Value { get; set; }
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-}
-
-public sealed class TypographyToken
-{
-    [JsonPropertyName("fontFamily")]
-    public string? FontFamily { get; set; }
-
-    [JsonPropertyName("fontSize")]
-    public double? FontSize { get; set; }
-
-    [JsonPropertyName("fontWeight")]
-    public object? FontWeight { get; set; } // Can be number or string
-
-    [JsonPropertyName("lineHeight")]
-    public double? LineHeight { get; set; }
-
-    [JsonPropertyName("letterSpacing")]
-    public double? LetterSpacing { get; set; }
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-}
-
-public sealed class RadiusToken
-{
-    [JsonPropertyName("value")]
-    public double Value { get; set; }
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-}
-
-public sealed class ShadowToken
-{
-    /// <summary>
-    /// Shadow value - can be a CSS-like string or a structured object.
-    /// Use JsonElement to handle both cases.
-    /// </summary>
-    [JsonPropertyName("value")]
-    public JsonElement Value { get; set; }
-
-    /// <summary>
-    /// Gets the shadow value as a string (serialized if object).
-    /// </summary>
-    public string ValueAsString =>
-        Value.ValueKind == JsonValueKind.String
-            ? Value.GetString() ?? ""
-            : Value.GetRawText();
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-}
-
-public sealed class OpacityToken
-{
-    [JsonPropertyName("value")]
-    public double Value { get; set; }
-
-    [JsonPropertyName("description")]
-    public string? Description { get; set; }
-
-    [JsonPropertyName("deprecated")]
-    public bool Deprecated { get; set; }
-}
+/// <summary>
+/// Opacity token (domain type).
+/// </summary>
+public sealed record OpacityToken(
+    double Value,
+    string? Description = null,
+    bool Deprecated = false);
 
 #endregion
