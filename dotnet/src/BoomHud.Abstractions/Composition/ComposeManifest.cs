@@ -1,62 +1,56 @@
 // Compose Manifest for BoomHud
+// Domain wrapper that maps from Generated DTOs
 // Defines the schema for boom-hud.compose.json
 
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using BoomHud.Abstractions.Composition.Generated;
 
 namespace BoomHud.Abstractions.Composition;
 
 /// <summary>
 /// A composition manifest that defines how to combine multiple design sources.
-/// Loaded from boom-hud.compose.json.
+/// Loaded from boom-hud.compose.json. Domain type (immutable).
 /// </summary>
 public sealed record ComposeManifest
 {
     /// <summary>
     /// Schema version. Currently "1.0".
     /// </summary>
-    [JsonPropertyName("version")]
     public string Version { get; init; } = "1.0";
 
     /// <summary>
     /// Name of the root component/document to use as the composition root.
     /// </summary>
-    [JsonPropertyName("root")]
     public string? Root { get; init; }
 
     /// <summary>
     /// List of source file paths (relative to manifest location).
     /// Order matters: first source provides default root if not specified.
     /// </summary>
-    [JsonPropertyName("sources")]
     public IReadOnlyList<string> Sources { get; init; } = [];
 
     /// <summary>
     /// Optional path to token registry file (relative to manifest).
     /// If omitted, uses standard auto-discovery (ui/tokens.ir.json).
     /// </summary>
-    [JsonPropertyName("tokens")]
     public string? Tokens { get; init; }
 
     /// <summary>
     /// Optional list of target backends to generate for.
     /// If omitted, must be specified via CLI --target.
     /// </summary>
-    [JsonPropertyName("targets")]
     public IReadOnlyList<string>? Targets { get; init; }
 
     /// <summary>
     /// Optional output directory (relative to manifest).
     /// If omitted, uses CLI --output or current directory.
     /// </summary>
-    [JsonPropertyName("output")]
     public string? Output { get; init; }
 
     /// <summary>
     /// Optional namespace for generated code.
     /// If omitted, uses CLI --namespace.
     /// </summary>
-    [JsonPropertyName("namespace")]
     public string? Namespace { get; init; }
 
     /// <summary>
@@ -75,13 +69,23 @@ public sealed record ComposeManifest
 
     /// <summary>
     /// Loads a compose manifest from JSON string.
+    /// Maps from Generated DTO to domain type.
     /// </summary>
     public static ComposeManifest LoadFromJson(string json, string? sourcePath = null)
     {
-        var manifest = JsonSerializer.Deserialize<ComposeManifest>(json, JsonOptions)
+        var dto = JsonSerializer.Deserialize<ComposeManifestDto>(json, JsonOptions)
             ?? throw new InvalidOperationException("Failed to deserialize compose manifest");
 
-        return manifest;
+        return new ComposeManifest
+        {
+            Version = dto.Version ?? "1.0",
+            Root = dto.Root,
+            Sources = dto.Sources?.AsReadOnly() ?? (IReadOnlyList<string>)[],
+            Tokens = dto.Tokens,
+            Targets = dto.Targets?.AsReadOnly(),
+            Output = dto.Output,
+            Namespace = dto.Namespace
+        };
     }
 
     /// <summary>

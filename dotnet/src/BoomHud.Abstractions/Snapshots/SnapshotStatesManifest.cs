@@ -1,39 +1,37 @@
 // Snapshot States for BoomHud
+// Domain wrapper that maps from Generated DTOs
 // Defines the schema for *.states.json files used by snapshot generation
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BoomHud.Abstractions.Snapshots.Generated;
 
 namespace BoomHud.Abstractions.Snapshots;
 
 /// <summary>
 /// A snapshot states manifest that defines viewport and VM states to render.
-/// Loaded from *.states.json files.
+/// Loaded from *.states.json files. Domain type (immutable).
 /// </summary>
 public sealed record SnapshotStatesManifest
 {
     /// <summary>
     /// Schema version. Currently "1.0".
     /// </summary>
-    [JsonPropertyName("version")]
     public string Version { get; init; } = "1.0";
 
     /// <summary>
     /// Viewport configuration for all snapshots.
     /// </summary>
-    [JsonPropertyName("viewport")]
     public ViewportConfig Viewport { get; init; } = new();
 
     /// <summary>
     /// States to render (in order).
     /// </summary>
-    [JsonPropertyName("states")]
     public IReadOnlyList<SnapshotState> States { get; init; } = [];
 
     /// <summary>
     /// Default settings for all states.
     /// </summary>
-    [JsonPropertyName("defaults")]
     public SnapshotDefaults Defaults { get; init; } = new();
 
     /// <summary>
@@ -52,13 +50,42 @@ public sealed record SnapshotStatesManifest
 
     /// <summary>
     /// Loads a states manifest from JSON string.
+    /// Maps from Generated DTO to domain type.
     /// </summary>
     public static SnapshotStatesManifest LoadFromJson(string json)
     {
-        var manifest = JsonSerializer.Deserialize<SnapshotStatesManifest>(json, JsonOptions)
+        var dto = JsonSerializer.Deserialize<StatesManifestDto>(json, JsonOptions)
             ?? throw new InvalidOperationException("Failed to deserialize states manifest");
 
-        return manifest;
+        return new SnapshotStatesManifest
+        {
+            Version = dto.Version ?? "1.0",
+            Viewport = dto.Viewport is { } v
+                ? new ViewportConfig
+                {
+                    Width = v.Width ?? 1280,
+                    Height = v.Height ?? 720,
+                    Scale = v.Scale ?? 1.0
+                }
+                : new ViewportConfig(),
+            Defaults = dto.Defaults is { } d
+                ? new SnapshotDefaults
+                {
+                    WaitFrames = d.WaitFrames ?? 2,
+                    Background = d.Background
+                }
+                : new SnapshotDefaults(),
+            States = dto.States
+                .Select(s => new SnapshotState
+                {
+                    Name = s.Name,
+                    Description = s.Description,
+                    Vm = s.Vm,
+                    WaitFrames = s.WaitFrames
+                })
+                .ToList()
+                .AsReadOnly()
+        };
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -70,75 +97,66 @@ public sealed record SnapshotStatesManifest
 }
 
 /// <summary>
-/// Viewport configuration for snapshot rendering.
+/// Viewport configuration for snapshot rendering. Domain type (immutable).
 /// </summary>
 public sealed record ViewportConfig
 {
     /// <summary>
     /// Viewport width in pixels.
     /// </summary>
-    [JsonPropertyName("width")]
     public int Width { get; init; } = 1280;
 
     /// <summary>
     /// Viewport height in pixels.
     /// </summary>
-    [JsonPropertyName("height")]
     public int Height { get; init; } = 720;
 
     /// <summary>
     /// Scale factor (1 = 100%).
     /// </summary>
-    [JsonPropertyName("scale")]
     public double Scale { get; init; } = 1.0;
 }
 
 /// <summary>
-/// Default settings for all states.
+/// Default settings for all states. Domain type (immutable).
 /// </summary>
 public sealed record SnapshotDefaults
 {
     /// <summary>
     /// Default number of frames to wait before capture (allows layout to settle).
     /// </summary>
-    [JsonPropertyName("waitFrames")]
     public int WaitFrames { get; init; } = 2;
 
     /// <summary>
     /// Default background color (hex, e.g., "#1a1a2e").
     /// </summary>
-    [JsonPropertyName("background")]
     public string? Background { get; init; }
 }
 
 /// <summary>
-/// A single snapshot state with ViewModel bindings.
+/// A single snapshot state with ViewModel bindings. Domain type (immutable).
 /// </summary>
 public sealed record SnapshotState
 {
     /// <summary>
     /// State name (used for filename, e.g., "Default" → "000_Default.png").
     /// </summary>
-    [JsonPropertyName("name")]
     public required string Name { get; init; }
 
     /// <summary>
     /// Optional description for documentation.
     /// </summary>
-    [JsonPropertyName("description")]
     public string? Description { get; init; }
 
     /// <summary>
     /// ViewModel property values to apply before rendering.
     /// Structure matches the generated IViewModel interface hierarchy.
     /// </summary>
-    [JsonPropertyName("vm")]
     public JsonElement? Vm { get; init; }
 
     /// <summary>
     /// Override frames to wait before capture (defaults to manifest.defaults.waitFrames).
     /// </summary>
-    [JsonPropertyName("waitFrames")]
     public int? WaitFrames { get; init; }
 }
 
