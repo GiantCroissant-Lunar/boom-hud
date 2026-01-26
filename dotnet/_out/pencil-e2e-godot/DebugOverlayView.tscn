@@ -1,0 +1,47 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="DebugOverlayView" type="Control"]
+
+[node name="header" type="HBoxContainer" parent="."]
+
+[node name="title" type="Label" parent="header"]
+text = "DEBUG"
+
+[node name="version" type="Label" parent="header"]
+text = "v0.0.0"
+
+[node name="separator" type="VBoxContainer" parent="."]
+
+[node name="stats-container" type="VBoxContainer" parent="."]
+
+[node name="fps-row" type="HBoxContainer" parent="stats-container"]
+
+[node name="fps-label" type="Label" parent="stats-container/fps-row"]
+text = "FPS"
+
+[node name="fps-value" type="Label" parent="stats-container/fps-row"]
+text = "60"
+
+[node name="memory-row" type="HBoxContainer" parent="stats-container"]
+
+[node name="memory-label" type="Label" parent="stats-container/memory-row"]
+text = "MEM"
+
+[node name="memory-value" type="Label" parent="stats-container/memory-row"]
+text = "512 MB"
+
+[node name="position-row" type="HBoxContainer" parent="stats-container"]
+
+[node name="position-label" type="Label" parent="stats-container/position-row"]
+text = "POS"
+
+[node name="position-value" type="Label" parent="stats-container/position-row"]
+text = "(0, 0, 0)"
+
+[node name="chunk-row" type="HBoxContainer" parent="stats-container"]
+
+[node name="chunk-label" type="Label" parent="stats-container/chunk-row"]
+text = "CHUNK"
+
+[node name="chunk-value" type="Label" parent="stats-container/chunk-row"]
+text = "0, 0"

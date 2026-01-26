@@ -1,0 +1,511 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/pencil.schema.json",
+  "version": "1.0",
+  "name": "PerformancePanel",
+  "canvas": {
+    "width": 320,
+    "height": 400,
+    "units": "px",
+    "scaleMode": "none",
+    "safeArea": { "top": 20, "right": 20, "bottom": 20, "left": 20 }
+  },
+  "tokenRegistry": "./tokens.ir.json",
+  "tokens": {
+    "colors": {
+      "panel-bg": "rgba(15, 15, 25, 0.95)",
+      "panel-border": "rgba(100, 100, 140, 0.3)",
+      "text-primary": "#e0e0e0",
+      "text-secondary": "#888899",
+      "text-muted": "#555566",
+      "accent-good": "#4caf50",
+      "accent-warning": "#ff9800",
+      "accent-critical": "#f44336",
+      "chart-bg": "rgba(0, 0, 0, 0.3)",
+      "chart-line": "#64b5f6",
+      "chart-fill": "rgba(100, 181, 246, 0.2)"
+    },
+    "spacing": {
+      "xs": 4,
+      "sm": 8,
+      "md": 12,
+      "lg": 16,
+      "xl": 24
+    },
+    "typography": {
+      "heading": {
+        "fontFamily": "Inter, system-ui, sans-serif",
+        "fontSize": 14,
+        "fontWeight": "600",
+        "lineHeight": 1.2
+      },
+      "label": {
+        "fontFamily": "Inter, system-ui, sans-serif",
+        "fontSize": 11,
+        "fontWeight": "500",
+        "lineHeight": 1.3
+      },
+      "value": {
+        "fontFamily": "JetBrains Mono, Consolas, monospace",
+        "fontSize": 13,
+        "fontWeight": "600",
+        "lineHeight": 1.2
+      },
+      "small": {
+        "fontFamily": "JetBrains Mono, Consolas, monospace",
+        "fontSize": 10,
+        "lineHeight": 1.2
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "type": "frame",
+      "name": "PerformancePanel",
+      "layout": {
+        "mode": "vertical",
+        "gap": 12,
+        "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 },
+        "width": "hug",
+        "height": "hug",
+        "position": "absolute",
+        "constraints": { "horizontal": "right", "vertical": "top" }
+      },
+      "style": {
+        "background": { "$ref": "tokens.colors.panel-bg" },
+        "cornerRadius": 8,
+        "stroke": { "$ref": "tokens.colors.panel-border" },
+        "strokeWidth": 1
+      },
+      "children": [
+        {
+          "id": "header",
+          "type": "frame",
+          "name": "Header",
+          "layout": {
+            "mode": "horizontal",
+            "gap": 8,
+            "alignment": "center",
+            "justify": "space-between",
+            "width": "fill"
+          },
+          "children": [
+            {
+              "id": "title",
+              "type": "text",
+              "name": "Title",
+              "content": "PERFORMANCE",
+              "style": {
+                "fill": { "$ref": "tokens.colors.text-secondary" },
+                "fontSize": 10,
+                "fontWeight": "bold",
+                "letterSpacing": 2
+              }
+            },
+            {
+              "id": "close-btn",
+              "type": "frame",
+              "name": "CloseButton",
+              "layout": { "width": { "type": "fixed", "value": 20 }, "height": { "type": "fixed", "value": 20 } },
+              "style": {
+                "background": "transparent",
+                "cornerRadius": 4
+              },
+              "interactions": [
+                { "trigger": "click", "action": "Close" }
+              ],
+              "children": [
+                {
+                  "id": "close-icon",
+                  "type": "text",
+                  "name": "CloseIcon",
+                  "content": "×",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-muted" },
+                    "fontSize": 16,
+                    "textAlign": "center"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fps-section",
+          "type": "frame",
+          "name": "FpsSection",
+          "layout": { "mode": "vertical", "gap": 4 },
+          "children": [
+            {
+              "id": "fps-header",
+              "type": "frame",
+              "name": "FpsHeader",
+              "layout": { "mode": "horizontal", "alignment": "baseline", "gap": 8, "width": "fill" },
+              "children": [
+                {
+                  "id": "fps-value",
+                  "type": "text",
+                  "name": "FpsValue",
+                  "content": "60",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.accent-good" },
+                    "fontSize": 32,
+                    "fontFamily": "JetBrains Mono, monospace",
+                    "fontWeight": "bold"
+                  },
+                  "bindings": {
+                    "content": { "$bind": "Fps", "format": "{0:F0}" },
+                    "style.fill": {
+                      "$bind": "FpsStatus",
+                      "map": {
+                        "good": { "$ref": "tokens.colors.accent-good" },
+                        "warning": { "$ref": "tokens.colors.accent-warning" },
+                        "critical": { "$ref": "tokens.colors.accent-critical" }
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": "fps-unit",
+                  "type": "text",
+                  "name": "FpsUnit",
+                  "content": "FPS",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-muted" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "fps-minmax",
+              "type": "frame",
+              "name": "FpsMinMax",
+              "layout": { "mode": "horizontal", "gap": 16 },
+              "children": [
+                {
+                  "id": "fps-min",
+                  "type": "text",
+                  "name": "FpsMin",
+                  "content": "Min: 45",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-muted" },
+                    "fontSize": 10,
+                    "fontFamily": "monospace"
+                  },
+                  "bindings": {
+                    "content": { "$bind": "FpsMin", "format": "Min: {0:F0}" }
+                  }
+                },
+                {
+                  "id": "fps-max",
+                  "type": "text",
+                  "name": "FpsMax",
+                  "content": "Max: 120",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-muted" },
+                    "fontSize": 10,
+                    "fontFamily": "monospace"
+                  },
+                  "bindings": {
+                    "content": { "$bind": "FpsMax", "format": "Max: {0:F0}" }
+                  }
+                },
+                {
+                  "id": "fps-avg",
+                  "type": "text",
+                  "name": "FpsAvg",
+                  "content": "Avg: 58",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-secondary" },
+                    "fontSize": 10,
+                    "fontFamily": "monospace"
+                  },
+                  "bindings": {
+                    "content": { "$bind": "FpsAvg", "format": "Avg: {0:F0}" }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "divider-1",
+          "type": "rectangle",
+          "name": "Divider1",
+          "layout": { "width": "fill", "height": { "type": "fixed", "value": 1 } },
+          "style": { "fill": { "$ref": "tokens.colors.panel-border" } }
+        },
+        {
+          "id": "frame-time-section",
+          "type": "frame",
+          "name": "FrameTimeSection",
+          "layout": { "mode": "vertical", "gap": 4 },
+          "children": [
+            {
+              "id": "frame-time-label",
+              "type": "text",
+              "name": "FrameTimeLabel",
+              "content": "FRAME TIME",
+              "style": {
+                "fill": { "$ref": "tokens.colors.text-muted" },
+                "fontSize": 9,
+                "fontWeight": "bold",
+                "letterSpacing": 1
+              }
+            },
+            {
+              "id": "frame-time-row",
+              "type": "frame",
+              "name": "FrameTimeRow",
+              "layout": { "mode": "horizontal", "gap": 8, "alignment": "baseline" },
+              "children": [
+                {
+                  "id": "frame-time-value",
+                  "type": "text",
+                  "name": "FrameTimeValue",
+                  "content": "16.67",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-primary" },
+                    "fontSize": 20,
+                    "fontFamily": "JetBrains Mono, monospace",
+                    "fontWeight": "600"
+                  },
+                  "bindings": {
+                    "content": { "$bind": "FrameTimeMs", "format": "{0:F2}" }
+                  }
+                },
+                {
+                  "id": "frame-time-unit",
+                  "type": "text",
+                  "name": "FrameTimeUnit",
+                  "content": "ms",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.text-muted" },
+                    "fontSize": 11
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "divider-2",
+          "type": "rectangle",
+          "name": "Divider2",
+          "layout": { "width": "fill", "height": { "type": "fixed", "value": 1 } },
+          "style": { "fill": { "$ref": "tokens.colors.panel-border" } }
+        },
+        {
+          "id": "memory-section",
+          "type": "frame",
+          "name": "MemorySection",
+          "layout": { "mode": "vertical", "gap": 8 },
+          "children": [
+            {
+              "id": "memory-label",
+              "type": "text",
+              "name": "MemoryLabel",
+              "content": "MEMORY",
+              "style": {
+                "fill": { "$ref": "tokens.colors.text-muted" },
+                "fontSize": 9,
+                "fontWeight": "bold",
+                "letterSpacing": 1
+              }
+            },
+            {
+              "id": "memory-stats",
+              "type": "frame",
+              "name": "MemoryStats",
+              "layout": { "mode": "vertical", "gap": 4 },
+              "children": [
+                {
+                  "id": "heap-row",
+                  "type": "frame",
+                  "name": "HeapRow",
+                  "layout": { "mode": "horizontal", "alignment": "space-between", "width": "fill" },
+                  "children": [
+                    {
+                      "id": "heap-label",
+                      "type": "text",
+                      "name": "HeapLabel",
+                      "content": "Heap",
+                      "style": { "fill": { "$ref": "tokens.colors.text-secondary" }, "fontSize": 11 }
+                    },
+                    {
+                      "id": "heap-value",
+                      "type": "text",
+                      "name": "HeapValue",
+                      "content": "128 MB",
+                      "style": {
+                        "fill": { "$ref": "tokens.colors.text-primary" },
+                        "fontSize": 11,
+                        "fontFamily": "JetBrains Mono, monospace"
+                      },
+                      "bindings": {
+                        "content": { "$bind": "HeapMemoryMb", "format": "{0:F0} MB" }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "gc-row",
+                  "type": "frame",
+                  "name": "GcRow",
+                  "layout": { "mode": "horizontal", "alignment": "space-between", "width": "fill" },
+                  "children": [
+                    {
+                      "id": "gc-label",
+                      "type": "text",
+                      "name": "GcLabel",
+                      "content": "GC Collections",
+                      "style": { "fill": { "$ref": "tokens.colors.text-secondary" }, "fontSize": 11 }
+                    },
+                    {
+                      "id": "gc-value",
+                      "type": "text",
+                      "name": "GcValue",
+                      "content": "12",
+                      "style": {
+                        "fill": { "$ref": "tokens.colors.text-primary" },
+                        "fontSize": 11,
+                        "fontFamily": "JetBrains Mono, monospace"
+                      },
+                      "bindings": {
+                        "content": { "$bind": "GcCollections" }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "objects-row",
+                  "type": "frame",
+                  "name": "ObjectsRow",
+                  "layout": { "mode": "horizontal", "alignment": "space-between", "width": "fill" },
+                  "children": [
+                    {
+                      "id": "objects-label",
+                      "type": "text",
+                      "name": "ObjectsLabel",
+                      "content": "Godot Objects",
+                      "style": { "fill": { "$ref": "tokens.colors.text-secondary" }, "fontSize": 11 }
+                    },
+                    {
+                      "id": "objects-value",
+                      "type": "text",
+                      "name": "ObjectsValue",
+                      "content": "1,234",
+                      "style": {
+                        "fill": { "$ref": "tokens.colors.text-primary" },
+                        "fontSize": 11,
+                        "fontFamily": "JetBrains Mono, monospace"
+                      },
+                      "bindings": {
+                        "content": { "$bind": "GodotObjectCount", "format": "{0:N0}" }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "divider-3",
+          "type": "rectangle",
+          "name": "Divider3",
+          "layout": { "width": "fill", "height": { "type": "fixed", "value": 1 } },
+          "style": { "fill": { "$ref": "tokens.colors.panel-border" } }
+        },
+        {
+          "id": "render-section",
+          "type": "frame",
+          "name": "RenderSection",
+          "layout": { "mode": "vertical", "gap": 8 },
+          "children": [
+            {
+              "id": "render-label",
+              "type": "text",
+              "name": "RenderLabel",
+              "content": "RENDERING",
+              "style": {
+                "fill": { "$ref": "tokens.colors.text-muted" },
+                "fontSize": 9,
+                "fontWeight": "bold",
+                "letterSpacing": 1
+              }
+            },
+            {
+              "id": "render-stats",
+              "type": "frame",
+              "name": "RenderStats",
+              "layout": { "mode": "vertical", "gap": 4 },
+              "children": [
+                {
+                  "id": "draw-calls-row",
+                  "type": "frame",
+                  "name": "DrawCallsRow",
+                  "layout": { "mode": "horizontal", "alignment": "space-between", "width": "fill" },
+                  "children": [
+                    {
+                      "id": "draw-calls-label",
+                      "type": "text",
+                      "name": "DrawCallsLabel",
+                      "content": "Draw Calls",
+                      "style": { "fill": { "$ref": "tokens.colors.text-secondary" }, "fontSize": 11 }
+                    },
+                    {
+                      "id": "draw-calls-value",
+                      "type": "text",
+                      "name": "DrawCallsValue",
+                      "content": "256",
+                      "style": {
+                        "fill": { "$ref": "tokens.colors.text-primary" },
+                        "fontSize": 11,
+                        "fontFamily": "JetBrains Mono, monospace"
+                      },
+                      "bindings": {
+                        "content": { "$bind": "DrawCalls", "format": "{0:N0}" }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "vertices-row",
+                  "type": "frame",
+                  "name": "VerticesRow",
+                  "layout": { "mode": "horizontal", "alignment": "space-between", "width": "fill" },
+                  "children": [
+                    {
+                      "id": "vertices-label",
+                      "type": "text",
+                      "name": "VerticesLabel",
+                      "content": "Vertices",
+                      "style": { "fill": { "$ref": "tokens.colors.text-secondary" }, "fontSize": 11 }
+                    },
+                    {
+                      "id": "vertices-value",
+                      "type": "text",
+                      "name": "VerticesValue",
+                      "content": "45.2K",
+                      "style": {
+                        "fill": { "$ref": "tokens.colors.text-primary" },
+                        "fontSize": 11,
+                        "fontFamily": "JetBrains Mono, monospace"
+                      },
+                      "bindings": {
+                        "content": { "$bind": "VertexCount", "format": "{0:N0}" }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

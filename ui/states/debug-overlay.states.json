@@ -1,0 +1,44 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/states.schema.json",
+  "version": "1.0",
+
+  // Viewport configuration for all snapshots
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "scale": 1
+  },
+
+  // Default rendering settings
+  "defaults": {
+    "waitFrames": 2,
+    "background": "#1a1a2e"
+  },
+
+  // States to render (in order)
+  "states": [
+    {
+      "name": "Default",
+      "description": "Default state with debug overlay disabled",
+      "vm": {
+        "Debug": {
+          "Enabled": false
+        }
+      }
+    },
+    {
+      "name": "DebugOverlay_On",
+      "description": "Debug overlay enabled with sample data",
+      "vm": {
+        "Debug": {
+          "Enabled": true,
+          "Fps": 60,
+          "FrameTime": "16.7ms",
+          "EntityCount": 1234,
+          "MemoryUsage": "256 MB",
+          "Position": "X: 100.5, Y: 50.2, Z: -10.0"
+        }
+      }
+    }
+  ]
+}

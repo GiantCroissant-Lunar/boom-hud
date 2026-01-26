@@ -17,6 +17,9 @@ This directory contains Request for Comments (RFC) documents for the BoomHud pro
 | [RFC-0009](./RFC-0009-runtime-theming.md) | Runtime Theming (Multi-Variant) | Accepted |
 | [RFC-0010](./RFC-0010-figma-component-reuse.md) | Figma Component Reuse (COMPONENT / INSTANCE) | Accepted |
 | [RFC-0011](./RFC-0011-mvvm-adapter-generator.md) | MVVM Adapter Generator (Roslyn) | Accepted |
+| [RFC-0012](./RFC-0012-unity-uitoolkit-backend.md) | Unity UI Toolkit Backend | Draft |
+| [RFC-0013](./RFC-0013-native-godot-tscn-backend.md) | Native Godot TSCN Backend | Draft |
+| [RFC-0014](./RFC-0014-pencil-dev-integration.md) | Pencil.dev Integration for Agentic UI | Draft |
 
 ## RFC Process
 

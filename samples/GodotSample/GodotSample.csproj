@@ -1,0 +1,19 @@
+<Project Sdk="Godot.NET.Sdk/4.2.0">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Nullable>enable</Nullable>
+    <RootNamespace>GodotSample</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reference the BoomHud generator if needed locally, but usually we just need the output -->
+    <!-- For this sample, we might need a reference to Abstractions if the generated code uses them? 
+         Looking at the generator, it generates interfaces that implement INotifyPropertyChanged.
+         It doesn't seem to depend on BoomHud.Abstractions at runtime, only the generator does.
+         The generated code uses System.ComponentModel.INotifyPropertyChanged which is standard.
+    -->
+  </ItemGroup>
+
+</Project>

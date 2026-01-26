@@ -1,0 +1,25 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/compose.schema.json",
+  "version": "1.0",
+
+  // Root component determines the composition entry point
+  "root": "DebugOverlay",
+
+  // Source files in composition order (first file provides default root if not specified)
+  "sources": [
+    "sources/pencil/debug-overlay.pen",
+    "sources/pencil/performance-panel.pen"
+  ],
+
+  // Token registry (relative to this manifest)
+  "tokens": "tokens.ir.json",
+
+  // Default targets for `boomhud generate --manifest ui/boom-hud.compose.json`
+  "targets": ["godot", "terminalgui"],
+
+  // Output directory (relative to this manifest)
+  "output": "../generated",
+
+  // Namespace for generated code
+  "namespace": "BoomHud.Sample.Hud"
+}

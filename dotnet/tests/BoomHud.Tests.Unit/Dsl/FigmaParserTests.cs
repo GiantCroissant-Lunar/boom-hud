@@ -680,6 +680,172 @@ public class FigmaParserTests
     }
 
     [Fact]
+    public void Parse_PseudoButtonNodeType_IsNormalized_AndDoesNotThrow()
+    {
+        var json = """
+            {
+                "name": "Test",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Frame",
+                                    "type": "FRAME",
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Play Button",
+                                            "type": "BUTTON",
+                                            "characters": "▶"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+        doc.Root.Children.Should().ContainSingle();
+    }
+
+    [Fact]
+    public void Parse_PseudoNodeTypes_EmitsWarnings()
+    {
+        var json = """
+            {
+                "name": "Test",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Frame",
+                                    "type": "FRAME",
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Play Button",
+                                            "type": "BUTTON"
+                                        },
+                                        {
+                                            "id": "1:3",
+                                            "name": "Scrubber",
+                                            "type": "SLIDER"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        _ = _parser.Parse(json, out var warnings);
+
+        warnings.Should().NotBeNull();
+        warnings.Should().HaveCount(2);
+        warnings.Should().Contain(w => w.Contains("Pseudo node type 'BUTTON'", StringComparison.Ordinal));
+        warnings.Should().Contain(w => w.Contains("Pseudo node type 'SLIDER'", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Parse_PseudoNodeTypes_StampsOriginalTypeMetadataIntoInstanceOverrides()
+    {
+        var json = """
+            {
+                "name": "Test",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Frame",
+                                    "type": "FRAME",
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Play Button",
+                                            "type": "BUTTON"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        // The pseudo node should still exist as a node in the IR and carry original-type metadata.
+        doc.Root.Children.Should().ContainSingle();
+        var buttonNode = doc.Root.Children[0];
+
+        buttonNode.InstanceOverrides.Should().ContainKey(BoomHudMetadataKeys.OriginalFigmaType);
+        buttonNode.InstanceOverrides[BoomHudMetadataKeys.OriginalFigmaType].Should().Be("BUTTON");
+        buttonNode.InstanceOverrides.Should().ContainKey(BoomHudMetadataKeys.NormalizedFromPseudoType);
+        buttonNode.InstanceOverrides[BoomHudMetadataKeys.NormalizedFromPseudoType].Should().Be(true);
+    }
+
+    [Fact]
+    public void Parse_PseudoSliderNodeType_IsNormalized_AndDoesNotThrow()
+    {
+        var json = """
+            {
+                "name": "Test",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Frame",
+                                    "type": "FRAME",
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Scrubber",
+                                            "type": "SLIDER"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+        doc.Root.Children.Should().ContainSingle();
+    }
+
+    [Fact]
     public void Parse_WithOpacity_ExtractsOpacity()
     {
         var json = """

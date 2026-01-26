@@ -11,9 +11,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj" />
   </ItemGroup>
 

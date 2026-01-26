@@ -89,7 +89,7 @@ public class EndToEndTests
         // Check view file
         var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
         viewFile.Content.Should().Contain("namespace MyGame.Hud;");
-        viewFile.Content.Should().Contain("public partial class StatusBarView : View");
+        viewFile.Content.Should().Contain("public partial class StatusBarView : Terminal.Gui.ViewBase.View");
         viewFile.Content.Should().Contain("private Label _healthLabel");
         viewFile.Content.Should().Contain("private Label _locationLabel");
     }

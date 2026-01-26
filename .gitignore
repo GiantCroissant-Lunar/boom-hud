@@ -3,7 +3,17 @@
 .vs/
 
 # Local environment and tools
-.agent/
+.claude/
+.cline/
+.clinerules/
+.codex/
+.cursor/
+.gemini/
+.kilocode/
+.opencode/
+.windsurf/
+
+opencode.json
 .nuke/
 .venv/
 ref-projects/
@@ -13,3 +23,12 @@ ref-projects/
 [Oo][Bb][Jj]/
 build/
 *.log
+
+# Generated snapshots (regenerated in CI)
+ui/snapshots/
+
+# Test output
+_test_output/
+
+# Godot generated files
+.godot/

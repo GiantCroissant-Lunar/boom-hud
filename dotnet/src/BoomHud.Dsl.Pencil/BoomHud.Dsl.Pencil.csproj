@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Dsl.Pencil</AssemblyName>
+    <RootNamespace>BoomHud.Dsl.Pencil</RootNamespace>
+    <Description>Pencil.dev .pen file parser for BoomHud component definitions</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

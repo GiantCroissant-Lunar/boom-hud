@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
@@ -40,13 +42,27 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                     Type = GeneratedFileType.SourceCode
                 });
 
-                var componentViewModelCode = GenerateViewModelInterface(componentDocument, options);
-                files.Add(new GeneratedFile
+                if (options.EmitCompose)
                 {
-                    Path = $"I{componentDocument.Name}ViewModel.g.cs",
-                    Content = componentViewModelCode,
-                    Type = GeneratedFileType.SourceCode
-                });
+                    var composeCode = GenerateCompose(componentDocument, options, document.Components);
+                    files.Add(new GeneratedFile
+                    {
+                        Path = $"{componentDocument.Name}View.Compose.g.cs",
+                        Content = composeCode,
+                        Type = GeneratedFileType.SourceCode
+                    });
+                }
+
+                if (options.EmitViewModelInterfaces)
+                {
+                    var componentViewModelCode = GenerateViewModelInterface(componentDocument, options);
+                    files.Add(new GeneratedFile
+                    {
+                        Path = $"I{componentDocument.Name}ViewModel.g.cs",
+                        Content = componentViewModelCode,
+                        Type = GeneratedFileType.SourceCode
+                    });
+                }
             }
 
             // Generate the main view class
@@ -58,14 +74,28 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                 Type = GeneratedFileType.SourceCode
             });
 
-            // Generate the view model interface
-            var viewModelCode = GenerateViewModelInterface(document, options);
-            files.Add(new GeneratedFile
+            if (options.EmitCompose)
             {
-                Path = $"I{document.Name}ViewModel.g.cs",
-                Content = viewModelCode,
-                Type = GeneratedFileType.SourceCode
-            });
+                var composeCode = GenerateCompose(document, options, document.Components);
+                files.Add(new GeneratedFile
+                {
+                    Path = $"{document.Name}View.Compose.g.cs",
+                    Content = composeCode,
+                    Type = GeneratedFileType.SourceCode
+                });
+            }
+
+            // ViewModel interface
+            if (options.EmitViewModelInterfaces)
+            {
+                var viewModelCode = GenerateViewModelInterface(document, options);
+                files.Add(new GeneratedFile
+                {
+                    Path = $"I{document.Name}ViewModel.g.cs",
+                    Content = viewModelCode,
+                    Type = GeneratedFileType.SourceCode
+                });
+            }
         }
         catch (Exception ex)
         {
@@ -87,6 +117,12 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
     {
         var cb = new CodeBuilder();
 
+        var viewModelNamespace = options.ViewModelNamespace ?? options.Namespace;
+        var sourceId = ComputeSourceId(document);
+        var contractId = options.ContractId ?? string.Empty;
+
+        var normalizedPseudoNodes = CollectNormalizedPseudoNodes(document);
+
         // File header
         if (options.IncludeComments)
         {
@@ -104,11 +140,18 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         }
 
         // Usings
+        cb.AppendLine("using System;");
+        cb.AppendLine("using System.Collections.Generic;");
         cb.AppendLine("using Terminal.Gui;");
         cb.AppendLine("using Terminal.Gui.Drawing;");
         cb.AppendLine("using Terminal.Gui.Views;");
         cb.AppendLine("using Terminal.Gui.ViewBase;");
         cb.AppendLine("using View = Terminal.Gui.ViewBase.View;");
+
+        if (!string.Equals(viewModelNamespace, options.Namespace, StringComparison.Ordinal))
+        {
+            cb.AppendLine($"using {viewModelNamespace};");
+        }
         cb.AppendLine();
 
         // Namespace
@@ -127,6 +170,28 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Class declaration
         cb.AppendLine($"public partial class {document.Name}View : Terminal.Gui.ViewBase.View");
         cb.OpenBlock();
+
+        cb.AppendLine($"public const string BoomHudSourceId = \"{sourceId}\";");
+        cb.AppendLine($"public const string BoomHudContractId = \"{EscapeString(contractId)}\";");
+        cb.AppendLine($"public static readonly string[] BoomHudNormalizedPseudoNodes = {FormatStringArrayLiteral(normalizedPseudoNodes)};");
+        cb.AppendLine();
+
+        cb.AppendLine("private readonly Dictionary<string, View> _slots = new(StringComparer.Ordinal);");
+        cb.AppendLine();
+        cb.AppendLine("private void RegisterSlot(string slotKey, View view)");
+        cb.OpenBlock();
+        cb.AppendLine("_slots[slotKey] = view;");
+        cb.CloseBlock();
+        cb.AppendLine();
+        cb.AppendLine("public T FindSlot<T>(string slotKey) where T : View");
+        cb.OpenBlock();
+        cb.AppendLine("if (!_slots.TryGetValue(slotKey, out var view))");
+        cb.OpenBlock();
+        cb.AppendLine("throw new InvalidOperationException(\"Could not find slot: \" + slotKey);");
+        cb.CloseBlock();
+        cb.AppendLine("return (T)view;");
+        cb.CloseBlock();
+        cb.AppendLine();
 
         // ViewModel property
         cb.AppendLine($"private I{document.Name}ViewModel? _viewModel;");
@@ -195,6 +260,180 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         return cb.ToString();
     }
 
+    private static string GenerateCompose(HudDocument document, GenerationOptions options, IReadOnlyDictionary<string, HudComponentDefinition> components)
+    {
+        var cb = new CodeBuilder();
+        var viewModelNamespace = options.ViewModelNamespace ?? options.Namespace;
+
+        cb.AppendLine("#nullable enable");
+        cb.AppendLine();
+        cb.AppendLine("using System;");
+        cb.AppendLine("using System.Collections.Generic;");
+
+        if (!string.Equals(viewModelNamespace, options.Namespace, StringComparison.Ordinal))
+        {
+            cb.AppendLine($"using {viewModelNamespace};");
+        }
+
+        cb.AppendLine();
+        cb.AppendLine($"namespace {options.Namespace};");
+        cb.AppendLine();
+
+        cb.AppendLine($"public static class {document.Name}_Compose");
+        cb.OpenBlock();
+        cb.AppendLine("public interface IChildVmResolver");
+        cb.OpenBlock();
+        cb.AppendLine("T Resolve<T>(object parentVm, string slotKey) where T : class;");
+        cb.CloseBlock();
+        cb.AppendLine();
+
+        cb.AppendLine("private sealed class DisposableAction : IDisposable");
+        cb.OpenBlock();
+        cb.AppendLine("private readonly Action _dispose;");
+        cb.AppendLine("public DisposableAction(Action dispose) { _dispose = dispose; }");
+        cb.AppendLine("public void Dispose() { _dispose(); }");
+        cb.CloseBlock();
+        cb.AppendLine();
+
+        cb.AppendLine("private sealed class CompositeDisposable : IDisposable");
+        cb.OpenBlock();
+        cb.AppendLine("private readonly List<IDisposable> _items = new();");
+        cb.AppendLine("public void Add(IDisposable d) { _items.Add(d); }");
+        cb.AppendLine("public void Dispose() { for (var i = _items.Count - 1; i >= 0; i--) _items[i].Dispose(); }");
+        cb.CloseBlock();
+        cb.AppendLine();
+
+        cb.AppendLine($"public static IDisposable Apply({document.Name}View root, I{document.Name}ViewModel vm, IChildVmResolver resolver)");
+        cb.OpenBlock();
+        cb.AppendLine("var d = new CompositeDisposable();");
+        cb.AppendLine("root.ViewModel = vm;");
+        cb.AppendLine("d.Add(new DisposableAction(() => root.ViewModel = null));");
+
+        var childInstances = new List<(ComponentNode Node, HudComponentDefinition Def)>();
+        CollectComponentInstances(document.Root, components, childInstances);
+        foreach (var (node, def) in childInstances)
+        {
+            var slotKey = node.SlotKey ?? node.Id ?? def.Name;
+            if (string.IsNullOrWhiteSpace(slotKey))
+                continue;
+
+            cb.AppendLine();
+            cb.AppendLine($"var childView = root.FindSlot<{def.Name}View>(\"{EscapeString(slotKey)}\");");
+            cb.AppendLine($"var childVm = resolver.Resolve<I{def.Name}ViewModel>(vm, \"{EscapeString(slotKey)}\");");
+            cb.AppendLine("childView.ViewModel = childVm;");
+            cb.AppendLine("d.Add(new DisposableAction(() => childView.ViewModel = null));");
+        }
+
+        cb.AppendLine();
+        cb.AppendLine("return d;");
+        cb.CloseBlock();
+
+        cb.CloseBlock();
+        return cb.ToString();
+    }
+
+    private static void CollectComponentInstances(ComponentNode node, IReadOnlyDictionary<string, HudComponentDefinition> components, List<(ComponentNode Node, HudComponentDefinition Def)> results)
+    {
+        if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var def))
+        {
+            results.Add((node, def));
+        }
+
+        foreach (var child in node.Children)
+        {
+            CollectComponentInstances(child, components, results);
+        }
+    }
+
+    private static string ComputeSourceId(HudDocument document)
+    {
+        var sb = new StringBuilder();
+        sb.Append("doc:").Append(document.Name).Append('\n');
+        AppendNode(sb, document.Root);
+        return "sha256:" + ComputeSha256Hex(sb.ToString());
+    }
+
+    private static List<string> CollectNormalizedPseudoNodes(HudDocument document)
+    {
+        var results = new List<string>();
+        CollectNormalizedPseudoNodes(document.Root, currentPath: [], results);
+        results.Sort(StringComparer.Ordinal);
+        return results;
+    }
+
+    private static void CollectNormalizedPseudoNodes(ComponentNode node, List<string> currentPath, List<string> results)
+    {
+        var nextPath = new List<string>(currentPath);
+        if (!string.IsNullOrWhiteSpace(node.Id))
+        {
+            nextPath.Add(node.Id);
+        }
+
+        if (node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.NormalizedFromPseudoType, out var normalized)
+            && normalized is bool normalizedBool
+            && normalizedBool
+            && node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.OriginalFigmaType, out var original)
+            && original is string originalStr)
+        {
+            results.Add($"{string.Join("/", nextPath)}|{originalStr}|{node.Type}");
+        }
+
+        foreach (var child in node.Children)
+        {
+            CollectNormalizedPseudoNodes(child, nextPath, results);
+        }
+    }
+
+    private static string FormatStringArrayLiteral(List<string> items)
+    {
+        if (items.Count == 0)
+        {
+            return "new string[0]";
+        }
+
+        return "new[] { " + string.Join(", ", items.Select(s => "\"" + EscapeString(s) + "\"")) + " }";
+    }
+
+    private static void AppendNode(StringBuilder sb, ComponentNode node)
+    {
+        sb.Append("node:")
+            .Append(node.Type.ToString()).Append('|')
+            .Append(node.Id ?? string.Empty).Append('|')
+            .Append(node.SlotKey ?? string.Empty).Append('|')
+            .Append(node.ComponentRefId ?? string.Empty).Append('\n');
+
+        foreach (var b in node.Bindings.OrderBy(b => b.Property, StringComparer.Ordinal).ThenBy(b => b.Path, StringComparer.Ordinal))
+        {
+            sb.Append("bind:")
+                .Append(b.Property).Append('|')
+                .Append(b.Path).Append('|')
+                .Append(b.Key ?? string.Empty).Append('|')
+                .Append(b.Format ?? string.Empty).Append('\n');
+        }
+
+        if (node.Command != null)
+        {
+            sb.Append("cmd:").Append(node.Command).Append('\n');
+        }
+
+        foreach (var child in node.Children)
+        {
+            AppendNode(sb, child);
+        }
+    }
+
+    private static string ComputeSha256Hex(string text)
+    {
+        var bytes = Encoding.UTF8.GetBytes(text);
+        var hash = SHA256.HashData(bytes);
+        var hex = new StringBuilder(hash.Length * 2);
+        foreach (var b in hash)
+        {
+            hex.Append(b.ToString("x2", CultureInfo.InvariantCulture));
+        }
+        return hex.ToString();
+    }
+
     private static string ApplyDescriptionReplacements(
         string description,
         IReadOnlyDictionary<string, string> replacements)
@@ -222,6 +461,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
     {
         var cb = new CodeBuilder();
 
+        var viewModelNamespace = options.ViewModelNamespace ?? options.Namespace;
+
         if (options.IncludeComments)
         {
             cb.AppendLine("// <auto-generated>");
@@ -236,7 +477,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
             cb.AppendLine();
         }
 
-        cb.AppendLine($"namespace {options.Namespace};");
+        cb.AppendLine($"namespace {viewModelNamespace};");
         cb.AppendLine();
 
         if (options.IncludeComments)
@@ -456,6 +697,11 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Add to parent
         cb.AppendLine($"{parentVar}.Add({varName});");
 
+        if (!string.IsNullOrWhiteSpace(node.SlotKey))
+        {
+            cb.AppendLine($"RegisterSlot(\"{EscapeString(node.SlotKey)}\", {varName});");
+        }
+
         return varName;
     }
 
@@ -647,7 +893,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         {
             if (string.Equals(binding.Property, "command", StringComparison.OrdinalIgnoreCase))
             {
-                return binding.Path;
+                return !string.IsNullOrWhiteSpace(binding.Key) ? binding.Key : binding.Path;
             }
         }
 
@@ -674,7 +920,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
             foreach (var binding in node.Bindings)
             {
-                var propertyName = binding.Path.Replace(".", "");
+                var member = !string.IsNullOrWhiteSpace(binding.Key) ? binding.Key! : binding.Path;
+                var propertyName = member.Replace(".", "");
                 var valueExpr = $"_viewModel.{propertyName}";
 
                 switch (binding.Property.ToLowerInvariant())
@@ -737,7 +984,9 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
     {
         foreach (var binding in node.Bindings)
         {
-            paths.Add(binding.Path);
+            var member = !string.IsNullOrWhiteSpace(binding.Key) ? binding.Key : binding.Path;
+            if (!string.IsNullOrEmpty(member))
+                paths.Add(member);
         }
 
         if (!string.IsNullOrWhiteSpace(node.Command))

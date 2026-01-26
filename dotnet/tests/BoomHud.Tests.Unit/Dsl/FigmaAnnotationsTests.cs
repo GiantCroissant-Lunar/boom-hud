@@ -129,6 +129,105 @@ public class FigmaAnnotationsTests
         leftGroup!.Type.Should().Be(ComponentType.Menu);
     }
 
+    [Fact]
+    public void Apply_PseudoTypeNodeWithoutTypeOverride_EmitsWarning()
+    {
+        var json = """
+            {
+              "name": "Test File",
+              "document": {
+                "id": "0:0",
+                "type": "DOCUMENT",
+                "children": [
+                  {
+                    "id": "0:1",
+                    "type": "CANVAS",
+                    "children": [
+                      {
+                        "id": "1:1",
+                        "name": "Frame",
+                        "type": "FRAME",
+                        "children": [
+                          {
+                            "id": "1:2",
+                            "name": "Play Button",
+                            "type": "BUTTON"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        var annotations = FigmaAnnotations.Parse("""
+            {
+              "nodes": []
+            }
+            """);
+
+        _ = FigmaAnnotations.Apply(doc, annotations, out var warnings);
+
+        warnings.Should().ContainSingle();
+        warnings[0].Should().Contain("playButton");
+        warnings[0].Should().Contain("set.type='Button'");
+    }
+
+    [Fact]
+    public void Apply_PseudoTypeNodeWithTypeOverride_DoesNotEmitWarning()
+    {
+        var json = """
+            {
+              "name": "Test File",
+              "document": {
+                "id": "0:0",
+                "type": "DOCUMENT",
+                "children": [
+                  {
+                    "id": "0:1",
+                    "type": "CANVAS",
+                    "children": [
+                      {
+                        "id": "1:1",
+                        "name": "Frame",
+                        "type": "FRAME",
+                        "children": [
+                          {
+                            "id": "1:2",
+                            "name": "Play Button",
+                            "type": "BUTTON"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        var annotations = FigmaAnnotations.Parse("""
+            {
+              "nodes": [
+                {
+                  "match": { "path": ["frame", "playButton"] },
+                  "set": { "type": "Button" }
+                }
+              ]
+            }
+            """);
+
+        _ = FigmaAnnotations.Apply(doc, annotations, out var warnings);
+
+        warnings.Should().BeEmpty();
+    }
+
     private static ComponentNode? FindNodeById(ComponentNode node, string id)
     {
         if (string.Equals(node.Id, id, StringComparison.Ordinal))

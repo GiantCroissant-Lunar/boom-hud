@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/tokens.schema.json",
+  "title": "BoomHud Token Registry",
+  "description": "Authoritative design token registry for BoomHud. Both Figma and Pencil parsers resolve tokens against this registry.",
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Token registry version",
+      "enum": ["1.0"]
+    },
+    "colors": {
+      "type": "object",
+      "description": "Color tokens",
+      "additionalProperties": {
+        "$ref": "#/$defs/colorToken"
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "description": "Spacing tokens (margins, padding, gaps)",
+      "additionalProperties": {
+        "$ref": "#/$defs/spacingToken"
+      }
+    },
+    "typography": {
+      "type": "object",
+      "description": "Typography tokens (font families, sizes, weights)",
+      "additionalProperties": {
+        "$ref": "#/$defs/typographyToken"
+      }
+    },
+    "radii": {
+      "type": "object",
+      "description": "Border radius tokens",
+      "additionalProperties": {
+        "$ref": "#/$defs/radiusToken"
+      }
+    },
+    "shadows": {
+      "type": "object",
+      "description": "Shadow tokens",
+      "additionalProperties": {
+        "$ref": "#/$defs/shadowToken"
+      }
+    },
+    "opacity": {
+      "type": "object",
+      "description": "Opacity tokens",
+      "additionalProperties": {
+        "$ref": "#/$defs/opacityToken"
+      }
+    }
+  },
+  "$defs": {
+    "colorToken": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Color value (hex, rgb, rgba, hsl, or named color)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "description": "Whether this token is deprecated",
+          "default": false
+        },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alternative names for this token"
+        }
+      }
+    },
+    "spacingToken": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "Spacing value in pixels"
+        },
+        "description": { "type": "string" },
+        "deprecated": { "type": "boolean", "default": false }
+      }
+    },
+    "typographyToken": {
+      "type": "object",
+      "properties": {
+        "fontFamily": {
+          "type": "string",
+          "description": "Font family name(s)"
+        },
+        "fontSize": {
+          "type": "number",
+          "description": "Font size in pixels"
+        },
+        "fontWeight": {
+          "oneOf": [
+            { "type": "string", "enum": ["normal", "bold", "light", "medium", "semibold"] },
+            { "type": "number", "minimum": 100, "maximum": 900 }
+          ],
+          "description": "Font weight"
+        },
+        "lineHeight": {
+          "oneOf": [
+            { "type": "number" },
+            { "type": "string" }
+          ],
+          "description": "Line height (number for multiplier, string for explicit value)"
+        },
+        "letterSpacing": {
+          "type": "number",
+          "description": "Letter spacing in pixels"
+        },
+        "description": { "type": "string" },
+        "deprecated": { "type": "boolean", "default": false }
+      }
+    },
+    "radiusToken": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "object",
+              "properties": {
+                "topLeft": { "type": "number" },
+                "topRight": { "type": "number" },
+                "bottomRight": { "type": "number" },
+                "bottomLeft": { "type": "number" }
+              }
+            }
+          ],
+          "description": "Border radius value(s) in pixels"
+        },
+        "description": { "type": "string" },
+        "deprecated": { "type": "boolean", "default": false }
+      }
+    },
+    "shadowToken": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["drop", "inner"],
+              "default": "drop"
+            },
+            "color": { "type": "string" },
+            "offsetX": { "type": "number" },
+            "offsetY": { "type": "number" },
+            "blur": { "type": "number" },
+            "spread": { "type": "number" }
+          }
+        },
+        "description": { "type": "string" },
+        "deprecated": { "type": "boolean", "default": false }
+      }
+    },
+    "opacityToken": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Opacity value (0.0 to 1.0)"
+        },
+        "description": { "type": "string" },
+        "deprecated": { "type": "boolean", "default": false }
+      }
+    }
+  }
+}

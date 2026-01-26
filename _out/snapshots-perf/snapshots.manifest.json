@@ -1,0 +1,44 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-01-26T09:38:07.0129171Z",
+  "toolVersion": "1.0.0.0",
+  "godotVersion": null,
+  "target": "godot",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "scale": 1
+  },
+  "runnerInfo": {
+    "os": "Win32NT 10.0.26200.0",
+    "dotnetVersion": "9.0.12",
+    "isCI": false,
+    "ciRunner": null,
+    "runnerScriptHash": null,
+    "fontBundleHash": null,
+    "headless": true
+  },
+  "inputHashes": {
+    "states": "73a8558e1d6d8c9b44c2285752cdc9159770570d6bbe84ed36edee47e738752f",
+    "manifest": "e1c6c4f97e9ba704c72fdc5214cfb601c6a210d8f6bb4bce863b217d65d3a52a",
+    "source:debug-overlay.pen": "cc5ac5d582964c0832541b0dfb8db8da23a21d07221bc7c6b33d1ac670bb7c8c",
+    "source:performance-panel.pen": "05589295665b8d35b2730b136dcccb157f7f24e8dfa0e3a67379ba0952200217"
+  },
+  "snapshots": [
+    {
+      "state": "optimal",
+      "path": "000_optimal.png",
+      "sha256": "7ce49b775a00527c8b83d6d9d276eba3f744a5d4b372e4283c3e6b74c0efcc27"
+    },
+    {
+      "state": "degraded",
+      "path": "001_degraded.png",
+      "sha256": "7ce49b775a00527c8b83d6d9d276eba3f744a5d4b372e4283c3e6b74c0efcc27"
+    },
+    {
+      "state": "critical",
+      "path": "002_critical.png",
+      "sha256": "7ce49b775a00527c8b83d6d9d276eba3f744a5d4b372e4283c3e6b74c0efcc27"
+    }
+  ]
+}

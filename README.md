@@ -77,6 +77,8 @@ See [docs/rfcs/](./docs/rfcs/) for detailed design documents:
 | [RFC-0005](./docs/rfcs/RFC-0005-backend-adapters.md) | Backend Adapters |
 | [RFC-0006](./docs/rfcs/RFC-0006-capability-policies.md) | Capability Policies |
 | [RFC-0007](./docs/rfcs/RFC-0007-theming-styles.md) | Theming & Styles |
+| [RFC-0013](./docs/rfcs/RFC-0013-native-godot-tscn-backend.md) | Native Godot TSCN Backend |
+| [RFC-0014](./docs/rfcs/RFC-0014-pencil-dev-integration.md) | Pencil.dev Integration |
 
 ## Implementation Plan
 

@@ -1,0 +1,19 @@
+# Windsurf Adapter Configuration
+
+tool: windsurf
+display_name: Windsurf
+
+rules:
+  strategy: directory
+  target: .windsurf/rules
+
+skills:
+  strategy: stub
+  target: .windsurf/skills
+  source: .agent/skills
+
+workflows:
+  enabled: true
+  target: .windsurf/workflows
+
+cleanup: []

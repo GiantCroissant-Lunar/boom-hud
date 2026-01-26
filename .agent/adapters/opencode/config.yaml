@@ -1,0 +1,25 @@
+# OpenCode Adapter Configuration
+
+tool: opencode
+display_name: OpenCode
+
+rules:
+  strategy: none
+
+skills:
+  strategy: stub
+  target: .opencode/skills
+  source: .agent/skills
+
+commands:
+  enabled: false
+
+agents:
+  enabled: true
+  source: .agent/adapters/opencode/agents
+
+permissions:
+  enabled: true
+  source: .agent/adapters/opencode/permissions.yaml
+
+cleanup: []

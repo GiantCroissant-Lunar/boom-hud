@@ -36,6 +36,16 @@ public sealed record GenerationOptions
     /// Root namespace for generated code.
     /// </summary>
     public string Namespace { get; init; } = "Generated";
+    public string? ViewModelNamespace { get; init; }
+    public bool EmitViewModelInterfaces { get; init; } = true;
+    public bool EmitCompose { get; init; }
+
+    /// <summary>
+    /// Emit Godot scene files (.tscn) when supported by the backend.
+    /// </summary>
+    public bool EmitTscn { get; init; }
+    public bool EmitTscnAttachScript { get; init; } = true;
+    public string? ContractId { get; init; }
 
     /// <summary>
     /// Output directory for generated files.

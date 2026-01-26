@@ -10,6 +10,8 @@ public sealed record ComponentNode
     /// </summary>
     public string? Id { get; init; }
 
+    public string? SlotKey { get; init; }
+
     /// <summary>
     /// Type of component (label, button, container, etc.).
     /// </summary>
@@ -101,8 +103,12 @@ public enum ComponentType
     Image,
 
     // Menus
+    MenuBar,
     Menu,
     MenuItem,
+
+    // Timeline
+    Timeline,
 
     // Containers
     Container,

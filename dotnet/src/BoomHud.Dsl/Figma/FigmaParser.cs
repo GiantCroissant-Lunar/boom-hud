@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using BoomHud.Abstractions.IR;
 
 namespace BoomHud.Dsl.Figma;
@@ -19,6 +21,17 @@ public sealed class FigmaParser : IFigmaParser
 
     public HudDocument Parse(string json)
     {
+        return Parse(json, out _);
+    }
+
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public HudDocument Parse(string json, out IReadOnlyList<string> warnings)
+    {
+        var warningList = new List<string>();
+        warnings = warningList;
+
+        var pseudoTypesByNodeId = new Dictionary<string, string>(StringComparer.Ordinal);
+        json = NormalizePseudoNodeTypes(json, warningList, pseudoTypesByNodeId);
         var figmaFile = FigmaDto.FromJson(json)
             ?? throw new InvalidOperationException("Failed to parse Figma JSON");
 
@@ -43,11 +56,22 @@ public sealed class FigmaParser : IFigmaParser
             throw new InvalidOperationException("No suitable root node found on canvas");
         }
 
-        return ConvertToHudDocument(rootFrame, figmaFile);
+        return ConvertToHudDocument(rootFrame, figmaFile, pseudoTypesByNodeId);
     }
 
     public HudDocument ParseNode(string json, string nodeId)
     {
+        return ParseNode(json, nodeId, out _);
+    }
+
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public HudDocument ParseNode(string json, string nodeId, out IReadOnlyList<string> warnings)
+    {
+        var warningList = new List<string>();
+        warnings = warningList;
+
+        var pseudoTypesByNodeId = new Dictionary<string, string>(StringComparer.Ordinal);
+        json = NormalizePseudoNodeTypes(json, warningList, pseudoTypesByNodeId);
         var figmaFile = FigmaDto.FromJson(json)
             ?? throw new InvalidOperationException("Failed to parse Figma JSON");
 
@@ -59,13 +83,23 @@ public sealed class FigmaParser : IFigmaParser
         var node = FindNodeById(figmaFile.Document, nodeId)
             ?? throw new InvalidOperationException($"Node with ID '{nodeId}' not found");
 
-        return ConvertToHudDocument(node, figmaFile);
+        return ConvertToHudDocument(node, figmaFile, pseudoTypesByNodeId);
     }
 
     public ValidationResult Validate(string json)
     {
+        return Validate(json, out _);
+    }
+
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public ValidationResult Validate(string json, out IReadOnlyList<string> warnings)
+    {
+        var warningList = new List<string>();
+        warnings = warningList;
+
         try
         {
+            json = NormalizePseudoNodeTypes(json, warningList, pseudoTypesByNodeId: null);
             var figmaFile = FigmaDto.FromJson(json);
 
             if (figmaFile == null)
@@ -89,6 +123,98 @@ public sealed class FigmaParser : IFigmaParser
                 Column = (int?)ex.BytePositionInLine
             });
         }
+    }
+
+    private static string NormalizePseudoNodeTypes(string json, List<string>? warnings, Dictionary<string, string>? pseudoTypesByNodeId)
+    {
+        if (json.IndexOf("\"BUTTON\"", StringComparison.OrdinalIgnoreCase) < 0
+            && json.IndexOf("\"SLIDER\"", StringComparison.OrdinalIgnoreCase) < 0)
+        {
+            return json;
+        }
+
+        JsonNode? root;
+        try
+        {
+            root = JsonNode.Parse(json);
+        }
+        catch
+        {
+            return json;
+        }
+
+        if (root is null)
+        {
+            return json;
+        }
+
+        var changed = false;
+
+        void Visit(JsonNode? node)
+        {
+            if (node is null)
+            {
+                return;
+            }
+
+            if (node is JsonObject obj)
+            {
+                // Only normalize objects that look like Figma nodes.
+                // This avoids touching unrelated nested objects (e.g., paints) that also have a "type" field.
+                if (obj.TryGetPropertyValue("id", out var idNode)
+                    && idNode is JsonValue idVal
+                    && idVal.TryGetValue<string>(out var idStr)
+                    && obj.TryGetPropertyValue("name", out var nameNode)
+                    && nameNode is JsonValue nameVal
+                    && nameVal.TryGetValue<string>(out var nameStr)
+                    && obj.TryGetPropertyValue("type", out var typeNode)
+                    && typeNode is JsonValue typeVal
+                    && typeVal.TryGetValue<string>(out var typeStr))
+                {
+                    if (string.Equals(typeStr, "BUTTON", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pseudoTypesByNodeId?.TryAdd(idStr, typeStr);
+                        obj["type"] = "TEXT";
+                        changed = true;
+                        warnings?.Add($"Pseudo node type 'BUTTON' was normalized at Id='{idStr}', Name='{nameStr}'. Consider adding a set.type override in annotations.");
+                    }
+                    else if (string.Equals(typeStr, "SLIDER", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pseudoTypesByNodeId?.TryAdd(idStr, typeStr);
+                        obj["type"] = "FRAME";
+                        changed = true;
+                        warnings?.Add($"Pseudo node type 'SLIDER' was normalized at Id='{idStr}', Name='{nameStr}'. Consider adding a set.type override in annotations.");
+                    }
+                }
+
+                foreach (var kv in obj)
+                {
+                    Visit(kv.Value);
+                }
+
+                return;
+            }
+
+            if (node is JsonArray arr)
+            {
+                foreach (var item in arr)
+                {
+                    Visit(item);
+                }
+            }
+        }
+
+        Visit(root);
+
+        if (!changed)
+        {
+            return json;
+        }
+
+        return root.ToJsonString(new JsonSerializerOptions
+        {
+            WriteIndented = false
+        });
     }
 
     private static CanvasNode? FindFirstCanvas(DocumentNode node)
@@ -160,7 +286,7 @@ public sealed class FigmaParser : IFigmaParser
         return null;
     }
 
-    private static HudDocument ConvertToHudDocument(SubcanvasNode rootNode, FigmaDto file)
+    private static HudDocument ConvertToHudDocument(SubcanvasNode rootNode, FigmaDto file, IReadOnlyDictionary<string, string> pseudoTypesByNodeId)
     {
         var componentDefinitions = new Dictionary<string, HudComponentDefinition>(StringComparer.Ordinal);
         if (file.Document != null && file.Document.Children != null)
@@ -171,13 +297,13 @@ public sealed class FigmaParser : IFigmaParser
                 {
                     foreach (var child in canvas.Children)
                     {
-                        CollectComponentDefinitions(child, file, componentDefinitions);
+                        CollectComponentDefinitions(child, file, componentDefinitions, pseudoTypesByNodeId);
                     }
                 }
             }
         }
 
-        var componentNode = ConvertNode(rootNode, file, componentDefinitions, isComponentDefinition: false);
+        var componentNode = ConvertNode(rootNode, file, componentDefinitions, isComponentDefinition: false, pseudoTypesByNodeId);
 
         return new HudDocument
         {
@@ -196,7 +322,8 @@ public sealed class FigmaParser : IFigmaParser
     private static void CollectComponentDefinitions(
         SubcanvasNode node,
         FigmaDto file,
-        IDictionary<string, HudComponentDefinition> components)
+        IDictionary<string, HudComponentDefinition> components,
+        IReadOnlyDictionary<string, string> pseudoTypesByNodeId)
     {
         if (node.Type == SubcanvasNodeType.Component &&
             node.Children != null && node.Children.Count > 0)
@@ -218,7 +345,7 @@ public sealed class FigmaParser : IFigmaParser
             if (!components.ContainsKey(id))
             {
                 var placeholder = new Dictionary<string, HudComponentDefinition>(StringComparer.Ordinal);
-                var root = ConvertNode(node, file, placeholder, isComponentDefinition: true);
+                var root = ConvertNode(node, file, placeholder, isComponentDefinition: true, pseudoTypesByNodeId);
 
                 components[id] = new HudComponentDefinition
                 {
@@ -237,7 +364,7 @@ public sealed class FigmaParser : IFigmaParser
 
         foreach (var child in node.Children)
         {
-            CollectComponentDefinitions(child, file, components);
+            CollectComponentDefinitions(child, file, components, pseudoTypesByNodeId);
         }
     }
 
@@ -245,7 +372,8 @@ public sealed class FigmaParser : IFigmaParser
         SubcanvasNode figmaNode,
         FigmaDto file,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
-        bool isComponentDefinition)
+        bool isComponentDefinition,
+        IReadOnlyDictionary<string, string> pseudoTypesByNodeId)
     {
         var componentType = MapFigmaTypeToComponentType(figmaNode.Type);
         var layout = ExtractLayout(figmaNode);
@@ -256,6 +384,12 @@ public sealed class FigmaParser : IFigmaParser
 
         string? componentRefId = null;
         Dictionary<string, object?> instanceOverrides = new(StringComparer.Ordinal);
+
+        if (pseudoTypesByNodeId.TryGetValue(figmaNode.Id, out var originalType))
+        {
+            instanceOverrides[BoomHudMetadataKeys.OriginalFigmaType] = originalType;
+            instanceOverrides[BoomHudMetadataKeys.NormalizedFromPseudoType] = true;
+        }
 
         if (!isComponentDefinition && isInstanceLike && !string.IsNullOrWhiteSpace(figmaNode.ComponentId))
         {
@@ -307,6 +441,7 @@ public sealed class FigmaParser : IFigmaParser
         var node = new ComponentNode
         {
             Id = SanitizeId(figmaNode.Name),
+            SlotKey = null,
             Type = componentType,
             Visible = new BindableValue<bool> { Value = figmaNode.Visible ?? true },
             Layout = layout,
@@ -361,7 +496,7 @@ public sealed class FigmaParser : IFigmaParser
         {
             children = figmaNode.Children
                 .Where(c => c.Visible ?? true) // Skip hidden nodes
-                .Select(child => ConvertNode(child, file, components, isComponentDefinition: false))
+                .Select(child => ConvertNode(child, file, components, isComponentDefinition: false, pseudoTypesByNodeId))
                 .ToList();
         }
 

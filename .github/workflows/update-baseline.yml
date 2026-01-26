@@ -1,0 +1,144 @@
+name: Update UI Baseline
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run mode (no Godot, placeholder images)'
+        type: boolean
+        default: false
+      godot_version:
+        description: 'Godot version tag (e.g., 4.3-stable)'
+        type: string
+        default: '4.3-stable'
+      reason:
+        description: 'Reason for baseline update (shown in summary)'
+        type: string
+        required: true
+
+jobs:
+  update-baseline:
+    runs-on: ubuntu-latest
+    # For real snapshots, use: runs-on: self-hosted
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        working-directory: dotnet
+        run: dotnet restore
+
+      - name: Build CLI
+        working-directory: dotnet
+        run: dotnet build src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release --no-restore
+
+      # Download current baseline for comparison
+      - name: Download current baseline
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ci.yml
+          branch: main
+          name: snapshots
+          path: ui/snapshots-old
+          if_no_artifact_found: warn
+        continue-on-error: true
+
+      # Generate new snapshots
+      - name: Generate snapshots (dry-run)
+        if: ${{ inputs.dry_run }}
+        working-directory: dotnet
+        run: |
+          dotnet run --project src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+            snapshot \
+            --manifest ../ui/boom-hud.compose.json \
+            --states ../ui/states/debug-overlay.states.json \
+            --out ../ui/snapshots \
+            --dry-run \
+            --verbose
+
+      - name: Generate snapshots (real Godot)
+        if: ${{ !inputs.dry_run }}
+        working-directory: dotnet
+        run: |
+          echo "Real Godot snapshots require self-hosted runner with Godot ${{ inputs.godot_version }}"
+          echo "Using dry-run as fallback on GitHub-hosted runner"
+          dotnet run --project src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+            snapshot \
+            --manifest ../ui/boom-hud.compose.json \
+            --states ../ui/states/debug-overlay.states.json \
+            --out ../ui/snapshots \
+            --dry-run \
+            --verbose
+
+      # Generate preview video
+      - name: Generate preview video
+        working-directory: dotnet
+        run: |
+          dotnet run --project src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+            video --snapshots ../ui/snapshots --verbose
+
+      # Compare with old baseline if exists
+      - name: Compare with previous baseline
+        working-directory: dotnet
+        run: |
+          if [ -d "../ui/snapshots-old" ] && [ -f "../ui/snapshots-old/snapshots.manifest.json" ]; then
+            echo "Comparing with previous baseline..."
+            dotnet run --project src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+              baseline compare \
+              --current ../ui/snapshots \
+              --baseline ../ui/snapshots-old \
+              --out ../ui/baseline-update-report.json \
+              --summary \
+              --tolerance 8 \
+              --min-changed-percent 0.01
+          else
+            echo "No previous baseline found"
+          fi
+
+      # Upload new baseline
+      - name: Upload new baseline
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshots
+          path: ui/snapshots/
+          retention-days: 90
+
+      - name: Upload preview video
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-video
+          path: ui/snapshots/preview.mp4
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Upload comparison report
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-update-report
+          path: ui/baseline-update-report.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+      # Write summary
+      - name: Write summary
+        run: |
+          echo "## 🔄 Baseline Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Reason:** ${{ inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Mode | ${{ inputs.dry_run && 'Dry-run' || 'Real Godot' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Godot Version | ${{ inputs.godot_version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Triggered by | @${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ New baseline uploaded as artifact \`snapshots\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📎 See artifacts for preview video and comparison report." >> $GITHUB_STEP_SUMMARY

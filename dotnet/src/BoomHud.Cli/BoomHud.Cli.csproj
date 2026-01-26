@@ -8,17 +8,22 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>boom-hud</ToolCommandName>
     <PackageId>BoomHud.Tool</PackageId>
+    <!-- CA1861: Constant array arguments in uipro command Option constructors (pre-existing) -->
+    <NoWarn>$(NoWarn);CA1861</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
     <ProjectReference Include="..\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
     <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+    <ProjectReference Include="..\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 

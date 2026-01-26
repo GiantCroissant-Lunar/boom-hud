@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace BoomHud.Abstractions.IR;
 
 /// <summary>
@@ -138,6 +141,7 @@ public enum BorderStyle
 /// <summary>
 /// Color representation supporting named colors, hex, and RGB.
 /// </summary>
+[JsonConverter(typeof(ColorJsonConverter))]
 public readonly record struct Color
 {
     public byte R { get; init; }
@@ -227,4 +231,41 @@ public readonly record struct Color
         : $"#{R:X2}{G:X2}{B:X2}{A:X2}";
 
     public override string ToString() => ToHex();
+}
+
+public class ColorJsonConverter : JsonConverter<Color>
+{
+    public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            var value = reader.GetString();
+            if (value != null)
+            {
+                return Color.Parse(value);
+            }
+        }
+        else if (reader.TokenType == JsonTokenType.StartObject)
+        {
+            // Handle object format { "r": 255, "g": 0, "b": 0, "a": 255 } if needed
+            // For now, we mainly need string parsing for the sample JSON
+            using var doc = JsonDocument.ParseValue(ref reader);
+            var root = doc.RootElement;
+            byte r = 0, g = 0, b = 0, a = 255;
+            
+            if (root.TryGetProperty("r", out var rProp) || root.TryGetProperty("R", out rProp)) r = rProp.GetByte();
+            if (root.TryGetProperty("g", out var gProp) || root.TryGetProperty("G", out gProp)) g = gProp.GetByte();
+            if (root.TryGetProperty("b", out var bProp) || root.TryGetProperty("B", out bProp)) b = bProp.GetByte();
+            if (root.TryGetProperty("a", out var aProp) || root.TryGetProperty("A", out aProp)) a = aProp.GetByte();
+            
+            return new Color(r, g, b, a);
+        }
+
+        throw new JsonException("Expected string or object for Color");
+    }
+
+    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToHex());
+    }
 }

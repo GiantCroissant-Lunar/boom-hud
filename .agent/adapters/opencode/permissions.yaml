@@ -1,0 +1,9 @@
+# Global permissions for OpenCode
+
+schema: https://opencode.ai/config.json
+
+permission:
+  edit:
+    "*": ask
+  external_directory:
+    "*": ask

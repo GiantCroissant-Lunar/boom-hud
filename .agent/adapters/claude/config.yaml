@@ -1,0 +1,23 @@
+# Claude Code Adapter Configuration
+
+tool: claude
+display_name: Claude Code
+
+rules:
+  strategy: none
+
+skills:
+  strategy: copy_full
+  target: .claude/skills
+  source: .agent/skills
+
+commands:
+  enabled: false
+
+workflows:
+  enabled: false
+
+hooks:
+  enabled: false
+
+cleanup: []

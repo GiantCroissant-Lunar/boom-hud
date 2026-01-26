@@ -1,0 +1,98 @@
+{
+  "name": "GameHud",
+  "root": {
+    "type": "container",
+    "id": "MainContainer",
+    "layout": {
+      "type": "dock",
+      "width": { "unit": "fill", "value": 1 },
+      "height": { "unit": "fill", "value": 1 },
+      "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 }
+    },
+    "children": [
+      {
+        "type": "container",
+        "id": "TopLeftPanel",
+        "layout": {
+          "type": "vertical",
+          "dock": "left",
+          "align": "start",
+          "gap": { "top": 10 }
+        },
+        "children": [
+          {
+            "type": "container",
+            "layout": { "type": "horizontal", "gap": { "left": 10 }, "align": "center" },
+            "children": [
+              {
+                "type": "label",
+                "properties": { "text": { "value": "HP" } },
+                "style": { "foreground": "#FF0000", "fontWeight": "bold" }
+              },
+              {
+                "type": "progressBar",
+                "id": "HealthBar",
+                "layout": { "width": { "unit": "pixels", "value": 200 }, "height": { "unit": "pixels", "value": 20 } },
+                "bindings": [
+                  { "property": "value", "path": "PlayerHealthPercent" }
+                ]
+              },
+              {
+                "type": "label",
+                "layout": { "width": { "unit": "pixels", "value": 50 } },
+                "bindings": [
+                  { "property": "text", "path": "PlayerHealth", "format": "{0}/100" }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "layout": { "type": "horizontal", "gap": { "left": 10 }, "align": "center" },
+            "children": [
+              {
+                "type": "label",
+                "properties": { "text": { "value": "MP" } },
+                "style": { "foreground": "#0000FF", "fontWeight": "bold" }
+              },
+              {
+                "type": "progressBar",
+                "id": "ManaBar",
+                "layout": { "width": { "unit": "pixels", "value": 200 }, "height": { "unit": "pixels", "value": 20 } },
+                "bindings": [
+                  { "property": "value", "path": "PlayerManaPercent" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "id": "BottomRightPanel",
+        "layout": {
+          "type": "vertical",
+          "dock": "right",
+          "align": "end",
+          "gap": { "top": 10 }
+        },
+        "children": [
+          {
+            "type": "label",
+            "id": "ScoreLabel",
+            "style": { "fontSize": 24, "foreground": "#FFD700" },
+            "bindings": [
+              { "property": "text", "path": "Score", "format": "Score: {0:N0}" }
+            ]
+          },
+          {
+            "type": "button",
+            "id": "PauseButton",
+            "properties": { "text": { "value": "Pause Game" } },
+            "command": "TogglePauseCommand"
+          }
+        ]
+      }
+    ]
+  }
+}

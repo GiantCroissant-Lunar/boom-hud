@@ -1,0 +1,290 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/pencil.schema.json",
+  "version": "1.0",
+  "name": "DebugOverlay",
+  "canvas": {
+    "width": 400,
+    "height": 200,
+    "units": "px",
+    "scaleMode": "none",
+    "safeArea": { "top": 40, "right": 20, "bottom": 40, "left": 20 }
+  },
+  "tokenRegistry": "./tokens.ir.json",
+  "tokens": {
+    "colors": {
+      "debug-bg": "rgba(0, 0, 0, 0.85)",
+      "debug-text": "#00ff00",
+      "debug-warning": "#ffaa00",
+      "debug-error": "#ff4444",
+      "debug-muted": "#888888"
+    },
+    "spacing": {
+      "xs": 2,
+      "sm": 4,
+      "md": 8,
+      "lg": 16
+    },
+    "typography": {
+      "mono-sm": {
+        "fontFamily": "JetBrains Mono, Consolas, monospace",
+        "fontSize": 12,
+        "lineHeight": 1.4
+      },
+      "mono-md": {
+        "fontFamily": "JetBrains Mono, Consolas, monospace",
+        "fontSize": 14,
+        "lineHeight": 1.4
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "type": "frame",
+      "name": "DebugOverlay",
+      "layout": {
+        "mode": "vertical",
+        "gap": 4,
+        "padding": {
+          "top": 8,
+          "right": 12,
+          "bottom": 8,
+          "left": 12
+        },
+        "width": "hug",
+        "height": "hug",
+        "position": "absolute",
+        "constraints": {
+          "horizontal": "left",
+          "vertical": "top"
+        }
+      },
+      "style": {
+        "background": { "$ref": "tokens.colors.debug-bg" },
+        "cornerRadius": 4
+      },
+      "children": [
+        {
+          "id": "header",
+          "type": "frame",
+          "name": "Header",
+          "layout": {
+            "mode": "horizontal",
+            "gap": 8,
+            "alignment": "center"
+          },
+          "children": [
+            {
+              "id": "title",
+              "type": "text",
+              "name": "Title",
+              "content": "DEBUG",
+              "style": {
+                "fill": { "$ref": "tokens.colors.debug-muted" },
+                "fontSize": 10,
+                "fontWeight": "bold",
+                "letterSpacing": 2
+              }
+            },
+            {
+              "id": "version",
+              "type": "text",
+              "name": "Version",
+              "content": "v0.0.0",
+              "style": {
+                "fill": { "$ref": "tokens.colors.debug-muted" },
+                "fontSize": 10
+              },
+              "bindings": {
+                "content": "Version"
+              }
+            }
+          ]
+        },
+        {
+          "id": "separator",
+          "type": "rectangle",
+          "name": "Separator",
+          "layout": {
+            "width": "fill",
+            "height": { "type": "fixed", "value": 1 }
+          },
+          "style": {
+            "fill": { "$ref": "tokens.colors.debug-muted" },
+            "opacity": 0.3
+          }
+        },
+        {
+          "id": "stats-container",
+          "type": "frame",
+          "name": "StatsContainer",
+          "layout": {
+            "mode": "vertical",
+            "gap": 2
+          },
+          "children": [
+            {
+              "id": "fps-row",
+              "type": "frame",
+              "name": "FpsRow",
+              "layout": {
+                "mode": "horizontal",
+                "gap": 8,
+                "alignment": "space-between",
+                "width": "fill"
+              },
+              "children": [
+                {
+                  "id": "fps-label",
+                  "type": "text",
+                  "name": "FpsLabel",
+                  "content": "FPS",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-muted" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace"
+                  }
+                },
+                {
+                  "id": "fps-value",
+                  "type": "text",
+                  "name": "FpsValue",
+                  "content": "60",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-text" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace",
+                    "fontWeight": "bold"
+                  },
+                  "bindings": {
+                    "content": {
+                      "$bind": "Fps",
+                      "format": "{0:F0}"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "memory-row",
+              "type": "frame",
+              "name": "MemoryRow",
+              "layout": {
+                "mode": "horizontal",
+                "gap": 8,
+                "alignment": "space-between",
+                "width": "fill"
+              },
+              "children": [
+                {
+                  "id": "memory-label",
+                  "type": "text",
+                  "name": "MemoryLabel",
+                  "content": "MEM",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-muted" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace"
+                  }
+                },
+                {
+                  "id": "memory-value",
+                  "type": "text",
+                  "name": "MemoryValue",
+                  "content": "512 MB",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-text" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace",
+                    "fontWeight": "bold"
+                  },
+                  "bindings": {
+                    "content": "MemoryUsage"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "position-row",
+              "type": "frame",
+              "name": "PositionRow",
+              "layout": {
+                "mode": "horizontal",
+                "gap": 8,
+                "alignment": "space-between",
+                "width": "fill"
+              },
+              "children": [
+                {
+                  "id": "position-label",
+                  "type": "text",
+                  "name": "PositionLabel",
+                  "content": "POS",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-muted" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace"
+                  }
+                },
+                {
+                  "id": "position-value",
+                  "type": "text",
+                  "name": "PositionValue",
+                  "content": "(0, 0, 0)",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-text" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace",
+                    "fontWeight": "bold"
+                  },
+                  "bindings": {
+                    "content": "PlayerPosition"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "chunk-row",
+              "type": "frame",
+              "name": "ChunkRow",
+              "layout": {
+                "mode": "horizontal",
+                "gap": 8,
+                "alignment": "space-between",
+                "width": "fill"
+              },
+              "children": [
+                {
+                  "id": "chunk-label",
+                  "type": "text",
+                  "name": "ChunkLabel",
+                  "content": "CHUNK",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-muted" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace"
+                  }
+                },
+                {
+                  "id": "chunk-value",
+                  "type": "text",
+                  "name": "ChunkValue",
+                  "content": "0, 0",
+                  "style": {
+                    "fill": { "$ref": "tokens.colors.debug-text" },
+                    "fontSize": 12,
+                    "fontFamily": "monospace",
+                    "fontWeight": "bold"
+                  },
+                  "bindings": {
+                    "content": "CurrentChunk"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

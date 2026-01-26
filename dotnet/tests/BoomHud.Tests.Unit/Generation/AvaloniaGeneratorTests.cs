@@ -2,6 +2,7 @@ using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Gen.Avalonia;
 using FluentAssertions;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace BoomHud.Tests.Unit.Generation;
@@ -15,6 +16,162 @@ public class AvaloniaGeneratorTests
         IncludeComments = true,
         UseNullableAnnotations = true
     };
+
+    [Fact]
+    public void Generate_WithViewModelNamespace_UsesThatNamespaceInAxaml()
+    {
+        var options = _options with { ViewModelNamespace = "FantaSim.Hud.Contracts" };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        var axamlFile = result.Files.First(f => f.Path == "TestView.axaml");
+        axamlFile.Content.Should().Contain("xmlns:vm=\"clr-namespace:FantaSim.Hud.Contracts\"");
+    }
+
+    [Fact]
+    public void Generate_WithNoViewModelInterfaces_SuppressesInterfaceFile()
+    {
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Files.Should().Contain(f => f.Path == "TestView.axaml");
+        result.Files.Should().Contain(f => f.Path == "TestView.axaml.cs");
+        result.Files.Should().NotContain(f => f.Path == "ITestViewModel.g.cs");
+    }
+
+    [Fact]
+    public void Generate_WithCompose_EmitsComposeFile_AndUsesSlotKeyLookup()
+    {
+        var options = _options with
+        {
+            EmitCompose = true,
+            EmitViewModelInterfaces = false,
+            ViewModelNamespace = "FantaSim.Hud.Contracts"
+        };
+
+        var componentId = "component:Child";
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Type = ComponentType.Container,
+                        ComponentRefId = componentId,
+                        SlotKey = "slot.child"
+                    }
+                ]
+            },
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                [componentId] = new HudComponentDefinition
+                {
+                    Id = componentId,
+                    Name = "Child",
+                    Root = new ComponentNode { Type = ComponentType.Container }
+                }
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Files.Should().Contain(f => f.Path == "RootView.Compose.g.cs");
+        var composeFile = result.Files.First(f => f.Path == "RootView.Compose.g.cs");
+
+        composeFile.Content.Should().Contain("using FantaSim.Hud.Contracts;");
+        composeFile.Content.Should().Contain("FindControl<global::Avalonia.Controls.Control>(\"slot_child\")");
+        composeFile.Content.Should().Contain("resolver.Resolve<IChildViewModel>");
+        composeFile.Content.Should().Contain("\"slot.child\"");
+    }
+
+    [Fact]
+    public void Generate_EmbedsDriftIds_InCodeBehind()
+    {
+        var options = _options with
+        {
+            ContractId = "contract:test",
+            EmitViewModelInterfaces = false
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var codeBehind = result.Files.First(f => f.Path == "RootView.axaml.cs");
+
+        codeBehind.Content.Should().Contain("public const string BoomHudSourceId = \"sha256:");
+        codeBehind.Content.Should().Contain("public const string BoomHudContractId = \"contract:test\";");
+    }
+
+    [Fact]
+    public void Generate_SourceId_ChangesWhenDocumentChanges()
+    {
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        var docA = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "a", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var docB = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "a", Type = ComponentType.Label },
+                    new ComponentNode { Id = "b", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var fileA = _generator.Generate(docA, options).Files.First(f => f.Path == "RootView.axaml.cs");
+        var fileB = _generator.Generate(docB, options).Files.First(f => f.Path == "RootView.axaml.cs");
+
+        var idA = ExtractConst(fileA.Content, "BoomHudSourceId");
+        var idB = ExtractConst(fileB.Content, "BoomHudSourceId");
+
+        idA.Should().StartWith("sha256:");
+        idB.Should().StartWith("sha256:");
+        idA.Should().NotBe(idB);
+    }
+
+    private static string ExtractConst(string content, string constName)
+    {
+        var m = Regex.Match(content, $@"public const string\s+{Regex.Escape(constName)}\s*=\s*""([^""]+)""", RegexOptions.CultureInvariant);
+        m.Success.Should().BeTrue($"Expected to find const '{constName}' in generated output.");
+        return m.Groups[1].Value;
+    }
 
     [Fact]
     public void Generate_MinimalDocument_ProducesThreeFiles()

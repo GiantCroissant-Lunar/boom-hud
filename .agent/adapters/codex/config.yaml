@@ -1,0 +1,17 @@
+# Codex Adapter Configuration
+
+tool: codex
+display_name: GitHub Copilot / Codex
+
+rules:
+  strategy: none
+
+skills:
+  strategy: stub
+  target: .codex/skills
+  source: .agent/skills
+
+commands:
+  enabled: false
+
+cleanup: []

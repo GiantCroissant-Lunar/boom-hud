@@ -32,8 +32,9 @@ if (-not (Test-Path $cliPath)) {
 Write-Host "Checking for Generated namespace references in BoomHud.Cli..." -ForegroundColor Cyan
 
 # Search for .Generated namespace references
+# Check 1: .Generated namespace references
 $leaks = Get-ChildItem -Path $cliPath -Filter '*.cs' -Recurse |
-    Select-String -Pattern '\.Generated' -SimpleMatch
+    Select-String -Pattern '\.Generated\b'
 
 if ($leaks) {
     Write-Host ""
@@ -51,5 +52,27 @@ if ($leaks) {
     exit 1
 }
 
-Write-Host "OK: No Generated namespace references found in CLI." -ForegroundColor Green
+# Check 2: Direct DTO type usage (optional but effective)
+# This catches accidental coupling even without using .Generated namespace
+$dtoLeaks = Get-ChildItem -Path $cliPath -Filter '*.cs' -Recurse |
+    Select-String -Pattern '\b\w+Dto\b' |
+    Where-Object { $_.Line -notmatch '// *dto-ok' }  # Allow explicit opt-out
+
+if ($dtoLeaks) {
+    Write-Host ""
+    Write-Host "ERROR: BoomHud.Cli must not reference DTO types directly." -ForegroundColor Red
+    Write-Host "Use domain wrappers instead. Add '// dto-ok' comment to suppress false positives." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Violations found:" -ForegroundColor Yellow
+    
+    foreach ($leak in $dtoLeaks) {
+        Write-Host "  $($leak.Path):$($leak.LineNumber): $($leak.Line.Trim())" -ForegroundColor Yellow
+    }
+    
+    Write-Host ""
+    Write-Host "See docs/dev/SCHEMA_DTO_DOMAIN.md for the schema -> DTO -> domain pattern." -ForegroundColor Cyan
+    exit 1
+}
+
+Write-Host "OK: No Generated namespace or DTO type references found in CLI." -ForegroundColor Green
 exit 0

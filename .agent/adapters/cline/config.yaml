@@ -1,0 +1,23 @@
+# Cline Adapter Configuration
+
+tool: cline
+display_name: Cline
+
+rules:
+  strategy: directory
+  target: .clinerules
+
+skills:
+  strategy: stub
+  target: .cline/skills
+  source: .agent/skills
+
+commands:
+  enabled: true
+  target: .clinerules/workflows
+
+hooks:
+  enabled: true
+  target: .clinerules/hooks
+
+cleanup: []

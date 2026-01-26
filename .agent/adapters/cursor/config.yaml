@@ -1,0 +1,23 @@
+# Cursor Adapter Configuration
+
+tool: cursor
+display_name: Cursor
+
+rules:
+  strategy: directory
+  target: .cursor/rules
+  extension: .mdc
+
+skills:
+  strategy: stub
+  target: .cursor/skills
+  source: .agent/skills
+
+commands:
+  enabled: true
+  target: .cursor/commands
+
+hooks:
+  enabled: false
+
+cleanup: []

@@ -1,0 +1,450 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/pencil.schema.json",
+  "title": "BoomHud Pencil Input Schema",
+  "description": "Schema for parsing pencil.dev .pen files into BoomHud IR",
+  "type": "object",
+  "required": ["version", "name", "nodes"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "enum": ["1.0"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Component/document name"
+    },
+    "canvas": {
+      "$ref": "#/$defs/canvas"
+    },
+    "tokenRegistry": {
+      "type": "string",
+      "description": "Path to external token registry file (tokens.ir.json). When specified, inline tokens are validated against this registry."
+    },
+    "tokens": {
+      "$ref": "#/$defs/tokenDefinitions"
+    },
+    "nodes": {
+      "type": "array",
+      "description": "Root-level nodes (typically one root frame)",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Reusable component definitions",
+      "additionalProperties": {
+        "$ref": "#/$defs/componentDefinition"
+      }
+    }
+  },
+  "$defs": {
+    "canvas": {
+      "type": "object",
+      "description": "Canvas/artboard dimensions and coordinate system",
+      "properties": {
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "units": {
+          "type": "string",
+          "enum": ["px", "dp"],
+          "default": "px",
+          "description": "Coordinate units (px = pixels, dp = density-independent pixels)"
+        },
+        "scaleMode": {
+          "type": "string",
+          "enum": ["none", "fit", "fitWidth", "fitHeight", "fill"],
+          "default": "none",
+          "description": "How the canvas scales to fit the viewport"
+        },
+        "safeArea": {
+          "type": "object",
+          "description": "Safe area insets (content should not overlap these regions)",
+          "properties": {
+            "top": { "type": "number", "default": 0 },
+            "right": { "type": "number", "default": 0 },
+            "bottom": { "type": "number", "default": 0 },
+            "left": { "type": "number", "default": 0 }
+          }
+        }
+      }
+    },
+    "tokenDefinitions": {
+      "type": "object",
+      "description": "Design tokens (colors, spacing, typography)",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/$defs/tokenRef" }
+            ]
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "number" },
+              { "$ref": "#/$defs/tokenRef" }
+            ]
+          }
+        },
+        "typography": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/typographyToken"
+          }
+        },
+        "radii": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "number" },
+              { "$ref": "#/$defs/tokenRef" }
+            ]
+          }
+        }
+      }
+    },
+    "typographyToken": {
+      "type": "object",
+      "properties": {
+        "fontFamily": { "type": "string" },
+        "fontSize": { "type": "number" },
+        "fontWeight": { "type": ["string", "number"] },
+        "lineHeight": { "type": ["number", "string"] },
+        "letterSpacing": { "type": "number" }
+      }
+    },
+    "tokenRef": {
+      "type": "object",
+      "required": ["$ref"],
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "description": "Reference to a token, e.g., 'tokens.colors.primary'"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this node"
+        },
+        "type": {
+          "$ref": "#/$defs/nodeType"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name (used for code generation)"
+        },
+        "visible": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "$ref": "#/$defs/binding" }
+          ],
+          "default": true
+        },
+        "layout": {
+          "$ref": "#/$defs/layoutSpec"
+        },
+        "style": {
+          "$ref": "#/$defs/styleSpec"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "content": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/binding" }
+          ],
+          "description": "Text content for text nodes"
+        },
+        "src": {
+          "type": "string",
+          "description": "Image source for image nodes"
+        },
+        "bindings": {
+          "$ref": "#/$defs/bindingMap"
+        },
+        "componentRef": {
+          "type": "string",
+          "description": "Reference to a reusable component definition"
+        },
+        "overrides": {
+          "type": "object",
+          "description": "Property overrides when using componentRef"
+        }
+      }
+    },
+    "nodeType": {
+      "type": "string",
+      "enum": [
+        "frame",
+        "group",
+        "text",
+        "rectangle",
+        "ellipse",
+        "image",
+        "vector",
+        "line",
+        "instance",
+        "component",
+        "boolean",
+        "star",
+        "polygon"
+      ]
+    },
+    "layoutSpec": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["none", "horizontal", "vertical", "grid"],
+          "description": "Auto-layout mode"
+        },
+        "gap": {
+          "oneOf": [
+            { "type": "number" },
+            { "$ref": "#/$defs/tokenRef" }
+          ]
+        },
+        "padding": {
+          "oneOf": [
+            { "type": "number" },
+            { "$ref": "#/$defs/paddingSpec" },
+            { "$ref": "#/$defs/tokenRef" }
+          ]
+        },
+        "alignment": {
+          "type": "string",
+          "enum": ["start", "center", "end", "stretch", "space-between"]
+        },
+        "crossAlignment": {
+          "type": "string",
+          "enum": ["start", "center", "end", "stretch", "baseline"]
+        },
+        "width": {
+          "$ref": "#/$defs/dimension"
+        },
+        "height": {
+          "$ref": "#/$defs/dimension"
+        },
+        "minWidth": { "type": "number" },
+        "maxWidth": { "type": "number" },
+        "minHeight": { "type": "number" },
+        "maxHeight": { "type": "number" },
+        "position": {
+          "type": "string",
+          "enum": ["auto", "absolute"]
+        },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "constraints": {
+          "$ref": "#/$defs/constraints"
+        }
+      }
+    },
+    "paddingSpec": {
+      "type": "object",
+      "properties": {
+        "top": { "type": "number" },
+        "right": { "type": "number" },
+        "bottom": { "type": "number" },
+        "left": { "type": "number" }
+      }
+    },
+    "dimension": {
+      "oneOf": [
+        { "type": "number" },
+        {
+          "type": "string",
+          "enum": ["fill", "hug", "fixed"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["fixed", "fill", "hug"] },
+            "value": { "type": "number" }
+          }
+        }
+      ]
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Positioning constraints relative to parent",
+      "properties": {
+        "horizontal": {
+          "type": "string",
+          "enum": ["left", "right", "left-right", "center", "scale"]
+        },
+        "vertical": {
+          "type": "string",
+          "enum": ["top", "bottom", "top-bottom", "center", "scale"]
+        }
+      }
+    },
+    "styleSpec": {
+      "type": "object",
+      "properties": {
+        "background": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/tokenRef" },
+            { "$ref": "#/$defs/gradientSpec" }
+          ]
+        },
+        "fill": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/tokenRef" }
+          ]
+        },
+        "stroke": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/tokenRef" }
+          ]
+        },
+        "strokeWidth": { "type": "number" },
+        "cornerRadius": {
+          "oneOf": [
+            { "type": "number" },
+            { "$ref": "#/$defs/tokenRef" },
+            { "$ref": "#/$defs/cornerRadiusSpec" }
+          ]
+        },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fontSize": { "type": "number" },
+        "fontFamily": { "type": "string" },
+        "fontWeight": { "type": ["string", "number"] },
+        "textAlign": {
+          "type": "string",
+          "enum": ["left", "center", "right", "justify"]
+        },
+        "textDecoration": {
+          "type": "string",
+          "enum": ["none", "underline", "line-through"]
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadowSpec"
+        },
+        "blur": { "type": "number" }
+      }
+    },
+    "gradientSpec": {
+      "type": "object",
+      "required": ["type", "stops"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["linear", "radial", "angular", "diamond"]
+        },
+        "angle": { "type": "number" },
+        "stops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": { "type": "number", "minimum": 0, "maximum": 1 },
+              "color": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "cornerRadiusSpec": {
+      "type": "object",
+      "properties": {
+        "topLeft": { "type": "number" },
+        "topRight": { "type": "number" },
+        "bottomRight": { "type": "number" },
+        "bottomLeft": { "type": "number" }
+      }
+    },
+    "shadowSpec": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["drop", "inner"]
+        },
+        "color": { "type": "string" },
+        "offsetX": { "type": "number" },
+        "offsetY": { "type": "number" },
+        "blur": { "type": "number" },
+        "spread": { "type": "number" }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "required": ["$bind"],
+      "properties": {
+        "$bind": {
+          "type": "string",
+          "description": "Path to ViewModel property"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["oneWay", "twoWay", "oneTime"],
+          "default": "oneWay"
+        },
+        "converter": {
+          "type": "string",
+          "description": "Value converter name"
+        },
+        "format": {
+          "type": "string",
+          "description": "String format pattern"
+        }
+      }
+    },
+    "bindingMap": {
+      "type": "object",
+      "description": "Map of property names to binding paths",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "#/$defs/binding" }
+        ]
+      }
+    },
+    "componentDefinition": {
+      "type": "object",
+      "required": ["name", "root"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "props": {
+          "type": "object",
+          "description": "Configurable properties with defaults",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "default": {}
+            }
+          }
+        },
+        "root": {
+          "$ref": "#/$defs/node"
+        }
+      }
+    }
+  }
+}

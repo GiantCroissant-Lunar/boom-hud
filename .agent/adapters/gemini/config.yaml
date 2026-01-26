@@ -1,0 +1,19 @@
+# Gemini Adapter Configuration
+
+tool: gemini
+display_name: Gemini
+
+rules:
+  strategy: none
+
+skills:
+  strategy: stub
+  target: .gemini/skills
+  source: .agent/skills
+
+commands:
+  enabled: true
+  target: .gemini/commands
+  format: toml
+
+cleanup: []

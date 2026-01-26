@@ -55,7 +55,7 @@ tasks:
     desc: Generate ComposeManifestDto from compose.schema.json
     cmds:
       - >-
-        npx quicktype
+        npx quicktype@23.0.170
         --src schemas/compose.schema.json
         --src-lang schema
         --lang csharp
@@ -74,7 +74,7 @@ tasks:
     desc: Generate StatesManifestDto from states.schema.json
     cmds:
       - >-
-        npx quicktype
+        npx quicktype@23.0.170
         --src schemas/states.schema.json
         --src-lang schema
         --lang csharp
@@ -93,7 +93,7 @@ tasks:
     desc: Generate TokensDto from tokens.schema.json
     cmds:
       - >-
-        npx quicktype
+        npx quicktype@23.0.170
         --src schemas/tokens.schema.json
         --src-lang schema
         --lang csharp

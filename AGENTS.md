@@ -17,15 +17,15 @@ Quick overview of the agent infrastructure for the **boom-hud** project.
 ```
 .agent/
 ├── README.md           # Complete overview (START HERE)
+├── adapters/           # Tool-specific sync configuration
 ├── rules/              # Development rules
 │   ├── schema-first.md          # DSL schema patterns
 │   ├── code-generation.md       # Generator patterns
 │   └── capability-mapping.md    # Framework capability rules
+├── skills/             # AgentSkills-format skills (SKILL.md)
 ├── workflows/          # Multi-step development processes
 │   ├── add-component.md         # Adding new component types
 │   └── add-backend.md           # Adding new backend generators
-└── providers/          # Platform-specific hints
-    └── README.md                # Claude, Windsurf, Copilot, Cursor
 ```
 
 ## Core Principles

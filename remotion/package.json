@@ -1,0 +1,27 @@
+{
+  "name": "@boomhud/video-stitcher",
+  "version": "1.0.0",
+  "description": "Remotion-based video stitcher for BoomHud snapshot previews",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "remotion bundle",
+    "render": "remotion render Snapshots out/preview.mp4",
+    "preview": "remotion preview",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.242",
+    "@remotion/bundler": "4.0.242",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.242",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/node": "^22.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}

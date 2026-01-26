@@ -15,6 +15,8 @@ public sealed record BindingSpec
     /// </summary>
     public required string Path { get; init; }
 
+    public string? Key { get; init; }
+
     /// <summary>
     /// Binding mode.
     /// </summary>

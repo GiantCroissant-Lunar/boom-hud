@@ -1,0 +1,140 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/pen.agent.schema.json",
+  "version": "1.0",
+  "componentName": "DebugOverlay",
+  "description": "Agent constraints and metadata for the DebugOverlay component",
+  
+  "constraints": {
+    "safeArea": {
+      "description": "Minimum distance from screen edges",
+      "top": 40,
+      "right": 20,
+      "bottom": 40,
+      "left": 20
+    },
+    "typography": {
+      "minFontSize": 10,
+      "maxFontSize": 16,
+      "allowedFontFamilies": ["monospace", "JetBrains Mono", "Consolas"]
+    },
+    "colors": {
+      "allowedTokens": [
+        "tokens.colors.debug-bg",
+        "tokens.colors.debug-text",
+        "tokens.colors.debug-warning",
+        "tokens.colors.debug-error",
+        "tokens.colors.debug-muted"
+      ]
+    },
+    "sizing": {
+      "maxWidth": 400,
+      "maxHeight": 300
+    }
+  },
+  
+  "agentPermissions": {
+    "editable": {
+      "nodes": [
+        "fps-value",
+        "memory-value",
+        "position-value",
+        "chunk-value"
+      ],
+      "properties": ["content", "style.fill", "bindings"],
+      "description": "Agent can modify data display nodes"
+    },
+    "addable": {
+      "parentNodes": ["stats-container"],
+      "nodeTypes": ["frame", "text"],
+      "description": "Agent can add new stat rows"
+    },
+    "readonly": {
+      "nodes": ["root", "header", "title", "separator"],
+      "description": "Agent should not modify structural/branding elements"
+    }
+  },
+  
+  "validationRules": [
+    {
+      "id": "consistent-row-layout",
+      "description": "All stat rows must use horizontal layout with space-between",
+      "selector": "stats-container > frame",
+      "check": {
+        "layout.mode": "horizontal",
+        "layout.alignment": "space-between"
+      }
+    },
+    {
+      "id": "label-style-consistency",
+      "description": "All labels must use muted color and monospace font",
+      "selector": "*[name$='Label']",
+      "check": {
+        "style.fill.$ref": "tokens.colors.debug-muted",
+        "style.fontFamily": "monospace"
+      }
+    },
+    {
+      "id": "value-style-consistency",
+      "description": "All values must use debug-text color and bold weight",
+      "selector": "*[name$='Value']",
+      "check": {
+        "style.fill.$ref": "tokens.colors.debug-text",
+        "style.fontWeight": "bold"
+      }
+    }
+  ],
+  
+  "suggestedIterations": [
+    {
+      "name": "Add entity count",
+      "description": "Add a row showing number of active entities",
+      "priority": "medium"
+    },
+    {
+      "name": "Add network latency",
+      "description": "Add a row showing current network ping",
+      "priority": "low"
+    },
+    {
+      "name": "Conditional coloring",
+      "description": "Change FPS value color based on performance (green/yellow/red)",
+      "priority": "high"
+    }
+  ],
+  
+  "testStates": [
+    {
+      "name": "default",
+      "description": "Normal gameplay state",
+      "viewModel": {
+        "Version": "0.1.0-alpha",
+        "Fps": 60,
+        "MemoryUsage": "512 MB",
+        "PlayerPosition": "(128, 64, 256)",
+        "CurrentChunk": "4, 8"
+      }
+    },
+    {
+      "name": "lowPerformance",
+      "description": "Low FPS warning state",
+      "viewModel": {
+        "Version": "0.1.0-alpha",
+        "Fps": 15,
+        "MemoryUsage": "1.8 GB",
+        "PlayerPosition": "(128, 64, 256)",
+        "CurrentChunk": "4, 8"
+      }
+    },
+    {
+      "name": "extreme",
+      "description": "Extreme values for layout stress test",
+      "viewModel": {
+        "Version": "0.1.0-alpha.build.12345",
+        "Fps": 999,
+        "MemoryUsage": "16.0 GB",
+        "PlayerPosition": "(-999999, 999999, -999999)",
+        "CurrentChunk": "99999, 99999"
+      }
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/pen.agent.schema.json",
+  "title": "BoomHud Agent Metadata",
+  "description": "Agent-specific metadata for .pen files. This file does NOT affect IR semantics - it is used for validation, edit permissions, and test state definitions.",
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "enum": ["1.0"]
+    },
+    "componentName": {
+      "type": "string",
+      "description": "Name of the component this metadata applies to (must match .pen file name)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the component"
+    },
+    "constraints": {
+      "$ref": "#/$defs/constraints"
+    },
+    "agentPermissions": {
+      "$ref": "#/$defs/agentPermissions"
+    },
+    "validationRules": {
+      "type": "array",
+      "description": "Custom validation rules for this component",
+      "items": {
+        "$ref": "#/$defs/validationRule"
+      }
+    },
+    "testStates": {
+      "type": "array",
+      "description": "ViewModel states for snapshot testing",
+      "items": {
+        "$ref": "#/$defs/testState"
+      }
+    },
+    "suggestedIterations": {
+      "type": "array",
+      "description": "Suggested improvements for agents to consider",
+      "items": {
+        "$ref": "#/$defs/suggestedIteration"
+      }
+    }
+  },
+  "$defs": {
+    "constraints": {
+      "type": "object",
+      "description": "Design constraints for validation (does NOT affect IR)",
+      "properties": {
+        "safeArea": {
+          "type": "object",
+          "description": "Safe area insets (content should not overlap)",
+          "properties": {
+            "description": { "type": "string" },
+            "top": { "type": "number" },
+            "right": { "type": "number" },
+            "bottom": { "type": "number" },
+            "left": { "type": "number" }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "properties": {
+            "minFontSize": { "type": "number" },
+            "maxFontSize": { "type": "number" },
+            "allowedFontFamilies": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "colors": {
+          "type": "object",
+          "properties": {
+            "allowedTokens": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "List of allowed token references (e.g., 'tokens.colors.debug-bg')"
+            }
+          }
+        },
+        "sizing": {
+          "type": "object",
+          "properties": {
+            "maxWidth": { "type": "number" },
+            "maxHeight": { "type": "number" },
+            "minWidth": { "type": "number" },
+            "minHeight": { "type": "number" }
+          }
+        }
+      }
+    },
+    "agentPermissions": {
+      "type": "object",
+      "description": "Defines what agents can and cannot modify",
+      "properties": {
+        "editable": {
+          "type": "object",
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Node IDs that agents can modify"
+            },
+            "properties": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Property names that agents can modify on editable nodes"
+            },
+            "description": { "type": "string" }
+          }
+        },
+        "addable": {
+          "type": "object",
+          "properties": {
+            "parentNodes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Node IDs where agents can add children"
+            },
+            "nodeTypes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Node types that agents can add"
+            },
+            "description": { "type": "string" }
+          }
+        },
+        "readonly": {
+          "type": "object",
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Node IDs that agents should not modify"
+            },
+            "description": { "type": "string" }
+          }
+        }
+      }
+    },
+    "validationRule": {
+      "type": "object",
+      "required": ["id", "description", "selector", "check"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique rule identifier"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what the rule checks"
+        },
+        "selector": {
+          "type": "string",
+          "description": "CSS-like selector for nodes to check (e.g., '*[name$=\"Label\"]')"
+        },
+        "check": {
+          "type": "object",
+          "description": "Property checks (key=property path, value=expected value)",
+          "additionalProperties": {}
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"],
+          "default": "warning"
+        }
+      }
+    },
+    "testState": {
+      "type": "object",
+      "required": ["name", "viewModel"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "State name (used for snapshot filename)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of what this state represents"
+        },
+        "viewModel": {
+          "type": "object",
+          "description": "ViewModel property values for this state",
+          "additionalProperties": {}
+        }
+      }
+    },
+    "suggestedIteration": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Short name for the suggestion"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the suggested improvement"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "default": "medium"
+        },
+        "affectedNodes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Node IDs that would be affected by this iteration"
+        }
+      }
+    }
+  }
+}
