@@ -295,12 +295,17 @@ When diagnostics are emitted, they need to reference the original source file an
 public sealed record SourceIdentity(
     string FilePath,
     string? NodeId = null,
-    int? Line = null,
-    int? Column = null)
+    int? Line = null,    // Future: populated by parsers with position tracking
+    int? Column = null)  // Future: populated by parsers with position tracking
 {
     public override string ToString() => 
         NodeId != null ? $"{FilePath} (node: {NodeId})" : FilePath;
 }
+```
+
+> **Note**: `Line` and `Column` are reserved for future parser enhancements. Currently,
+> diagnostics include `FilePath` and `NodeId` only. Line/column support requires parsers
+> to track source positions during parsing.
 ```
 
 ### SourcedDocument Wrapper

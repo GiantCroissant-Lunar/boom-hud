@@ -195,21 +195,24 @@ The snapshot system invokes Godot in headless mode with a custom runner script.
 **CLI Invocation Shape**:
 
 ```bash
-godot --headless --path <project_dir> \
-  --script res://addons/boomhud/SnapshotRunner.gd \
+godot --headless \
+  --quit-after <timeout> \
+  --script <runner_script_path> \
   -- \
-  --states-json <states_json_path> \
-  --output-dir <output_dir> \
-  --root-scene <generated_scene.tscn>
+  --scene <generated_scene.tscn> \
+  --states <states_json_path> \
+  --out <output_dir> \
+  [--verbose]
 ```
 
 **Runner Arguments**:
 
 | Argument | Description |
 |----------|-------------|
-| `--states-json` | Path to serialized states (temp file) |
-| `--output-dir` | Directory for PNG output |
-| `--root-scene` | Path to generated scene to instantiate |
+| `--scene` | Path to generated scene to instantiate |
+| `--states` | Path to states manifest JSON file |
+| `--out` | Directory for PNG output |
+| `--verbose` | Enable verbose logging (optional) |
 
 ### ApplyVmJson Contract
 

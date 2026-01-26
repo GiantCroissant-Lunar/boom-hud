@@ -158,12 +158,16 @@ public enum DiagnosticSeverity
 
 | Range | Category | Examples |
 |-------|----------|----------|
-| BH0100-BH0199 | Collision/Identity | BH0100 component collision, BH0110 style collision |
-| BH0200-BH0299 | Tokens | BH0102 unresolved, BH0103 deprecated, BH0104 inline |
+| BH0100-BH0109 | Component/Document Collisions | BH0100 component collision, BH0101 token collision |
+| BH0102-BH0109 | Token Errors (legacy range) | BH0102 unresolved, BH0103 deprecated, BH0104 inline |
+| BH0110-BH0119 | Style Collisions | BH0110 style collision, BH0111 root not found |
+| BH0120-BH0129 | Naming (lint) | BH0120 case convention, BH0121 ID hygiene |
 | BH0300-BH0399 | Bindings | BH0300 invalid expression, BH0301 target not found |
 | BH0400-BH0499 | Generation | BH0400 unsupported feature |
-| BH0500-BH0599 | Layout (lint) | BH0500 safe area violation |
-| BH0600-BH0699 | Naming (lint) | BH0120 case convention |
+| BH0500-BH0599 | Layout (lint, future) | BH0500 safe area violation |
+
+> **Note**: Token errors (BH0102-0104) are in the BH01xx range for historical reasons.
+> New token-related codes should use BH0105-0109 to maintain compatibility.
 
 ---
 
@@ -234,6 +238,10 @@ INFO [BH0121]: Node ID 'Frame123' appears auto-generated; consider using meaning
 
 ### Binding Rules
 
+> **Scope**: Binding lint validates **syntax** and **IR-level target existence** only.
+> It does NOT validate that a ViewModel property exists or has the correct type—that
+> requires an external schema (see Non-Goals).
+
 #### BH0300: Invalid Binding Expression (Error)
 
 A binding expression has invalid syntax.
@@ -247,7 +255,11 @@ ERROR [BH0300]: Invalid binding expression: '{Binding .FpsValue}'
 
 #### BH0301: Binding Target Not Found (Warning)
 
-A binding references a path that doesn't exist in the component hierarchy.
+A binding references an **element path** that doesn't exist in the component's IR tree.
+This detects typos like `ElementToFill: "NonExistent"` when no such node exists.
+
+> **Note**: This is NOT ViewModel path validation. BH0301 checks IR node references,
+> not `{Binding PropertyName}` paths. VM path validation requires external schema.
 
 ```
 WARNING [BH0301]: Binding target 'NonExistent' not found in component tree
@@ -269,6 +281,11 @@ WARNING [BH0110]: Style 'DebugText' collision detected during composition
   
   Suggestion: Define shared styles in a single theme file or scope styles inside components
 ```
+
+> **Implementation Note**: To detect BH0110, `boomhud lint --manifest` internally runs
+> `MultiSourceComposer.Compose()` when the manifest has multiple sources. This means lint
+> sees cross-source collisions. If linting a single file without `--manifest`, cross-source
+> rules like BH0110 will not fire.
 
 ### Layout Rules (Future)
 
