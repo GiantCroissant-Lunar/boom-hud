@@ -7,6 +7,7 @@ namespace BoomHud.Abstractions.Tokens;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Abstractions.Tokens.Generated;
 
 /// <summary>
@@ -31,6 +32,16 @@ public sealed class TokenRegistry
     /// Registry version.
     /// </summary>
     public string Version { get; private init; } = "1.0";
+
+    /// <summary>
+    /// Diagnostics emitted during loading (e.g., unknown version warning).
+    /// </summary>
+    public IReadOnlyList<BoomHudDiagnostic> LoadDiagnostics { get; private init; } = [];
+
+    /// <summary>
+    /// Known supported versions.
+    /// </summary>
+    private static readonly HashSet<string> SupportedVersions = ["1.0"];
 
     /// <summary>
     /// All color tokens.
@@ -92,10 +103,20 @@ public sealed class TokenRegistry
         var dto = JsonSerializer.Deserialize<TokenRegistryDto>(json, JsonOptions)
             ?? throw new InvalidOperationException("Failed to deserialize token registry");
 
+        var diagnostics = new List<BoomHudDiagnostic>();
+        var version = dto.Version ?? "1.0";
+
+        // Validate version
+        if (!SupportedVersions.Contains(version))
+        {
+            diagnostics.Add(Diagnostics.UnknownSchemaVersion("token registry", version, sourcePath));
+        }
+
         var registry = new TokenRegistry
         {
             SourcePath = sourcePath,
-            Version = dto.Version ?? "1.0"
+            Version = version,
+            LoadDiagnostics = diagnostics.AsReadOnly()
         };
 
         // Map colors: DTO → domain

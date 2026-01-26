@@ -159,6 +159,14 @@ public static class DiagnosticCodes
     /// The IR document has an invalid structure.
     /// </summary>
     public const string InvalidIrStructure = "BH0401";
+
+    // === Schema/Manifest Warnings (BH05xx) ===
+
+    /// <summary>
+    /// BH0500: Unknown schema version.
+    /// The manifest specifies a version that is not recognized.
+    /// </summary>
+    public const string UnknownSchemaVersion = "BH0500";
 }
 
 /// <summary>
@@ -226,4 +234,14 @@ public static class Diagnostics
             DiagnosticCodes.UnsupportedFeature,
             DiagnosticSeverity.Error,
             $"Feature '{feature}' is not supported by backend '{backend}'");
+
+    /// <summary>
+    /// Creates a BH0500 unknown schema version warning.
+    /// </summary>
+    public static BoomHudDiagnostic UnknownSchemaVersion(string manifestType, string version, string? sourceFile = null)
+        => new(
+            DiagnosticCodes.UnknownSchemaVersion,
+            DiagnosticSeverity.Warning,
+            $"Unknown {manifestType} version '{version}'; expected '1.0'. Some features may not work correctly.",
+            sourceFile);
 }

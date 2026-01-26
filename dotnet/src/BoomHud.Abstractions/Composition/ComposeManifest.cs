@@ -4,6 +4,7 @@
 
 using System.Text.Json;
 using BoomHud.Abstractions.Composition.Generated;
+using BoomHud.Abstractions.Diagnostics;
 
 namespace BoomHud.Abstractions.Composition;
 
@@ -17,6 +18,16 @@ public sealed record ComposeManifest
     /// Schema version. Currently "1.0".
     /// </summary>
     public string Version { get; init; } = "1.0";
+
+    /// <summary>
+    /// Diagnostics emitted during loading (e.g., unknown version warning).
+    /// </summary>
+    public IReadOnlyList<BoomHudDiagnostic> LoadDiagnostics { get; init; } = [];
+
+    /// <summary>
+    /// Known supported versions.
+    /// </summary>
+    private static readonly HashSet<string> SupportedVersions = ["1.0"];
 
     /// <summary>
     /// Name of the root component/document to use as the composition root.
@@ -76,15 +87,25 @@ public sealed record ComposeManifest
         var dto = JsonSerializer.Deserialize<ComposeManifestDto>(json, JsonOptions)
             ?? throw new InvalidOperationException("Failed to deserialize compose manifest");
 
+        var diagnostics = new List<BoomHudDiagnostic>();
+        var version = dto.Version ?? "1.0";
+
+        // Validate version
+        if (!SupportedVersions.Contains(version))
+        {
+            diagnostics.Add(Diagnostics.UnknownSchemaVersion("compose manifest", version, sourcePath));
+        }
+
         return new ComposeManifest
         {
-            Version = dto.Version ?? "1.0",
+            Version = version,
             Root = dto.Root,
             Sources = dto.Sources?.AsReadOnly() ?? (IReadOnlyList<string>)[],
             Tokens = dto.Tokens,
             Targets = dto.Targets?.AsReadOnly(),
             Output = dto.Output,
-            Namespace = dto.Namespace
+            Namespace = dto.Namespace,
+            LoadDiagnostics = diagnostics.AsReadOnly()
         };
     }
 

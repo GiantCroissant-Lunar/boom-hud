@@ -4,6 +4,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Abstractions.Snapshots.Generated;
 
 namespace BoomHud.Abstractions.Snapshots;
@@ -18,6 +19,16 @@ public sealed record SnapshotStatesManifest
     /// Schema version. Currently "1.0".
     /// </summary>
     public string Version { get; init; } = "1.0";
+
+    /// <summary>
+    /// Diagnostics emitted during loading (e.g., unknown version warning).
+    /// </summary>
+    public IReadOnlyList<BoomHudDiagnostic> LoadDiagnostics { get; init; } = [];
+
+    /// <summary>
+    /// Known supported versions.
+    /// </summary>
+    private static readonly HashSet<string> SupportedVersions = ["1.0"];
 
     /// <summary>
     /// Viewport configuration for all snapshots.
@@ -45,21 +56,31 @@ public sealed record SnapshotStatesManifest
         }
 
         var json = File.ReadAllText(filePath);
-        return LoadFromJson(json);
+        return LoadFromJson(json, filePath);
     }
 
     /// <summary>
     /// Loads a states manifest from JSON string.
     /// Maps from Generated DTO to domain type.
     /// </summary>
-    public static SnapshotStatesManifest LoadFromJson(string json)
+    public static SnapshotStatesManifest LoadFromJson(string json, string? sourcePath = null)
     {
         var dto = JsonSerializer.Deserialize<StatesManifestDto>(json, JsonOptions)
             ?? throw new InvalidOperationException("Failed to deserialize states manifest");
 
+        var diagnostics = new List<BoomHudDiagnostic>();
+        var version = dto.Version ?? "1.0";
+
+        // Validate version
+        if (!SupportedVersions.Contains(version))
+        {
+            diagnostics.Add(Diagnostics.UnknownSchemaVersion("states manifest", version, sourcePath));
+        }
+
         return new SnapshotStatesManifest
         {
-            Version = dto.Version ?? "1.0",
+            Version = version,
+            LoadDiagnostics = diagnostics.AsReadOnly(),
             Viewport = dto.Viewport is { } v
                 ? new ViewportConfig
                 {
