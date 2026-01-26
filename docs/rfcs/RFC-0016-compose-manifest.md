@@ -273,6 +273,11 @@ When `--tokens` is not specified and manifest has no `tokens` field:
 2. If found, load and use
 3. If not found, proceed without token validation
 
+> **CI Recommendation**: In CI pipelines, always specify `--tokens` explicitly (or include
+> `tokens` in your compose manifest) to ensure missing tokens fail early. The auto-discovery
+> fallback is convenient for local experimentation but can mask broken token references
+> in automated builds.
+
 ### Token Diagnostic Codes
 
 | Code | Severity | Description |

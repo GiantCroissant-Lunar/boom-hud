@@ -639,7 +639,6 @@ Enable strict failure with `--fail-on`:
 |-------|----------|
 | `any` | Fail if any actionable frame changed |
 | `percent:X` | Fail if any frame exceeds X% changed |
-| `count:N` | Fail if more than N frames changed |
 
 ```bash
 # Fail if any frame has >5% pixel changes
