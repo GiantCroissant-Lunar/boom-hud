@@ -5,6 +5,7 @@
 using System.Text.Json;
 using BoomHud.Abstractions.Composition.Generated;
 using BoomHud.Abstractions.Diagnostics;
+using DiagnosticFactory = BoomHud.Abstractions.Diagnostics.Diagnostics;
 
 namespace BoomHud.Abstractions.Composition;
 
@@ -93,7 +94,7 @@ public sealed record ComposeManifest
         // Validate version
         if (!SupportedVersions.Contains(version))
         {
-            diagnostics.Add(Diagnostics.UnknownSchemaVersion("compose manifest", version, sourcePath));
+            diagnostics.Add(DiagnosticFactory.UnknownSchemaVersion("compose manifest", version, sourcePath));
         }
 
         return new ComposeManifest

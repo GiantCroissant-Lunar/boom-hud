@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Abstractions.Snapshots.Generated;
+using DiagnosticFactory = BoomHud.Abstractions.Diagnostics.Diagnostics;
 
 namespace BoomHud.Abstractions.Snapshots;
 
@@ -74,7 +75,7 @@ public sealed record SnapshotStatesManifest
         // Validate version
         if (!SupportedVersions.Contains(version))
         {
-            diagnostics.Add(Diagnostics.UnknownSchemaVersion("states manifest", version, sourcePath));
+            diagnostics.Add(DiagnosticFactory.UnknownSchemaVersion("states manifest", version, sourcePath));
         }
 
         return new SnapshotStatesManifest

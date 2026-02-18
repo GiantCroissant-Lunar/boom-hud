@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "unifybuild.tool": {
+      "version": "0.2.2",
+      "commands": ["unify-build"]
+    }
+  }
+}

@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="BoomHud.Tests.Unit" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
     <ProjectReference Include="..\BoomHud.Dsl\BoomHud.Dsl.csproj" />
     <ProjectReference Include="..\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
