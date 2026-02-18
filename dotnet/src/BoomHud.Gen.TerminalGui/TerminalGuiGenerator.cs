@@ -210,11 +210,12 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Collect all component fields
         var componentFields = new List<(string Id, string Type)>();
         CollectComponentFields(document.Root, componentFields);
+        var nameContext = BuildNameContext(componentFields);
 
         // Generate field declarations
         foreach (var (id, type) in componentFields)
         {
-            cb.AppendLine($"private {type} _{ToCamelCase(id)} = null!;");
+            cb.AppendLine($"private {type} {ResolveFieldName(nameContext, id)} = null!;");
         }
 
         if (componentFields.Count > 0)
@@ -232,13 +233,13 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         cb.OpenBlock();
 
         // Generate root component setup
-        GenerateComponentSetup(cb, document.Root, "this", diagnostics, options, null, components);
+        GenerateComponentSetup(cb, document.Root, "this", diagnostics, options, null, components, nameContext);
 
         cb.CloseBlock();
         cb.AppendLine();
 
         // RefreshBindings method
-        GenerateRefreshBindingsMethod(cb, document, componentFields);
+        GenerateRefreshBindingsMethod(cb, document, componentFields, nameContext);
 
         // Generate public accessors for named components
         if (componentFields.Count > 0)
@@ -251,7 +252,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
             foreach (var (id, type) in componentFields)
             {
-                cb.AppendLine($"public {type} {ToPascalCase(id)} => _{ToCamelCase(id)};");
+                cb.AppendLine($"public {type} {ResolveAccessorName(nameContext, id)} => {ResolveFieldName(nameContext, id)};");
             }
         }
 
@@ -512,7 +513,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         List<Diagnostic> diagnostics,
         GenerationOptions options,
         LayoutType? parentLayoutType,
-        IReadOnlyDictionary<string, HudComponentDefinition> components)
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
+        Dictionary<string, (string FieldName, string AccessorName)> nameContext)
     {
         var isRoot = parentVar == "this";
 
@@ -543,7 +545,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         foreach (var child in node.Children)
         {
-            var childVar = GenerateChildComponent(cb, child, parentVar, diagnostics, options, layoutType, components);
+            var childVar = GenerateChildComponent(cb, child, parentVar, diagnostics, options, layoutType, components, nameContext);
 
             if (layoutType == LayoutType.Vertical)
             {
@@ -588,7 +590,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
             if (child.Children.Count > 0)
             {
-                GenerateComponentSetup(cb, child, childVar, diagnostics, options, child.Layout?.Type, components);
+                GenerateComponentSetup(cb, child, childVar, diagnostics, options, child.Layout?.Type, components, nameContext);
             }
 
             previousChildVar = childVar;
@@ -602,7 +604,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         List<Diagnostic> diagnostics,
         GenerationOptions options,
         LayoutType? parentLayoutType,
-        IReadOnlyDictionary<string, HudComponentDefinition> components)
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
+        Dictionary<string, (string FieldName, string AccessorName)> nameContext)
     {
         var terminalGuiType = MapComponentType(node.Type);
         if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var componentDef))
@@ -617,7 +620,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
             }
         }
 
-        var varName = node.Id != null ? $"_{ToCamelCase(node.Id)}" : $"_component{Guid.NewGuid():N}".Substring(0, 16);
+        var varName = node.Id != null ? ResolveFieldName(nameContext, node.Id) : $"_component{Guid.NewGuid():N}".Substring(0, 16);
 
         // Check capability
         if (!Capabilities.SupportsComponent(node.Type.ToString()))
@@ -900,23 +903,30 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         return node.Command;
     }
 
-    private static void GenerateRefreshBindingsMethod(CodeBuilder cb, HudDocument document, List<(string Id, string Type)> componentFields)
+    private static void GenerateRefreshBindingsMethod(
+        CodeBuilder cb,
+        HudDocument document,
+        List<(string Id, string Type)> componentFields,
+        Dictionary<string, (string FieldName, string AccessorName)> nameContext)
     {
         cb.AppendLine("public void RefreshBindings()");
         cb.OpenBlock();
         cb.AppendLine("if (_viewModel == null) return;");
         cb.AppendLine();
 
-        GenerateBindingRefresh(cb, document.Root);
+        GenerateBindingRefresh(cb, document.Root, nameContext);
 
         cb.CloseBlock();
     }
 
-    private static void GenerateBindingRefresh(CodeBuilder cb, ComponentNode node)
+    private static void GenerateBindingRefresh(
+        CodeBuilder cb,
+        ComponentNode node,
+        Dictionary<string, (string FieldName, string AccessorName)> nameContext)
     {
         if (node.Id != null)
         {
-            var varName = $"_{ToCamelCase(node.Id)}";
+            var varName = ResolveFieldName(nameContext, node.Id);
 
             foreach (var binding in node.Bindings)
             {
@@ -962,7 +972,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Recurse into children
         foreach (var child in node.Children)
         {
-            GenerateBindingRefresh(cb, child);
+            GenerateBindingRefresh(cb, child, nameContext);
         }
     }
 
@@ -978,6 +988,148 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         {
             CollectComponentFields(child, fields);
         }
+    }
+
+    private static readonly HashSet<string> ReservedFieldNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "_viewModel",
+        "_slots"
+    };
+
+    private static readonly HashSet<string> ReservedAccessorNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "ViewModel",
+        "RefreshBindings",
+        "FindSlot",
+        "RegisterSlot",
+        "InitializeComponents",
+        "Dispose",
+        "Title"
+    };
+
+    private static readonly HashSet<string> CSharpKeywords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+        "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else",
+        "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach",
+        "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
+        "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
+        "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
+        "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked",
+        "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
+    };
+
+    private static Dictionary<string, (string FieldName, string AccessorName)> BuildNameContext(
+        List<(string Id, string Type)> componentFields)
+    {
+        var context = new Dictionary<string, (string FieldName, string AccessorName)>(StringComparer.Ordinal);
+        var usedFieldNames = new HashSet<string>(ReservedFieldNames, StringComparer.OrdinalIgnoreCase);
+        var usedAccessorNames = new HashSet<string>(ReservedAccessorNames, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var (id, _) in componentFields)
+        {
+            if (context.ContainsKey(id))
+            {
+                continue;
+            }
+
+            var normalized = NormalizeIdentifier(id);
+            var basePascal = ToPascalCase(normalized);
+            var baseCamel = ToCamelCase(normalized);
+
+            var fieldCandidate = $"_{baseCamel}";
+            var accessorCandidate = basePascal;
+
+            if (CSharpKeywords.Contains(accessorCandidate) || ReservedAccessorNames.Contains(accessorCandidate))
+            {
+                accessorCandidate = $"{accessorCandidate}Component";
+            }
+
+            var fieldName = EnsureUniqueName(fieldCandidate, usedFieldNames);
+            var accessorName = EnsureUniqueName(accessorCandidate, usedAccessorNames);
+
+            context[id] = (fieldName, accessorName);
+        }
+
+        return context;
+    }
+
+    private static string ResolveFieldName(
+        Dictionary<string, (string FieldName, string AccessorName)> context,
+        string id)
+    {
+        if (context.TryGetValue(id, out var names))
+        {
+            return names.FieldName;
+        }
+
+        var normalized = NormalizeIdentifier(id);
+        return $"_{ToCamelCase(normalized)}";
+    }
+
+    private static string ResolveAccessorName(
+        Dictionary<string, (string FieldName, string AccessorName)> context,
+        string id)
+    {
+        if (context.TryGetValue(id, out var names))
+        {
+            return names.AccessorName;
+        }
+
+        var normalized = NormalizeIdentifier(id);
+        return ToPascalCase(normalized);
+    }
+
+    private static string EnsureUniqueName(string baseName, HashSet<string> usedNames)
+    {
+        var candidate = baseName;
+        var suffix = 2;
+        while (usedNames.Contains(candidate))
+        {
+            candidate = $"{baseName}{suffix}";
+            suffix++;
+        }
+
+        usedNames.Add(candidate);
+        return candidate;
+    }
+
+    private static string NormalizeIdentifier(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return "component";
+        }
+
+        var sb = new StringBuilder(raw.Length);
+        var uppercaseNext = false;
+
+        foreach (var ch in raw)
+        {
+            if (!char.IsLetterOrDigit(ch))
+            {
+                uppercaseNext = true;
+                continue;
+            }
+
+            if (sb.Length == 0 && char.IsDigit(ch))
+            {
+                sb.Append('N');
+            }
+
+            if (uppercaseNext && char.IsLetter(ch))
+            {
+                sb.Append(char.ToUpperInvariant(ch));
+            }
+            else
+            {
+                sb.Append(ch);
+            }
+
+            uppercaseNext = false;
+        }
+
+        return sb.Length == 0 ? "component" : sb.ToString();
     }
 
     private static void CollectBindingPaths(ComponentNode node, HashSet<string> paths)

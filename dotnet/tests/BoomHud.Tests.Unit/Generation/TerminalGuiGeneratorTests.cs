@@ -755,6 +755,71 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_AccessorNameCollision_WithViewTitle_IsRenamed()
+    {
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
+        viewFile.Content.Should().Contain("private Label _title = null!;");
+        viewFile.Content.Should().Contain("public Label TitleComponent => _title;");
+        viewFile.Content.Should().NotContain("public Label Title => _title;");
+    }
+
+    [Fact]
+    public void Generate_FieldNameCollision_WithViewModelField_IsRenamed()
+    {
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "viewModel",
+                        Type = ComponentType.Label,
+                        Bindings =
+                        [
+                            new BindingSpec
+                            {
+                                Property = "text",
+                                Path = "Name"
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
+        viewFile.Content.Should().Contain("private Label _viewModel2 = null!;");
+        viewFile.Content.Should().Contain("public Label ViewModelComponent => _viewModel2;");
+        viewFile.Content.Should().Contain("_viewModel2.Text = _viewModel.Name");
+        viewFile.Content.Should().NotContain("private Label _viewModel = null!;");
+    }
+
+    [Fact]
     public void Generate_ViewModelProperty_HasRefreshBindingsCall()
     {
         var doc = new HudDocument
