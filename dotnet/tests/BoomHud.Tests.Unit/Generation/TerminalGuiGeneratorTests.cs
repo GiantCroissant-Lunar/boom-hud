@@ -301,6 +301,78 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_WithMenuBar_CreatesMenuBarComponent()
+    {
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "menuBar1",
+                        Type = ComponentType.MenuBar
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
+        viewFile.Content.Should().Contain("private MenuBar _menuBar1");
+        viewFile.Content.Should().Contain("_menuBar1 = new MenuBar()");
+    }
+
+    [Fact]
+    public void Generate_WithMenuHierarchy_CreatesMenuAndMenuItemComponents()
+    {
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "menuBar1",
+                        Type = ComponentType.MenuBar,
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "fileMenu",
+                                Type = ComponentType.Menu,
+                                Children =
+                                [
+                                    new ComponentNode
+                                    {
+                                        Id = "openItem",
+                                        Type = ComponentType.MenuItem
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
+        viewFile.Content.Should().Contain("private Menu _fileMenu");
+        viewFile.Content.Should().Contain("private MenuItem _openItem");
+        viewFile.Content.Should().Contain("_fileMenu = new Menu()");
+        viewFile.Content.Should().Contain("_openItem = new MenuItem()");
+    }
+
+    [Fact]
     public void Generate_WithLayout_SetsWidthAndHeight()
     {
         var doc = new HudDocument

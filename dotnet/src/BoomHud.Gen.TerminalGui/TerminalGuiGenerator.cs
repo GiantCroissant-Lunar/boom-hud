@@ -1012,6 +1012,9 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         ComponentType.Slider => "Slider",
         ComponentType.Icon => "Label", // Icons are labels with emoji
         ComponentType.Image => "Label", // No image support, fallback to label
+        ComponentType.MenuBar => "MenuBar",
+        ComponentType.Menu => "Menu",
+        ComponentType.MenuItem => "MenuItem",
         ComponentType.Container => "View",
         ComponentType.ScrollView => "ScrollView",
         ComponentType.Panel => "FrameView",

@@ -17,6 +17,9 @@ public class CapabilityTests
         caps.SupportsComponent("button").Should().BeTrue();
         caps.SupportsComponent("progressBar").Should().BeTrue();
         caps.SupportsComponent("container").Should().BeTrue();
+        caps.SupportsComponent("menuBar").Should().BeTrue();
+        caps.SupportsComponent("menu").Should().BeTrue();
+        caps.SupportsComponent("menuItem").Should().BeTrue();
     }
 
     [Fact]

@@ -15,6 +15,7 @@ public sealed class TerminalGuiCapabilities : ICapabilityManifest
     {
         "label", "button", "textinput", "textarea", "checkbox", "radiobutton",
         "progressbar", "slider", "icon", // icon via label with emoji
+        "menubar", "menu", "menuitem",
         "container", "scrollview", "panel", "tabview",
         "listbox", "listview", "treeview", "datagrid",
         "spacer"
