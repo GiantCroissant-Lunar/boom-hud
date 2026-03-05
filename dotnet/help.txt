@@ -1,0 +1,35 @@
+Description:
+  Generate UI code from design files (Figma JSON, Pencil .pen, or BoomHud IR)
+
+Usage:
+  BoomHud.Cli generate [<input>] [options]
+
+Arguments:
+  <input>  Input design file (.pen, .figma.json, or IR JSON). Use --input for multiple files. []
+
+Options:
+  --in, --input <input>                        Input design files (can be specified multiple times for composition)
+  --root <root>                                Root component name for multi-input composition. If omitted, first input's root is used.
+  --manifest <manifest>                        Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.
+  --format <format>                            Input format (pen, figma, ir). Auto-detected from extension if omitted.
+  --target <target>                            Target backend (terminalGui, avalonia, godot, all) [default: terminalGui]
+  --output <output>                            Output directory for generated files
+  --namespace <namespace>                      Namespace for generated code [default: Generated]
+  --viewmodel-namespace <viewmodel-namespace>  Namespace for generated (or externally-provided) ViewModel interfaces (defaults to --namespace)
+  --no-vm-interfaces                           Do not emit I*ViewModel.g.cs interfaces (assume provided externally)
+  --compose                                    Emit *Compose.g.cs composition helpers
+  --tscn                                       Emit Godot scene files (*.tscn) in addition to C# (Godot target only)
+  --tscn-no-script                             Emit Godot scene files (*.tscn) without attaching generated C# script (Godot target only)
+  --contract-id <contract-id>                  Optional contract ID to embed into generated views for drift detection
+  --node <node>                                Optional Figma node id to use as the root (e.g. "1:2")
+  --annotations <annotations>                  Optional BoomHud annotations JSON file (bindings, semantics) applied after parsing
+  --variables <variables>                      Optional Figma variables JSON file for theme tokens
+  --theme-name <theme-name>                    Optional theme name (defaults to variables filename)
+  --theme-collection <theme-collection>        Optional Figma variables collection name
+  --theme-mode <theme-mode>                    Optional Figma variables mode id or name (e.g. "Light")
+  --description-replace <description-replace>  Optional description replacements in the form 'from=to' (can be specified multiple times)
+  --tokens <tokens>                            Token registry file (tokens.ir.json). If omitted, looks for ui/tokens.ir.json relative to input file.
+  -?, -h, --help                               Show help and usage information
+
+
+

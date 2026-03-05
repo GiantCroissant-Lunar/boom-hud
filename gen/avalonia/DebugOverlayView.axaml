@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:BoomHud.Sample"
+             xmlns:vm="clr-namespace:BoomHud.Sample"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BoomHud.Sample.DebugOverlayView" x:DataType="vm:IDebugOverlayViewModel">
+    <Canvas x:Name="root" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontWeight="Normal">
+        <StackPanel x:Name="header" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal" Spacing="8">
+            <TextBlock x:Name="title" FontSize="10" FontWeight="Bold" />
+            <TextBlock x:Name="version" FontSize="10" FontWeight="Normal" />
+        </StackPanel>
+        <StackPanel x:Name="separator" Width="*" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Vertical" FontWeight="Normal" Opacity="0.3" />
+        <StackPanel x:Name="stats-container" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Vertical" Spacing="2">
+            <StackPanel x:Name="fps-row" Width="*" Margin="0,0,0,0" VerticalAlignment="Top" Orientation="Horizontal" Spacing="8">
+                <TextBlock x:Name="fps-label" FontSize="12" FontWeight="Normal" />
+                <TextBlock x:Name="fps-value" FontSize="12" FontWeight="Bold" />
+            </StackPanel>
+            <StackPanel x:Name="memory-row" Width="*" Margin="0,0,0,0" VerticalAlignment="Top" Orientation="Horizontal" Spacing="8">
+                <TextBlock x:Name="memory-label" FontSize="12" FontWeight="Normal" />
+                <TextBlock x:Name="memory-value" FontSize="12" FontWeight="Bold" />
+            </StackPanel>
+            <StackPanel x:Name="position-row" Width="*" Margin="0,0,0,0" VerticalAlignment="Top" Orientation="Horizontal" Spacing="8">
+                <TextBlock x:Name="position-label" FontSize="12" FontWeight="Normal" />
+                <TextBlock x:Name="position-value" FontSize="12" FontWeight="Bold" />
+            </StackPanel>
+            <StackPanel x:Name="chunk-row" Width="*" Margin="0,0,0,0" VerticalAlignment="Top" Orientation="Horizontal" Spacing="8">
+                <TextBlock x:Name="chunk-label" FontSize="12" FontWeight="Normal" />
+                <TextBlock x:Name="chunk-value" FontSize="12" FontWeight="Bold" />
+            </StackPanel>
+        </StackPanel>
+    </Canvas>
+</UserControl>
