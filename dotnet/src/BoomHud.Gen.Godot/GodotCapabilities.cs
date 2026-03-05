@@ -16,7 +16,7 @@ public sealed class GodotCapabilities : ICapabilityManifest
 
     public IReadOnlySet<string> SupportedComponents { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        "label", "button", "textinput", "textarea", "checkbox", "radiobutton",
+        "label", "badge", "button", "textinput", "textarea", "checkbox", "radiobutton",
         "progressbar", "slider", "icon", "image",
         "container", "scrollview", "panel", "tabview", "splitview",
         "listbox", "listview", "treeview", "datagrid",

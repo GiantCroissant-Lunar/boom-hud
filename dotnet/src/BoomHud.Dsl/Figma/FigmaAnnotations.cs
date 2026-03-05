@@ -192,7 +192,7 @@ public static class FigmaAnnotations
     {
         if (match.Path != null && match.Path.Count > 0)
         {
-            if (!path.SequenceEqual(match.Path, StringComparer.Ordinal))
+            if (!path.SequenceEqual(match.Path, StringComparer.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -200,7 +200,7 @@ public static class FigmaAnnotations
 
         if (!string.IsNullOrWhiteSpace(match.Id))
         {
-            if (!string.Equals(node.Id, match.Id, StringComparison.Ordinal))
+            if (!string.Equals(node.Id, match.Id, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

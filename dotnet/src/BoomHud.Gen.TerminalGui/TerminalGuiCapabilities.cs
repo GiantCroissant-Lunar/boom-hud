@@ -13,7 +13,7 @@ public sealed class TerminalGuiCapabilities : ICapabilityManifest
 
     public IReadOnlySet<string> SupportedComponents { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        "label", "button", "textinput", "textarea", "checkbox", "radiobutton",
+        "label", "badge", "button", "textinput", "textarea", "checkbox", "radiobutton",
         "progressbar", "slider", "icon", // icon via label with emoji
         "menubar", "menu", "menuitem",
         "container", "scrollview", "panel", "tabview",

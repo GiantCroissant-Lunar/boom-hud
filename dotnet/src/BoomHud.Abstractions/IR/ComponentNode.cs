@@ -92,6 +92,7 @@ public enum ComponentType
 {
     // Primitives
     Label,
+    Badge,
     Button,
     TextInput,
     TextArea,

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using BoomHud.Abstractions.IR;
 
 namespace BoomHud.Dsl.Figma;
@@ -569,6 +570,8 @@ public sealed class FigmaParser : IFigmaParser
             height = Dimension.Pixels((float)node.AbsoluteBoundingBox.Height);
         }
 
+        ExtractDimensionFromName(node.Name, ref width, ref height);
+
         Spacing? padding = null;
         if (node.PaddingLeft != null || node.PaddingTop != null ||
             node.PaddingRight != null || node.PaddingBottom != null)
@@ -808,12 +811,39 @@ public sealed class FigmaParser : IFigmaParser
 
     private static string SanitizeId(string name)
     {
+        // Strip [bind: xxx], [width: xxx], [height: xxx] before generating ID
+        name = Regex.Replace(name, @"\[(?:bind|width|height):[^\]]+\]", "", RegexOptions.IgnoreCase).Trim();
+
         // Convert to camelCase identifier
         var pascalCase = SanitizeName(name);
         if (string.IsNullOrEmpty(pascalCase)) return "element";
 
         return char.ToLower(pascalCase[0], CultureInfo.InvariantCulture) +
                (pascalCase.Length > 1 ? pascalCase[1..] : "");
+    }
+
+    private static void ExtractDimensionFromName(string name, ref Dimension? width, ref Dimension? height)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return;
+
+        var wMatch = Regex.Match(name, @"\[width:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
+        if (wMatch.Success) width = ParseDimString(wMatch.Groups[1].Value);
+
+        var hMatch = Regex.Match(name, @"\[height:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
+        if (hMatch.Success) height = ParseDimString(hMatch.Groups[1].Value);
+    }
+
+    private static Dimension ParseDimString(string val)
+    {
+        val = val.Trim().ToLowerInvariant();
+        if (val == "fill" || val == "fill()") return Dimension.Fill;
+        if (val == "auto" || val == "auto()") return Dimension.Auto;
+        if (val.EndsWith('%') && float.TryParse(val.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out var p)) 
+            return Dimension.Percent(p);
+        if (int.TryParse(val, NumberStyles.Any, CultureInfo.InvariantCulture, out var px)) 
+            return Dimension.Pixels(px);
+        
+        return Dimension.Auto;
     }
 
 }

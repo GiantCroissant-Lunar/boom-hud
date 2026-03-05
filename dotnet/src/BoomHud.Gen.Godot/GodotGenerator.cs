@@ -1440,6 +1440,7 @@ public sealed class GodotGenerator : IBackendGenerator
         ComponentType.ProgressBar => "ProgressBar",
         ComponentType.Slider => "HSlider", // or VSlider based on layout
         ComponentType.Icon => "Label", 
+        ComponentType.Badge => "Label",
         ComponentType.Image => "TextureRect",
         ComponentType.MenuBar => "MenuBar",
         ComponentType.Menu => "PopupMenu",

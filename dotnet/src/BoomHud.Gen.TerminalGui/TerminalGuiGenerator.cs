@@ -1211,7 +1211,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         {
             DimensionUnit.Pixels => $"Dim.Absolute({(int)dim.Value})", // Fallback, reachable?
             DimensionUnit.Cells => $"Dim.Absolute({(int)dim.Value})",
-            DimensionUnit.Percent => $"Dim.Percent({dim.Value.ToString(CultureInfo.InvariantCulture)}f)",
+            DimensionUnit.Percent => $"Dim.Percent({(int)Math.Round(dim.Value)})",
             DimensionUnit.Star => $"Dim.Fill({(int)dim.Value})", // Star isn't exactly Fill(n) in TUI v1 but close enough for now
             DimensionUnit.Auto => "Dim.Auto()",
             DimensionUnit.Fill => "Dim.Fill()",
