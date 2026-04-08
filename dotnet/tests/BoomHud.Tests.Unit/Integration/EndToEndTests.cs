@@ -4,6 +4,7 @@ using BoomHud.Dsl;
 using BoomHud.Dsl.Figma;
 using BoomHud.Gen.Avalonia;
 using BoomHud.Gen.TerminalGui;
+using BoomHud.Gen.Unity;
 using FluentAssertions;
 using Xunit;
 
@@ -359,5 +360,71 @@ public class EndToEndTests
         var axamlFile = result.Files.First(f => f.Path.EndsWith(".axaml", StringComparison.Ordinal));
         axamlFile.Content.Should().Contain("StackPanel");
         axamlFile.Content.Should().Contain("Width=\"200\"");
+    }
+
+    [Fact]
+    public void Unity_ParseFigmaAndGenerate_ProducesUiToolkitArtifacts()
+    {
+        var unityGenerator = new UnityGenerator();
+        var figmaJson = """
+            {
+                "name": "Status Bar",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Status Bar",
+                                    "type": "FRAME",
+                                    "layoutMode": "HORIZONTAL",
+                                    "absoluteBoundingBox": { "x": 0, "y": 0, "width": 800, "height": 40 },
+                                    "fills": [{ "type": "SOLID", "color": { "r": 0.13, "g": 0.13, "b": 0.13, "a": 1 } }],
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Health Label",
+                                            "type": "TEXT",
+                                            "characters": "HP: 100"
+                                        },
+                                        {
+                                            "id": "1:3",
+                                            "name": "Location Label",
+                                            "type": "TEXT",
+                                            "characters": "Town Square"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        var document = _parser.Parse(figmaJson);
+        var result = unityGenerator.Generate(document, _options);
+
+        document.Name.Should().Be("StatusBar");
+        result.Success.Should().BeTrue();
+        result.Files.Should().Contain(f => f.Path == "StatusBarView.uxml");
+        result.Files.Should().Contain(f => f.Path == "StatusBarView.uss");
+        result.Files.Should().Contain(f => f.Path == "StatusBarView.gen.cs");
+        result.Files.Should().Contain(f => f.Path == "IStatusBarViewModel.g.cs");
+
+        var uxmlFile = result.Files.First(f => f.Path == "StatusBarView.uxml");
+        uxmlFile.Content.Should().Contain("<ui:UXML xmlns:ui=\"UnityEngine.UIElements\">");
+        uxmlFile.Content.Should().Contain("<ui:Label name=\"HealthLabel\"");
+        uxmlFile.Content.Should().Contain("<ui:Label name=\"LocationLabel\"");
+
+        var controllerFile = result.Files.First(f => f.Path == "StatusBarView.gen.cs");
+        controllerFile.Content.Should().Contain("using UnityEngine.UIElements;");
+        controllerFile.Content.Should().Contain("public sealed class StatusBarView");
+        controllerFile.Content.Should().Contain("HealthLabel = Root.Q<Label>(\"HealthLabel\")");
+        controllerFile.Content.Should().Contain("LocationLabel = Root.Q<Label>(\"LocationLabel\")");
     }
 }

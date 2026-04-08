@@ -1,0 +1,285 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "rootHUD",
+      "x": 0,
+      "y": 0,
+      "name": "Explore HUD",
+      "width": 1280,
+      "height": 960,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "viewport",
+          "x": 0,
+          "y": 0,
+          "name": "Viewport",
+          "width": 960,
+          "height": 720,
+          "fill": "#111111",
+          "stroke": {
+            "align": "inside",
+            "thickness": 12,
+            "fill": "#888888"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "compassPanel",
+              "x": 444,
+              "y": 12,
+              "name": "Compass",
+              "width": 72,
+              "height": 72,
+              "fill": "#000000",
+              "stroke": {
+                "thickness": 12,
+                "fill": "#888888"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "compassText",
+                  "name": "compassN",
+                  "fill": "#FFFFFF",
+                  "content": "N",
+                  "fontFamily": "Press Start 2P",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "zoneLabel",
+              "x": 16,
+              "y": 620,
+              "name": "Zone",
+              "fill": "#AAAAAA",
+              "content": "Darkstone Crypt B1",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "partyPanel",
+          "x": 980,
+          "y": 24,
+          "name": "Party List",
+          "width": 280,
+          "height": 300,
+          "fill": "#000000",
+          "stroke": {
+            "thickness": 12,
+            "fill": "#888888"
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "padding": [
+            8,
+            6
+          ],
+          "children": [
+            {
+              "id": "char1",
+              "type": "ref",
+              "ref": "charPortrait",
+              "name": "Char 1",
+              "width": "fill_container",
+              "descendants": {
+                "classIcon": {
+                  "iconFontName": "sword"
+                },
+                "nameText": {
+                  "id": "c1name",
+                  "content": "Aelric",
+                  "name": "c1name"
+                },
+                "stat1": {
+                  "content": "ATK 12"
+                },
+                "stat2": {
+                  "content": "DEF 8"
+                }
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "separator",
+              "name": "Separator",
+              "fill": "#AAAAAA",
+              "width": "fill_container",
+              "height": 4
+            },
+            {
+              "id": "char2",
+              "type": "ref",
+              "ref": "charPortrait",
+              "name": "Char 2",
+              "width": "fill_container",
+              "descendants": {
+                "classIcon": {
+                  "iconFontName": "sparkles"
+                },
+                "nameText": {
+                  "id": "c2name",
+                  "content": "Lyra",
+                  "name": "c2name"
+                },
+                "stat1": {
+                  "content": "ATK 6"
+                },
+                "stat2": {
+                  "content": "MAG 14"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "actionButton",
+      "x": 1400,
+      "y": 0,
+      "name": "Component/ActionButton",
+      "reusable": true,
+      "width": 28,
+      "height": 28,
+      "fill": "#000000",
+      "stroke": {
+        "thickness": 2,
+        "fill": "#FFFFFF"
+      },
+      "layout": "vertical",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "actionIcon",
+          "name": "icon",
+          "width": 16,
+          "height": 16,
+          "iconFontName": "swords",
+          "iconFontFamily": "lucide",
+          "fill": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "charPortrait",
+      "x": 1400,
+      "y": 160,
+      "name": "Component/CharPortrait",
+      "reusable": true,
+      "width": 130,
+      "fill": "#000000",
+      "layout": "vertical",
+      "gap": 8,
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "face",
+          "name": "face",
+          "width": 56,
+          "height": 56,
+          "fill": "#000000",
+          "stroke": {
+            "thickness": 6,
+            "fill": "#FFFFFF"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "classIcon",
+              "x": 12,
+              "y": 12,
+              "name": "classIcon",
+              "width": 32,
+              "height": 32,
+              "iconFontName": "shield",
+              "iconFontFamily": "lucide",
+              "fill": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "nameText",
+          "name": "name",
+          "fill": "#FFFFFF",
+          "content": "Name",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 8,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "stats",
+          "name": "stats",
+          "width": "fill_container",
+          "gap": 8,
+          "padding": [
+            0,
+            6
+          ],
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "stat1",
+              "name": "stat1",
+              "fill": "#AAAAAA",
+              "content": "ATK 10",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 8,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "stat2",
+              "name": "stat2",
+              "fill": "#AAAAAA",
+              "content": "DEF 8",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 8,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "ref",
+          "id": "actionButtonInstance",
+          "ref": "actionButton",
+          "name": "AttackButton"
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "text": {
+      "type": "color",
+      "value": "#E2E8F0"
+    },
+    "text-dim": {
+      "type": "color",
+      "value": "#8B8BA0"
+    }
+  }
+}

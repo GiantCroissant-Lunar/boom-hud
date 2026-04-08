@@ -82,14 +82,15 @@ public sealed class PenParser : IPenParser
                 return ValidationResult.Fail(new ValidationError { Message = "Failed to parse JSON" });
             }
 
-            if (penDto.Nodes == null || penDto.Nodes.Count == 0)
+            var nodes = penDto.Nodes ?? penDto.Children;
+            if (nodes == null || nodes.Count == 0)
             {
-                return ValidationResult.Fail(new ValidationError { Message = "No nodes defined in .pen file" });
+                return ValidationResult.Fail(new ValidationError { Message = "No nodes or children defined in .pen file" });
             }
 
             // Check for required node properties
             var errors = new List<ValidationError>();
-            ValidateNodes(penDto.Nodes, errors, "nodes");
+            ValidateNodes(nodes, errors, penDto.Nodes != null ? "nodes" : "children");
 
             if (errors.Count > 0)
             {

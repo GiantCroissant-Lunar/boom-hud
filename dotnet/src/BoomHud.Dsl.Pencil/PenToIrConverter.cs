@@ -1,17 +1,42 @@
 using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using BoomHud.Abstractions.IR;
 
 namespace BoomHud.Dsl.Pencil;
 
 /// <summary>
 /// Converts PenDto to BoomHud IR types.
-/// Implementation follows docs/PENCIL-IR-MAPPING.md precisely.
+/// Supports both the schema-first .pen shape and the raw editor export shape used by Pencil.
 /// </summary>
 public sealed class PenToIrConverter
 {
+    private static readonly JsonSerializerOptions CloneJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        AllowTrailingCommas = true
+    };
+    private static readonly HashSet<string> RootMergeSkipKeys = new(StringComparer.Ordinal)
+    {
+        "type",
+        "children",
+        "reusable",
+        "ref",
+        "descendants"
+    };
+    private static readonly HashSet<string> DescendantMergeSkipKeys = new(StringComparer.Ordinal)
+    {
+        "children",
+        "reusable",
+        "ref",
+        "descendants"
+    };
+    private static readonly HashSet<string> EmptyMergeSkipKeys = [];
+
     private readonly PenDto _pen;
     private readonly List<string> _warnings = [];
+    private readonly Dictionary<string, PenNodeDto> _reusableNodesById = new(StringComparer.Ordinal);
 
     public PenToIrConverter(PenDto pen)
     {
@@ -20,51 +45,80 @@ public sealed class PenToIrConverter
 
     public IReadOnlyList<string> Warnings => _warnings;
 
-    /// <summary>
-    /// Converts the entire .pen file to a HudDocument.
-    /// </summary>
     public HudDocument Convert()
     {
-        if (_pen.Nodes == null || _pen.Nodes.Count == 0)
+        var topLevelNodes = _pen.Nodes ?? _pen.Children ?? [];
+        if (topLevelNodes.Count == 0)
         {
             throw new InvalidOperationException("No nodes found in .pen file");
         }
 
-        // Find root node (first node at top level)
-        var rootPenNode = _pen.Nodes[0];
-        var bindings = _pen.Bindings ?? [];
-        var rootComponent = ConvertNode(rootPenNode, bindings);
+        foreach (var node in topLevelNodes.Where(IsReusableNode))
+        {
+            if (string.IsNullOrWhiteSpace(node.Id))
+            {
+                _warnings.Add($"Skipping reusable component without id: '{node.Name ?? "<unnamed>"}'");
+                continue;
+            }
 
-        // Derive name from root node
-        var name = rootPenNode.Name ?? rootPenNode.Id ?? "Untitled";
+            _reusableNodesById[node.Id] = node;
+        }
+
+        var bindings = _pen.Bindings ?? [];
+        var rootPenNode = topLevelNodes.FirstOrDefault(node => !IsReusableNode(node)) ?? topLevelNodes[0];
+        var rootComponent = ConvertNode(rootPenNode, bindings);
+        var documentName = BuildTypeName(_pen.Name ?? rootPenNode.Name ?? rootPenNode.Id ?? "Untitled");
+        var metadata = string.IsNullOrWhiteSpace(_pen.Version)
+            ? null
+            : new ComponentMetadata { Version = _pen.Version };
 
         return new HudDocument
         {
-            Name = name,
-            Root = rootComponent
+            Name = documentName,
+            Metadata = metadata,
+            Root = rootComponent,
+            Components = BuildComponentDefinitions(bindings)
         };
     }
 
-    /// <summary>
-    /// Converts a single PenNodeDto to ComponentNode.
-    /// </summary>
-    private ComponentNode ConvertNode(PenNodeDto node, List<PenBindingDto> allBindings)
+    private Dictionary<string, HudComponentDefinition> BuildComponentDefinitions(List<PenBindingDto> allBindings)
     {
-        // Collect bindings: from both top-level array and inline node bindings
-        var nodeBindings = new List<BindingSpec>();
-        
-        // From top-level bindings array
-        nodeBindings.AddRange(allBindings
-            .Where(b => b.NodeId == node.Id)
-            .Select(ConvertBinding));
-        
-        // From inline bindings on node
-        if (node.Bindings != null)
+        var components = new Dictionary<string, HudComponentDefinition>(StringComparer.Ordinal);
+
+        foreach (var reusableNode in _reusableNodesById.Values)
         {
-            nodeBindings.AddRange(ConvertInlineBindings(node.Bindings));
+            var componentId = reusableNode.Id!;
+            components[componentId] = new HudComponentDefinition
+            {
+                Id = componentId,
+                Name = BuildTypeName(GetLeafName(reusableNode.Name) ?? reusableNode.Id ?? "Component"),
+                Metadata = new ComponentMetadata
+                {
+                    Description = reusableNode.Name,
+                    Tags = ["pencil", "component"]
+                },
+                Root = ConvertNode(reusableNode, allBindings)
+            };
         }
 
-        // Convert children recursively
+        return components;
+    }
+
+    private ComponentNode ConvertNode(PenNodeDto sourceNode, List<PenBindingDto> allBindings)
+    {
+        var node = ExpandReferenceNode(sourceNode);
+        var componentType = MapNodeType(node.Type);
+        var nodeBindings = new List<BindingSpec>();
+
+        nodeBindings.AddRange(allBindings
+            .Where(b => string.Equals(b.NodeId, node.Id, StringComparison.Ordinal))
+            .Select(b => ConvertBinding(b, componentType)));
+
+        if (node.Bindings != null)
+        {
+            nodeBindings.AddRange(ConvertInlineBindings(node.Bindings, componentType));
+        }
+
         var children = new List<ComponentNode>();
         if (node.Children != null)
         {
@@ -74,15 +128,17 @@ public sealed class PenToIrConverter
             }
         }
 
-        // Build properties dictionary for text/image content
-        var properties = new Dictionary<string, BindableValue<object?>>();
-        
-        // Text content can come from node.Content or node.Text.Content
+        var properties = new Dictionary<string, BindableValue<object?>>(StringComparer.Ordinal);
         var textContent = node.Content ?? node.Text?.Content ?? node.Text?.Template;
-        if (textContent != null)
+        if (!string.IsNullOrWhiteSpace(textContent))
         {
             properties["Text"] = new BindableValue<object?> { Value = textContent };
         }
+        else if (componentType == ComponentType.Icon && !string.IsNullOrWhiteSpace(node.IconFontName))
+        {
+            properties["Text"] = new BindableValue<object?> { Value = node.IconFontName };
+        }
+
         if (node.Image?.Src != null)
         {
             properties["Source"] = new BindableValue<object?> { Value = node.Image.Src };
@@ -92,100 +148,335 @@ public sealed class PenToIrConverter
             properties["Stretch"] = new BindableValue<object?> { Value = node.Image.Fit };
         }
 
+        var metadata = new Dictionary<string, object?>(StringComparer.Ordinal);
+        if (!string.IsNullOrWhiteSpace(node.Type))
+        {
+            metadata[BoomHudMetadataKeys.OriginalPencilType] = node.Type;
+        }
+        if (node.X is { } x)
+        {
+            metadata[BoomHudMetadataKeys.PencilLeft] = x;
+        }
+        if (node.Y is { } y)
+        {
+            metadata[BoomHudMetadataKeys.PencilTop] = y;
+        }
+        if (!string.IsNullOrWhiteSpace(sourceNode.Ref))
+        {
+            metadata[BoomHudMetadataKeys.PencilComponentRef] = sourceNode.Ref;
+        }
+
         return new ComponentNode
         {
-            Id = node.Id,
-            Type = MapNodeType(node.Type),
-            Layout = ConvertLayout(node.Layout),
-            Style = ConvertStyle(node.Style),
+            Id = GetNodeIdentifier(node),
+            Type = componentType,
+            Layout = ConvertLayout(node),
+            Style = ConvertStyle(node),
             Children = children,
             Bindings = nodeBindings,
-            Properties = properties
+            Properties = properties,
+            InstanceOverrides = metadata
         };
     }
 
-    /// <summary>
-    /// Converts inline bindings object to BindingSpec list.
-    /// Handles both simple string path and object with $bind/format/mode.
-    /// </summary>
-    private static List<BindingSpec> ConvertInlineBindings(Dictionary<string, object> bindings)
+    private PenNodeDto ExpandReferenceNode(PenNodeDto node)
+    {
+        if (!string.Equals(node.Type, "ref", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(node.Ref))
+        {
+            return node;
+        }
+
+        if (!_reusableNodesById.TryGetValue(node.Ref, out var reusableNode))
+        {
+            _warnings.Add($"Could not resolve reusable component ref '{node.Ref}' for node '{node.Name ?? node.Id ?? "<unnamed>"}'");
+            return node;
+        }
+
+        var mergedObject = JsonSerializer.SerializeToNode(reusableNode, CloneJsonOptions)?.AsObject()
+            ?? throw new InvalidOperationException("Failed to clone reusable Pencil component.");
+        var instanceObject = JsonSerializer.SerializeToNode(node, CloneJsonOptions)?.AsObject()
+            ?? throw new InvalidOperationException("Failed to serialize Pencil component instance.");
+
+        MergeNodeObjects(mergedObject, instanceObject, RootMergeSkipKeys);
+
+        if (node.Descendants != null)
+        {
+            foreach (var (descendantId, overrideElement) in node.Descendants)
+            {
+                if (!TryFindDescendantObject(mergedObject, descendantId, out var target))
+                {
+                    _warnings.Add($"Could not find descendant override target '{descendantId}' on ref '{node.Ref}'");
+                    continue;
+                }
+
+                if (JsonNode.Parse(overrideElement.GetRawText()) is JsonObject overrideNode)
+                {
+                    MergeNodeObjects(target, overrideNode, DescendantMergeSkipKeys);
+                }
+            }
+        }
+
+        var expanded = mergedObject.Deserialize<PenNodeDto>(CloneJsonOptions)
+            ?? throw new InvalidOperationException("Failed to deserialize merged Pencil component instance.");
+        expanded.Reusable = false;
+        expanded.Ref = null;
+        expanded.Descendants = null;
+        return expanded;
+    }
+
+    private static void MergeNodeObjects(JsonObject target, JsonObject overlay, HashSet<string> skipKeys)
+    {
+        foreach (var pair in overlay)
+        {
+            if (skipKeys.Contains(pair.Key) || pair.Value == null)
+            {
+                continue;
+            }
+
+            if (pair.Value is JsonObject overlayObject && target[pair.Key] is JsonObject targetObject)
+            {
+                MergeNodeObjects(targetObject, overlayObject, EmptyMergeSkipKeys);
+                continue;
+            }
+
+            target[pair.Key] = JsonNode.Parse(pair.Value.ToJsonString());
+        }
+    }
+
+    private static bool TryFindDescendantObject(JsonObject node, string descendantId, out JsonObject result)
+    {
+        if (string.Equals(node["id"]?.GetValue<string>(), descendantId, StringComparison.Ordinal))
+        {
+            result = node;
+            return true;
+        }
+
+        if (node["children"] is JsonArray children)
+        {
+            foreach (var child in children.OfType<JsonObject>())
+            {
+                if (TryFindDescendantObject(child, descendantId, out result))
+                {
+                    return true;
+                }
+            }
+        }
+
+        result = null!;
+        return false;
+    }
+
+    private static string? GetLeafName(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return name;
+        }
+
+        var lastSlash = name.LastIndexOf('/');
+        return lastSlash >= 0 ? name[(lastSlash + 1)..] : name;
+    }
+
+    private static string GetNodeIdentifier(PenNodeDto node)
+    {
+        if (!string.IsNullOrWhiteSpace(node.Id) && !LooksGeneratedIdentifier(node.Id))
+        {
+            return node.Id;
+        }
+
+        return node.Name ?? node.Id ?? "Node";
+    }
+
+    private static bool LooksGeneratedIdentifier(string id)
+    {
+        var hasDigit = false;
+        var hasUpper = false;
+        var hasLower = false;
+
+        foreach (var ch in id)
+        {
+            if (!char.IsLetterOrDigit(ch))
+            {
+                return false;
+            }
+
+            hasDigit |= char.IsDigit(ch);
+            hasUpper |= char.IsUpper(ch);
+            hasLower |= char.IsLower(ch);
+        }
+
+        return id.Length >= 5 && (hasDigit || (hasUpper && hasLower));
+    }
+
+    private static string BuildTypeName(string value)
+    {
+        var builder = new System.Text.StringBuilder(value.Length);
+        var token = new System.Text.StringBuilder();
+
+        foreach (var ch in value)
+        {
+            if (char.IsLetterOrDigit(ch))
+            {
+                token.Append(ch);
+                continue;
+            }
+
+            AppendTypeNameToken(builder, token);
+        }
+
+        AppendTypeNameToken(builder, token);
+
+        if (builder.Length == 0)
+        {
+            return "GeneratedHud";
+        }
+
+        if (char.IsDigit(builder[0]))
+        {
+            builder.Insert(0, 'N');
+        }
+
+        return builder.ToString();
+    }
+
+    private static void AppendTypeNameToken(System.Text.StringBuilder builder, System.Text.StringBuilder token)
+    {
+        if (token.Length == 0)
+        {
+            return;
+        }
+
+        var tokenValue = token.ToString();
+        if (tokenValue.Length > 1 && tokenValue.All(char.IsUpper))
+        {
+            tokenValue = char.ToUpperInvariant(tokenValue[0]) + tokenValue[1..].ToLowerInvariant();
+        }
+        else
+        {
+            tokenValue = char.ToUpperInvariant(tokenValue[0]) + tokenValue[1..];
+        }
+
+        builder.Append(tokenValue);
+        token.Clear();
+    }
+
+    private static bool IsReusableNode(PenNodeDto node)
+    {
+        return node.Reusable == true;
+    }
+
+    private static List<BindingSpec> ConvertInlineBindings(Dictionary<string, object> bindings, ComponentType componentType)
     {
         var result = new List<BindingSpec>();
-        
+
         foreach (var (property, value) in bindings)
         {
             if (value is JsonElement je)
             {
                 if (je.ValueKind == JsonValueKind.String)
                 {
-                    // Simple path: "content": "Fps"
                     result.Add(new BindingSpec
                     {
-                        Property = property,
-                        Path = je.GetString() ?? "",
+                        Property = NormalizeBindingProperty(property, componentType),
+                        Path = je.GetString() ?? string.Empty,
                         Mode = BindingMode.OneWay
                     });
                 }
                 else if (je.ValueKind == JsonValueKind.Object)
                 {
-                    // Complex binding: "content": { "$bind": "Fps", "format": "{0:F0}" }
-                    // Also support: "content": { "path": "Fps", "mode": "twoWay" }
                     string? path = null;
                     if (je.TryGetProperty("$bind", out var bindProp))
                         path = bindProp.GetString();
                     else if (je.TryGetProperty("path", out var pathProp))
                         path = pathProp.GetString();
-                    
+
                     var format = je.TryGetProperty("format", out var formatProp) ? formatProp.GetString() : null;
                     var mode = je.TryGetProperty("mode", out var modeProp) ? modeProp.GetString() : "oneWay";
                     var converter = je.TryGetProperty("converter", out var convProp) ? convProp.GetString() : null;
-                    var fallback = je.TryGetProperty("fallback", out var fbProp) ? fbProp.GetString() : null;
-                    
+                    var fallback = je.TryGetProperty("fallback", out var fbProp) ? ExtractBindingValue(fbProp) : null;
+                    var map = je.TryGetProperty("map", out var mapProp) ? ExtractBindingValue(mapProp) : null;
+
                     result.Add(new BindingSpec
                     {
-                        Property = property,
-                        Path = path ?? "",
+                        Property = NormalizeBindingProperty(property, componentType),
+                        Path = path ?? string.Empty,
                         Mode = MapBindingMode(mode),
                         Format = format,
                         Converter = converter,
+                        ConverterParameter = map,
                         Fallback = fallback
                     });
                 }
             }
             else if (value is string s)
             {
-                // Simple path as string
                 result.Add(new BindingSpec
                 {
-                    Property = property,
+                    Property = NormalizeBindingProperty(property, componentType),
                     Path = s,
                     Mode = BindingMode.OneWay
                 });
             }
         }
-        
+
         return result;
     }
 
-    /// <summary>
-    /// Converts a PenBindingDto to BindingSpec.
-    /// </summary>
-    private static BindingSpec ConvertBinding(PenBindingDto binding)
+    private static BindingSpec ConvertBinding(PenBindingDto binding, ComponentType componentType)
     {
         return new BindingSpec
         {
-            Property = binding.Property ?? "Text",
-            Path = binding.Path ?? "",
+            Property = NormalizeBindingProperty(binding.Property, componentType),
+            Path = binding.Path ?? string.Empty,
             Mode = MapBindingMode(binding.Mode),
             Converter = binding.Converter,
+            ConverterParameter = binding.Map,
             Format = binding.Format,
             Fallback = binding.Fallback
         };
     }
 
-    /// <summary>
-    /// Maps .pen node type to IR ComponentType.
-    /// </summary>
+    private static string NormalizeBindingProperty(string? property, ComponentType componentType)
+    {
+        return property?.Trim().ToLowerInvariant() switch
+        {
+            null or "" => "Text",
+            "content" => "Text",
+            "text.content" => "Text",
+            "style.fill" => BindsFillToForeground(componentType) ? "style.foreground" : "style.background",
+            "style.stroke" => "style.borderColor",
+            "style.strokewidth" => "style.borderWidth",
+            _ => property!
+        };
+    }
+
+    private static bool BindsFillToForeground(ComponentType componentType)
+    {
+        return componentType is ComponentType.Label
+            or ComponentType.Badge
+            or ComponentType.Icon
+            or ComponentType.Button
+            or ComponentType.TextInput
+            or ComponentType.TextArea
+            or ComponentType.Checkbox
+            or ComponentType.RadioButton;
+    }
+
+    private static object? ExtractBindingValue(JsonElement element)
+    {
+        return element.ValueKind switch
+        {
+            JsonValueKind.Null => null,
+            JsonValueKind.String => element.GetString(),
+            JsonValueKind.True => true,
+            JsonValueKind.False => false,
+            JsonValueKind.Number when element.TryGetInt64(out var intValue) => intValue,
+            JsonValueKind.Number => element.GetDouble(),
+            JsonValueKind.Object or JsonValueKind.Array => element.Clone(),
+            _ => element.Clone()
+        };
+    }
+
     private static ComponentType MapNodeType(string? penType)
     {
         return penType?.ToLowerInvariant() switch
@@ -193,8 +484,9 @@ public sealed class PenToIrConverter
             "frame" => ComponentType.Container,
             "text" => ComponentType.Label,
             "image" => ComponentType.Image,
-            "component" => ComponentType.Container, // Custom components map to container
-            "slot" => ComponentType.Container,      // Slots map to container
+            "rectangle" => ComponentType.Panel,
+            "component" => ComponentType.Container,
+            "slot" => ComponentType.Container,
             "button" => ComponentType.Button,
             "input" => ComponentType.TextInput,
             "checkbox" => ComponentType.Checkbox,
@@ -202,43 +494,93 @@ public sealed class PenToIrConverter
             "progress" => ComponentType.ProgressBar,
             "list" => ComponentType.ListBox,
             "scroll" => ComponentType.ScrollView,
-            _ => ComponentType.Container // Default to container
+            "icon_font" => ComponentType.Icon,
+            _ => ComponentType.Container
         };
     }
 
-    /// <summary>
-    /// Converts PenLayoutDto to LayoutSpec.
-    /// </summary>
-    private LayoutSpec ConvertLayout(PenLayoutDto? layout)
+    private LayoutSpec ConvertLayout(PenNodeDto node)
     {
-        if (layout == null)
+        string? mode = null;
+        string? type = null;
+        string? direction = null;
+        string? position = null;
+        string? align = null;
+        string? alignment = null;
+        string? justify = null;
+        object? width = node.Width;
+        object? height = node.Height;
+        object? gap = node.Gap;
+        object? padding = node.Padding;
+        object? margin = null;
+
+        if (node.Layout is JsonElement jsonElement)
         {
-            return new LayoutSpec { Type = LayoutType.Vertical };
+            if (jsonElement.ValueKind == JsonValueKind.Object)
+            {
+                type = GetOptionalString(jsonElement, "type");
+                mode = GetOptionalString(jsonElement, "mode");
+                direction = GetOptionalString(jsonElement, "direction");
+                position = GetOptionalString(jsonElement, "position");
+                align = GetOptionalString(jsonElement, "align");
+                alignment = GetOptionalString(jsonElement, "alignment");
+                justify = GetOptionalString(jsonElement, "justify");
+                width ??= GetOptionalProperty(jsonElement, "width");
+                height ??= GetOptionalProperty(jsonElement, "height");
+                gap ??= GetOptionalProperty(jsonElement, "gap");
+                padding ??= GetOptionalProperty(jsonElement, "padding");
+                margin = GetOptionalProperty(jsonElement, "margin");
+            }
+            else if (jsonElement.ValueKind == JsonValueKind.String)
+            {
+                mode = jsonElement.GetString();
+            }
+        }
+        else if (node.Layout is string layoutString)
+        {
+            mode = layoutString;
         }
 
-        // Determine layout type from mode, type, direction, or position
-        var layoutType = MapLayoutType(layout.Mode ?? layout.Type, layout.Direction, layout.Position);
+        justify ??= node.JustifyContent;
+        align ??= node.AlignItems;
 
-        // Get alignment - can be from align, alignment, or justify properties
-        var alignStr = layout.Align ?? layout.Alignment;
-        
+        var layoutMode = mode ?? type ?? GetDefaultLayoutMode(node.Type);
+        var layoutType = MapLayoutType(layoutMode, direction, position);
         return new LayoutSpec
         {
             Type = layoutType,
-            Width = ParseDimension(layout.Width),
-            Height = ParseDimension(layout.Height),
-            Gap = ParseSpacingUniform(layout.Gap),
-            Padding = ParseSpacing(layout.Padding),
-            Margin = ParseSpacing(layout.Margin),
-            Align = MapAlignment(alignStr),
-            Justify = MapJustification(layout.Justify ?? GetJustifyFromAlignment(layout.Alignment))
-            // Note: X/Y absolute positioning not in IR LayoutSpec - would need extension
+            Width = ParseDimension(width),
+            Height = ParseDimension(height),
+            Gap = ParseSpacingUniform(gap),
+            Padding = ParseSpacing(padding),
+            Margin = ParseSpacing(margin),
+            Align = MapAlignment(align ?? alignment),
+            Justify = MapJustification(justify ?? GetJustifyFromAlignment(alignment ?? align))
         };
     }
 
-    /// <summary>
-    /// Some .pen files use alignment for both align and justify (e.g., "space-between").
-    /// </summary>
+    private static string? GetDefaultLayoutMode(string? nodeType)
+    {
+        return nodeType?.ToLowerInvariant() switch
+        {
+            "frame" => "horizontal",
+            "group" => "none",
+            _ => null
+        };
+    }
+
+    private static string? GetOptionalString(JsonElement element, string propertyName)
+    {
+        return element.TryGetProperty(propertyName, out var property) && property.ValueKind == JsonValueKind.String
+            ? property.GetString()
+            : null;
+    }
+
+    private static JsonElement? GetOptionalProperty(JsonElement element, string propertyName)
+    {
+        return element.TryGetProperty(propertyName, out var property) ? property.Clone() : null;
+    }
+
     private static string? GetJustifyFromAlignment(string? alignment)
     {
         return alignment?.ToLowerInvariant() switch
@@ -248,12 +590,8 @@ public sealed class PenToIrConverter
         };
     }
 
-    /// <summary>
-    /// Maps .pen layout type/mode + direction + position to IR LayoutType.
-    /// </summary>
     private static LayoutType MapLayoutType(string? modeOrType, string? direction, string? position)
     {
-        // Absolute position overrides everything
         if (position?.Equals("absolute", StringComparison.OrdinalIgnoreCase) == true)
             return LayoutType.Absolute;
 
@@ -268,9 +606,6 @@ public sealed class PenToIrConverter
         };
     }
 
-    /// <summary>
-    /// Maps alignment string to Alignment enum.
-    /// </summary>
     private static Alignment MapAlignment(string? align)
     {
         return align?.ToLowerInvariant() switch
@@ -283,9 +618,6 @@ public sealed class PenToIrConverter
         };
     }
 
-    /// <summary>
-    /// Maps justify string to Justification enum.
-    /// </summary>
     private static Justification MapJustification(string? justify)
     {
         return justify?.ToLowerInvariant() switch
@@ -300,52 +632,77 @@ public sealed class PenToIrConverter
         };
     }
 
-    /// <summary>
-    /// Converts PenStyleDto to StyleSpec.
-    /// </summary>
-    private StyleSpec ConvertStyle(PenStyleDto? style)
+    private StyleSpec ConvertStyle(PenNodeDto node)
     {
-        if (style == null)
-        {
-            return new StyleSpec();
-        }
-
-        // Use cornerRadius if borderRadius is not set
-        var borderRadius = style.BorderRadius ?? style.CornerRadius;
+        var style = node.Style;
+        var borderRadius = style?.BorderRadius ?? style?.CornerRadius;
+        var primaryFill = node.Fill ?? style?.Fill ?? style?.Background;
+        var isTextLikeNode = string.Equals(node.Type, "text", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(node.Type, "icon_font", StringComparison.OrdinalIgnoreCase);
+        var foregroundSource = style?.Foreground ?? node.Fill ?? (isTextLikeNode ? primaryFill : null);
+        var backgroundSource = isTextLikeNode ? style?.Background : primaryFill;
+        var strokeSource = node.Stroke ?? style?.Stroke ?? style?.BorderColor;
+        var borderColorSource = ExtractStrokeFill(strokeSource) ?? style?.BorderColor ?? style?.Stroke ?? node.Stroke;
+        var borderWidthSource = node.StrokeWidth ?? style?.StrokeWidth ?? style?.BorderWidth ?? ExtractStrokeThickness(strokeSource);
 
         return new StyleSpec
         {
-            Background = ParseColorFromObject(style.Background),
-            BackgroundToken = IsTokenRef(style.Background) ? ExtractTokenName(style.Background) : null,
-            Foreground = ParseColorFromObject(style.Foreground),
-            ForegroundToken = IsTokenRef(style.Foreground) ? ExtractTokenName(style.Foreground) : null,
-            FontSize = ParseDouble(style.FontSize),
-            FontWeight = ParseFontWeight(style.FontWeight),
-            Border = ParseBorder(style.BorderWidth, style.BorderColor),
-            BorderColorToken = IsTokenRef(style.BorderColor) ? ExtractTokenName(style.BorderColor) : null,
+            Background = ParseColorFromObject(backgroundSource),
+            BackgroundToken = IsTokenRef(backgroundSource) ? ExtractTokenName(backgroundSource) : null,
+            Foreground = ParseColorFromObject(foregroundSource),
+            ForegroundToken = IsTokenRef(foregroundSource) ? ExtractTokenName(foregroundSource) : null,
+            FontSize = ParseDouble(node.FontSize ?? style?.FontSize),
+            FontFamily = node.IconFontFamily ?? node.FontFamily ?? style?.FontFamily,
+            FontWeight = ParseFontWeight(node.FontWeight ?? style?.FontWeight),
+            LetterSpacing = node.LetterSpacing ?? style?.LetterSpacing,
+            Border = ParseBorder(borderWidthSource, borderColorSource),
+            BorderColorToken = IsTokenRef(borderColorSource) ? ExtractTokenName(borderColorSource) : null,
             BorderRadius = ParseDouble(borderRadius),
-            Opacity = style.Opacity
+            Opacity = style?.Opacity
         };
     }
 
-    /// <summary>
-    /// Parses a color value from object (string or { "$ref": ... }) or returns null for token refs.
-    /// </summary>
+    private static JsonElement? ExtractStrokeFill(object? stroke)
+    {
+        return stroke is JsonElement { ValueKind: JsonValueKind.Object } element && element.TryGetProperty("fill", out var fill)
+            ? fill.Clone()
+            : null;
+    }
+
+    private static JsonElement? ExtractStrokeThickness(object? stroke)
+    {
+        return stroke is JsonElement { ValueKind: JsonValueKind.Object } element && element.TryGetProperty("thickness", out var thickness)
+            ? thickness.Clone()
+            : null;
+    }
+
     private Color? ParseColorFromObject(object? value)
     {
         if (value == null) return null;
 
-        // Handle JsonElement
         if (value is JsonElement je)
         {
             if (je.ValueKind == JsonValueKind.String)
             {
-                var s = je.GetString();
-                return ParseColor(s);
+                return ParseColor(je.GetString());
             }
-            // Token ref object { "$ref": "..." } - return null, use token instead
+
             if (je.ValueKind == JsonValueKind.Object)
+            {
+                if (je.TryGetProperty("fill", out var fillProp))
+                {
+                    return ParseColorFromObject(fillProp.Clone());
+                }
+
+                if (je.TryGetProperty("type", out var typeProp)
+                    && typeProp.ValueKind == JsonValueKind.String
+                    && string.Equals(typeProp.GetString(), "image", StringComparison.OrdinalIgnoreCase))
+                {
+                    _warnings.Add("Encountered image paint fill in .pen file; current IR/style conversion keeps layout but does not emit background images yet.");
+                }
+
                 return null;
+            }
         }
 
         if (value is string str)
@@ -354,14 +711,11 @@ public sealed class PenToIrConverter
         return null;
     }
 
-    /// <summary>
-    /// Parses a color value or returns null for token refs.
-    /// </summary>
     private Color? ParseColor(string? value)
     {
         if (string.IsNullOrEmpty(value)) return null;
-        if (value.StartsWith('$')) return null; // Token ref - use token instead
-        
+        if (value.StartsWith('$')) return null;
+
         try
         {
             return Color.Parse(value);
@@ -373,9 +727,6 @@ public sealed class PenToIrConverter
         }
     }
 
-    /// <summary>
-    /// Parses a double from object (number or string).
-    /// </summary>
     private static double? ParseDouble(object? value)
     {
         if (value == null) return null;
@@ -393,15 +744,13 @@ public sealed class PenToIrConverter
         if (value is double dbl) return dbl;
         if (value is int i) return i;
         if (value is float f) return f;
+        if (value is long l) return l;
         if (value is string s && double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed))
             return parsed;
 
         return null;
     }
 
-    /// <summary>
-    /// Parses border specification.
-    /// </summary>
     private BorderSpec? ParseBorder(object? width, object? color)
     {
         var borderWidth = ParseDouble(width);
@@ -416,66 +765,59 @@ public sealed class PenToIrConverter
         };
     }
 
-    /// <summary>
-    /// Parses a dimension value (number, string like "100px", "50%", "auto", or token ref).
-    /// </summary>
     private Dimension? ParseDimension(object? value)
     {
         if (value == null) return null;
 
-        // Handle JsonElement from System.Text.Json
         if (value is JsonElement jsonElement)
         {
             return jsonElement.ValueKind switch
             {
                 JsonValueKind.Number => Dimension.Pixels((float)jsonElement.GetDouble()),
                 JsonValueKind.String => ParseDimensionString(jsonElement.GetString()),
+                JsonValueKind.Object => ParseDimensionObject(jsonElement),
                 _ => null
             };
         }
 
-        // Handle raw types
         if (value is double d) return Dimension.Pixels((float)d);
         if (value is int i) return Dimension.Pixels(i);
         if (value is float f) return Dimension.Pixels(f);
+        if (value is long l) return Dimension.Pixels(l);
         if (value is string s) return ParseDimensionString(s);
 
         return null;
     }
 
-    /// <summary>
-    /// Parses dimension from string like "100px", "50%", "auto", "1*".
-    /// </summary>
     private Dimension? ParseDimensionString(string? s)
     {
         if (string.IsNullOrWhiteSpace(s)) return null;
-        
+
         s = s.Trim();
 
-        if (s.Equals("auto", StringComparison.OrdinalIgnoreCase))
+        if (s.Equals("auto", StringComparison.OrdinalIgnoreCase) || s.Equals("hug", StringComparison.OrdinalIgnoreCase))
             return Dimension.Auto;
 
-        if (s.Equals("fill", StringComparison.OrdinalIgnoreCase))
+        if (s.Equals("fill", StringComparison.OrdinalIgnoreCase)
+            || s.Equals("fill_container", StringComparison.OrdinalIgnoreCase)
+            || s.Equals("fill-container", StringComparison.OrdinalIgnoreCase))
             return Dimension.Fill;
 
         if (s.StartsWith('$'))
         {
-            // Token reference - resolve later
             _warnings.Add($"Token reference '{s}' in dimension - token resolution not yet implemented");
             return null;
         }
 
-        // Try parsing with Dimension.Parse (handles px, %, *, etc.)
         try
         {
             return Dimension.Parse(s);
         }
         catch
         {
-            // Parse failed, fall through
+            // fall through
         }
 
-        // Fallback: try as plain number
         if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var num))
             return Dimension.Pixels((float)num);
 
@@ -483,14 +825,32 @@ public sealed class PenToIrConverter
         return null;
     }
 
-    /// <summary>
-    /// Parses spacing value (single number/token for uniform, or object for per-edge).
-    /// </summary>
+    private static Dimension? ParseDimensionObject(JsonElement element)
+    {
+        if (!element.TryGetProperty("type", out var typeProp))
+        {
+            return null;
+        }
+
+        var type = typeProp.GetString();
+        var value = element.TryGetProperty("value", out var valueProp) && valueProp.ValueKind == JsonValueKind.Number
+            ? valueProp.GetDouble()
+            : 0d;
+
+        return type?.ToLowerInvariant() switch
+        {
+            "fixed" => Dimension.Pixels(value),
+            "fill" => Dimension.Fill,
+            "hug" => Dimension.Auto,
+            "auto" => Dimension.Auto,
+            _ => null
+        };
+    }
+
     private Spacing ParseSpacing(object? value)
     {
         if (value == null) return new Spacing();
 
-        // Handle JsonElement
         if (value is JsonElement jsonElement)
         {
             return jsonElement.ValueKind switch
@@ -498,22 +858,20 @@ public sealed class PenToIrConverter
                 JsonValueKind.Number => new Spacing((float)jsonElement.GetDouble()),
                 JsonValueKind.String => ParseSpacingString(jsonElement.GetString()),
                 JsonValueKind.Object => ParseSpacingObject(jsonElement),
+                JsonValueKind.Array => ParseSpacingArray(jsonElement),
                 _ => new Spacing()
             };
         }
 
-        // Handle raw types
         if (value is double d) return new Spacing((float)d);
         if (value is int i) return new Spacing(i);
         if (value is float f) return new Spacing(f);
+        if (value is long l) return new Spacing(l);
         if (value is string s) return ParseSpacingString(s);
 
         return new Spacing();
     }
 
-    /// <summary>
-    /// Parses spacing to uniform Spacing? for Gap.
-    /// </summary>
     private Spacing? ParseSpacingUniform(object? value)
     {
         if (value == null) return null;
@@ -524,9 +882,6 @@ public sealed class PenToIrConverter
         return new Spacing(spacingValue);
     }
 
-    /// <summary>
-    /// Parses single spacing value to float.
-    /// </summary>
     private float ParseSpacingValue(object? value)
     {
         if (value == null) return 0f;
@@ -544,6 +899,7 @@ public sealed class PenToIrConverter
         if (value is double d) return (float)d;
         if (value is int i) return i;
         if (value is float f) return f;
+        if (value is long l) return l;
         if (value is string s) return ParseSpacingFloat(s);
 
         return 0f;
@@ -552,16 +908,15 @@ public sealed class PenToIrConverter
     private float ParseSpacingFloat(string? s)
     {
         if (string.IsNullOrWhiteSpace(s)) return 0f;
-        
+
         if (s.StartsWith('$'))
         {
             _warnings.Add($"Token reference '{s}' in spacing - token resolution not yet implemented");
             return 0f;
         }
 
-        // Remove units suffix
         s = s.TrimEnd('p', 'x', 'd', 'P', 'X', 'D');
-        
+
         if (float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
             return result;
 
@@ -576,18 +931,35 @@ public sealed class PenToIrConverter
 
     private Spacing ParseSpacingObject(JsonElement element)
     {
-        var top = element.TryGetProperty("top", out var t) ? ParseSpacingValue(t) : 0f;
-        var bottom = element.TryGetProperty("bottom", out var b) ? ParseSpacingValue(b) : 0f;
-        var left = element.TryGetProperty("left", out var l) ? ParseSpacingValue(l) : 0f;
-        var right = element.TryGetProperty("right", out var r) ? ParseSpacingValue(r) : 0f;
-        
+        var vertical = element.TryGetProperty("vertical", out var verticalProp) ? ParseSpacingValue(verticalProp) : 0f;
+        var horizontal = element.TryGetProperty("horizontal", out var horizontalProp) ? ParseSpacingValue(horizontalProp) : 0f;
+        var top = element.TryGetProperty("top", out var t) ? ParseSpacingValue(t) : vertical;
+        var bottom = element.TryGetProperty("bottom", out var b) ? ParseSpacingValue(b) : vertical;
+        var left = element.TryGetProperty("left", out var l) ? ParseSpacingValue(l) : horizontal;
+        var right = element.TryGetProperty("right", out var r) ? ParseSpacingValue(r) : horizontal;
+
         return new Spacing(top, right, bottom, left);
     }
 
-    /// <summary>
-    /// Parses font weight from number or string.
-    /// IR FontWeight only has: Light, Normal, Bold
-    /// </summary>
+    private Spacing ParseSpacingArray(JsonElement element)
+    {
+        if (element.GetArrayLength() == 2)
+        {
+            return new Spacing(ParseSpacingValue(element[0]), ParseSpacingValue(element[1]));
+        }
+
+        if (element.GetArrayLength() >= 4)
+        {
+            return new Spacing(
+                ParseSpacingValue(element[0]),
+                ParseSpacingValue(element[1]),
+                ParseSpacingValue(element[2]),
+                ParseSpacingValue(element[3]));
+        }
+
+        return new Spacing();
+    }
+
     private static FontWeight ParseFontWeight(object? value)
     {
         if (value == null) return FontWeight.Normal;
@@ -608,7 +980,6 @@ public sealed class PenToIrConverter
 
         if (num.HasValue)
         {
-            // Map numeric weights to Light/Normal/Bold
             return num.Value switch
             {
                 < 400 => FontWeight.Light,
@@ -631,9 +1002,6 @@ public sealed class PenToIrConverter
         return FontWeight.Normal;
     }
 
-    /// <summary>
-    /// Checks if a string is a token reference (starts with $).
-    /// </summary>
     private static bool IsTokenRef(string? value)
     {
         return !string.IsNullOrEmpty(value) && value.StartsWith('$');
@@ -646,56 +1014,44 @@ public sealed class PenToIrConverter
         {
             if (je.ValueKind == JsonValueKind.String)
                 return IsTokenRef(je.GetString());
-            // Handle { "$ref": "..." } format
             if (je.ValueKind == JsonValueKind.Object && je.TryGetProperty("$ref", out _))
                 return true;
         }
         return false;
     }
 
-    /// <summary>
-    /// Extracts token name from "$token-name" or { "$ref": "tokens.x" } format.
-    /// </summary>
     private static string? ExtractTokenName(string? tokenRef)
     {
         if (string.IsNullOrEmpty(tokenRef) || !tokenRef.StartsWith('$'))
             return null;
-        return tokenRef[1..]; // Remove leading $
+        return tokenRef[1..];
     }
 
-    /// <summary>
-    /// Extracts token name from object (string or { "$ref": "..." }).
-    /// </summary>
     private static string? ExtractTokenName(object? value)
     {
         if (value is string s)
             return ExtractTokenName(s);
-        
+
         if (value is JsonElement je)
         {
             if (je.ValueKind == JsonValueKind.String)
                 return ExtractTokenName(je.GetString());
-            
-            // Handle { "$ref": "tokens.colors.x" } format
+
             if (je.ValueKind == JsonValueKind.Object && je.TryGetProperty("$ref", out var refProp))
             {
                 var refValue = refProp.GetString();
                 if (!string.IsNullOrEmpty(refValue))
                 {
-                    // Convert "tokens.colors.debug-bg" -> "colors.debug-bg"
                     if (refValue.StartsWith("tokens.", StringComparison.OrdinalIgnoreCase))
                         return refValue["tokens.".Length..];
                     return refValue;
                 }
             }
         }
-        
+
         return null;
     }
 
-    /// <summary>
-    /// Maps binding mode string to BindingMode enum.
-    /// </summary>
     private static BindingMode MapBindingMode(string? mode)
     {
         return mode?.ToLowerInvariant() switch

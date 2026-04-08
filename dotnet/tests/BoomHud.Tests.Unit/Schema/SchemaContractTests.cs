@@ -184,7 +184,7 @@ public class SchemaContractTests
         // Arrange
         var json = """
         {
-          "$schema": "../../schemas/compose.schema.json",
+          "$schema": "../../schemas/json/compose.schema.json",
           "version": "1.0",
           "root": "GameHud",
           "sources": [
@@ -283,7 +283,7 @@ public class SchemaContractTests
         // Arrange
         var json = """
         {
-          "$schema": "../../schemas/states.schema.json",
+          "$schema": "../../schemas/json/states.schema.json",
           "version": "1.0",
           "viewport": {
             "width": 1920,

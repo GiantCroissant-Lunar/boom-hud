@@ -34,6 +34,11 @@ public sealed record StyleSpec
     public double? FontSize { get; init; }
 
     /// <summary>
+    /// Font family name.
+    /// </summary>
+    public string? FontFamily { get; init; }
+
+    /// <summary>
     /// Optional theme token key for the font size.
     /// </summary>
     public string? FontSizeToken { get; init; }
@@ -47,6 +52,11 @@ public sealed record StyleSpec
     /// Font style (normal, italic).
     /// </summary>
     public FontStyle? FontStyle { get; init; }
+
+    /// <summary>
+    /// Additional spacing between characters in pixels.
+    /// </summary>
+    public double? LetterSpacing { get; init; }
 
     /// <summary>
     /// Border specification.

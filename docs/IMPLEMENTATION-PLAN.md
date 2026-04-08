@@ -40,7 +40,7 @@ This document outlines the implementation roadmap for BoomHud, organized into ph
 ### Deliverables
 - `BoomHud.Abstractions` with IR types
 - `BoomHud.Dsl` with parser
-- `schemas/boom-hud.schema.json`
+- `schemas/json/boom-hud.schema.json`
 - Basic unit tests
 
 ---

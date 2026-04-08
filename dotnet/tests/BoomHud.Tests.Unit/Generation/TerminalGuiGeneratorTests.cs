@@ -431,7 +431,7 @@ public class TerminalGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
 
         var viewFile = result.Files.First(f => f.Path.EndsWith("View.g.cs", StringComparison.Ordinal));
-        viewFile.Content.Should().Contain("_panel.Width = Dim.Percent(50f)");
+        viewFile.Content.Should().Contain("_panel.Width = Dim.Percent(50)");
     }
 
     [Fact]

@@ -62,7 +62,7 @@ Other locations are valid when specified via `--manifest`.
   ],
   "tokens": "tokens.ir.json",
   "targets": ["godot", "avalonia"],
-  "output": "../generated",
+  "output": "generated",
   "namespace": "FantaSim.Hud.Generated"
 }
 ```
@@ -88,6 +88,7 @@ All paths in the manifest are **relative to the manifest file location**:
 ui/
 ├── boom-hud.compose.json    # Manifest
 ├── tokens.ir.json           # tokens: "tokens.ir.json"
+├── generated/               # output: "generated"
 ├── sources/
 │   ├── debug-overlay.pen    # sources: ["sources/debug-overlay.pen"]
 │   └── minimap.pen
@@ -354,7 +355,7 @@ public sealed record SourcedDocument(HudDocument Document, SourceIdentity Source
   ],
   "tokens": "tokens.ir.json",
   "targets": ["godot", "avalonia", "terminalgui"],
-  "output": "../generated",
+  "output": "generated",
   "namespace": "FantaSim.Hud.Generated"
 }
 ```
@@ -474,7 +475,7 @@ After:
   "sources": ["design-a.pen", "design-b.pen"],
   "tokens": "tokens.ir.json",
   "targets": ["godot"],
-  "output": "../generated",
+  "output": "generated",
   "namespace": "FantaSim.Hud"
 }
 ```
@@ -497,14 +498,14 @@ boomhud generate --manifest ui/boom-hud.compose.json
 A JSON Schema for IDE autocompletion is provided at:
 
 ```
-schemas/compose.schema.json
+schemas/json/compose.schema.json
 ```
 
 Reference it in your manifest:
 
 ```json
 {
-  "$schema": "../schemas/compose.schema.json",
+  "$schema": "../schemas/json/compose.schema.json",
   "version": "1.0",
   ...
 }

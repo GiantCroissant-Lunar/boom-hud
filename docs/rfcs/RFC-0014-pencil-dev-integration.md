@@ -485,7 +485,7 @@ Design Source → IR → Generate → Build → Snapshot → Compare
 ```bash
 # Generate Godot project, run headless, capture screenshots
 boomhud snapshot \
-  --project gen/godot/DebugOverlay.csproj \
+  --manifest ui/boom-hud.compose.json \
   --states states.json \
   --out snapshots/
 
@@ -526,7 +526,7 @@ boomhud video \
 
 #### Checklist
 
-- [x] Define `.pen` schema for BoomHud (`schemas/pencil.schema.json`) ✅
+- [x] Define `.pen` schema for BoomHud (`schemas/json/pencil.schema.json`) ✅
 - [x] Implement `PenDto.cs` (deserialization types) ✅
 - [x] Implement `PenParser.cs` returning `HudDocument` (IR) ✅
 - [x] Implement `PenToIrConverter.cs` (subset: frame/text/image + basic layout + token refs) ✅
@@ -550,7 +550,7 @@ boomhud video \
 
 #### Checklist
 
-- [x] Define `tokens.ir.json` schema (`schemas/tokens.schema.json`) ✅
+- [x] Define `tokens.ir.json` schema (`schemas/json/tokens.schema.json`) ✅
 - [x] Implement `TokenRegistry.cs` - load and resolve tokens ✅
 - [x] Implement `BoomHudDiagnostic.cs` - error codes BH0102, BH0104 ✅
 - [x] Add `--tokens` CLI option with auto-discovery ✅

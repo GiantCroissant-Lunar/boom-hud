@@ -2,6 +2,13 @@
 
 This document provides a precise mapping from `.pen` schema fields to `BoomHud.Abstractions.IR` types.
 
+The parser now supports two `.pen` shapes:
+
+- Schema-first `.pen` documents that use top-level `nodes`, nested `layout`, and nested `style`.
+- Raw Pencil editor exports that use top-level `children`, inline fields like `x`, `y`, `width`, `height`, `fill`, `stroke`, `padding`, `gap`, plus `reusable` component definitions and `ref` instances with `descendants` overrides.
+
+For a concrete raw-export sample, see `samples/pencil/raw-hud-components.pen`.
+
 ## Node Type Mapping
 
 | `.pen` node type | IR `ComponentType` | Notes |
@@ -9,10 +16,11 @@ This document provides a precise mapping from `.pen` schema fields to `BoomHud.A
 | `frame` | `Container` | Use layout.mode to determine stack vs absolute |
 | `text` | `Label` | |
 | `image` | `Image` | |
-| `rectangle` | `Container` | Panel with background |
+| `rectangle` | `Panel` | Panel/background block |
 | `ellipse` | `Container` | Requires style.borderRadius |
 | `group` | `Container` | Layout type = Absolute |
-| `instance` | Uses `ComponentRefId` | Reference to component definition |
+| `icon_font` | `Icon` | Converted as text-like icon node |
+| `ref` | Expanded from reusable component | `descendants` overrides are applied during Pencil parsing |
 | `component` | Creates `HudComponentDefinition` | Registered in document.Components |
 
 ## Layout Mapping
@@ -28,7 +36,10 @@ This document provides a precise mapping from `.pen` schema fields to `BoomHud.A
 | `gap: 8` | `Gap = Spacing.Uniform(8)` | |
 | `padding: 8` | `Padding = Spacing.Uniform(8)` | |
 | `padding: { top, right, bottom, left }` | `Padding = new Spacing(t, r, b, l)` | |
+| `padding: [vertical, horizontal]` | `Padding = new Spacing(v, h)` | Raw export shorthand |
+| `padding: [top, right, bottom, left]` | `Padding = new Spacing(t, r, b, l)` | Raw export shorthand |
 | `width: "fill"` | `Width = Dimension.Fill` | |
+| `width: "fill_container"` | `Width = Dimension.Fill` | Raw export alias |
 | `width: "hug"` | `Width = Dimension.Auto` | |
 | `width: 100` | `Width = Dimension.Pixels(100)` | |
 | `width: { type: "fixed", value: 100 }` | `Width = Dimension.Pixels(100)` | |
@@ -132,10 +143,14 @@ public static FontWeight? ConvertFontWeight(object? value)
 
 | `.pen` format | IR `BindingSpec` |
 |---------------|------------------|
-| `"content": "DebugInfo.Fps"` | `Property="content", Path="DebugInfo.Fps", Mode=OneWay` |
-| `"content": { "$bind": "X.Y" }` | `Property="content", Path="X.Y", Mode=OneWay` |
-| `"content": { "$bind": "X.Y", "mode": "twoWay" }` | `Property="content", Path="X.Y", Mode=TwoWay` |
-| `"content": { "$bind": "X.Y", "format": "{0:F0}" }` | `Property="content", Path="X.Y", Format="{0:F0}"` |
+| `"content": "DebugInfo.Fps"` | `Property="Text", Path="DebugInfo.Fps", Mode=OneWay` |
+| `"content": { "$bind": "X.Y" }` | `Property="Text", Path="X.Y", Mode=OneWay` |
+| `"content": { "$bind": "X.Y", "mode": "twoWay" }` | `Property="Text", Path="X.Y", Mode=TwoWay` |
+| `"content": { "$bind": "X.Y", "format": "{0:F0}" }` | `Property="Text", Path="X.Y", Format="{0:F0}"` |
+| `"content": { "path": "X.Y", "fallback": "n/a" }` | `Property="Text", Path="X.Y", Fallback="n/a"` |
+| `"style.fill": { "$bind": "Status", "map": { ... } }` on text nodes | `Property="style.foreground", Path="Status", ConverterParameter=<map object>` |
+
+Binding aliases are normalized during Pencil parsing so downstream generators see canonical IR property names instead of `.pen`-specific field names. Current normalization rules include `content -> Text`, `style.fill -> style.foreground` for text-like components (or `style.background` for non-text components), `style.stroke -> style.borderColor`, and `style.strokeWidth -> style.borderWidth`.
 
 ### Binding Mode Conversion
 

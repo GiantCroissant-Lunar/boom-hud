@@ -20,7 +20,7 @@ public class ComposeManifestTests
           ],
           "tokens": "../tokens.ir.json",
           "targets": ["godot", "terminalgui"],
-          "output": "../generated",
+          "output": "generated",
           "namespace": "MyGame.Hud"
         }
         """;
@@ -36,7 +36,7 @@ public class ComposeManifestTests
         manifest.Sources[1].Should().Be("pencil/debug-overlay.pen");
         manifest.Tokens.Should().Be("../tokens.ir.json");
         manifest.Targets.Should().BeEquivalentTo(["godot", "terminalgui"]);
-        manifest.Output.Should().Be("../generated");
+        manifest.Output.Should().Be("generated");
         manifest.Namespace.Should().Be("MyGame.Hud");
     }
 
@@ -133,7 +133,7 @@ public class ComposeManifestTests
         var json = """
         {
           "sources": ["input.pen"],
-          "output": "../generated"
+          "output": "generated"
         }
         """;
         var manifest = ComposeManifest.LoadFromJson(json);
@@ -143,7 +143,7 @@ public class ComposeManifestTests
         var resolved = manifest.ResolveOutputPath(manifestPath);
 
         // Assert
-        resolved.Should().EndWith(Path.Combine("project", "generated"));
+        resolved.Should().EndWith(Path.Combine("project", "ui", "generated"));
     }
 
     [Fact]
