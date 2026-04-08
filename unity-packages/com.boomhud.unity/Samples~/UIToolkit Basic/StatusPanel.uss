@@ -1,0 +1,14 @@
+#StatusPanel {
+    padding: 12px;
+    background-color: rgba(18, 24, 32, 0.92);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#StatusLabel {
+    color: rgb(64, 220, 128);
+    font-size: 18px;
+    unity-font-style: bold;
+}

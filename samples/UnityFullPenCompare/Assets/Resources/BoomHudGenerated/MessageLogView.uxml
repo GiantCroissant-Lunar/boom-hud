@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ComponentMessageLog" class="boomhud-component-message-log">
+        <ui:Label name="Line1" class="boomhud-line1" />
+        <ui:Label name="Line2" class="boomhud-line2" />
+        <ui:Label name="Line3" class="boomhud-line3" />
+        <ui:Label name="Line4" class="boomhud-line4" />
+        <ui:Label name="Line5" class="boomhud-line5" />
+    </ui:VisualElement>
+</ui:UXML>

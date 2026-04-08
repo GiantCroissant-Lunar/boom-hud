@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Tests.Backends</AssemblyName>
+    <RootNamespace>BoomHud.Tests.Backends</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Cli\BoomHud.Cli.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Unity\BoomHud.Gen.Unity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\BoomHud.Tests.Unit\Capabilities\**\*.cs" />
+    <Compile Include="..\BoomHud.Tests.Unit\Cli\**\*.cs" />
+    <Compile Include="..\BoomHud.Tests.Unit\Generation\**\*.cs" />
+    <Compile Include="..\BoomHud.Tests.Unit\Integration\**\*.cs" />
+    <Compile Include="..\BoomHud.Tests.Unit\Snapshots\BaselineCompareHandlerTests.cs" />
+    <Compile Include="..\BoomHud.Tests.Unit\Snapshots\BaselineDiffHandlerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

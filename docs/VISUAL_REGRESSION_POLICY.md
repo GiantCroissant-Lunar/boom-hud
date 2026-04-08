@@ -114,6 +114,39 @@ For each changed frame, the system generates:
 
 Download the `diff-images` artifact to review changes locally.
 
+## Single-Frame Similarity Score
+
+For design-vs-render checks on one frame or one component crop, use the CLI image scorer:
+
+```bash
+dotnet run --project dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj -- \
+  baseline score --reference path/to/reference.png --candidate path/to/current.png \
+  --normalize cover --diff ui/diffs/component-diff.png \
+  --out ui/image-similarity-report.json --tolerance 8 --fail-below 95
+```
+
+The scorer reports three related values:
+
+| Metric | Formula | Meaning |
+|--------|---------|---------|
+| `Pixel identity %` | `100 - changedPercent` | Percentage of pixels unchanged above tolerance |
+| `Delta similarity %` | `100 * (1 - meanDelta / 255)` | How close changed pixels still are in average intensity |
+| `Overall similarity %` | `pixelIdentity * 0.7 + deltaSimilarity * 0.3` | Practical single number for review dashboards |
+
+Interpretation:
+
+- `100%` means identical at the chosen tolerance
+- `90-99%` usually means small layout, spacing, or text-rendering drift
+- `<90%` usually means a materially different frame or crop
+
+Important:
+
+- Scores are most meaningful when the images have the same dimensions and crop.
+- Use `--normalize stretch` or `--normalize cover` when the candidate image does not match the reference dimensions.
+- `--normalize cover` is the safer default for screenshot-vs-screenshot comparisons because it preserves aspect ratio and center-crops.
+- `--fail-below 95` makes the command suitable for CI quality gates without needing a wrapper script.
+- This is a deterministic diff score, not a perceptual SSIM implementation.
+
 ## Local Development
 
 Run the full review workflow locally:

@@ -1,0 +1,16 @@
+{
+  "name": "com.boomhud.unity",
+  "version": "0.1.0",
+  "displayName": "BoomHud Unity Integration",
+  "description": "Unity package for hosting BoomHud-generated UI in UI Toolkit today, with shared runtime scaffolding for upcoming uGUI generation.",
+  "unity": "2022.3",
+  "documentationUrl": "Documentation~/README.md",
+  "author": {
+    "name": "BoomHud Contributors"
+  },
+  "dependencies": {
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.ui": "1.0.0",
+    "com.unity.ugui": "1.0.0"
+  }
+}

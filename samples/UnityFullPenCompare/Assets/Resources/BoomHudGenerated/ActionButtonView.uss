@@ -1,0 +1,45 @@
+.boomhud-component-action-button {
+    flex-direction: column;
+    width: 28px;
+    height: 28px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-icon {
+    flex-direction: column;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+

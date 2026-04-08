@@ -1,0 +1,340 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ExploreHUD" class="boomhud-explore-h-u-d">
+        <ui:VisualElement name="HUD" class="boomhud-h-u-d">
+            <ui:VisualElement name="Content" class="boomhud-content">
+                <ui:VisualElement name="MainArea" class="boomhud-main-area">
+                    <ui:VisualElement name="Viewport" class="boomhud-viewport">
+                        <ui:VisualElement name="Compass" class="boomhud-compass">
+                            <ui:Label name="CompassN" class="boomhud-compass-n" />
+                        </ui:VisualElement>
+                        <ui:Label name="Zone" class="boomhud-zone" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ActivityLog" class="boomhud-activity-log">
+                        <ui:VisualElement name="ActivityLogInner" class="boomhud-activity-log-inner">
+                            <ui:Label name="Log3" class="boomhud-log3" />
+                            <ui:Label name="Log4" class="boomhud-log4" />
+                            <ui:Label name="Log5" class="boomhud-log5" />
+                            <ui:Label name="Log6" class="boomhud-log6" />
+                            <ui:Label name="P83Vj" class="boomhud-p83-vj" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="RightPanel" class="boomhud-right-panel">
+                    <ui:VisualElement name="RightPanelInner" class="boomhud-right-panel-inner">
+                        <ui:VisualElement name="Minimap" class="boomhud-minimap">
+                            <ui:VisualElement name="R0" class="boomhud-r0">
+                                <ui:VisualElement name="N00" class="boomhud-n00" />
+                                <ui:VisualElement name="N01" class="boomhud-n01" />
+                                <ui:VisualElement name="N02" class="boomhud-n02" />
+                                <ui:VisualElement name="N03" class="boomhud-n03" />
+                                <ui:VisualElement name="N04" class="boomhud-n04" />
+                                <ui:VisualElement name="N05" class="boomhud-n05" />
+                                <ui:VisualElement name="N06" class="boomhud-n06" />
+                                <ui:VisualElement name="N07" class="boomhud-n07" />
+                                <ui:VisualElement name="N08" class="boomhud-n08" />
+                                <ui:VisualElement name="N09" class="boomhud-n09" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R1" class="boomhud-r1">
+                                <ui:VisualElement name="N10" class="boomhud-n10" />
+                                <ui:VisualElement name="N11" class="boomhud-n11" />
+                                <ui:VisualElement name="N12" class="boomhud-n12" />
+                                <ui:VisualElement name="N13" class="boomhud-n13" />
+                                <ui:VisualElement name="N14" class="boomhud-n14" />
+                                <ui:VisualElement name="N15" class="boomhud-n15" />
+                                <ui:VisualElement name="N16" class="boomhud-n16" />
+                                <ui:VisualElement name="N17" class="boomhud-n17" />
+                                <ui:VisualElement name="N18" class="boomhud-n18" />
+                                <ui:VisualElement name="N19" class="boomhud-n19" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R2" class="boomhud-r2">
+                                <ui:VisualElement name="N20" class="boomhud-n20" />
+                                <ui:VisualElement name="N21" class="boomhud-n21" />
+                                <ui:VisualElement name="Lxixo" class="boomhud-lxixo" />
+                                <ui:VisualElement name="N23" class="boomhud-n23" />
+                                <ui:VisualElement name="N24" class="boomhud-n24" />
+                                <ui:VisualElement name="N25" class="boomhud-n25" />
+                                <ui:VisualElement name="N26" class="boomhud-n26" />
+                                <ui:VisualElement name="N27" class="boomhud-n27" />
+                                <ui:VisualElement name="QZTGM" class="boomhud-q-z-t-g-m" />
+                                <ui:VisualElement name="N29" class="boomhud-n29" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R3" class="boomhud-r3">
+                                <ui:VisualElement name="N30" class="boomhud-n30" />
+                                <ui:VisualElement name="N31" class="boomhud-n31" />
+                                <ui:VisualElement name="N32" class="boomhud-n32" />
+                                <ui:VisualElement name="N33" class="boomhud-n33" />
+                                <ui:VisualElement name="N34" class="boomhud-n34" />
+                                <ui:VisualElement name="LODSH" class="boomhud-l-o-d-s-h" />
+                                <ui:VisualElement name="N36" class="boomhud-n36" />
+                                <ui:VisualElement name="N37" class="boomhud-n37" />
+                                <ui:VisualElement name="N38" class="boomhud-n38" />
+                                <ui:VisualElement name="Bfqim" class="boomhud-bfqim" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R4" class="boomhud-r4">
+                                <ui:VisualElement name="N40" class="boomhud-n40" />
+                                <ui:VisualElement name="N41" class="boomhud-n41" />
+                                <ui:VisualElement name="N42" class="boomhud-n42" />
+                                <ui:VisualElement name="Bbvcn" class="boomhud-bbvcn" />
+                                <ui:VisualElement name="N44" class="boomhud-n44" />
+                                <ui:VisualElement name="N45" class="boomhud-n45" />
+                                <ui:VisualElement name="N46" class="boomhud-n46" />
+                                <ui:VisualElement name="N47" class="boomhud-n47" />
+                                <ui:VisualElement name="N48" class="boomhud-n48" />
+                                <ui:VisualElement name="N49" class="boomhud-n49" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R5" class="boomhud-r5">
+                                <ui:VisualElement name="N50" class="boomhud-n50" />
+                                <ui:VisualElement name="N51" class="boomhud-n51" />
+                                <ui:VisualElement name="N52" class="boomhud-n52" />
+                                <ui:VisualElement name="N53" class="boomhud-n53" />
+                                <ui:VisualElement name="N54" class="boomhud-n54" />
+                                <ui:VisualElement name="N55" class="boomhud-n55" />
+                                <ui:VisualElement name="N56" class="boomhud-n56" />
+                                <ui:VisualElement name="N57" class="boomhud-n57" />
+                                <ui:VisualElement name="N58" class="boomhud-n58" />
+                                <ui:VisualElement name="N59" class="boomhud-n59" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="Bmfhw" class="boomhud-bmfhw">
+                                <ui:VisualElement name="N60" class="boomhud-n60" />
+                                <ui:VisualElement name="N61" class="boomhud-n61" />
+                                <ui:VisualElement name="N62" class="boomhud-n62" />
+                                <ui:VisualElement name="N63" class="boomhud-n63" />
+                                <ui:VisualElement name="N64" class="boomhud-n64" />
+                                <ui:VisualElement name="N65" class="boomhud-n65" />
+                                <ui:VisualElement name="N66" class="boomhud-n66" />
+                                <ui:VisualElement name="N67" class="boomhud-n67" />
+                                <ui:VisualElement name="N68" class="boomhud-n68" />
+                                <ui:VisualElement name="N69" class="boomhud-n69" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R7" class="boomhud-r7">
+                                <ui:VisualElement name="N70" class="boomhud-n70" />
+                                <ui:VisualElement name="N71" class="boomhud-n71" />
+                                <ui:VisualElement name="N72" class="boomhud-n72" />
+                                <ui:VisualElement name="N73" class="boomhud-n73" />
+                                <ui:VisualElement name="N74" class="boomhud-n74" />
+                                <ui:VisualElement name="N75" class="boomhud-n75" />
+                                <ui:VisualElement name="N76" class="boomhud-n76" />
+                                <ui:VisualElement name="N77" class="boomhud-n77" />
+                                <ui:VisualElement name="N78" class="boomhud-n78" />
+                                <ui:VisualElement name="N79" class="boomhud-n79" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R8" class="boomhud-r8">
+                                <ui:VisualElement name="N80" class="boomhud-n80" />
+                                <ui:VisualElement name="N81" class="boomhud-n81" />
+                                <ui:VisualElement name="N82" class="boomhud-n82" />
+                                <ui:VisualElement name="N83" class="boomhud-n83" />
+                                <ui:VisualElement name="N84" class="boomhud-n84" />
+                                <ui:VisualElement name="N85" class="boomhud-n85" />
+                                <ui:VisualElement name="N86" class="boomhud-n86" />
+                                <ui:VisualElement name="N87" class="boomhud-n87" />
+                                <ui:VisualElement name="N88" class="boomhud-n88" />
+                                <ui:VisualElement name="N89" class="boomhud-n89" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="R9" class="boomhud-r9">
+                                <ui:VisualElement name="N90" class="boomhud-n90" />
+                                <ui:VisualElement name="N91" class="boomhud-n91" />
+                                <ui:VisualElement name="N92" class="boomhud-n92" />
+                                <ui:VisualElement name="N93" class="boomhud-n93" />
+                                <ui:VisualElement name="N94" class="boomhud-n94" />
+                                <ui:VisualElement name="N95" class="boomhud-n95" />
+                                <ui:VisualElement name="N96" class="boomhud-n96" />
+                                <ui:VisualElement name="N97" class="boomhud-n97" />
+                                <ui:VisualElement name="N98" class="boomhud-n98" />
+                                <ui:VisualElement name="N99" class="boomhud-n99" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Sep" class="boomhud-sep" />
+                        <ui:VisualElement name="PartyList" class="boomhud-party-list">
+                            <ui:VisualElement name="Row1" class="boomhud-row1">
+                                <ui:VisualElement name="Char1" class="boomhud-char1">
+                                    <ui:VisualElement name="Face" class="boomhud-face">
+                                        <ui:Label name="ClassIcon" class="boomhud-class-icon" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C1name" class="boomhud-c1name" />
+                                    <ui:VisualElement name="Hp" class="boomhud-hp">
+                                        <ui:VisualElement name="HpFill" class="boomhud-hp-fill" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp" class="boomhud-mp">
+                                        <ui:VisualElement name="MpFill" class="boomhud-mp-fill" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats" class="boomhud-stats">
+                                        <ui:Label name="Stat1" class="boomhud-stat1" />
+                                        <ui:Label name="Stat2" class="boomhud-stat2" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid" class="boomhud-action-grid">
+                                        <ui:VisualElement name="Atk" class="boomhud-atk">
+                                            <ui:Label name="QEpO3" class="boomhud-q-ep-o3" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag" class="boomhud-mag">
+                                            <ui:Label name="AIphN" class="boomhud-a-iph-n" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def" class="boomhud-def">
+                                            <ui:Label name="E4QKZ" class="boomhud-e4-q-k-z" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item" class="boomhud-item">
+                                            <ui:Label name="DVzX7" class="boomhud-d-vz-x7" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Char2" class="boomhud-char2">
+                                    <ui:VisualElement name="Face2" class="boomhud-face2">
+                                        <ui:Label name="ClassIcon2" class="boomhud-class-icon2" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C2name" class="boomhud-c2name" />
+                                    <ui:VisualElement name="Hp2" class="boomhud-hp2">
+                                        <ui:VisualElement name="HpFill2" class="boomhud-hp-fill2" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp2" class="boomhud-mp2">
+                                        <ui:VisualElement name="MpFill2" class="boomhud-mp-fill2" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats2" class="boomhud-stats2">
+                                        <ui:Label name="Stat12" class="boomhud-stat12" />
+                                        <ui:Label name="Stat22" class="boomhud-stat22" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid2" class="boomhud-action-grid2">
+                                        <ui:VisualElement name="Atk2" class="boomhud-atk2">
+                                            <ui:Label name="QEpO32" class="boomhud-q-ep-o32" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag2" class="boomhud-mag2">
+                                            <ui:Label name="AIphN2" class="boomhud-a-iph-n2" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def2" class="boomhud-def2">
+                                            <ui:Label name="E4QKZ2" class="boomhud-e4-q-k-z2" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item2" class="boomhud-item2">
+                                            <ui:Label name="DVzX72" class="boomhud-d-vz-x72" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="Row2" class="boomhud-row2">
+                                <ui:VisualElement name="Char3" class="boomhud-char3">
+                                    <ui:VisualElement name="Face3" class="boomhud-face3">
+                                        <ui:Label name="ClassIcon3" class="boomhud-class-icon3" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C3name" class="boomhud-c3name" />
+                                    <ui:VisualElement name="Hp3" class="boomhud-hp3">
+                                        <ui:VisualElement name="HpFill3" class="boomhud-hp-fill3" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp3" class="boomhud-mp3">
+                                        <ui:VisualElement name="MpFill3" class="boomhud-mp-fill3" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats3" class="boomhud-stats3">
+                                        <ui:Label name="Stat13" class="boomhud-stat13" />
+                                        <ui:Label name="Stat23" class="boomhud-stat23" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid3" class="boomhud-action-grid3">
+                                        <ui:VisualElement name="Atk3" class="boomhud-atk3">
+                                            <ui:Label name="QEpO33" class="boomhud-q-ep-o33" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag3" class="boomhud-mag3">
+                                            <ui:Label name="AIphN3" class="boomhud-a-iph-n3" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def3" class="boomhud-def3">
+                                            <ui:Label name="E4QKZ3" class="boomhud-e4-q-k-z3" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item3" class="boomhud-item3">
+                                            <ui:Label name="DVzX73" class="boomhud-d-vz-x73" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Char4" class="boomhud-char4">
+                                    <ui:VisualElement name="Face4" class="boomhud-face4">
+                                        <ui:Label name="ClassIcon4" class="boomhud-class-icon4" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C4name" class="boomhud-c4name" />
+                                    <ui:VisualElement name="Hp4" class="boomhud-hp4">
+                                        <ui:VisualElement name="HpFill4" class="boomhud-hp-fill4" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp4" class="boomhud-mp4">
+                                        <ui:VisualElement name="MpFill4" class="boomhud-mp-fill4" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats4" class="boomhud-stats4">
+                                        <ui:Label name="Stat14" class="boomhud-stat14" />
+                                        <ui:Label name="Stat24" class="boomhud-stat24" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid4" class="boomhud-action-grid4">
+                                        <ui:VisualElement name="Atk4" class="boomhud-atk4">
+                                            <ui:Label name="QEpO34" class="boomhud-q-ep-o34" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag4" class="boomhud-mag4">
+                                            <ui:Label name="AIphN4" class="boomhud-a-iph-n4" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def4" class="boomhud-def4">
+                                            <ui:Label name="E4QKZ4" class="boomhud-e4-q-k-z4" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item4" class="boomhud-item4">
+                                            <ui:Label name="DVzX74" class="boomhud-d-vz-x74" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="Row3" class="boomhud-row3">
+                                <ui:VisualElement name="Char5" class="boomhud-char5">
+                                    <ui:VisualElement name="Face5" class="boomhud-face5">
+                                        <ui:Label name="ClassIcon5" class="boomhud-class-icon5" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C5name" class="boomhud-c5name" />
+                                    <ui:VisualElement name="Hp5" class="boomhud-hp5">
+                                        <ui:VisualElement name="HpFill5" class="boomhud-hp-fill5" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp5" class="boomhud-mp5">
+                                        <ui:VisualElement name="MpFill5" class="boomhud-mp-fill5" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats5" class="boomhud-stats5">
+                                        <ui:Label name="Stat15" class="boomhud-stat15" />
+                                        <ui:Label name="Stat25" class="boomhud-stat25" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid5" class="boomhud-action-grid5">
+                                        <ui:VisualElement name="Atk5" class="boomhud-atk5">
+                                            <ui:Label name="QEpO35" class="boomhud-q-ep-o35" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag5" class="boomhud-mag5">
+                                            <ui:Label name="AIphN5" class="boomhud-a-iph-n5" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def5" class="boomhud-def5">
+                                            <ui:Label name="E4QKZ5" class="boomhud-e4-q-k-z5" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item5" class="boomhud-item5">
+                                            <ui:Label name="DVzX75" class="boomhud-d-vz-x75" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="Char6" class="boomhud-char6">
+                                    <ui:VisualElement name="Face6" class="boomhud-face6">
+                                        <ui:Label name="ClassIcon6" class="boomhud-class-icon6" />
+                                    </ui:VisualElement>
+                                    <ui:Label name="C6name" class="boomhud-c6name" />
+                                    <ui:VisualElement name="Hp6" class="boomhud-hp6">
+                                        <ui:VisualElement name="HpFill6" class="boomhud-hp-fill6" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Mp6" class="boomhud-mp6">
+                                        <ui:VisualElement name="MpFill6" class="boomhud-mp-fill6" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="Stats6" class="boomhud-stats6">
+                                        <ui:Label name="Stat16" class="boomhud-stat16" />
+                                        <ui:Label name="Stat26" class="boomhud-stat26" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ActionGrid6" class="boomhud-action-grid6">
+                                        <ui:VisualElement name="Atk6" class="boomhud-atk6">
+                                            <ui:Label name="QEpO36" class="boomhud-q-ep-o36" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Mag6" class="boomhud-mag6">
+                                            <ui:Label name="AIphN6" class="boomhud-a-iph-n6" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Def6" class="boomhud-def6">
+                                            <ui:Label name="E4QKZ6" class="boomhud-e4-q-k-z6" />
+                                        </ui:VisualElement>
+                                        <ui:VisualElement name="Item6" class="boomhud-item6">
+                                            <ui:Label name="DVzX76" class="boomhud-d-vz-x76" />
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

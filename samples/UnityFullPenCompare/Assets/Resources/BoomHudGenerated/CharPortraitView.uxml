@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ComponentCharPortrait" class="boomhud-component-char-portrait">
+        <ui:VisualElement name="Face" class="boomhud-face">
+            <ui:Label name="ClassIcon" class="boomhud-class-icon" />
+        </ui:VisualElement>
+        <ui:Label name="Name" class="boomhud-name" />
+        <ui:VisualElement name="Hp" class="boomhud-hp">
+            <ui:VisualElement name="HpFill" class="boomhud-hp-fill" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Mp" class="boomhud-mp">
+            <ui:VisualElement name="MpFill" class="boomhud-mp-fill" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Stats" class="boomhud-stats">
+            <ui:Label name="Stat1" class="boomhud-stat1" />
+            <ui:Label name="Stat2" class="boomhud-stat2" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ActionGrid" class="boomhud-action-grid">
+            <ui:VisualElement name="Atk" class="boomhud-atk">
+                <ui:Label name="QEpO3" class="boomhud-q-ep-o3" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Mag" class="boomhud-mag">
+                <ui:Label name="AIphN" class="boomhud-a-iph-n" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Def" class="boomhud-def">
+                <ui:Label name="E4QKZ" class="boomhud-e4-q-k-z" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Item" class="boomhud-item">
+                <ui:Label name="DVzX7" class="boomhud-d-vz-x7" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,28 @@
+{
+  "$schema": "./build.config.schema.json",
+  "version": "0.1.0",
+  "artifactsVersion": "boom-hud",
+  "solution": "dotnet/BoomHud.sln",
+
+  "projectGroups": {
+    "packages": {
+      "sourceDir": "dotnet/src",
+      "action": "pack",
+      "include": [
+        "BoomHud.Abstractions",
+        "BoomHud.Cli",
+        "BoomHud.Dsl",
+        "BoomHud.Dsl.Pencil",
+        "BoomHud.Gen.Avalonia",
+        "BoomHud.Gen.Godot",
+        "BoomHud.Gen.TerminalGui",
+        "BoomHud.Gen.Unity",
+        "BoomHud.Generators",
+        "BoomHud.Mvvm.Generators"
+      ]
+    }
+  },
+
+  "packIncludeSymbols": false,
+  "syncLocalNugetFeed": false
+}

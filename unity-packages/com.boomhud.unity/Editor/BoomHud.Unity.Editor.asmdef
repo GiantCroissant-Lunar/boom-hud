@@ -1,0 +1,20 @@
+{
+  "name": "BoomHud.Unity.Editor",
+  "rootNamespace": "BoomHud.Unity.Editor",
+  "references": [
+    "BoomHud.Unity.Runtime",
+    "BoomHud.Unity.UIToolkit",
+    "BoomHud.Unity.UGUI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

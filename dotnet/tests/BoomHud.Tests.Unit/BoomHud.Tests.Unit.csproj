@@ -13,11 +13,16 @@
     <ProjectReference Include="..\..\src\BoomHud.Cli\BoomHud.Cli.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Capabilities\**\*.cs" />
+    <Compile Remove="Cli\**\*.cs" />
+    <Compile Remove="Generation\**\*.cs" />
+    <Compile Remove="Integration\**\*.cs" />
+    <Compile Remove="Snapshots\BaselineCompareHandlerTests.cs" />
+    <Compile Remove="Snapshots\BaselineDiffHandlerTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

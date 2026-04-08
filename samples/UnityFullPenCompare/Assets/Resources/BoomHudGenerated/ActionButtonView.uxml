@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ComponentActionButton" class="boomhud-component-action-button">
+        <ui:Label name="Icon" class="boomhud-icon" />
+    </ui:VisualElement>
+</ui:UXML>

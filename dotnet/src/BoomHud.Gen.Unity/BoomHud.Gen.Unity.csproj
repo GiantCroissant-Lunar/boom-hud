@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Gen.Unity</AssemblyName>
+    <RootNamespace>BoomHud.Gen.Unity</RootNamespace>
+    <PackageId>BoomHud.Unity</PackageId>
+    <Description>Unity UI Toolkit code generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;unity;ui-toolkit;generator;boomhud</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
+  </ItemGroup>
+
+</Project>

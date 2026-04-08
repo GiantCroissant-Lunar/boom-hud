@@ -8,12 +8,14 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>boom-hud</ToolCommandName>
     <PackageId>BoomHud.Tool</PackageId>
+    <PackageTags>ui;code-generation;tool;cli;boomhud</PackageTags>
     <!-- CA1861: Constant array arguments in uipro command Option constructors (pre-existing) -->
     <NoWarn>$(NoWarn);CA1861</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="BoomHud.Tests.Unit" />
+    <InternalsVisibleTo Include="BoomHud.Tests.Backends" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,7 @@
     <ProjectReference Include="..\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
+    <ProjectReference Include="..\BoomHud.Gen.Unity\BoomHud.Gen.Unity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

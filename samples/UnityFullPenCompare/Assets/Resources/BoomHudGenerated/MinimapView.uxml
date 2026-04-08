@@ -1,0 +1,124 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ComponentMinimap" class="boomhud-component-minimap">
+        <ui:VisualElement name="R0" class="boomhud-r0">
+            <ui:VisualElement name="N6x8c6" class="boomhud-n6x8c6" />
+            <ui:VisualElement name="O6YM3" class="boomhud-o6-y-m3" />
+            <ui:VisualElement name="Aincn" class="boomhud-aincn" />
+            <ui:VisualElement name="YPnXK" class="boomhud-y-pn-x-k" />
+            <ui:VisualElement name="RcwqJ" class="boomhud-rcwq-j" />
+            <ui:VisualElement name="TejHd" class="boomhud-tej-hd" />
+            <ui:VisualElement name="XR5to" class="boomhud-x-r5to" />
+            <ui:VisualElement name="JpWZL" class="boomhud-jp-w-z-l" />
+            <ui:VisualElement name="A2BdA" class="boomhud-a2-bd-a" />
+            <ui:VisualElement name="N6Hi4d" class="boomhud-n6-hi4d" />
+        </ui:VisualElement>
+        <ui:VisualElement name="UWSWW" class="boomhud-u-w-s-w-w">
+            <ui:VisualElement name="CuaBP" class="boomhud-cua-b-p" />
+            <ui:VisualElement name="GXwkx" class="boomhud-g-xwkx" />
+            <ui:VisualElement name="EYmy1" class="boomhud-e-ymy1" />
+            <ui:VisualElement name="HFwSV" class="boomhud-h-fw-s-v" />
+            <ui:VisualElement name="B1VHG" class="boomhud-b1-v-h-g" />
+            <ui:VisualElement name="VgGpm" class="boomhud-vg-gpm" />
+            <ui:VisualElement name="YwC1g" class="boomhud-yw-c1g" />
+            <ui:VisualElement name="JgsDT" class="boomhud-jgs-d-t" />
+            <ui:VisualElement name="Ipu0B" class="boomhud-ipu0-b" />
+            <ui:VisualElement name="FMYJi" class="boomhud-f-m-y-ji" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R2" class="boomhud-r2">
+            <ui:VisualElement name="YdHfh" class="boomhud-yd-hfh" />
+            <ui:VisualElement name="CP14T" class="boomhud-c-p14-t" />
+            <ui:VisualElement name="Hjw5u" class="boomhud-hjw5u" />
+            <ui:VisualElement name="T42Ve" class="boomhud-t42-ve" />
+            <ui:VisualElement name="QU5yX" class="boomhud-q-u5y-x" />
+            <ui:VisualElement name="UOzTP" class="boomhud-u-oz-t-p" />
+            <ui:VisualElement name="Yazb5" class="boomhud-yazb5" />
+            <ui:VisualElement name="VnYhg" class="boomhud-vn-yhg" />
+            <ui:VisualElement name="N3ZwH7" class="boomhud-n3-zw-h7" />
+            <ui:VisualElement name="LFvQh" class="boomhud-l-fv-qh" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R3" class="boomhud-r3">
+            <ui:VisualElement name="EFlKk" class="boomhud-e-fl-kk" />
+            <ui:VisualElement name="N99g1h" class="boomhud-n99g1h" />
+            <ui:VisualElement name="NYrc2" class="boomhud-n-yrc2" />
+            <ui:VisualElement name="N5rDAT" class="boomhud-n5r-d-a-t" />
+            <ui:VisualElement name="VUUvL" class="boomhud-v-u-uv-l" />
+            <ui:VisualElement name="N6Pvv3" class="boomhud-n6-pvv3" />
+            <ui:VisualElement name="WWpsz" class="boomhud-w-wpsz" />
+            <ui:VisualElement name="N3ml5n" class="boomhud-n3ml5n" />
+            <ui:VisualElement name="VpQeD" class="boomhud-vp-qe-d" />
+            <ui:VisualElement name="YHSZ9" class="boomhud-y-h-s-z9" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R4" class="boomhud-r4">
+            <ui:VisualElement name="Q3F6h" class="boomhud-q3-f6h" />
+            <ui:VisualElement name="ZIbCu" class="boomhud-z-ib-cu" />
+            <ui:VisualElement name="N0uOk8" class="boomhud-n0u-ok8" />
+            <ui:VisualElement name="J3Yys" class="boomhud-j3-yys" />
+            <ui:VisualElement name="O3VLs" class="boomhud-o3-v-ls" />
+            <ui:VisualElement name="UJZhP" class="boomhud-u-j-zh-p" />
+            <ui:VisualElement name="MCv79" class="boomhud-m-cv79" />
+            <ui:VisualElement name="A6n7U" class="boomhud-a6n7-u" />
+            <ui:VisualElement name="KCzQt" class="boomhud-k-cz-qt" />
+            <ui:VisualElement name="Rudsi" class="boomhud-rudsi" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R5" class="boomhud-r5">
+            <ui:VisualElement name="K4A32" class="boomhud-k4-a32" />
+            <ui:VisualElement name="Ewfjc" class="boomhud-ewfjc" />
+            <ui:VisualElement name="LMK0J" class="boomhud-l-m-k0-j" />
+            <ui:VisualElement name="BknD1" class="boomhud-bkn-d1" />
+            <ui:VisualElement name="K9n5g" class="boomhud-k9n5g" />
+            <ui:VisualElement name="UEWlP" class="boomhud-u-e-wl-p" />
+            <ui:VisualElement name="XXyXg" class="boomhud-x-xy-xg" />
+            <ui:VisualElement name="QmDB2" class="boomhud-qm-d-b2" />
+            <ui:VisualElement name="ZVV9n" class="boomhud-z-v-v9n" />
+            <ui:VisualElement name="KUo3i" class="boomhud-k-uo3i" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R6" class="boomhud-r6">
+            <ui:VisualElement name="CzyWO" class="boomhud-czy-w-o" />
+            <ui:VisualElement name="GU8uw" class="boomhud-g-u8uw" />
+            <ui:VisualElement name="BWMYJ" class="boomhud-b-w-m-y-j" />
+            <ui:VisualElement name="WAgyT" class="boomhud-w-agy-t" />
+            <ui:VisualElement name="Toi5m" class="boomhud-toi5m" />
+            <ui:VisualElement name="NKAZk" class="boomhud-n-k-a-zk" />
+            <ui:VisualElement name="NwNzy" class="boomhud-nw-nzy" />
+            <ui:VisualElement name="N67ABX" class="boomhud-n67-a-b-x" />
+            <ui:VisualElement name="N0zMF4" class="boomhud-n0z-m-f4" />
+            <ui:VisualElement name="GtA3K" class="boomhud-gt-a3-k" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R7" class="boomhud-r7">
+            <ui:VisualElement name="WcPEQ" class="boomhud-wc-p-e-q" />
+            <ui:VisualElement name="YpXEf" class="boomhud-yp-x-ef" />
+            <ui:VisualElement name="ZauKp" class="boomhud-zau-kp" />
+            <ui:VisualElement name="EOwtr" class="boomhud-e-owtr" />
+            <ui:VisualElement name="A9HRe" class="boomhud-a9-h-re" />
+            <ui:VisualElement name="CFZB2" class="boomhud-c-f-z-b2" />
+            <ui:VisualElement name="TXXss" class="boomhud-t-x-xss" />
+            <ui:VisualElement name="WqJtc" class="boomhud-wq-jtc" />
+            <ui:VisualElement name="N2owQF" class="boomhud-n2ow-q-f" />
+            <ui:VisualElement name="E10m7" class="boomhud-e10m7" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R8" class="boomhud-r8">
+            <ui:VisualElement name="N0khbK" class="boomhud-n0khb-k" />
+            <ui:VisualElement name="M4jyc" class="boomhud-m4jyc" />
+            <ui:VisualElement name="K1jGl" class="boomhud-k1j-gl" />
+            <ui:VisualElement name="AnYXF" class="boomhud-an-y-x-f" />
+            <ui:VisualElement name="KxEAx" class="boomhud-kx-e-ax" />
+            <ui:VisualElement name="XLOow" class="boomhud-x-l-oow" />
+            <ui:VisualElement name="IOev6" class="boomhud-i-oev6" />
+            <ui:VisualElement name="YjAST" class="boomhud-yj-a-s-t" />
+            <ui:VisualElement name="StfYw" class="boomhud-stf-yw" />
+            <ui:VisualElement name="VZata" class="boomhud-v-zata" />
+        </ui:VisualElement>
+        <ui:VisualElement name="R9" class="boomhud-r9">
+            <ui:VisualElement name="PHSWw" class="boomhud-p-h-s-ww" />
+            <ui:VisualElement name="IKrc0" class="boomhud-i-krc0" />
+            <ui:VisualElement name="AZTlg" class="boomhud-a-z-tlg" />
+            <ui:VisualElement name="ZI5lR" class="boomhud-z-i5l-r" />
+            <ui:VisualElement name="MFgl5" class="boomhud-m-fgl5" />
+            <ui:VisualElement name="N2Eyxs" class="boomhud-n2-eyxs" />
+            <ui:VisualElement name="DtIS1" class="boomhud-dt-i-s1" />
+            <ui:VisualElement name="SumhN" class="boomhud-sumh-n" />
+            <ui:VisualElement name="N8JgdD" class="boomhud-n8-jgd-d" />
+            <ui:VisualElement name="QZs7g" class="boomhud-q-zs7g" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

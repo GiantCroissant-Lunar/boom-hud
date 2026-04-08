@@ -1,0 +1,26 @@
+{
+    "name": "MCPForUnity.Editor",
+    "rootNamespace": "MCPForUnity.Editor",
+    "references": [
+        "MCPForUnity.Runtime",
+        "UnityEngine.ImageConversionModule"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.imageconversion",
+            "expression": "1.0.0",
+            "define": "ENABLE_IMAGECONVERSION_MODULE"
+        }
+    ],
+    "noEngineReferences": false
+}

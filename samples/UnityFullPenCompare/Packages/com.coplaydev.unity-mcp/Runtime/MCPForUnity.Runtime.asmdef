@@ -1,0 +1,22 @@
+{
+    "name": "MCPForUnity.Runtime",
+    "rootNamespace": "MCPForUnity.Runtime",
+    "references": [
+        "UnityEngine.ImageConversionModule"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.imageconversion",
+            "expression": "1.0.0",
+            "define": "ENABLE_IMAGECONVERSION_MODULE"
+        }
+    ],
+    "noEngineReferences": false
+} 

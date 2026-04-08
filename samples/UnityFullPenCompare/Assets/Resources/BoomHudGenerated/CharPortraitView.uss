@@ -1,0 +1,408 @@
+.boomhud-component-char-portrait {
+    flex-direction: column;
+    width: 130px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: flex-start;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+}
+
+.boomhud-face {
+    width: 56px;
+    height: 56px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top-width: 6px;
+    border-bottom-width: 6px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-class-icon {
+    flex-direction: column;
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+
+.boomhud-name {
+    flex-direction: column;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 8px;
+    -unity-font-style: normal;
+}
+
+.boomhud-hp {
+    align-self: stretch;
+    height: 10px;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #333333;
+    background-color: #333333;
+    -unity-font-style: normal;
+}
+
+.boomhud-hp-fill {
+    flex-direction: column;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 90px;
+    height: 10px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #CCCCCC;
+    background-color: #CCCCCC;
+    -unity-font-style: normal;
+}
+
+.boomhud-mp {
+    align-self: stretch;
+    height: 8px;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #333333;
+    background-color: #333333;
+    -unity-font-style: normal;
+}
+
+.boomhud-mp-fill {
+    flex-direction: column;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 60px;
+    height: 8px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #777777;
+    background-color: #777777;
+    -unity-font-style: normal;
+}
+
+.boomhud-stats {
+    flex-direction: row;
+    align-self: stretch;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 6px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+    align-items: flex-start;
+    justify-content: center;
+    -unity-font-style: normal;
+}
+
+.boomhud-stat1 {
+    flex-direction: column;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #AAAAAA;
+    font-size: 8px;
+    -unity-font-style: normal;
+}
+
+.boomhud-stat2 {
+    flex-direction: column;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #AAAAAA;
+    font-size: 8px;
+    -unity-font-style: normal;
+}
+
+.boomhud-action-grid {
+    flex-direction: row;
+    align-self: stretch;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    -unity-font-style: normal;
+}
+
+.boomhud-atk {
+    flex-direction: column;
+    flex-grow: 1;
+    height: 28px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-q-ep-o3 {
+    flex-direction: column;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+
+.boomhud-mag {
+    flex-direction: column;
+    flex-grow: 1;
+    height: 28px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-a-iph-n {
+    flex-direction: column;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+
+.boomhud-def {
+    flex-direction: column;
+    flex-grow: 1;
+    height: 28px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-e4-q-k-z {
+    flex-direction: column;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+
+.boomhud-item {
+    flex-direction: column;
+    flex-grow: 1;
+    height: 28px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-d-vz-x7 {
+    flex-direction: column;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    -unity-font-style: normal;
+}
+

@@ -1,0 +1,112 @@
+.boomhud-component-message-log {
+    flex-direction: column;
+    width: 280px;
+    height: 144px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    align-items: flex-start;
+    justify-content: flex-end;
+    color: #000000;
+    background-color: #000000;
+    -unity-font-style: normal;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+    border-top-color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
+.boomhud-line1 {
+    flex-direction: column;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-line2 {
+    flex-direction: column;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-line3 {
+    flex-direction: column;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-line4 {
+    flex-direction: column;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #AAAAAA;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-line5 {
+    flex-direction: column;
+    margin-top: 8px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #AAAAAA;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+

@@ -11,14 +11,12 @@ using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Snapshots;
 using BoomHud.Abstractions.Tokens;
+using BoomHud.Cli.Backends;
 using BoomHud.Cli.Commands.Baseline;
 using BoomHud.Cli.Handlers.Baseline;
 using BoomHud.Dsl;
 using BoomHud.Dsl.Figma;
 using BoomHud.Dsl.Pencil;
-using BoomHud.Gen.Avalonia;
-using BoomHud.Gen.Godot;
-using BoomHud.Gen.TerminalGui;
 using Path = System.IO.Path;
 
 namespace BoomHud.Cli;
@@ -415,39 +413,12 @@ public static class Program
 
             // Baseline compare subcommand (extracted to BaselineCompareCommand)
             var baselineCompareCommand = BaselineCompareCommand.Build();
+            var baselineScoreCommand = BaselineScoreCommand.Build();
 
-            // Baseline diff subcommand
-            var baselineDiffCommand = new Command("diff", "Generate diff images for changed frames");
-            var diffCurrentOption = new Option<DirectoryInfo?>("--current", "Current snapshots directory (with snapshots.manifest.json)");
-            diffCurrentOption.AddAlias("-c");
-            var diffBaselineOption = new Option<DirectoryInfo?>("--baseline", "Baseline snapshots directory (with snapshots.manifest.json)");
-            diffBaselineOption.AddAlias("-b");
-            var diffOutOption = new Option<DirectoryInfo?>("--out", "Output directory for diff images (default: ui/diffs)");
-            diffOutOption.AddAlias("-o");
-            var diffReportOption = new Option<FileInfo?>("--report", "Output diff report file (default: diff-report.json in output directory)");
-            var diffToleranceOption = new Option<int>("--tolerance", () => 0, "Per-channel delta tolerance (0-255). Pixels within tolerance are considered unchanged.");
-            var diffVerboseOption = new Option<bool>("--verbose", () => false, "Enable verbose output");
-
-            baselineDiffCommand.AddOption(diffCurrentOption);
-            baselineDiffCommand.AddOption(diffBaselineOption);
-            baselineDiffCommand.AddOption(diffOutOption);
-            baselineDiffCommand.AddOption(diffReportOption);
-            baselineDiffCommand.AddOption(diffToleranceOption);
-            baselineDiffCommand.AddOption(diffVerboseOption);
-
-            baselineDiffCommand.SetHandler((InvocationContext context) =>
-            {
-                var currentDir = context.ParseResult.GetValueForOption(diffCurrentOption);
-                var baselineDir = context.ParseResult.GetValueForOption(diffBaselineOption);
-                var outDir = context.ParseResult.GetValueForOption(diffOutOption);
-                var reportFile = context.ParseResult.GetValueForOption(diffReportOption);
-                var tolerance = context.ParseResult.GetValueForOption(diffToleranceOption);
-                var verbose = context.ParseResult.GetValueForOption(diffVerboseOption);
-
-                context.ExitCode = HandleBaselineDiff(currentDir, baselineDir, outDir, reportFile, tolerance, verbose);
-            });
+            var baselineDiffCommand = BaselineDiffCommand.Build();
 
             baselineCommand.AddCommand(baselineCompareCommand);
+            baselineCommand.AddCommand(baselineScoreCommand);
             baselineCommand.AddCommand(baselineDiffCommand);
 
             rootCommand.AddCommand(generateCommand);
@@ -631,10 +602,10 @@ public static class Program
             DescriptionReplacements = ParseDescriptionReplacements(descriptionReplacements)
         };
 
-        var targets = ResolveTargets(target);
+        var targets = BackendCatalog.ResolveTargets(target);
         foreach (var backend in targets)
         {
-            var generator = CreateGenerator(backend);
+            var generator = BackendCatalog.CreateGenerator(backend);
 
             Console.WriteLine();
             Console.WriteLine($"=== Generating {backend} ===");
@@ -949,35 +920,6 @@ public static class Program
             Console.Error.WriteLine(ex.Message);
             return 1;
         }
-    }
-
-    private static IReadOnlyList<string> ResolveTargets(string target)
-    {
-        if (string.IsNullOrWhiteSpace(target))
-        {
-            return ["TerminalGui"];
-        }
-
-        var normalized = target.Trim().ToLowerInvariant();
-        return normalized switch
-        {
-            "terminalgui" or "terminal-gui" or "terminal" => ["TerminalGui"],
-            "avalonia" => ["Avalonia"],
-            "godot" => ["Godot"],
-            "all" => ["TerminalGui", "Avalonia", "Godot"],
-            _ => throw new ArgumentException($"Unknown target: {target}")
-        };
-    }
-
-    private static IBackendGenerator CreateGenerator(string backend)
-    {
-        return backend switch
-        {
-            "TerminalGui" => new TerminalGuiGenerator(),
-            "Avalonia" => new AvaloniaGenerator(),
-            "Godot" => new GodotGenerator(),
-            _ => throw new ArgumentException($"Unknown backend: {backend}")
-        };
     }
 
     private static void WriteGeneratedFiles(string outputRoot, IReadOnlyList<GeneratedFile> files)
@@ -1316,7 +1258,7 @@ public static class Program
                 var runnerPath = ResolveSnapshotRunnerPath(runnerPathExplicit);
                 if (runnerPath == null)
                 {
-                    Console.Error.WriteLine("Error: Could not find SnapshotRunner.gd. Use --runner-path to specify path, or ensure it exists in the godot/ directory.");
+                    Console.Error.WriteLine("Error: Could not find SnapshotRunner.gd. Use --runner-path to specify it explicitly, or ensure it exists in ui/godot/ (legacy fallback: godot/).");
                     return 1;
                 }
 
@@ -1816,149 +1758,6 @@ public static class Program
         return BaselineCompareHandler.Execute(options);
     }
 
-    private static SnapshotOutputManifest? LoadManifest(string path)
-    {
-        try
-        {
-            var json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<SnapshotOutputManifest>(json);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static BaselineReport CompareManifests(
-        SnapshotOutputManifest current,
-        SnapshotOutputManifest baseline,
-        string currentPath,
-        string baselinePath,
-        string currentManifestPath,
-        string baselineManifestPath)
-    {
-        var frames = new List<FrameCompareResult>();
-
-        // Build lookup for baseline by state name
-        var baselineLookup = baseline.Snapshots.ToDictionary(s => s.State, s => s);
-        var currentLookup = current.Snapshots.ToDictionary(s => s.State, s => s);
-
-        // Union of all names
-        var allNames = baselineLookup.Keys.Union(currentLookup.Keys).OrderBy(n => n).ToList();
-
-        // Check compatibility (Godot version mismatch makes changes non-actionable)
-        var compatible = true;
-        string? incompatibilityReason = null;
-        var isGodotVersionMismatch = false;
-
-        if (!string.IsNullOrEmpty(baseline.GodotVersion) &&
-            !string.IsNullOrEmpty(current.GodotVersion) &&
-            baseline.GodotVersion != current.GodotVersion)
-        {
-            // Different Godot versions - mark as incompatible
-            compatible = false;
-            isGodotVersionMismatch = true;
-            incompatibilityReason = $"Godot version mismatch: baseline={baseline.GodotVersion}, current={current.GodotVersion}";
-        }
-
-        var index = 0;
-        var unchanged = 0;
-        var changed = 0;
-        var changedNonActionable = 0;
-        var missingBaseline = 0;
-        var missingCurrent = 0;
-
-        foreach (var name in allNames)
-        {
-            var hasBaseline = baselineLookup.TryGetValue(name, out var baselineSnap);
-            var hasCurrent = currentLookup.TryGetValue(name, out var currentSnap);
-
-            FrameCompareStatus status;
-            var actionable = true;
-
-            if (hasBaseline && hasCurrent)
-            {
-                if (baselineSnap!.Sha256 == currentSnap!.Sha256)
-                {
-                    status = FrameCompareStatus.Unchanged;
-                    unchanged++;
-                }
-                else
-                {
-                    // Hash differs - check if actionable
-                    if (isGodotVersionMismatch)
-                    {
-                        status = FrameCompareStatus.ChangedNonActionable;
-                        actionable = false;
-                        changedNonActionable++;
-                    }
-                    else
-                    {
-                        status = FrameCompareStatus.Changed;
-                        changed++;
-                    }
-                }
-            }
-            else if (!hasBaseline)
-            {
-                status = FrameCompareStatus.MissingBaseline;
-                missingBaseline++;
-            }
-            else
-            {
-                status = FrameCompareStatus.MissingCurrent;
-                missingCurrent++;
-            }
-
-            frames.Add(new FrameCompareResult
-            {
-                Index = index++,
-                Name = name,
-                Status = status,
-                Actionable = actionable,
-                BaselineHash = baselineSnap?.Sha256,
-                CurrentHash = currentSnap?.Sha256,
-                BaselinePath = baselineSnap?.Path,
-                CurrentPath = currentSnap?.Path
-            });
-        }
-
-        return new BaselineReport
-        {
-            ToolVersion = typeof(Program).Assembly.GetName().Version?.ToString(),
-            Baseline = new ManifestInfo
-            {
-                Path = baselineManifestPath,
-                GodotVersion = baseline.GodotVersion,
-                ToolVersion = baseline.ToolVersion,
-                Target = baseline.Target,
-                InputHash = baseline.InputHashes.TryGetValue("manifest", out var baselineHash) ? baselineHash : null,
-                SnapshotCount = baseline.Snapshots.Count
-            },
-            Current = new ManifestInfo
-            {
-                Path = currentManifestPath,
-                GodotVersion = current.GodotVersion,
-                ToolVersion = current.ToolVersion,
-                Target = current.Target,
-                InputHash = current.InputHashes.TryGetValue("manifest", out var manifestHash) ? manifestHash : null,
-                SnapshotCount = current.Snapshots.Count
-            },
-            Summary = new BaselineCompareSummary
-            {
-                Total = frames.Count,
-                Unchanged = unchanged,
-                Changed = changed,
-                ChangedNonActionable = changedNonActionable,
-                MissingBaseline = missingBaseline,
-                MissingCurrent = missingCurrent,
-                Compatible = compatible,
-                IncompatibilityReason = incompatibilityReason
-            },
-            Frames = frames
-        };
-    }
-
     private static int HandleBaselineDiff(
         DirectoryInfo? currentDir,
         DirectoryInfo? baselineDir,
@@ -1967,216 +1766,17 @@ public static class Program
         int tolerance,
         bool verbose)
     {
-        try
+        var options = new BaselineDiffOptions
         {
-            // Resolve current snapshots directory
-            var currentPath = currentDir?.FullName ?? Path.Combine(Environment.CurrentDirectory, "ui", "snapshots");
-            if (!Directory.Exists(currentPath))
-            {
-                Console.Error.WriteLine($"Error: Current snapshots directory not found: {currentPath}");
-                return 1;
-            }
+            CurrentDir = currentDir,
+            BaselineDir = baselineDir,
+            OutputDir = outDir,
+            ReportFile = reportFile,
+            Tolerance = tolerance,
+            Verbose = verbose
+        };
 
-            var currentManifestPath = Path.Combine(currentPath, "snapshots.manifest.json");
-            if (!File.Exists(currentManifestPath))
-            {
-                Console.Error.WriteLine($"Error: Current manifest not found: {currentManifestPath}");
-                return 1;
-            }
-
-            // Resolve baseline directory
-            var baselinePath = baselineDir?.FullName;
-            if (string.IsNullOrEmpty(baselinePath))
-            {
-                Console.Error.WriteLine("Error: --baseline directory is required");
-                return 1;
-            }
-
-            if (!Directory.Exists(baselinePath))
-            {
-                Console.Error.WriteLine($"Error: Baseline directory not found: {baselinePath}");
-                return 1;
-            }
-
-            var baselineManifestPath = Path.Combine(baselinePath, "snapshots.manifest.json");
-            if (!File.Exists(baselineManifestPath))
-            {
-                Console.Error.WriteLine($"Error: Baseline manifest not found: {baselineManifestPath}");
-                return 1;
-            }
-
-            // Load both manifests
-            var currentManifest = LoadManifest(currentManifestPath);
-            var baselineManifest = LoadManifest(baselineManifestPath);
-
-            if (currentManifest == null || baselineManifest == null)
-            {
-                Console.Error.WriteLine("Error: Could not parse manifests");
-                return 1;
-            }
-
-            // Resolve output directory
-            var outputPath = outDir?.FullName ?? Path.Combine(Environment.CurrentDirectory, "ui", "diffs");
-            Directory.CreateDirectory(outputPath);
-
-            Console.WriteLine($"Current: {currentPath}");
-            Console.WriteLine($"Baseline: {baselinePath}");
-            Console.WriteLine($"Output: {outputPath}");
-            if (tolerance > 0) Console.WriteLine($"Tolerance: {tolerance}");
-
-            // Compare and generate diffs
-            var report = CompareManifests(currentManifest, baselineManifest, currentPath, baselinePath, currentManifestPath, baselineManifestPath);
-            var diffResults = GenerateDiffImages(report, currentPath, baselinePath, outputPath, tolerance, verbose);
-
-            // Update report with diff paths
-            var updatedFrames = report.Frames.Select((f, i) => f with { DiffPath = diffResults.GetValueOrDefault(f.Name) }).ToList();
-            var updatedReport = report with { Frames = updatedFrames };
-
-            // Write report
-            var reportPath = reportFile?.FullName ?? Path.Combine(outputPath, "diff-report.json");
-            File.WriteAllText(reportPath, updatedReport.ToJson());
-            Console.WriteLine($"Report written: {reportPath}");
-
-            // Summary
-            var diffCount = diffResults.Count;
-            Console.WriteLine($"✓ Generated {diffCount} diff images");
-
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error: {ex.Message}");
-            return 1;
-        }
-    }
-
-    private static Dictionary<string, string> GenerateDiffImages(
-        BaselineReport report,
-        string currentPath,
-        string baselinePath,
-        string outputPath,
-        int tolerance,
-        bool verbose)
-    {
-        var diffPaths = new Dictionary<string, string>();
-
-        // Only process Changed and ChangedNonActionable frames
-        var changedFrames = report.Frames
-            .Where(f => f.Status == FrameCompareStatus.Changed || f.Status == FrameCompareStatus.ChangedNonActionable)
-            .ToList();
-
-        if (changedFrames.Count == 0)
-        {
-            Console.WriteLine("No changed frames to diff");
-            return diffPaths;
-        }
-
-        Console.WriteLine($"Generating diffs for {changedFrames.Count} changed frames...");
-
-        foreach (var frame in changedFrames)
-        {
-            if (string.IsNullOrEmpty(frame.BaselinePath) || string.IsNullOrEmpty(frame.CurrentPath))
-            {
-                continue;
-            }
-
-            var baselineFile = Path.Combine(baselinePath, frame.BaselinePath);
-            var currentFile = Path.Combine(currentPath, frame.CurrentPath);
-
-            if (!File.Exists(baselineFile) || !File.Exists(currentFile))
-            {
-                if (verbose)
-                {
-                    Console.WriteLine($"  Skipping {frame.Name}: missing file");
-                }
-                continue;
-            }
-
-            // Generate file names with index prefix for deterministic ordering
-            var prefix = frame.Index.ToString("D3", System.Globalization.CultureInfo.InvariantCulture);
-            var safeName = SanitizeFileName(frame.Name);
-            var baselineOutName = $"{prefix}_{safeName}__baseline.png";
-            var currentOutName = $"{prefix}_{safeName}__current.png";
-            var diffOutName = $"{prefix}_{safeName}__diff.png";
-
-            var baselineOutPath = Path.Combine(outputPath, baselineOutName);
-            var currentOutPath = Path.Combine(outputPath, currentOutName);
-            var diffOutPath = Path.Combine(outputPath, diffOutName);
-
-            try
-            {
-                // Copy baseline and current
-                File.Copy(baselineFile, baselineOutPath, overwrite: true);
-                File.Copy(currentFile, currentOutPath, overwrite: true);
-
-                // Generate diff image
-                GeneratePixelDiff(baselineFile, currentFile, diffOutPath, tolerance);
-
-                diffPaths[frame.Name] = diffOutName;
-
-                if (verbose)
-                {
-                    Console.WriteLine($"  ✓ {frame.Name}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"  ✗ {frame.Name}: {ex.Message}");
-            }
-        }
-
-        return diffPaths;
-    }
-
-    private static void GeneratePixelDiff(string baselinePath, string currentPath, string outputPath, int tolerance = 0)
-    {
-        using var baseline = SixLabors.ImageSharp.Image.Load<SixLabors.ImageSharp.PixelFormats.Rgba32>(baselinePath);
-        using var current = SixLabors.ImageSharp.Image.Load<SixLabors.ImageSharp.PixelFormats.Rgba32>(currentPath);
-
-        // Use the max dimensions
-        var width = Math.Max(baseline.Width, current.Width);
-        var height = Math.Max(baseline.Height, current.Height);
-
-        using var diff = new SixLabors.ImageSharp.Image<SixLabors.ImageSharp.PixelFormats.Rgba32>(width, height);
-
-        for (var y = 0; y < height; y++)
-        {
-            for (var x = 0; x < width; x++)
-            {
-                var baselinePixel = (x < baseline.Width && y < baseline.Height)
-                    ? baseline[x, y]
-                    : new SixLabors.ImageSharp.PixelFormats.Rgba32(0, 0, 0, 0);
-
-                var currentPixel = (x < current.Width && y < current.Height)
-                    ? current[x, y]
-                    : new SixLabors.ImageSharp.PixelFormats.Rgba32(0, 0, 0, 0);
-
-                // Compute absolute difference per channel
-                var dr = Math.Abs(currentPixel.R - baselinePixel.R);
-                var dg = Math.Abs(currentPixel.G - baselinePixel.G);
-                var db = Math.Abs(currentPixel.B - baselinePixel.B);
-                var da = Math.Abs(currentPixel.A - baselinePixel.A);
-
-                // Check if any channel exceeds tolerance
-                var maxDelta = Math.Max(Math.Max(dr, dg), Math.Max(db, da));
-
-                if (maxDelta > tolerance)
-                {
-                    // Highlight differences in magenta (visible on most backgrounds)
-                    var intensity = (byte)Math.Min(255, (dr + dg + db + da) / 2 + 128);
-                    diff[x, y] = new SixLabors.ImageSharp.PixelFormats.Rgba32(intensity, 0, intensity, 255);
-                }
-                else
-                {
-                    // Unchanged: show dimmed grayscale
-                    var gray = (byte)((currentPixel.R + currentPixel.G + currentPixel.B) / 6);
-                    diff[x, y] = new SixLabors.ImageSharp.PixelFormats.Rgba32(gray, gray, gray, 128);
-                }
-            }
-        }
-
-        using var outputStream = File.Create(outputPath);
-        diff.Save(outputStream, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
+        return BaselineDiffHandler.Execute(options);
     }
 
     private static string? ResolveScenePath(ComposeManifest manifest, string manifestPath)
@@ -2197,6 +1797,22 @@ public static class Program
             {
                 return tscnFiles[0];
             }
+
+            var godotOutputDir = Path.Combine(outputDir, "godot");
+            if (Directory.Exists(godotOutputDir))
+            {
+                var godotFiles = Directory.GetFiles(godotOutputDir, "*.tscn");
+                if (godotFiles.Length > 0)
+                {
+                    return godotFiles[0];
+                }
+            }
+
+            var recursiveFiles = Directory.GetFiles(outputDir, "*.tscn", SearchOption.AllDirectories);
+            if (recursiveFiles.Length > 0)
+            {
+                return recursiveFiles[0];
+            }
         }
 
         return null;
@@ -2216,8 +1832,11 @@ public static class Program
         // Check various locations
         var candidates = new[]
         {
+            Path.Combine(exeDir, "ui", "godot", "SnapshotRunner.gd"),
             Path.Combine(exeDir, "godot", "SnapshotRunner.gd"),
+            Path.Combine(exeDir, "..", "..", "..", "..", "ui", "godot", "SnapshotRunner.gd"),
             Path.Combine(exeDir, "..", "..", "..", "..", "godot", "SnapshotRunner.gd"),
+            Path.Combine(Environment.CurrentDirectory, "ui", "godot", "SnapshotRunner.gd"),
             Path.Combine(Environment.CurrentDirectory, "godot", "SnapshotRunner.gd"),
         };
 

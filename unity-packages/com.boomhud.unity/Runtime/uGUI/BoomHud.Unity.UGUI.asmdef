@@ -1,0 +1,16 @@
+{
+  "name": "BoomHud.Unity.UGUI",
+  "rootNamespace": "BoomHud.Unity.UGUI",
+  "references": [
+    "BoomHud.Unity.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,0 +1,17 @@
+{
+  "name": "BoomHud.Unity.UIToolkit",
+  "rootNamespace": "BoomHud.Unity.UIToolkit",
+  "references": [
+    "BoomHud.Unity.Runtime",
+    "UnityEngine.UIElementsModule"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
