@@ -393,11 +393,18 @@
     },
     "binding": {
       "type": "object",
-      "required": ["$bind"],
+      "anyOf": [
+        { "required": ["$bind"] },
+        { "required": ["path"] }
+      ],
       "properties": {
         "$bind": {
           "type": "string",
           "description": "Path to ViewModel property"
+        },
+        "path": {
+          "type": "string",
+          "description": "Alias for $bind"
         },
         "mode": {
           "type": "string",
@@ -411,6 +418,21 @@
         "format": {
           "type": "string",
           "description": "String format pattern"
+        },
+        "fallback": {
+          "description": "Fallback value if binding resolution fails"
+        },
+        "map": {
+          "type": "object",
+          "description": "Optional value map keyed by source values",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "$ref": "#/$defs/tokenRef" }
+            ]
+          }
         }
       }
     },

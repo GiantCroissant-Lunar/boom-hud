@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
-    <ProjectReference Include="..\..\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Generators\BoomHud.Generators.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Gen.TerminalGui\BoomHud.Gen.TerminalGui.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Gen.Avalonia\BoomHud.Gen.Avalonia.csproj" />
   </ItemGroup>
 
   <ItemGroup>

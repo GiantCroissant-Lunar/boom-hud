@@ -308,6 +308,67 @@ public partial class DebugOverlayView : Control
 
     }
 
+    /// <summary>
+    /// Apply VM state from JSON for snapshot rendering.
+    /// This allows setting UI state without a full ViewModel implementation.
+    /// </summary>
+    public void ApplyVmJson(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return;
+
+        try
+        {
+            var doc = System.Text.Json.JsonDocument.Parse(json);
+            ApplyVmFromJsonElement(doc.RootElement);
+        }
+        catch (System.Text.Json.JsonException ex)
+        {
+            GD.PrintErr($"ApplyVmJson failed to parse JSON: {ex.Message}");
+        }
+    }
+
+    private void ApplyVmFromJsonElement(System.Text.Json.JsonElement element, string prefix = "")
+    {
+        if (element.ValueKind != System.Text.Json.JsonValueKind.Object) return;
+
+        foreach (var prop in element.EnumerateObject())
+        {
+            var path = string.IsNullOrEmpty(prefix) ? prop.Name : $"{prefix}.{prop.Name}";
+
+            if (prop.Value.ValueKind == System.Text.Json.JsonValueKind.Object)
+            {
+                ApplyVmFromJsonElement(prop.Value, path);
+            }
+            else
+            {
+                ApplyVmProperty(path, prop.Value);
+            }
+        }
+    }
+
+    private void ApplyVmProperty(string path, System.Text.Json.JsonElement value)
+    {
+        // Map VM property paths to control updates
+        switch (path)
+        {
+            case "Version":
+                _version.Text = value.ValueKind == System.Text.Json.JsonValueKind.String ? value.GetString() ?? "" : value.ToString();
+                break;
+            case "Fps":
+                _fpsvalue.Text = value.ValueKind == System.Text.Json.JsonValueKind.String ? value.GetString() ?? "" : value.ToString();
+                break;
+            case "MemoryUsage":
+                _memoryvalue.Text = value.ValueKind == System.Text.Json.JsonValueKind.String ? value.GetString() ?? "" : value.ToString();
+                break;
+            case "PlayerPosition":
+                _positionvalue.Text = value.ValueKind == System.Text.Json.JsonValueKind.String ? value.GetString() ?? "" : value.ToString();
+                break;
+            case "CurrentChunk":
+                _chunkvalue.Text = value.ValueKind == System.Text.Json.JsonValueKind.String ? value.GetString() ?? "" : value.ToString();
+                break;
+        }
+    }
+
     // Component accessors
     public Control Root => _root;
     public HBoxContainer Header => _header;

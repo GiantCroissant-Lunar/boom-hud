@@ -18,7 +18,7 @@
   "targets": ["godot", "terminalgui"],
 
   // Output directory (relative to this manifest)
-  "output": "../generated",
+  "output": "generated",
 
   // Namespace for generated code
   "namespace": "BoomHud.Sample.Hud"

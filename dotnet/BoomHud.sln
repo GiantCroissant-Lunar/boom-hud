@@ -25,15 +25,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Mvvm.Generators", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Tests.Unit", "tests\BoomHud.Tests.Unit\BoomHud.Tests.Unit.csproj", "{C9D0E1F2-A3B4-5678-2345-789012345678}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.Generation", "samples\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj", "{E1F2A3B4-C5D6-7890-2345-BCDEFABCDEFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.Generation", "..\samples\dotnet\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj", "{E1F2A3B4-C5D6-7890-2345-BCDEFABCDEFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.TerminalGuiHost", "samples\BoomHud.Sample.TerminalGuiHost\BoomHud.Sample.TerminalGuiHost.csproj", "{F2A3B4C5-D6E7-8901-3456-CDEFABCDEFAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.TerminalGuiHost", "..\samples\dotnet\BoomHud.Sample.TerminalGuiHost\BoomHud.Sample.TerminalGuiHost.csproj", "{F2A3B4C5-D6E7-8901-3456-CDEFABCDEFAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.AvaloniaHost", "samples\BoomHud.Sample.AvaloniaHost\BoomHud.Sample.AvaloniaHost.csproj", "{A3B4C5D6-E7F8-9012-4567-ABCDEF012345}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Sample.AvaloniaHost", "..\samples\dotnet\BoomHud.Sample.AvaloniaHost\BoomHud.Sample.AvaloniaHost.csproj", "{A3B4C5D6-E7F8-9012-4567-ABCDEF012345}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Gen.Godot", "src\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj", "{697C52A9-B321-41DE-BED8-EDC9A8624A8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Dsl.Pencil", "src\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj", "{414A33BA-7F13-4B94-A26E-F002A7772EF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Tests.Backends", "tests\BoomHud.Tests.Backends\BoomHud.Tests.Backends.csproj", "{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoomHud.Gen.Unity", "src\BoomHud.Gen.Unity\BoomHud.Gen.Unity.csproj", "{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +205,30 @@ Global
 		{414A33BA-7F13-4B94-A26E-F002A7772EF9}.Release|x64.Build.0 = Release|Any CPU
 		{414A33BA-7F13-4B94-A26E-F002A7772EF9}.Release|x86.ActiveCfg = Release|Any CPU
 		{414A33BA-7F13-4B94-A26E-F002A7772EF9}.Release|x86.Build.0 = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|x64.Build.0 = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Debug|x86.Build.0 = Debug|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|x64.ActiveCfg = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|x64.Build.0 = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|x86.ActiveCfg = Release|Any CPU
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793}.Release|x86.Build.0 = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|x64.Build.0 = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Debug|x86.Build.0 = Debug|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|x64.ActiveCfg = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|x64.Build.0 = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|x86.ActiveCfg = Release|Any CPU
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,5 +247,7 @@ Global
 		{A3B4C5D6-E7F8-9012-4567-ABCDEF012345} = {D1E2F3A4-B5C6-7890-1234-ABCDEFABCDEF}
 		{697C52A9-B321-41DE-BED8-EDC9A8624A8F} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 		{414A33BA-7F13-4B94-A26E-F002A7772EF9} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
+		{75CD09D1-1ED7-4C6E-BDFF-93342ED66793} = {B2C3D4E5-F6A7-8901-BCDE-F12345678901}
+		{38AC8F52-DC4C-4849-81A3-34CC54DDDD1C} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 	EndGlobalSection
 EndGlobal

@@ -37,7 +37,7 @@
       "description": "Target backends to generate for. If omitted, must be specified via CLI --target.",
       "items": {
         "type": "string",
-        "enum": ["godot", "avalonia", "terminalGui"]
+        "enum": ["godot", "avalonia", "terminalGui", "unity"]
       }
     },
     "output": {
@@ -61,7 +61,7 @@
       ],
       "tokens": "tokens.ir.json",
       "targets": ["godot"],
-      "output": "generated/",
+      "output": "generated",
       "namespace": "MyGame.Hud"
     }
   ]

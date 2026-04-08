@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
     <ProjectReference Include="..\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj" />
   </ItemGroup>
 
@@ -27,7 +27,7 @@
   <!-- NOTE: HUD code is generated via BoomHud.Sample.Generation; regeneration is currently manual
        to allow hand-tuning of generated Terminal.Gui code for Terminal.Gui 2.0.0 quirks. -->
 
-  <Import Project="..\..\source-generators\MvvmAdapters.BoomHud.props"
+  <Import Project="..\..\..\dotnet\source-generators\MvvmAdapters.BoomHud.props"
           Condition="'$(BoomHud_EnableMvvmAdapters)' == 'true'" />
 
 </Project>

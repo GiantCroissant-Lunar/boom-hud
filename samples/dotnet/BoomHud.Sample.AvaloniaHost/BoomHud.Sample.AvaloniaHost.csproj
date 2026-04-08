@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\src\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
     <ProjectReference Include="..\BoomHud.Sample.Generation\BoomHud.Sample.Generation.csproj" />
   </ItemGroup>
 
@@ -29,7 +29,7 @@
     <Compile Include="..\BoomHud.Sample.Generation\Generated\Avalonia\**\*.axaml.cs" />
   </ItemGroup>
 
-  <Import Project="..\..\source-generators\MvvmAdapters.BoomHud.props"
+  <Import Project="..\..\..\dotnet\source-generators\MvvmAdapters.BoomHud.props"
           Condition="'$(BoomHud_EnableMvvmAdapters)' == 'true'" />
 
 </Project>
