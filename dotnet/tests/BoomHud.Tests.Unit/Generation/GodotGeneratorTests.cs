@@ -1,5 +1,6 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Abstractions.Motion;
 using BoomHud.Dsl.Figma;
 using BoomHud.Gen.Godot;
 using FluentAssertions;
@@ -198,6 +199,71 @@ public class GodotGeneratorTests
 
         viewFile.Content.Should().Contain("public static readonly string[] BoomHudNormalizedPseudoNodes");
         viewFile.Content.Should().Contain("timeline/playButton|BUTTON|Button");
+    }
+
+    [Fact]
+    public void Generate_WithMotion_EmitsGodotMotionAttachmentClass()
+    {
+        var options = _options with
+        {
+            EmitViewModelInterfaces = false,
+            Motion = new MotionDocument
+            {
+                Name = "RootMotion",
+                FramesPerSecond = 30,
+                Clips =
+                [
+                    new MotionClip
+                    {
+                        Id = "intro",
+                        Name = "Intro",
+                        DurationFrames = 45,
+                        Tracks =
+                        [
+                            new MotionTrack
+                            {
+                                Id = "labelFade",
+                                TargetId = "label",
+                                Channels =
+                                [
+                                    new MotionChannel
+                                    {
+                                        Property = MotionProperty.Opacity,
+                                        Keyframes =
+                                        [
+                                            new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(0) },
+                                            new MotionKeyframe { Frame = 15, Value = MotionValue.FromNumber(1), Easing = MotionEasing.EaseOut }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "label", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Files.Should().Contain(f => f.Path == "RootMotion.g.cs");
+        var motionFile = result.Files.First(f => f.Path == "RootMotion.g.cs");
+        motionFile.Content.Should().Contain("public static class RootMotion");
+        motionFile.Content.Should().Contain("player.AddAnimation(\"intro\", BuildIntro());");
+        motionFile.Content.Should().Contain("new NodePath(\"../label:modulate:a\")");
     }
 
     private static string ExtractConst(string content, string constName)

@@ -122,6 +122,13 @@ public sealed class GodotGenerator : IBackendGenerator
                 });
             }
 
+            if (options.Motion != null)
+            {
+                var motionResult = GodotMotionExporter.Generate(document, options.Motion, options);
+                files.AddRange(motionResult.Files);
+                diagnostics.AddRange(motionResult.Diagnostics);
+            }
+
         }
         catch (Exception ex)
         {

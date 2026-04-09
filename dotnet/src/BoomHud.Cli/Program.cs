@@ -9,6 +9,7 @@ using BoomHud.Abstractions.Composition;
 using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Abstractions.Motion;
 using BoomHud.Abstractions.Snapshots;
 using BoomHud.Abstractions.Tokens;
 using BoomHud.Cli.Backends;
@@ -56,6 +57,7 @@ public static class Program
             var nodeOption = new Option<string?>("--node", "Optional Figma node id to use as the root (e.g. \"1:2\")");
             var annotationsOption = new Option<FileInfo?>("--annotations", "Optional BoomHud annotations JSON file (bindings, semantics) applied after parsing");
             var variablesOption = new Option<FileInfo?>("--variables", "Optional Figma variables JSON file for theme tokens");
+            var motionOption = new Option<FileInfo?>("--motion", "Optional Motion JSON file to emit animation artifacts for supported backends");
             var themeNameOption = new Option<string?>("--theme-name", "Optional theme name (defaults to variables filename)");
             var themeCollectionOption = new Option<string?>("--theme-collection", "Optional Figma variables collection name");
             var themeModeOption = new Option<string?>("--theme-mode", "Optional Figma variables mode id or name (e.g. \"Light\")");
@@ -82,6 +84,7 @@ public static class Program
             generateCommand.AddOption(nodeOption);
             generateCommand.AddOption(annotationsOption);
             generateCommand.AddOption(variablesOption);
+            generateCommand.AddOption(motionOption);
             generateCommand.AddOption(themeNameOption);
             generateCommand.AddOption(themeCollectionOption);
             generateCommand.AddOption(themeModeOption);
@@ -107,6 +110,7 @@ public static class Program
                 var node = context.ParseResult.GetValueForOption(nodeOption);
                 var annotations = context.ParseResult.GetValueForOption(annotationsOption);
                 var variables = context.ParseResult.GetValueForOption(variablesOption);
+                var motion = context.ParseResult.GetValueForOption(motionOption);
                 var themeName = context.ParseResult.GetValueForOption(themeNameOption);
                 var themeCollection = context.ParseResult.GetValueForOption(themeCollectionOption);
                 var themeMode = context.ParseResult.GetValueForOption(themeModeOption);
@@ -206,6 +210,7 @@ public static class Program
                     node,
                     annotations,
                     variables,
+                    motion,
                     themeName,
                     themeCollection,
                     themeMode,
@@ -455,6 +460,7 @@ public static class Program
         string? node,
         FileInfo? annotations,
         FileInfo? variables,
+        FileInfo? motion,
         string? themeName,
         string? themeCollection,
         string? themeMode,
@@ -585,6 +591,22 @@ public static class Program
                 mode: themeMode);
         }
 
+        MotionDocument? motionDocument = null;
+        if (motion != null)
+        {
+            if (!motion.Exists)
+            {
+                throw new FileNotFoundException($"Motion file not found: {motion.FullName}");
+            }
+
+            Console.WriteLine($"Loading motion from: {motion.FullName}");
+            motionDocument = MotionDocument.LoadFromFile(motion.FullName);
+            foreach (var diagnostic in motionDocument.LoadDiagnostics)
+            {
+                Console.WriteLine(diagnostic.ToString());
+            }
+        }
+
         var options = new GenerationOptions
         {
             Namespace = @namespace,
@@ -596,6 +618,7 @@ public static class Program
             ContractId = contractId,
             OutputDirectory = outputRoot,
             Theme = theme,
+            Motion = motionDocument,
             MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
             IncludeComments = true,
             UseNullableAnnotations = true,
@@ -603,6 +626,11 @@ public static class Program
         };
 
         var targets = BackendCatalog.ResolveTargets(target);
+        if (motionDocument != null && !targets.Contains("Godot", StringComparer.Ordinal))
+        {
+            Console.WriteLine("Warning: motion input is currently consumed by the Godot backend only.");
+        }
+
         foreach (var backend in targets)
         {
             var generator = BackendCatalog.CreateGenerator(backend);
