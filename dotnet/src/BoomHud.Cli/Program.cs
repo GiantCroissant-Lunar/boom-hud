@@ -42,7 +42,7 @@ public static class Program
                 AllowMultipleArgumentsPerToken = true
             };
             inputOption.AddAlias("--in");
-            var rootComponentOption = new Option<string?>("--root", "Root component name for multi-input composition. If omitted, first input's root is used.");
+            var rootComponentOption = new Option<string?>("--root", "Root component name to generate. For a single input, selects a reusable component from that document; for multiple inputs, selects the composition root.");
             var manifestOption = new Option<FileInfo?>("--manifest", "Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.");
             var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, unity, all)");
             var formatOption = new Option<string?>("--format", "Input format (pen, figma, ir). Auto-detected from extension if omitted.");
@@ -499,6 +499,11 @@ public static class Program
         if (sourcedDocs.Count == 1)
         {
             document = sourcedDocs[0].Document;
+            if (!string.IsNullOrWhiteSpace(rootComponent))
+            {
+                document = HudDocumentRootSelector.SelectRoot(document, rootComponent);
+                Console.WriteLine($"Selected root component: {document.Name}");
+            }
         }
         else
         {

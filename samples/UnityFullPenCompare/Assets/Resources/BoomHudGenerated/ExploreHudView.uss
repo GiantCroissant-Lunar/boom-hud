@@ -1,4 +1,5 @@
 .boomhud-explore-h-u-d {
+    flex-direction: column;
     width: 1280px;
     height: 960px;
     margin-top: 0px;
@@ -68,7 +69,7 @@
 .boomhud-main-area {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -85,7 +86,8 @@
 }
 
 .boomhud-viewport {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     flex-grow: 1;
     margin-top: 0px;
     margin-right: 0px;
@@ -177,7 +179,7 @@
 
 .boomhud-activity-log {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     height: 160px;
     margin-top: 0px;
     margin-right: 0px;
@@ -204,7 +206,7 @@
 
 .boomhud-activity-log-inner {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 0px;
     margin-right: 0px;
@@ -231,7 +233,7 @@
 
 .boomhud-log3 {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -249,7 +251,7 @@
 
 .boomhud-log4 {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -267,7 +269,7 @@
 
 .boomhud-log5 {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -285,7 +287,7 @@
 
 .boomhud-log6 {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -303,7 +305,7 @@
 
 .boomhud-p83-vj {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -322,7 +324,7 @@
 .boomhud-right-panel {
     flex-direction: column;
     width: 300px;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -375,7 +377,7 @@
 
 .boomhud-minimap {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     height: 268px;
     margin-top: 0px;
     margin-right: 0px;
@@ -402,7 +404,7 @@
 
 .boomhud-r0 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 0px;
     margin-right: 0px;
@@ -420,7 +422,7 @@
 .boomhud-n00 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -439,7 +441,7 @@
 .boomhud-n01 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -458,7 +460,7 @@
 .boomhud-n02 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -477,7 +479,7 @@
 .boomhud-n03 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -496,7 +498,7 @@
 .boomhud-n04 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -515,7 +517,7 @@
 .boomhud-n05 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -534,7 +536,7 @@
 .boomhud-n06 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -553,7 +555,7 @@
 .boomhud-n07 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -572,7 +574,7 @@
 .boomhud-n08 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -591,7 +593,7 @@
 .boomhud-n09 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -609,7 +611,7 @@
 
 .boomhud-r1 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -627,7 +629,7 @@
 .boomhud-n10 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -646,7 +648,7 @@
 .boomhud-n11 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -665,7 +667,7 @@
 .boomhud-n12 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -684,7 +686,7 @@
 .boomhud-n13 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -703,7 +705,7 @@
 .boomhud-n14 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -722,7 +724,7 @@
 .boomhud-n15 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -741,7 +743,7 @@
 .boomhud-n16 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -760,7 +762,7 @@
 .boomhud-n17 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -779,7 +781,7 @@
 .boomhud-n18 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -798,7 +800,7 @@
 .boomhud-n19 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -816,7 +818,7 @@
 
 .boomhud-r2 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -834,7 +836,7 @@
 .boomhud-n20 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -853,7 +855,7 @@
 .boomhud-n21 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -872,7 +874,7 @@
 .boomhud-lxixo {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -891,7 +893,7 @@
 .boomhud-n23 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -910,7 +912,7 @@
 .boomhud-n24 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -929,7 +931,7 @@
 .boomhud-n25 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -948,7 +950,7 @@
 .boomhud-n26 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -967,7 +969,7 @@
 .boomhud-n27 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -986,7 +988,7 @@
 .boomhud-q-z-t-g-m {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1005,7 +1007,7 @@
 .boomhud-n29 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1023,7 +1025,7 @@
 
 .boomhud-r3 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -1041,7 +1043,7 @@
 .boomhud-n30 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1060,7 +1062,7 @@
 .boomhud-n31 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1079,7 +1081,7 @@
 .boomhud-n32 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1098,7 +1100,7 @@
 .boomhud-n33 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1117,7 +1119,7 @@
 .boomhud-n34 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1136,7 +1138,7 @@
 .boomhud-l-o-d-s-h {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1155,7 +1157,7 @@
 .boomhud-n36 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1174,7 +1176,7 @@
 .boomhud-n37 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1193,7 +1195,7 @@
 .boomhud-n38 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1212,7 +1214,7 @@
 .boomhud-bfqim {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1230,7 +1232,7 @@
 
 .boomhud-r4 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -1248,7 +1250,7 @@
 .boomhud-n40 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1267,7 +1269,7 @@
 .boomhud-n41 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1286,7 +1288,7 @@
 .boomhud-n42 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1305,7 +1307,7 @@
 .boomhud-bbvcn {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1324,7 +1326,7 @@
 .boomhud-n44 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1343,7 +1345,7 @@
 .boomhud-n45 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1362,7 +1364,7 @@
 .boomhud-n46 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1381,7 +1383,7 @@
 .boomhud-n47 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1400,7 +1402,7 @@
 .boomhud-n48 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1419,7 +1421,7 @@
 .boomhud-n49 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1437,7 +1439,7 @@
 
 .boomhud-r5 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -1455,7 +1457,7 @@
 .boomhud-n50 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1474,7 +1476,7 @@
 .boomhud-n51 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1493,7 +1495,7 @@
 .boomhud-n52 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1512,7 +1514,7 @@
 .boomhud-n53 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1531,7 +1533,7 @@
 .boomhud-n54 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1550,7 +1552,7 @@
 .boomhud-n55 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1569,7 +1571,7 @@
 .boomhud-n56 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1588,7 +1590,7 @@
 .boomhud-n57 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1607,7 +1609,7 @@
 .boomhud-n58 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1626,7 +1628,7 @@
 .boomhud-n59 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1644,7 +1646,7 @@
 
 .boomhud-bmfhw {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -1662,7 +1664,7 @@
 .boomhud-n60 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1681,7 +1683,7 @@
 .boomhud-n61 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1700,7 +1702,7 @@
 .boomhud-n62 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1719,7 +1721,7 @@
 .boomhud-n63 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1738,7 +1740,7 @@
 .boomhud-n64 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1757,7 +1759,7 @@
 .boomhud-n65 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1776,7 +1778,7 @@
 .boomhud-n66 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1795,7 +1797,7 @@
 .boomhud-n67 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1814,7 +1816,7 @@
 .boomhud-n68 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1833,7 +1835,7 @@
 .boomhud-n69 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1851,7 +1853,7 @@
 
 .boomhud-r7 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -1869,7 +1871,7 @@
 .boomhud-n70 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1888,7 +1890,7 @@
 .boomhud-n71 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1907,7 +1909,7 @@
 .boomhud-n72 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1926,7 +1928,7 @@
 .boomhud-n73 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1945,7 +1947,7 @@
 .boomhud-n74 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1964,7 +1966,7 @@
 .boomhud-n75 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1983,7 +1985,7 @@
 .boomhud-n76 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2002,7 +2004,7 @@
 .boomhud-n77 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2021,7 +2023,7 @@
 .boomhud-n78 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2040,7 +2042,7 @@
 .boomhud-n79 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2058,7 +2060,7 @@
 
 .boomhud-r8 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -2076,7 +2078,7 @@
 .boomhud-n80 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2095,7 +2097,7 @@
 .boomhud-n81 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2114,7 +2116,7 @@
 .boomhud-n82 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2133,7 +2135,7 @@
 .boomhud-n83 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2152,7 +2154,7 @@
 .boomhud-n84 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2171,7 +2173,7 @@
 .boomhud-n85 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2190,7 +2192,7 @@
 .boomhud-n86 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2209,7 +2211,7 @@
 .boomhud-n87 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2228,7 +2230,7 @@
 .boomhud-n88 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2247,7 +2249,7 @@
 .boomhud-n89 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2265,7 +2267,7 @@
 
 .boomhud-r9 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 2px;
     margin-right: 0px;
@@ -2283,7 +2285,7 @@
 .boomhud-n90 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2302,7 +2304,7 @@
 .boomhud-n91 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2321,7 +2323,7 @@
 .boomhud-n92 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2340,7 +2342,7 @@
 .boomhud-n93 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2359,7 +2361,7 @@
 .boomhud-n94 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2378,7 +2380,7 @@
 .boomhud-n95 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2397,7 +2399,7 @@
 .boomhud-n96 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2416,7 +2418,7 @@
 .boomhud-n97 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2435,7 +2437,7 @@
 .boomhud-n98 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2454,7 +2456,7 @@
 .boomhud-n99 {
     flex-direction: column;
     flex-grow: 1;
-    align-self: stretch;
+    height: auto;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2472,7 +2474,7 @@
 
 .boomhud-sep {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     height: 4px;
     margin-top: 8px;
     margin-right: 0px;
@@ -2491,7 +2493,7 @@
 
 .boomhud-party-list {
     flex-direction: column;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 8px;
     margin-right: 0px;
@@ -2508,7 +2510,7 @@
 
 .boomhud-row1 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 0px;
     margin-right: 0px;
@@ -2542,6 +2544,7 @@
 }
 
 .boomhud-face {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -2607,7 +2610,8 @@
 }
 
 .boomhud-hp {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -2647,7 +2651,8 @@
 }
 
 .boomhud-mp {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -2688,7 +2693,7 @@
 
 .boomhud-stats {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2740,7 +2745,7 @@
 
 .boomhud-action-grid {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -2953,6 +2958,7 @@
 }
 
 .boomhud-face2 {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -3018,7 +3024,8 @@
 }
 
 .boomhud-hp2 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3058,7 +3065,8 @@
 }
 
 .boomhud-mp2 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3099,7 +3107,7 @@
 
 .boomhud-stats2 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -3151,7 +3159,7 @@
 
 .boomhud-action-grid2 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -3347,7 +3355,7 @@
 
 .boomhud-row2 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 6px;
     margin-right: 0px;
@@ -3381,6 +3389,7 @@
 }
 
 .boomhud-face3 {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -3446,7 +3455,8 @@
 }
 
 .boomhud-hp3 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3486,7 +3496,8 @@
 }
 
 .boomhud-mp3 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3527,7 +3538,7 @@
 
 .boomhud-stats3 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -3579,7 +3590,7 @@
 
 .boomhud-action-grid3 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -3792,6 +3803,7 @@
 }
 
 .boomhud-face4 {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -3857,7 +3869,8 @@
 }
 
 .boomhud-hp4 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3897,7 +3910,8 @@
 }
 
 .boomhud-mp4 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -3938,7 +3952,7 @@
 
 .boomhud-stats4 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -3990,7 +4004,7 @@
 
 .boomhud-action-grid4 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -4186,7 +4200,7 @@
 
 .boomhud-row3 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     flex-grow: 1;
     margin-top: 6px;
     margin-right: 0px;
@@ -4220,6 +4234,7 @@
 }
 
 .boomhud-face5 {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -4285,7 +4300,8 @@
 }
 
 .boomhud-hp5 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -4325,7 +4341,8 @@
 }
 
 .boomhud-mp5 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -4366,7 +4383,7 @@
 
 .boomhud-stats5 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -4418,7 +4435,7 @@
 
 .boomhud-action-grid5 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -4631,6 +4648,7 @@
 }
 
 .boomhud-face6 {
+    flex-direction: column;
     width: 56px;
     height: 56px;
     margin-top: 0px;
@@ -4696,7 +4714,8 @@
 }
 
 .boomhud-hp6 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 10px;
     margin-top: 8px;
     margin-right: 0px;
@@ -4736,7 +4755,8 @@
 }
 
 .boomhud-mp6 {
-    align-self: stretch;
+    flex-direction: column;
+    width: auto;
     height: 8px;
     margin-top: 8px;
     margin-right: 0px;
@@ -4777,7 +4797,7 @@
 
 .boomhud-stats6 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -4829,7 +4849,7 @@
 
 .boomhud-action-grid6 {
     flex-direction: row;
-    align-self: stretch;
+    width: auto;
     margin-top: 8px;
     margin-right: 0px;
     margin-bottom: 0px;

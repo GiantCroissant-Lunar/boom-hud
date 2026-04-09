@@ -5,7 +5,7 @@ import {
   GeneratedMotionDemo,
   GeneratedMotionDemoSchema,
 } from "./GeneratedMotionDemo";
-import motionJson from "./motion-samples/debug-overlay.motion.json";
+import motionJson from "./motion-samples/char-portrait.motion.json";
 import { parseMotionDocument } from "./motion";
 
 export const RemotionRoot: React.FC = () => {

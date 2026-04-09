@@ -109,4 +109,170 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("import { ActionButtonView } from './ActionButtonView';");
         tsx.Should().Contain("<ActionButtonView motionTargets={props.motionTargets} />");
     }
+
+    [Fact]
+    public void Generate_FlowChildWithAbsoluteLayout_KeepsChildInFlow()
+    {
+        var document = new HudDocument
+        {
+            Name = "Portrait",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(8),
+                    Padding = new Spacing(0)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "face",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Width = Dimension.Pixels(56),
+                            Height = Dimension.Pixels(56)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "icon",
+                                Type = ComponentType.Icon,
+                                Layout = new LayoutSpec
+                                {
+                                    Width = Dimension.Pixels(16),
+                                    Height = Dimension.Pixels(16)
+                                },
+                                InstanceOverrides = new Dictionary<string, object?>
+                                {
+                                    [BoomHudMetadataKeys.PencilLeft] = 12d,
+                                    [BoomHudMetadataKeys.PencilTop] = 12d
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "PortraitView.tsx").Content;
+
+        tsx.Should().Contain("gap: '8px'");
+        tsx.Should().Contain("padding: '0'");
+        tsx.Should().Contain("data-boomhud-id='face'", Exactly.Once());
+        tsx.Should().Contain("width: '56px', height: '56px', position: 'relative'");
+        tsx.Should().NotContain("data-boomhud-id='face' style={ { width: '56px', height: '56px', position: 'absolute'");
+        tsx.Should().Contain("data-boomhud-id='icon'");
+        tsx.Should().Contain("position: 'absolute', left: '12px', top: '12px'");
+    }
+
+    [Fact]
+    public void Generate_SpacingShorthands_EmitsCssUnits()
+    {
+        var document = new HudDocument
+        {
+            Name = "SpacingHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = new Spacing(6),
+                    Padding = new Spacing(0, 6),
+                    Margin = new Spacing(1, 2, 3, 4)
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "SpacingHudView.tsx").Content;
+
+        tsx.Should().Contain("gap: '6px'");
+        tsx.Should().Contain("padding: '0 6px'");
+        tsx.Should().Contain("margin: '1px 2px 3px 4px'");
+    }
+
+    [Fact]
+    public void Generate_HorizontalFillChildren_UseFlexFillWidth()
+    {
+        var document = new HudDocument
+        {
+            Name = "ActionRow",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = new Spacing(2)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "left",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(28)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "right",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(28)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "ActionRowView.tsx").Content;
+
+        tsx.Should().Contain("data-boomhud-id='left'");
+        tsx.Should().Contain("data-boomhud-id='right'");
+        tsx.Should().Contain("flex: '1 1 0'");
+    }
+
+    [Fact]
+    public void Generate_IconNode_NormalizesLucideTokens()
+    {
+        var document = new HudDocument
+        {
+            Name = "IconHud",
+            Root = new ComponentNode
+            {
+                Id = "icon",
+                Type = ComponentType.Icon,
+                Style = new StyleSpec
+                {
+                    FontFamily = "lucide"
+                },
+                Properties = new Dictionary<string, BindableValue<object?>>()
+                {
+                    ["text"] = "shield"
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "IconHudView.tsx").Content;
+
+        tsx.Should().Contain("const resolveIconText = (value: unknown, familyName?: string) => {");
+        tsx.Should().Contain("case 'shield': return '⛨'");
+        tsx.Should().Contain("{resolveIconText(getMotionText(props.motionTargets, 'icon') ?? ('shield'), 'lucide')}");
+    }
 }

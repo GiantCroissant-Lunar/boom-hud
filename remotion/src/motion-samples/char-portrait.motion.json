@@ -1,0 +1,205 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/motion.schema.json",
+  "version": "1.0",
+  "name": "CharPortraitMotion",
+  "framesPerSecond": 30,
+  "clips": [
+    {
+      "id": "intro",
+      "name": "Intro",
+      "startFrame": 0,
+      "durationFrames": 90,
+      "tracks": [
+        {
+          "id": "portraitRoot",
+          "targetId": "Component/CharPortrait",
+          "targetKind": "root",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 12, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionY",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 24 } },
+                { "frame": 18, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "faceReveal",
+          "targetId": "face",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 12, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "scaleX",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.78 } },
+                { "frame": 16, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "scaleY",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.78 } },
+                { "frame": 16, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "classIconSettle",
+          "targetId": "classIcon",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 4, "value": { "kind": "number", "number": 0 } },
+                { "frame": 16, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "rotation",
+              "keyframes": [
+                { "frame": 4, "value": { "kind": "number", "number": -14 } },
+                { "frame": 20, "value": { "kind": "number", "number": 0 }, "easing": "easeInOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nameBoot",
+          "targetId": "name",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "text",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "SCANNING" }, "easing": "step" },
+                { "frame": 24, "value": { "kind": "text", "text": "AELRIC" }, "easing": "step" }
+              ]
+            },
+            {
+              "property": "color",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "#d6c6a4" } },
+                { "frame": 24, "value": { "kind": "text", "text": "#ffffff" }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": -10 } },
+                { "frame": 20, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hpFillIntro",
+          "targetId": "hpFill",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "width",
+              "keyframes": [
+                { "frame": 6, "value": { "kind": "number", "number": 0 } },
+                { "frame": 28, "value": { "kind": "number", "number": 90 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mpFillIntro",
+          "targetId": "mpFill",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "width",
+              "keyframes": [
+                { "frame": 12, "value": { "kind": "number", "number": 0 } },
+                { "frame": 34, "value": { "kind": "number", "number": 60 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "statsReveal",
+          "targetId": "stat1",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 14, "value": { "kind": "number", "number": 0 } },
+                { "frame": 30, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 14, "value": { "kind": "number", "number": -8 } },
+                { "frame": 30, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "statsRevealSecondary",
+          "targetId": "stat2",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 18, "value": { "kind": "number", "number": 0 } },
+                { "frame": 34, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 18, "value": { "kind": "number", "number": 8 } },
+                { "frame": 34, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "actionsReveal",
+          "targetId": "actionGrid",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 20, "value": { "kind": "number", "number": 0 } },
+                { "frame": 36, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionY",
+              "keyframes": [
+                { "frame": 20, "value": { "kind": "number", "number": 10 } },
+                { "frame": 36, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

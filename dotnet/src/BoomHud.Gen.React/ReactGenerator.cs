@@ -74,6 +74,22 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine("type BoomHudMotionTargets = Record<string, BoomHudMotionTargetState>;");
         builder.AppendLine("const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;");
         builder.AppendLine("const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);");
+        builder.AppendLine("const resolveIconText = (value: unknown, familyName?: string) => {");
+        builder.AppendLine("  const text = asText(value, '');");
+        builder.AppendLine("  if (!text || familyName?.trim().toLowerCase() !== 'lucide') return text;");
+        builder.AppendLine("  switch (text) {");
+        builder.AppendLine("    case 'sword': return '†';");
+        builder.AppendLine("    case 'swords': return '⚔';");
+        builder.AppendLine("    case 'sparkles': return '✦';");
+        builder.AppendLine("    case 'wand-sparkles': return '✦';");
+        builder.AppendLine("    case 'shield': return '⛨';");
+        builder.AppendLine("    case 'flask-conical': return '⚗';");
+        builder.AppendLine("    case 'flame': return '✹';");
+        builder.AppendLine("    case 'moon': return '☾';");
+        builder.AppendLine("    case 'cross': return '✚';");
+        builder.AppendLine("    default: return text;");
+        builder.AppendLine("  }");
+        builder.AppendLine("};");
         builder.AppendLine("const formatValue = (value: unknown, format?: string, fallback = '') => !format ? asText(value, fallback) : format.replace(/\\{0(?:\\:[^}]*)?\\}/g, asText(value, fallback));");
         builder.AppendLine("const clampPercent = (value: unknown) => `${Math.max(0, Math.min(100, typeof value === 'number' ? value : 0))}%`;");
         builder.AppendLine("const asMotionNumber = (value: BoomHudMotionScalar | undefined) => typeof value === 'number' ? value : undefined;");
@@ -237,6 +253,10 @@ public sealed class ReactGenerator : IBackendGenerator
             var finalText = string.IsNullOrWhiteSpace(node.Id)
                 ? text
                 : $"getMotionText(props.motionTargets, {Ts(node.Id)}) ?? ({text})";
+            if (node.Type == ComponentType.Icon)
+            {
+                finalText = $"resolveIconText({finalText}, {Ts(node.Style?.FontFamily ?? string.Empty)})";
+            }
             builder.Append(indent).Append("  {").Append(finalText).AppendLine("}");
         }
         foreach (var child in node.Children) builder.Append(RenderNode(child, indentLevel + 1, node.Layout?.Type, components, diagnostics));
@@ -253,15 +273,15 @@ public sealed class ReactGenerator : IBackendGenerator
             if (layout.Type == LayoutType.Horizontal) style.Add("display: 'flex', flexDirection: 'row'");
             if (layout.Type is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock) style.Add("display: 'flex', flexDirection: 'column'");
             if (layout.Type == LayoutType.Grid) style.Add("display: 'grid'");
-            if (layout.Gap is { } gap) style.Add($"gap: {Ts(gap.ToString())}");
-            if (layout.Padding is { } padding) style.Add($"padding: {Ts(padding.ToString())}");
-            if (layout.Margin is { } margin) style.Add($"margin: {Ts(margin.ToString())}");
-            AppendDimension(style, "width", layout.Width);
-            AppendDimension(style, "height", layout.Height);
-            AppendDimension(style, "minWidth", layout.MinWidth);
-            AppendDimension(style, "minHeight", layout.MinHeight);
-            AppendDimension(style, "maxWidth", layout.MaxWidth);
-            AppendDimension(style, "maxHeight", layout.MaxHeight);
+            if (layout.Gap is { } gap) style.Add($"gap: {Ts(SpacingToCss(gap))}");
+            if (layout.Padding is { } padding) style.Add($"padding: {Ts(SpacingToCss(padding))}");
+            if (layout.Margin is { } margin) style.Add($"margin: {Ts(SpacingToCss(margin))}");
+            AppendDimension(style, "width", layout.Width, parentLayout);
+            AppendDimension(style, "height", layout.Height, parentLayout);
+            AppendDimension(style, "minWidth", layout.MinWidth, parentLayout);
+            AppendDimension(style, "minHeight", layout.MinHeight, parentLayout);
+            AppendDimension(style, "maxWidth", layout.MaxWidth, parentLayout);
+            AppendDimension(style, "maxHeight", layout.MaxHeight, parentLayout);
             if (layout.Align is { } align) style.Add($"alignItems: {Ts(align switch { Alignment.Start => "flex-start", Alignment.Center => "center", Alignment.End => "flex-end", _ => "stretch" })}");
             if (layout.Justify is { } justify) style.Add($"justifyContent: {Ts(justify switch { Justification.Start => "flex-start", Justification.Center => "center", Justification.End => "flex-end", Justification.SpaceBetween => "space-between", Justification.SpaceAround => "space-around", Justification.SpaceEvenly => "space-evenly", _ => "flex-start" })}");
             if (layout.Weight is { } weight) style.Add($"flexGrow: {weight.ToString(CultureInfo.InvariantCulture)}");
@@ -285,7 +305,12 @@ public sealed class ReactGenerator : IBackendGenerator
             }
         }
 
-        if (parentLayout == LayoutType.Absolute || layout?.Type == LayoutType.Absolute)
+        if (layout?.Type == LayoutType.Absolute && parentLayout != LayoutType.Absolute)
+        {
+            style.Add("position: 'relative'");
+        }
+
+        if (parentLayout == LayoutType.Absolute)
         {
             style.Add("position: 'absolute'");
             if (NumericMetadata(node, BoomHudMetadataKeys.PencilLeft) is { } left) style.Add($"left: {Ts($"{left.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
@@ -297,7 +322,26 @@ public sealed class ReactGenerator : IBackendGenerator
         return string.Join(", ", style);
     }
 
-    private static void AppendDimension(List<string> style, string key, Dimension? dimension)
+    private static string SpacingToCss(Spacing spacing)
+    {
+        if (spacing.Top == spacing.Right && spacing.Right == spacing.Bottom && spacing.Bottom == spacing.Left)
+        {
+            return CssPixels(spacing.Top);
+        }
+
+        if (spacing.Top == spacing.Bottom && spacing.Left == spacing.Right)
+        {
+            return $"{CssPixels(spacing.Top)} {CssPixels(spacing.Left)}";
+        }
+
+        return $"{CssPixels(spacing.Top)} {CssPixels(spacing.Right)} {CssPixels(spacing.Bottom)} {CssPixels(spacing.Left)}";
+    }
+
+    private static string CssPixels(double value) => value == 0d
+        ? "0"
+        : $"{value.ToString("0.##", CultureInfo.InvariantCulture)}px";
+
+    private static void AppendDimension(List<string> style, string key, Dimension? dimension, LayoutType? parentLayout)
     {
         if (dimension == null) return;
         switch (dimension.Value.Unit)
@@ -305,9 +349,26 @@ public sealed class ReactGenerator : IBackendGenerator
             case DimensionUnit.Pixels: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString("0.##", CultureInfo.InvariantCulture)}px")}"); break;
             case DimensionUnit.Percent: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}%")}"); break;
             case DimensionUnit.Auto: style.Add($"{key}: 'auto'"); break;
-            case DimensionUnit.Fill: style.Add(key == "width" ? "alignSelf: 'stretch'" : "flexGrow: 1"); break;
+            case DimensionUnit.Fill:
+                style.Add(FillDimensionStyle(key, parentLayout));
+                break;
             case DimensionUnit.Star: style.Add($"flexGrow: {dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}"); break;
         }
+    }
+
+    private static string FillDimensionStyle(string key, LayoutType? parentLayout)
+    {
+        if (key == "width")
+        {
+            return parentLayout == LayoutType.Horizontal ? "flex: '1 1 0'" : "alignSelf: 'stretch'";
+        }
+
+        if (key == "height")
+        {
+            return parentLayout is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock ? "flex: '1 1 0'" : "alignSelf: 'stretch'";
+        }
+
+        return key.Contains("Width", StringComparison.Ordinal) ? "alignSelf: 'stretch'" : "flexGrow: 1";
     }
 
     private static string? TextExpr(ComponentNode node, IReadOnlyList<string> names, string? fallback)

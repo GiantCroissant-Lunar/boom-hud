@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using BoomHud.Compare;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -95,57 +96,14 @@ namespace BoomHud.Compare.Editor
             var outputPath = GetCompareScreenshotOutputPath();
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
 
-            var panelSettings = document.panelSettings;
-            var renderTexture = new RenderTexture(1682, 906, 32, RenderTextureFormat.ARGB32)
-            {
-                name = "BoomHudCompareCapture"
-            };
+            var presenter = UnityEngine.Object.FindFirstObjectByType<ExploreHudPresenter>();
+            presenter?.Rebind();
+            document.rootVisualElement?.MarkDirtyRepaint();
 
-            try
-            {
-                renderTexture.Create();
-                panelSettings.targetTexture = renderTexture;
+            WaitForDocumentToSettle(document);
 
-                for (var iteration = 0; iteration < 3; iteration++)
-                {
-                    document.rootVisualElement?.MarkDirtyRepaint();
-                    EditorUtility.SetDirty(panelSettings);
-                    UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
-                    Canvas.ForceUpdateCanvases();
-                }
-
-                var previousActive = RenderTexture.active;
-                RenderTexture.active = renderTexture;
-
-                try
-                {
-                    var texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
-                    try
-                    {
-                        texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-                        texture.Apply();
-
-                        var png = texture.EncodeToPNG();
-                        File.WriteAllBytes(outputPath, png);
-                    }
-                    finally
-                    {
-                        UnityEngine.Object.DestroyImmediate(texture);
-                    }
-                }
-                finally
-                {
-                    RenderTexture.active = previousActive;
-                }
-
-                Debug.Log($"BoomHud compare screenshot saved to {outputPath}");
-            }
-            finally
-            {
-                panelSettings.targetTexture = null;
-                renderTexture.Release();
-                UnityEngine.Object.DestroyImmediate(renderTexture);
-            }
+            CaptureGameViewScreenshot(outputPath);
+            Debug.Log($"BoomHud compare screenshot saved to {outputPath}");
         }
 
         private static void EnsureRuntimeAssets()
@@ -166,10 +124,270 @@ namespace BoomHud.Compare.Editor
         {
             var projectRoot = Directory.GetParent(Application.dataPath)?.FullName
                 ?? throw new InvalidOperationException("Could not resolve the Unity project root.");
-            var repoRoot = Directory.GetParent(projectRoot)?.FullName
+            var repoRoot = Directory.GetParent(projectRoot)?.Parent?.FullName
                 ?? throw new InvalidOperationException("Could not resolve the repository root from the Unity project path.");
 
             return Path.Combine(repoRoot, "build", "_artifacts", "latest", "screenshots", "unity-fullpen-compare.png");
+        }
+
+        private static void CaptureGameViewScreenshot(string outputPath)
+        {
+            var gameView = GetGameViewWindow();
+            if (gameView == null)
+            {
+                throw new InvalidOperationException("Could not open the Unity Game View for screenshot capture.");
+            }
+
+            FocusAndRepaintWindow(gameView);
+
+            var viewportRectPixels = GetWindowPixelRect(gameView);
+            var width = Mathf.RoundToInt(viewportRectPixels.width);
+            var height = Mathf.RoundToInt(viewportRectPixels.height);
+            if (width <= 0 || height <= 0)
+            {
+                throw new InvalidOperationException("The Unity Game View reported an empty viewport.");
+            }
+
+            var hostView = GetHostView(gameView);
+            if (hostView == null)
+            {
+                throw new InvalidOperationException("Could not resolve the Unity Game View host.");
+            }
+
+            var grabPixels = hostView.GetType().GetMethod(
+                "GrabPixels",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                null,
+                new[] { typeof(RenderTexture), typeof(Rect) },
+                null);
+            if (grabPixels == null)
+            {
+                throw new MissingMethodException(hostView.GetType().FullName, "GrabPixels");
+            }
+
+            Texture2D? capturedTexture = null;
+            try
+            {
+                for (var attempt = 0; attempt < 8; attempt++)
+                {
+                    FocusAndRepaintWindow(gameView);
+
+                    var nextCapture = CaptureTexture(hostView, grabPixels, viewportRectPixels, width, height);
+                    if (capturedTexture != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(capturedTexture);
+                    }
+
+                    capturedTexture = nextCapture;
+                    if (HasMeaningfulContent(capturedTexture))
+                    {
+                        break;
+                    }
+                }
+
+                if (capturedTexture == null)
+                {
+                    throw new InvalidOperationException("Game View capture did not produce a texture.");
+                }
+
+                File.WriteAllBytes(outputPath, capturedTexture.EncodeToPNG());
+            }
+            finally
+            {
+                if (capturedTexture != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(capturedTexture);
+                }
+            }
+        }
+
+        private static Texture2D CaptureTexture(object hostView, MethodInfo grabPixels, Rect viewportRectPixels, int width, int height)
+        {
+            RenderTexture? renderTexture = null;
+            var previousActive = RenderTexture.active;
+            try
+            {
+                renderTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
+                {
+                    name = "BoomHudCompareCapture",
+                    antiAliasing = 1,
+                    filterMode = FilterMode.Bilinear,
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                renderTexture.Create();
+
+                grabPixels.Invoke(hostView, new object[] { renderTexture, viewportRectPixels });
+
+                RenderTexture.active = renderTexture;
+                var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+                texture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+                texture.Apply();
+                FlipTextureVertically(texture);
+                return texture;
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+
+                if (renderTexture != null)
+                {
+                    renderTexture.Release();
+                    UnityEngine.Object.DestroyImmediate(renderTexture);
+                }
+            }
+        }
+
+        private static bool HasMeaningfulContent(Texture2D texture)
+        {
+            var pixels = texture.GetPixels32();
+            if (pixels.Length == 0)
+            {
+                return false;
+            }
+
+            var baseline = pixels[0];
+            var differingPixels = 0;
+            var brightPixels = 0;
+
+            for (var index = 0; index < pixels.Length; index++)
+            {
+                var pixel = pixels[index];
+                var delta = Mathf.Abs(pixel.r - baseline.r) + Mathf.Abs(pixel.g - baseline.g) + Mathf.Abs(pixel.b - baseline.b);
+                if (delta >= 12)
+                {
+                    differingPixels++;
+                }
+
+                if (pixel.r >= 80 || pixel.g >= 80 || pixel.b >= 80)
+                {
+                    brightPixels++;
+                }
+
+                if (differingPixels >= 256 && brightPixels >= 256)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void WaitForDocumentToSettle(UIDocument document)
+        {
+            var root = document.rootVisualElement;
+            if (root == null)
+            {
+                return;
+            }
+
+            for (var attempt = 0; attempt < 8; attempt++)
+            {
+                root.MarkDirtyRepaint();
+
+                var firstChild = root.childCount > 0 ? root[0] : null;
+                if (HasResolvedLayout(firstChild))
+                {
+                    return;
+                }
+
+                UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+                SceneView.RepaintAll();
+                EditorApplication.QueuePlayerLoopUpdate();
+                Thread.Sleep(100);
+            }
+        }
+
+        private static bool HasResolvedLayout(VisualElement? element)
+        {
+            if (element == null)
+            {
+                return false;
+            }
+
+            var layout = element.layout;
+            return !float.IsNaN(layout.width) && !float.IsNaN(layout.height) && layout.width > 0f && layout.height > 0f;
+        }
+
+        private static EditorWindow? GetGameViewWindow()
+        {
+            try
+            {
+                if (!EditorApplication.ExecuteMenuItem("Window/General/Game"))
+                {
+                    EditorApplication.ExecuteMenuItem("Window/General/Game %2");
+                }
+            }
+            catch
+            {
+            }
+
+            var gameViewType = Type.GetType("UnityEditor.GameView,UnityEditor");
+            return gameViewType != null ? EditorWindow.GetWindow(gameViewType) : null;
+        }
+
+        private static void FocusAndRepaintWindow(EditorWindow window)
+        {
+            try
+            {
+                window.Focus();
+            }
+            catch
+            {
+            }
+
+            window.Repaint();
+            UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+            SceneView.RepaintAll();
+            EditorApplication.QueuePlayerLoopUpdate();
+            Thread.Sleep(150);
+        }
+
+        private static Rect GetWindowPixelRect(EditorWindow window)
+        {
+            var contentRectPoints = window.rootVisualElement.contentRect;
+            var pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
+            return new Rect(
+                Mathf.Round(contentRectPoints.x * pixelsPerPoint),
+                Mathf.Round(contentRectPoints.y * pixelsPerPoint),
+                Mathf.Round(contentRectPoints.width * pixelsPerPoint),
+                Mathf.Round(contentRectPoints.height * pixelsPerPoint));
+        }
+
+        private static object? GetHostView(EditorWindow window)
+        {
+            var parentField = typeof(EditorWindow).GetField("m_Parent", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (parentField != null)
+            {
+                var parent = parentField.GetValue(window);
+                if (parent != null)
+                {
+                    return parent;
+                }
+            }
+
+            var hostViewProperty = typeof(EditorWindow).GetProperty("hostView", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return hostViewProperty?.GetValue(window, null);
+        }
+
+        private static void FlipTextureVertically(Texture2D texture)
+        {
+            var pixels = texture.GetPixels32();
+            var width = texture.width;
+            var height = texture.height;
+            var row = new Color32[width];
+
+            for (var y = 0; y < height / 2; y++)
+            {
+                var topIndex = y * width;
+                var bottomIndex = (height - 1 - y) * width;
+
+                System.Array.Copy(pixels, topIndex, row, 0, width);
+                System.Array.Copy(pixels, bottomIndex, pixels, topIndex, width);
+                System.Array.Copy(row, 0, pixels, bottomIndex, width);
+            }
+
+            texture.SetPixels32(pixels);
+            texture.Apply();
         }
 
         internal static void EnsureCompareFolders()

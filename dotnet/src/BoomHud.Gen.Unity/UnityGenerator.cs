@@ -286,13 +286,13 @@ public sealed class UnityGenerator : IBackendGenerator
 
     private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType)
     {
-        var sourceIsAbsolute = source.Layout?.Type == LayoutType.Absolute || HasAbsolutePositionMetadata(source);
-        if (parentLayoutType != LayoutType.Absolute && !sourceIsAbsolute)
+        var sourceHasAbsolutePlacement = HasAbsolutePositionMetadata(source);
+        if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
         }
 
-        var hasAbsoluteCoordinates = sourceIsAbsolute;
+        var hasAbsoluteCoordinates = parentLayoutType == LayoutType.Absolute || sourceHasAbsolutePlacement;
         if (hasAbsoluteCoordinates)
         {
             AppendCssDeclaration(builder, "position", "absolute");
@@ -320,7 +320,7 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendCssDeclaration(builder, "top", ToPixels(top));
         }
 
-        if (sourceIsAbsolute && parentLayoutType == null)
+        if (sourceHasAbsolutePlacement && parentLayoutType == null)
         {
             AppendCssDeclaration(builder, "left", ToPixels(0));
             AppendCssDeclaration(builder, "top", ToPixels(0));

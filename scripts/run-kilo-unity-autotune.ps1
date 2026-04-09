@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$RepoRoot = "",
-    [string]$PenPath = "C:\Users\User\project-ultima-magic\ultima-magic\docs\assets\hud\full.pen",
+    [string]$PenPath = "samples\pencil\full.pen",
     [string]$UnityProjectPath = "",
     [string]$UnityCaptureToolRoot = "C:\Users\User\project-ultima-magic\ultima-magic",
     [string]$ReferenceImage = "",

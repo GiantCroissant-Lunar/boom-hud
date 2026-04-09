@@ -1,4 +1,5 @@
 using Generated.Hud;
+using BoomHud.Compare;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -9,10 +10,10 @@ namespace BoomHud.Compare.Editor
     public static class BoomHudMotionPreviewSetup
     {
         private const string SceneDirectory = "Assets/BoomHudCompare/Scenes";
-        private const string ScenePath = SceneDirectory + "/DebugOverlayMotionPreview.unity";
-        private const string DebugOverlayUxmlPath = "Assets/Resources/BoomHudGenerated/DebugOverlayView.uxml";
+        private const string ScenePath = SceneDirectory + "/CharPortraitMotionPreview.unity";
+        private const string CharPortraitUxmlPath = "Assets/Resources/BoomHudGenerated/CharPortraitView.uxml";
 
-        [MenuItem("Tools/BoomHud/Setup Debug Overlay Motion Scene", priority = 102)]
+        [MenuItem("Tools/BoomHud/Setup Char Portrait Motion Scene", priority = 102)]
         public static void SetupSceneFromMenu()
         {
             SetupScene();
@@ -26,11 +27,13 @@ namespace BoomHud.Compare.Editor
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var panelSettings = BoomHudCompareProjectSetup.EnsurePanelSettingsAsset();
 
-            var rootObject = new GameObject("BoomHud Debug Overlay Motion");
+            var rootObject = new GameObject("BoomHud Char Portrait Motion");
             var document = rootObject.AddComponent<UIDocument>();
             document.panelSettings = panelSettings;
-            document.visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DebugOverlayUxmlPath);
-            rootObject.AddComponent<DebugOverlayMotionHost>();
+            document.visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(CharPortraitUxmlPath);
+            rootObject.AddComponent<MotionStagePresenter>();
+            var motionHost = rootObject.AddComponent<CharPortraitMotionHost>();
+            ConfigureMotionHostDefaults(motionHost);
 
             var cameraObject = new GameObject("Main Camera");
             var camera = cameraObject.AddComponent<Camera>();
@@ -45,7 +48,16 @@ namespace BoomHud.Compare.Editor
             AssetDatabase.Refresh();
             EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
 
-            Debug.Log($"BoomHud debug overlay motion scene ready at {ScenePath}");
+            Debug.Log($"BoomHud char portrait motion scene ready at {ScenePath}");
+        }
+
+        private static void ConfigureMotionHostDefaults(CharPortraitMotionHost host)
+        {
+            var serializedHost = new SerializedObject(host);
+
+            serializedHost.FindProperty("_initialClip").stringValue = CharPortraitMotion.DefaultClipId;
+            serializedHost.FindProperty("_playOnEnable").boolValue = true;
+            serializedHost.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

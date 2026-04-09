@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
@@ -163,14 +164,6 @@ public sealed class ActionButtonView
         label.style.whiteSpace = WhiteSpace.NoWrap;
         label.style.flexShrink = 0;
         label.style.overflow = Overflow.Visible;
-        label.style.marginLeft = 0f;
-        label.style.marginRight = 0f;
-        label.style.marginTop = 0f;
-        label.style.marginBottom = 0f;
-        label.style.paddingLeft = 0f;
-        label.style.paddingRight = 0f;
-        label.style.paddingTop = 0f;
-        label.style.paddingBottom = 0f;
     }
 
     private static bool ApplyFontFamily(VisualElement element, string? familyName, float pointSize)
@@ -268,9 +261,20 @@ public sealed class ActionButtonView
             return true;
         }
 
+        var fontCandidates = ExpandFontFamilyCandidates(familyName);
+        foreach (var candidate in fontCandidates)
+        {
+            resourceFont = LoadBundledFont(candidate);
+            if (resourceFont != null)
+            {
+                font = resourceFont;
+                return true;
+            }
+        }
+
         try
         {
-            var osFont = Font.CreateDynamicFontFromOSFont(familyName, pointSize);
+            var osFont = Font.CreateDynamicFontFromOSFont(fontCandidates, pointSize);
             if (osFont == null)
             {
                 return false;
@@ -296,6 +300,50 @@ public sealed class ActionButtonView
 
         var compactName = normalizedFamily.Replace(" ", string.Empty, StringComparison.Ordinal).Replace("-", string.Empty, StringComparison.Ordinal);
         return Resources.Load<Font>($"BoomHudFonts/{compactName}") ?? Resources.Load<Font>($"BoomHudFonts/{normalizedFamily}");
+    }
+
+    private static string[] ExpandFontFamilyCandidates(string familyName)
+    {
+        var rawCandidates = familyName.Split(',');
+        var expanded = new List<string>();
+
+        foreach (var rawCandidate in rawCandidates)
+        {
+            var candidate = rawCandidate.Trim().Trim('\'', '"');
+            if (string.IsNullOrWhiteSpace(candidate))
+            {
+                continue;
+            }
+
+            switch (candidate.ToLowerInvariant())
+            {
+                case "monospace":
+                    expanded.Add("Consolas");
+                    expanded.Add("Cascadia Mono");
+                    expanded.Add("Courier New");
+                    expanded.Add("Lucida Console");
+                    break;
+                case "sans-serif":
+                case "sans serif":
+                    expanded.Add("Segoe UI");
+                    expanded.Add("Arial");
+                    break;
+                case "serif":
+                    expanded.Add("Georgia");
+                    expanded.Add("Times New Roman");
+                    break;
+                default:
+                    expanded.Add(candidate);
+                    break;
+            }
+        }
+
+        if (expanded.Count == 0)
+        {
+            expanded.Add(familyName.Trim());
+        }
+
+        return expanded.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
     }
 
     private static string ResolveIconText(string value, string? familyName, float pointSize)

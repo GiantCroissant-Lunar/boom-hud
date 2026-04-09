@@ -134,13 +134,13 @@ Generated BoomHud React views can now be driven declaratively:
 
 ```tsx
 import { MotionScene } from "./src/motion";
-import { DebugOverlayView } from "./generated/DebugOverlayView";
+import { CharPortraitView } from "./generated/CharPortraitView";
 
 <MotionScene
   document={document}
   clipId="intro"
-  component={DebugOverlayView}
-  viewModel={{ version: "v1.2.0", fps: 60 }}
+  component={CharPortraitView}
+  viewModel={{}}
 />;
 ```
 
@@ -156,6 +156,6 @@ npm run preview
 
 The demo composition added in this repo is `GeneratedMotionDemo`. It renders:
 
-- a generated BoomHud React view at `src/generated/DebugOverlayView.tsx`
-- a Motion JSON document at `src/motion-samples/debug-overlay.motion.json`
+- a generated BoomHud React view at `src/generated/CharPortraitView.tsx`
+- a Motion JSON document at `src/motion-samples/char-portrait.motion.json`
 - through the `MotionScene` bridge in `src/motion/MotionScene.tsx`

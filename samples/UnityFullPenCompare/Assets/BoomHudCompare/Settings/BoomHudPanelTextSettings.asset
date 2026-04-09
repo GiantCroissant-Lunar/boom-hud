@@ -38,5 +38,3 @@ MonoBehaviour:
   m_FontReferences:
   - font: {fileID: 2230732570650464555, guid: f043b08e783c4f548833867eb6b1e887, type: 3}
     fontAsset: {fileID: 0}
-  - font: {fileID: 0}
-    fontAsset: {fileID: 0}

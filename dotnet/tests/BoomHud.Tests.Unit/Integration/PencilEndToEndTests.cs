@@ -19,22 +19,22 @@ public class PencilEndToEndTests
 {
     private readonly PenParser _parser = new();
 
-  private static string GetRepoFilePath(string relativePath)
-  {
-    var directory = new DirectoryInfo(AppContext.BaseDirectory);
-    while (directory != null)
+    private static string GetRepoFilePath(string relativePath)
     {
-      var candidate = Path.Combine(directory.FullName, relativePath);
-      if (File.Exists(candidate))
-      {
-        return candidate;
-      }
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory != null)
+        {
+            var candidate = Path.Combine(directory.FullName, relativePath);
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
 
-      directory = directory.Parent;
+            directory = directory.Parent;
+        }
+
+        throw new FileNotFoundException($"Could not locate repo file '{relativePath}'.");
     }
-
-    throw new FileNotFoundException($"Could not locate repo file '{relativePath}'.");
-  }
 
     private readonly GenerationOptions _terminalGuiOptions = new()
     {
@@ -52,12 +52,12 @@ public class PencilEndToEndTests
         EmitTscnAttachScript = true
     };
 
-      private readonly GenerationOptions _unityOptions = new()
-      {
+    private readonly GenerationOptions _unityOptions = new()
+    {
         Namespace = "Generated.Hud",
         IncludeComments = true,
         UseNullableAnnotations = true
-      };
+    };
 
     [Fact]
     public void ParseAndGenerate_DebugOverlay_TerminalGui_ProducesValidCode()
@@ -302,7 +302,8 @@ public class PencilEndToEndTests
         var result = generator.Generate(document, _unityOptions);
 
         document.Name.Should().Be("DebugOverlay");
-        document.Root.Layout!.Type.Should().Be(LayoutType.Absolute);
+        document.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+        document.Root.InstanceOverrides[BoomHudMetadataKeys.PencilPosition].Should().Be("absolute");
         document.Root.Style!.Border.Should().NotBeNull();
         document.Root.Style.Border!.Width.Should().Be(1);
         document.Root.Children[0].Layout!.Height.Should().Be(Dimension.Pixels(1));
@@ -322,6 +323,9 @@ public class PencilEndToEndTests
         ussFile.Content.Should().Contain("border-left-width: 1px;");
         ussFile.Content.Should().Contain("height: 1px;");
         ussFile.Content.Should().Contain("opacity: 0.3;");
+        ussFile.Content.Should().Contain("position: absolute;");
+        ussFile.Content.Should().Contain("left: 0px;");
+        ussFile.Content.Should().Contain("top: 0px;");
     }
 
     [Fact]
@@ -452,7 +456,7 @@ public class PencilEndToEndTests
         document.Root.Style.Should().NotBeNull();
         document.Root.Style!.BackgroundToken.Should().Be("colors.primary");
         document.Root.Style.ForegroundToken.Should().Be("text-primary");
-        
+
         // Actual color values should be null since they're token refs
         document.Root.Style.Background.Should().BeNull();
         document.Root.Style.Foreground.Should().BeNull();
@@ -484,7 +488,7 @@ public class PencilEndToEndTests
 
         // Assert
         document.Root.Bindings.Should().NotBeEmpty();
-        
+
         var contentBinding = document.Root.Bindings.FirstOrDefault(b => b.Property == "Text");
         contentBinding.Should().NotBeNull();
         contentBinding!.Path.Should().Be("Message");
@@ -623,9 +627,9 @@ public class PencilEndToEndTests
         vbox.Layout.Justify.Should().Be(Justification.SpaceBetween);
     }
 
-      [Fact]
-      public void ParseAndGenerate_RawPencilSample_Unity_EmitsComponentArtifacts_AndAbsolutePlacement()
-      {
+    [Fact]
+    public void ParseAndGenerate_RawPencilSample_Unity_EmitsComponentArtifacts_AndAbsolutePlacement()
+    {
         var samplePath = GetRepoFilePath(Path.Combine("samples", "pencil", "raw-hud-components.pen"));
         var penJson = File.ReadAllText(samplePath);
 
@@ -651,12 +655,12 @@ public class PencilEndToEndTests
 
         var componentUxml = result.Files.First(f => f.Path == "CharPortraitView.uxml");
         componentUxml.Content.Should().Contain("name=\"AttackButton\"");
-      }
+    }
 
-      [Fact]
-      public void Parse_RealFullPen_ContentFrame_DefaultsToHorizontalLayout()
-      {
-        var samplePath = @"C:\Users\User\project-ultima-magic\ultima-magic\docs\assets\hud\full.pen";
+    [Fact]
+    public void Parse_RealFullPen_ContentFrame_DefaultsToHorizontalLayout()
+    {
+        var samplePath = GetRepoFilePath(@"samples\pencil\full.pen");
         var penJson = File.ReadAllText(samplePath);
 
         var document = _parser.Parse(penJson);
@@ -673,21 +677,22 @@ public class PencilEndToEndTests
         var rootUss = result.Files.First(f => f.Path == "ExploreHudView.uss");
         rootUss.Content.Should().Contain(".boomhud-content");
         rootUss.Content.Should().Contain("flex-direction: row;");
-      }
+    }
 
-      [Fact]
-      public void Parse_RealFullPen_ComponentRootsWithCanvasCoordinates_PreserveFlowLayouts()
-      {
-        var samplePath = @"C:\Users\User\project-ultima-magic\ultima-magic\docs\assets\hud\full.pen";
+    [Fact]
+    public void Parse_RealFullPen_ComponentRootsWithCanvasCoordinates_PreserveFlowLayouts()
+    {
+        var samplePath = GetRepoFilePath(@"samples\pencil\full.pen");
         var penJson = File.ReadAllText(samplePath);
 
         var document = _parser.Parse(penJson);
 
-        document.Components.Should().ContainKey("minimap");
-        document.Components.Should().ContainKey("charPortrait");
-        document.Components["minimap"].Root.Layout.Should().NotBeNull();
-        document.Components["minimap"].Root.Layout!.Type.Should().Be(LayoutType.Vertical);
-        document.Components["charPortrait"].Root.Layout.Should().NotBeNull();
-        document.Components["charPortrait"].Root.Layout!.Type.Should().Be(LayoutType.Vertical);
-      }
+        var minimap = document.Components.Values.Single(component => component.Name == "Minimap");
+        var charPortrait = document.Components.Values.Single(component => component.Name == "CharPortrait");
+
+        minimap.Root.Layout.Should().NotBeNull();
+        minimap.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+        charPortrait.Root.Layout.Should().NotBeNull();
+        charPortrait.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+    }
 }

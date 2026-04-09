@@ -1,4 +1,5 @@
 .boomhud-component-stat-bar {
+    flex-direction: column;
     width: 108px;
     height: 12px;
     margin-top: 0px;

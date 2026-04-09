@@ -2,9 +2,13 @@ using System.Collections;
 using BoomHud.Unity.UIToolkit;
 using UnityEngine;
 using UnityEngine.Playables;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace BoomHud.Unity.Timeline
 {
+    [ExecuteAlways]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(BoomHudUiToolkitMotionHost))]
     public sealed class BoomHudMotionPreviewBootstrap : MonoBehaviour
@@ -16,6 +20,9 @@ namespace BoomHud.Unity.Timeline
         [SerializeField] private bool _disableDirectorWhenFallback = true;
 
         private Coroutine? _startupRoutine;
+    #if UNITY_EDITOR
+        private bool _editorRefreshQueued;
+    #endif
 
         private BoomHudUiToolkitMotionHost Host
             => _host != null ? _host : _host = GetComponent<BoomHudUiToolkitMotionHost>();
@@ -34,6 +41,9 @@ namespace BoomHud.Unity.Timeline
         {
             if (!Application.isPlaying)
             {
+#if UNITY_EDITOR
+                QueueEditorRefresh();
+#endif
                 return;
             }
 
@@ -49,11 +59,16 @@ namespace BoomHud.Unity.Timeline
         {
             if (_startupRoutine == null)
             {
-                return;
+                goto EditorCleanup;
             }
 
             StopCoroutine(_startupRoutine);
             _startupRoutine = null;
+
+EditorCleanup:
+#if UNITY_EDITOR
+            _editorRefreshQueued = false;
+#endif
         }
 
         private IEnumerator EnsurePreviewPlayback()
@@ -97,5 +112,59 @@ namespace BoomHud.Unity.Timeline
             _director = GetComponent<PlayableDirector>();
             _host = GetComponent<BoomHudUiToolkitMotionHost>();
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
+            QueueEditorRefresh();
+        }
+
+        private void QueueEditorRefresh()
+        {
+            if (_editorRefreshQueued)
+            {
+                return;
+            }
+
+            _editorRefreshQueued = true;
+            EditorApplication.delayCall += PerformEditorRefresh;
+        }
+
+        private void PerformEditorRefresh()
+        {
+            _editorRefreshQueued = false;
+
+            if (this == null || !isActiveAndEnabled || Application.isPlaying)
+            {
+                return;
+            }
+
+            var host = Host;
+            host.Rebind();
+
+            var director = Director;
+            if (director == null)
+            {
+                return;
+            }
+
+            if (director.playableAsset != null)
+            {
+                director.RebuildGraph();
+                director.Evaluate();
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_fallbackClipId))
+            {
+                host.Evaluate(_fallbackClipId, 0f);
+            }
+        }
+#endif
     }
 }

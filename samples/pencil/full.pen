@@ -1,0 +1,2988 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "PYS9B",
+      "x": 0,
+      "y": 0,
+      "name": "Explore HUD",
+      "width": 1280,
+      "height": 960,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "oyh0G",
+          "x": 0,
+          "y": 0,
+          "name": "HUD",
+          "width": 1280,
+          "height": 960,
+          "fill": "#888888",
+          "stroke": {
+            "align": "inside",
+            "thickness": 0,
+            "fill": "#888888"
+          },
+          "padding": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "e1rxq",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#000000",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "z4va0",
+                  "name": "Main Area",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#000000",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KQtU2",
+                      "name": "Viewport",
+                      "clip": true,
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "./images/generated-1774523075613.png",
+                        "mode": "fill"
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 12,
+                        "fill": "#888888"
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "QLM66",
+                          "x": 444,
+                          "y": 12,
+                          "name": "Compass",
+                          "width": 72,
+                          "height": 72,
+                          "fill": "#000000",
+                          "stroke": {
+                            "thickness": 12,
+                            "fill": "#888888"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "aRprp",
+                              "name": "compassN",
+                              "fill": "#FFFFFF",
+                              "content": "N",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 24,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "sMItz",
+                          "x": 16,
+                          "y": 620,
+                          "name": "Zone",
+                          "fill": "#AAAAAA",
+                          "content": "Darkstone Crypt B1",
+                          "fontFamily": "Press Start 2P",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "72gtg",
+                      "name": "Activity Log",
+                      "width": "fill_container",
+                      "height": 160,
+                      "fill": "#000000",
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 12,
+                        "fill": "#888888"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 12,
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ygi16",
+                          "name": "Activity Log Inner",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "fill": "#000000",
+                          "stroke": {
+                            "thickness": 0,
+                            "fill": "#00000000"
+                          },
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 8,
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "RgELk",
+                              "name": "log3",
+                              "fill": "#AAAAAA",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "You see a locked door.",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "VXec1",
+                              "name": "log4",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Aelric attacks Slime!",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "9c1Gn",
+                              "name": "log5",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "12 damage dealt.",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "zdYqh",
+                              "name": "log6",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Lyra casts Fireball!",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "p83Vj",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "28 damage dealt!",
+                              "fontFamily": "Press Start 2P",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n0pPf",
+                  "name": "Right Panel",
+                  "width": 300,
+                  "height": "fill_container",
+                  "fill": "#000000",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 12,
+                    "fill": "#888888"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lyG8b",
+                      "name": "Right Panel Inner",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "#000000",
+                      "stroke": {
+                        "thickness": 0,
+                        "fill": "#00000000"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wOolW",
+                          "name": "Minimap",
+                          "width": "fill_container",
+                          "height": 268,
+                          "fill": "#111111",
+                          "stroke": {
+                            "thickness": 12,
+                            "fill": "#888888"
+                          },
+                          "layout": "vertical",
+                          "gap": 2,
+                          "padding": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Qrbuj",
+                              "name": "r0",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "zWk9N",
+                                  "name": "0-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "GrEIt",
+                                  "name": "0-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "pxZkW",
+                                  "name": "0-2",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "JhNT9",
+                                  "name": "0-3",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "1I3Kd",
+                                  "name": "0-4",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "GeTCH",
+                                  "name": "0-5",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "RZyFX",
+                                  "name": "0-6",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "eUOb8",
+                                  "name": "0-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "tnjTb",
+                                  "name": "0-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Y4pxk",
+                                  "name": "0-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "EmC9Q",
+                              "name": "r1",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "lUKXa",
+                                  "name": "1-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "pVPFI",
+                                  "name": "1-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "ywzd7",
+                                  "name": "1-2",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "m6cXS",
+                                  "name": "1-3",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "fuv1g",
+                                  "name": "1-4",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "KrrzT",
+                                  "name": "1-5",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "vGXeM",
+                                  "name": "1-6",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "0viMT",
+                                  "name": "1-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "v1suz",
+                                  "name": "1-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "2vJOc",
+                                  "name": "1-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "HdSRI",
+                              "name": "r2",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "2FwrW",
+                                  "name": "2-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Fr9yp",
+                                  "name": "2-1",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "lxixo",
+                                  "name": "2-2",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "nUDEp",
+                                  "name": "2-3",
+                                  "fill": "#444444",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "ChLjB",
+                                  "name": "2-4",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "HunBL",
+                                  "name": "2-5",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "d8ALH",
+                                  "name": "2-6",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "x2glO",
+                                  "name": "2-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "QZTGM",
+                                  "name": "2-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "RVoWV",
+                                  "name": "2-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "DQr8g",
+                              "name": "r3",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "loboL",
+                                  "name": "3-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Rz9A9",
+                                  "name": "3-1",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "LIP6o",
+                                  "name": "3-2",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "LHyYS",
+                                  "name": "3-3",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "AYfOy",
+                                  "name": "3-4",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "LODSH",
+                                  "name": "3-5",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "iUfQO",
+                                  "name": "3-6",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "wHAPc",
+                                  "name": "3-7",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "vqPLW",
+                                  "name": "3-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "bfqim",
+                                  "name": "3-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "UB1DR",
+                              "name": "r4",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "uH3p9",
+                                  "name": "4-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "29HDW",
+                                  "name": "4-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "FPheV",
+                                  "name": "4-2",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "bbvcn",
+                                  "name": "4-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "gUlDE",
+                                  "name": "4-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "OKnyB",
+                                  "name": "4-5",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "EqV7T",
+                                  "name": "4-6",
+                                  "fill": "#444444",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "mqAhW",
+                                  "name": "4-7",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "w940T",
+                                  "name": "4-8",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "8N4p8",
+                                  "name": "4-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "raMI9",
+                              "name": "r5",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "jNLfr",
+                                  "name": "5-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "8eN89",
+                                  "name": "5-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "m1jG6",
+                                  "name": "5-2",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "YiOpQ",
+                                  "name": "5-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Z9ZIf",
+                                  "name": "5-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "RVHmE",
+                                  "name": "5-5",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "JUy0i",
+                                  "name": "5-6",
+                                  "fill": "#FFFFFF",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "zzXAU",
+                                  "name": "5-7",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "CwGHL",
+                                  "name": "5-8",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "UfvMj",
+                                  "name": "5-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bmfhw",
+                              "name": "r6",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "gvSYn",
+                                  "name": "6-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "U2kg6",
+                                  "name": "6-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "NYujT",
+                                  "name": "6-2",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Az8JV",
+                                  "name": "6-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "8MeCD",
+                                  "name": "6-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "G2GlW",
+                                  "name": "6-5",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "K6vSr",
+                                  "name": "6-6",
+                                  "fill": "#333333",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "9tJSG",
+                                  "name": "6-7",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "gFlP9",
+                                  "name": "6-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "jkTEz",
+                                  "name": "6-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "4ruiD",
+                              "name": "r7",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "Z7BfE",
+                                  "name": "7-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "E682k",
+                                  "name": "7-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Wjkbl",
+                                  "name": "7-2",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "rKAO2",
+                                  "name": "7-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "p9evR",
+                                  "name": "7-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "S6tsj",
+                                  "name": "7-5",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "tWGn9",
+                                  "name": "7-6",
+                                  "fill": "#222222",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "eHm9X",
+                                  "name": "7-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "yBsNi",
+                                  "name": "7-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "mssj4",
+                                  "name": "7-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "lRMFw",
+                              "name": "r8",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "GODcU",
+                                  "name": "8-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "jzDpy",
+                                  "name": "8-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "0PROA",
+                                  "name": "8-2",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "gnryP",
+                                  "name": "8-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "xHUUG",
+                                  "name": "8-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "DMz9z",
+                                  "name": "8-5",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "mlMRQ",
+                                  "name": "8-6",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "MYP7d",
+                                  "name": "8-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "JK1sB",
+                                  "name": "8-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "8DC9B",
+                                  "name": "8-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "X3pTH",
+                              "name": "r9",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "id": "T3Pru",
+                                  "name": "9-0",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "vNAYN",
+                                  "name": "9-1",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "unByt",
+                                  "name": "9-2",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "IgbfR",
+                                  "name": "9-3",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "aTCfF",
+                                  "name": "9-4",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "w3qC9",
+                                  "name": "9-5",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "Jggp1",
+                                  "name": "9-6",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "JCyGV",
+                                  "name": "9-7",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "ChV8H",
+                                  "name": "9-8",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                },
+                                {
+                                  "type": "rectangle",
+                                  "id": "M67gy",
+                                  "name": "9-9",
+                                  "fill": "#0A0A0A",
+                                  "width": "fill_container",
+                                  "height": "fill_container"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "jj1uI",
+                          "name": "Sep",
+                          "fill": "#AAAAAA",
+                          "width": "fill_container",
+                          "height": 4
+                        },
+                        {
+                          "type": "frame",
+                          "id": "epvgM",
+                          "name": "Party List",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": [
+                            8,
+                            6
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "YRtmq",
+                              "name": "Row 1",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 8,
+                              "justifyContent": "center",
+                              "children": [
+                                {
+                                  "id": "5OlyV",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 1",
+                                  "width": "fill_container",
+                                  "x": 0,
+                                  "y": 0,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "sword"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Aelric",
+                                      "name": "c1name",
+                                      "x": 36
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 96
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 60
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 12",
+                                      "x": 12
+                                    },
+                                    "VBtLt": {
+                                      "content": "DEF 8",
+                                      "x": 68
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "grOGE",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 2",
+                                  "width": "fill_container",
+                                  "x": 128,
+                                  "y": 0,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "sparkles"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Lyra",
+                                      "name": "c2name",
+                                      "x": 44
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 70
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 90
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 6",
+                                      "x": 12
+                                    },
+                                    "VBtLt": {
+                                      "content": "MAG 14",
+                                      "x": 60
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LkOQV",
+                              "name": "Row 2",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 8,
+                              "padding": [
+                                12,
+                                0,
+                                0,
+                                0
+                              ],
+                              "justifyContent": "center",
+                              "children": [
+                                {
+                                  "id": "iWTUD",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 3",
+                                  "width": "fill_container",
+                                  "x": 0,
+                                  "y": 12,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "shield"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Theron",
+                                      "name": "c3name",
+                                      "x": 36
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 110
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 40
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 14",
+                                      "x": 8
+                                    },
+                                    "VBtLt": {
+                                      "content": "DEF 12",
+                                      "x": 64
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "c7x2m",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 4",
+                                  "width": "fill_container",
+                                  "x": 128,
+                                  "y": 12,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "moon"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Selene",
+                                      "name": "c4name",
+                                      "x": 36
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 100
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 80
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 5",
+                                      "x": 12
+                                    },
+                                    "VBtLt": {
+                                      "content": "MAG 16",
+                                      "x": 60
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "brn0l",
+                              "name": "Row 3",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "gap": 8,
+                              "padding": [
+                                12,
+                                0,
+                                0,
+                                0
+                              ],
+                              "justifyContent": "center",
+                              "children": [
+                                {
+                                  "id": "mQiXu",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 5",
+                                  "width": "fill_container",
+                                  "x": 0,
+                                  "y": 12,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "cross"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Elara",
+                                      "name": "c5name",
+                                      "x": 40
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 80
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 100
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 4",
+                                      "x": 12
+                                    },
+                                    "VBtLt": {
+                                      "content": "MAG 11",
+                                      "x": 60
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "QKsWE",
+                                  "type": "ref",
+                                  "ref": "j8BT0",
+                                  "name": "Char 6",
+                                  "width": "fill_container",
+                                  "x": 128,
+                                  "y": 12,
+                                  "descendants": {
+                                    "BocBz": {
+                                      "x": 32
+                                    },
+                                    "eQQPb": {
+                                      "iconFontName": "flame"
+                                    },
+                                    "2MzBr": {
+                                      "content": "Darius",
+                                      "name": "c6name",
+                                      "x": 36
+                                    },
+                                    "6b8QB": {
+                                      "width": "fill_container"
+                                    },
+                                    "JIVyE": {
+                                      "width": 116
+                                    },
+                                    "ZsTsH": {
+                                      "width": "fill_container"
+                                    },
+                                    "AOAr9": {
+                                      "width": 50
+                                    },
+                                    "hoW2O": {
+                                      "width": "fill_container"
+                                    },
+                                    "MOTQg": {
+                                      "content": "ATK 16",
+                                      "x": 8
+                                    },
+                                    "VBtLt": {
+                                      "content": "DEF 10",
+                                      "x": 64
+                                    },
+                                    "ig1mA": {
+                                      "width": "fill_container"
+                                    },
+                                    "bsBbk": {
+                                      "width": "fill_container"
+                                    },
+                                    "qEpO3": {
+                                      "x": 6.25
+                                    },
+                                    "XLjxR": {
+                                      "width": "fill_container",
+                                      "x": 30.5
+                                    },
+                                    "AIphN": {
+                                      "x": 6.25
+                                    },
+                                    "3YocR": {
+                                      "width": "fill_container",
+                                      "x": 61
+                                    },
+                                    "e4QKZ": {
+                                      "x": 6.25
+                                    },
+                                    "gg5mL": {
+                                      "width": "fill_container",
+                                      "x": 91.5
+                                    },
+                                    "dVzX7": {
+                                      "x": 6.25
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "DFxSR",
+      "x": 1400,
+      "y": 0,
+      "name": "Component/ActionButton",
+      "reusable": true,
+      "width": 28,
+      "height": 28,
+      "fill": "#000000",
+      "stroke": {
+        "thickness": 2,
+        "fill": "#FFFFFF"
+      },
+      "layout": "vertical",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "AEMsZ",
+          "name": "icon",
+          "width": 16,
+          "height": 16,
+          "iconFontName": "swords",
+          "iconFontFamily": "lucide",
+          "fill": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "tP5Ym",
+      "x": 1400,
+      "y": 60,
+      "name": "Component/StatBar",
+      "reusable": true,
+      "width": 108,
+      "height": 12,
+      "fill": "#333333",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "FNUuU",
+          "x": 0,
+          "y": 0,
+          "name": "fill",
+          "fill": "#CCCCCC",
+          "width": 80,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "pXhr5",
+      "x": 1400,
+      "y": 100,
+      "name": "Component/StatusIcon",
+      "reusable": true,
+      "width": 24,
+      "height": 24,
+      "layout": "vertical",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "Hqcw2",
+          "name": "icon",
+          "width": 24,
+          "height": 24,
+          "iconFontName": "flame",
+          "iconFontFamily": "lucide",
+          "fill": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "j8BT0",
+      "x": 1400,
+      "y": 160,
+      "name": "Component/CharPortrait",
+      "reusable": true,
+      "width": 130,
+      "fill": "#000000",
+      "layout": "vertical",
+      "gap": 8,
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "BocBz",
+          "name": "face",
+          "width": 56,
+          "height": 56,
+          "fill": "#000000",
+          "stroke": {
+            "thickness": 6,
+            "fill": "#FFFFFF"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "eQQPb",
+              "x": 12,
+              "y": 12,
+              "name": "classIcon",
+              "width": 32,
+              "height": 32,
+              "iconFontName": "shield",
+              "iconFontFamily": "lucide",
+              "fill": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "2MzBr",
+          "name": "name",
+          "fill": "#FFFFFF",
+          "content": "Name",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 8,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "6b8QB",
+          "name": "hp",
+          "width": "fill_container",
+          "height": 10,
+          "fill": "#333333",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "JIVyE",
+              "x": 0,
+              "y": 0,
+              "name": "hpFill",
+              "fill": "#CCCCCC",
+              "width": 90,
+              "height": 10
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZsTsH",
+          "name": "mp",
+          "width": "fill_container",
+          "height": 8,
+          "fill": "#333333",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "AOAr9",
+              "x": 0,
+              "y": 0,
+              "name": "mpFill",
+              "fill": "#777777",
+              "width": 60,
+              "height": 8
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hoW2O",
+          "name": "stats",
+          "width": "fill_container",
+          "gap": 8,
+          "padding": [
+            0,
+            6
+          ],
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "MOTQg",
+              "name": "stat1",
+              "fill": "#AAAAAA",
+              "content": "ATK 10",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 8,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "VBtLt",
+              "name": "stat2",
+              "fill": "#AAAAAA",
+              "content": "DEF 8",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 8,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ig1mA",
+          "name": "actionGrid",
+          "width": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "frame",
+              "id": "bsBbk",
+              "name": "atk",
+              "width": "fill_container",
+              "height": 28,
+              "fill": "#000000",
+              "stroke": {
+                "thickness": 2,
+                "fill": "#FFFFFF"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "qEpO3",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "swords",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "XLjxR",
+              "name": "mag",
+              "width": "fill_container",
+              "height": 28,
+              "fill": "#000000",
+              "stroke": {
+                "thickness": 2,
+                "fill": "#FFFFFF"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "AIphN",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "wand-sparkles",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "3YocR",
+              "name": "def",
+              "width": "fill_container",
+              "height": 28,
+              "fill": "#000000",
+              "stroke": {
+                "thickness": 2,
+                "fill": "#FFFFFF"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "e4QKZ",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "shield",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "gg5mL",
+              "name": "item",
+              "width": "fill_container",
+              "height": 28,
+              "fill": "#000000",
+              "stroke": {
+                "thickness": 2,
+                "fill": "#FFFFFF"
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "dVzX7",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "flask-conical",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "bjsNG",
+      "x": 1400,
+      "y": 360,
+      "name": "Component/MessageLog",
+      "reusable": true,
+      "width": 280,
+      "height": 144,
+      "fill": "#000000",
+      "stroke": {
+        "thickness": 2,
+        "fill": "#FFFFFF"
+      },
+      "layout": "vertical",
+      "gap": 8,
+      "padding": 8,
+      "justifyContent": "end",
+      "children": [
+        {
+          "type": "text",
+          "id": "3QT6B",
+          "name": "line1",
+          "fill": "#FFFFFF",
+          "content": "Activity log line.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "8SwAz",
+          "name": "line2",
+          "fill": "#FFFFFF",
+          "content": "Second log entry.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "9qZFG",
+          "name": "line3",
+          "fill": "#FFFFFF",
+          "content": "Third log entry.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "MGw1I",
+          "name": "line4",
+          "fill": "#AAAAAA",
+          "content": "Fourth log entry.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "mKcGi",
+          "name": "line5",
+          "fill": "#AAAAAA",
+          "content": "Fifth log entry.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "hrbtA",
+      "x": 1400,
+      "y": 540,
+      "name": "Component/Minimap",
+      "reusable": true,
+      "width": 280,
+      "height": 268,
+      "fill": "#111111",
+      "stroke": {
+        "thickness": 2,
+        "fill": "#FFFFFF"
+      },
+      "layout": "vertical",
+      "gap": 2,
+      "padding": 16,
+      "children": [
+        {
+          "type": "frame",
+          "id": "68epG",
+          "name": "r0",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "6x8c6",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "o6YM3",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "Aincn",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "yPnXK",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "RcwqJ",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "TejHd",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "xR5to",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "jpWZL",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "A2BdA",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "6Hi4d",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "UWSWW",
+          "name": "r1",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "cuaBP",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "GXwkx",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "eYmy1",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "HFwSV",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "b1VHG",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "VgGpm",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "YwC1g",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "jgsDT",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "ipu0B",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "FMYJi",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7bgKp",
+          "name": "r2",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "YdHfh",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "cP14T",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "Hjw5u",
+              "fill": "#444444",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "T42Ve",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "QU5yX",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "UOzTP",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "yazb5",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "vnYhg",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "3ZwH7",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "lFvQh",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "G1CnJ",
+          "name": "r3",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "eFlKk",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "99g1h",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "nYrc2",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "5rDAT",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "VUUvL",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "6Pvv3",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "WWpsz",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "3ml5n",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "vpQeD",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "yHSZ9",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "DZFfG",
+          "name": "r4",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "q3F6h",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "zIbCu",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "0uOk8",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "j3Yys",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "o3VLs",
+              "fill": "#FFFFFF",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "uJZhP",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "MCv79",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "a6n7U",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "kCzQt",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "rudsi",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "BxaXs",
+          "name": "r5",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "K4A32",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "Ewfjc",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "LMK0J",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "BknD1",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "k9n5g",
+              "fill": "#333333",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "uEWlP",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "XXyXg",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "QmDB2",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "ZVV9n",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "KUo3i",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "YjjQO",
+          "name": "r6",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "czyWO",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "gU8uw",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "bWMYJ",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "WAgyT",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "toi5m",
+              "fill": "#222222",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "nKAZk",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "nwNzy",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "67ABX",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "0zMF4",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "GtA3K",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ocADZ",
+          "name": "r7",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "WcPEQ",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "ypXEf",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "ZauKp",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "eOwtr",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "A9HRe",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "cFZB2",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "tXXss",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "WqJtc",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "2owQF",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "e10m7",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c1SSw",
+          "name": "r8",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "0khbK",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "M4jyc",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "K1jGl",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "AnYXF",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "kxEAx",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "XLOow",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "iOev6",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "YjAST",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "stfYw",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "vZata",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dsDdN",
+          "name": "r9",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 2,
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "pHSWw",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "IKrc0",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "aZTlg",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "ZI5lR",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "mFgl5",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "2Eyxs",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "DtIS1",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "SumhN",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "8JgdD",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            },
+            {
+              "type": "rectangle",
+              "id": "QZs7g",
+              "fill": "#0A0A0A",
+              "width": "fill_container",
+              "height": "fill_container"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "bg": {
+      "type": "color",
+      "value": "#0F0F23"
+    },
+    "border": {
+      "type": "color",
+      "value": "#2D2D44"
+    },
+    "cta": {
+      "type": "color",
+      "value": "#F43F5E"
+    },
+    "gold": {
+      "type": "color",
+      "value": "#CA8A04"
+    },
+    "hp": {
+      "type": "color",
+      "value": "#DC2626"
+    },
+    "hp-bg": {
+      "type": "color",
+      "value": "#3C1414"
+    },
+    "mp": {
+      "type": "color",
+      "value": "#3B82F6"
+    },
+    "mp-bg": {
+      "type": "color",
+      "value": "#141E3C"
+    },
+    "panel": {
+      "type": "color",
+      "value": "#1A1A2E"
+    },
+    "primary": {
+      "type": "color",
+      "value": "#7C3AED"
+    },
+    "primary-light": {
+      "type": "color",
+      "value": "#A78BFA"
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 12
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 8
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 4
+    },
+    "spacing-lg": {
+      "type": "number",
+      "value": 16
+    },
+    "spacing-md": {
+      "type": "number",
+      "value": 12
+    },
+    "spacing-sm": {
+      "type": "number",
+      "value": 8
+    },
+    "spacing-xl": {
+      "type": "number",
+      "value": 24
+    },
+    "spacing-xs": {
+      "type": "number",
+      "value": 4
+    },
+    "success": {
+      "type": "color",
+      "value": "#22C55E"
+    },
+    "text": {
+      "type": "color",
+      "value": "#E2E8F0"
+    },
+    "text-dim": {
+      "type": "color",
+      "value": "#8B8BA0"
+    }
+  }
+}
