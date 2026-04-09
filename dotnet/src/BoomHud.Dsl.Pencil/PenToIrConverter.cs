@@ -104,27 +104,36 @@ public sealed class PenToIrConverter
         return components;
     }
 
-    private ComponentNode ConvertNode(PenNodeDto sourceNode, List<PenBindingDto> allBindings)
+    private ComponentNode ConvertNode(PenNodeDto sourceNode, List<PenBindingDto> allBindings, string? descendantScope = null)
     {
+        var isReferenceNode = string.Equals(sourceNode.Type, "ref", StringComparison.OrdinalIgnoreCase)
+            && !string.IsNullOrWhiteSpace(sourceNode.Ref);
         var node = ExpandReferenceNode(sourceNode);
+        var nodeId = BuildNodeIdentifier(sourceNode, node, descendantScope, isReferenceNode);
         var componentType = MapNodeType(node.Type);
         var nodeBindings = new List<BindingSpec>();
+        var bindingNodeIds = CollectBindingNodeIds(sourceNode, node);
 
         nodeBindings.AddRange(allBindings
-            .Where(b => string.Equals(b.NodeId, node.Id, StringComparison.Ordinal))
+            .Where(b => !string.IsNullOrWhiteSpace(b.NodeId) && bindingNodeIds.Contains(b.NodeId))
             .Select(b => ConvertBinding(b, componentType)));
 
         if (node.Bindings != null)
         {
             nodeBindings.AddRange(ConvertInlineBindings(node.Bindings, componentType));
         }
+        if (!ReferenceEquals(sourceNode, node) && sourceNode.Bindings != null)
+        {
+            nodeBindings.AddRange(ConvertInlineBindings(sourceNode.Bindings, componentType));
+        }
 
         var children = new List<ComponentNode>();
+        var childScope = isReferenceNode || descendantScope != null ? nodeId : null;
         if (node.Children != null)
         {
             foreach (var childNode in node.Children)
             {
-                children.Add(ConvertNode(childNode, allBindings));
+                children.Add(ConvertNode(childNode, allBindings, childScope));
             }
         }
 
@@ -176,15 +185,48 @@ public sealed class PenToIrConverter
 
         return new ComponentNode
         {
-            Id = GetNodeIdentifier(node),
+            Id = nodeId,
             Type = componentType,
             Layout = ConvertLayout(node),
             Style = ConvertStyle(node),
             Children = children,
             Bindings = nodeBindings,
             Properties = properties,
+            ComponentRefId = sourceNode.Ref,
             InstanceOverrides = metadata
         };
+    }
+
+    private static HashSet<string> CollectBindingNodeIds(PenNodeDto sourceNode, PenNodeDto resolvedNode)
+    {
+        var ids = new HashSet<string>(StringComparer.Ordinal);
+
+        if (!string.IsNullOrWhiteSpace(sourceNode.Id))
+        {
+            ids.Add(sourceNode.Id);
+        }
+
+        if (!string.IsNullOrWhiteSpace(resolvedNode.Id))
+        {
+            ids.Add(resolvedNode.Id);
+        }
+
+        return ids;
+    }
+
+    private static string BuildNodeIdentifier(
+        PenNodeDto sourceNode,
+        PenNodeDto resolvedNode,
+        string? descendantScope,
+        bool isReferenceNode)
+    {
+        var localIdentifier = GetNodeIdentifier(isReferenceNode ? sourceNode : resolvedNode);
+        if (string.IsNullOrWhiteSpace(descendantScope))
+        {
+            return localIdentifier;
+        }
+
+        return $"{descendantScope}/{localIdentifier}";
     }
 
     private PenNodeDto ExpandReferenceNode(PenNodeDto node)
@@ -562,6 +604,10 @@ public sealed class PenToIrConverter
             Gap = ParseSpacingUniform(gap),
             Padding = ParseSpacing(padding),
             Margin = ParseSpacing(margin),
+            Left = node.X is { } x ? Dimension.Pixels(x) : null,
+            Top = node.Y is { } y ? Dimension.Pixels(y) : null,
+            IsAbsolutePositioned = HasAbsolutePosition(node),
+            ClipContent = node.Clip is true,
             Align = MapAlignment(align ?? alignment),
             Justify = MapJustification(justify ?? GetJustifyFromAlignment(alignment ?? align))
         };

@@ -303,7 +303,9 @@ public class PencilEndToEndTests
 
         document.Name.Should().Be("DebugOverlay");
         document.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
-        document.Root.InstanceOverrides[BoomHudMetadataKeys.PencilPosition].Should().Be("absolute");
+        document.Root.Layout.IsAbsolutePositioned.Should().BeTrue();
+        document.Root.Layout.Left.Should().BeNull();
+        document.Root.Layout.Top.Should().BeNull();
         document.Root.Style!.Border.Should().NotBeNull();
         document.Root.Style.Border!.Width.Should().Be(1);
         document.Root.Children[0].Layout!.Height.Should().Be(Dimension.Pixels(1));
@@ -644,8 +646,8 @@ public class PencilEndToEndTests
         result.Files.Should().Contain(f => f.Path == "CharPortraitView.uxml");
 
         var rootUxml = result.Files.First(f => f.Path == "ExploreHudView.uxml");
-        rootUxml.Content.Should().Contain("name=\"C1name\"");
-        rootUxml.Content.Should().Contain("name=\"AttackButton\"");
+        rootUxml.Content.Should().Contain("name=\"Char1C1name\"");
+        rootUxml.Content.Should().Contain("name=\"Char1AttackButton\"");
 
         var rootUss = result.Files.First(f => f.Path == "ExploreHudView.uss");
         rootUss.Content.Should().Contain("left: 444px;");

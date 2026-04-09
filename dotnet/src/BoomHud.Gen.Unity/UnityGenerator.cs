@@ -235,6 +235,10 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendDimensionStyles(builder, "max-height", layout.MaxHeight, parentLayoutType, parentLayout);
             AppendSpacingStyles(builder, "margin", MergeParentGapIntoMargin(layout.Margin, parentLayoutType, parentGap, siblingIndex));
             AppendSpacingStyles(builder, "padding", layout.Padding);
+            if (layout.ClipContent)
+            {
+                AppendCssDeclaration(builder, "overflow", "hidden");
+            }
 
             if (layout.Weight is { } weight)
             {
@@ -286,7 +290,7 @@ public sealed class UnityGenerator : IBackendGenerator
 
     private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType)
     {
-        var sourceHasAbsolutePlacement = HasAbsolutePositionMetadata(source);
+        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source);
         if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
@@ -298,7 +302,8 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendCssDeclaration(builder, "position", "absolute");
         }
 
-        if (TryGetNumericMetadata(source, BoomHudMetadataKeys.PencilLeft, out var left))
+        var left = ResolveAbsoluteOffset(source, static layout => layout.Left, BoomHudMetadataKeys.PencilLeft);
+        if (left != null)
         {
             if (!hasAbsoluteCoordinates)
             {
@@ -306,10 +311,11 @@ public sealed class UnityGenerator : IBackendGenerator
                 hasAbsoluteCoordinates = true;
             }
 
-            AppendCssDeclaration(builder, "left", ToPixels(left));
+            AppendOffsetStyle(builder, "left", left.Value);
         }
 
-        if (TryGetNumericMetadata(source, BoomHudMetadataKeys.PencilTop, out var top))
+        var top = ResolveAbsoluteOffset(source, static layout => layout.Top, BoomHudMetadataKeys.PencilTop);
+        if (top != null)
         {
             if (!hasAbsoluteCoordinates)
             {
@@ -317,13 +323,20 @@ public sealed class UnityGenerator : IBackendGenerator
                 hasAbsoluteCoordinates = true;
             }
 
-            AppendCssDeclaration(builder, "top", ToPixels(top));
+            AppendOffsetStyle(builder, "top", top.Value);
         }
 
         if (sourceHasAbsolutePlacement && parentLayoutType == null)
         {
-            AppendCssDeclaration(builder, "left", ToPixels(0));
-            AppendCssDeclaration(builder, "top", ToPixels(0));
+            if (left == null)
+            {
+                AppendCssDeclaration(builder, "left", ToPixels(0));
+            }
+
+            if (top == null)
+            {
+                AppendCssDeclaration(builder, "top", ToPixels(0));
+            }
         }
     }
 
@@ -357,8 +370,13 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
-    private static bool HasAbsolutePositionMetadata(ComponentNode source)
+    private static bool HasAbsolutePlacement(ComponentNode source)
     {
+        if (source.Layout?.IsAbsolutePositioned == true)
+        {
+            return true;
+        }
+
         if (!source.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilPosition, out var raw) || raw == null)
         {
             return false;
@@ -366,6 +384,37 @@ public sealed class UnityGenerator : IBackendGenerator
 
         return raw is string stringValue
             && string.Equals(stringValue, "absolute", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static Dimension? ResolveAbsoluteOffset(
+        ComponentNode source,
+        Func<LayoutSpec, Dimension?> selector,
+        string metadataKey)
+    {
+        if (source.Layout != null && selector(source.Layout) is { } dimension)
+        {
+            return dimension;
+        }
+
+        return TryGetNumericMetadata(source, metadataKey, out var value)
+            ? Dimension.Pixels(value)
+            : null;
+    }
+
+    private static void AppendOffsetStyle(StringBuilder builder, string propertyName, Dimension offset)
+    {
+        switch (offset.Unit)
+        {
+            case DimensionUnit.Pixels:
+                AppendCssDeclaration(builder, propertyName, ToPixels(offset.Value));
+                break;
+            case DimensionUnit.Percent:
+                AppendCssDeclaration(builder, propertyName, offset.Value.ToString(CultureInfo.InvariantCulture) + "%");
+                break;
+            case DimensionUnit.Cells:
+                AppendCssDeclaration(builder, propertyName, ToPixels(offset.Value));
+                break;
+        }
     }
 
     private static void AppendVisualStyles(StringBuilder builder, StyleSpec? style, ThemeDocument? theme)
