@@ -167,6 +167,12 @@ public static class DiagnosticCodes
     /// The manifest specifies a version that is not recognized.
     /// </summary>
     public const string UnknownSchemaVersion = "BH0500";
+
+    /// <summary>
+    /// BH0501: Non-portable motion value.
+    /// A motion channel uses a value kind that is not part of the shared portable contract.
+    /// </summary>
+    public const string NonPortableMotionValue = "BH0501";
 }
 
 /// <summary>
@@ -243,5 +249,21 @@ public static class Diagnostics
             DiagnosticCodes.UnknownSchemaVersion,
             DiagnosticSeverity.Warning,
             $"Unknown {manifestType} version '{version}'; expected '1.0'. Some features may not work correctly.",
+            sourceFile);
+
+    /// <summary>
+    /// Creates a BH0501 non-portable motion value warning.
+    /// </summary>
+    public static BoomHudDiagnostic NonPortableMotionValue(
+        string targetId,
+        string property,
+        string actualKind,
+        string expectedKind,
+        int frame,
+        string? sourceFile = null)
+        => new(
+            DiagnosticCodes.NonPortableMotionValue,
+            DiagnosticSeverity.Warning,
+            $"Motion target '{targetId}' property '{property}' uses value kind '{actualKind}' at frame {frame}; portable motion v1 requires '{expectedKind}'.",
             sourceFile);
 }

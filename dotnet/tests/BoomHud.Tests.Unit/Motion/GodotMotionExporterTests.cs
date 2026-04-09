@@ -1,6 +1,7 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
+using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Gen.Godot;
 using FluentAssertions;
 using Xunit;
@@ -210,5 +211,57 @@ public sealed class GodotMotionExporterTests
         result.Diagnostics.Should().Contain(d => d.Code == "BHG2002");
         result.Files[0].Content.Should().NotContain("does-not-exist");
         result.Files[0].Content.Should().NotContain("position:z");
+    }
+
+    [Fact]
+    public void Generate_NonPortableValueKind_UsesSharedContractWarningAndSkipsChannel()
+    {
+        var document = new HudDocument
+        {
+            Name = "DebugOverlay",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children = [new ComponentNode { Id = "label", Type = ComponentType.Label }]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "DebugOverlayMotion",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 30,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "labelTrack",
+                            TargetId = "label",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.PositionY,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromVector(0, -12) }]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = GodotMotionExporter.Generate(document, motion, _options);
+
+        result.Success.Should().BeTrue();
+        result.Diagnostics.Should().ContainSingle(d => d.Code == DiagnosticCodes.NonPortableMotionValue);
+        result.Files[0].Content.Should().NotContain("labelTrackPositionY");
+        result.Files[0].Content.Should().NotContain("position:y");
     }
 }

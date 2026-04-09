@@ -83,7 +83,7 @@ public sealed record MotionDocument
             diagnostics.Add(DiagnosticFactory.UnknownSchemaVersion("motion document", version, sourcePath));
         }
 
-        return new MotionDocument
+        var document = new MotionDocument
         {
             Version = version,
             Name = dto.Name ?? throw new InvalidOperationException("Motion document name is required"),
@@ -91,12 +91,24 @@ public sealed record MotionDocument
             Clips = (dto.Clips ?? []).Select(MapClip).ToList().AsReadOnly(),
             DefaultSequenceId = string.IsNullOrWhiteSpace(dto.DefaultSequenceId) ? null : dto.DefaultSequenceId,
             Sequences = (dto.Sequences ?? []).Select(MapSequence).ToList().AsReadOnly(),
-            LoadDiagnostics = diagnostics.AsReadOnly()
+        };
+
+        var contractDiagnostics = document.ValidatePortableContract(sourcePath);
+        return document with
+        {
+            LoadDiagnostics = diagnostics.Concat(contractDiagnostics).ToList().AsReadOnly()
         };
     }
 
     public string ToJson(bool indented = true)
     {
+        var contractDiagnostics = ValidatePortableContract();
+        if (contractDiagnostics.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"Motion document '{Name}' contains non-portable keyframe values and cannot be serialized to the v1 motion contract. {contractDiagnostics[0].Message}");
+        }
+
         var dto = ToDto();
         var json = GeneratedSerialize.ToJson(dto);
         if (!indented)
@@ -107,6 +119,53 @@ public sealed record MotionDocument
         using var document = System.Text.Json.JsonDocument.Parse(json);
         return System.Text.Json.JsonSerializer.Serialize(document.RootElement, IndentedJsonOptions);
     }
+
+    /// <summary>
+    /// Validates the shared portable motion contract used across generators and runtimes.
+    /// </summary>
+    public IReadOnlyList<BoomHudDiagnostic> ValidatePortableContract(string? sourcePath = null)
+    {
+        var diagnostics = new List<BoomHudDiagnostic>();
+
+        foreach (var clip in Clips)
+        {
+            foreach (var track in clip.Tracks)
+            {
+                foreach (var channel in track.Channels)
+                {
+                    var expectedKind = GetPortableValueKind(channel.Property);
+                    foreach (var keyframe in channel.Keyframes)
+                    {
+                        if (IsPortableValueKind(channel.Property, keyframe.Value.Kind))
+                        {
+                            continue;
+                        }
+
+                        diagnostics.Add(DiagnosticFactory.NonPortableMotionValue(
+                            track.TargetId,
+                            channel.Property.ToString(),
+                            keyframe.Value.Kind.ToString(),
+                            expectedKind.ToString(),
+                            keyframe.Frame,
+                            sourcePath));
+                    }
+                }
+            }
+        }
+
+        return diagnostics.AsReadOnly();
+    }
+
+    public static MotionValueKind GetPortableValueKind(MotionProperty property)
+        => property switch
+        {
+            MotionProperty.Visibility => MotionValueKind.Boolean,
+            MotionProperty.Text or MotionProperty.SpriteFrame or MotionProperty.Color => MotionValueKind.Text,
+            _ => MotionValueKind.Number
+        };
+
+    public static bool IsPortableValueKind(MotionProperty property, MotionValueKind kind)
+        => kind != MotionValueKind.None && kind == GetPortableValueKind(property);
 
     private GeneratedMotionDocument ToDto()
         => new()

@@ -11,11 +11,7 @@ import type {
   MotionValue,
 } from "./schema";
 
-export type ResolvedMotionScalar =
-  | number
-  | boolean
-  | string
-  | readonly number[];
+export type ResolvedMotionScalar = number | boolean | string;
 
 export type MotionTargetState = Partial<
   Record<MotionProperty, ResolvedMotionScalar>
@@ -371,24 +367,6 @@ const interpolateKeyframes = (
     });
   }
 
-  if (start.value.kind === "vector" && end.value.kind === "vector") {
-    const startVector = start.value.vector;
-    const endVector = end.value.vector;
-    const size = Math.min(startVector.length, endVector.length);
-    return Array.from({ length: size }, (_, index) =>
-      interpolate(
-        frame,
-        [start.frame, end.frame],
-        [startVector[index], endVector[index]],
-        {
-          easing: mapEasing(start.easing),
-          extrapolateLeft: "clamp",
-          extrapolateRight: "clamp",
-        },
-      ),
-    );
-  }
-
   return frame >= end.frame
     ? unwrapMotionValue(end.value)
     : unwrapMotionValue(start.value);
@@ -402,8 +380,6 @@ const unwrapMotionValue = (value: MotionValue): ResolvedMotionScalar => {
       return value.boolean;
     case "text":
       return value.text;
-    case "vector":
-      return value.vector;
   }
 };
 

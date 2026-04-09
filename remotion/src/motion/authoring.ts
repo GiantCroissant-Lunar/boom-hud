@@ -59,6 +59,3 @@ export const booleanValue = (value: boolean): MotionValue =>
 
 export const textValue = (value: string): MotionValue =>
   defineMotionValue({ kind: "text", text: value });
-
-export const vectorValue = (...value: number[]): MotionValue =>
-  defineMotionValue({ kind: "vector", vector: value });

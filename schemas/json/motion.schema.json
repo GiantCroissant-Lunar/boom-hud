@@ -225,7 +225,7 @@
         "kind": {
           "type": "string",
           "description": "Tagged value kind used for deterministic export.",
-          "enum": ["number", "boolean", "text", "vector"]
+          "enum": ["number", "boolean", "text"]
         },
         "number": {
           "type": "number",
@@ -238,15 +238,6 @@
         "text": {
           "type": "string",
           "description": "String value used when kind is text."
-        },
-        "vector": {
-          "type": "array",
-          "description": "Vector value used when kind is vector.",
-          "items": {
-            "type": "number"
-          },
-          "minItems": 2,
-          "maxItems": 4
         }
       },
       "additionalProperties": false,
@@ -273,14 +264,6 @@
           },
           "then": {
             "required": ["text"]
-          }
-        },
-        {
-          "if": {
-            "properties": { "kind": { "const": "vector" } }
-          },
-          "then": {
-            "required": ["vector"]
           }
         }
       ]
