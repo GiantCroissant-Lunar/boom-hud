@@ -1,0 +1,337 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/motion.schema.json",
+  "version": "1.0",
+  "name": "MinimapMotion",
+  "framesPerSecond": 30,
+  "defaultSequenceId": "generatedMinimapDemo",
+  "clips": [
+    {
+      "id": "minimapBoot",
+      "name": "Minimap Boot",
+      "startFrame": 0,
+      "durationFrames": 18,
+      "tracks": [
+        {
+          "id": "minimapRoot",
+          "targetId": "Component/Minimap",
+          "targetKind": "root",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 10, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionY",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 16 } },
+                { "frame": 14, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "scaleX",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.94 } },
+                { "frame": 18, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "scaleY",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.94 } },
+                { "frame": 18, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "terrainSweep",
+      "name": "Terrain Sweep",
+      "startFrame": 0,
+      "durationFrames": 44,
+      "tracks": [
+        {
+          "id": "row0Reveal",
+          "targetId": "r0",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 8, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": -18 } },
+                { "frame": 8, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row1Reveal",
+          "targetId": "UWSWW",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 4, "value": { "kind": "number", "number": 0 } },
+                { "frame": 12, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 4, "value": { "kind": "number", "number": 18 } },
+                { "frame": 12, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row2Reveal",
+          "targetId": "r2",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 8, "value": { "kind": "number", "number": 0 } },
+                { "frame": 16, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 8, "value": { "kind": "number", "number": -18 } },
+                { "frame": 16, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row3Reveal",
+          "targetId": "r3",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 12, "value": { "kind": "number", "number": 0 } },
+                { "frame": 20, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 12, "value": { "kind": "number", "number": 18 } },
+                { "frame": 20, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row4Reveal",
+          "targetId": "r4",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 16, "value": { "kind": "number", "number": 0 } },
+                { "frame": 24, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 16, "value": { "kind": "number", "number": -18 } },
+                { "frame": 24, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row5Reveal",
+          "targetId": "r5",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 20, "value": { "kind": "number", "number": 0 } },
+                { "frame": 28, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 20, "value": { "kind": "number", "number": 18 } },
+                { "frame": 28, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row6Reveal",
+          "targetId": "r6",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 24, "value": { "kind": "number", "number": 0 } },
+                { "frame": 32, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 24, "value": { "kind": "number", "number": -18 } },
+                { "frame": 32, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row7Reveal",
+          "targetId": "r7",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 28, "value": { "kind": "number", "number": 0 } },
+                { "frame": 36, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 28, "value": { "kind": "number", "number": 18 } },
+                { "frame": 36, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row8Reveal",
+          "targetId": "r8",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 32, "value": { "kind": "number", "number": 0 } },
+                { "frame": 40, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 32, "value": { "kind": "number", "number": -18 } },
+                { "frame": 40, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "row9Reveal",
+          "targetId": "r9",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 36, "value": { "kind": "number", "number": 0 } },
+                { "frame": 44, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 36, "value": { "kind": "number", "number": 18 } },
+                { "frame": 44, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "centerPulse",
+      "name": "Center Pulse",
+      "startFrame": 0,
+      "durationFrames": 20,
+      "tracks": [
+        {
+          "id": "focusBandUpper",
+          "targetId": "r4",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.78 } },
+                { "frame": 8, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" },
+                { "frame": 14, "value": { "kind": "number", "number": 0.9 }, "easing": "easeInOut" },
+                { "frame": 20, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "focusBandCenter",
+          "targetId": "r5",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.72 } },
+                { "frame": 8, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" },
+                { "frame": 14, "value": { "kind": "number", "number": 0.92 }, "easing": "easeInOut" },
+                { "frame": 20, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "focusBandLower",
+          "targetId": "r6",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.78 } },
+                { "frame": 8, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" },
+                { "frame": 14, "value": { "kind": "number", "number": 0.9 }, "easing": "easeInOut" },
+                { "frame": 20, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sequences": [
+    {
+      "id": "generatedMinimapDemo",
+      "name": "Generated Minimap Demo",
+      "items": [
+        { "clipId": "minimapBoot", "startFrame": 0, "fillMode": "holdEnd" },
+        { "clipId": "terrainSweep", "startFrame": 6, "fillMode": "holdEnd" },
+        { "clipId": "centerPulse", "startFrame": 38, "fillMode": "none" }
+      ]
+    }
+  ]
+}
