@@ -154,6 +154,7 @@ namespace BoomHud.Unity.Editor
             document.visualTreeAsset = descriptor.VisualTreeAsset;
 
             var motionHost = (BoomHudUiToolkitMotionHost)rootObject.AddComponent(hostType);
+            var previewBootstrap = rootObject.AddComponent<BoomHudMotionPreviewBootstrap>();
             var director = rootObject.AddComponent<PlayableDirector>();
             director.playOnAwake = true;
             director.playableAsset = timeline;
@@ -164,6 +165,8 @@ namespace BoomHud.Unity.Editor
 
             EditorUtility.SetDirty(document);
             EditorUtility.SetDirty(motionHost);
+            ConfigurePreviewBootstrap(previewBootstrap, director, motionHost, descriptor.DefaultClipId);
+            EditorUtility.SetDirty(previewBootstrap);
             EditorUtility.SetDirty(director);
             EditorSceneManager.MarkSceneDirty(scene);
 
@@ -344,6 +347,15 @@ namespace BoomHud.Unity.Editor
             }
 
             return panelSettings;
+        }
+
+        private static void ConfigurePreviewBootstrap(
+            BoomHudMotionPreviewBootstrap previewBootstrap,
+            PlayableDirector director,
+            BoomHudUiToolkitMotionHost motionHost,
+            string defaultClipId)
+        {
+            previewBootstrap.Configure(director, motionHost, defaultClipId);
         }
 
         private static TimelineAsset EnsureTimelineAsset(string timelinePath, MotionHostDescriptor descriptor)

@@ -161,6 +161,10 @@ public sealed class PenToIrConverter
         {
             metadata[BoomHudMetadataKeys.PencilTop] = y;
         }
+        if (HasAbsolutePosition(node))
+        {
+            metadata[BoomHudMetadataKeys.PencilPosition] = "absolute";
+        }
         if (!string.IsNullOrWhiteSpace(sourceNode.Ref))
         {
             metadata[BoomHudMetadataKeys.PencilComponentRef] = sourceNode.Ref;
@@ -592,8 +596,11 @@ public sealed class PenToIrConverter
 
     private static LayoutType MapLayoutType(string? modeOrType, string? direction, string? position)
     {
-        if (position?.Equals("absolute", StringComparison.OrdinalIgnoreCase) == true)
+        if (position?.Equals("absolute", StringComparison.OrdinalIgnoreCase) == true
+            && string.IsNullOrWhiteSpace(modeOrType))
+        {
             return LayoutType.Absolute;
+        }
 
         return modeOrType?.ToLowerInvariant() switch
         {
@@ -604,6 +611,34 @@ public sealed class PenToIrConverter
             "flex" => direction?.ToLowerInvariant() == "row" ? LayoutType.Horizontal : LayoutType.Vertical,
             _ => LayoutType.Vertical
         };
+    }
+
+    private static bool HasAbsolutePosition(PenNodeDto node)
+    {
+        if (node.Layout is PenLayoutDto layoutDto)
+        {
+            return string.Equals(layoutDto.Position, "absolute", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(layoutDto.Type, "absolute", StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (node.Layout is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Object)
+        {
+            if (jsonElement.TryGetProperty("position", out var position)
+                && position.ValueKind == JsonValueKind.String
+                && string.Equals(position.GetString(), "absolute", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (jsonElement.TryGetProperty("type", out var type)
+                && type.ValueKind == JsonValueKind.String
+                && string.Equals(type.GetString(), "absolute", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Alignment MapAlignment(string? align)
@@ -680,6 +715,12 @@ public sealed class PenToIrConverter
     {
         if (value == null) return null;
 
+        var tokenName = ExtractTokenName(value);
+        if (!string.IsNullOrWhiteSpace(tokenName))
+        {
+            return ResolveInlineColorToken(tokenName);
+        }
+
         if (value is JsonElement je)
         {
             if (je.ValueKind == JsonValueKind.String)
@@ -723,6 +764,36 @@ public sealed class PenToIrConverter
         catch
         {
             _warnings.Add($"Could not parse color: '{value}'");
+            return null;
+        }
+    }
+
+    private Color? ResolveInlineColorToken(string tokenName)
+    {
+        var colors = _pen.Tokens?.Colors;
+        if (colors == null || colors.Count == 0)
+        {
+            return null;
+        }
+
+        var normalizedTokenName = tokenName.Trim();
+        if (normalizedTokenName.StartsWith("colors.", StringComparison.OrdinalIgnoreCase))
+        {
+            normalizedTokenName = normalizedTokenName["colors.".Length..];
+        }
+
+        if (!colors.TryGetValue(normalizedTokenName, out var colorValue) || string.IsNullOrWhiteSpace(colorValue))
+        {
+            return null;
+        }
+
+        try
+        {
+            return Color.Parse(colorValue);
+        }
+        catch
+        {
+            _warnings.Add($"Could not parse inline token color '{tokenName}' with value '{colorValue}'.");
             return null;
         }
     }

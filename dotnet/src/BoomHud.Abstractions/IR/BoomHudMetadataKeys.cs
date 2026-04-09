@@ -7,5 +7,6 @@ public static class BoomHudMetadataKeys
     public const string OriginalPencilType = "boomhud:originalPencilType";
     public const string PencilLeft = "boomhud:pencilLeft";
     public const string PencilTop = "boomhud:pencilTop";
+    public const string PencilPosition = "boomhud:pencilPosition";
     public const string PencilComponentRef = "boomhud:pencilComponentRef";
 }

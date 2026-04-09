@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -191,6 +192,11 @@ public readonly record struct Color
 
         value = value.Trim().ToLowerInvariant();
 
+        if (value.StartsWith("rgba(", StringComparison.Ordinal) || value.StartsWith("rgb(", StringComparison.Ordinal))
+        {
+            return ParseRgbFunction(value);
+        }
+
         // Named colors
         return value switch
         {
@@ -208,6 +214,79 @@ public readonly record struct Color
             "transparent" => Transparent,
             _ => ParseHex(value)
         };
+    }
+
+    private static Color ParseRgbFunction(string value)
+    {
+        var openParen = value.IndexOf('(');
+        var closeParen = value.LastIndexOf(')');
+        if (openParen < 0 || closeParen <= openParen)
+        {
+            throw new ArgumentException($"Invalid color format: {value}", nameof(value));
+        }
+
+        var functionName = value[..openParen];
+        var parts = value[(openParen + 1)..closeParen]
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        if (string.Equals(functionName, "rgb", StringComparison.Ordinal))
+        {
+            if (parts.Length != 3)
+            {
+                throw new ArgumentException($"Invalid rgb() color format: {value}", nameof(value));
+            }
+
+            return new Color(
+                ParseRgbChannel(parts[0]),
+                ParseRgbChannel(parts[1]),
+                ParseRgbChannel(parts[2]));
+        }
+
+        if (string.Equals(functionName, "rgba", StringComparison.Ordinal))
+        {
+            if (parts.Length != 4)
+            {
+                throw new ArgumentException($"Invalid rgba() color format: {value}", nameof(value));
+            }
+
+            return new Color(
+                ParseRgbChannel(parts[0]),
+                ParseRgbChannel(parts[1]),
+                ParseRgbChannel(parts[2]),
+                ParseAlphaChannel(parts[3]));
+        }
+
+        throw new ArgumentException($"Invalid color format: {value}", nameof(value));
+    }
+
+    private static byte ParseRgbChannel(string value)
+    {
+        if (value.EndsWith('%'))
+        {
+            var percent = double.Parse(value[..^1], CultureInfo.InvariantCulture);
+            return ClampToByte(Math.Round(percent / 100d * 255d, MidpointRounding.AwayFromZero));
+        }
+
+        return ClampToByte(double.Parse(value, CultureInfo.InvariantCulture));
+    }
+
+    private static byte ParseAlphaChannel(string value)
+    {
+        if (value.EndsWith('%'))
+        {
+            var percent = double.Parse(value[..^1], CultureInfo.InvariantCulture);
+            return ClampToByte(Math.Round(percent / 100d * 255d, MidpointRounding.AwayFromZero));
+        }
+
+        var alpha = double.Parse(value, CultureInfo.InvariantCulture);
+        return alpha <= 1d
+            ? ClampToByte(Math.Round(alpha * 255d, MidpointRounding.AwayFromZero))
+            : ClampToByte(alpha);
+    }
+
+    private static byte ClampToByte(double value)
+    {
+        return (byte)Math.Clamp(value, byte.MinValue, byte.MaxValue);
     }
 
     private static Color ParseHex(string hex)

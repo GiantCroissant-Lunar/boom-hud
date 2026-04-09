@@ -325,6 +325,106 @@ public class PencilEndToEndTests
     }
 
     [Fact]
+    public void ParseAndGenerate_PenInlineTokens_Unity_ResolvesColorsAndAbsoluteRoot()
+    {
+        var penJson = """
+            {
+              "version": "1.0",
+              "name": "DebugOverlay",
+              "tokens": {
+                "colors": {
+                  "debug-bg": "rgba(0, 0, 0, 0.85)",
+                  "debug-text": "#00ff00",
+                  "debug-muted": "#888888"
+                }
+              },
+              "nodes": [
+                {
+                  "id": "root",
+                  "type": "frame",
+                  "name": "DebugOverlay",
+                  "layout": {
+                    "mode": "vertical",
+                    "position": "absolute",
+                    "width": "hug",
+                    "padding": { "top": 8, "right": 12, "bottom": 8, "left": 12 }
+                  },
+                  "style": {
+                    "background": { "$ref": "tokens.colors.debug-bg" }
+                  },
+                  "children": [
+                    {
+                      "id": "fps-row",
+                      "type": "frame",
+                      "name": "FpsRow",
+                      "layout": { "mode": "horizontal", "width": "fill" },
+                      "children": [
+                        {
+                          "id": "fps-label",
+                          "type": "text",
+                          "name": "FpsLabel",
+                          "content": "FPS",
+                          "style": { "fill": { "$ref": "tokens.colors.debug-muted" } }
+                        },
+                        {
+                          "id": "fps-value",
+                          "type": "text",
+                          "name": "FpsValue",
+                          "content": "60",
+                          "style": { "fill": { "$ref": "tokens.colors.debug-text" } }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            """;
+
+        var document = _parser.Parse(penJson);
+        var generator = new UnityGenerator();
+        var result = generator.Generate(document, _unityOptions);
+
+        result.Success.Should().BeTrue();
+        document.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+        document.Root.Style!.Background.Should().Be(new Color(0, 0, 0, 217));
+        document.Root.Children[0].Children[0].Style!.Foreground.Should().Be(new Color(136, 136, 136));
+        document.Root.Children[0].Children[1].Style!.Foreground.Should().Be(Color.Green);
+
+        var ussFile = result.Files.First(f => f.Path == "DebugOverlayView.uss");
+        ussFile.Content.Should().Contain("background-color: #000000D9;");
+        ussFile.Content.Should().Contain("color: #888888;");
+        ussFile.Content.Should().Contain("color: #00FF00;");
+        ussFile.Content.Should().Contain("position: absolute;");
+        ussFile.Content.Should().Contain("left: 0px;");
+        ussFile.Content.Should().Contain("top: 0px;");
+        ussFile.Content.Should().Contain("flex-direction: column;");
+    }
+
+    [Fact]
+    public void ParseAndGenerate_DebugOverlayPen_Unity_ResolvesRgbaBackgroundAndKeepsFlowLayout()
+    {
+        var penPath = GetRepoFilePath(@"ui\sources\pencil\debug-overlay.pen");
+        var penJson = File.ReadAllText(penPath);
+
+        var document = _parser.Parse(penJson);
+        var generator = new UnityGenerator();
+        var result = generator.Generate(document, _unityOptions);
+
+        result.Success.Should().BeTrue();
+        document.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+        document.Root.Style!.Background.Should().Be(new Color(0, 0, 0, 217));
+        document.Root.Style.BackgroundToken.Should().Be("colors.debug-bg");
+
+        var ussFile = result.Files.First(f => f.Path == "DebugOverlayView.uss");
+        ussFile.Content.Should().Contain("background-color: #000000D9;");
+        ussFile.Content.Should().Contain(".boomhud-fps-row {");
+        ussFile.Content.Should().Contain("width: auto;");
+        ussFile.Content.Should().Contain("justify-content: flex-start;");
+        ussFile.Content.Should().NotContain("justify-content: space-between;");
+    }
+
+    [Fact]
     public void ParseAndGenerate_TokenRefs_ResolvedAsTokenNames()
     {
         // Arrange - .pen file with token references
