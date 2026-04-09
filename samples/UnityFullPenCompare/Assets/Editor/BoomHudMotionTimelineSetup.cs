@@ -16,6 +16,7 @@ namespace BoomHud.Compare.Editor
         private const string ScenePath = SceneDirectory + "/DebugOverlayMotionTimeline.unity";
         private const string TimelineDirectory = "Assets/BoomHudCompare/Timelines";
         private const string TimelinePath = TimelineDirectory + "/DebugOverlayMotionTimeline.playable";
+        private const string DebugOverlayUxmlPath = "Assets/Resources/BoomHudGenerated/DebugOverlayView.uxml";
 
         [MenuItem("Tools/BoomHud/Setup Debug Overlay Motion Timeline Scene", priority = 103)]
         public static void SetupSceneFromMenu()
@@ -36,6 +37,7 @@ namespace BoomHud.Compare.Editor
             var rootObject = new GameObject("BoomHud Debug Overlay Motion Timeline");
             var document = rootObject.AddComponent<UIDocument>();
             document.panelSettings = panelSettings;
+            document.visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DebugOverlayUxmlPath);
 
             var motionHost = rootObject.AddComponent<DebugOverlayMotionHost>();
             var director = rootObject.AddComponent<PlayableDirector>();

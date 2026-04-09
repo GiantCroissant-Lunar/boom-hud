@@ -10,6 +10,7 @@ namespace BoomHud.Compare.Editor
     {
         private const string SceneDirectory = "Assets/BoomHudCompare/Scenes";
         private const string ScenePath = SceneDirectory + "/DebugOverlayMotionPreview.unity";
+        private const string DebugOverlayUxmlPath = "Assets/Resources/BoomHudGenerated/DebugOverlayView.uxml";
 
         [MenuItem("Tools/BoomHud/Setup Debug Overlay Motion Scene", priority = 102)]
         public static void SetupSceneFromMenu()
@@ -28,6 +29,7 @@ namespace BoomHud.Compare.Editor
             var rootObject = new GameObject("BoomHud Debug Overlay Motion");
             var document = rootObject.AddComponent<UIDocument>();
             document.panelSettings = panelSettings;
+            document.visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DebugOverlayUxmlPath);
             rootObject.AddComponent<DebugOverlayMotionHost>();
 
             var cameraObject = new GameObject("Main Camera");
