@@ -1,0 +1,29 @@
+# Kilo Adapter Configuration
+
+tool: kilo
+display_name: Kilo Code
+
+rules:
+  strategy: directory
+  target: .kilo/rules
+  extra_source: .agent/adapters/kilo/rules
+
+skills:
+  strategy: copy_full
+  target: .kilo/skills
+  source: .agent/skills
+
+commands:
+  enabled: true
+  target: .kilo/commands
+  source: .agent/adapters/kilo/commands
+
+agents:
+  enabled: true
+  source: .agent/adapters/kilo/agents
+  target: .kilo/agents
+
+workflows:
+  enabled: false
+
+cleanup: []

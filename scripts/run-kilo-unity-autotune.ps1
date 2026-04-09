@@ -50,7 +50,7 @@ if ([string]::IsNullOrWhiteSpace($TargetFile))
 
 if ([string]::IsNullOrWhiteSpace($PromptTemplate))
 {
-    $PromptTemplate = Join-Path $RepoRoot ".kilocode\prompts\unity-generator-autotune.md"
+    $PromptTemplate = Join-Path $RepoRoot ".agent\adapters\kilo\prompts\unity-generator-autotune.md"
 }
 
 $cliProject = Join-Path $RepoRoot "dotnet\src\BoomHud.Cli\BoomHud.Cli.csproj"

@@ -6,7 +6,7 @@ from typing import Any
 
 AGENT_DIR = Path(".agent")
 ADAPTERS_DIR = AGENT_DIR / "adapters"
-COMMANDS_SOURCE = AGENT_DIR / "commands"
+DEFAULT_COMMANDS_SOURCE = AGENT_DIR / "commands"
 
 
 def parse_simple_yaml(lines: list[str]) -> dict[str, Any]:
@@ -66,11 +66,15 @@ def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def main() -> int:
-    if not COMMANDS_SOURCE.exists():
-        print(f"Nothing to sync: {COMMANDS_SOURCE} does not exist")
-        return 0
+def get_commands_source(cmd_cfg: dict[str, Any]) -> Path:
+    source = cmd_cfg.get("source")
+    if isinstance(source, str) and source:
+        return Path(source)
 
+    return DEFAULT_COMMANDS_SOURCE
+
+
+def main() -> int:
     configs = load_adapter_configs()
 
     for tool, cfg in configs.items():
@@ -85,6 +89,10 @@ def main() -> int:
         if not isinstance(target, str) or not target:
             continue
 
+        source_dir = get_commands_source(cmd_cfg)
+        if not source_dir.exists():
+            continue
+
         target_dir = Path(target)
         ensure_dir(target_dir)
 
@@ -94,12 +102,12 @@ def main() -> int:
             for existing in target_dir.glob("*.toml"):
                 if existing.is_file():
                     existing.unlink()
-            for src in COMMANDS_SOURCE.glob("*.md"):
+            for src in sorted(source_dir.glob("*.md")):
                 dst = target_dir / (src.stem + ".toml")
                 dst.write_text(
                     "\n".join(
                         [
-                            f"# Auto-generated pointer to .agent/commands/{src.name}",
+                            f"# Auto-generated pointer to {src.as_posix()}",
                             "",
                             "[command]",
                             f'name = "{src.stem}"',
@@ -107,7 +115,7 @@ def main() -> int:
                             "",
                             "[command.prompt]",
                             'text = """',
-                            f"This command is defined in .agent/commands/{src.name}",
+                            f"This command is defined in {src.as_posix()}",
                             "Please read and execute the instructions from that file.",
                             '"""',
                             "",
@@ -121,7 +129,7 @@ def main() -> int:
             if existing.is_file():
                 existing.unlink()
 
-        for src in COMMANDS_SOURCE.glob("*.md"):
+        for src in sorted(source_dir.glob("*.md")):
             dst = target_dir / src.name
             shutil.copy2(src, dst)
 

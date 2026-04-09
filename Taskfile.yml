@@ -7,31 +7,37 @@ tasks:
       - task --list
 
   agent:sync:
-    desc: Sync all tool-specific directories from .agent
+    desc: Sync all tool-specific directories from .agent and adapter overlays
     cmds:
+      - task: agent:sync-agents
       - task: agent:sync-skills
       - task: agent:sync-rules
       - task: agent:sync-workflows
       - task: agent:sync-commands
       - task: agent:sync-opencode
 
+  agent:sync-agents:
+    desc: Sync adapter-specific agent definitions from configured adapter sources
+    cmds:
+      - python scripts/sync_agents.py
+
   agent:sync-skills:
-    desc: Sync skill stubs/copies from .agent/skills to tool-specific directories
+    desc: Sync skill stubs/copies from configured skill sources to tool-specific directories
     cmds:
       - python scripts/sync_skills.py
 
   agent:sync-rules:
-    desc: Sync rules from .agent/rules to tool-specific directories
+    desc: Sync shared rules plus adapter-specific rule overlays to tool-specific directories
     cmds:
       - python scripts/sync_rules.py
 
   agent:sync-workflows:
-    desc: Sync workflows from .agent/workflows to tool-specific directories
+    desc: Sync workflows from configured workflow sources to tool-specific directories
     cmds:
       - python scripts/sync_workflows.py
 
   agent:sync-commands:
-    desc: Sync commands from .agent/commands to tool-specific directories
+    desc: Sync commands from configured shared or adapter-specific sources to tool-specific directories
     cmds:
       - python scripts/sync_commands.py
 

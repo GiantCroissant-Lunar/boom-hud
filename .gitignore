@@ -9,7 +9,7 @@
 .codex/
 .cursor/
 .gemini/
-.kilocode/
+.kilo/
 .opencode/
 .windsurf/
 
@@ -36,3 +36,9 @@ _test_output/
 node_modules/
 
 remotion\build
+
+# Local preview captures and ad hoc render notes
+/charportrait-*.png
+/generated-motion-demo-*.png
+/remotion-generated-fullpen*.png
+/remotion-generated-fullpen.md

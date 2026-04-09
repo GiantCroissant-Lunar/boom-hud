@@ -6,7 +6,6 @@ from typing import Any
 
 AGENT_DIR = Path(".agent")
 ADAPTERS_DIR = AGENT_DIR / "adapters"
-DEFAULT_RULES_SOURCE = AGENT_DIR / "rules"
 
 
 def parse_simple_yaml(lines: list[str]) -> dict[str, Any]:
@@ -62,62 +61,51 @@ def load_adapter_configs() -> dict[str, dict[str, Any]]:
     return configs
 
 
-def ensure_dir(path: Path) -> None:
+def ensure_empty_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
+    for item in path.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink()
 
 
-def get_rule_sources(rules_cfg: dict[str, Any]) -> list[Path]:
-    sources: list[Path] = []
-
-    source = rules_cfg.get("source")
-    if isinstance(source, str) and source:
-        sources.append(Path(source))
-    else:
-        sources.append(DEFAULT_RULES_SOURCE)
-
-    extra_source = rules_cfg.get("extra_source")
-    if isinstance(extra_source, str) and extra_source:
-        sources.append(Path(extra_source))
-
-    return sources
+def copy_contents(src: Path, dst: Path) -> None:
+    for item in src.iterdir():
+        target = dst / item.name
+        if item.is_dir():
+            shutil.copytree(item, target)
+        else:
+            shutil.copy2(item, target)
 
 
 def main() -> int:
     configs = load_adapter_configs()
 
     for tool, cfg in configs.items():
-        rules_cfg = cfg.get("rules")
-        if not isinstance(rules_cfg, dict):
+        agents_cfg = cfg.get("agents")
+        if not isinstance(agents_cfg, dict):
             continue
 
-        if rules_cfg.get("strategy") != "directory":
+        if not agents_cfg.get("enabled", False):
             continue
 
-        target = rules_cfg.get("target")
+        source = agents_cfg.get("source")
+        target = agents_cfg.get("target")
+        if not isinstance(source, str) or not source:
+            continue
         if not isinstance(target, str) or not target:
             continue
 
-        ext = rules_cfg.get("extension", ".md")
-        if not isinstance(ext, str) or not ext:
-            ext = ".md"
-
-        sources = [source for source in get_rule_sources(rules_cfg) if source.exists()]
-        if not sources:
+        source_dir = Path(source)
+        if not source_dir.exists():
             continue
 
         target_dir = Path(target)
-        ensure_dir(target_dir)
+        ensure_empty_dir(target_dir)
+        copy_contents(source_dir, target_dir)
 
-        for existing in target_dir.glob(f"*{ext}"):
-            if existing.is_file():
-                existing.unlink()
-
-        for source_dir in sources:
-            for src in sorted(source_dir.glob("*.md")):
-                dst = target_dir / (src.stem + ext)
-                shutil.copy2(src, dst)
-
-    print("Synced rules")
+    print("Synced agents")
     return 0
 
 

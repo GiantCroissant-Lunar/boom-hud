@@ -13,7 +13,9 @@ This directory contains agent configuration, rules, and workflows for the BoomHu
 ```
 .agent/
 ├── README.md           # This file
-├── adapters/           # Tool-specific sync configuration
+├── adapters/           # Tool-specific sync configuration and overlays
+│   └── <tool>/         # Adapter-only rules, commands, agents, etc.
+├── commands/           # Shared commands for tools that support them
 ├── rules/              # Development rules and guidelines
 │   ├── schema-first.md          # Schema-first design patterns
 │   ├── code-generation.md       # Generator implementation rules
@@ -80,6 +82,8 @@ dotnet test BoomHud.sln
 ## Sync Commands
 
 This repo can generate tool-specific agent directories (for Windsurf/Cursor/Cline/etc.) from `.agent/`.
+
+Adapter-specific content can live under `.agent/adapters/<tool>/` and will be synced only for that tool.
 
 ```bash
 task agent:sync
