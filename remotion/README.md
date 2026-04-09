@@ -93,7 +93,7 @@ The Remotion workspace now exposes typed helpers under `src/motion/`:
 
 - `schema.ts`: Zod schemas and TypeScript types mirroring `schemas/json/motion.schema.json`
 - `authoring.ts`: object-literal helpers like `defineMotionDocument()` and `parseMotionDocument()`
-- `runtime.ts`: frame evaluation helpers like `resolveClipStateAtFrame()` and `useMotionTargetState()`
+- `runtime.ts`: frame evaluation helpers like `resolveClipStateAtFrame()`, `resolveSequenceStateAtFrame()`, and `useMotionTargetState()`
 - `MotionScene.tsx`: wrapper that injects `motionTargets` into generated BoomHud React views
 
 Example:
@@ -130,6 +130,11 @@ const document = defineMotionDocument({
 
 This keeps JSON as the source of truth while still giving Remotion typed authoring and playback utilities.
 
+The Remotion workspace now exposes both:
+
+- `GeneratedMotionDemo`: the focused `CharPortraitView` motion surface
+- `GeneratedFullPenDemo`: the full `ExploreHudView` generated from `samples/pencil/full.pen`, with the same motion IR applied to the nested targets it defines
+
 Generated BoomHud React views can now be driven declaratively:
 
 ```tsx
@@ -144,6 +149,27 @@ import { CharPortraitView } from "./generated/CharPortraitView";
 />;
 ```
 
+For finer-grained playback, keep bars, buttons, and other nested elements in separate clips and compose them in a sequence:
+
+```tsx
+import { MotionScene, type MotionSequence } from "./src/motion";
+
+const sequence: MotionSequence = [
+  { clipId: "portraitIntro", startFrame: 0, fillMode: "holdEnd" },
+  { clipId: "hpBarFill", startFrame: 14, fillMode: "holdBoth" },
+  { clipId: "atkReveal", startFrame: 42, fillMode: "holdBoth" },
+];
+
+<MotionScene
+  document={document}
+  sequence={sequence}
+  component={CharPortraitView}
+  viewModel={{}}
+/>;
+```
+
+This keeps motion authored as separate clips, which is a better fit for later exporting independent timing into Unity timelines.
+
 ## Studio
 
 Remotion Studio is available locally in this workspace after install.
@@ -154,8 +180,13 @@ From [remotion](C:/lunar-horse/plate-projects/boom-hud/remotion):
 npm run preview
 ```
 
-The demo composition added in this repo is `GeneratedMotionDemo`. It renders:
+The demo compositions added in this repo are:
 
-- a generated BoomHud React view at `src/generated/CharPortraitView.tsx`
-- a Motion JSON document at `src/motion-samples/char-portrait.motion.json`
-- through the `MotionScene` bridge in `src/motion/MotionScene.tsx`
+- `GeneratedMotionDemo`: renders the focused `CharPortraitView` motion surface
+- `GeneratedFullPenDemo`: renders the full `ExploreHudView` generated from `samples/pencil/full.pen`
+
+Both compositions use:
+
+- generated BoomHud React views under `src/generated/`
+- the shared Motion JSON document at `src/motion-samples/char-portrait.motion.json`
+- the `MotionScene` bridge in `src/motion/MotionScene.tsx`

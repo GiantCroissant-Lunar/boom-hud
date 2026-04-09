@@ -1,17 +1,26 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { z } from "zod";
-import { MotionScene, parseMotionDocument } from "./motion";
+import {
+  MotionScene,
+  getSequenceDurationFrames,
+  getRequiredMotionSequence,
+  parseMotionDocument,
+} from "./motion";
 import { CharPortraitView } from "./generated/CharPortraitView";
 import type { CharPortraitViewModel } from "./generated/CharPortraitView";
 import motionJson from "./motion-samples/char-portrait.motion.json";
 
 const motionDocument = parseMotionDocument(motionJson);
-const introClip = motionDocument.clips.find((clip) => clip.id === "intro");
 
-if (!introClip) {
-  throw new Error("Expected intro clip in char-portrait.motion.json");
-}
+export const generatedMotionDemoSequence = getRequiredMotionSequence(motionDocument);
+
+export const generatedMotionDemoDurationInFrames = getSequenceDurationFrames(
+  motionDocument,
+  generatedMotionDemoSequence,
+);
+
+export const generatedMotionDemoFramesPerSecond = motionDocument.framesPerSecond;
 
 export const GeneratedMotionDemoSchema = z.object({});
 export type GeneratedMotionDemoSchema = z.infer<typeof GeneratedMotionDemoSchema>;
@@ -30,7 +39,7 @@ export const GeneratedMotionDemo: React.FC<GeneratedMotionDemoSchema> = () => {
     >
       <MotionScene
         document={motionDocument}
-        clipId={introClip.id}
+        sequence={generatedMotionDemoSequence}
         component={CharPortraitView}
         viewModel={demoViewModel}
       />

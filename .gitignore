@@ -34,3 +34,5 @@ _test_output/
 .godot/
 
 node_modules/
+
+remotion\build

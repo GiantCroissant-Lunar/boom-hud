@@ -25,12 +25,23 @@
       "minimum": 1,
       "default": 30
     },
+    "defaultSequenceId": {
+      "type": "string",
+      "description": "Optional default timeline sequence id to use when building staged playback from this motion document."
+    },
     "clips": {
       "type": "array",
       "description": "Named motion clips contained in this document.",
       "minItems": 1,
       "items": {
         "$ref": "#/definitions/motionClip"
+      }
+    },
+    "sequences": {
+      "type": "array",
+      "description": "Optional staged clip sequences that compose multiple clips into a single timeline arrangement.",
+      "items": {
+        "$ref": "#/definitions/motionSequence"
       }
     }
   },
@@ -66,6 +77,56 @@
           "items": {
             "$ref": "#/definitions/motionTrack"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionSequence": {
+      "type": "object",
+      "required": ["id", "name", "items"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the sequence."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the sequence."
+        },
+        "items": {
+          "type": "array",
+          "description": "Ordered clip placements in the composed sequence.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/motionSequenceItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionSequenceItem": {
+      "type": "object",
+      "required": ["clipId"],
+      "properties": {
+        "clipId": {
+          "type": "string",
+          "description": "Referenced clip id to place in the sequence."
+        },
+        "startFrame": {
+          "type": "integer",
+          "description": "Optional absolute start frame for the clip within the sequence.",
+          "minimum": 0
+        },
+        "durationFrames": {
+          "type": "integer",
+          "description": "Optional active duration for the clip within the sequence.",
+          "minimum": 1
+        },
+        "fillMode": {
+          "type": "string",
+          "description": "How the clip should behave before and after its active range when composed on a timeline.",
+          "enum": ["none", "holdStart", "holdEnd", "holdBoth"],
+          "default": "none"
         }
       },
       "additionalProperties": false
@@ -230,6 +291,7 @@
       "version": "1.0",
       "name": "HudMotion",
       "framesPerSecond": 30,
+      "defaultSequenceId": "introSequence",
       "clips": [
         {
           "id": "intro",
@@ -264,6 +326,19 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": "introSequence",
+          "name": "Intro Sequence",
+          "items": [
+            {
+              "clipId": "intro",
+              "startFrame": 0,
+              "fillMode": "holdEnd"
             }
           ]
         }

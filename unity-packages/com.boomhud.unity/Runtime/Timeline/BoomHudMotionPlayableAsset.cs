@@ -20,7 +20,7 @@ namespace BoomHud.Unity.Timeline
         public double TimeOffsetSeconds
         {
             get => _timeOffsetSeconds;
-            set => _timeOffsetSeconds = Math.Max(0d, value);
+            set => _timeOffsetSeconds = value;
         }
 
         public ClipCaps clipCaps => ClipCaps.ClipIn | ClipCaps.SpeedMultiplier;

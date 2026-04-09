@@ -86,11 +86,40 @@ export const MotionClipSchema = z.object({
 });
 export type MotionClip = z.infer<typeof MotionClipSchema>;
 
+export const MotionSequenceFillModeValueSchema = z.enum([
+  "none",
+  "holdStart",
+  "holdEnd",
+  "holdBoth",
+]);
+export type MotionSequenceFillModeValue = z.infer<
+  typeof MotionSequenceFillModeValueSchema
+>;
+
+export const MotionSequenceEntrySchema = z.object({
+  clipId: z.string().min(1),
+  startFrame: z.number().int().min(0).optional(),
+  durationFrames: z.number().int().min(1).optional(),
+  fillMode: MotionSequenceFillModeValueSchema.default("none"),
+});
+export type MotionSequenceEntry = z.infer<typeof MotionSequenceEntrySchema>;
+
+export const MotionSequenceDefinitionSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  items: z.array(MotionSequenceEntrySchema).min(1),
+});
+export type MotionSequenceDefinition = z.infer<
+  typeof MotionSequenceDefinitionSchema
+>;
+
 export const MotionDocumentSchema = z.object({
   $schema: z.string().default(MotionSchemaUrl),
   version: z.string().default(MotionSchemaVersion),
   name: z.string().min(1),
   framesPerSecond: z.number().int().min(1).default(30),
+  defaultSequenceId: z.string().min(1).optional(),
   clips: z.array(MotionClipSchema).min(1),
+  sequences: z.array(MotionSequenceDefinitionSchema).optional(),
 });
 export type MotionDocument = z.infer<typeof MotionDocumentSchema>;

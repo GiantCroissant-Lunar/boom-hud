@@ -39,6 +39,13 @@ namespace BoomHud.Abstractions.Motion.Generated
         public List<MotionClip> Clips { get; set; }
 
         /// <summary>
+        /// Optional default timeline sequence id to use when building staged playback from this motion document.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("defaultSequenceId")]
+        public string? DefaultSequenceId { get; set; }
+
+        /// <summary>
         /// Canonical frames-per-second value used for timing normalization.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -50,6 +57,13 @@ namespace BoomHud.Abstractions.Motion.Generated
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Optional staged clip sequences that compose multiple clips into a single timeline arrangement.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sequences")]
+        public List<MotionSequence> Sequences { get; set; }
 
         /// <summary>
         /// Motion document schema version.
@@ -119,6 +133,57 @@ namespace BoomHud.Abstractions.Motion.Generated
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("targetKind")]
         public TargetKind? TargetKind { get; set; }
+    }
+
+    public partial class MotionSequence
+    {
+        /// <summary>
+        /// Stable identifier for the sequence.
+        /// </summary>
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Ordered clip placements in the composed sequence.
+        /// </summary>
+        [JsonPropertyName("items")]
+        public List<MotionSequenceItem> Items { get; set; }
+
+        /// <summary>
+        /// Human-readable name for the sequence.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
+    public partial class MotionSequenceItem
+    {
+        /// <summary>
+        /// Referenced clip id to place in the sequence.
+        /// </summary>
+        [JsonPropertyName("clipId")]
+        public string ClipId { get; set; }
+
+        /// <summary>
+        /// Optional active duration for the clip within the sequence.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("durationFrames")]
+        public long? DurationFrames { get; set; }
+
+        /// <summary>
+        /// How the clip should behave before and after its active range when composed on a timeline.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("fillMode")]
+        public MotionSequenceFillMode? FillMode { get; set; }
+
+        /// <summary>
+        /// Optional absolute start frame for the clip within the sequence.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("startFrame")]
+        public long? StartFrame { get; set; }
     }
 
     public partial class MotionChannel
@@ -203,6 +268,11 @@ namespace BoomHud.Abstractions.Motion.Generated
     public enum Kind { Boolean, Number, Text, Vector };
 
     /// <summary>
+    /// How the clip should behave before and after its active range when composed on a timeline.
+    /// </summary>
+    public enum MotionSequenceFillMode { HoldBoth, HoldEnd, HoldStart, None };
+
+    /// <summary>
     /// Portable property identifier understood by all motion adapters.
     /// </summary>
     public enum Property { Color, Height, Opacity, PositionX, PositionY, PositionZ, Rotation, RotationX, RotationY, ScaleX, ScaleY, ScaleZ, SpriteFrame, Text, Visibility, Width };
@@ -230,6 +300,7 @@ namespace BoomHud.Abstractions.Motion.Generated
             {
                 EasingConverter.Singleton,
                 KindConverter.Singleton,
+                MotionSequenceFillModeConverter.Singleton,
                 PropertyConverter.Singleton,
                 TargetKindConverter.Singleton,
                 new DateOnlyConverter(),
@@ -330,6 +401,50 @@ namespace BoomHud.Abstractions.Motion.Generated
         }
 
         public static readonly KindConverter Singleton = new KindConverter();
+    }
+
+    internal class MotionSequenceFillModeConverter : JsonConverter<MotionSequenceFillMode>
+    {
+        public override bool CanConvert(Type t) => t == typeof(MotionSequenceFillMode);
+
+        public override MotionSequenceFillMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "holdBoth":
+                    return MotionSequenceFillMode.HoldBoth;
+                case "holdEnd":
+                    return MotionSequenceFillMode.HoldEnd;
+                case "holdStart":
+                    return MotionSequenceFillMode.HoldStart;
+                case "none":
+                    return MotionSequenceFillMode.None;
+            }
+            throw new Exception("Cannot unmarshal type MotionSequenceFillMode");
+        }
+
+        public override void Write(Utf8JsonWriter writer, MotionSequenceFillMode value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case MotionSequenceFillMode.HoldBoth:
+                    JsonSerializer.Serialize(writer, "holdBoth", options);
+                    return;
+                case MotionSequenceFillMode.HoldEnd:
+                    JsonSerializer.Serialize(writer, "holdEnd", options);
+                    return;
+                case MotionSequenceFillMode.HoldStart:
+                    JsonSerializer.Serialize(writer, "holdStart", options);
+                    return;
+                case MotionSequenceFillMode.None:
+                    JsonSerializer.Serialize(writer, "none", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type MotionSequenceFillMode");
+        }
+
+        public static readonly MotionSequenceFillModeConverter Singleton = new MotionSequenceFillModeConverter();
     }
 
     internal class PropertyConverter : JsonConverter<Property>

@@ -41,6 +41,7 @@ public sealed class UnityMotionExporterTests
         {
             Name = "DebugOverlayMotion",
             FramesPerSecond = 30,
+            DefaultSequenceId = "introSequence",
             Clips =
             [
                 new MotionClip
@@ -96,6 +97,23 @@ public sealed class UnityMotionExporterTests
                         }
                     ]
                 }
+            ],
+            Sequences =
+            [
+                new MotionSequence
+                {
+                    Id = "introSequence",
+                    Name = "Intro Sequence",
+                    Items =
+                    [
+                        new MotionSequenceItem
+                        {
+                            ClipId = "intro",
+                            StartFrame = 0,
+                            FillMode = MotionSequenceFillMode.HoldEnd
+                        }
+                    ]
+                }
             ]
         };
 
@@ -109,6 +127,16 @@ public sealed class UnityMotionExporterTests
         file.Content.Should().Contain("public const int FramesPerSecond = 30;");
         file.Content.Should().Contain("public const string DefaultClipId = \"intro\";");
         file.Content.Should().Contain("public static readonly string[] ClipIds =");
+        file.Content.Should().Contain("public const string DefaultSequenceId = \"introSequence\";");
+        file.Content.Should().Contain("public static readonly string[] SequenceIds =");
+        file.Content.Should().Contain("public static TimelineSequenceClip[] GetSequenceItems(string sequenceId)");
+        file.Content.Should().Contain("public string ClipId { get; set; } = string.Empty;");
+        file.Content.Should().Contain("public int StartFrame { get; set; }");
+        file.Content.Should().Contain("public int DurationFrames { get; set; }");
+        file.Content.Should().Contain("public TimelineSequenceFillMode FillMode { get; set; } = TimelineSequenceFillMode.None;");
+        file.Content.Should().NotContain("get; init;");
+        file.Content.Should().Contain("ClipId = \"intro\"");
+        file.Content.Should().Contain("FillMode = TimelineSequenceFillMode.HoldEnd");
         file.Content.Should().Contain("public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)");
         file.Content.Should().Contain("throw new ArgumentNullException(nameof(view));");
         file.Content.Should().NotContain("ArgumentNullException.ThrowIfNull");

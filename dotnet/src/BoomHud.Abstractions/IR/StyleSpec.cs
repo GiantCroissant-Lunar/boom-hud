@@ -25,6 +25,11 @@ public sealed record StyleSpec
     public Color? Background { get; init; }
 
     /// <summary>
+    /// Background image fill.
+    /// </summary>
+    public BackgroundImageSpec? BackgroundImage { get; init; }
+
+    /// <summary>
     /// Optional theme token key for the background color.
     /// </summary>
     public string? BackgroundToken { get; init; }
@@ -93,6 +98,34 @@ public sealed record StyleSpec
     /// Height override (can also be in layout).
     /// </summary>
     public Dimension? Height { get; init; }
+}
+
+/// <summary>
+/// Background image fill specification.
+/// </summary>
+public sealed record BackgroundImageSpec
+{
+    /// <summary>
+    /// Image URL or asset path.
+    /// </summary>
+    public required string Url { get; init; }
+
+    /// <summary>
+    /// Fill mode for the image.
+    /// </summary>
+    public BackgroundImageMode Mode { get; init; } = BackgroundImageMode.Fill;
+}
+
+/// <summary>
+/// Background image sizing modes.
+/// </summary>
+public enum BackgroundImageMode
+{
+    Fill,
+    Contain,
+    Stretch,
+    Tile,
+    Original
 }
 
 /// <summary>
@@ -341,12 +374,12 @@ public class ColorJsonConverter : JsonConverter<Color>
             using var doc = JsonDocument.ParseValue(ref reader);
             var root = doc.RootElement;
             byte r = 0, g = 0, b = 0, a = 255;
-            
+
             if (root.TryGetProperty("r", out var rProp) || root.TryGetProperty("R", out rProp)) r = rProp.GetByte();
             if (root.TryGetProperty("g", out var gProp) || root.TryGetProperty("G", out gProp)) g = gProp.GetByte();
             if (root.TryGetProperty("b", out var bProp) || root.TryGetProperty("B", out bProp)) b = bProp.GetByte();
             if (root.TryGetProperty("a", out var aProp) || root.TryGetProperty("A", out aProp)) a = aProp.GetByte();
-            
+
             return new Color(r, g, b, a);
         }
 

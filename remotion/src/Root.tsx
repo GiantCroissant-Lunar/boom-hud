@@ -4,9 +4,15 @@ import { CompareComposition, CompareSchema } from "./Compare";
 import {
   GeneratedMotionDemo,
   GeneratedMotionDemoSchema,
+  generatedMotionDemoDurationInFrames,
+  generatedMotionDemoFramesPerSecond,
 } from "./GeneratedMotionDemo";
-import motionJson from "./motion-samples/char-portrait.motion.json";
-import { parseMotionDocument } from "./motion";
+import {
+  GeneratedFullPenDemo,
+  GeneratedFullPenDemoSchema,
+  generatedFullPenDemoDurationInFrames,
+  generatedFullPenDemoFramesPerSecond,
+} from "./GeneratedFullPenDemo";
 
 export const RemotionRoot: React.FC = () => {
   // Default props for preview - will be overridden by CLI input
@@ -43,11 +49,6 @@ export const RemotionRoot: React.FC = () => {
   const compareDuration = Math.ceil(
     Math.max(compareStates.size, 1) * compareProps.secondsPerState * compareProps.fps
   );
-  const motionDocument = parseMotionDocument(motionJson);
-  const introClip = motionDocument.clips.find((clip) => clip.id === "intro");
-  const motionDuration = introClip?.durationFrames ?? motionDocument.clips[0]?.durationFrames ?? 90;
-  const motionFps = motionDocument.framesPerSecond;
-
   return (
     <>
       <Composition
@@ -73,12 +74,22 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="GeneratedMotionDemo"
         component={GeneratedMotionDemo}
-        durationInFrames={motionDuration}
-        fps={motionFps}
+        durationInFrames={generatedMotionDemoDurationInFrames}
+        fps={generatedMotionDemoFramesPerSecond}
         width={1280}
         height={720}
         schema={GeneratedMotionDemoSchema}
         defaultProps={{}}
+      />
+      <Composition
+        id="GeneratedFullPenDemo"
+        component={GeneratedFullPenDemo}
+        durationInFrames={generatedFullPenDemoDurationInFrames}
+        fps={generatedFullPenDemoFramesPerSecond}
+        width={1280}
+        height={960}
+        schema={GeneratedFullPenDemoSchema}
+        defaultProps={{ animated: false }}
       />
     </>
   );

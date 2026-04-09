@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -15,6 +16,27 @@ using UnityEngine.UIElements;
 
 namespace BoomHud.Unity.Editor
 {
+    public enum BoomHudMotionTimelineFillMode
+    {
+        None,
+        HoldStart,
+        HoldEnd,
+        HoldBoth
+    }
+
+    public sealed class BoomHudMotionTimelineClipSchedule
+    {
+        public string ClipId { get; set; } = string.Empty;
+
+        public double StartSeconds { get; set; }
+
+        public double? DurationSeconds { get; set; }
+
+        public BoomHudMotionTimelineFillMode FillMode { get; set; } = BoomHudMotionTimelineFillMode.None;
+
+        public string? DisplayName { get; set; }
+    }
+
     public sealed class BoomHudMotionTimelineSceneOptions
     {
         public string OutputRootDirectory { get; set; } = "Assets/BoomHudGenerated/TimelineScenes";
@@ -33,9 +55,13 @@ namespace BoomHud.Unity.Editor
 
         public string? DefaultClipId { get; set; }
 
+        public string? SequenceId { get; set; }
+
         public Color CameraBackgroundColor { get; set; } = new Color(0.04f, 0.04f, 0.05f, 1f);
 
         public bool OpenSceneAfterCreation { get; set; } = true;
+
+        public IReadOnlyList<BoomHudMotionTimelineClipSchedule>? ClipSchedule { get; set; }
     }
 
     public sealed class BoomHudMotionTimelineSceneResult
@@ -122,7 +148,7 @@ namespace BoomHud.Unity.Editor
             }
 
             options ??= new BoomHudMotionTimelineSceneOptions();
-            var descriptor = ResolveDescriptor(hostType, options.DefaultClipId);
+            var descriptor = ResolveDescriptor(hostType, options.DefaultClipId, options.SequenceId);
 
             var sceneDirectory = NormalizeAssetPath(options.SceneDirectory ?? $"{options.OutputRootDirectory.TrimEnd('/')}/{descriptor.BaseName}");
             var timelineDirectory = NormalizeAssetPath(options.TimelineDirectory ?? sceneDirectory);
@@ -138,7 +164,7 @@ namespace BoomHud.Unity.Editor
             EnsureFolderPath(Path.GetDirectoryName(panelSettingsPath)?.Replace('\\', '/') ?? sceneDirectory);
 
             var panelSettings = EnsurePanelSettings(panelSettingsPath, options.CameraBackgroundColor);
-            var timeline = EnsureTimelineAsset(timelinePath, descriptor);
+            var timeline = EnsureTimelineAsset(timelinePath, descriptor, options.ClipSchedule ?? descriptor.SequenceClipSchedule);
             var visualTreeAssetPath = AssetDatabase.GetAssetPath(descriptor.VisualTreeAsset);
             if (string.IsNullOrWhiteSpace(visualTreeAssetPath))
             {
@@ -208,7 +234,7 @@ namespace BoomHud.Unity.Editor
         private static bool IsMotionHostType(Type? type)
             => type != null && typeof(BoomHudUiToolkitMotionHost).IsAssignableFrom(type) && !type.IsAbstract;
 
-        private static MotionHostDescriptor ResolveDescriptor(Type hostType, string? preferredClipId)
+        private static MotionHostDescriptor ResolveDescriptor(Type hostType, string? preferredClipId, string? preferredSequenceId)
         {
             var baseName = hostType.Name.EndsWith("MotionHost", StringComparison.Ordinal)
                 ? hostType.Name[..^"MotionHost".Length]
@@ -229,7 +255,8 @@ namespace BoomHud.Unity.Editor
                 MotionType = motionType,
                 VisualTreeAsset = visualTreeAsset,
                 ClipIds = clipIds,
-                DefaultClipId = defaultClipId
+                DefaultClipId = defaultClipId,
+                SequenceClipSchedule = ResolveSequenceClipSchedule(motionType, clipIds, preferredSequenceId)
             };
         }
 
@@ -358,7 +385,10 @@ namespace BoomHud.Unity.Editor
             previewBootstrap.Configure(director, motionHost, defaultClipId);
         }
 
-        private static TimelineAsset EnsureTimelineAsset(string timelinePath, MotionHostDescriptor descriptor)
+        private static TimelineAsset EnsureTimelineAsset(
+            string timelinePath,
+            MotionHostDescriptor descriptor,
+            IReadOnlyList<BoomHudMotionTimelineClipSchedule>? clipSchedule)
         {
             var timeline = AssetDatabase.LoadAssetAtPath<TimelineAsset>(timelinePath);
             if (timeline == null)
@@ -372,6 +402,21 @@ namespace BoomHud.Unity.Editor
                 timeline.DeleteTrack(track);
             }
 
+            if (clipSchedule != null && clipSchedule.Count > 0)
+            {
+                CreateScheduledTracks(timeline, descriptor, clipSchedule);
+            }
+            else
+            {
+                CreateSequentialTrack(timeline, descriptor);
+            }
+
+            EditorUtility.SetDirty(timeline);
+            return timeline;
+        }
+
+        private static void CreateSequentialTrack(TimelineAsset timeline, MotionHostDescriptor descriptor)
+        {
             var motionTrack = timeline.CreateTrack<BoomHudMotionTrack>(null, "HUD Motion");
             var currentStart = 0d;
 
@@ -392,10 +437,225 @@ namespace BoomHud.Unity.Editor
 
                 currentStart += clipDuration;
             }
-
-            EditorUtility.SetDirty(timeline);
-            return timeline;
         }
+
+        private static void CreateScheduledTracks(
+            TimelineAsset timeline,
+            MotionHostDescriptor descriptor,
+            IReadOnlyList<BoomHudMotionTimelineClipSchedule> clipSchedule)
+        {
+            var resolvedSchedule = clipSchedule
+                .Select(item => ResolveScheduledClip(item, descriptor))
+                .ToArray();
+
+            var sequenceDurationSeconds = resolvedSchedule
+                .Select(item => item.StartSeconds + item.ActiveDurationSeconds)
+                .DefaultIfEmpty(0.1d)
+                .Max();
+
+            for (var index = 0; index < resolvedSchedule.Length; index++)
+            {
+                var scheduledClip = resolvedSchedule[index];
+                var timing = ResolveScheduledClipTiming(scheduledClip, sequenceDurationSeconds);
+                var trackName = string.IsNullOrWhiteSpace(scheduledClip.DisplayName)
+                    ? $"{index + 1:00} {scheduledClip.ClipId}"
+                    : scheduledClip.DisplayName!;
+                var track = timeline.CreateTrack<BoomHudMotionTrack>(null, trackName);
+                var clip = track.CreateClip<BoomHudMotionPlayableAsset>();
+                clip.displayName = scheduledClip.ClipId;
+                clip.start = timing.TimelineStartSeconds;
+                clip.duration = timing.TimelineDurationSeconds;
+
+                if (clip.asset is BoomHudMotionPlayableAsset motionClip)
+                {
+                    motionClip.ClipId = scheduledClip.ClipId;
+                    motionClip.TimeOffsetSeconds = timing.TimeOffsetSeconds;
+                    EditorUtility.SetDirty(motionClip);
+                }
+            }
+        }
+
+        private static ResolvedScheduledClip ResolveScheduledClip(
+            BoomHudMotionTimelineClipSchedule clipSchedule,
+            MotionHostDescriptor descriptor)
+        {
+            if (string.IsNullOrWhiteSpace(clipSchedule.ClipId))
+            {
+                throw new InvalidOperationException("Timeline clip schedule items must declare a clip id.");
+            }
+
+            if (!descriptor.ClipIds.Contains(clipSchedule.ClipId, StringComparer.Ordinal))
+            {
+                throw new InvalidOperationException(
+                    $"Motion clip '{clipSchedule.ClipId}' is not available on '{descriptor.MotionType.FullName}'.");
+            }
+
+            var clipDurationSeconds = Math.Max(
+                0.1d,
+                clipSchedule.DurationSeconds ?? GetClipDurationSeconds(descriptor.MotionType, clipSchedule.ClipId));
+
+            return new ResolvedScheduledClip
+            {
+                ClipId = clipSchedule.ClipId,
+                StartSeconds = Math.Max(0d, clipSchedule.StartSeconds),
+                ActiveDurationSeconds = clipDurationSeconds,
+                FillMode = clipSchedule.FillMode,
+                DisplayName = clipSchedule.DisplayName
+            };
+        }
+
+        private static ScheduledClipTiming ResolveScheduledClipTiming(
+            ResolvedScheduledClip clipSchedule,
+            double sequenceDurationSeconds)
+        {
+            return clipSchedule.FillMode switch
+            {
+                BoomHudMotionTimelineFillMode.HoldBoth => new ScheduledClipTiming
+                {
+                    TimelineStartSeconds = 0d,
+                    TimelineDurationSeconds = Math.Max(0.1d, sequenceDurationSeconds),
+                    TimeOffsetSeconds = -clipSchedule.StartSeconds
+                },
+                BoomHudMotionTimelineFillMode.HoldEnd => new ScheduledClipTiming
+                {
+                    TimelineStartSeconds = clipSchedule.StartSeconds,
+                    TimelineDurationSeconds = Math.Max(0.1d, sequenceDurationSeconds - clipSchedule.StartSeconds),
+                    TimeOffsetSeconds = 0d
+                },
+                BoomHudMotionTimelineFillMode.HoldStart => new ScheduledClipTiming
+                {
+                    TimelineStartSeconds = 0d,
+                    TimelineDurationSeconds = Math.Max(0.1d, clipSchedule.StartSeconds + clipSchedule.ActiveDurationSeconds),
+                    TimeOffsetSeconds = -clipSchedule.StartSeconds
+                },
+                _ => new ScheduledClipTiming
+                {
+                    TimelineStartSeconds = clipSchedule.StartSeconds,
+                    TimelineDurationSeconds = clipSchedule.ActiveDurationSeconds,
+                    TimeOffsetSeconds = 0d
+                }
+            };
+        }
+
+        private static IReadOnlyList<BoomHudMotionTimelineClipSchedule>? ResolveSequenceClipSchedule(
+            Type motionType,
+            IReadOnlyList<string> clipIds,
+            string? preferredSequenceId)
+        {
+            var sequenceIds = ResolveSequenceIds(motionType);
+            if (sequenceIds.Count == 0)
+            {
+                return null;
+            }
+
+            var sequenceId = ResolveSequenceId(motionType, sequenceIds, preferredSequenceId);
+            if (string.IsNullOrWhiteSpace(sequenceId))
+            {
+                return null;
+            }
+
+            var sequenceItemsMethod = motionType.GetMethod("GetSequenceItems", BindingFlags.Public | BindingFlags.Static);
+            if (sequenceItemsMethod == null)
+            {
+                return null;
+            }
+
+            if (sequenceItemsMethod.Invoke(null, new object[] { sequenceId! }) is not IEnumerable sequenceItems)
+            {
+                return null;
+            }
+
+            var framesPerSecond = ResolveFramesPerSecond(motionType);
+            var clipSchedule = new List<BoomHudMotionTimelineClipSchedule>();
+
+            foreach (var sequenceItem in sequenceItems)
+            {
+                if (sequenceItem == null)
+                {
+                    continue;
+                }
+
+                var itemType = sequenceItem.GetType();
+                var clipId = itemType.GetProperty("ClipId", BindingFlags.Public | BindingFlags.Instance)?.GetValue(sequenceItem) as string;
+                if (string.IsNullOrWhiteSpace(clipId) || !clipIds.Contains(clipId, StringComparer.Ordinal))
+                {
+                    continue;
+                }
+
+                var startFrame = Convert.ToInt32(
+                    itemType.GetProperty("StartFrame", BindingFlags.Public | BindingFlags.Instance)?.GetValue(sequenceItem) ?? 0,
+                    CultureInfo.InvariantCulture);
+                var durationFrames = Convert.ToInt32(
+                    itemType.GetProperty("DurationFrames", BindingFlags.Public | BindingFlags.Instance)?.GetValue(sequenceItem) ?? 0,
+                    CultureInfo.InvariantCulture);
+                var fillModeName = itemType.GetProperty("FillMode", BindingFlags.Public | BindingFlags.Instance)?.GetValue(sequenceItem)?.ToString();
+
+                clipSchedule.Add(new BoomHudMotionTimelineClipSchedule
+                {
+                    ClipId = clipId,
+                    StartSeconds = startFrame / (double)framesPerSecond,
+                    DurationSeconds = durationFrames > 0 ? durationFrames / (double)framesPerSecond : null,
+                    FillMode = ParseTimelineFillMode(fillModeName),
+                    DisplayName = $"{startFrame:000}f {clipId}"
+                });
+            }
+
+            return clipSchedule.Count == 0 ? null : clipSchedule;
+        }
+
+        private static IReadOnlyList<string> ResolveSequenceIds(Type motionType)
+        {
+            var sequenceIdsField = motionType.GetField("SequenceIds", BindingFlags.Public | BindingFlags.Static);
+            if (sequenceIdsField?.GetValue(null) is IEnumerable<string> sequenceIds)
+            {
+                var resolved = sequenceIds.Where(id => !string.IsNullOrWhiteSpace(id)).Distinct(StringComparer.Ordinal).ToArray();
+                if (resolved.Length > 0)
+                {
+                    return resolved;
+                }
+            }
+
+            var defaultSequenceId = motionType.GetField("DefaultSequenceId", BindingFlags.Public | BindingFlags.Static)?.GetRawConstantValue() as string;
+            return string.IsNullOrWhiteSpace(defaultSequenceId)
+                ? Array.Empty<string>()
+                : new[] { defaultSequenceId! };
+        }
+
+        private static string? ResolveSequenceId(Type motionType, IReadOnlyList<string> sequenceIds, string? preferredSequenceId)
+        {
+            if (!string.IsNullOrWhiteSpace(preferredSequenceId) && sequenceIds.Contains(preferredSequenceId, StringComparer.Ordinal))
+            {
+                return preferredSequenceId;
+            }
+
+            var defaultSequenceId = motionType.GetField("DefaultSequenceId", BindingFlags.Public | BindingFlags.Static)?.GetRawConstantValue() as string;
+            if (!string.IsNullOrWhiteSpace(defaultSequenceId))
+            {
+                return defaultSequenceId;
+            }
+
+            return sequenceIds.FirstOrDefault();
+        }
+
+        private static int ResolveFramesPerSecond(Type motionType)
+        {
+            var framesPerSecondField = motionType.GetField("FramesPerSecond", BindingFlags.Public | BindingFlags.Static);
+            if (framesPerSecondField?.GetRawConstantValue() is int framesPerSecond)
+            {
+                return Math.Max(1, framesPerSecond);
+            }
+
+            return 30;
+        }
+
+        private static BoomHudMotionTimelineFillMode ParseTimelineFillMode(string? fillModeName)
+            => fillModeName switch
+            {
+                nameof(BoomHudMotionTimelineFillMode.HoldStart) => BoomHudMotionTimelineFillMode.HoldStart,
+                nameof(BoomHudMotionTimelineFillMode.HoldEnd) => BoomHudMotionTimelineFillMode.HoldEnd,
+                nameof(BoomHudMotionTimelineFillMode.HoldBoth) => BoomHudMotionTimelineFillMode.HoldBoth,
+                _ => BoomHudMotionTimelineFillMode.None
+            };
 
         private static double GetClipDurationSeconds(Type motionType, string clipId)
         {
@@ -484,6 +744,30 @@ namespace BoomHud.Unity.Editor
             public IReadOnlyList<string> ClipIds { get; set; } = Array.Empty<string>();
 
             public string DefaultClipId { get; set; } = string.Empty;
+
+            public IReadOnlyList<BoomHudMotionTimelineClipSchedule>? SequenceClipSchedule { get; set; }
+        }
+
+        private sealed class ResolvedScheduledClip
+        {
+            public string ClipId { get; set; } = string.Empty;
+
+            public double StartSeconds { get; set; }
+
+            public double ActiveDurationSeconds { get; set; }
+
+            public BoomHudMotionTimelineFillMode FillMode { get; set; }
+
+            public string? DisplayName { get; set; }
+        }
+
+        private sealed class ScheduledClipTiming
+        {
+            public double TimelineStartSeconds { get; set; }
+
+            public double TimelineDurationSeconds { get; set; }
+
+            public double TimeOffsetSeconds { get; set; }
         }
     }
 

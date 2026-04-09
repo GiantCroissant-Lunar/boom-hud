@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Compile Include="Cli\BackendCatalogTests.cs" />
+    <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
     <Compile Include="Generation\ReactGeneratorTests.cs" />
   </ItemGroup>
 

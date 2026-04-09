@@ -228,6 +228,58 @@ public class PenParserTests
     }
 
     [Fact]
+    public void Parse_ImageFill_PreservesBackgroundImageInIr()
+    {
+        var json = """
+            {
+                "nodes": [
+                    {
+                        "id": "root",
+                        "type": "frame",
+                        "style": {
+                            "fill": {
+                                "type": "image",
+                                "enabled": true,
+                                "url": "./images/viewport.png",
+                                "mode": "fill"
+                            }
+                        }
+                    }
+                ]
+            }
+            """;
+
+        var doc = _parser.Parse(json, out var warnings);
+
+        doc.Root.Style.Should().NotBeNull();
+        doc.Root.Style!.BackgroundImage.Should().NotBeNull();
+        doc.Root.Style.BackgroundImage!.Url.Should().Be("./images/viewport.png");
+        doc.Root.Style.BackgroundImage.Mode.Should().Be(BackgroundImageMode.Fill);
+        warnings.Should().NotContain(w => w.Contains("does not emit background images yet", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void Parse_ClipTrue_PreservesClipMetadata()
+    {
+        var json = """
+            {
+                "nodes": [
+                    {
+                        "id": "root",
+                        "type": "frame",
+                        "clip": true
+                    }
+                ]
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        doc.Root.InstanceOverrides.Should().ContainKey(BoomHudMetadataKeys.PencilClip);
+        doc.Root.InstanceOverrides[BoomHudMetadataKeys.PencilClip].Should().Be(true);
+    }
+
+    [Fact]
     public void Parse_LayoutMode_MapsToLayoutType()
     {
         var json = """

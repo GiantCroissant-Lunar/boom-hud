@@ -291,6 +291,7 @@ public sealed class ReactGenerator : IBackendGenerator
         {
             if (visual.Foreground is { } foreground) style.Add($"color: {Ts(foreground.ToHex())}");
             if (visual.Background is { } background) style.Add($"backgroundColor: {Ts(background.ToHex())}");
+            if (visual.BackgroundImage is { } backgroundImage) AppendBackgroundImageStyle(style, backgroundImage);
             if (visual.FontSize is { } fontSize) style.Add($"fontSize: {Ts($"{fontSize.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
             if (!string.IsNullOrWhiteSpace(visual.FontFamily)) style.Add($"fontFamily: {Ts(visual.FontFamily)}");
             if (visual.FontWeight is { } weight) style.Add($"fontWeight: {Ts(weight == FontWeight.Bold ? "700" : weight == FontWeight.Light ? "300" : "400")}");
@@ -317,6 +318,11 @@ public sealed class ReactGenerator : IBackendGenerator
             if (NumericMetadata(node, BoomHudMetadataKeys.PencilTop) is { } top) style.Add($"top: {Ts($"{top.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
         }
 
+        if (BoolMetadata(node, BoomHudMetadataKeys.PencilClip) is true)
+        {
+            style.Add("overflow: 'hidden'");
+        }
+
         if (FindBinding(node, "style.foreground", "foreground") is { } foregroundBinding) style.Add($"color: asText(props.{PropName(foregroundBinding.Path)}, {Ts(foregroundBinding.Fallback?.ToString() ?? string.Empty)})");
         if (FindBinding(node, "style.background", "background") is { } backgroundBinding) style.Add($"backgroundColor: asText(props.{PropName(backgroundBinding.Path)}, {Ts(backgroundBinding.Fallback?.ToString() ?? string.Empty)})");
         return string.Join(", ", style);
@@ -340,6 +346,39 @@ public sealed class ReactGenerator : IBackendGenerator
     private static string CssPixels(double value) => value == 0d
         ? "0"
         : $"{value.ToString("0.##", CultureInfo.InvariantCulture)}px";
+
+    private static void AppendBackgroundImageStyle(List<string> style, BackgroundImageSpec image)
+    {
+        style.Add($"backgroundImage: {Ts($"url('{image.Url}')")}");
+
+        switch (image.Mode)
+        {
+            case BackgroundImageMode.Fill:
+                style.Add("backgroundSize: 'cover'");
+                style.Add("backgroundPosition: 'center'");
+                style.Add("backgroundRepeat: 'no-repeat'");
+                break;
+            case BackgroundImageMode.Contain:
+                style.Add("backgroundSize: 'contain'");
+                style.Add("backgroundPosition: 'center'");
+                style.Add("backgroundRepeat: 'no-repeat'");
+                break;
+            case BackgroundImageMode.Stretch:
+                style.Add("backgroundSize: '100% 100%'");
+                style.Add("backgroundPosition: 'center'");
+                style.Add("backgroundRepeat: 'no-repeat'");
+                break;
+            case BackgroundImageMode.Tile:
+                style.Add("backgroundSize: 'auto'");
+                style.Add("backgroundRepeat: 'repeat'");
+                break;
+            case BackgroundImageMode.Original:
+                style.Add("backgroundSize: 'auto'");
+                style.Add("backgroundPosition: 'center'");
+                style.Add("backgroundRepeat: 'no-repeat'");
+                break;
+        }
+    }
 
     private static void AppendDimension(List<string> style, string key, Dimension? dimension, LayoutType? parentLayout)
     {
@@ -485,6 +524,16 @@ public sealed class ReactGenerator : IBackendGenerator
             float floatValue => floatValue,
             int intValue => intValue,
             long longValue => longValue,
+            _ => null
+        };
+    }
+
+    private static bool? BoolMetadata(ComponentNode node, string key)
+    {
+        if (!node.InstanceOverrides.TryGetValue(key, out var raw) || raw == null) return null;
+        return raw switch
+        {
+            bool boolValue => boolValue,
             _ => null
         };
     }

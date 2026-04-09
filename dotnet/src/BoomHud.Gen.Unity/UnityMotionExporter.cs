@@ -116,6 +116,7 @@ public static class UnityMotionExporter
 
         builder.AppendLine("    };");
         builder.AppendLine();
+        AppendSequenceMetadata(builder, motion);
         AppendInvariantLine(builder, $"    public static bool TryApplyAtFrame({document.Name}View view, string clipId, int frame)");
         builder.AppendLine("    {");
         builder.AppendLine("        if (view == null)");
@@ -207,6 +208,74 @@ public static class UnityMotionExporter
         return builder.ToString();
     }
 
+    private static void AppendSequenceMetadata(StringBuilder builder, MotionDocument motion)
+    {
+        var defaultSequenceId = ResolveDefaultSequenceId(motion) ?? string.Empty;
+        AppendInvariantLine(builder, $"    public const string DefaultSequenceId = {ToStringLiteral(defaultSequenceId)};");
+        builder.AppendLine("    public static readonly string[] SequenceIds =");
+        builder.AppendLine("    {");
+        foreach (var sequence in motion.Sequences)
+        {
+            AppendInvariantLine(builder, $"        {ToStringLiteral(sequence.Id)},");
+        }
+
+        builder.AppendLine("    };");
+        builder.AppendLine();
+        builder.AppendLine("    public enum TimelineSequenceFillMode");
+        builder.AppendLine("    {");
+        builder.AppendLine("        None,");
+        builder.AppendLine("        HoldStart,");
+        builder.AppendLine("        HoldEnd,");
+        builder.AppendLine("        HoldBoth");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    public sealed class TimelineSequenceClip");
+        builder.AppendLine("    {");
+        builder.AppendLine("        public string ClipId { get; set; } = string.Empty;");
+        builder.AppendLine("        public int StartFrame { get; set; }");
+        builder.AppendLine("        public int DurationFrames { get; set; }");
+        builder.AppendLine("        public TimelineSequenceFillMode FillMode { get; set; } = TimelineSequenceFillMode.None;");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    public static TimelineSequenceClip[] GetSequenceItems(string sequenceId)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        return sequenceId switch");
+        builder.AppendLine("        {");
+        foreach (var sequence in motion.Sequences)
+        {
+            AppendInvariantLine(builder, $"            {ToStringLiteral(sequence.Id)} => new[]");
+            builder.AppendLine("            {");
+            foreach (var item in sequence.Items)
+            {
+                builder.AppendLine("                new TimelineSequenceClip");
+                builder.AppendLine("                {");
+                AppendInvariantLine(builder, $"                    ClipId = {ToStringLiteral(item.ClipId)},");
+                AppendInvariantLine(builder, $"                    StartFrame = {(item.StartFrame ?? 0).ToString(CultureInfo.InvariantCulture)},");
+                AppendInvariantLine(builder, $"                    DurationFrames = {(item.DurationFrames ?? 0).ToString(CultureInfo.InvariantCulture)},");
+                AppendInvariantLine(builder, $"                    FillMode = TimelineSequenceFillMode.{item.FillMode}");
+                builder.AppendLine("                },");
+            }
+
+            builder.AppendLine("            },");
+        }
+
+        builder.AppendLine("            _ => Array.Empty<TimelineSequenceClip>()");
+        builder.AppendLine("        };");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+    }
+
+    private static string? ResolveDefaultSequenceId(MotionDocument motion)
+    {
+        if (!string.IsNullOrWhiteSpace(motion.DefaultSequenceId)
+            && motion.Sequences.Any(sequence => string.Equals(sequence.Id, motion.DefaultSequenceId, StringComparison.Ordinal)))
+        {
+            return motion.DefaultSequenceId;
+        }
+
+        return motion.Sequences.Count > 0 ? motion.Sequences[0].Id : null;
+    }
+
     private static string GenerateMotionHostClass(
         HudDocument document,
         UnityBackendPlan plan,
@@ -270,7 +339,7 @@ public static class UnityMotionExporter
         builder.AppendLine();
         AppendInvariantLine(builder, $"        if (string.Equals(root.name, {ToStringLiteral(plan.Root.Name)}, StringComparison.Ordinal))");
         builder.AppendLine("        {");
-            builder.AppendLine("            return root;");
+        builder.AppendLine("            return root;");
         builder.AppendLine("        }");
         builder.AppendLine();
         AppendInvariantLine(builder, $"        return root.Q<{plan.Root.ElementType}>({ToStringLiteral(plan.Root.Name)})");

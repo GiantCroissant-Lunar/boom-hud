@@ -173,6 +173,29 @@ public sealed class ReactGeneratorTests
     }
 
     [Fact]
+    public void Generate_PencilClipMetadata_EmitsOverflowHidden()
+    {
+        var document = new HudDocument
+        {
+            Name = "ClippedHud",
+            Root = new ComponentNode
+            {
+                Id = "viewport",
+                Type = ComponentType.Container,
+                InstanceOverrides = new Dictionary<string, object?>
+                {
+                    [BoomHudMetadataKeys.PencilClip] = true
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "ClippedHudView.tsx").Content;
+
+        tsx.Should().Contain("overflow: 'hidden'");
+    }
+
+    [Fact]
     public void Generate_SpacingShorthands_EmitsCssUnits()
     {
         var document = new HudDocument
@@ -274,5 +297,36 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("const resolveIconText = (value: unknown, familyName?: string) => {");
         tsx.Should().Contain("case 'shield': return '⛨'");
         tsx.Should().Contain("{resolveIconText(getMotionText(props.motionTargets, 'icon') ?? ('shield'), 'lucide')}");
+    }
+
+    [Fact]
+    public void Generate_BackgroundImage_EmitsCssBackgroundImageStyles()
+    {
+        var document = new HudDocument
+        {
+            Name = "ViewportHud",
+            Root = new ComponentNode
+            {
+                Id = "viewport",
+                Type = ComponentType.Container,
+                Style = new StyleSpec
+                {
+                    BackgroundImage = new BackgroundImageSpec
+                    {
+                        Url = "./images/viewport.png",
+                        Mode = BackgroundImageMode.Fill
+                    }
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "ViewportHudView.tsx").Content;
+
+        tsx.Should().Contain("backgroundImage:");
+        tsx.Should().Contain("./images/viewport.png");
+        tsx.Should().Contain("backgroundSize: 'cover'");
+        tsx.Should().Contain("backgroundPosition: 'center'");
+        tsx.Should().Contain("backgroundRepeat: 'no-repeat'");
     }
 }

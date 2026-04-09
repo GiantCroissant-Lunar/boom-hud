@@ -6,6 +6,8 @@ import type {
   MotionEasing,
   MotionKeyframe,
   MotionProperty,
+  MotionSequenceDefinition,
+  MotionSequenceFillModeValue,
   MotionValue,
 } from "./schema";
 
@@ -20,6 +22,46 @@ export type MotionTargetState = Partial<
 >;
 
 export type MotionClipState = Record<string, MotionTargetState>;
+
+export type MotionSequenceFillMode = MotionSequenceFillModeValue;
+
+export type MotionSequenceItem = {
+  clipId: string;
+  startFrame?: number;
+  durationFrames?: number;
+  fillMode?: MotionSequenceFillMode;
+};
+
+export type MotionSequence = readonly MotionSequenceItem[];
+
+export const findMotionSequence = (
+  document: MotionDocument,
+  sequenceId: string,
+): MotionSequenceDefinition | undefined =>
+  document.sequences?.find((sequence) => sequence.id === sequenceId);
+
+export const getDefaultMotionSequenceId = (
+  document: MotionDocument,
+): string | undefined => document.defaultSequenceId ?? document.sequences?.[0]?.id;
+
+export const getRequiredMotionSequence = (
+  document: MotionDocument,
+  sequenceId?: string,
+): MotionSequence => {
+  const resolvedSequenceId = sequenceId ?? getDefaultMotionSequenceId(document);
+  if (!resolvedSequenceId) {
+    throw new Error(`Motion document '${document.name}' does not define a sequence.`);
+  }
+
+  const sequence = findMotionSequence(document, resolvedSequenceId);
+  if (!sequence) {
+    throw new Error(
+      `Motion sequence '${resolvedSequenceId}' was not found in '${document.name}'.`,
+    );
+  }
+
+  return sequence.items;
+};
 
 export const findMotionClip = (
   document: MotionDocument,
@@ -37,14 +79,18 @@ export const resolveClipStateAtFrame = (
   }
 
   const localFrame = clamp(frame - clip.startFrame, 0, clip.durationFrames);
+  return resolveClipStateAtLocalFrame(clip, localFrame);
+};
+
+export const resolveSequenceStateAtFrame = (
+  document: MotionDocument,
+  sequence: MotionSequence,
+  frame: number,
+): MotionClipState => {
   const state: MotionClipState = {};
 
-  for (const track of clip.tracks) {
-    const target = state[track.targetId] ?? {};
-    for (const channel of track.channels) {
-      target[channel.property] = resolveChannelValue(channel.keyframes, localFrame);
-    }
-    state[track.targetId] = target;
+  for (const item of sequence) {
+    mergeMotionState(state, resolveSequenceItemStateAtFrame(document, item, frame));
   }
 
   return state;
@@ -64,6 +110,34 @@ export const useMotionClipState = (
 ): MotionClipState => {
   const frame = useCurrentFrame();
   return resolveClipStateAtFrame(document, clipId, frame);
+};
+
+export const useMotionSequenceState = (
+  document: MotionDocument,
+  sequence: MotionSequence,
+): MotionClipState => {
+  const frame = useCurrentFrame();
+  return resolveSequenceStateAtFrame(document, sequence, frame);
+};
+
+export const useMotionSceneState = (
+  document: MotionDocument,
+  options: {
+    clipId?: string;
+    sequence?: MotionSequence;
+  },
+): MotionClipState => {
+  const frame = useCurrentFrame();
+
+  if (options.sequence) {
+    return resolveSequenceStateAtFrame(document, options.sequence, frame);
+  }
+
+  if (options.clipId) {
+    return resolveClipStateAtFrame(document, options.clipId, frame);
+  }
+
+  throw new Error("Motion scene requires either a clipId or a sequence.");
 };
 
 export const useMotionTargetState = (
@@ -161,6 +235,93 @@ export const getAnimatedText = (targetState: MotionTargetState): string | undefi
 export const getAnimatedSpriteFrame = (
   targetState: MotionTargetState,
 ): string | undefined => asText(targetState.spriteFrame);
+
+export const getSequenceDurationFrames = (
+  document: MotionDocument,
+  sequence: MotionSequence,
+): number => {
+  if (sequence.length === 0) {
+    return 0;
+  }
+
+  let maxFrame = 0;
+
+  for (const item of sequence) {
+    const clip = findMotionClip(document, item.clipId);
+    if (!clip) {
+      throw new Error(`Motion clip '${item.clipId}' was not found in '${document.name}'.`);
+    }
+
+    const startFrame = item.startFrame ?? clip.startFrame;
+    const durationFrames = Math.min(item.durationFrames ?? clip.durationFrames, clip.durationFrames);
+    maxFrame = Math.max(maxFrame, startFrame + durationFrames);
+  }
+
+  return maxFrame;
+};
+
+const resolveSequenceItemStateAtFrame = (
+  document: MotionDocument,
+  item: MotionSequenceItem,
+  frame: number,
+): MotionClipState => {
+  const clip = findMotionClip(document, item.clipId);
+  if (!clip) {
+    throw new Error(`Motion clip '${item.clipId}' was not found in '${document.name}'.`);
+  }
+
+  const startFrame = item.startFrame ?? clip.startFrame;
+  const durationFrames = Math.min(item.durationFrames ?? clip.durationFrames, clip.durationFrames);
+  const endFrame = startFrame + durationFrames;
+  const fillMode = item.fillMode ?? "none";
+
+  if (frame < startFrame) {
+    if (fillMode === "holdStart" || fillMode === "holdBoth") {
+      return resolveClipStateAtLocalFrame(clip, 0);
+    }
+
+    return {};
+  }
+
+  if (frame > endFrame) {
+    if (fillMode === "holdEnd" || fillMode === "holdBoth") {
+      return resolveClipStateAtLocalFrame(clip, durationFrames);
+    }
+
+    return {};
+  }
+
+  return resolveClipStateAtLocalFrame(clip, clamp(frame - startFrame, 0, durationFrames));
+};
+
+const resolveClipStateAtLocalFrame = (
+  clip: MotionClip,
+  localFrame: number,
+): MotionClipState => {
+  const state: MotionClipState = {};
+
+  for (const track of clip.tracks) {
+    const target = state[track.targetId] ?? {};
+    for (const channel of track.channels) {
+      target[channel.property] = resolveChannelValue(channel.keyframes, localFrame);
+    }
+    state[track.targetId] = target;
+  }
+
+  return state;
+};
+
+const mergeMotionState = (
+  target: MotionClipState,
+  overlay: MotionClipState,
+): void => {
+  for (const [targetId, overlayState] of Object.entries(overlay)) {
+    target[targetId] = {
+      ...(target[targetId] ?? {}),
+      ...overlayState,
+    };
+  }
+};
 
 const resolveChannelValue = (
   rawKeyframes: readonly MotionKeyframe[],

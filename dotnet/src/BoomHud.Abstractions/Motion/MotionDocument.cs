@@ -6,6 +6,9 @@ using GeneratedMotionChannel = BoomHud.Abstractions.Motion.Generated.MotionChann
 using GeneratedMotionClip = BoomHud.Abstractions.Motion.Generated.MotionClip;
 using GeneratedMotionDocument = BoomHud.Abstractions.Motion.Generated.MotionDocumentDto;
 using GeneratedMotionKeyframe = BoomHud.Abstractions.Motion.Generated.MotionKeyframe;
+using GeneratedMotionSequence = BoomHud.Abstractions.Motion.Generated.MotionSequence;
+using GeneratedMotionSequenceFillMode = BoomHud.Abstractions.Motion.Generated.MotionSequenceFillMode;
+using GeneratedMotionSequenceItem = BoomHud.Abstractions.Motion.Generated.MotionSequenceItem;
 using GeneratedMotionTrack = BoomHud.Abstractions.Motion.Generated.MotionTrack;
 using GeneratedMotionValue = BoomHud.Abstractions.Motion.Generated.MotionValue;
 using GeneratedProperty = BoomHud.Abstractions.Motion.Generated.Property;
@@ -38,6 +41,16 @@ public sealed record MotionDocument
     /// Motion clips contained in this document.
     /// </summary>
     public IReadOnlyList<MotionClip> Clips { get; init; } = [];
+
+    /// <summary>
+    /// Optional default sequence id to use for staged playback.
+    /// </summary>
+    public string? DefaultSequenceId { get; init; }
+
+    /// <summary>
+    /// Optional composed motion sequences built from clips in this document.
+    /// </summary>
+    public IReadOnlyList<MotionSequence> Sequences { get; init; } = [];
 
     /// <summary>
     /// Diagnostics emitted during loading.
@@ -76,6 +89,8 @@ public sealed record MotionDocument
             Name = dto.Name ?? throw new InvalidOperationException("Motion document name is required"),
             FramesPerSecond = dto.FramesPerSecond.HasValue ? checked((int)dto.FramesPerSecond.Value) : 30,
             Clips = (dto.Clips ?? []).Select(MapClip).ToList().AsReadOnly(),
+            DefaultSequenceId = string.IsNullOrWhiteSpace(dto.DefaultSequenceId) ? null : dto.DefaultSequenceId,
+            Sequences = (dto.Sequences ?? []).Select(MapSequence).ToList().AsReadOnly(),
             LoadDiagnostics = diagnostics.AsReadOnly()
         };
     }
@@ -100,7 +115,50 @@ public sealed record MotionDocument
             Version = Version,
             Name = Name,
             FramesPerSecond = FramesPerSecond,
-            Clips = Clips.Select(MapClip).ToList()
+            DefaultSequenceId = DefaultSequenceId,
+            Clips = Clips.Select(MapClip).ToList(),
+            Sequences = Sequences.Select(MapSequence).ToList()
+        };
+
+    private static MotionSequence MapSequence(GeneratedMotionSequence dto)
+        => new()
+        {
+            Id = dto.Id ?? throw new InvalidOperationException("Motion sequence id is required"),
+            Name = dto.Name ?? throw new InvalidOperationException("Motion sequence name is required"),
+            Items = (dto.Items ?? []).Select(MapSequenceItem).ToList().AsReadOnly()
+        };
+
+    private static GeneratedMotionSequence MapSequence(MotionSequence sequence)
+        => new()
+        {
+            Id = sequence.Id,
+            Name = sequence.Name,
+            Items = sequence.Items.Select(MapSequenceItem).ToList()
+        };
+
+    private static MotionSequenceItem MapSequenceItem(GeneratedMotionSequenceItem dto)
+        => new()
+        {
+            ClipId = dto.ClipId ?? throw new InvalidOperationException("Motion sequence item clipId is required"),
+            StartFrame = dto.StartFrame.HasValue ? checked((int)dto.StartFrame.Value) : null,
+            DurationFrames = dto.DurationFrames.HasValue ? checked((int)dto.DurationFrames.Value) : null,
+            FillMode = ParseSequenceFillMode(dto.FillMode)
+        };
+
+    private static GeneratedMotionSequenceItem MapSequenceItem(MotionSequenceItem item)
+        => new()
+        {
+            ClipId = item.ClipId,
+            StartFrame = item.StartFrame,
+            DurationFrames = item.DurationFrames,
+            FillMode = item.FillMode switch
+            {
+                MotionSequenceFillMode.None => GeneratedMotionSequenceFillMode.None,
+                MotionSequenceFillMode.HoldStart => GeneratedMotionSequenceFillMode.HoldStart,
+                MotionSequenceFillMode.HoldEnd => GeneratedMotionSequenceFillMode.HoldEnd,
+                MotionSequenceFillMode.HoldBoth => GeneratedMotionSequenceFillMode.HoldBoth,
+                _ => GeneratedMotionSequenceFillMode.None
+            }
         };
 
     private static MotionClip MapClip(GeneratedMotionClip dto)
@@ -282,6 +340,15 @@ public sealed record MotionDocument
             _ => MotionEasing.Linear
         };
 
+    private static MotionSequenceFillMode ParseSequenceFillMode(GeneratedMotionSequenceFillMode? fillMode)
+        => fillMode switch
+        {
+            GeneratedMotionSequenceFillMode.HoldStart => MotionSequenceFillMode.HoldStart,
+            GeneratedMotionSequenceFillMode.HoldEnd => MotionSequenceFillMode.HoldEnd,
+            GeneratedMotionSequenceFillMode.HoldBoth => MotionSequenceFillMode.HoldBoth,
+            _ => MotionSequenceFillMode.None
+        };
+
     private static readonly System.Text.Json.JsonSerializerOptions IndentedJsonOptions = new()
     {
         WriteIndented = true
@@ -309,6 +376,27 @@ public sealed record MotionTrack
     public required string TargetId { get; init; }
     public MotionTargetKind TargetKind { get; init; } = MotionTargetKind.Element;
     public IReadOnlyList<MotionChannel> Channels { get; init; } = [];
+}
+
+/// <summary>
+/// A named staged sequence composed from motion clips in the same document.
+/// </summary>
+public sealed record MotionSequence
+{
+    public required string Id { get; init; }
+    public required string Name { get; init; }
+    public IReadOnlyList<MotionSequenceItem> Items { get; init; } = [];
+}
+
+/// <summary>
+/// Placement of a clip within a staged motion sequence.
+/// </summary>
+public sealed record MotionSequenceItem
+{
+    public required string ClipId { get; init; }
+    public int? StartFrame { get; init; }
+    public int? DurationFrames { get; init; }
+    public MotionSequenceFillMode FillMode { get; init; } = MotionSequenceFillMode.None;
 }
 
 /// <summary>
@@ -373,6 +461,17 @@ public enum MotionEasing
     EaseOut,
     EaseInOut,
     Step
+}
+
+/// <summary>
+/// Sequence fill behavior for staged motion playback.
+/// </summary>
+public enum MotionSequenceFillMode
+{
+    None,
+    HoldStart,
+    HoldEnd,
+    HoldBoth
 }
 
 /// <summary>

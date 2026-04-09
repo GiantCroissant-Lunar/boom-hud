@@ -16,6 +16,7 @@ public sealed class MotionDocumentTests
           "version": "1.0",
           "name": "HudMotion",
           "framesPerSecond": 30,
+          "defaultSequenceId": "introSequence",
           "clips": [
             {
               "id": "intro",
@@ -47,6 +48,19 @@ public sealed class MotionDocumentTests
                 }
               ]
             }
+          ],
+          "sequences": [
+            {
+              "id": "introSequence",
+              "name": "Intro Sequence",
+              "items": [
+                {
+                  "clipId": "intro",
+                  "startFrame": 0,
+                  "fillMode": "holdEnd"
+                }
+              ]
+            }
           ]
         }
         """;
@@ -60,6 +74,10 @@ public sealed class MotionDocumentTests
         document.Clips[0].Tracks[0].Channels[0].Property.Should().Be(MotionProperty.Opacity);
         document.Clips[0].Tracks[0].Channels[0].Keyframes[1].Value.Kind.Should().Be(MotionValueKind.Number);
         document.Clips[0].Tracks[0].Channels[0].Keyframes[1].Value.Number.Should().Be(1);
+        document.DefaultSequenceId.Should().Be("introSequence");
+        document.Sequences.Should().ContainSingle();
+        document.Sequences[0].Items.Should().ContainSingle();
+        document.Sequences[0].Items[0].FillMode.Should().Be(MotionSequenceFillMode.HoldEnd);
         document.LoadDiagnostics.Should().BeEmpty();
     }
 
@@ -112,6 +130,7 @@ public sealed class MotionDocumentTests
         {
             Name = "HudMotion",
             FramesPerSecond = 60,
+            DefaultSequenceId = "introSequence",
             Clips =
             [
                 new MotionClip
@@ -146,6 +165,23 @@ public sealed class MotionDocumentTests
                         }
                     ]
                 }
+            ],
+            Sequences =
+            [
+                new MotionSequence
+                {
+                    Id = "introSequence",
+                    Name = "Intro Sequence",
+                    Items =
+                    [
+                        new MotionSequenceItem
+                        {
+                            ClipId = "intro",
+                            StartFrame = 0,
+                            FillMode = MotionSequenceFillMode.HoldBoth
+                        }
+                    ]
+                }
             ]
         };
 
@@ -153,8 +189,11 @@ public sealed class MotionDocumentTests
         var roundTripped = MotionDocument.LoadFromJson(json);
 
         roundTripped.FramesPerSecond.Should().Be(60);
+        roundTripped.DefaultSequenceId.Should().Be("introSequence");
         roundTripped.Clips[0].Tracks[0].TargetKind.Should().Be(MotionTargetKind.Component);
         roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Kind.Should().Be(MotionValueKind.Vector);
         roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Vector.Should().Equal([0, -12]);
+        roundTripped.Sequences.Should().ContainSingle();
+        roundTripped.Sequences[0].Items[0].FillMode.Should().Be(MotionSequenceFillMode.HoldBoth);
     }
 }

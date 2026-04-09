@@ -665,6 +665,20 @@ public static class Program
                 : outputRoot;
 
             WriteGeneratedFiles(backendRoot, result.Files);
+
+            if (string.Equals(backend, "React", StringComparison.Ordinal))
+            {
+                var assetCopyResult = ReactGeneratedAssetCopier.CopyBackgroundImageAssets(document, inputs, backendRoot);
+                foreach (var copiedFile in assetCopyResult.CopiedFiles)
+                {
+                    Console.WriteLine($"Copied React asset: {copiedFile}");
+                }
+
+                foreach (var warning in assetCopyResult.Warnings)
+                {
+                    Console.WriteLine(warning);
+                }
+            }
         }
 
         Console.WriteLine();

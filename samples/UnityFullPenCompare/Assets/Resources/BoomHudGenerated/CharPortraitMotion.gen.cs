@@ -13,11 +13,115 @@ namespace Generated.Hud
 public static class CharPortraitMotion
 {
     public const int FramesPerSecond = 30;
-    public const string DefaultClipId = "intro";
+    public const string DefaultClipId = "portraitIntro";
     public static readonly string[] ClipIds =
     {
-        "intro",
+        "portraitIntro",
+        "hpBarFill",
+        "mpBarFill",
+        "stat1Reveal",
+        "stat2Reveal",
+        "atkReveal",
+        "magReveal",
+        "defReveal",
+        "itemReveal",
     };
+
+    public const string DefaultSequenceId = "generatedMotionDemo";
+    public static readonly string[] SequenceIds =
+    {
+        "generatedMotionDemo",
+    };
+
+    public enum TimelineSequenceFillMode
+    {
+        None,
+        HoldStart,
+        HoldEnd,
+        HoldBoth
+    }
+
+    public sealed class TimelineSequenceClip
+    {
+        public string ClipId { get; set; } = string.Empty;
+        public int StartFrame { get; set; }
+        public int DurationFrames { get; set; }
+        public TimelineSequenceFillMode FillMode { get; set; } = TimelineSequenceFillMode.None;
+    }
+
+    public static TimelineSequenceClip[] GetSequenceItems(string sequenceId)
+    {
+        return sequenceId switch
+        {
+            "generatedMotionDemo" => new[]
+            {
+                new TimelineSequenceClip
+                {
+                    ClipId = "portraitIntro",
+                    StartFrame = 0,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldEnd
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "hpBarFill",
+                    StartFrame = 14,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "mpBarFill",
+                    StartFrame = 22,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "stat1Reveal",
+                    StartFrame = 28,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "stat2Reveal",
+                    StartFrame = 34,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "atkReveal",
+                    StartFrame = 42,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "magReveal",
+                    StartFrame = 48,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "defReveal",
+                    StartFrame = 54,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+                new TimelineSequenceClip
+                {
+                    ClipId = "itemReveal",
+                    StartFrame = 60,
+                    DurationFrames = 0,
+                    FillMode = TimelineSequenceFillMode.HoldBoth
+                },
+            },
+            _ => Array.Empty<TimelineSequenceClip>()
+        };
+    }
 
     public static bool TryApplyAtFrame(CharPortraitView view, string clipId, int frame)
     {
@@ -28,7 +132,15 @@ public static class CharPortraitMotion
 
         return clipId switch
         {
-            "intro" => ApplyIntro(view, frame),
+            "portraitIntro" => ApplyPortraitIntro(view, frame),
+            "hpBarFill" => ApplyHpBarFill(view, frame),
+            "mpBarFill" => ApplyMpBarFill(view, frame),
+            "stat1Reveal" => ApplyStat1Reveal(view, frame),
+            "stat2Reveal" => ApplyStat2Reveal(view, frame),
+            "atkReveal" => ApplyAtkReveal(view, frame),
+            "magReveal" => ApplyMagReveal(view, frame),
+            "defReveal" => ApplyDefReveal(view, frame),
+            "itemReveal" => ApplyItemReveal(view, frame),
             _ => false
         };
     }
@@ -42,7 +154,15 @@ public static class CharPortraitMotion
     {
         return clipId switch
         {
-            "intro" => 90,
+            "portraitIntro" => 24,
+            "hpBarFill" => 22,
+            "mpBarFill" => 22,
+            "stat1Reveal" => 16,
+            "stat2Reveal" => 16,
+            "atkReveal" => 12,
+            "magReveal" => 12,
+            "defReveal" => 12,
+            "itemReveal" => 12,
             _ => 0
         };
     }
@@ -52,134 +172,252 @@ public static class CharPortraitMotion
         return GetClipDurationFrames(clipId) / (float)FramesPerSecond;
     }
 
-    private static readonly NumberKeyframe[] s_IntroPortraitRootOpacity =
+    private static readonly NumberKeyframe[] s_PortraitIntroPortraitRootOpacity =
     {
         new NumberKeyframe(0, 0f, EaseMode.Linear),
         new NumberKeyframe(12, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroPortraitRootPositionY =
+    private static readonly NumberKeyframe[] s_PortraitIntroPortraitRootPositionY =
     {
         new NumberKeyframe(0, 24f, EaseMode.Linear),
         new NumberKeyframe(18, 0f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroFaceRevealOpacity =
+    private static readonly NumberKeyframe[] s_PortraitIntroFaceRevealOpacity =
     {
         new NumberKeyframe(0, 0f, EaseMode.Linear),
         new NumberKeyframe(12, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroFaceRevealScaleX =
+    private static readonly NumberKeyframe[] s_PortraitIntroFaceRevealScaleX =
     {
         new NumberKeyframe(0, 0.78f, EaseMode.Linear),
         new NumberKeyframe(16, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroFaceRevealScaleY =
+    private static readonly NumberKeyframe[] s_PortraitIntroFaceRevealScaleY =
     {
         new NumberKeyframe(0, 0.78f, EaseMode.Linear),
         new NumberKeyframe(16, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroClassIconSettleOpacity =
+    private static readonly NumberKeyframe[] s_PortraitIntroClassIconSettleOpacity =
     {
-        new NumberKeyframe(4, 0f, EaseMode.Linear),
-        new NumberKeyframe(16, 1f, EaseMode.EaseOut),
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(12, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroClassIconSettleRotation =
+    private static readonly NumberKeyframe[] s_PortraitIntroClassIconSettleRotation =
     {
-        new NumberKeyframe(4, -14f, EaseMode.Linear),
-        new NumberKeyframe(20, 0f, EaseMode.EaseInOut),
+        new NumberKeyframe(0, -14f, EaseMode.Linear),
+        new NumberKeyframe(16, 0f, EaseMode.EaseInOut),
     };
 
-    private static readonly StringKeyframe[] s_IntroNameBootText =
+    private static readonly StringKeyframe[] s_PortraitIntroNameBootText =
     {
         new StringKeyframe(0, "SCANNING"),
-        new StringKeyframe(24, "AELRIC"),
+        new StringKeyframe(18, "AELRIC"),
     };
 
-    private static readonly StringKeyframe[] s_IntroNameBootColor =
+    private static readonly StringKeyframe[] s_PortraitIntroNameBootColor =
     {
         new StringKeyframe(0, "#d6c6a4"),
-        new StringKeyframe(24, "#ffffff"),
+        new StringKeyframe(18, "#ffffff"),
     };
 
-    private static readonly NumberKeyframe[] s_IntroNameBootPositionX =
+    private static readonly NumberKeyframe[] s_PortraitIntroNameBootPositionX =
     {
         new NumberKeyframe(0, -10f, EaseMode.Linear),
-        new NumberKeyframe(20, 0f, EaseMode.EaseOut),
+        new NumberKeyframe(16, 0f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroHpFillIntroWidth =
+    private static bool ApplyPortraitIntro(CharPortraitView view, int frame)
     {
-        new NumberKeyframe(6, 0f, EaseMode.Linear),
-        new NumberKeyframe(28, 90f, EaseMode.EaseOut),
+        var localFrame = Mathf.Clamp(frame - 0, 0, 24);
+        ApplyOpacity(view.Root, EvaluateNumber(localFrame, s_PortraitIntroPortraitRootOpacity, 1f));
+        ApplyTranslate(view.Root, 0f, EvaluateNumber(localFrame, s_PortraitIntroPortraitRootPositionY, 0f));
+        ApplyOpacity(view.Face, EvaluateNumber(localFrame, s_PortraitIntroFaceRevealOpacity, 1f));
+        ApplyScale(view.Face, EvaluateNumber(localFrame, s_PortraitIntroFaceRevealScaleX, 1f), EvaluateNumber(localFrame, s_PortraitIntroFaceRevealScaleY, 1f));
+        ApplyOpacity(view.ClassIcon, EvaluateNumber(localFrame, s_PortraitIntroClassIconSettleOpacity, 1f));
+        ApplyRotation(view.ClassIcon, EvaluateNumber(localFrame, s_PortraitIntroClassIconSettleRotation, 0f));
+        ApplyText(view.Name, EvaluateString(localFrame, s_PortraitIntroNameBootText, string.Empty));
+        ApplyColor(view.Name, EvaluateString(localFrame, s_PortraitIntroNameBootColor, string.Empty));
+        ApplyTranslate(view.Name, EvaluateNumber(localFrame, s_PortraitIntroNameBootPositionX, 0f), 0f);
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_HpBarFillHpFillIntroWidth =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(22, 90f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroMpFillIntroWidth =
+    private static bool ApplyHpBarFill(CharPortraitView view, int frame)
     {
-        new NumberKeyframe(12, 0f, EaseMode.Linear),
-        new NumberKeyframe(34, 60f, EaseMode.EaseOut),
+        var localFrame = Mathf.Clamp(frame - 0, 0, 22);
+        ApplyWidth(view.HpFill, EvaluateNumber(localFrame, s_HpBarFillHpFillIntroWidth, 0f));
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_MpBarFillMpFillIntroWidth =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(22, 60f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroStatsRevealOpacity =
+    private static bool ApplyMpBarFill(CharPortraitView view, int frame)
     {
-        new NumberKeyframe(14, 0f, EaseMode.Linear),
-        new NumberKeyframe(30, 1f, EaseMode.EaseOut),
+        var localFrame = Mathf.Clamp(frame - 0, 0, 22);
+        ApplyWidth(view.MpFill, EvaluateNumber(localFrame, s_MpBarFillMpFillIntroWidth, 0f));
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_Stat1RevealStatsRevealOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(16, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroStatsRevealPositionX =
+    private static readonly NumberKeyframe[] s_Stat1RevealStatsRevealPositionX =
     {
-        new NumberKeyframe(14, -8f, EaseMode.Linear),
-        new NumberKeyframe(30, 0f, EaseMode.EaseOut),
+        new NumberKeyframe(0, -8f, EaseMode.Linear),
+        new NumberKeyframe(16, 0f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroStatsRevealSecondaryOpacity =
+    private static bool ApplyStat1Reveal(CharPortraitView view, int frame)
     {
-        new NumberKeyframe(18, 0f, EaseMode.Linear),
-        new NumberKeyframe(34, 1f, EaseMode.EaseOut),
+        var localFrame = Mathf.Clamp(frame - 0, 0, 16);
+        ApplyOpacity(view.Stat1, EvaluateNumber(localFrame, s_Stat1RevealStatsRevealOpacity, 1f));
+        ApplyTranslate(view.Stat1, EvaluateNumber(localFrame, s_Stat1RevealStatsRevealPositionX, 0f), 0f);
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_Stat2RevealStatsRevealSecondaryOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(16, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroStatsRevealSecondaryPositionX =
+    private static readonly NumberKeyframe[] s_Stat2RevealStatsRevealSecondaryPositionX =
     {
-        new NumberKeyframe(18, 8f, EaseMode.Linear),
-        new NumberKeyframe(34, 0f, EaseMode.EaseOut),
+        new NumberKeyframe(0, 8f, EaseMode.Linear),
+        new NumberKeyframe(16, 0f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroActionsRevealOpacity =
+    private static bool ApplyStat2Reveal(CharPortraitView view, int frame)
     {
-        new NumberKeyframe(20, 0f, EaseMode.Linear),
-        new NumberKeyframe(36, 1f, EaseMode.EaseOut),
+        var localFrame = Mathf.Clamp(frame - 0, 0, 16);
+        ApplyOpacity(view.Stat2, EvaluateNumber(localFrame, s_Stat2RevealStatsRevealSecondaryOpacity, 1f));
+        ApplyTranslate(view.Stat2, EvaluateNumber(localFrame, s_Stat2RevealStatsRevealSecondaryPositionX, 0f), 0f);
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_AtkRevealAtkButtonOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(12, 1f, EaseMode.EaseOut),
     };
 
-    private static readonly NumberKeyframe[] s_IntroActionsRevealPositionY =
+    private static readonly NumberKeyframe[] s_AtkRevealAtkButtonPositionY =
     {
-        new NumberKeyframe(20, 10f, EaseMode.Linear),
-        new NumberKeyframe(36, 0f, EaseMode.EaseOut),
+        new NumberKeyframe(0, 10f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
     };
 
-    private static bool ApplyIntro(CharPortraitView view, int frame)
+    private static readonly NumberKeyframe[] s_AtkRevealAtkIconRotation =
     {
-        var localFrame = Mathf.Clamp(frame - 0, 0, 90);
-        ApplyOpacity(view.Root, EvaluateNumber(localFrame, s_IntroPortraitRootOpacity, 1f));
-        ApplyTranslate(view.Root, 0f, EvaluateNumber(localFrame, s_IntroPortraitRootPositionY, 0f));
-        ApplyOpacity(view.Face, EvaluateNumber(localFrame, s_IntroFaceRevealOpacity, 1f));
-        ApplyScale(view.Face, EvaluateNumber(localFrame, s_IntroFaceRevealScaleX, 1f), EvaluateNumber(localFrame, s_IntroFaceRevealScaleY, 1f));
-        ApplyOpacity(view.ClassIcon, EvaluateNumber(localFrame, s_IntroClassIconSettleOpacity, 1f));
-        ApplyRotation(view.ClassIcon, EvaluateNumber(localFrame, s_IntroClassIconSettleRotation, 0f));
-        ApplyText(view.Name, EvaluateString(localFrame, s_IntroNameBootText, string.Empty));
-        ApplyColor(view.Name, EvaluateString(localFrame, s_IntroNameBootColor, string.Empty));
-        ApplyTranslate(view.Name, EvaluateNumber(localFrame, s_IntroNameBootPositionX, 0f), 0f);
-        ApplyWidth(view.HpFill, EvaluateNumber(localFrame, s_IntroHpFillIntroWidth, 0f));
-        ApplyWidth(view.MpFill, EvaluateNumber(localFrame, s_IntroMpFillIntroWidth, 0f));
-        ApplyOpacity(view.Stat1, EvaluateNumber(localFrame, s_IntroStatsRevealOpacity, 1f));
-        ApplyTranslate(view.Stat1, EvaluateNumber(localFrame, s_IntroStatsRevealPositionX, 0f), 0f);
-        ApplyOpacity(view.Stat2, EvaluateNumber(localFrame, s_IntroStatsRevealSecondaryOpacity, 1f));
-        ApplyTranslate(view.Stat2, EvaluateNumber(localFrame, s_IntroStatsRevealSecondaryPositionX, 0f), 0f);
-        ApplyOpacity(view.ActionGrid, EvaluateNumber(localFrame, s_IntroActionsRevealOpacity, 1f));
-        ApplyTranslate(view.ActionGrid, 0f, EvaluateNumber(localFrame, s_IntroActionsRevealPositionY, 0f));
+        new NumberKeyframe(0, -18f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static bool ApplyAtkReveal(CharPortraitView view, int frame)
+    {
+        var localFrame = Mathf.Clamp(frame - 0, 0, 12);
+        ApplyOpacity(view.Atk, EvaluateNumber(localFrame, s_AtkRevealAtkButtonOpacity, 1f));
+        ApplyTranslate(view.Atk, 0f, EvaluateNumber(localFrame, s_AtkRevealAtkButtonPositionY, 0f));
+        ApplyRotation(view.QEpO3, EvaluateNumber(localFrame, s_AtkRevealAtkIconRotation, 0f));
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_MagRevealMagButtonOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(12, 1f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_MagRevealMagButtonPositionY =
+    {
+        new NumberKeyframe(0, 10f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_MagRevealMagIconRotation =
+    {
+        new NumberKeyframe(0, -18f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static bool ApplyMagReveal(CharPortraitView view, int frame)
+    {
+        var localFrame = Mathf.Clamp(frame - 0, 0, 12);
+        ApplyOpacity(view.Mag, EvaluateNumber(localFrame, s_MagRevealMagButtonOpacity, 1f));
+        ApplyTranslate(view.Mag, 0f, EvaluateNumber(localFrame, s_MagRevealMagButtonPositionY, 0f));
+        ApplyRotation(view.AIphN, EvaluateNumber(localFrame, s_MagRevealMagIconRotation, 0f));
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_DefRevealDefButtonOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(12, 1f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_DefRevealDefButtonPositionY =
+    {
+        new NumberKeyframe(0, 10f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_DefRevealDefIconRotation =
+    {
+        new NumberKeyframe(0, -18f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static bool ApplyDefReveal(CharPortraitView view, int frame)
+    {
+        var localFrame = Mathf.Clamp(frame - 0, 0, 12);
+        ApplyOpacity(view.Def, EvaluateNumber(localFrame, s_DefRevealDefButtonOpacity, 1f));
+        ApplyTranslate(view.Def, 0f, EvaluateNumber(localFrame, s_DefRevealDefButtonPositionY, 0f));
+        ApplyRotation(view.E4QKZ, EvaluateNumber(localFrame, s_DefRevealDefIconRotation, 0f));
+        return true;
+    }
+
+    private static readonly NumberKeyframe[] s_ItemRevealItemButtonOpacity =
+    {
+        new NumberKeyframe(0, 0f, EaseMode.Linear),
+        new NumberKeyframe(12, 1f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_ItemRevealItemButtonPositionY =
+    {
+        new NumberKeyframe(0, 10f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static readonly NumberKeyframe[] s_ItemRevealItemIconRotation =
+    {
+        new NumberKeyframe(0, -18f, EaseMode.Linear),
+        new NumberKeyframe(12, 0f, EaseMode.EaseOut),
+    };
+
+    private static bool ApplyItemReveal(CharPortraitView view, int frame)
+    {
+        var localFrame = Mathf.Clamp(frame - 0, 0, 12);
+        ApplyOpacity(view.Item, EvaluateNumber(localFrame, s_ItemRevealItemButtonOpacity, 1f));
+        ApplyTranslate(view.Item, 0f, EvaluateNumber(localFrame, s_ItemRevealItemButtonPositionY, 0f));
+        ApplyRotation(view.DVzX7, EvaluateNumber(localFrame, s_ItemRevealItemIconRotation, 0f));
         return true;
     }
 

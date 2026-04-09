@@ -165,6 +165,10 @@ public sealed class PenToIrConverter
         {
             metadata[BoomHudMetadataKeys.PencilPosition] = "absolute";
         }
+        if (node.Clip is true)
+        {
+            metadata[BoomHudMetadataKeys.PencilClip] = true;
+        }
         if (!string.IsNullOrWhiteSpace(sourceNode.Ref))
         {
             metadata[BoomHudMetadataKeys.PencilComponentRef] = sourceNode.Ref;
@@ -683,6 +687,7 @@ public sealed class PenToIrConverter
         return new StyleSpec
         {
             Background = ParseColorFromObject(backgroundSource),
+            BackgroundImage = ParseBackgroundImageFill(backgroundSource),
             BackgroundToken = IsTokenRef(backgroundSource) ? ExtractTokenName(backgroundSource) : null,
             Foreground = ParseColorFromObject(foregroundSource),
             ForegroundToken = IsTokenRef(foregroundSource) ? ExtractTokenName(foregroundSource) : null,
@@ -696,6 +701,59 @@ public sealed class PenToIrConverter
             Opacity = style?.Opacity
         };
     }
+
+    private BackgroundImageSpec? ParseBackgroundImageFill(object? value)
+    {
+        if (value is not JsonElement { ValueKind: JsonValueKind.Object } element)
+        {
+            return null;
+        }
+
+        if (element.TryGetProperty("fill", out var fillProp))
+        {
+            return ParseBackgroundImageFill(fillProp.Clone());
+        }
+
+        if (!element.TryGetProperty("type", out var typeProp)
+            || typeProp.ValueKind != JsonValueKind.String
+            || !string.Equals(typeProp.GetString(), "image", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        if (element.TryGetProperty("enabled", out var enabledProp)
+            && enabledProp.ValueKind is JsonValueKind.False)
+        {
+            return null;
+        }
+
+        if (!element.TryGetProperty("url", out var urlProp)
+            || urlProp.ValueKind != JsonValueKind.String
+            || string.IsNullOrWhiteSpace(urlProp.GetString()))
+        {
+            _warnings.Add("Encountered image paint fill in .pen file without a url; skipping background image.");
+            return null;
+        }
+
+        return new BackgroundImageSpec
+        {
+            Url = urlProp.GetString()!,
+            Mode = ParseBackgroundImageMode(element.TryGetProperty("mode", out var modeProp) ? modeProp.GetString() : null)
+        };
+    }
+
+    private static BackgroundImageMode ParseBackgroundImageMode(string? mode)
+        => mode?.Trim().ToLowerInvariant() switch
+        {
+            "contain" => BackgroundImageMode.Contain,
+            "fit" => BackgroundImageMode.Contain,
+            "stretch" => BackgroundImageMode.Stretch,
+            "tile" => BackgroundImageMode.Tile,
+            "original" => BackgroundImageMode.Original,
+            "fill" => BackgroundImageMode.Fill,
+            "cover" => BackgroundImageMode.Fill,
+            _ => BackgroundImageMode.Fill
+        };
 
     private static JsonElement? ExtractStrokeFill(object? stroke)
     {
@@ -733,13 +791,6 @@ public sealed class PenToIrConverter
                 if (je.TryGetProperty("fill", out var fillProp))
                 {
                     return ParseColorFromObject(fillProp.Clone());
-                }
-
-                if (je.TryGetProperty("type", out var typeProp)
-                    && typeProp.ValueKind == JsonValueKind.String
-                    && string.Equals(typeProp.GetString(), "image", StringComparison.OrdinalIgnoreCase))
-                {
-                    _warnings.Add("Encountered image paint fill in .pen file; current IR/style conversion keeps layout but does not emit background images yet.");
                 }
 
                 return null;
