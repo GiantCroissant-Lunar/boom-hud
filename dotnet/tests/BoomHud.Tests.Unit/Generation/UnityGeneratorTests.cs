@@ -138,12 +138,17 @@ public class UnityGeneratorTests
         var result = _generator.Generate(doc, options);
 
         result.Files.Should().Contain(f => f.Path == "StatusHudMotion.gen.cs");
+        result.Files.Should().Contain(f => f.Path == "StatusHudMotionHost.gen.cs");
         var motionFile = result.Files.First(f => f.Path == "StatusHudMotion.gen.cs");
+        var hostFile = result.Files.First(f => f.Path == "StatusHudMotionHost.gen.cs");
         motionFile.Content.Should().Contain("public static bool TryApplyAtFrame(StatusHudView view, string clipId, int frame)");
         motionFile.Content.Should().Contain("ApplyOpacity(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusFadeOpacity, 1f));");
         motionFile.Content.Should().Contain("ApplyText(view.StatusLabel, EvaluateString(localFrame, s_IntroStatusFadeText, string.Empty));");
         motionFile.Content.Should().Contain("ApplyTranslate(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusMovePositionX, 0f), 0f);");
         motionFile.Content.Should().Contain("ApplyRotation(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusMoveRotation, 0f));");
+        hostFile.Content.Should().Contain("public partial class StatusHudMotionHost : BoomHudUiToolkitMotionHost");
+        hostFile.Content.Should().Contain("_view = new StatusHudView(generatedRoot);");
+        hostFile.Content.Should().Contain("return _view != null && StatusHudMotion.TryApplyAtTime(_view, clipId, timeSeconds);");
     }
 
     [Fact]

@@ -102,9 +102,9 @@ public sealed class UnityMotionExporterTests
         var result = UnityMotionExporter.Generate(document, motion, _options);
 
         result.Success.Should().BeTrue();
-        result.Files.Should().ContainSingle();
-        var file = result.Files[0];
-        file.Path.Should().Be("DebugOverlayMotion.gen.cs");
+        result.Files.Should().HaveCount(2);
+        var file = result.Files.First(f => f.Path == "DebugOverlayMotion.gen.cs");
+        var hostFile = result.Files.First(f => f.Path == "DebugOverlayMotionHost.gen.cs");
         file.Content.Should().Contain("public static class DebugOverlayMotion");
         file.Content.Should().Contain("public const int FramesPerSecond = 30;");
         file.Content.Should().Contain("public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)");
@@ -112,6 +112,9 @@ public sealed class UnityMotionExporterTests
         file.Content.Should().Contain("ApplyText(view.Version, EvaluateString(localFrame, s_IntroVersionTrackText, string.Empty));");
         file.Content.Should().Contain("ApplyColor(view.Version, EvaluateString(localFrame, s_IntroVersionTrackColor, string.Empty));");
         file.Content.Should().Contain("element.style.color = new StyleColor");
+        hostFile.Content.Should().Contain("public partial class DebugOverlayMotionHost : BoomHudUiToolkitMotionHost");
+        hostFile.Content.Should().Contain("_view = new DebugOverlayView(generatedRoot);");
+        hostFile.Content.Should().Contain("return _view != null && DebugOverlayMotion.TryApplyAtTime(_view, clipId, timeSeconds);");
         result.Diagnostics.Should().BeEmpty();
     }
 
@@ -178,7 +181,8 @@ public sealed class UnityMotionExporterTests
         result.Diagnostics.Should().HaveCount(2);
         result.Diagnostics.Should().Contain(d => d.Code == "BHU2001");
         result.Diagnostics.Should().Contain(d => d.Code == "BHU2002");
-        result.Files[0].Content.Should().NotContain("does-not-exist");
-        result.Files[0].Content.Should().NotContain("SpriteFrame");
+        var motionFile = result.Files.First(f => f.Path == "DebugOverlayMotion.gen.cs");
+        motionFile.Content.Should().NotContain("does-not-exist");
+        motionFile.Content.Should().NotContain("SpriteFrame");
     }
 }
