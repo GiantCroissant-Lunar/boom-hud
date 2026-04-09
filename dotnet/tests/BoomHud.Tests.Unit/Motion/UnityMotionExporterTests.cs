@@ -108,11 +108,15 @@ public sealed class UnityMotionExporterTests
         file.Content.Should().Contain("public static class DebugOverlayMotion");
         file.Content.Should().Contain("public const int FramesPerSecond = 30;");
         file.Content.Should().Contain("public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)");
+        file.Content.Should().Contain("throw new ArgumentNullException(nameof(view));");
+        file.Content.Should().NotContain("ArgumentNullException.ThrowIfNull");
         file.Content.Should().Contain("ApplyOpacity(view.Root, EvaluateNumber(localFrame, s_IntroFadeRootOpacity, 1f));");
         file.Content.Should().Contain("ApplyText(view.Version, EvaluateString(localFrame, s_IntroVersionTrackText, string.Empty));");
         file.Content.Should().Contain("ApplyColor(view.Version, EvaluateString(localFrame, s_IntroVersionTrackColor, string.Empty));");
         file.Content.Should().Contain("element.style.color = new StyleColor");
         hostFile.Content.Should().Contain("public partial class DebugOverlayMotionHost : BoomHudUiToolkitMotionHost");
+        hostFile.Content.Should().Contain("throw new ArgumentNullException(nameof(root));");
+        hostFile.Content.Should().NotContain("ArgumentNullException.ThrowIfNull");
         hostFile.Content.Should().Contain("_view = new DebugOverlayView(generatedRoot);");
         hostFile.Content.Should().Contain("return _view != null && DebugOverlayMotion.TryApplyAtTime(_view, clipId, timeSeconds);");
         result.Diagnostics.Should().BeEmpty();

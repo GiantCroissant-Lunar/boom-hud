@@ -16,7 +16,10 @@ public static class DebugOverlayMotion
 
     public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)
     {
-        ArgumentNullException.ThrowIfNull(view);
+        if (view == null)
+        {
+            throw new ArgumentNullException(nameof(view));
+        }
 
         return clipId switch
         {

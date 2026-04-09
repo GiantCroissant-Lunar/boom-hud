@@ -108,7 +108,10 @@ public static class UnityMotionExporter
         builder.AppendLine();
         AppendInvariantLine(builder, $"    public static bool TryApplyAtFrame({document.Name}View view, string clipId, int frame)");
         builder.AppendLine("    {");
-        builder.AppendLine("        ArgumentNullException.ThrowIfNull(view);");
+        builder.AppendLine("        if (view == null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            throw new ArgumentNullException(nameof(view));");
+        builder.AppendLine("        }");
         builder.AppendLine();
         builder.AppendLine("        return clipId switch");
         builder.AppendLine("        {");
@@ -233,7 +236,10 @@ public static class UnityMotionExporter
         builder.AppendLine();
         builder.AppendLine("    protected override void BindMotionView(VisualElement root)");
         builder.AppendLine("    {");
-        builder.AppendLine("        ArgumentNullException.ThrowIfNull(root);");
+        builder.AppendLine("        if (root == null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            throw new ArgumentNullException(nameof(root));");
+        builder.AppendLine("        }");
         AppendInvariantLine(builder, $"        var generatedRoot = ResolveGeneratedRoot(root);");
         AppendInvariantLine(builder, $"        _view = new {document.Name}View(generatedRoot);");
         builder.AppendLine("    }");

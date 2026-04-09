@@ -22,7 +22,10 @@ public partial class DebugOverlayMotionHost : BoomHudUiToolkitMotionHost
 
     protected override void BindMotionView(VisualElement root)
     {
-        ArgumentNullException.ThrowIfNull(root);
+        if (root == null)
+        {
+            throw new ArgumentNullException(nameof(root));
+        }
         var generatedRoot = ResolveGeneratedRoot(root);
         _view = new DebugOverlayView(generatedRoot);
     }
