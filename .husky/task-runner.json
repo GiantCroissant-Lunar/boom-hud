@@ -12,15 +12,10 @@
          "name": "conventional-commit-message",
          "group": "commit-msg",
          "command": "pwsh",
-         "args": ["-NoProfile", "-Command", "${args}"],
          "args": [
-            "$commitMsg = Get-Content ${args};",
-            "$pattern = '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z-]+\))?!?: .+$';",
-            "if ($commitMsg -match $pattern) { exit 0 };",
-            "Write-Host 'Error: Commit message does not follow Conventional Commits format.' -ForegroundColor Red;",
-            "Write-Host 'Expected format: type(scope)?: description' -ForegroundColor Yellow;",
-            "Write-Host 'Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert' -ForegroundColor Yellow;",
-            "exit 1"
+            "-NoProfile",
+            "-Command",
+            "$commitMsg = Get-Content ${args}; $pattern = '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\([a-z-]+\\))?!?: .+$'; if ($commitMsg -match $pattern) { exit 0 }; Write-Host 'Error: Commit message does not follow Conventional Commits format.' -ForegroundColor Red; Write-Host 'Expected format: type(scope)?: description' -ForegroundColor Yellow; Write-Host 'Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert' -ForegroundColor Yellow; exit 1"
          ]
       }
    ]
