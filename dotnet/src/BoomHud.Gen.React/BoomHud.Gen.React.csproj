@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Gen.React</AssemblyName>
+    <RootNamespace>BoomHud.Gen.React</RootNamespace>
+    <PackageId>BoomHud.React</PackageId>
+    <Description>React and Remotion-friendly code generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;react;remotion;generator;boomhud</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

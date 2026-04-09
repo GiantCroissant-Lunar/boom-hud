@@ -43,7 +43,7 @@ public static class Program
             inputOption.AddAlias("--in");
             var rootComponentOption = new Option<string?>("--root", "Root component name for multi-input composition. If omitted, first input's root is used.");
             var manifestOption = new Option<FileInfo?>("--manifest", "Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.");
-            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, all)");
+            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, unity, all)");
             var formatOption = new Option<string?>("--format", "Input format (pen, figma, ir). Auto-detected from extension if omitted.");
             var outputOption = new Option<DirectoryInfo?>("--output", "Output directory for generated files");
             var namespaceOption = new Option<string>("--namespace", () => "Generated", "Namespace for generated code");

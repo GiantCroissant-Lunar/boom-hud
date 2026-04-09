@@ -20,6 +20,8 @@ This directory contains Request for Comments (RFC) documents for the BoomHud pro
 | [RFC-0012](./RFC-0012-unity-uitoolkit-backend.md) | Unity UI Toolkit Backend | Draft |
 | [RFC-0013](./RFC-0013-native-godot-tscn-backend.md) | Native Godot TSCN Backend | Draft |
 | [RFC-0014](./RFC-0014-pencil-dev-integration.md) | Pencil.dev Integration for Agentic UI | Draft |
+| [RFC-0018](./RFC-0018-react-remotion-motion-pipeline.md) | React/Remotion Backend and Motion Pipeline Split | Draft |
+| [RFC-0019](./RFC-0019-remotion-motion-ir-authoring.md) | Remotion as Motion IR Authoring Surface | Draft |
 
 ## RFC Process
 

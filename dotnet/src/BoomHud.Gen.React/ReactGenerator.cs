@@ -1,0 +1,390 @@
+using System.Globalization;
+using System.Text;
+using BoomHud.Abstractions.Capabilities;
+using BoomHud.Abstractions.Generation;
+using BoomHud.Abstractions.IR;
+
+namespace BoomHud.Gen.React;
+
+public sealed class ReactGenerator : IBackendGenerator
+{
+    public string TargetFramework => "React";
+    public ICapabilityManifest Capabilities => ReactCapabilities.Instance;
+
+    public GenerationResult Generate(HudDocument document, GenerationOptions options)
+    {
+        var diagnostics = new List<Diagnostic>();
+        var files = new List<GeneratedFile>();
+
+        if (options.EmitCompose)
+        {
+            diagnostics.Add(Diagnostic.Warning("React compose helpers are not implemented yet.", code: "BHR2000"));
+        }
+
+        try
+        {
+            foreach (var component in document.Components.Values)
+            {
+                EmitArtifacts(new HudDocument
+                {
+                    Name = component.Name,
+                    Metadata = component.Metadata,
+                    Root = component.Root,
+                    Styles = document.Styles,
+                    Components = document.Components
+                }, options, diagnostics, files);
+            }
+
+            EmitArtifacts(document, options, diagnostics, files);
+        }
+        catch (Exception ex)
+        {
+            diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
+        }
+
+        return new GenerationResult { Files = files, Diagnostics = diagnostics };
+    }
+
+    private static void EmitArtifacts(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
+    {
+        var props = CollectProps(document.Root).OrderBy(static x => x, StringComparer.Ordinal).ToList();
+        files.Add(new GeneratedFile { Path = $"{document.Name}View.tsx", Content = GenerateTsx(document, props, diagnostics), Type = GeneratedFileType.SourceCode });
+        if (options.EmitViewModelInterfaces)
+        {
+            files.Add(new GeneratedFile { Path = $"I{document.Name}ViewModel.g.ts", Content = GenerateContract(document.Name, props), Type = GeneratedFileType.SourceCode });
+        }
+    }
+
+    private static string GenerateTsx(HudDocument document, IReadOnlyList<string> props, List<Diagnostic> diagnostics)
+    {
+        var imports = CollectRefs(document.Root, document.Components, diagnostics, document.Name);
+        var builder = new StringBuilder();
+        builder.AppendLine("import React from 'react';");
+        foreach (var import in imports)
+        {
+            builder.Append("import { ").Append(import).Append("View } from './").Append(import).AppendLine("View';");
+        }
+
+        if (imports.Count > 0) builder.AppendLine();
+        builder.Append(GenerateContract(document.Name, props));
+        builder.AppendLine();
+        builder.AppendLine("const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;");
+        builder.AppendLine("const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);");
+        builder.AppendLine("const formatValue = (value: unknown, format?: string, fallback = '') => !format ? asText(value, fallback) : format.replace(/\\{0(?:\\:[^}]*)?\\}/g, asText(value, fallback));");
+        builder.AppendLine("const clampPercent = (value: unknown) => `${Math.max(0, Math.min(100, typeof value === 'number' ? value : 0))}%`;");
+        builder.AppendLine();
+        builder.Append("export function ").Append(document.Name).Append("View(props: ").Append(document.Name).AppendLine("ViewModel): React.JSX.Element {");
+        builder.AppendLine("  return (");
+        builder.Append(RenderNode(document.Root, 2, null, document.Components, diagnostics));
+        builder.AppendLine("  );");
+        builder.AppendLine("}");
+        builder.Append("export default ").Append(document.Name).AppendLine("View;");
+        return builder.ToString();
+    }
+
+    private static string GenerateContract(string name, IReadOnlyList<string> props)
+    {
+        var builder = new StringBuilder();
+        builder.Append("export interface ").Append(name).AppendLine("ViewModel {");
+        foreach (var prop in props)
+        {
+            builder.Append("  ").Append(prop).AppendLine("?: unknown;");
+        }
+
+        builder.AppendLine("}");
+        return builder.ToString();
+    }
+
+    private static string RenderNode(ComponentNode node, int indentLevel, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics)
+    {
+        var indent = new string(' ', indentLevel * 2);
+        if (node.Visible.IsBound)
+        {
+            return indent + $"asBool(props.{PropName(node.Visible.BindingPath!)}) ? (\n" +
+                RenderCore(node, indentLevel + 1, parentLayout, components, diagnostics) +
+                indent + ") : null\n";
+        }
+
+        if (node.Visible.Value == false) return indent + "null\n";
+        return RenderCore(node, indentLevel, parentLayout, components, diagnostics);
+    }
+
+    private static string RenderCore(ComponentNode node, int indentLevel, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics)
+    {
+        var indent = new string(' ', indentLevel * 2);
+        var style = BuildStyle(node, parentLayout);
+        var title = node.Tooltip?.IsBound == true ? $" title={{asText(props.{PropName(node.Tooltip!.Value.BindingPath!)})}}" :
+            node.Tooltip?.Value is { } tooltip ? $" title={Ts(tooltip)}" : string.Empty;
+        var disabled = node.Enabled.IsBound ? $" disabled={{!asBool(props.{PropName(node.Enabled.BindingPath!)})}}" : node.Enabled.Value == false ? " disabled" : string.Empty;
+        var common = $" className={Ts(ClassName(node))}" + (style.Length > 0 ? $" style={{ {{ {style} }} }}" : string.Empty) + title +
+            (string.IsNullOrWhiteSpace(node.Id) ? string.Empty : $" data-boomhud-id={Ts(node.Id)}");
+
+        if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var component))
+        {
+            if (node.InstanceOverrides.Count > 0)
+            {
+                diagnostics.Add(Diagnostic.Warning($"React backend does not apply instance overrides for '{component.Name}' yet.", node.Id, "BHR1002"));
+            }
+
+            return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View />\n" + indent + "</div>\n";
+        }
+
+        var tag = node.Type switch
+        {
+            ComponentType.Label or ComponentType.Badge or ComponentType.Icon => "span",
+            ComponentType.Button or ComponentType.MenuItem => "button",
+            ComponentType.Panel => "section",
+            ComponentType.MenuBar => "nav",
+            ComponentType.Image => "img",
+            ComponentType.TextInput => "input",
+            ComponentType.TextArea => "textarea",
+            ComponentType.Checkbox or ComponentType.RadioButton => "input",
+            _ => "div"
+        };
+
+        if (node.Type == ComponentType.Image)
+        {
+            return indent + $"<img{common} src={{{TextExpr(node, ["source", "src", "value"], "''")}}} alt={Ts(node.Id ?? "image")} />\n";
+        }
+
+        if (node.Type == ComponentType.TextInput)
+        {
+            return indent + $"<input{common} type=\"text\"{disabled} defaultValue={{{TextExpr(node, ["text", "content", "value"], "''")}}} />\n";
+        }
+
+        if (node.Type == ComponentType.TextArea)
+        {
+            return indent + $"<textarea{common}{disabled} defaultValue={{{TextExpr(node, ["text", "content", "value"], "''")}}} />\n";
+        }
+
+        if (node.Type is ComponentType.Checkbox or ComponentType.RadioButton)
+        {
+            var inputType = node.Type == ComponentType.Checkbox ? "checkbox" : "radio";
+            return indent + $"<input{common} type=\"{inputType}\" checked={{asBool({ValueExpr(node, ["checked", "value"], "false")}, false)}} readOnly{disabled} />\n";
+        }
+
+        if (node.Type == ComponentType.ProgressBar)
+        {
+            return indent + $"<div{common}>\n" +
+                indent + $"  <div style={{ {{ width: clampPercent({ValueExpr(node, ["value"], "0")}), height: '100%', backgroundColor: 'currentColor' }} }} />\n" +
+                indent + "</div>\n";
+        }
+
+        var text = TextExpr(node, ["text", "content", "value"], null);
+        var builder = new StringBuilder();
+        builder.Append(indent).Append('<').Append(tag).Append(common).Append(disabled);
+        if (node.Children.Count == 0 && text == null)
+        {
+            builder.AppendLine(" />");
+            return builder.ToString();
+        }
+
+        builder.AppendLine(">");
+        if (text != null) builder.Append(indent).Append("  {").Append(text).AppendLine("}");
+        foreach (var child in node.Children) builder.Append(RenderNode(child, indentLevel + 1, node.Layout?.Type, components, diagnostics));
+        builder.Append(indent).Append("</").Append(tag).AppendLine(">");
+        return builder.ToString();
+    }
+
+    private static string BuildStyle(ComponentNode node, LayoutType? parentLayout)
+    {
+        var style = new List<string>();
+        var layout = node.Layout;
+        if (layout != null)
+        {
+            if (layout.Type == LayoutType.Horizontal) style.Add("display: 'flex', flexDirection: 'row'");
+            if (layout.Type is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock) style.Add("display: 'flex', flexDirection: 'column'");
+            if (layout.Type == LayoutType.Grid) style.Add("display: 'grid'");
+            if (layout.Gap is { } gap) style.Add($"gap: {Ts(gap.ToString())}");
+            if (layout.Padding is { } padding) style.Add($"padding: {Ts(padding.ToString())}");
+            if (layout.Margin is { } margin) style.Add($"margin: {Ts(margin.ToString())}");
+            AppendDimension(style, "width", layout.Width);
+            AppendDimension(style, "height", layout.Height);
+            AppendDimension(style, "minWidth", layout.MinWidth);
+            AppendDimension(style, "minHeight", layout.MinHeight);
+            AppendDimension(style, "maxWidth", layout.MaxWidth);
+            AppendDimension(style, "maxHeight", layout.MaxHeight);
+            if (layout.Align is { } align) style.Add($"alignItems: {Ts(align switch { Alignment.Start => "flex-start", Alignment.Center => "center", Alignment.End => "flex-end", _ => "stretch" })}");
+            if (layout.Justify is { } justify) style.Add($"justifyContent: {Ts(justify switch { Justification.Start => "flex-start", Justification.Center => "center", Justification.End => "flex-end", Justification.SpaceBetween => "space-between", Justification.SpaceAround => "space-around", Justification.SpaceEvenly => "space-evenly", _ => "flex-start" })}");
+            if (layout.Weight is { } weight) style.Add($"flexGrow: {weight.ToString(CultureInfo.InvariantCulture)}");
+        }
+
+        if (node.Style is { } visual)
+        {
+            if (visual.Foreground is { } foreground) style.Add($"color: {Ts(foreground.ToHex())}");
+            if (visual.Background is { } background) style.Add($"backgroundColor: {Ts(background.ToHex())}");
+            if (visual.FontSize is { } fontSize) style.Add($"fontSize: {Ts($"{fontSize.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+            if (!string.IsNullOrWhiteSpace(visual.FontFamily)) style.Add($"fontFamily: {Ts(visual.FontFamily)}");
+            if (visual.FontWeight is { } weight) style.Add($"fontWeight: {Ts(weight == FontWeight.Bold ? "700" : weight == FontWeight.Light ? "300" : "400")}");
+            if (visual.FontStyle is { } fontStyle) style.Add($"fontStyle: {Ts(fontStyle == FontStyle.Italic ? "italic" : "normal")}");
+            if (visual.LetterSpacing is { } spacing) style.Add($"letterSpacing: {Ts($"{spacing.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+            if (visual.Opacity is { } opacity) style.Add($"opacity: {opacity.ToString(CultureInfo.InvariantCulture)}");
+            if (visual.BorderRadius is { } borderRadius) style.Add($"borderRadius: {Ts($"{borderRadius.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+            if (visual.Border is { } border)
+            {
+                if (border.Style != BorderStyle.None) style.Add($"borderStyle: {Ts(border.Style == BorderStyle.Dashed ? "dashed" : "solid")}, borderWidth: {Ts($"{border.Width.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+                if (border.Color is { } borderColor) style.Add($"borderColor: {Ts(borderColor.ToHex())}");
+            }
+        }
+
+        if (parentLayout == LayoutType.Absolute || layout?.Type == LayoutType.Absolute)
+        {
+            style.Add("position: 'absolute'");
+            if (NumericMetadata(node, BoomHudMetadataKeys.PencilLeft) is { } left) style.Add($"left: {Ts($"{left.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+            if (NumericMetadata(node, BoomHudMetadataKeys.PencilTop) is { } top) style.Add($"top: {Ts($"{top.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+        }
+
+        if (FindBinding(node, "style.foreground", "foreground") is { } foregroundBinding) style.Add($"color: asText(props.{PropName(foregroundBinding.Path)}, {Ts(foregroundBinding.Fallback?.ToString() ?? string.Empty)})");
+        if (FindBinding(node, "style.background", "background") is { } backgroundBinding) style.Add($"backgroundColor: asText(props.{PropName(backgroundBinding.Path)}, {Ts(backgroundBinding.Fallback?.ToString() ?? string.Empty)})");
+        return string.Join(", ", style);
+    }
+
+    private static void AppendDimension(List<string> style, string key, Dimension? dimension)
+    {
+        if (dimension == null) return;
+        switch (dimension.Value.Unit)
+        {
+            case DimensionUnit.Pixels: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString("0.##", CultureInfo.InvariantCulture)}px")}"); break;
+            case DimensionUnit.Percent: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}%")}"); break;
+            case DimensionUnit.Auto: style.Add($"{key}: 'auto'"); break;
+            case DimensionUnit.Fill: style.Add(key == "width" ? "alignSelf: 'stretch'" : "flexGrow: 1"); break;
+            case DimensionUnit.Star: style.Add($"flexGrow: {dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}"); break;
+        }
+    }
+
+    private static string? TextExpr(ComponentNode node, IReadOnlyList<string> names, string? fallback)
+    {
+        foreach (var name in names)
+        {
+            if (FindBinding(node, name) is { } binding)
+            {
+                var prop = $"props.{PropName(binding.Path)}";
+                return string.IsNullOrWhiteSpace(binding.Format) ? $"asText({prop}, {Ts(binding.Fallback?.ToString() ?? string.Empty)})" : $"formatValue({prop}, {Ts(binding.Format)}, {Ts(binding.Fallback?.ToString() ?? string.Empty)})";
+            }
+
+            if (TryGetProperty(node, name, out var bindable))
+            {
+                if (bindable.IsBound) return $"asText(props.{PropName(bindable.BindingPath!)})";
+                if (bindable.Value != null) return bindable.Value is string text ? Ts(text) : $"asText({Literal(bindable.Value)})";
+            }
+        }
+
+        return fallback;
+    }
+
+    private static string ValueExpr(ComponentNode node, IReadOnlyList<string> names, string fallback)
+    {
+        foreach (var name in names)
+        {
+            if (FindBinding(node, name) is { } binding) return $"props.{PropName(binding.Path)}";
+            if (TryGetProperty(node, name, out var bindable))
+            {
+                if (bindable.IsBound) return $"props.{PropName(bindable.BindingPath!)}";
+                if (bindable.Value != null) return Literal(bindable.Value);
+            }
+        }
+
+        return fallback;
+    }
+
+    private static BindingSpec? FindBinding(ComponentNode node, params string[] names)
+        => node.Bindings.FirstOrDefault(binding => names.Any(name => string.Equals(binding.Property, name, StringComparison.OrdinalIgnoreCase)));
+
+    private static bool TryGetProperty(ComponentNode node, string name, out BindableValue<object?> bindable)
+    {
+        foreach (var pair in node.Properties)
+        {
+            if (string.Equals(pair.Key, name, StringComparison.OrdinalIgnoreCase))
+            {
+                bindable = pair.Value;
+                return true;
+            }
+        }
+
+        bindable = default;
+        return false;
+    }
+
+    private static string Literal(object value) => value switch
+    {
+        bool boolValue => boolValue ? "true" : "false",
+        int intValue => intValue.ToString(CultureInfo.InvariantCulture),
+        long longValue => longValue.ToString(CultureInfo.InvariantCulture),
+        float floatValue => floatValue.ToString(CultureInfo.InvariantCulture),
+        double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
+        decimal decimalValue => decimalValue.ToString(CultureInfo.InvariantCulture),
+        _ => Ts(value.ToString() ?? string.Empty)
+    };
+
+    private static HashSet<string> CollectProps(ComponentNode node)
+    {
+        var props = new HashSet<string>(StringComparer.Ordinal);
+        CollectProps(node, props);
+        return props;
+    }
+
+    private static void CollectProps(ComponentNode node, HashSet<string> props)
+    {
+        foreach (var binding in node.Bindings) props.Add(PropName(binding.Path));
+        if (node.Visible.IsBound) props.Add(PropName(node.Visible.BindingPath!));
+        if (node.Enabled.IsBound) props.Add(PropName(node.Enabled.BindingPath!));
+        if (node.Tooltip?.IsBound == true) props.Add(PropName(node.Tooltip!.Value.BindingPath!));
+        foreach (var property in node.Properties.Values.Where(static property => property.IsBound)) props.Add(PropName(property.BindingPath!));
+        foreach (var child in node.Children) CollectProps(child, props);
+    }
+
+    private static HashSet<string> CollectRefs(ComponentNode node, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, string documentName)
+    {
+        var refs = new HashSet<string>(StringComparer.Ordinal);
+        CollectRefs(node, components, diagnostics, documentName, refs);
+        return refs;
+    }
+
+    private static void CollectRefs(ComponentNode node, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, string documentName, HashSet<string> refs)
+    {
+        if (node.ComponentRefId != null)
+        {
+            if (components.TryGetValue(node.ComponentRefId, out var component))
+            {
+                if (!string.Equals(component.Name, documentName, StringComparison.Ordinal)) refs.Add(component.Name);
+            }
+            else
+            {
+                diagnostics.Add(Diagnostic.Warning($"Component reference '{node.ComponentRefId}' was not found for React generation.", node.Id, "BHR1001"));
+            }
+        }
+
+        foreach (var child in node.Children) CollectRefs(child, components, diagnostics, documentName, refs);
+    }
+
+    private static double? NumericMetadata(ComponentNode node, string key)
+    {
+        if (!node.InstanceOverrides.TryGetValue(key, out var raw) || raw == null) return null;
+        return raw switch
+        {
+            double doubleValue => doubleValue,
+            float floatValue => floatValue,
+            int intValue => intValue,
+            long longValue => longValue,
+            _ => null
+        };
+    }
+
+    private static string PropName(string path)
+    {
+        var parts = path.Split(['.', ':', '-', '/', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(static part => new string(part.Where(char.IsLetterOrDigit).ToArray()))
+            .Where(static part => part.Length > 0)
+            .Select(static part => char.ToUpperInvariant(part[0]) + part[1..])
+            .ToList();
+        if (parts.Count == 0) return "value";
+        var first = parts[0];
+        return char.ToLowerInvariant(first[0]) + first[1..] + string.Concat(parts.Skip(1));
+    }
+
+    private static string ClassName(ComponentNode node)
+        => "boomhud-node boomhud-" + string.Concat((node.Id ?? node.Type.ToString()).Select(static ch => char.IsLetterOrDigit(ch) ? char.ToLowerInvariant(ch) : '-')).Trim('-');
+
+    private static string Ts(string value)
+        => "'" + value.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("'", "\\'", StringComparison.Ordinal).Replace("\r", "\\r", StringComparison.Ordinal).Replace("\n", "\\n", StringComparison.Ordinal) + "'";
+}
