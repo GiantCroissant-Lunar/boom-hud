@@ -1,3 +1,0 @@
-PLACEHOLDER: 1280x720 seed=1440823698
-This file will be replaced with actual rendered PNG
-when Godot headless rendering is integrated.
