@@ -13,6 +13,11 @@ namespace Generated.Hud
 public static class DebugOverlayMotion
 {
     public const int FramesPerSecond = 30;
+    public const string DefaultClipId = "intro";
+    public static readonly string[] ClipIds =
+    {
+        "intro",
+    };
 
     public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)
     {

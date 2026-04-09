@@ -107,6 +107,8 @@ public sealed class UnityMotionExporterTests
         var hostFile = result.Files.First(f => f.Path == "DebugOverlayMotionHost.gen.cs");
         file.Content.Should().Contain("public static class DebugOverlayMotion");
         file.Content.Should().Contain("public const int FramesPerSecond = 30;");
+        file.Content.Should().Contain("public const string DefaultClipId = \"intro\";");
+        file.Content.Should().Contain("public static readonly string[] ClipIds =");
         file.Content.Should().Contain("public static bool TryApplyAtFrame(DebugOverlayView view, string clipId, int frame)");
         file.Content.Should().Contain("throw new ArgumentNullException(nameof(view));");
         file.Content.Should().NotContain("ArgumentNullException.ThrowIfNull");

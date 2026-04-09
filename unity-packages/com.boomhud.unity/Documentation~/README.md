@@ -70,6 +70,22 @@ Generated `*MotionHost` classes already know how to evaluate Motion JSON clips a
 
 The Timeline bridge calls `Evaluate(clipId, timeSeconds)` on the host, so Timeline becomes the time owner without introducing a second playback implementation.
 
+## Generic Timeline Scene Tooling
+
+The Unity package now includes a generic editor action for generated motion hosts:
+
+1. Select a generated `*MotionHost` script in the Project window, or a GameObject with that host attached.
+2. Run `Tools/BoomHud/Create Timeline Scene From Selected Motion Host`.
+
+The tool will:
+
+- resolve the generated `VisualTreeAsset`
+- resolve the generated motion class and its available clip ids
+- create a Timeline asset with one `BoomHud Motion Clip` per clip
+- create a scene with `UIDocument`, `PlayableDirector`, camera, and the selected motion host bound to the Timeline track
+
+By default the generated assets land under `Assets/BoomHudGenerated/TimelineScenes/<HudName>/`.
+
 ## Basic uGUI Usage
 
 The package also exposes a simple uGUI host base so Canvas-based presenters have a consistent home once the generator adds uGUI output:

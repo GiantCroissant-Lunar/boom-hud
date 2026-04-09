@@ -3,8 +3,10 @@
   "rootNamespace": "BoomHud.Unity.Editor",
   "references": [
     "BoomHud.Unity.Runtime",
+    "BoomHud.Unity.Timeline",
     "BoomHud.Unity.UIToolkit",
-    "BoomHud.Unity.UGUI"
+    "BoomHud.Unity.UGUI",
+    "Unity.Timeline"
   ],
   "includePlatforms": [
     "Editor"

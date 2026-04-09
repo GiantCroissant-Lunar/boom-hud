@@ -141,6 +141,8 @@ public class UnityGeneratorTests
         result.Files.Should().Contain(f => f.Path == "StatusHudMotionHost.gen.cs");
         var motionFile = result.Files.First(f => f.Path == "StatusHudMotion.gen.cs");
         var hostFile = result.Files.First(f => f.Path == "StatusHudMotionHost.gen.cs");
+        motionFile.Content.Should().Contain("public const string DefaultClipId = \"intro\";");
+        motionFile.Content.Should().Contain("public static readonly string[] ClipIds =");
         motionFile.Content.Should().Contain("public static bool TryApplyAtFrame(StatusHudView view, string clipId, int frame)");
         motionFile.Content.Should().Contain("ApplyOpacity(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusFadeOpacity, 1f));");
         motionFile.Content.Should().Contain("ApplyText(view.StatusLabel, EvaluateString(localFrame, s_IntroStatusFadeText, string.Empty));");

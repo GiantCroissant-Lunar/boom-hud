@@ -105,6 +105,16 @@ public static class UnityMotionExporter
         AppendInvariantLine(builder, $"public static class {className}");
         builder.AppendLine("{");
         AppendInvariantLine(builder, $"    public const int FramesPerSecond = {motion.FramesPerSecond.ToString(CultureInfo.InvariantCulture)};");
+        var defaultClipId = motion.Clips.Count > 0 ? motion.Clips[0].Id : string.Empty;
+        AppendInvariantLine(builder, $"    public const string DefaultClipId = {ToStringLiteral(defaultClipId)};");
+        builder.AppendLine("    public static readonly string[] ClipIds =");
+        builder.AppendLine("    {");
+        foreach (var clip in motion.Clips)
+        {
+            AppendInvariantLine(builder, $"        {ToStringLiteral(clip.Id)},");
+        }
+
+        builder.AppendLine("    };");
         builder.AppendLine();
         AppendInvariantLine(builder, $"    public static bool TryApplyAtFrame({document.Name}View view, string clipId, int frame)");
         builder.AppendLine("    {");
