@@ -160,6 +160,14 @@ public sealed class StatBarView
         label.style.whiteSpace = WhiteSpace.NoWrap;
         label.style.flexShrink = 0;
         label.style.overflow = Overflow.Visible;
+        label.style.marginLeft = 0f;
+        label.style.marginRight = 0f;
+        label.style.marginTop = 0f;
+        label.style.marginBottom = 0f;
+        label.style.paddingLeft = 0f;
+        label.style.paddingRight = 0f;
+        label.style.paddingTop = 0f;
+        label.style.paddingBottom = 0f;
     }
 
     private static bool ApplyFontFamily(VisualElement element, string? familyName, float pointSize)

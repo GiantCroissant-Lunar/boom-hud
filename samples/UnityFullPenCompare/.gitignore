@@ -1,0 +1,13 @@
+/*
+
+!.editorconfig
+!.gitignore
+
+!Assets/
+!Packages/
+Packages/**
+!Packages/manifest.json
+!ProjectSettings/
+
+!*.sln.DotSettings
+!Directory.Build.props

@@ -7,6 +7,7 @@ using BoomHud.Compare;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 namespace BoomHud.Compare.Editor
@@ -76,6 +77,77 @@ namespace BoomHud.Compare.Editor
             Debug.Log($"BoomHud compare scene ready at {ScenePath}");
         }
 
+        public static void CaptureCompareScreenshot()
+        {
+            SetupScene();
+
+            var document = UnityEngine.Object.FindFirstObjectByType<UIDocument>();
+            if (document == null)
+            {
+                throw new InvalidOperationException("Could not find a UIDocument in the compare scene.");
+            }
+
+            if (document.panelSettings == null)
+            {
+                throw new InvalidOperationException("The compare UIDocument does not have PanelSettings assigned.");
+            }
+
+            var outputPath = GetCompareScreenshotOutputPath();
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+
+            var panelSettings = document.panelSettings;
+            var renderTexture = new RenderTexture(1682, 906, 32, RenderTextureFormat.ARGB32)
+            {
+                name = "BoomHudCompareCapture"
+            };
+
+            try
+            {
+                renderTexture.Create();
+                panelSettings.targetTexture = renderTexture;
+
+                for (var iteration = 0; iteration < 3; iteration++)
+                {
+                    document.rootVisualElement?.MarkDirtyRepaint();
+                    EditorUtility.SetDirty(panelSettings);
+                    UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+                    Canvas.ForceUpdateCanvases();
+                }
+
+                var previousActive = RenderTexture.active;
+                RenderTexture.active = renderTexture;
+
+                try
+                {
+                    var texture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
+                    try
+                    {
+                        texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+                        texture.Apply();
+
+                        var png = texture.EncodeToPNG();
+                        File.WriteAllBytes(outputPath, png);
+                    }
+                    finally
+                    {
+                        UnityEngine.Object.DestroyImmediate(texture);
+                    }
+                }
+                finally
+                {
+                    RenderTexture.active = previousActive;
+                }
+
+                Debug.Log($"BoomHud compare screenshot saved to {outputPath}");
+            }
+            finally
+            {
+                panelSettings.targetTexture = null;
+                renderTexture.Release();
+                UnityEngine.Object.DestroyImmediate(renderTexture);
+            }
+        }
+
         private static void EnsureRuntimeAssets()
         {
             if (AssetDatabase.LoadAssetAtPath<Font>(PressStartFontPath) == null ||
@@ -88,6 +160,16 @@ namespace BoomHud.Compare.Editor
             EnsurePanelSettingsAsset();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static string GetCompareScreenshotOutputPath()
+        {
+            var projectRoot = Directory.GetParent(Application.dataPath)?.FullName
+                ?? throw new InvalidOperationException("Could not resolve the Unity project root.");
+            var repoRoot = Directory.GetParent(projectRoot)?.FullName
+                ?? throw new InvalidOperationException("Could not resolve the repository root from the Unity project path.");
+
+            return Path.Combine(repoRoot, "build", "_artifacts", "latest", "screenshots", "unity-fullpen-compare.png");
         }
 
         internal static void EnsureCompareFolders()
@@ -182,11 +264,13 @@ namespace BoomHud.Compare.Editor
             int atlasPadding,
             int atlasSize)
         {
-            var existingFontAsset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(fontAssetPath);
-            if (existingFontAsset != null)
+            var existingFontAsset = AssetDatabase.LoadAssetAtPath<FontAsset>(fontAssetPath);
+            if (IsUsableFontAsset(existingFontAsset, fontAssetPath))
             {
                 return existingFontAsset;
             }
+
+            DeleteAssetIfPresent(fontAssetPath);
 
             var sourceFont = AssetDatabase.LoadAssetAtPath<Font>(sourceFontPath);
             if (sourceFont == null)
@@ -195,7 +279,7 @@ namespace BoomHud.Compare.Editor
                 return null;
             }
 
-            var createdFontAsset = CreateSdfFontAsset(sourceFont, preferredRenderModeName, samplingPointSize, atlasPadding, atlasSize);
+            var createdFontAsset = CreateSdfFontAsset(sourceFont, preferredRenderModeName, samplingPointSize, atlasPadding, atlasSize) as FontAsset;
             if (createdFontAsset == null)
             {
                 Debug.LogWarning($"BoomHud compare setup could not create a TextCore font asset for {sourceFontPath}");
@@ -204,8 +288,19 @@ namespace BoomHud.Compare.Editor
 
             createdFontAsset.name = Path.GetFileNameWithoutExtension(fontAssetPath);
             AssetDatabase.CreateAsset(createdFontAsset, fontAssetPath);
+            PersistFontAssetSubAssets(createdFontAsset);
             EditorUtility.SetDirty(createdFontAsset);
-            return createdFontAsset;
+            AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(fontAssetPath, ImportAssetOptions.ForceUpdate);
+
+            var persistedFontAsset = AssetDatabase.LoadAssetAtPath<FontAsset>(fontAssetPath);
+            if (!IsUsableFontAsset(persistedFontAsset, fontAssetPath))
+            {
+                DeleteAssetIfPresent(fontAssetPath);
+                return null;
+            }
+
+            return persistedFontAsset;
         }
 
         private static UnityEngine.Object CreateSdfFontAsset(
@@ -335,6 +430,77 @@ namespace BoomHud.Compare.Editor
                     fallbackFontAssets.Add(fallbackFontAsset);
                 }
             }
+        }
+
+        private static bool IsUsableFontAsset(FontAsset fontAsset, string fontAssetPath)
+        {
+            if (fontAsset == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var atlasTextures = fontAsset.atlasTextures;
+                if (atlasTextures != null && atlasTextures.Any(texture => texture != null))
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"BoomHud compare setup rejected font asset at {fontAssetPath}: {exception.Message}");
+                return false;
+            }
+
+            var hasPersistedAtlasTexture = AssetDatabase
+                .LoadAllAssetsAtPath(fontAssetPath)
+                .OfType<Texture2D>()
+                .Any(texture => texture != null);
+
+            if (hasPersistedAtlasTexture)
+            {
+                return true;
+            }
+
+            Debug.LogWarning($"BoomHud compare setup found a broken font asset at {fontAssetPath}; falling back to raw font resources.");
+            return false;
+        }
+
+        private static void PersistFontAssetSubAssets(FontAsset fontAsset)
+        {
+            if (fontAsset.material != null && AssetDatabase.GetAssetPath(fontAsset.material) != AssetDatabase.GetAssetPath(fontAsset))
+            {
+                AssetDatabase.AddObjectToAsset(fontAsset.material, fontAsset);
+                EditorUtility.SetDirty(fontAsset.material);
+            }
+
+            var atlasTextures = fontAsset.atlasTextures;
+            if (atlasTextures == null)
+            {
+                return;
+            }
+
+            foreach (var atlasTexture in atlasTextures)
+            {
+                if (atlasTexture == null || AssetDatabase.GetAssetPath(atlasTexture) == AssetDatabase.GetAssetPath(fontAsset))
+                {
+                    continue;
+                }
+
+                AssetDatabase.AddObjectToAsset(atlasTexture, fontAsset);
+                EditorUtility.SetDirty(atlasTexture);
+            }
+        }
+
+        private static void DeleteAssetIfPresent(string assetPath)
+        {
+            if (AssetDatabase.LoadMainAssetAtPath(assetPath) == null)
+            {
+                return;
+            }
+
+            AssetDatabase.DeleteAsset(assetPath);
         }
 
         private static System.Type ResolveUnityType(string fullName)

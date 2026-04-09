@@ -2602,6 +2602,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -2715,6 +2716,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -2732,6 +2734,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3010,6 +3013,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3123,6 +3127,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3140,6 +3145,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3435,6 +3441,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3548,6 +3555,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3565,6 +3573,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3843,6 +3852,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3956,6 +3966,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -3973,6 +3984,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4268,6 +4280,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4381,6 +4394,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4398,6 +4412,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4676,6 +4691,7 @@
     justify-content: flex-start;
     color: #FFFFFF;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4789,6 +4805,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 
@@ -4806,6 +4823,7 @@
     justify-content: flex-start;
     color: #AAAAAA;
     font-size: 8px;
+    line-height: 12px;
     -unity-font-style: normal;
 }
 

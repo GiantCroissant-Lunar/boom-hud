@@ -121,11 +121,11 @@ namespace BoomHud.Compare
             }
 
             var view = new CharPortraitView(componentRoot);
-            view.Name.text = "Aelric";
-            view.Stat1.text = "ATK 12";
+            view.Name.text = "Name";
+            view.Stat1.text = "ATK 10";
             view.Stat2.text = "DEF 8";
-            view.HpFill.style.width = 96f;
-            view.MpFill.style.width = 62f;
+            view.HpFill.style.width = 90f;
+            view.MpFill.style.width = 60f;
         }
 
         private static void AddMinimapPreview(VisualElement gallery)
