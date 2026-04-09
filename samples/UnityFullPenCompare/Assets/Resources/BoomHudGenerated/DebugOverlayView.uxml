@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="Root" class="boomhud-root">
+        <ui:VisualElement name="Header" class="boomhud-header">
+            <ui:Label name="Title" class="boomhud-title" />
+            <ui:Label name="Version" class="boomhud-version" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Separator" class="boomhud-separator" />
+        <ui:VisualElement name="StatsContainer" class="boomhud-stats-container">
+            <ui:VisualElement name="FpsRow" class="boomhud-fps-row">
+                <ui:Label name="FpsLabel" class="boomhud-fps-label" />
+                <ui:Label name="FpsValue" class="boomhud-fps-value" />
+            </ui:VisualElement>
+            <ui:VisualElement name="MemoryRow" class="boomhud-memory-row">
+                <ui:Label name="MemoryLabel" class="boomhud-memory-label" />
+                <ui:Label name="MemoryValue" class="boomhud-memory-value" />
+            </ui:VisualElement>
+            <ui:VisualElement name="PositionRow" class="boomhud-position-row">
+                <ui:Label name="PositionLabel" class="boomhud-position-label" />
+                <ui:Label name="PositionValue" class="boomhud-position-value" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ChunkRow" class="boomhud-chunk-row">
+                <ui:Label name="ChunkLabel" class="boomhud-chunk-label" />
+                <ui:Label name="ChunkValue" class="boomhud-chunk-value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
