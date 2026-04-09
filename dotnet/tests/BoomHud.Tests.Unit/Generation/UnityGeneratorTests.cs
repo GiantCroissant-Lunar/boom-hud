@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.Unity;
 using FluentAssertions;
 using Xunit;
@@ -38,6 +39,111 @@ public class UnityGeneratorTests
         var uxmlFile = result.Files.First(f => f.Path == "TestComponentView.uxml");
         uxmlFile.Content.Should().Contain("<ui:UXML xmlns:ui=\"UnityEngine.UIElements\">");
         uxmlFile.Content.Should().Contain("<ui:VisualElement name=\"TestComponentRoot\" class=\"boomhud-test-component-root\" />");
+    }
+
+    [Fact]
+    public void Generate_WithMotion_EmitsUnityMotionAdapter()
+    {
+        var options = _options with
+        {
+            Motion = new MotionDocument
+            {
+                Name = "StatusHudMotion",
+                FramesPerSecond = 30,
+                Clips =
+                [
+                    new MotionClip
+                    {
+                        Id = "intro",
+                        Name = "Intro",
+                        DurationFrames = 48,
+                        Tracks =
+                        [
+                            new MotionTrack
+                            {
+                                Id = "statusFade",
+                                TargetId = "statusLabel",
+                                Channels =
+                                [
+                                    new MotionChannel
+                                    {
+                                        Property = MotionProperty.Opacity,
+                                        Keyframes =
+                                        [
+                                            new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(0) },
+                                            new MotionKeyframe { Frame = 12, Value = MotionValue.FromNumber(1), Easing = MotionEasing.EaseOut }
+                                        ]
+                                    },
+                                    new MotionChannel
+                                    {
+                                        Property = MotionProperty.Text,
+                                        Keyframes =
+                                        [
+                                            new MotionKeyframe { Frame = 0, Value = MotionValue.FromText("BOOT") },
+                                            new MotionKeyframe { Frame = 24, Value = MotionValue.FromText("READY") }
+                                        ]
+                                    }
+                                ]
+                            },
+                            new MotionTrack
+                            {
+                                Id = "statusMove",
+                                TargetId = "statusLabel",
+                                Channels =
+                                [
+                                    new MotionChannel
+                                    {
+                                        Property = MotionProperty.PositionX,
+                                        Keyframes =
+                                        [
+                                            new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(-12) },
+                                            new MotionKeyframe { Frame = 24, Value = MotionValue.FromNumber(0), Easing = MotionEasing.EaseOut }
+                                        ]
+                                    },
+                                    new MotionChannel
+                                    {
+                                        Property = MotionProperty.Rotation,
+                                        Keyframes =
+                                        [
+                                            new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(-8) },
+                                            new MotionKeyframe { Frame = 24, Value = MotionValue.FromNumber(0), Easing = MotionEasing.EaseInOut }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "statusLabel",
+                        Type = ComponentType.Label
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Files.Should().Contain(f => f.Path == "StatusHudMotion.gen.cs");
+        var motionFile = result.Files.First(f => f.Path == "StatusHudMotion.gen.cs");
+        motionFile.Content.Should().Contain("public static bool TryApplyAtFrame(StatusHudView view, string clipId, int frame)");
+        motionFile.Content.Should().Contain("ApplyOpacity(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusFadeOpacity, 1f));");
+        motionFile.Content.Should().Contain("ApplyText(view.StatusLabel, EvaluateString(localFrame, s_IntroStatusFadeText, string.Empty));");
+        motionFile.Content.Should().Contain("ApplyTranslate(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusMovePositionX, 0f), 0f);");
+        motionFile.Content.Should().Contain("ApplyRotation(view.StatusLabel, EvaluateNumber(localFrame, s_IntroStatusMoveRotation, 0f));");
     }
 
     [Fact]

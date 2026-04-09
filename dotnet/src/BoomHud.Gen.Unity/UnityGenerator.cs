@@ -44,7 +44,13 @@ public sealed class UnityGenerator : IBackendGenerator
                 EmitDocumentArtifacts(componentDocument, options, diagnostics, files);
             }
 
-            EmitDocumentArtifacts(document, options, diagnostics, files);
+            var mainPlan = EmitDocumentArtifacts(document, options, diagnostics, files);
+            if (options.Motion != null)
+            {
+                var motionResult = UnityMotionExporter.Generate(document, mainPlan, options.Motion, options);
+                files.AddRange(motionResult.Files);
+                diagnostics.AddRange(motionResult.Diagnostics);
+            }
         }
         catch (Exception ex)
         {
@@ -58,7 +64,7 @@ public sealed class UnityGenerator : IBackendGenerator
         };
     }
 
-    private static void EmitDocumentArtifacts(
+    private static UnityBackendPlan EmitDocumentArtifacts(
         HudDocument document,
         GenerationOptions options,
         List<Diagnostic> diagnostics,
@@ -96,6 +102,8 @@ public sealed class UnityGenerator : IBackendGenerator
                 Type = GeneratedFileType.SourceCode
             });
         }
+
+        return plan;
     }
 
     private static string GenerateUxml(UnityBackendPlan plan)
@@ -351,6 +359,12 @@ public sealed class UnityGenerator : IBackendGenerator
         if (fontSize != null)
         {
             AppendCssDeclaration(builder, "font-size", ToPixels(fontSize.Value));
+
+            if (string.Equals(style.FontFamily, "Press Start 2P", StringComparison.Ordinal)
+                && fontSize.Value <= 8d)
+            {
+                AppendCssDeclaration(builder, "line-height", "12px");
+            }
         }
 
         if (style.LetterSpacing is { } letterSpacing)

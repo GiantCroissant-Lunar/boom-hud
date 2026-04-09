@@ -626,9 +626,11 @@ public static class Program
         };
 
         var targets = BackendCatalog.ResolveTargets(target);
-        if (motionDocument != null && !targets.Contains("Godot", StringComparer.Ordinal))
+        if (motionDocument != null
+            && !targets.Contains("Godot", StringComparer.Ordinal)
+            && !targets.Contains("Unity", StringComparer.Ordinal))
         {
-            Console.WriteLine("Warning: motion input is currently consumed by the Godot backend only.");
+            Console.WriteLine("Warning: motion input is currently consumed by the Godot and Unity backends only.");
         }
 
         foreach (var backend in targets)
