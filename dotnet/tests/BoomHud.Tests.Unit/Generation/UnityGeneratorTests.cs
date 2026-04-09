@@ -522,13 +522,10 @@ public class UnityGeneratorTests
                                 Layout = new LayoutSpec
                                 {
                                     Type = LayoutType.Absolute,
+                                    Left = Dimension.Pixels(12),
+                                    Top = Dimension.Pixels(16),
                                     Width = Dimension.Pixels(20),
                                     Height = Dimension.Pixels(20)
-                                },
-                                InstanceOverrides = new Dictionary<string, object?>
-                                {
-                                    [BoomHudMetadataKeys.PencilLeft] = 12d,
-                                    [BoomHudMetadataKeys.PencilTop] = 16d
                                 }
                             }
                         ]

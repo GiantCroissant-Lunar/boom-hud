@@ -259,7 +259,7 @@ public class PenParserTests
     }
 
     [Fact]
-    public void Parse_ClipTrue_PreservesClipMetadata()
+    public void Parse_ClipTrue_MapsToLayoutClipContent()
     {
         var json = """
             {
@@ -275,8 +275,8 @@ public class PenParserTests
 
         var doc = _parser.Parse(json);
 
-        doc.Root.InstanceOverrides.Should().ContainKey(BoomHudMetadataKeys.PencilClip);
-        doc.Root.InstanceOverrides[BoomHudMetadataKeys.PencilClip].Should().Be(true);
+        doc.Root.Layout.Should().NotBeNull();
+        doc.Root.Layout!.ClipContent.Should().BeTrue();
     }
 
     [Fact]
@@ -659,7 +659,7 @@ public class PenParserTests
     }
 
     [Fact]
-    public void Parse_RawPencilExport_CollectsReusableComponents_AndExpandsRefs()
+    public void Parse_RawPencilExport_CollectsReusableComponents_AndPreservesScopedRefs()
     {
         var samplePath = GetRepoFilePath(Path.Combine("samples", "pencil", "raw-hud-components.pen"));
         var json = File.ReadAllText(samplePath);
@@ -681,8 +681,13 @@ public class PenParserTests
         partyPanel.Children.Should().HaveCount(3);
 
         var firstPortrait = partyPanel.Children[0];
-        firstPortrait.Children.Should().Contain(child => child.Id == "c1name");
-        firstPortrait.Children.First(child => child.Id == "c1name").Properties["Text"].Value.Should().Be("Aelric");
-        firstPortrait.Children.Should().Contain(child => child.Id == "AttackButton");
+        firstPortrait.ComponentRefId.Should().Be("charPortrait");
+        firstPortrait.Children.Should().Contain(child => child.Id == $"{firstPortrait.Id}/c1name");
+        firstPortrait.Children.First(child => child.Id == $"{firstPortrait.Id}/c1name").Properties["Text"].Value.Should().Be("Aelric");
+        firstPortrait.Children.Should().Contain(child => child.Id == $"{firstPortrait.Id}/AttackButton");
+
+        var nestedActionButton = doc.Components["charPortrait"].Root.Children[^1];
+        nestedActionButton.ComponentRefId.Should().Be("actionButton");
+        nestedActionButton.Children.Should().ContainSingle(child => child.Id == "AttackButton/icon");
     }
 }

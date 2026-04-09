@@ -56,6 +56,28 @@ public sealed record LayoutSpec
     public Spacing? Margin { get; init; }
 
     /// <summary>
+    /// Explicit left offset used when absolute placement is applied.
+    /// </summary>
+    public Dimension? Left { get; init; }
+
+    /// <summary>
+    /// Explicit top offset used when absolute placement is applied.
+    /// </summary>
+    public Dimension? Top { get; init; }
+
+    /// <summary>
+    /// Whether this node should be explicitly positioned absolutely.
+    /// This is separate from <see cref="Type"/> because <see cref="LayoutType.Absolute"/>
+    /// is also used for overlay containers that remain in normal flow.
+    /// </summary>
+    public bool IsAbsolutePositioned { get; init; }
+
+    /// <summary>
+    /// Whether overflowing child content should be clipped.
+    /// </summary>
+    public bool ClipContent { get; init; }
+
+    /// <summary>
     /// Cross-axis alignment.
     /// </summary>
     public Alignment? Align { get; init; }

@@ -73,7 +73,7 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("playerHealthText?: unknown;");
         tsx.Should().Contain("playerHealthPercent?: unknown;");
         tsx.Should().Contain("playerShowHud?: unknown;");
-        tsx.Should().Contain("getMotionStyle(props.motionTargets, 'healthLabel')");
+        tsx.Should().Contain("getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'healthLabel'))");
         tsx.Should().Contain("formatValue(props.playerHealthText, '{0} HP', '')");
         tsx.Should().Contain("width: clampPercent(props.playerHealthPercent)");
         tsx.Should().Contain("asBool(props.playerShowHud)");
@@ -107,7 +107,8 @@ public sealed class ReactGeneratorTests
         var tsx = result.Files.First(file => file.Path == "HudView.tsx").Content;
 
         tsx.Should().Contain("import { ActionButtonView } from './ActionButtonView';");
-        tsx.Should().Contain("<ActionButtonView motionTargets={props.motionTargets} />");
+        tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'primaryAction')}");
+        tsx.Should().Contain("<ActionButtonView motionTargets={props.motionTargets} motionScope={resolveMotionId(props.motionScope, 'primaryAction')} />");
     }
 
     [Fact]
@@ -145,13 +146,10 @@ public sealed class ReactGeneratorTests
                                 Type = ComponentType.Icon,
                                 Layout = new LayoutSpec
                                 {
+                                    Left = Dimension.Pixels(12),
+                                    Top = Dimension.Pixels(12),
                                     Width = Dimension.Pixels(16),
                                     Height = Dimension.Pixels(16)
-                                },
-                                InstanceOverrides = new Dictionary<string, object?>
-                                {
-                                    [BoomHudMetadataKeys.PencilLeft] = 12d,
-                                    [BoomHudMetadataKeys.PencilTop] = 12d
                                 }
                             }
                         ]
@@ -165,15 +163,15 @@ public sealed class ReactGeneratorTests
 
         tsx.Should().Contain("gap: '8px'");
         tsx.Should().Contain("padding: '0'");
-        tsx.Should().Contain("data-boomhud-id='face'", Exactly.Once());
+        tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'face')}", Exactly.Once());
         tsx.Should().Contain("width: '56px', height: '56px', position: 'relative'");
-        tsx.Should().NotContain("data-boomhud-id='face' style={ { width: '56px', height: '56px', position: 'absolute'");
-        tsx.Should().Contain("data-boomhud-id='icon'");
+        tsx.Should().NotContain("position: 'absolute', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'face'))");
+        tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'icon')}");
         tsx.Should().Contain("position: 'absolute', left: '12px', top: '12px'");
     }
 
     [Fact]
-    public void Generate_PencilClipMetadata_EmitsOverflowHidden()
+    public void Generate_LayoutClipContent_EmitsOverflowHidden()
     {
         var document = new HudDocument
         {
@@ -182,9 +180,9 @@ public sealed class ReactGeneratorTests
             {
                 Id = "viewport",
                 Type = ComponentType.Container,
-                InstanceOverrides = new Dictionary<string, object?>
+                Layout = new LayoutSpec
                 {
-                    [BoomHudMetadataKeys.PencilClip] = true
+                    ClipContent = true
                 }
             }
         };
@@ -265,8 +263,8 @@ public sealed class ReactGeneratorTests
         var result = _generator.Generate(document, _options);
         var tsx = result.Files.First(file => file.Path == "ActionRowView.tsx").Content;
 
-        tsx.Should().Contain("data-boomhud-id='left'");
-        tsx.Should().Contain("data-boomhud-id='right'");
+        tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'left')}");
+        tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'right')}");
         tsx.Should().Contain("flex: '1 1 0'");
     }
 
@@ -296,7 +294,7 @@ public sealed class ReactGeneratorTests
 
         tsx.Should().Contain("const resolveIconText = (value: unknown, familyName?: string) => {");
         tsx.Should().Contain("case 'shield': return '⛨'");
-        tsx.Should().Contain("{resolveIconText(getMotionText(props.motionTargets, 'icon') ?? ('shield'), 'lucide')}");
+        tsx.Should().Contain("{resolveIconText(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('shield'), 'lucide')}");
     }
 
     [Fact]
