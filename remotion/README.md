@@ -84,3 +84,47 @@ npm run preview
 ```
 
 Opens Remotion Studio for interactive preview.
+
+## Motion JSON
+
+BoomHud motion authoring for Remotion should use the shared JSON contract, not a custom chained DSL.
+
+The Remotion workspace now exposes typed helpers under `src/motion/`:
+
+- `schema.ts`: Zod schemas and TypeScript types mirroring `schemas/json/motion.schema.json`
+- `authoring.ts`: object-literal helpers like `defineMotionDocument()` and `parseMotionDocument()`
+- `runtime.ts`: frame evaluation helpers like `resolveClipStateAtFrame()` and `useMotionTargetState()`
+
+Example:
+
+```ts
+import { defineMotionDocument, numberValue } from "./src/motion";
+
+const document = defineMotionDocument({
+  name: "HudMotion",
+  clips: [
+    {
+      id: "intro",
+      name: "Intro",
+      durationFrames: 20,
+      tracks: [
+        {
+          id: "portrait",
+          targetId: "char-portrait",
+          channels: [
+            {
+              property: "opacity",
+              keyframes: [
+                { frame: 0, value: numberValue(0) },
+                { frame: 20, value: numberValue(1), easing: "easeOut" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+});
+```
+
+This keeps JSON as the source of truth while still giving Remotion typed authoring and playback utilities.
