@@ -139,6 +139,12 @@ namespace BoomHud.Unity.Editor
 
             var panelSettings = EnsurePanelSettings(panelSettingsPath, options.CameraBackgroundColor);
             var timeline = EnsureTimelineAsset(timelinePath, descriptor);
+            var visualTreeAssetPath = AssetDatabase.GetAssetPath(descriptor.VisualTreeAsset);
+            if (string.IsNullOrWhiteSpace(visualTreeAssetPath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not resolve the asset path for VisualTreeAsset '{descriptor.VisualTreeAsset.name}'.");
+            }
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -156,7 +162,21 @@ namespace BoomHud.Unity.Editor
             BindTimelineTrack(timeline, director, motionHost);
             CreateCamera(options.CameraBackgroundColor);
 
+            EditorUtility.SetDirty(document);
+            EditorUtility.SetDirty(motionHost);
+            EditorUtility.SetDirty(director);
+            EditorSceneManager.MarkSceneDirty(scene);
+
             EditorSceneManager.SaveScene(scene, scenePath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            var reopenedScene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            ReapplyDocumentBindings(
+                panelSettingsPath,
+                visualTreeAssetPath);
+            EditorSceneManager.MarkSceneDirty(reopenedScene);
+            EditorSceneManager.SaveScene(reopenedScene, scenePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
@@ -300,10 +320,12 @@ namespace BoomHud.Unity.Editor
         private static PanelSettings EnsurePanelSettings(string panelSettingsPath, Color clearColor)
         {
             var panelSettings = AssetDatabase.LoadAssetAtPath<PanelSettings>(panelSettingsPath);
+            var created = false;
             if (panelSettings == null)
             {
                 panelSettings = ScriptableObject.CreateInstance<PanelSettings>();
                 AssetDatabase.CreateAsset(panelSettings, panelSettingsPath);
+                created = true;
             }
 
             panelSettings.scaleMode = PanelScaleMode.ConstantPixelSize;
@@ -312,6 +334,15 @@ namespace BoomHud.Unity.Editor
             panelSettings.clearColor = true;
             panelSettings.colorClearValue = clearColor;
             EditorUtility.SetDirty(panelSettings);
+            AssetDatabase.SaveAssets();
+
+            if (created)
+            {
+                AssetDatabase.ImportAsset(panelSettingsPath, ImportAssetOptions.ForceUpdate);
+                panelSettings = AssetDatabase.LoadAssetAtPath<PanelSettings>(panelSettingsPath)
+                    ?? throw new InvalidOperationException($"Could not reload PanelSettings asset at '{panelSettingsPath}'.");
+            }
+
             return panelSettings;
         }
 
@@ -385,6 +416,24 @@ namespace BoomHud.Unity.Editor
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = backgroundColor;
             camera.tag = "MainCamera";
+        }
+
+        private static void ReapplyDocumentBindings(string panelSettingsPath, string visualTreeAssetPath)
+        {
+            var document = UnityEngine.Object.FindFirstObjectByType<UIDocument>();
+            if (document == null)
+            {
+                throw new InvalidOperationException("The generated Timeline scene is missing its UIDocument after reopen.");
+            }
+
+            var panelSettings = AssetDatabase.LoadAssetAtPath<PanelSettings>(panelSettingsPath)
+                ?? throw new InvalidOperationException($"Could not reload PanelSettings asset at '{panelSettingsPath}'.");
+            var visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(visualTreeAssetPath)
+                ?? throw new InvalidOperationException($"Could not reload VisualTreeAsset at '{visualTreeAssetPath}'.");
+
+            document.panelSettings = panelSettings;
+            document.visualTreeAsset = visualTreeAsset;
+            EditorUtility.SetDirty(document);
         }
 
         private static void EnsureFolderPath(string folderPath)
