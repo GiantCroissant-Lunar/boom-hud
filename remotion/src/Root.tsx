@@ -1,6 +1,12 @@
 import { Composition, getInputProps } from "remotion";
 import { SnapshotsComposition, SnapshotsSchema } from "./Snapshots";
 import { CompareComposition, CompareSchema } from "./Compare";
+import {
+  GeneratedMotionDemo,
+  GeneratedMotionDemoSchema,
+} from "./GeneratedMotionDemo";
+import motionJson from "./motion-samples/debug-overlay.motion.json";
+import { parseMotionDocument } from "./motion";
 
 export const RemotionRoot: React.FC = () => {
   // Default props for preview - will be overridden by CLI input
@@ -37,6 +43,10 @@ export const RemotionRoot: React.FC = () => {
   const compareDuration = Math.ceil(
     Math.max(compareStates.size, 1) * compareProps.secondsPerState * compareProps.fps
   );
+  const motionDocument = parseMotionDocument(motionJson);
+  const introClip = motionDocument.clips.find((clip) => clip.id === "intro");
+  const motionDuration = introClip?.durationFrames ?? motionDocument.clips[0]?.durationFrames ?? 90;
+  const motionFps = motionDocument.framesPerSecond;
 
   return (
     <>
@@ -59,6 +69,16 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         schema={CompareSchema}
         defaultProps={compareProps}
+      />
+      <Composition
+        id="GeneratedMotionDemo"
+        component={GeneratedMotionDemo}
+        durationInFrames={motionDuration}
+        fps={motionFps}
+        width={1280}
+        height={720}
+        schema={GeneratedMotionDemoSchema}
+        defaultProps={{}}
       />
     </>
   );

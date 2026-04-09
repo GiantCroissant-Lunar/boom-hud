@@ -143,3 +143,19 @@ import { DebugOverlayView } from "./generated/DebugOverlayView";
   viewModel={{ version: "v1.2.0", fps: 60 }}
 />;
 ```
+
+## Studio
+
+Remotion Studio is available locally in this workspace after install.
+
+From [remotion](C:/lunar-horse/plate-projects/boom-hud/remotion):
+
+```bash
+npm run preview
+```
+
+The demo composition added in this repo is `GeneratedMotionDemo`. It renders:
+
+- a generated BoomHud React view at `src/generated/DebugOverlayView.tsx`
+- a Motion JSON document at `src/motion-samples/debug-overlay.motion.json`
+- through the `MotionScene` bridge in `src/motion/MotionScene.tsx`

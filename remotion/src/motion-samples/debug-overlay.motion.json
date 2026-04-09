@@ -1,0 +1,196 @@
+{
+  "$schema": "https://boom-hud.dev/schemas/motion.schema.json",
+  "version": "1.0",
+  "name": "DebugOverlayMotion",
+  "framesPerSecond": 30,
+  "clips": [
+    {
+      "id": "intro",
+      "name": "Intro",
+      "startFrame": 0,
+      "durationFrames": 90,
+      "tracks": [
+        {
+          "id": "rootFade",
+          "targetId": "root",
+          "targetKind": "root",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 12, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "positionY",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 18 } },
+                { "frame": 16, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "headerEntrance",
+          "targetId": "header",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": -24 } },
+                { "frame": 18, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0.15 } },
+                { "frame": 18, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "versionBootText",
+          "targetId": "version",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "text",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "BOOT" }, "easing": "step" },
+                { "frame": 24, "value": { "kind": "text", "text": "READY" }, "easing": "step" },
+                { "frame": 42, "value": { "kind": "text", "text": "v1.2.0" }, "easing": "step" }
+              ]
+            },
+            {
+              "property": "color",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "#7dd3fc" } },
+                { "frame": 42, "value": { "kind": "text", "text": "#f8fafc" }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "separatorGlow",
+          "targetId": "separator",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 20, "value": { "kind": "number", "number": 0.3 }, "easing": "easeOut" },
+                { "frame": 46, "value": { "kind": "number", "number": 0.6 }, "easing": "easeInOut" },
+                { "frame": 72, "value": { "kind": "number", "number": 0.3 }, "easing": "easeInOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fpsPulse",
+          "targetId": "fps-value",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "positionY",
+              "keyframes": [
+                { "frame": 8, "value": { "kind": "number", "number": -8 } },
+                { "frame": 24, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "color",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "#f8fafc" } },
+                { "frame": 18, "value": { "kind": "text", "text": "#86efac" }, "easing": "step" },
+                { "frame": 36, "value": { "kind": "text", "text": "#f8fafc" }, "easing": "step" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "memorySlide",
+          "targetId": "memory-row",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 10, "value": { "kind": "number", "number": -18 } },
+                { "frame": 26, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 10, "value": { "kind": "number", "number": 0 } },
+                { "frame": 26, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "positionSlide",
+          "targetId": "position-row",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 16, "value": { "kind": "number", "number": -18 } },
+                { "frame": 32, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 16, "value": { "kind": "number", "number": 0 } },
+                { "frame": 32, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chunkReveal",
+          "targetId": "chunk-row",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "positionX",
+              "keyframes": [
+                { "frame": 22, "value": { "kind": "number", "number": -18 } },
+                { "frame": 40, "value": { "kind": "number", "number": 0 }, "easing": "easeOut" }
+              ]
+            },
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 22, "value": { "kind": "number", "number": 0 } },
+                { "frame": 40, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chunkText",
+          "targetId": "chunk-value",
+          "targetKind": "element",
+          "channels": [
+            {
+              "property": "text",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "text", "text": "--" }, "easing": "step" },
+                { "frame": 45, "value": { "kind": "text", "text": "14,08" }, "easing": "step" },
+                { "frame": 72, "value": { "kind": "text", "text": "14,09" }, "easing": "step" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
