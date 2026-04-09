@@ -28,7 +28,7 @@ This directory contains agent configuration, rules, and workflows for the BoomHu
 
 ### 1. Schema-First Design
 
-- Define DSL schema (`schemas/boom-hud.schema.json`) before implementing parsers
+- Define DSL schema (`schemas/json/boom-hud.schema.json`) before implementing parsers
 - Schema is the contract between DSL and IR
 - Validate all input against schema
 
@@ -54,7 +54,7 @@ This directory contains agent configuration, rules, and workflows for the BoomHu
 
 ### Adding a New Component
 
-1. Add to DSL schema (`schemas/boom-hud.schema.json`)
+1. Add to DSL schema (`schemas/json/boom-hud.schema.json`)
 2. Add IR type if needed (`BoomHud.Abstractions/IR/`)
 3. Add to each backend's capability manifest
 4. Implement emitter for each backend

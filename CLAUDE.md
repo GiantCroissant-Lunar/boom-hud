@@ -14,7 +14,7 @@ dotnet build dotnet/BoomHud.sln
 dotnet test dotnet/BoomHud.sln
 
 # Generate from DSL (Figma JSON)
-dotnet run --project dotnet/src/BoomHud.Cli -- generate samples/BoomHud.Sample.Generation/design/status-bar.json --target terminalGui
+dotnet run --project dotnet/src/BoomHud.Cli -- generate samples/dotnet/BoomHud.Sample.Generation/design/status-bar.json --target terminalGui
 ```
 
 ## Project Structure
@@ -36,7 +36,7 @@ dotnet run --project dotnet/src/BoomHud.Cli -- generate samples/BoomHud.Sample.G
 |------|----------|
 | Add component type | `schemas/`, `Abstractions/`, each `Gen.*` |
 | Add backend | New `BoomHud.Gen.{Framework}` project |
-| Modify DSL | Update `schemas/boom-hud.schema.json` first |
+| Modify DSL | Update `schemas/json/boom-hud.schema.json` first |
 
 ## RFCs
 

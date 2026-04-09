@@ -20,7 +20,7 @@ Define the component's:
 
 ### 2. Update DSL Schema
 
-Add to `schemas/boom-hud.schema.json`:
+Add to `schemas/json/boom-hud.schema.json`:
 
 ```json
 // In componentType enum

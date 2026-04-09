@@ -39,7 +39,7 @@ Quick overview of the agent infrastructure for the **boom-hud** project.
 
 ### Adding a New Component
 
-1. Define component in DSL schema (`schemas/boom-hud.schema.json`)
+1. Define component in DSL schema (`schemas/json/boom-hud.schema.json`)
 2. Add IR representation (`BoomHud.Abstractions`)
 3. Implement generator for each backend
 4. Add tests and samples

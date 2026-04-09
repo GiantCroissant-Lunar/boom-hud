@@ -4,7 +4,7 @@
 
 **Always define the DSL schema before implementing code.**
 
-The JSON Schema (`schemas/boom-hud.schema.json`) is the single source of truth for the DSL format.
+The JSON Schema (`schemas/json/boom-hud.schema.json`) is the single source of truth for the DSL format.
 
 ## Rules
 
