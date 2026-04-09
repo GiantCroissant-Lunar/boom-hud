@@ -169,13 +169,12 @@ namespace BoomHud.Compare
             surface.style.justifyContent = Justify.FlexStart;
             surface.style.alignItems = Align.Center;
             surface.style.overflow = Overflow.Visible;
-            var componentRoot = InstantiateGeneratedRoot(surface, "CharPortraitView");
-            if (componentRoot == null)
+            var view = ComposedCharPortraitView.TryCreate(surface);
+            if (view == null)
             {
                 return;
             }
 
-            var view = new CharPortraitView(componentRoot);
             ApplyPartyMemberPresentation(view, s_partyMembers[0], 1f, 1f, useScanningText: false);
 
             RegisterAnimatedCharPortrait(view, s_partyMembers[0], PreviewPlaybackMode.Loop);
@@ -184,51 +183,12 @@ namespace BoomHud.Compare
         private void AddPartyMemberLayoutPreview(VisualElement gallery)
         {
             var surface = CreatePreviewCard(gallery, "Party Member Layout", 360f, 560f);
-            surface.style.flexDirection = FlexDirection.Column;
-            surface.style.alignItems = Align.Center;
-            surface.style.justifyContent = Justify.FlexStart;
-            surface.style.paddingLeft = 8f;
-            surface.style.paddingTop = 6f;
-            surface.style.paddingRight = 8f;
-            surface.style.paddingBottom = 6f;
-            surface.style.overflow = Overflow.Visible;
-
-            for (var rowIndex = 0; rowIndex < 3; rowIndex++)
+            var view = new PartyMemberLayoutView(surface);
+            var memberCount = Mathf.Min(view.Portraits.Count, s_partyMembers.Length);
+            for (var memberIndex = 0; memberIndex < memberCount; memberIndex++)
             {
-                var row = new VisualElement();
-                row.style.width = 252f;
-                row.style.flexDirection = FlexDirection.Row;
-                row.style.justifyContent = Justify.Center;
-                row.style.alignItems = Align.FlexStart;
-                row.style.marginBottom = 6f;
-                if (rowIndex > 0)
-                {
-                    row.style.paddingLeft = 12f;
-                }
-                surface.Add(row);
-
-                for (var columnIndex = 0; columnIndex < 2; columnIndex++)
-                {
-                    var memberIndex = rowIndex * 2 + columnIndex;
-                    if (memberIndex >= s_partyMembers.Length)
-                    {
-                        break;
-                    }
-
-                    var slot = CreatePartyMemberSlot(row);
-                    var componentRoot = InstantiateGeneratedRoot(slot, "CharPortraitView");
-                    if (componentRoot == null)
-                    {
-                        continue;
-                    }
-
-                    var view = new CharPortraitView(componentRoot);
-                    view.Root.style.width = Length.Percent(100f);
-                    view.Root.style.minWidth = PartyMemberWidth;
-                    ApplyPartyMemberPresentation(view, s_partyMembers[memberIndex], 1f, 1f, useScanningText: false);
-
-                    RegisterAnimatedCharPortrait(view, s_partyMembers[memberIndex], PreviewPlaybackMode.HoldEnd);
-                }
+                ApplyPartyMemberPresentation(view.Portraits[memberIndex], s_partyMembers[memberIndex], 1f, 1f, useScanningText: false);
+                RegisterAnimatedCharPortrait(view.Portraits[memberIndex], s_partyMembers[memberIndex], PreviewPlaybackMode.Loop);
             }
         }
 
@@ -311,20 +271,41 @@ namespace BoomHud.Compare
             return slot;
         }
 
-        private void RegisterAnimatedCharPortrait(CharPortraitView view, PartyMemberSpec spec, PreviewPlaybackMode playbackMode)
+        private void RegisterAnimatedCharPortrait(ComposedCharPortraitView view, PartyMemberSpec spec, PreviewPlaybackMode playbackMode)
         {
             _charPortraitPreviews.Add(new AnimatedCharPortraitPreview(view, spec, playbackMode));
         }
 
-        private static void ApplyPartyMemberPresentation(CharPortraitView view, PartyMemberSpec spec, float hpProgress, float mpProgress, bool useScanningText)
+        private static void ApplyPartyMemberPresentation(ComposedCharPortraitView view, PartyMemberSpec spec, float hpProgress, float mpProgress, bool useScanningText)
         {
-            view.Root.style.width = PartyMemberWidth;
-            view.Name.text = useScanningText ? "SCANNING" : spec.Name;
-            view.ClassIcon.text = ResolveLucideGlyph(spec.IconToken);
-            view.Stat1.text = spec.Stat1;
-            view.Stat2.text = spec.Stat2;
-            view.HpFill.style.width = spec.HpWidth * Mathf.Clamp01(hpProgress);
-            view.MpFill.style.width = spec.MpWidth * Mathf.Clamp01(mpProgress);
+            view.Generated.Root.style.width = PartyMemberWidth;
+            view.Generated.Name.text = useScanningText ? "SCANNING" : spec.Name;
+            view.Generated.ClassIcon.text = ResolveLucideGlyph(spec.IconToken);
+            view.Generated.Stat1.text = spec.Stat1;
+            view.Generated.Stat2.text = spec.Stat2;
+            view.Generated.HpFill.style.width = spec.HpWidth * Mathf.Clamp01(hpProgress);
+            view.Generated.MpFill.style.width = spec.MpWidth * Mathf.Clamp01(mpProgress);
+            view.SyncStatusBarsFromGeneratedWidths();
+        }
+
+        private static float ResolveStyleWidth(StyleLength styleLength)
+        {
+            return styleLength.keyword == StyleKeyword.Auto ? 0f : styleLength.value.value;
+        }
+
+        private static float ResolveProgress(float animatedWidth, float referenceWidth)
+        {
+            if (referenceWidth <= 0f)
+            {
+                return 0f;
+            }
+
+            if (float.IsNaN(animatedWidth) || animatedWidth <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp01(animatedWidth / referenceWidth);
         }
 
         private static string ResolveLucideGlyph(string iconToken)
@@ -396,12 +377,12 @@ namespace BoomHud.Compare
 
         private sealed class AnimatedCharPortraitPreview
         {
-            private readonly CharPortraitView _view;
+            private readonly ComposedCharPortraitView _view;
             private readonly PartyMemberSpec _spec;
             private readonly PreviewPlaybackMode _playbackMode;
             private readonly float _clipDurationSeconds;
 
-            public AnimatedCharPortraitPreview(CharPortraitView view, PartyMemberSpec spec, PreviewPlaybackMode playbackMode)
+            public AnimatedCharPortraitPreview(ComposedCharPortraitView view, PartyMemberSpec spec, PreviewPlaybackMode playbackMode)
             {
                 _view = view;
                 _spec = spec;
@@ -414,34 +395,143 @@ namespace BoomHud.Compare
                 var localTimeSeconds = _playbackMode == PreviewPlaybackMode.HoldEnd
                     ? _clipDurationSeconds
                     : Mathf.Repeat(Mathf.Max(0f, elapsedSeconds) + _spec.PhaseOffsetSeconds, _clipDurationSeconds);
-                CharPortraitMotion.TryApplyAtTime(_view, CharPortraitMotion.DefaultClipId, localTimeSeconds);
+                CharPortraitMotion.TryApplyAtTime(_view.Generated, CharPortraitMotion.DefaultClipId, localTimeSeconds);
 
                 var scanningThresholdSeconds = 24f / CharPortraitMotion.FramesPerSecond;
                 var useScanningText = localTimeSeconds < scanningThresholdSeconds;
-                var hpProgress = ResolveProgress(ResolveStyleWidth(_view.HpFill.style.width), DefaultHpWidth);
-                var mpProgress = ResolveProgress(ResolveStyleWidth(_view.MpFill.style.width), DefaultMpWidth);
+                var hpProgress = ResolveProgress(ResolveStyleWidth(_view.Generated.HpFill.style.width), DefaultHpWidth);
+                var mpProgress = ResolveProgress(ResolveStyleWidth(_view.Generated.MpFill.style.width), DefaultMpWidth);
 
                 ApplyPartyMemberPresentation(_view, _spec, hpProgress, mpProgress, useScanningText);
             }
+        }
 
-            private static float ResolveStyleWidth(StyleLength styleLength)
+        private sealed class PartyMemberLayoutView
+        {
+            private readonly List<ComposedCharPortraitView> _portraits = new List<ComposedCharPortraitView>();
+
+            public PartyMemberLayoutView(VisualElement surface)
             {
-                return styleLength.keyword == StyleKeyword.Auto ? 0f : styleLength.value.value;
+                surface.style.flexDirection = FlexDirection.Column;
+                surface.style.alignItems = Align.Center;
+                surface.style.justifyContent = Justify.FlexStart;
+                surface.style.paddingLeft = 8f;
+                surface.style.paddingTop = 6f;
+                surface.style.paddingRight = 8f;
+                surface.style.paddingBottom = 6f;
+                surface.style.overflow = Overflow.Visible;
+
+                for (var rowIndex = 0; rowIndex < 3; rowIndex++)
+                {
+                    var row = new VisualElement();
+                    row.style.width = 252f;
+                    row.style.flexDirection = FlexDirection.Row;
+                    row.style.justifyContent = Justify.Center;
+                    row.style.alignItems = Align.FlexStart;
+                    row.style.marginBottom = 6f;
+                    if (rowIndex > 0)
+                    {
+                        row.style.paddingLeft = 12f;
+                    }
+
+                    surface.Add(row);
+
+                    for (var columnIndex = 0; columnIndex < 2; columnIndex++)
+                    {
+                        var slot = CreatePartyMemberSlot(row);
+                        var portrait = ComposedCharPortraitView.TryCreate(slot);
+                        if (portrait != null)
+                        {
+                            _portraits.Add(portrait);
+                        }
+                    }
+                }
             }
 
-            private static float ResolveProgress(float animatedWidth, float referenceWidth)
+            public IReadOnlyList<ComposedCharPortraitView> Portraits => _portraits;
+        }
+
+        private sealed class ComposedCharPortraitView
+        {
+            private static readonly Color HpFillColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+            private static readonly Color MpFillColor = new Color(0.47f, 0.47f, 0.47f, 1f);
+
+            private readonly StatBarView? _hpBar;
+            private readonly StatBarView? _mpBar;
+
+            private ComposedCharPortraitView(CharPortraitView generated, StatBarView? hpBar, StatBarView? mpBar)
             {
-                if (referenceWidth <= 0f)
+                Generated = generated;
+                _hpBar = hpBar;
+                _mpBar = mpBar;
+            }
+
+            public CharPortraitView Generated { get; }
+
+            public static ComposedCharPortraitView? TryCreate(VisualElement surface)
+            {
+                var componentRoot = InstantiateGeneratedRoot(surface, "CharPortraitView");
+                if (componentRoot == null)
                 {
-                    return 0f;
+                    return null;
                 }
 
-                if (float.IsNaN(animatedWidth) || animatedWidth <= 0f)
+                var generated = new CharPortraitView(componentRoot);
+                generated.Root.style.width = Length.Percent(100f);
+                generated.Root.style.minWidth = PartyMemberWidth;
+
+                var hpBar = TryAttachStatusBar(generated.Hp, generated.HpFill, HpFillColor);
+                var mpBar = TryAttachStatusBar(generated.Mp, generated.MpFill, MpFillColor);
+                var view = new ComposedCharPortraitView(generated, hpBar, mpBar);
+                view.SyncStatusBarsFromGeneratedWidths();
+                return view;
+            }
+
+            public void SyncStatusBarsFromGeneratedWidths()
+            {
+                if (_hpBar != null)
                 {
-                    return 0f;
+                    _hpBar.Fill.style.width = ResolveStyleWidth(Generated.HpFill.style.width);
                 }
 
-                return Mathf.Clamp01(animatedWidth / referenceWidth);
+                if (_mpBar != null)
+                {
+                    _mpBar.Fill.style.width = ResolveStyleWidth(Generated.MpFill.style.width);
+                }
+            }
+
+            private static StatBarView? TryAttachStatusBar(VisualElement container, VisualElement animatedFill, Color fillColor)
+            {
+                animatedFill.style.position = Position.Absolute;
+                animatedFill.style.left = 0f;
+                animatedFill.style.top = 0f;
+                animatedFill.style.opacity = 0f;
+                animatedFill.pickingMode = PickingMode.Ignore;
+
+                var componentRoot = InstantiateGeneratedRoot(container, "StatBarView");
+                if (componentRoot == null)
+                {
+                    return null;
+                }
+
+                componentRoot.pickingMode = PickingMode.Ignore;
+                componentRoot.style.position = Position.Absolute;
+                componentRoot.style.left = 0f;
+                componentRoot.style.top = 0f;
+                componentRoot.style.right = 0f;
+                componentRoot.style.bottom = 0f;
+                componentRoot.style.width = Length.Percent(100f);
+                componentRoot.style.height = Length.Percent(100f);
+                componentRoot.style.backgroundColor = Color.clear;
+
+                var bar = new StatBarView(componentRoot);
+                bar.Root.style.width = Length.Percent(100f);
+                bar.Root.style.height = Length.Percent(100f);
+                bar.Root.style.backgroundColor = Color.clear;
+                bar.Fill.style.height = Length.Percent(100f);
+                bar.Fill.style.backgroundColor = fillColor;
+                bar.Fill.pickingMode = PickingMode.Ignore;
+                return bar;
             }
         }
 
