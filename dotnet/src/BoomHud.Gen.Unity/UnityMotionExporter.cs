@@ -41,6 +41,8 @@ public static class UnityMotionExporter
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
 
+        AddPortableMotionDiagnostics(motion, diagnostics);
+
         try
         {
             var targetInfos = CollectTargetInfos(plan);
@@ -396,7 +398,7 @@ public static class UnityMotionExporter
                     continue;
                 }
 
-                if (!TryValidateChannelValueKinds(channel.Property, channel.Keyframes, diagnostics, track.TargetId))
+                if (!HasPortableChannelValueKinds(channel.Property, channel.Keyframes))
                 {
                     continue;
                 }
@@ -508,12 +510,17 @@ public static class UnityMotionExporter
         IReadOnlyDictionary<string, UnityMotionTargetInfo> targetInfos,
         out UnityMotionTargetInfo targetInfo)
     {
+        if (targetInfos.TryGetValue(track.TargetId, out targetInfo!))
+        {
+            return true;
+        }
+
         if (track.TargetKind == MotionTargetKind.Root)
         {
             return targetInfos.TryGetValue(document.Root.Id ?? "__root__", out targetInfo!);
         }
 
-        return targetInfos.TryGetValue(track.TargetId, out targetInfo!);
+        return false;
     }
 
     private static Dictionary<string, UnityMotionTargetInfo> CollectTargetInfos(UnityBackendPlan plan)
@@ -594,31 +601,23 @@ public static class UnityMotionExporter
             || string.Equals(elementType, "TextField", StringComparison.Ordinal)
             || string.Equals(elementType, "ProgressBar", StringComparison.Ordinal);
 
-    private static bool TryValidateChannelValueKinds(
-        MotionProperty property,
-        IReadOnlyList<MotionKeyframe> keyframes,
-        List<Diagnostic> diagnostics,
-        string targetId)
+    private static bool HasPortableChannelValueKinds(MotionProperty property, IReadOnlyList<MotionKeyframe> keyframes)
+        => keyframes.All(keyframe => MotionDocument.IsPortableValueKind(property, keyframe.Value.Kind));
+
+    private static void AddPortableMotionDiagnostics(MotionDocument motion, List<Diagnostic> diagnostics)
     {
-        foreach (var keyframe in keyframes)
+        var existing = new HashSet<(string Code, string Message)>(
+            motion.LoadDiagnostics.Select(diagnostic => (diagnostic.Code, diagnostic.Message)));
+
+        foreach (var diagnostic in motion.ValidatePortableContract())
         {
-            var valid = property switch
+            if (!existing.Add((diagnostic.Code, diagnostic.Message)))
             {
-                MotionProperty.Visibility => keyframe.Value.Kind == MotionValueKind.Boolean,
-                MotionProperty.Text or MotionProperty.Color => keyframe.Value.Kind == MotionValueKind.Text,
-                _ => keyframe.Value.Kind == MotionValueKind.Number
-            };
-
-            if (!valid)
-            {
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Unity motion export skipped property '{property}' on target '{targetId}' because keyframe values are not in an exportable format.",
-                    code: "BHU2003"));
-                return false;
+                continue;
             }
-        }
 
-        return true;
+            diagnostics.Add(Diagnostic.Warning(diagnostic.Message, diagnostic.SourceFile, diagnostic.Code));
+        }
     }
 
     private static string FormatKeyframe(string fieldType, MotionKeyframe keyframe)

@@ -49,10 +49,6 @@ export const MotionValueSchema = z.discriminatedUnion("kind", [
     kind: z.literal("text"),
     text: z.string(),
   }),
-  z.object({
-    kind: z.literal("vector"),
-    vector: z.array(z.number()).min(2).max(4),
-  }),
 ]);
 export type MotionValue = z.infer<typeof MotionValueSchema>;
 

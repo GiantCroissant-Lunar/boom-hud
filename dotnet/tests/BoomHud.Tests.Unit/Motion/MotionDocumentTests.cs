@@ -156,8 +156,21 @@ public sealed class MotionDocumentTests
                                         new MotionKeyframe
                                         {
                                             Frame = 0,
-                                            Value = MotionValue.FromVector(0, -12),
+                                            Value = MotionValue.FromNumber(-12),
                                             Easing = MotionEasing.EaseOut
+                                        }
+                                    ]
+                                },
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Visibility,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe
+                                        {
+                                            Frame = 6,
+                                            Value = MotionValue.FromBoolean(true),
+                                            Easing = MotionEasing.Step
                                         }
                                     ]
                                 }
@@ -191,9 +204,98 @@ public sealed class MotionDocumentTests
         roundTripped.FramesPerSecond.Should().Be(60);
         roundTripped.DefaultSequenceId.Should().Be("introSequence");
         roundTripped.Clips[0].Tracks[0].TargetKind.Should().Be(MotionTargetKind.Component);
-        roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Kind.Should().Be(MotionValueKind.Vector);
-        roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Vector.Should().Equal([0, -12]);
+        roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Kind.Should().Be(MotionValueKind.Number);
+        roundTripped.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Number.Should().Be(-12);
+        roundTripped.Clips[0].Tracks[0].Channels[1].Keyframes[0].Value.Kind.Should().Be(MotionValueKind.Boolean);
+        roundTripped.Clips[0].Tracks[0].Channels[1].Keyframes[0].Value.Boolean.Should().BeTrue();
         roundTripped.Sequences.Should().ContainSingle();
         roundTripped.Sequences[0].Items[0].FillMode.Should().Be(MotionSequenceFillMode.HoldBoth);
+    }
+
+    [Fact]
+    public void LoadFromJson_LegacyVectorValue_EmitsPortableContractWarning()
+    {
+        const string json = """
+        {
+          "version": "1.0",
+          "name": "HudMotion",
+          "clips": [
+            {
+              "id": "intro",
+              "name": "Intro",
+              "durationFrames": 12,
+              "tracks": [
+                {
+                  "id": "badge",
+                  "targetId": "status-badge",
+                  "targetKind": "component",
+                  "channels": [
+                    {
+                      "property": "positionY",
+                      "keyframes": [
+                        {
+                          "frame": 0,
+                          "value": { "kind": "vector", "vector": [0, -12] }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+        """;
+
+        var document = MotionDocument.LoadFromJson(json, "motion.ir.json");
+
+        document.Clips[0].Tracks[0].Channels[0].Keyframes[0].Value.Kind.Should().Be(MotionValueKind.Vector);
+        document.LoadDiagnostics.Should().ContainSingle(d => d.Code == DiagnosticCodes.NonPortableMotionValue);
+    }
+
+    [Fact]
+    public void ToJson_LegacyVectorValue_ThrowsPortableContractError()
+    {
+        var document = new MotionDocument
+        {
+            Name = "HudMotion",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 12,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "badge",
+                            TargetId = "status-badge",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.PositionY,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe
+                                        {
+                                            Frame = 0,
+                                            Value = MotionValue.FromVector(0, -12)
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var action = () => document.ToJson();
+
+        action.Should().Throw<InvalidOperationException>()
+            .WithMessage("*non-portable keyframe values*");
     }
 }

@@ -1,6 +1,7 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
+using BoomHud.Abstractions.Diagnostics;
 using BoomHud.Gen.Unity;
 using FluentAssertions;
 using Xunit;
@@ -218,5 +219,156 @@ public sealed class UnityMotionExporterTests
         var motionFile = result.Files.First(f => f.Path == "DebugOverlayMotion.gen.cs");
         motionFile.Content.Should().NotContain("does-not-exist");
         motionFile.Content.Should().NotContain("SpriteFrame");
+    }
+
+    [Fact]
+    public void Generate_NonPortableValueKind_UsesSharedContractWarningAndSkipsChannel()
+    {
+        var document = new HudDocument
+        {
+            Name = "DebugOverlay",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children = [new ComponentNode { Id = "badge", Type = ComponentType.Container }]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "DebugOverlayMotion",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 30,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "badgeTrack",
+                            TargetId = "badge",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.PositionY,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromVector(0, -12) }]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = UnityMotionExporter.Generate(document, motion, _options);
+
+        result.Success.Should().BeTrue();
+        result.Diagnostics.Should().ContainSingle(d => d.Code == DiagnosticCodes.NonPortableMotionValue);
+        var motionFile = result.Files.First(f => f.Path == "DebugOverlayMotion.gen.cs");
+        motionFile.Content.Should().NotContain("BadgeTrackPositionY");
+        motionFile.Content.Should().NotContain("ApplyTranslate(view.Badge");
+    }
+
+    [Fact]
+    public void Generate_ResolvesTargetsByTargetIdForRootComponentAndElementTracks()
+    {
+        var document = new HudDocument
+        {
+            Name = "PartyHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "char1",
+                        Type = ComponentType.Container,
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "char1/c1name",
+                                Type = ComponentType.Label
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "PartyHudMotion",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 24,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "rootTrack",
+                            TargetId = "root",
+                            TargetKind = MotionTargetKind.Root,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Opacity,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(1) }]
+                                }
+                            ]
+                        },
+                        new MotionTrack
+                        {
+                            Id = "componentTrack",
+                            TargetId = "char1",
+                            TargetKind = MotionTargetKind.Component,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.PositionX,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(12) }]
+                                }
+                            ]
+                        },
+                        new MotionTrack
+                        {
+                            Id = "elementTrack",
+                            TargetId = "char1/c1name",
+                            TargetKind = MotionTargetKind.Element,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Text,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromText("Aelric") }]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = UnityMotionExporter.Generate(document, motion, _options);
+
+        result.Success.Should().BeTrue();
+        result.Diagnostics.Should().BeEmpty();
+        var file = result.Files.First(f => f.Path == "PartyHudMotion.gen.cs");
+        file.Content.Should().Contain("ApplyOpacity(view.Root, EvaluateNumber(localFrame, s_IntroRootTrackOpacity, 1f));");
+        file.Content.Should().Contain("ApplyTranslate(view.Char1, EvaluateNumber(localFrame, s_IntroComponentTrackPositionX, 0f), 0f);");
+        file.Content.Should().Contain("ApplyText(view.Char1C1name, EvaluateString(localFrame, s_IntroElementTrackText, string.Empty));");
     }
 }
