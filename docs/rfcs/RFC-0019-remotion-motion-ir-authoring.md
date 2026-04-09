@@ -11,8 +11,8 @@ This RFC defines how Remotion should participate in BoomHud motion authoring.
 Decision:
 
 1. Remotion is the primary authoring surface for motion.
-2. Motion is authored through BoomHud-owned motion helpers, not arbitrary React code.
-3. Those helpers compile to a framework-neutral Motion IR.
+2. Motion is authored as BoomHud-owned JSON documents, not arbitrary React code.
+3. Remotion helpers may assist with creation/editing, but they emit that JSON contract directly.
 4. Remotion also consumes that same Motion IR for preview and final render.
 
 In short, Remotion should dogfood Motion IR, but it should not become Motion IR.
@@ -36,7 +36,7 @@ If we treat free-form Remotion code as the source of truth, we will eventually n
 
 ## Core Decision
 
-### Remotion is an authoring adapter over Motion IR
+### Remotion is an authoring adapter over Motion IR JSON
 
 The architecture should be:
 
@@ -48,36 +48,39 @@ BoomHud UI IR + Motion IR
         +--> Unity Timeline export
 ```
 
-The Remotion side should expose BoomHud motion helpers such as:
+The source of truth should be a JSON document validated by `motion.schema.json`, for example:
 
-```ts
-const clip = motionClip("charPortraitIntro", ({track}) => {
-  track("portrait")
-    .target("char-portrait")
-    .frames(0, 20)
-    .animate("opacity", [0, 1], "easeOut");
-});
-```
-
-or equivalent object-based authoring:
-
-```ts
-const clip = defineMotion({
-  id: "charPortraitIntro",
-  tracks: [
+```json
+{
+  "version": "1.0",
+  "name": "HudMotion",
+  "framesPerSecond": 30,
+  "clips": [
     {
-      id: "portrait",
-      target: "char-portrait",
-      keyframes: [
-        {frame: 0, property: "opacity", value: 0},
-        {frame: 20, property: "opacity", value: 1, easing: "easeOut"}
+      "id": "charPortraitIntro",
+      "name": "Char Portrait Intro",
+      "durationFrames": 20,
+      "tracks": [
+        {
+          "id": "portrait",
+          "targetId": "char-portrait",
+          "channels": [
+            {
+              "property": "opacity",
+              "keyframes": [
+                { "frame": 0, "value": { "kind": "number", "number": 0 } },
+                { "frame": 20, "value": { "kind": "number", "number": 1 }, "easing": "easeOut" }
+              ]
+            }
+          ]
+        }
       ]
     }
   ]
-});
+}
 ```
 
-Both forms are acceptable if the output is deterministic Motion IR.
+Remotion-side helpers are acceptable only if they create or transform this JSON contract deterministically.
 
 ## Dogfooding Model
 
@@ -86,7 +89,7 @@ Both forms are acceptable if the output is deterministic Motion IR.
 Remotion should dogfood Motion IR in two ways:
 
 1. **Authoring dogfood**
-   - the Remotion author writes motion through APIs that immediately produce Motion IR
+   - the Remotion author works against Motion IR JSON, either directly or through helpers that emit it
 2. **Playback dogfood**
    - the Remotion renderer should be able to render directly from Motion IR
 
@@ -124,8 +127,9 @@ Motion IR
   - easing
   - events / visibility / swaps
 
-Authoring DSL
-  - TypeScript helpers for agents and humans
+Authoring layer
+  - JSON documents validated by schema
+  - optional TypeScript helpers for agents and humans
   - constrained enough to emit Motion IR deterministically
 
 Adapters
@@ -176,9 +180,9 @@ The first version of Motion IR should stay narrow and exportable.
 - custom shader/material logic
 - anything that cannot map cleanly to Godot or Unity
 
-## Remotion API Constraints
+## Authoring Constraints
 
-The Remotion authoring DSL should be expressive, but constrained.
+The Remotion authoring surface should be expressive, but constrained.
 
 Good constraints:
 
@@ -228,7 +232,7 @@ The long-term target remains Timeline-compatible output.
 
 ## Open Questions
 
-1. Should the primary authoring format be builder-style DSL, object literal, or both?
+1. Should the primary editing surface be raw JSON, a typed object literal, or both?
 2. Should Motion IR live in the same assembly/namespace as UI IR or as a sibling package?
 3. Do we need a separate “exportability validator” that rejects Remotion-only constructs before Godot/Unity export?
 4. Should Motion IR use frame-based timing only, or support seconds plus fps normalization?
@@ -238,7 +242,7 @@ The long-term target remains Timeline-compatible output.
 Implement in this order:
 
 1. Motion IR contracts
-2. Remotion authoring DSL that emits Motion IR
+2. Remotion authoring helpers that emit Motion IR JSON
 3. Remotion playback adapter that consumes Motion IR
 4. Godot exporter
 5. Unity exporter

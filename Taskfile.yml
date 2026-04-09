@@ -48,6 +48,7 @@ tasks:
     desc: Regenerate all DTOs from JSON schemas using quicktype
     deps:
       - generate:dto:compose
+      - generate:dto:motion
       - generate:dto:states
       - generate:dto:tokens
 
@@ -70,6 +71,26 @@ tasks:
     generates:
       - dotnet/src/BoomHud.Abstractions/Composition/Generated/ComposeManifestDto.g.cs
 
+  generate:dto:motion:
+    desc: Generate MotionDocumentDto from motion.schema.json
+    cmds:
+      - >-
+        npx quicktype@23.0.170
+        --src schemas/json/motion.schema.json
+        --src-lang schema
+        --lang csharp
+        --framework SystemTextJson
+        --top-level MotionDocumentDto
+        --namespace BoomHud.Abstractions.Motion.Generated
+        --features complete
+        --array-type list
+        --any-type object
+        --no-combine-classes
+        --out dotnet/src/BoomHud.Abstractions/Motion/Generated/MotionDocumentDto.g.cs
+    sources:
+      - schemas/json/motion.schema.json
+    generates:
+      - dotnet/src/BoomHud.Abstractions/Motion/Generated/MotionDocumentDto.g.cs
   generate:dto:states:
     desc: Generate StatesManifestDto from states.schema.json
     cmds:

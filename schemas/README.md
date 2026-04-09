@@ -11,6 +11,7 @@ Current notable files:
 - `json/boom-hud.schema.json`: core BoomHud DSL schema
 - `json/compose.schema.json`: compose manifest schema
 - `json/pencil.schema.json`: Pencil `.pen` schema
+- `json/motion.schema.json`: portable motion contract schema
 - `json/states.schema.json`: snapshot states schema
 - `json/tokens.schema.json`: token registry schema
 - `yaml/figma-openapi.yaml`: upstream Figma OpenAPI source

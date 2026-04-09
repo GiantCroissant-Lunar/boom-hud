@@ -14,6 +14,7 @@ This document describes how BoomHud manages schema-driven data structures.
 ```
 schemas/
   compose.schema.json          # boom-hud.compose.json schema
+  motion.schema.json           # motion.ir.json schema
   states.schema.json           # *.states.json schema
   tokens.schema.json           # tokens.ir.json schema
   figma-export.schema.json     # External Figma schema
@@ -23,6 +24,10 @@ dotnet/src/BoomHud.Abstractions/
     ComposeManifest.cs         # Domain wrapper
     Generated/
       ComposeManifestDto.g.cs  # quicktype output (DO NOT EDIT)
+  Motion/
+    MotionDocument.cs          # Domain wrapper
+    Generated/
+      MotionDocumentDto.g.cs   # quicktype output (DO NOT EDIT)
   Snapshots/
     SnapshotStatesManifest.cs  # Domain wrapper
     Generated/
@@ -38,6 +43,7 @@ dotnet/src/BoomHud.Abstractions/
 | Area | DTO Namespace | Wrapper Namespace |
 |------|---------------|-------------------|
 | Compose | `BoomHud.Abstractions.Composition.Generated` | `BoomHud.Abstractions.Composition` |
+| Motion | `BoomHud.Abstractions.Motion.Generated` | `BoomHud.Abstractions.Motion` |
 | States | `BoomHud.Abstractions.Snapshots.Generated` | `BoomHud.Abstractions.Snapshots` |
 | Tokens | `BoomHud.Abstractions.Tokens.Generated` | `BoomHud.Abstractions.Tokens` |
 

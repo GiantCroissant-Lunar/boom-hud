@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/motion.schema.json",
+  "title": "BoomHud Motion Document",
+  "description": "Framework-neutral motion document used as the portable animation contract between Remotion authoring, Godot AnimationPlayer export, and Unity Timeline export.",
+  "type": "object",
+  "required": ["name", "clips"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Motion document schema version.",
+      "default": "1.0"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for the motion document."
+    },
+    "framesPerSecond": {
+      "type": "integer",
+      "description": "Canonical frames-per-second value used for timing normalization.",
+      "minimum": 1,
+      "default": 30
+    },
+    "clips": {
+      "type": "array",
+      "description": "Named motion clips contained in this document.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/motionClip"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "motionClip": {
+      "type": "object",
+      "required": ["id", "name", "durationFrames", "tracks"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the clip."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the clip."
+        },
+        "startFrame": {
+          "type": "integer",
+          "description": "Optional clip start frame relative to the document timeline.",
+          "minimum": 0,
+          "default": 0
+        },
+        "durationFrames": {
+          "type": "integer",
+          "description": "Clip duration measured in frames.",
+          "minimum": 1
+        },
+        "tracks": {
+          "type": "array",
+          "description": "Animation tracks targeting specific UI elements or components.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/motionTrack"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionTrack": {
+      "type": "object",
+      "required": ["id", "targetId", "channels"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the track."
+        },
+        "targetId": {
+          "type": "string",
+          "description": "Stable BoomHud target id, shared across React, Godot, and Unity adapters."
+        },
+        "targetKind": {
+          "type": "string",
+          "description": "Classification of the target for exporter-specific mapping.",
+          "enum": ["element", "component", "root"],
+          "default": "element"
+        },
+        "channels": {
+          "type": "array",
+          "description": "Property channels animated by this track.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/motionChannel"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionChannel": {
+      "type": "object",
+      "required": ["property", "keyframes"],
+      "properties": {
+        "property": {
+          "type": "string",
+          "description": "Portable property identifier understood by all motion adapters.",
+          "enum": [
+            "opacity",
+            "positionX",
+            "positionY",
+            "positionZ",
+            "scaleX",
+            "scaleY",
+            "scaleZ",
+            "rotation",
+            "rotationX",
+            "rotationY",
+            "width",
+            "height",
+            "visibility",
+            "text",
+            "spriteFrame",
+            "color"
+          ]
+        },
+        "keyframes": {
+          "type": "array",
+          "description": "Ordered keyframes for the property channel.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/motionKeyframe"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionKeyframe": {
+      "type": "object",
+      "required": ["frame", "value"],
+      "properties": {
+        "frame": {
+          "type": "integer",
+          "description": "Frame index at which this keyframe applies.",
+          "minimum": 0
+        },
+        "value": {
+          "$ref": "#/definitions/motionValue"
+        },
+        "easing": {
+          "type": "string",
+          "description": "Interpolation hint to use until the next keyframe.",
+          "enum": ["linear", "easeIn", "easeOut", "easeInOut", "step"],
+          "default": "linear"
+        }
+      },
+      "additionalProperties": false
+    },
+    "motionValue": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "Tagged value kind used for deterministic export.",
+          "enum": ["number", "boolean", "text", "vector"]
+        },
+        "number": {
+          "type": "number",
+          "description": "Scalar value used when kind is number."
+        },
+        "boolean": {
+          "type": "boolean",
+          "description": "Boolean value used when kind is boolean."
+        },
+        "text": {
+          "type": "string",
+          "description": "String value used when kind is text."
+        },
+        "vector": {
+          "type": "array",
+          "description": "Vector value used when kind is vector.",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 4
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "number" } }
+          },
+          "then": {
+            "required": ["number"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "const": "boolean" } }
+          },
+          "then": {
+            "required": ["boolean"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "const": "text" } }
+          },
+          "then": {
+            "required": ["text"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "const": "vector" } }
+          },
+          "then": {
+            "required": ["vector"]
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "version": "1.0",
+      "name": "HudMotion",
+      "framesPerSecond": 30,
+      "clips": [
+        {
+          "id": "intro",
+          "name": "Intro",
+          "startFrame": 0,
+          "durationFrames": 20,
+          "tracks": [
+            {
+              "id": "charPortrait",
+              "targetId": "char-portrait",
+              "targetKind": "element",
+              "channels": [
+                {
+                  "property": "opacity",
+                  "keyframes": [
+                    {
+                      "frame": 0,
+                      "value": {
+                        "kind": "number",
+                        "number": 0
+                      },
+                      "easing": "linear"
+                    },
+                    {
+                      "frame": 20,
+                      "value": {
+                        "kind": "number",
+                        "number": 1
+                      },
+                      "easing": "easeOut"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
