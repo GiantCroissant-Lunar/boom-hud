@@ -5,6 +5,7 @@
 ## What It Covers
 
 - UI Toolkit hosting helpers for generated `.uxml`, `.uss`, and `.gen.cs` views.
+- Timeline track helpers that drive generated UI Toolkit motion hosts through Unity Playables.
 - Shared runtime base behavior for binding and rebinding generated views.
 - uGUI hosting scaffolding so consumer projects have a stable package location for future Canvas-based generation.
 
@@ -17,6 +18,7 @@
 
 - `Runtime/Common`: shared `BoomHudViewHost` lifecycle base class.
 - `Runtime/UIToolkit`: `BoomHudUiToolkitHost` for `UIDocument`-based hosts.
+- `Runtime/Timeline`: Timeline clips and tracks that scrub `BoomHudUiToolkitMotionHost` instances.
 - `Runtime/uGUI`: `BoomHudUguiHost` for `Canvas` and `RectTransform` hosts.
 - `Editor`: small editor utility hook for package discovery.
 - `Samples~`: importable Unity Package Manager samples for UI Toolkit and uGUI hosts.
@@ -55,6 +57,18 @@ public sealed class StatusHudPresenter : BoomHudUiToolkitHost
 ```
 
 Attach the presenter to the same `GameObject` as a `UIDocument`, or assign the `UIDocument` explicitly.
+
+## Timeline Motion Usage
+
+Generated `*MotionHost` classes already know how to evaluate Motion JSON clips at a specific time. The package now includes a generic Timeline track that binds directly to those hosts:
+
+1. Add a generated `*MotionHost` component to the same `GameObject` as your `UIDocument`.
+2. Add a `PlayableDirector`.
+3. Create a Timeline asset and add a `BoomHud Motion Track`.
+4. Bind the track to your generated `*MotionHost`.
+5. Add a `BoomHud Motion Clip` and set its `Clip Id` to a Motion JSON clip such as `intro`.
+
+The Timeline bridge calls `Evaluate(clipId, timeSeconds)` on the host, so Timeline becomes the time owner without introducing a second playback implementation.
 
 ## Basic uGUI Usage
 

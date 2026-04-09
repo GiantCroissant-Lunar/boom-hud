@@ -3,6 +3,7 @@
     "com.boomhud.unity": "file:../../../unity-packages/com.boomhud.unity",
     "com.coplaydev.unity-mcp": "file:com.coplaydev.unity-mcp",
     "com.unity.modules.imageconversion": "1.0.0",
+    "com.unity.timeline": "1.7.7",
     "com.unity.ugui": "1.0.0",
     "com.unity.ui": "1.0.0",
     "com.unity.modules.ui": "1.0.0",

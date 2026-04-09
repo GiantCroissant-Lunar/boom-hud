@@ -129,6 +129,19 @@ namespace BoomHud.Unity.UIToolkit
             ApplyCurrentPose();
         }
 
+        public void Evaluate(string clipId, float timeSeconds)
+        {
+            if (string.IsNullOrWhiteSpace(clipId))
+            {
+                return;
+            }
+
+            _currentClip = clipId;
+            _currentTimeSeconds = Mathf.Max(0f, timeSeconds);
+            _isPlaying = false;
+            ApplyCurrentPose();
+        }
+
         public void ScrubToTime(float timeSeconds)
         {
             _currentTimeSeconds = Mathf.Max(0f, timeSeconds);

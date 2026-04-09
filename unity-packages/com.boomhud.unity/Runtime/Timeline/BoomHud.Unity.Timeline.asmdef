@@ -1,0 +1,18 @@
+{
+  "name": "BoomHud.Unity.Timeline",
+  "rootNamespace": "BoomHud.Unity.Timeline",
+  "references": [
+    "BoomHud.Unity.Runtime",
+    "BoomHud.Unity.UIToolkit",
+    "Unity.Timeline"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

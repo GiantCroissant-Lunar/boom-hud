@@ -9,6 +9,7 @@
     "name": "BoomHud Contributors"
   },
   "dependencies": {
+    "com.unity.timeline": "1.7.7",
     "com.unity.modules.uielements": "1.0.0",
     "com.unity.ui": "1.0.0",
     "com.unity.ugui": "1.0.0"
