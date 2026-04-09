@@ -57,7 +57,7 @@ tasks:
     cmds:
       - >-
         npx quicktype@23.0.170
-        --src schemas/compose.schema.json
+        --src schemas/json/compose.schema.json
         --src-lang schema
         --lang csharp
         --namespace BoomHud.Abstractions.Composition.Generated
@@ -67,7 +67,7 @@ tasks:
         --no-combine-classes
         --out dotnet/src/BoomHud.Abstractions/Composition/Generated/ComposeManifestDto.g.cs
     sources:
-      - schemas/compose.schema.json
+      - schemas/json/compose.schema.json
     generates:
       - dotnet/src/BoomHud.Abstractions/Composition/Generated/ComposeManifestDto.g.cs
 
@@ -91,12 +91,13 @@ tasks:
       - schemas/json/motion.schema.json
     generates:
       - dotnet/src/BoomHud.Abstractions/Motion/Generated/MotionDocumentDto.g.cs
+
   generate:dto:states:
     desc: Generate StatesManifestDto from states.schema.json
     cmds:
       - >-
         npx quicktype@23.0.170
-        --src schemas/states.schema.json
+        --src schemas/json/states.schema.json
         --src-lang schema
         --lang csharp
         --namespace BoomHud.Abstractions.Snapshots.Generated
@@ -106,7 +107,7 @@ tasks:
         --no-combine-classes
         --out dotnet/src/BoomHud.Abstractions/Snapshots/Generated/StatesManifestDto.g.cs
     sources:
-      - schemas/states.schema.json
+      - schemas/json/states.schema.json
     generates:
       - dotnet/src/BoomHud.Abstractions/Snapshots/Generated/StatesManifestDto.g.cs
 
@@ -115,7 +116,7 @@ tasks:
     cmds:
       - >-
         npx quicktype@23.0.170
-        --src schemas/tokens.schema.json
+        --src schemas/json/tokens.schema.json
         --src-lang schema
         --lang csharp
         --namespace BoomHud.Abstractions.Tokens.Generated
@@ -125,7 +126,7 @@ tasks:
         --no-combine-classes
         --out dotnet/src/BoomHud.Abstractions/Tokens/Generated/TokensDto.g.cs
     sources:
-      - schemas/tokens.schema.json
+      - schemas/json/tokens.schema.json
     generates:
       - dotnet/src/BoomHud.Abstractions/Tokens/Generated/TokensDto.g.cs
 
@@ -137,3 +138,13 @@ tasks:
     desc: Verify CLI does not reference Generated namespaces
     cmds:
       - pwsh -NoProfile -File scripts/verify-no-dto-leak.ps1
+
+  verify:package-graph:
+    desc: Verify split-ready package IDs and NuGet dependency graph
+    cmds:
+      - pwsh -NoProfile -File scripts/verify-package-graph.ps1
+
+  verify:test-graph:
+    desc: Verify Foundation/backend test ownership and project references
+    cmds:
+      - pwsh -NoProfile -File scripts/verify-test-graph.ps1

@@ -3,8 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Abstractions</AssemblyName>
     <RootNamespace>BoomHud.Abstractions</RootNamespace>
-    <Description>Core types and interfaces for BoomHud UI code generation</Description>
-    <PackageTags>ui;code-generation;terminal-gui;avalonia;maui</PackageTags>
+    <PackageId>BoomHud.Foundation</PackageId>
+    <Description>Foundation contracts, IR, diagnostics, composition, and token models for BoomHud</Description>
+    <PackageTags>ui;code-generation;foundation;ir;composition;tokens;boomhud</PackageTags>
   </PropertyGroup>
 
   <!-- Enable DisposePattern source generator via local props (targets plate-shared set) -->

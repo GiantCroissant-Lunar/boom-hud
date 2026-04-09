@@ -3,7 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Generators</AssemblyName>
     <RootNamespace>BoomHud.Generators</RootNamespace>
-    <Description>Shared generator infrastructure for BoomHud backends</Description>
+    <PackageId>BoomHud.Foundation.Generators</PackageId>
+    <Description>Shared generation infrastructure that complements the BoomHud foundation contracts</Description>
+    <PackageTags>ui;code-generation;foundation;generator-infrastructure;boomhud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

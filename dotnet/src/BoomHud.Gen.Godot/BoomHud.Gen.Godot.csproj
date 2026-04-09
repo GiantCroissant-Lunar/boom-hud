@@ -3,7 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Gen.Godot</AssemblyName>
     <RootNamespace>BoomHud.Gen.Godot</RootNamespace>
+    <PackageId>BoomHud.Godot</PackageId>
     <Description>Godot 4.x C# code generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;godot;generator;boomhud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,7 +21,7 @@ ref-projects/
 # Build artifacts
 [Bb][Ii][Nn]/
 [Oo][Bb][Jj]/
-build/
+build/_artifacts/
 *.log
 
 # Generated snapshots (regenerated in CI)
@@ -32,3 +32,5 @@ _test_output/
 
 # Godot generated files
 .godot/
+
+node_modules/

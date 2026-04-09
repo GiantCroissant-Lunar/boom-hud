@@ -3,8 +3,16 @@
   "isRoot": true,
   "tools": {
     "unifybuild.tool": {
-      "version": "0.2.2",
+      "version": "3.0.0",
       "commands": ["unify-build"]
+    },
+    "husky": {
+      "version": "0.7.2",
+      "commands": ["husky"]
+    },
+    "gitversion.tool": {
+      "version": "5.12.0",
+      "commands": ["dotnet-gitversion"]
     }
   }
 }

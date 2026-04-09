@@ -1,103 +1,142 @@
-# Consuming BoomHud (Avalonia-first)
+# Consuming BoomHud
 
-This doc describes the **supported, repeatable** ways to consume BoomHud output in another repo (e.g. `fanta-world-window`).
+This document describes the supported ways to consume BoomHud today. The short version is:
 
-BoomHud currently produces **generated, framework-native files** (AXAML + code-behind + ViewModel interface) from a **design source** (currently: Figma JSON + optional Figma variables for theme tokens).
+- most consumers should use the CLI and commit generated output
+- advanced consumers can reference parser and backend packages directly
+- the repo's `ui/` folder is a dogfood workspace, not the package you consume
 
-## Option A (recommended): Generate files via the BoomHud CLI
+## Recommended Path: Use The CLI
 
-This is the lowest-friction approach: treat BoomHud as a codegen tool that outputs files you commit into the consuming repo.
+Treat BoomHud as a code-generation tool that turns input sources plus a manifest into framework-native output.
 
-### 1) Prepare inputs
+Supported inputs in the current pipeline:
 
-- Design file: Figma JSON export (see `dotnet/samples/BoomHud.Sample.Generation/design/*.json` for examples)
-- Optional: Figma variables JSON for theme tokens
+- Figma JSON
+- Pencil `.pen`
+- IR JSON
+- optional annotations and token registry files
 
-Bindings:
-
-- BoomHud supports explicit bindings via a simple node-name convention.
-- Add a trailing bracket segment like: `Health Value [bind: Health]`
-- For `TEXT` nodes, this converts the static text into a binding and will generate the corresponding ViewModel interface property.
-
-### 2) Run the generator
-
-From the BoomHud repo:
+Typical CLI usage from this repo:
 
 ```powershell
-Set-Location D:\lunar-snake\personal-work\plate-projects\boom-hud\dotnet
-
-# Run the CLI directly from source
-dotnet run -c Release --project .\src\BoomHud.Cli\BoomHud.Cli.csproj -- generate .\samples\BoomHud.Sample.Generation\design\status-bar.json --target avalonia --output .\_out\boom-hud\avalonia --namespace MyApp.Ui.Hud
-
-# Optional: include Figma variables for theme tokens
-# dotnet run -c Release --project .\src\BoomHud.Cli\BoomHud.Cli.csproj -- generate .\path\to\design.json --target avalonia --output .\_out\boom-hud\avalonia --namespace MyApp.Ui.Hud --variables .\path\to\variables.json
+dotnet run --project dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+	generate --manifest ui/boom-hud.compose.json --target godot --output artifacts/godot
 ```
 
-Outputs:
-
-- `*.axaml`
-- `*.axaml.cs`
-- `I*ViewModel.g.cs`
-
-If you want to install the CLI as a local tool for convenience, you can pack and install it from a local source:
+Single-input example:
 
 ```powershell
-Set-Location D:\lunar-snake\personal-work\plate-projects\boom-hud\dotnet
-dotnet pack -c Release .\src\BoomHud.Cli\BoomHud.Cli.csproj -o .\_out\packages
-dotnet tool install --global BoomHud.Tool --add-source .\_out\packages
-
-# Then run:
-boom-hud generate .\path\to\design.json --target avalonia --output .\_out\boom-hud\avalonia --namespace MyApp.Ui.Hud
+dotnet run --project dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release -- \
+	generate samples/dotnet/BoomHud.Sample.Generation/design/status-bar.json \
+	--target terminalgui \
+	--output out/terminalgui \
+	--namespace MyApp.Ui.Hud
 ```
 
-### 3) Copy/commit outputs into your app repo
+The CLI owns:
 
-In your consuming Avalonia app repo, place the generated files under a stable folder, e.g.
+- input loading and format detection
+- multi-source composition
+- token resolution
+- backend target resolution
+- file emission and command orchestration
 
-- `src/Ui/Hud/Generated/...`
+## Tool Packaging
 
-and include them in your `.csproj` as `AvaloniaXaml` + `Compile`.
+The CLI packs as the local tool package `BoomHud.Tool`.
 
-Notes:
+Example local pack/install flow:
 
-- The generated AXAML references `x:Class="<Namespace>.<Name>View"`; set `GenerationOptions.Namespace` to your app namespace.
-- BoomHud emits a `I<Name>ViewModel.g.cs` interface; your app implements that interface and assigns it as the view’s DataContext / ViewModel.
+```powershell
+dotnet pack dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj --configuration Release --output build/_artifacts/boom-hud/nuget
+dotnet tool install --global BoomHud.Tool --add-source build/_artifacts/boom-hud/nuget
+```
 
-### 4) Hook into your app
+Then run:
 
-Minimal pattern:
+```powershell
+boom-hud generate --manifest ui/boom-hud.compose.json --target terminalgui --output artifacts/terminalgui
+```
 
-- Create a ViewModel implementing `I<Name>ViewModel`
-- Instantiate the generated `*View`
-- Assign DataContext / ViewModel
-- Add to your visual tree
+## Package-Level Consumption
 
-## Option B: Call BoomHud generator APIs from your own tooling
+If you want to run generation inside your own tooling or build pipeline, reference the package boundary that matches your need.
 
-If you prefer to run generation inside your own repo/pipeline, create a small tool project that references:
+Current split-ready package identities:
 
-- `BoomHud.Dsl` (parsing)
-- `BoomHud.Gen.Avalonia` (AXAML emission)
+- `BoomHud.Foundation`
+- `BoomHud.Foundation.Generators`
+- `BoomHud.Input.Figma`
+- `BoomHud.Input.Pencil`
+- `BoomHud.TerminalGui`
+- `BoomHud.Godot`
+- `BoomHud.Tool`
 
-Pseudocode shape:
+Typical direct-reference combinations:
 
-1) Parse design source into `HudDocument`
-2) Create `GenerationOptions { Namespace = "...", Theme = ... }`
-3) Call `new AvaloniaGenerator().Generate(document, options)`
-4) Write `GeneratedFile.Content` to disk
+- parse only: `BoomHud.Foundation` + one input package
+- custom generator host: `BoomHud.Foundation` + `BoomHud.Foundation.Generators` + one backend package
+- normal repo consumption: `BoomHud.Tool`
 
-This avoids copying BoomHud’s sample project and lets you:
+Current nuance:
 
-- run codegen in CI
-- enforce output paths
-- pin generation options (namespace, nullable, comments)
+- Avalonia generation exists in-source and is available through the CLI.
+- Avalonia is not yet part of the first-pass package graph contract documented above.
 
-## Compatibility notes (Avalonia)
+## Compose Manifest Workflow
 
-- BoomHud targets Avalonia AXAML and emits code-behind plus ViewModel interfaces.
-- BoomHud emits `x:DataType="vm:I<Name>ViewModel"` on the generated root control, so it works cleanly with `AvaloniaUseCompiledBindingsByDefault=true`.
+For repeatable generation, prefer a compose manifest over ad hoc command-line input lists.
 
-## Current limitations (important)
+The repo dogfood manifest is `ui/boom-hud.compose.json`. It defines the current convention for:
 
-- The “JSON DSL” described in the top-level README is aspirational; the implemented path today is **Figma JSON → IR → generators**.
-- Generated component instance overrides are currently warned about (not fully applied) in `BoomHud.Gen.Avalonia`.
+- source list
+- token registry path
+- output path defaults
+- namespace
+- targets
+
+The repo convention is to keep generated output under `ui/generated`. External consumers should keep the same idea: pick a stable generated folder inside the app repo and commit it intentionally.
+
+## Generated Output Strategy
+
+BoomHud emits framework-native files. The exact file set depends on the backend and options, but the common expectation is:
+
+- generated source files live under a stable folder in your app repo
+- your app treats them as normal source assets
+- your app implements or consumes the generated ViewModel contracts as needed
+
+For compose and contract-oriented flows, see `docs/USAGE-CONTRACTS-AND-COMPOSE.md`.
+
+## When To Use APIs Directly
+
+Use the packages directly when you need one of these:
+
+- generation embedded in your own build orchestration
+- strict control over output paths and file writing
+- custom tooling around `HudDocument`
+- backend-specific post-processing in the same pipeline
+
+The programmatic shape is still the same core pipeline:
+
+1. Parse input into `HudDocument`.
+2. Apply composition and tokens.
+3. Build `GenerationOptions`.
+4. Invoke the selected backend generator.
+5. Write generated files to disk.
+
+## Repo-Specific Clarification
+
+`ui/` is not the product source tree. It is the repo's consumer-style workspace used to exercise the toolchain end to end.
+
+That distinction matters:
+
+- `dotnet/` is where BoomHud itself is built
+- `ui/` is where BoomHud is consumed inside this repo
+- `samples/` are examples, not the primary operational flow
+
+## Current Limitations
+
+- the split package graph is currently enforced for Foundation, Figma, Pencil, Terminal.Gui, Godot, and the tool
+- Avalonia is present but not yet brought into the same package-separation guardrails
+- consumer docs should assume the CLI path is the most stable entrypoint unless there is a specific reason to host generation yourself

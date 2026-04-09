@@ -3,7 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Dsl</AssemblyName>
     <RootNamespace>BoomHud.Dsl</RootNamespace>
+    <PackageId>BoomHud.Input.Figma</PackageId>
     <Description>Figma JSON parser for BoomHud component definitions</Description>
+    <PackageTags>ui;code-generation;figma;parser;boomhud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

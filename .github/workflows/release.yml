@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.2.0
+        with:
+          versionSpec: '5.x'
+      
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.2.0
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+      
+      - name: Restore dependencies
+        working-directory: dotnet
+        run: dotnet restore
+      
+      - name: Build
+        working-directory: dotnet
+        run: dotnet build --no-restore --configuration Release -p:Version=${{ steps.gitversion.outputs.fullSemVer }}
+      
+      - name: Test
+        working-directory: dotnet
+        run: dotnet test --no-build --configuration Release --verbosity normal
+      
+      - name: Publish CLI
+        working-directory: dotnet
+        run: |
+          dotnet publish src/BoomHud.Cli/BoomHud.Cli.csproj \
+            --configuration Release \
+            --output ../artifacts/publish \
+            -p:Version=${{ steps.gitversion.outputs.fullSemVer }} \
+            -p:PublishSingleFile=true \
+            --runtime linux-x64 \
+            --self-contained false
+      
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "BoomHud ${{ steps.gitversion.outputs.semVer }}"
+          body_path: RELEASE_NOTES.md
+          files: |
+            artifacts/publish/*
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

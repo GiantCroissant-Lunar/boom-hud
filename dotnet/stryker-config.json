@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/stryker-config.json",
+  "solution": "BoomHud.sln",
+  "project": "BoomHud.Abstractions",
+  "test-projects": [
+    "tests/BoomHud.Tests.Unit/BoomHud.Tests.Unit.csproj"
+  ],
+  "target-framework": "net9.0",
+  "reporters": [
+    "html",
+    "progress",
+    "markdown"
+  ],
+  "thresholds": {
+    "high": 90,
+    "low": 70,
+    "break": 60
+  },
+  "mutate": [
+    "src/**/*.cs",
+    "!src/**/Generated/**/*.cs",
+    "!src/**/*.g.cs",
+    "!src/**/Figma/FigmaDto.cs",
+    "!src/**/Figma/FigmaVariablesDto.cs",
+    "!src/**/PenDto.cs"
+  ],
+  "excluded-mutations": [],
+  "verbosity": "normal",
+  "concurrency": 4
+}

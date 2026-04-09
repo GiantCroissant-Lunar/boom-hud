@@ -3,7 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Dsl.Pencil</AssemblyName>
     <RootNamespace>BoomHud.Dsl.Pencil</RootNamespace>
+    <PackageId>BoomHud.Input.Pencil</PackageId>
     <Description>Pencil.dev .pen file parser for BoomHud component definitions</Description>
+    <PackageTags>ui;code-generation;pencil;parser;boomhud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

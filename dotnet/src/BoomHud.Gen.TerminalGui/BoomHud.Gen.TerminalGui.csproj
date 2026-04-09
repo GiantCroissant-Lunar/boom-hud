@@ -3,7 +3,9 @@
   <PropertyGroup>
     <AssemblyName>BoomHud.Gen.TerminalGui</AssemblyName>
     <RootNamespace>BoomHud.Gen.TerminalGui</RootNamespace>
+    <PackageId>BoomHud.TerminalGui</PackageId>
     <Description>Terminal.Gui v2 code generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;terminal-gui;generator;boomhud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
