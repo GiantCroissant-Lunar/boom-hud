@@ -29,6 +29,7 @@ public sealed class ReactGeneratorTests
         var tsx = result.Files.First(file => file.Path == "StatusHudView.tsx").Content;
         tsx.Should().Contain("import React from 'react';");
         tsx.Should().Contain("export function StatusHudView(props: StatusHudViewModel): React.JSX.Element");
+        tsx.Should().Contain("motionTargets?: Record<string");
         tsx.Should().Contain("className='boomhud-node boomhud-container'");
     }
 
@@ -72,6 +73,7 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("playerHealthText?: unknown;");
         tsx.Should().Contain("playerHealthPercent?: unknown;");
         tsx.Should().Contain("playerShowHud?: unknown;");
+        tsx.Should().Contain("getMotionStyle(props.motionTargets, 'healthLabel')");
         tsx.Should().Contain("formatValue(props.playerHealthText, '{0} HP', '')");
         tsx.Should().Contain("width: clampPercent(props.playerHealthPercent)");
         tsx.Should().Contain("asBool(props.playerShowHud)");
@@ -105,6 +107,6 @@ public sealed class ReactGeneratorTests
         var tsx = result.Files.First(file => file.Path == "HudView.tsx").Content;
 
         tsx.Should().Contain("import { ActionButtonView } from './ActionButtonView';");
-        tsx.Should().Contain("<ActionButtonView />");
+        tsx.Should().Contain("<ActionButtonView motionTargets={props.motionTargets} />");
     }
 }

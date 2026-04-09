@@ -68,10 +68,53 @@ public sealed class ReactGenerator : IBackendGenerator
         if (imports.Count > 0) builder.AppendLine();
         builder.Append(GenerateContract(document.Name, props));
         builder.AppendLine();
+        builder.AppendLine("type BoomHudMotionProperty = 'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color';");
+        builder.AppendLine("type BoomHudMotionScalar = number | boolean | string | readonly number[];");
+        builder.AppendLine("type BoomHudMotionTargetState = Partial<Record<BoomHudMotionProperty, BoomHudMotionScalar>>;");
+        builder.AppendLine("type BoomHudMotionTargets = Record<string, BoomHudMotionTargetState>;");
         builder.AppendLine("const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;");
         builder.AppendLine("const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);");
         builder.AppendLine("const formatValue = (value: unknown, format?: string, fallback = '') => !format ? asText(value, fallback) : format.replace(/\\{0(?:\\:[^}]*)?\\}/g, asText(value, fallback));");
         builder.AppendLine("const clampPercent = (value: unknown) => `${Math.max(0, Math.min(100, typeof value === 'number' ? value : 0))}%`;");
+        builder.AppendLine("const asMotionNumber = (value: BoomHudMotionScalar | undefined) => typeof value === 'number' ? value : undefined;");
+        builder.AppendLine("const asMotionText = (value: BoomHudMotionScalar | undefined) => typeof value === 'string' ? value : undefined;");
+        builder.AppendLine("const getMotionTarget = (targets: BoomHudMotionTargets | undefined, id?: string) => id ? targets?.[id] : undefined;");
+        builder.AppendLine("const getMotionText = (targets: BoomHudMotionTargets | undefined, id?: string) => asMotionText(getMotionTarget(targets, id)?.text);");
+        builder.AppendLine("const getMotionSpriteFrame = (targets: BoomHudMotionTargets | undefined, id?: string) => asMotionText(getMotionTarget(targets, id)?.spriteFrame);");
+        builder.AppendLine("const getMotionStyle = (targets: BoomHudMotionTargets | undefined, id?: string): React.CSSProperties => {");
+        builder.AppendLine("  const target = getMotionTarget(targets, id);");
+        builder.AppendLine("  if (!target) return {};");
+        builder.AppendLine("  const style: React.CSSProperties = {};");
+        builder.AppendLine("  const transform: string[] = [];");
+        builder.AppendLine("  const opacity = asMotionNumber(target.opacity);");
+        builder.AppendLine("  if (opacity !== undefined) style.opacity = opacity;");
+        builder.AppendLine("  const width = asMotionNumber(target.width);");
+        builder.AppendLine("  if (width !== undefined) style.width = width;");
+        builder.AppendLine("  const height = asMotionNumber(target.height);");
+        builder.AppendLine("  if (height !== undefined) style.height = height;");
+        builder.AppendLine("  const color = asMotionText(target.color);");
+        builder.AppendLine("  if (color !== undefined) style.color = color;");
+        builder.AppendLine("  if (typeof target.visibility === 'boolean') style.visibility = target.visibility ? 'visible' : 'hidden';");
+        builder.AppendLine("  if (typeof target.visibility === 'string') style.visibility = target.visibility === 'hidden' || target.visibility === 'collapse' ? target.visibility : 'visible';");
+        builder.AppendLine("  const positionX = asMotionNumber(target.positionX) ?? 0;");
+        builder.AppendLine("  const positionY = asMotionNumber(target.positionY) ?? 0;");
+        builder.AppendLine("  const positionZ = asMotionNumber(target.positionZ) ?? 0;");
+        builder.AppendLine("  if (positionX !== 0 || positionY !== 0 || positionZ !== 0) transform.push(`translate3d(${positionX}px, ${positionY}px, ${positionZ}px)`);");
+        builder.AppendLine("  const scaleX = asMotionNumber(target.scaleX);");
+        builder.AppendLine("  if (scaleX !== undefined) transform.push(`scaleX(${scaleX})`);");
+        builder.AppendLine("  const scaleY = asMotionNumber(target.scaleY);");
+        builder.AppendLine("  if (scaleY !== undefined) transform.push(`scaleY(${scaleY})`);");
+        builder.AppendLine("  const scaleZ = asMotionNumber(target.scaleZ);");
+        builder.AppendLine("  if (scaleZ !== undefined) transform.push(`scale3d(1, 1, ${scaleZ})`);");
+        builder.AppendLine("  const rotation = asMotionNumber(target.rotation);");
+        builder.AppendLine("  if (rotation !== undefined) transform.push(`rotate(${rotation}deg)`);");
+        builder.AppendLine("  const rotationX = asMotionNumber(target.rotationX);");
+        builder.AppendLine("  if (rotationX !== undefined) transform.push(`rotateX(${rotationX}deg)`);");
+        builder.AppendLine("  const rotationY = asMotionNumber(target.rotationY);");
+        builder.AppendLine("  if (rotationY !== undefined) transform.push(`rotateY(${rotationY}deg)`);");
+        builder.AppendLine("  if (transform.length > 0) style.transform = transform.join(' ');");
+        builder.AppendLine("  return style;");
+        builder.AppendLine("};");
         builder.AppendLine();
         builder.Append("export function ").Append(document.Name).Append("View(props: ").Append(document.Name).AppendLine("ViewModel): React.JSX.Element {");
         builder.AppendLine("  return (");
@@ -86,6 +129,7 @@ public sealed class ReactGenerator : IBackendGenerator
     {
         var builder = new StringBuilder();
         builder.Append("export interface ").Append(name).AppendLine("ViewModel {");
+        builder.AppendLine("  motionTargets?: Record<string, Partial<Record<'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color', number | boolean | string | readonly number[]>>>;");
         foreach (var prop in props)
         {
             builder.Append("  ").Append(prop).AppendLine("?: unknown;");
@@ -113,10 +157,14 @@ public sealed class ReactGenerator : IBackendGenerator
     {
         var indent = new string(' ', indentLevel * 2);
         var style = BuildStyle(node, parentLayout);
+        var motionStyle = string.IsNullOrWhiteSpace(node.Id) ? string.Empty : $"getMotionStyle(props.motionTargets, {Ts(node.Id)})";
+        var mergedStyle = style.Length > 0
+            ? (motionStyle.Length > 0 ? $" style={{ {{ {style}, ...{motionStyle} }} }}" : $" style={{ {{ {style} }} }}")
+            : (motionStyle.Length > 0 ? $" style={{{motionStyle}}}" : string.Empty);
         var title = node.Tooltip?.IsBound == true ? $" title={{asText(props.{PropName(node.Tooltip!.Value.BindingPath!)})}}" :
             node.Tooltip?.Value is { } tooltip ? $" title={Ts(tooltip)}" : string.Empty;
         var disabled = node.Enabled.IsBound ? $" disabled={{!asBool(props.{PropName(node.Enabled.BindingPath!)})}}" : node.Enabled.Value == false ? " disabled" : string.Empty;
-        var common = $" className={Ts(ClassName(node))}" + (style.Length > 0 ? $" style={{ {{ {style} }} }}" : string.Empty) + title +
+        var common = $" className={Ts(ClassName(node))}" + mergedStyle + title +
             (string.IsNullOrWhiteSpace(node.Id) ? string.Empty : $" data-boomhud-id={Ts(node.Id)}");
 
         if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var component))
@@ -126,7 +174,7 @@ public sealed class ReactGenerator : IBackendGenerator
                 diagnostics.Add(Diagnostic.Warning($"React backend does not apply instance overrides for '{component.Name}' yet.", node.Id, "BHR1002"));
             }
 
-            return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View />\n" + indent + "</div>\n";
+            return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View motionTargets={{props.motionTargets}} />\n" + indent + "</div>\n";
         }
 
         var tag = node.Type switch
@@ -144,7 +192,11 @@ public sealed class ReactGenerator : IBackendGenerator
 
         if (node.Type == ComponentType.Image)
         {
-            return indent + $"<img{common} src={{{TextExpr(node, ["source", "src", "value"], "''")}}} alt={Ts(node.Id ?? "image")} />\n";
+            var sourceExpr = TextExpr(node, ["source", "src", "value"], "''");
+            var srcExpr = string.IsNullOrWhiteSpace(node.Id)
+                ? sourceExpr
+                : $"getMotionSpriteFrame(props.motionTargets, {Ts(node.Id)}) ?? ({sourceExpr})";
+            return indent + $"<img{common} src={{{srcExpr}}} alt={Ts(node.Id ?? "image")} />\n";
         }
 
         if (node.Type == ComponentType.TextInput)
@@ -180,7 +232,13 @@ public sealed class ReactGenerator : IBackendGenerator
         }
 
         builder.AppendLine(">");
-        if (text != null) builder.Append(indent).Append("  {").Append(text).AppendLine("}");
+        if (text != null)
+        {
+            var finalText = string.IsNullOrWhiteSpace(node.Id)
+                ? text
+                : $"getMotionText(props.motionTargets, {Ts(node.Id)}) ?? ({text})";
+            builder.Append(indent).Append("  {").Append(finalText).AppendLine("}");
+        }
         foreach (var child in node.Children) builder.Append(RenderNode(child, indentLevel + 1, node.Layout?.Type, components, diagnostics));
         builder.Append(indent).Append("</").Append(tag).AppendLine(">");
         return builder.ToString();

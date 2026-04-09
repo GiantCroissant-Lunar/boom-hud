@@ -94,6 +94,7 @@ The Remotion workspace now exposes typed helpers under `src/motion/`:
 - `schema.ts`: Zod schemas and TypeScript types mirroring `schemas/json/motion.schema.json`
 - `authoring.ts`: object-literal helpers like `defineMotionDocument()` and `parseMotionDocument()`
 - `runtime.ts`: frame evaluation helpers like `resolveClipStateAtFrame()` and `useMotionTargetState()`
+- `MotionScene.tsx`: wrapper that injects `motionTargets` into generated BoomHud React views
 
 Example:
 
@@ -128,3 +129,17 @@ const document = defineMotionDocument({
 ```
 
 This keeps JSON as the source of truth while still giving Remotion typed authoring and playback utilities.
+
+Generated BoomHud React views can now be driven declaratively:
+
+```tsx
+import { MotionScene } from "./src/motion";
+import { DebugOverlayView } from "./generated/DebugOverlayView";
+
+<MotionScene
+  document={document}
+  clipId="intro"
+  component={DebugOverlayView}
+  viewModel={{ version: "v1.2.0", fps: 60 }}
+/>;
+```
