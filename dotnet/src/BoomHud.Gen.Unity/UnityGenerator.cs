@@ -290,7 +290,8 @@ public sealed class UnityGenerator : IBackendGenerator
 
     private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType)
     {
-        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source);
+        var sourceHasAbsoluteLayout = source.Layout?.Type == LayoutType.Absolute;
+        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source) || sourceHasAbsoluteLayout;
         if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
@@ -326,7 +327,19 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendOffsetStyle(builder, "top", top.Value);
         }
 
-        if (sourceHasAbsolutePlacement && parentLayoutType == null)
+        if (sourceHasAbsoluteLayout)
+        {
+            if (left == null)
+            {
+                AppendCssDeclaration(builder, "left", ToPixels(0));
+            }
+
+            if (top == null)
+            {
+                AppendCssDeclaration(builder, "top", ToPixels(0));
+            }
+        }
+        else if (sourceHasAbsolutePlacement && parentLayoutType == null)
         {
             if (left == null)
             {

@@ -313,11 +313,6 @@ public sealed class ReactGenerator : IBackendGenerator
         }
 
         var hasExplicitAbsolutePlacement = HasExplicitAbsolutePlacement(node, layout);
-        if (layout?.Type == LayoutType.Absolute && parentLayout != LayoutType.Absolute && !hasExplicitAbsolutePlacement)
-        {
-            style.Add("position: 'relative'");
-        }
-
         if (parentLayout == LayoutType.Absolute || hasExplicitAbsolutePlacement)
         {
             style.Add("position: 'absolute'");
@@ -326,7 +321,7 @@ public sealed class ReactGenerator : IBackendGenerator
             AppendPositionDimension(style, "left", left);
             AppendPositionDimension(style, "top", top);
 
-            if (hasExplicitAbsolutePlacement && parentLayout == null)
+            if (hasExplicitAbsolutePlacement)
             {
                 if (left == null) style.Add("left: '0px'");
                 if (top == null) style.Add("top: '0px'");
