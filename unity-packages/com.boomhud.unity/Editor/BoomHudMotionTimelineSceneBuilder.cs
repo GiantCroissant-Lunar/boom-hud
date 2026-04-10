@@ -5,13 +5,16 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BoomHud.Unity.Runtime;
 using BoomHud.Unity.Timeline;
+using BoomHud.Unity.UGUI;
 using BoomHud.Unity.UIToolkit;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace BoomHud.Unity.Editor
@@ -39,7 +42,7 @@ namespace BoomHud.Unity.Editor
 
     public sealed class BoomHudMotionTimelineSceneOptions
     {
-        public string OutputRootDirectory { get; set; } = "Assets/BoomHudGenerated/TimelineScenes";
+        public string? OutputRootDirectory { get; set; }
 
         public string? SceneDirectory { get; set; }
 
@@ -74,7 +77,7 @@ namespace BoomHud.Unity.Editor
 
         public IReadOnlyList<string> ClipIds { get; set; } = Array.Empty<string>();
 
-        public Type HostType { get; set; } = typeof(BoomHudUiToolkitMotionHost);
+        public Type HostType { get; set; } = typeof(BoomHudViewHost);
 
         public Type MotionType { get; set; } = typeof(object);
     }
@@ -90,7 +93,8 @@ namespace BoomHud.Unity.Editor
             {
                 var hostComponents = Selection.activeGameObject
                     .GetComponents<MonoBehaviour>()
-                    .OfType<BoomHudUiToolkitMotionHost>()
+                    .OfType<BoomHudViewHost>()
+                    .Where(static component => component is IBoomHudMotionHost)
                     .ToArray();
 
                 if (hostComponents.Length == 1)
@@ -118,7 +122,9 @@ namespace BoomHud.Unity.Editor
 
             if (Selection.activeObject is GameObject selectedObject)
             {
-                var hostComponent = selectedObject.GetComponents<MonoBehaviour>().OfType<BoomHudUiToolkitMotionHost>().FirstOrDefault();
+                var hostComponent = selectedObject.GetComponents<MonoBehaviour>()
+                    .OfType<BoomHudViewHost>()
+                    .FirstOrDefault(static component => component is IBoomHudMotionHost);
                 if (hostComponent != null)
                 {
                     hostType = hostComponent.GetType();
@@ -144,18 +150,23 @@ namespace BoomHud.Unity.Editor
         {
             if (!IsMotionHostType(hostType))
             {
-                throw new ArgumentException($"Type '{hostType.FullName}' is not a BoomHud UI Toolkit motion host.", nameof(hostType));
+                throw new ArgumentException($"Type '{hostType.FullName}' is not a BoomHud motion host.", nameof(hostType));
             }
 
             options ??= new BoomHudMotionTimelineSceneOptions();
+            var settings = BoomHudProjectSettings.Current;
             var descriptor = ResolveDescriptor(hostType, options.DefaultClipId, options.SequenceId);
 
-            var sceneDirectory = NormalizeAssetPath(options.SceneDirectory ?? $"{options.OutputRootDirectory.TrimEnd('/')}/{descriptor.BaseName}");
-            var timelineDirectory = NormalizeAssetPath(options.TimelineDirectory ?? sceneDirectory);
+            var outputRootDirectory = NormalizeAssetPath(
+                string.IsNullOrWhiteSpace(options.OutputRootDirectory)
+                    ? settings.TimelineSceneOutputRoot
+                    : options.OutputRootDirectory!);
+            var sceneDirectory = NormalizeAssetPath(options.SceneDirectory ?? $"{outputRootDirectory.TrimEnd('/')}/{descriptor.BaseName}");
+            var timelineDirectory = NormalizeAssetPath(options.TimelineDirectory ?? $"{settings.TimelineAssetOutputRoot.TrimEnd('/')}/{descriptor.BaseName}");
             var sceneName = string.IsNullOrWhiteSpace(options.SceneName) ? $"{descriptor.BaseName}MotionTimeline" : options.SceneName!.Trim();
             var timelineName = string.IsNullOrWhiteSpace(options.TimelineName) ? $"{descriptor.BaseName}MotionTimeline" : options.TimelineName!.Trim();
             var rootObjectName = string.IsNullOrWhiteSpace(options.RootObjectName) ? $"{descriptor.BaseName} Motion Timeline" : options.RootObjectName!.Trim();
-            var panelSettingsPath = NormalizeAssetPath(options.PanelSettingsAssetPath ?? $"{sceneDirectory}/BoomHudPanelSettings.asset");
+            var panelSettingsPath = NormalizeAssetPath(options.PanelSettingsAssetPath ?? settings.TimelinePanelSettingsAssetPath);
             var scenePath = NormalizeAssetPath($"{sceneDirectory}/{sceneName}.unity");
             var timelinePath = NormalizeAssetPath($"{timelineDirectory}/{timelineName}.playable");
 
@@ -163,51 +174,99 @@ namespace BoomHud.Unity.Editor
             EnsureFolderPath(timelineDirectory);
             EnsureFolderPath(Path.GetDirectoryName(panelSettingsPath)?.Replace('\\', '/') ?? sceneDirectory);
 
-            var panelSettings = EnsurePanelSettings(panelSettingsPath, options.CameraBackgroundColor);
             var timeline = EnsureTimelineAsset(timelinePath, descriptor, options.ClipSchedule ?? descriptor.SequenceClipSchedule);
-            var visualTreeAssetPath = AssetDatabase.GetAssetPath(descriptor.VisualTreeAsset);
-            if (string.IsNullOrWhiteSpace(visualTreeAssetPath))
+            if (descriptor.HostKind == MotionHostKind.UiToolkit)
             {
-                throw new InvalidOperationException(
-                    $"Could not resolve the asset path for VisualTreeAsset '{descriptor.VisualTreeAsset.name}'.");
+                var panelSettings = EnsurePanelSettings(panelSettingsPath, options.CameraBackgroundColor);
+                var visualTreeAssetPath = AssetDatabase.GetAssetPath(descriptor.VisualTreeAsset!);
+                if (string.IsNullOrWhiteSpace(visualTreeAssetPath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not resolve the asset path for VisualTreeAsset '{descriptor.VisualTreeAsset!.name}'.");
+                }
+
+                var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+                var rootObject = new GameObject(rootObjectName);
+                var document = rootObject.AddComponent<UIDocument>();
+                document.panelSettings = panelSettings;
+                document.visualTreeAsset = descriptor.VisualTreeAsset;
+
+                var motionHost = (BoomHudViewHost)rootObject.AddComponent(hostType);
+                var previewBootstrap = rootObject.AddComponent<BoomHudMotionPreviewBootstrap>();
+                var director = rootObject.AddComponent<PlayableDirector>();
+                director.playOnAwake = true;
+                director.playableAsset = timeline;
+                director.extrapolationMode = DirectorWrapMode.None;
+
+                BindTimelineTrack(timeline, director, motionHost);
+                CreateCamera(options.CameraBackgroundColor);
+
+                EditorUtility.SetDirty(document);
+                EditorUtility.SetDirty(motionHost);
+                ConfigurePreviewBootstrap(previewBootstrap, director, motionHost, descriptor.DefaultClipId);
+                EditorUtility.SetDirty(previewBootstrap);
+                EditorUtility.SetDirty(director);
+                EditorSceneManager.MarkSceneDirty(scene);
+
+                EditorSceneManager.SaveScene(scene, scenePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                var reopenedScene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+                ReapplyDocumentBindings(
+                    panelSettingsPath,
+                    visualTreeAssetPath);
+                EditorSceneManager.MarkSceneDirty(reopenedScene);
+                EditorSceneManager.SaveScene(reopenedScene, scenePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
+            else
+            {
+                var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+                var rootObject = new GameObject(rootObjectName, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+                var rectTransform = rootObject.GetComponent<RectTransform>();
+                rectTransform.anchorMin = Vector2.zero;
+                rectTransform.anchorMax = Vector2.one;
+                rectTransform.offsetMin = Vector2.zero;
+                rectTransform.offsetMax = Vector2.zero;
 
-            var rootObject = new GameObject(rootObjectName);
-            var document = rootObject.AddComponent<UIDocument>();
-            document.panelSettings = panelSettings;
-            document.visualTreeAsset = descriptor.VisualTreeAsset;
+                var canvas = rootObject.GetComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.pixelPerfect = false;
+                canvas.sortingOrder = 0;
 
-            var motionHost = (BoomHudUiToolkitMotionHost)rootObject.AddComponent(hostType);
-            var previewBootstrap = rootObject.AddComponent<BoomHudMotionPreviewBootstrap>();
-            var director = rootObject.AddComponent<PlayableDirector>();
-            director.playOnAwake = true;
-            director.playableAsset = timeline;
-            director.extrapolationMode = DirectorWrapMode.None;
+                var scaler = rootObject.GetComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1280f, 720f);
+                scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+                scaler.matchWidthOrHeight = 0.5f;
 
-            BindTimelineTrack(timeline, director, motionHost);
-            CreateCamera(options.CameraBackgroundColor);
+                var motionHost = (BoomHudViewHost)rootObject.AddComponent(hostType);
+                var previewBootstrap = rootObject.AddComponent<BoomHudMotionPreviewBootstrap>();
+                var director = rootObject.AddComponent<PlayableDirector>();
+                director.playOnAwake = true;
+                director.playableAsset = timeline;
+                director.extrapolationMode = DirectorWrapMode.None;
 
-            EditorUtility.SetDirty(document);
-            EditorUtility.SetDirty(motionHost);
-            ConfigurePreviewBootstrap(previewBootstrap, director, motionHost, descriptor.DefaultClipId);
-            EditorUtility.SetDirty(previewBootstrap);
-            EditorUtility.SetDirty(director);
-            EditorSceneManager.MarkSceneDirty(scene);
+                BindTimelineTrack(timeline, director, motionHost);
+                CreateCamera(options.CameraBackgroundColor);
 
-            EditorSceneManager.SaveScene(scene, scenePath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+                EditorUtility.SetDirty(rectTransform);
+                EditorUtility.SetDirty(canvas);
+                EditorUtility.SetDirty(scaler);
+                EditorUtility.SetDirty(motionHost);
+                ConfigurePreviewBootstrap(previewBootstrap, director, motionHost, descriptor.DefaultClipId);
+                EditorUtility.SetDirty(previewBootstrap);
+                EditorUtility.SetDirty(director);
+                EditorSceneManager.MarkSceneDirty(scene);
 
-            var reopenedScene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
-            ReapplyDocumentBindings(
-                panelSettingsPath,
-                visualTreeAssetPath);
-            EditorSceneManager.MarkSceneDirty(reopenedScene);
-            EditorSceneManager.SaveScene(reopenedScene, scenePath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+                EditorSceneManager.SaveScene(scene, scenePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
 
             if (options.OpenSceneAfterCreation)
             {
@@ -232,7 +291,10 @@ namespace BoomHud.Unity.Editor
         }
 
         private static bool IsMotionHostType(Type? type)
-            => type != null && typeof(BoomHudUiToolkitMotionHost).IsAssignableFrom(type) && !type.IsAbstract;
+            => type != null
+                && typeof(BoomHudViewHost).IsAssignableFrom(type)
+                && typeof(IBoomHudMotionHost).IsAssignableFrom(type)
+                && !type.IsAbstract;
 
         private static MotionHostDescriptor ResolveDescriptor(Type hostType, string? preferredClipId, string? preferredSequenceId)
         {
@@ -243,8 +305,11 @@ namespace BoomHud.Unity.Editor
             var motionType = ResolveMotionType(hostType, baseName)
                 ?? throw new InvalidOperationException($"Could not resolve generated motion type for host '{hostType.FullName}'.");
 
-            var visualTreeAsset = ResolveVisualTreeAsset(hostType, baseName)
-                ?? throw new InvalidOperationException($"Could not resolve generated VisualTreeAsset for host '{hostType.FullName}'.");
+            var hostKind = ResolveHostKind(hostType);
+            var visualTreeAsset = hostKind == MotionHostKind.UiToolkit
+                ? ResolveVisualTreeAsset(hostType, baseName)
+                    ?? throw new InvalidOperationException($"Could not resolve generated VisualTreeAsset for host '{hostType.FullName}'.")
+                : null;
 
             var clipIds = ResolveClipIds(motionType);
             var defaultClipId = ResolveDefaultClipId(motionType, clipIds, preferredClipId);
@@ -252,6 +317,7 @@ namespace BoomHud.Unity.Editor
             return new MotionHostDescriptor
             {
                 BaseName = baseName,
+                HostKind = hostKind,
                 MotionType = motionType,
                 VisualTreeAsset = visualTreeAsset,
                 ClipIds = clipIds,
@@ -259,6 +325,13 @@ namespace BoomHud.Unity.Editor
                 SequenceClipSchedule = ResolveSequenceClipSchedule(motionType, clipIds, preferredSequenceId)
             };
         }
+
+        private static MotionHostKind ResolveHostKind(Type hostType)
+            => typeof(BoomHudUiToolkitMotionHost).IsAssignableFrom(hostType)
+                ? MotionHostKind.UiToolkit
+                : typeof(BoomHudUguiMotionHost).IsAssignableFrom(hostType)
+                    ? MotionHostKind.UGui
+                    : throw new InvalidOperationException($"Type '{hostType.FullName}' is not a supported BoomHud motion host.");
 
         private static Type? ResolveMotionType(Type hostType, string baseName)
         {
@@ -379,7 +452,7 @@ namespace BoomHud.Unity.Editor
         private static void ConfigurePreviewBootstrap(
             BoomHudMotionPreviewBootstrap previewBootstrap,
             PlayableDirector director,
-            BoomHudUiToolkitMotionHost motionHost,
+            BoomHudViewHost motionHost,
             string defaultClipId)
         {
             previewBootstrap.Configure(director, motionHost, defaultClipId);
@@ -666,7 +739,7 @@ namespace BoomHud.Unity.Editor
             return Convert.ToDouble(result ?? 0d, CultureInfo.InvariantCulture);
         }
 
-        private static void BindTimelineTrack(TimelineAsset timeline, PlayableDirector director, BoomHudUiToolkitMotionHost motionHost)
+        private static void BindTimelineTrack(TimelineAsset timeline, PlayableDirector director, BoomHudViewHost motionHost)
         {
             foreach (var track in timeline.GetOutputTracks())
             {
@@ -733,13 +806,21 @@ namespace BoomHud.Unity.Editor
         private static string NormalizeAssetPath(string path)
             => path.Replace('\\', '/').TrimEnd('/');
 
+        private enum MotionHostKind
+        {
+            UiToolkit,
+            UGui
+        }
+
         private sealed class MotionHostDescriptor
         {
             public string BaseName { get; set; } = string.Empty;
 
+            public MotionHostKind HostKind { get; set; }
+
             public Type MotionType { get; set; } = typeof(object);
 
-            public VisualTreeAsset VisualTreeAsset { get; set; } = null!;
+            public VisualTreeAsset? VisualTreeAsset { get; set; }
 
             public IReadOnlyList<string> ClipIds { get; set; } = Array.Empty<string>();
 

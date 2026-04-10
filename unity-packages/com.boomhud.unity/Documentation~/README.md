@@ -5,21 +5,22 @@
 ## What It Covers
 
 - UI Toolkit hosting helpers for generated `.uxml`, `.uss`, and `.gen.cs` views.
-- Timeline track helpers that drive generated UI Toolkit motion hosts through Unity Playables.
+- Timeline track helpers that drive generated BoomHud motion hosts through Unity Playables.
 - Shared runtime base behavior for binding and rebinding generated views.
-- uGUI hosting scaffolding so consumer projects have a stable package location for future Canvas-based generation.
+- uGUI hosting scaffolding and motion hosts for Canvas-based generation.
 
 ## Current Status
 
 - UI Toolkit generation is implemented in BoomHud today.
-- uGUI generation is not implemented yet in the BoomHud generator, but this package includes the Unity-side host surface so the package layout is ready when that backend lands.
+- uGUI generation is implemented in BoomHud today.
+- Timeline support now targets a shared BoomHud motion host contract so UI Toolkit and uGUI can consume the same Motion IR sequence and clip metadata.
 
 ## Package Layout
 
 - `Runtime/Common`: shared `BoomHudViewHost` lifecycle base class.
 - `Runtime/UIToolkit`: `BoomHudUiToolkitHost` for `UIDocument`-based hosts.
-- `Runtime/Timeline`: Timeline clips and tracks that scrub `BoomHudUiToolkitMotionHost` instances.
-- `Runtime/uGUI`: `BoomHudUguiHost` for `Canvas` and `RectTransform` hosts.
+- `Runtime/Timeline`: Timeline clips and tracks that scrub `IBoomHudMotionHost` instances.
+- `Runtime/uGUI`: `BoomHudUguiHost` and `BoomHudUguiMotionHost` for `Canvas` and `RectTransform` hosts.
 - `Editor`: small editor utility hook for package discovery.
 - `Samples~`: importable Unity Package Manager samples for UI Toolkit and uGUI hosts.
 
@@ -70,6 +71,24 @@ Generated `*MotionHost` classes already know how to evaluate Motion JSON clips a
 
 The Timeline bridge calls `Evaluate(clipId, timeSeconds)` on the host, so Timeline becomes the time owner without introducing a second playback implementation.
 
+## Project Settings
+
+The package now registers `Project Settings > GiantCroissant > BoomHud` so consumer projects can define their BoomHud roots in one place.
+
+The settings currently cover:
+
+- Pen source root
+- Motion source root
+- UI Toolkit generated output path
+- uGUI generated output path
+- Timeline scene output root
+- Timeline playable output root
+- Timeline `PanelSettings` asset path
+
+Use `Tools/BoomHud/Open Project Settings` to jump directly to that page.
+
+Generated UI Toolkit motion hosts no longer assume `Resources.Load`. Consumer projects should provide the generated `VisualTreeAsset` through the `UIDocument` on the same GameObject, or by assigning the inherited `BoomHudUiToolkitHost` fields in the inspector.
+
 ## Generic Timeline Scene Tooling
 
 The Unity package now includes a generic editor action for generated motion hosts:
@@ -84,7 +103,7 @@ The tool will:
 - create a Timeline asset with one `BoomHud Motion Clip` per clip
 - create a scene with `UIDocument`, `PlayableDirector`, camera, and the selected motion host bound to the Timeline track
 
-By default the generated assets land under `Assets/BoomHudGenerated/TimelineScenes/<HudName>/`.
+By default the generated assets land under the locations configured in `Project Settings > GiantCroissant > BoomHud`.
 
 ## Basic uGUI Usage
 

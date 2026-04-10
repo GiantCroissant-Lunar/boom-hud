@@ -1,5 +1,6 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.UGui;
 using FluentAssertions;
 using Xunit;
@@ -320,5 +321,120 @@ public sealed class UGuiGeneratorTests
         viewFile.Content.Should().Contain("Title = RequireComponent<Text>(Root, \"Title\");");
         viewFile.Content.Should().Contain("private static RectTransform RequireRect(Transform root,string path)");
         viewFile.Content.Should().Contain("private static T RequireComponent<T>(Transform root,string path) where T : Component");
+    }
+
+    [Fact]
+    public void Generate_WithMotion_EmitsSharedTimelineArtifactsForUGui()
+    {
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label
+                    }
+                ]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "StatusHudMotion",
+            FramesPerSecond = 30,
+            DefaultSequenceId = "introSequence",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 24,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "rootTrack",
+                            TargetId = "root",
+                            TargetKind = MotionTargetKind.Root,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Opacity,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(0) },
+                                        new MotionKeyframe { Frame = 12, Value = MotionValue.FromNumber(1), Easing = MotionEasing.EaseOut }
+                                    ]
+                                }
+                            ]
+                        },
+                        new MotionTrack
+                        {
+                            Id = "titleTrack",
+                            TargetId = "title",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Text,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe { Frame = 0, Value = MotionValue.FromText("BOOT") },
+                                        new MotionKeyframe { Frame = 18, Value = MotionValue.FromText("READY") }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            Sequences =
+            [
+                new MotionSequence
+                {
+                    Id = "introSequence",
+                    Name = "Intro Sequence",
+                    Items =
+                    [
+                        new MotionSequenceItem
+                        {
+                            ClipId = "intro",
+                            StartFrame = 0,
+                            FillMode = MotionSequenceFillMode.HoldEnd
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = _generator.Generate(doc, _options with { Motion = motion });
+
+        result.Success.Should().BeTrue();
+        result.Files.Should().Contain(f => f.Path == "StatusHudMotion.gen.cs");
+        result.Files.Should().Contain(f => f.Path == "StatusHudMotionHost.gen.cs");
+
+        var motionFile = result.Files.First(f => f.Path == "StatusHudMotion.gen.cs");
+        motionFile.Content.Should().Contain("public const int FramesPerSecond = 30;");
+        motionFile.Content.Should().Contain("public const string DefaultSequenceId = \"introSequence\";");
+        motionFile.Content.Should().Contain("public static TimelineSequenceClip[] GetSequenceItems(string sequenceId)");
+        motionFile.Content.Should().Contain("ApplyOpacity(view.Root, EvaluateNumber(localFrame, s_IntroRootTrackOpacity, 1f));");
+        motionFile.Content.Should().Contain("ApplyText(view.Title, EvaluateString(localFrame, s_IntroTitleTrackText, string.Empty));");
+        motionFile.Content.Should().Contain("var canvasGroup = target.GetComponent<CanvasGroup>();");
+        motionFile.Content.Should().Contain("canvasGroup = target.gameObject.AddComponent<CanvasGroup>();");
+        motionFile.Content.Should().Contain("var state = BoomHudMotionRectState.Capture(rectTransform);");
+
+        var hostFile = result.Files.First(f => f.Path == "StatusHudMotionHost.gen.cs");
+        hostFile.Content.Should().Contain("public class StatusHudMotionHost : BoomHudUguiMotionHost");
+        hostFile.Content.Should().NotContain("OnMotionApplied(");
+        hostFile.Content.Should().Contain("if (root.childCount == 1 && root.GetChild(0) is RectTransform childRoot && TryBindExisting(childRoot, out boundView))");
+        result.Diagnostics.Should().BeEmpty();
     }
 }

@@ -636,7 +636,7 @@ public static class Program
             && !targets.Contains("Remotion", StringComparer.Ordinal)
             && !targets.Contains("Unity", StringComparer.Ordinal))
         {
-            Console.WriteLine("Warning: motion input is currently consumed by the Godot, Remotion, and Unity backends only.");
+            Console.WriteLine("Warning: motion input is currently consumed by the Godot, Remotion, Unity UI Toolkit, and Unity uGUI backends only.");
         }
 
         foreach (var backend in targets)

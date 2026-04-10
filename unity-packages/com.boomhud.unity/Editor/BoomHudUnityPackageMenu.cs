@@ -5,6 +5,12 @@ namespace BoomHud.Unity.Editor
 {
     internal static class BoomHudUnityPackageMenu
     {
+        [MenuItem("Tools/BoomHud/Open Project Settings", priority = 1)]
+        private static void OpenProjectSettings()
+        {
+            SettingsService.OpenProjectSettings(BoomHudProjectSettings.SettingsPath);
+        }
+
         [MenuItem("Tools/BoomHud/Log Unity Package Info", priority = 2000)]
         private static void LogPackageInfo()
         {

@@ -1,5 +1,6 @@
 using System.Collections;
-using BoomHud.Unity.UIToolkit;
+using System.Linq;
+using BoomHud.Unity.Runtime;
 using UnityEngine;
 using UnityEngine.Playables;
 #if UNITY_EDITOR
@@ -10,11 +11,10 @@ namespace BoomHud.Unity.Timeline
 {
     [ExecuteAlways]
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(BoomHudUiToolkitMotionHost))]
     public sealed class BoomHudMotionPreviewBootstrap : MonoBehaviour
     {
         [SerializeField] private PlayableDirector? _director;
-        [SerializeField] private BoomHudUiToolkitMotionHost? _host;
+        [SerializeField] private BoomHudViewHost? _hostView;
         [SerializeField] private string _fallbackClipId = "intro";
         [SerializeField] private bool _preferTimelinePlayback = true;
         [SerializeField] private bool _disableDirectorWhenFallback = true;
@@ -24,16 +24,21 @@ namespace BoomHud.Unity.Timeline
         private bool _editorRefreshQueued;
     #endif
 
-        private BoomHudUiToolkitMotionHost Host
-            => _host != null ? _host : _host = GetComponent<BoomHudUiToolkitMotionHost>();
+        private IBoomHudMotionHost Host
+            => (_hostView != null ? _hostView : _hostView = ResolveHostViewOrNull()) as IBoomHudMotionHost
+                ?? throw new MissingComponentException("BoomHudMotionPreviewBootstrap requires a BoomHud motion host that implements IBoomHudMotionHost.");
+
+        private BoomHudViewHost HostView
+            => _hostView != null ? _hostView : _hostView = ResolveHostViewOrNull()
+                ?? throw new MissingComponentException("BoomHudMotionPreviewBootstrap requires a BoomHudViewHost component that also implements IBoomHudMotionHost.");
 
         private PlayableDirector? Director
             => _director != null ? _director : _director = GetComponent<PlayableDirector>();
 
-        public void Configure(PlayableDirector director, BoomHudUiToolkitMotionHost host, string fallbackClipId)
+        public void Configure(PlayableDirector director, BoomHudViewHost host, string fallbackClipId)
         {
             _director = director;
-            _host = host;
+            _hostView = host;
             _fallbackClipId = fallbackClipId;
         }
 
@@ -110,7 +115,7 @@ EditorCleanup:
         private void Reset()
         {
             _director = GetComponent<PlayableDirector>();
-            _host = GetComponent<BoomHudUiToolkitMotionHost>();
+            _hostView = ResolveHostViewOrNull();
         }
 
 #if UNITY_EDITOR
@@ -144,8 +149,12 @@ EditorCleanup:
                 return;
             }
 
-            var host = Host;
-            host.Rebind();
+            if (!TryResolveHostView(out var hostView) || hostView is not IBoomHudMotionHost host)
+            {
+                return;
+            }
+
+            hostView.Rebind();
 
             var director = Director;
             if (director == null)
@@ -166,5 +175,31 @@ EditorCleanup:
             }
         }
 #endif
+
+        private bool TryResolveHostView(out BoomHudViewHost? hostView)
+        {
+            if (_hostView != null && _hostView is IBoomHudMotionHost)
+            {
+                hostView = _hostView;
+                return true;
+            }
+
+            hostView = GetComponents<MonoBehaviour>()
+                .OfType<BoomHudViewHost>()
+                .FirstOrDefault(component => component is IBoomHudMotionHost);
+
+            if (hostView != null)
+            {
+                _hostView = hostView;
+                return true;
+            }
+
+            return false;
+        }
+
+        private BoomHudViewHost? ResolveHostViewOrNull()
+        {
+            return TryResolveHostView(out var hostView) ? hostView : null;
+        }
     }
 }

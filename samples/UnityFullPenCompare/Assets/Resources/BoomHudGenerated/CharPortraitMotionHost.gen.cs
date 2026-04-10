@@ -13,9 +13,6 @@ namespace Generated.Hud
 {
 public partial class CharPortraitMotionHost : BoomHudUiToolkitMotionHost
 {
-    private const string VisualTreeResourcePath = "BoomHudGenerated/CharPortraitView";
-    private const string StyleSheetResourcePath = "BoomHudGenerated/CharPortraitView";
-
     private CharPortraitView? _view;
 
     public CharPortraitView View => _view ?? throw new InvalidOperationException("The generated view has not been bound yet.");
@@ -42,34 +39,13 @@ public partial class CharPortraitMotionHost : BoomHudUiToolkitMotionHost
 
     private static VisualElement ResolveGeneratedRoot(VisualElement root)
     {
-        EnsureGeneratedAssets(root);
-
         if (string.Equals(root.name, "ComponentCharPortrait", StringComparison.Ordinal))
         {
             return root;
         }
 
         return root.Q<VisualElement>("ComponentCharPortrait")
-            ?? throw new InvalidOperationException("Could not find generated root element 'ComponentCharPortrait'.");
-    }
-
-    private static void EnsureGeneratedAssets(VisualElement root)
-    {
-        if (root.Q<VisualElement>("ComponentCharPortrait") == null
-            && !string.Equals(root.name, "ComponentCharPortrait", StringComparison.Ordinal))
-        {
-            var visualTree = Resources.Load<VisualTreeAsset>(VisualTreeResourcePath)
-                ?? throw new InvalidOperationException($"Could not load VisualTreeAsset from Resources/{VisualTreeResourcePath}.uxml");
-
-            root.Clear();
-            visualTree.CloneTree(root);
-        }
-
-        var styleSheet = Resources.Load<StyleSheet>(StyleSheetResourcePath);
-        if (styleSheet != null && !root.styleSheets.Contains(styleSheet))
-        {
-            root.styleSheets.Add(styleSheet);
-        }
+            ?? throw new InvalidOperationException("Could not find generated root element 'ComponentCharPortrait'. Assign the generated VisualTreeAsset to the UIDocument or the BoomHudUiToolkitHost before binding motion.");
     }
 }
 }

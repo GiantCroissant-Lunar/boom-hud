@@ -6,7 +6,7 @@ using BoomHud.Abstractions.IR;
 
 namespace BoomHud.Gen.UGui;
 
-public sealed class UGuiGenerator : IBackendGenerator
+public sealed partial class UGuiGenerator : IBackendGenerator
 {
     public string TargetFramework => "Unity uGUI";
     public ICapabilityManifest Capabilities => UGuiCapabilities.Instance;
@@ -15,11 +15,6 @@ public sealed class UGuiGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
-
-        if (options.Motion != null)
-        {
-            diagnostics.Add(Diagnostic.Warning("Unity uGUI motion export is not implemented yet.", code: "BHUG2000"));
-        }
 
         try
         {
@@ -35,7 +30,11 @@ public sealed class UGuiGenerator : IBackendGenerator
                 }, options, diagnostics, files);
             }
 
-            Emit(document, options, diagnostics, files);
+            var plan = Emit(document, options, diagnostics, files);
+            if (options.Motion != null)
+            {
+                EmitMotion(document, plan, options, diagnostics, files);
+            }
         }
         catch (Exception ex)
         {
@@ -45,7 +44,7 @@ public sealed class UGuiGenerator : IBackendGenerator
         return new GenerationResult { Files = files, Diagnostics = diagnostics };
     }
 
-    private static void Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
+    private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
     {
         var plan = Planner.Create(document, diagnostics);
         files.Add(new GeneratedFile { Path = $"{document.Name}View.ugui.cs", Content = GenerateView(document, plan, options, diagnostics), Type = GeneratedFileType.SourceCode });
@@ -53,6 +52,8 @@ public sealed class UGuiGenerator : IBackendGenerator
         {
             files.Add(new GeneratedFile { Path = $"I{document.Name}ViewModel.g.cs", Content = GenerateInterface(document.Name, plan.Properties, options), Type = GeneratedFileType.SourceCode });
         }
+
+        return plan;
     }
 
     private static string GenerateView(HudDocument document, PlanDocument plan, GenerationOptions options, List<Diagnostic> diagnostics)

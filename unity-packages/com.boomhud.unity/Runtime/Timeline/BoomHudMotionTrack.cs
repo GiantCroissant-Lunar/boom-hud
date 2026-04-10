@@ -1,5 +1,5 @@
 using System;
-using BoomHud.Unity.UIToolkit;
+using BoomHud.Unity.Runtime;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -7,7 +7,7 @@ using UnityEngine.Timeline;
 namespace BoomHud.Unity.Timeline
 {
     [TrackClipType(typeof(BoomHudMotionPlayableAsset))]
-    [TrackBindingType(typeof(BoomHudUiToolkitMotionHost))]
+    [TrackBindingType(typeof(BoomHudViewHost))]
     [TrackColor(0.2f, 0.68f, 0.96f)]
     public sealed class BoomHudMotionTrack : TrackAsset
     {
@@ -21,8 +21,7 @@ namespace BoomHud.Unity.Timeline
     {
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            var host = playerData as BoomHudUiToolkitMotionHost;
-            if (host == null)
+            if (playerData is not IBoomHudMotionHost host)
             {
                 return;
             }

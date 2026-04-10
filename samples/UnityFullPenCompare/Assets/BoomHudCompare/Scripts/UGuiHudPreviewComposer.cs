@@ -147,6 +147,12 @@ namespace BoomHud.Compare
             view.SyncStatusBarsFromGeneratedWidths();
         }
 
+        public static void SyncComposedCharPortraitBars(CharPortraitView view)
+        {
+            SyncNamedStatusBar(view.Hp, view.HpFill, "HpBar");
+            SyncNamedStatusBar(view.Mp, view.MpFill, "MpBar");
+        }
+
         public static Text CreateCompassLabel(Transform parent)
         {
             var text = CreateText("Compass", parent, "N", 28, Color.white, TextAnchor.MiddleCenter, FontStyle.Bold);
@@ -414,6 +420,18 @@ namespace BoomHud.Compare
             }
 
             return AttachStatusBar(container, animatedFill, fillWidth, height, fillColor);
+        }
+
+        private static void SyncNamedStatusBar(RectTransform container, RectTransform animatedFill, string barName)
+        {
+            if (container.Find(barName) is not RectTransform barRoot)
+            {
+                return;
+            }
+
+            var view = StatBarView.Bind(barRoot);
+            view.Fill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, animatedFill.rect.width);
+            view.Fill.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, animatedFill.rect.height);
         }
 
         private static void ApplyMessageLogPresentation(MessageLogView view)

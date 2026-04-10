@@ -1,12 +1,11 @@
 using System;
 using BoomHud.Unity.Runtime;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-namespace BoomHud.Unity.UIToolkit
+namespace BoomHud.Unity.UGUI
 {
     [DisallowMultipleComponent]
-    public abstract class BoomHudUiToolkitMotionHost : BoomHudUiToolkitHost, IBoomHudMotionHost
+    public abstract class BoomHudUguiMotionHost : BoomHudUguiHost, IBoomHudMotionHost
     {
         public event Action<string, float>? MotionApplied;
 
@@ -38,7 +37,7 @@ namespace BoomHud.Unity.UIToolkit
             set => _playbackSpeed = Mathf.Max(0f, value);
         }
 
-        protected sealed override void BindView(VisualElement root)
+        protected sealed override void BindView(Canvas canvas, RectTransform root)
         {
             BindMotionView(root);
 
@@ -178,7 +177,7 @@ namespace BoomHud.Unity.UIToolkit
             base.Unbind();
         }
 
-        protected abstract void BindMotionView(VisualElement root);
+        protected abstract void BindMotionView(RectTransform root);
 
         protected abstract bool TryApplyMotionAtTime(string clipId, float timeSeconds);
 
