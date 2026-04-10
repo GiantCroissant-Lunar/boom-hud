@@ -441,7 +441,12 @@ public sealed class UnityGenerator : IBackendGenerator
         {
             AppendCssDeclaration(builder, "font-size", ToPixels(fontSize.Value));
 
-            if (string.Equals(style.FontFamily, "Press Start 2P", StringComparison.Ordinal)
+            var lineHeight = ResolveLineHeight(style, fontSize.Value);
+            if (lineHeight != null)
+            {
+                AppendCssDeclaration(builder, "line-height", ToPixels(lineHeight.Value));
+            }
+            else if (string.Equals(style.FontFamily, "Press Start 2P", StringComparison.Ordinal)
                 && fontSize.Value <= 8d)
             {
                 AppendCssDeclaration(builder, "line-height", "12px");
@@ -592,10 +597,7 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("    private void ApplyStaticValues()");
         builder.AppendLine("    {");
 
-        foreach (var node in flattenedNodes)
-        {
-            AppendStaticAssignments(builder, node, plan.Root, options.Theme);
-        }
+        AppendStaticAssignmentsRecursive(builder, plan.Root, plan.Root, options.Theme, parentLayoutType: null, parentLayout: null, parentGap: null, siblingIndex: 0);
 
         builder.AppendLine("    }");
         builder.AppendLine();
@@ -655,6 +657,93 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        };");
         builder.AppendLine("    }");
         builder.AppendLine();
+        builder.AppendLine("    private static StyleLength ParseStyleLength(string value)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (string.IsNullOrWhiteSpace(value))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return StyleKeyword.Null;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        if (string.Equals(value, \"auto\", StringComparison.OrdinalIgnoreCase))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return StyleKeyword.Auto;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        if (value.EndsWith(\"%\", StringComparison.Ordinal))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            var number = value[..^1];");
+        builder.AppendLine("            return float.TryParse(number, NumberStyles.Float, CultureInfo.InvariantCulture, out var percent)");
+        builder.AppendLine("                ? new StyleLength(new Length(percent, LengthUnit.Percent))");
+        builder.AppendLine("                : StyleKeyword.Null;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        if (value.EndsWith(\"px\", StringComparison.OrdinalIgnoreCase))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            var number = value[..^2];");
+        builder.AppendLine("            return float.TryParse(number, NumberStyles.Float, CultureInfo.InvariantCulture, out var pixels)");
+        builder.AppendLine("                ? new StyleLength(pixels)");
+        builder.AppendLine("                : StyleKeyword.Null;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        return float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var raw)");
+        builder.AppendLine("            ? new StyleLength(raw)");
+        builder.AppendLine("            : StyleKeyword.Null;");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    private static float ParseStyleFloat(string value)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (string.IsNullOrWhiteSpace(value))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return 0f;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        var normalized = value.EndsWith(\"px\", StringComparison.OrdinalIgnoreCase)");
+        builder.AppendLine("            ? value[..^2]");
+        builder.AppendLine("            : value;");
+        builder.AppendLine();
+        builder.AppendLine("        return float.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed)");
+        builder.AppendLine("            ? parsed");
+        builder.AppendLine("            : 0f;");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    private static Position ParsePosition(string value)");
+        builder.AppendLine("        => string.Equals(value, \"absolute\", StringComparison.OrdinalIgnoreCase)");
+        builder.AppendLine("            ? Position.Absolute");
+        builder.AppendLine("            : Position.Relative;");
+        builder.AppendLine();
+        builder.AppendLine("    private static FlexDirection ParseFlexDirection(string value)");
+        builder.AppendLine("        => string.Equals(value, \"row\", StringComparison.OrdinalIgnoreCase)");
+        builder.AppendLine("            ? FlexDirection.Row");
+        builder.AppendLine("            : FlexDirection.Column;");
+        builder.AppendLine();
+        builder.AppendLine("    private static Overflow ParseOverflow(string value)");
+        builder.AppendLine("        => string.Equals(value, \"hidden\", StringComparison.OrdinalIgnoreCase)");
+        builder.AppendLine("            ? Overflow.Hidden");
+        builder.AppendLine("            : Overflow.Visible;");
+        builder.AppendLine();
+        builder.AppendLine("    private static Align ParseAlign(string value)");
+        builder.AppendLine("        => value.ToLowerInvariant() switch");
+        builder.AppendLine("        {");
+        builder.AppendLine("            \"flex-start\" => Align.FlexStart,");
+        builder.AppendLine("            \"center\" => Align.Center,");
+        builder.AppendLine("            \"flex-end\" => Align.FlexEnd,");
+        builder.AppendLine("            \"stretch\" => Align.Stretch,");
+        builder.AppendLine("            \"auto\" => Align.Auto,");
+        builder.AppendLine("            _ => Align.Stretch");
+        builder.AppendLine("        };");
+        builder.AppendLine();
+        builder.AppendLine("    private static Justify ParseJustify(string value)");
+        builder.AppendLine("        => value.ToLowerInvariant() switch");
+        builder.AppendLine("        {");
+        builder.AppendLine("            \"flex-start\" => Justify.FlexStart,");
+        builder.AppendLine("            \"center\" => Justify.Center,");
+        builder.AppendLine("            \"flex-end\" => Justify.FlexEnd,");
+        builder.AppendLine("            \"space-between\" => Justify.SpaceBetween,");
+        builder.AppendLine("            \"space-around\" => Justify.SpaceAround,");
+        builder.AppendLine("            \"space-evenly\" => Justify.SpaceEvenly,");
+        builder.AppendLine("            _ => Justify.FlexStart");
+        builder.AppendLine("        };");
+        builder.AppendLine();
         builder.AppendLine("    private static string? ResolveMappedStyleValue(object? value, string? fallbackValue, params string[] mappings)");
         builder.AppendLine("    {");
         builder.AppendLine("        var key = AsString(value);");
@@ -685,11 +774,11 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        return default;");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine("    private static void ApplyTextLabelStyle(Label label)");
+        builder.AppendLine("    private static void ApplyTextLabelStyle(Label label, bool wrapText)");
         builder.AppendLine("    {");
-        builder.AppendLine("        label.style.whiteSpace = WhiteSpace.NoWrap;");
-        builder.AppendLine("        label.style.flexShrink = 0;");
-        builder.AppendLine("        label.style.overflow = Overflow.Visible;");
+        builder.AppendLine("        label.style.whiteSpace = wrapText ? WhiteSpace.Normal : WhiteSpace.NoWrap;");
+        builder.AppendLine("        label.style.flexShrink = wrapText ? 1 : 0;");
+        builder.AppendLine("        label.style.overflow = wrapText ? Overflow.Hidden : Overflow.Visible;");
         builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    private static bool ApplyFontFamily(VisualElement element, string? familyName, float pointSize)");
@@ -1023,11 +1112,41 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
+    private static void AppendStaticAssignmentsRecursive(
+        StringBuilder builder,
+        UnityPlannedNode node,
+        UnityPlannedNode root,
+        ThemeDocument? theme,
+        LayoutType? parentLayoutType,
+        LayoutSpec? parentLayout,
+        Spacing? parentGap,
+        int siblingIndex)
+    {
+        AppendStaticAssignments(builder, node, root, theme, parentLayoutType, parentLayout, parentGap, siblingIndex);
+
+        for (var index = 0; index < node.Children.Count; index++)
+        {
+            AppendStaticAssignmentsRecursive(
+                builder,
+                node.Children[index],
+                root,
+                theme,
+                node.Source.Layout?.Type,
+                node.Source.Layout,
+                node.Source.Layout?.Gap,
+                index);
+        }
+    }
+
     private static void AppendStaticAssignments(
         StringBuilder builder,
         UnityPlannedNode node,
         UnityPlannedNode root,
-        ThemeDocument? theme)
+        ThemeDocument? theme,
+        LayoutType? parentLayoutType,
+        LayoutSpec? parentLayout,
+        Spacing? parentGap,
+        int siblingIndex)
     {
         var accessor = GetNodeAccessor(node, root);
 
@@ -1035,6 +1154,8 @@ public sealed class UnityGenerator : IBackendGenerator
         {
             AppendInvariantLine(builder, $"        {accessor}.multiline = true;");
         }
+
+        AppendStaticLayoutAssignments(builder, accessor, node.Source, parentLayoutType, parentLayout, parentGap, siblingIndex);
 
         foreach (var binding in GetBindings(node.Source))
         {
@@ -1072,6 +1193,118 @@ public sealed class UnityGenerator : IBackendGenerator
         AppendStaticStyleAssignments(builder, accessor, node, theme);
     }
 
+    private static void AppendStaticLayoutAssignments(
+        StringBuilder builder,
+        string accessor,
+        ComponentNode source,
+        LayoutType? parentLayoutType,
+        LayoutSpec? parentLayout,
+        Spacing? parentGap,
+        int siblingIndex)
+    {
+        var declarations = new StringBuilder();
+        AppendLayoutStyles(declarations, source, parentLayoutType, parentLayout, parentGap, siblingIndex);
+
+        var lines = declarations.ToString()
+            .Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        foreach (var line in lines)
+        {
+            var separatorIndex = line.IndexOf(':', StringComparison.Ordinal);
+            if (separatorIndex <= 0)
+            {
+                continue;
+            }
+
+            var propertyName = line[..separatorIndex].Trim();
+            var propertyValue = line[(separatorIndex + 1)..].Trim().TrimEnd(';').Trim();
+            if (TryBuildStaticLayoutAssignment(accessor, propertyName, propertyValue, out var assignment))
+            {
+                AppendInvariantLine(builder, $"        {assignment}");
+            }
+        }
+    }
+
+    private static bool TryBuildStaticLayoutAssignment(string accessor, string propertyName, string propertyValue, out string assignment)
+    {
+        assignment = string.Empty;
+
+        switch (propertyName)
+        {
+            case "flex-direction":
+                assignment = $"{accessor}.style.flexDirection = ParseFlexDirection({ToStringLiteral(propertyValue)});";
+                return true;
+            case "position":
+                assignment = $"{accessor}.style.position = ParsePosition({ToStringLiteral(propertyValue)});";
+                return true;
+            case "left":
+                assignment = $"{accessor}.style.left = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "top":
+                assignment = $"{accessor}.style.top = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "width":
+                assignment = $"{accessor}.style.width = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "height":
+                assignment = $"{accessor}.style.height = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "min-width":
+                assignment = $"{accessor}.style.minWidth = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "min-height":
+                assignment = $"{accessor}.style.minHeight = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "max-width":
+                assignment = $"{accessor}.style.maxWidth = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "max-height":
+                assignment = $"{accessor}.style.maxHeight = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                return true;
+            case "margin-top":
+                assignment = $"{accessor}.style.marginTop = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "margin-right":
+                assignment = $"{accessor}.style.marginRight = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "margin-bottom":
+                assignment = $"{accessor}.style.marginBottom = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "margin-left":
+                assignment = $"{accessor}.style.marginLeft = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "padding-top":
+                assignment = $"{accessor}.style.paddingTop = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "padding-right":
+                assignment = $"{accessor}.style.paddingRight = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "padding-bottom":
+                assignment = $"{accessor}.style.paddingBottom = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "padding-left":
+                assignment = $"{accessor}.style.paddingLeft = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "overflow":
+                assignment = $"{accessor}.style.overflow = ParseOverflow({ToStringLiteral(propertyValue)});";
+                return true;
+            case "flex-grow":
+                assignment = $"{accessor}.style.flexGrow = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                return true;
+            case "align-items":
+                assignment = $"{accessor}.style.alignItems = ParseAlign({ToStringLiteral(propertyValue)});";
+                return true;
+            case "align-self":
+                assignment = $"{accessor}.style.alignSelf = ParseAlign({ToStringLiteral(propertyValue)});";
+                return true;
+            case "justify-content":
+                assignment = $"{accessor}.style.justifyContent = ParseJustify({ToStringLiteral(propertyValue)});";
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private static void AppendStaticStyleAssignments(
         StringBuilder builder,
         string accessor,
@@ -1094,6 +1327,23 @@ public sealed class UnityGenerator : IBackendGenerator
         if (!string.IsNullOrWhiteSpace(background))
         {
             AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({ToStringLiteral(background)}, null);");
+        }
+
+        var fontSize = ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes);
+        if (fontSize is { } resolvedFontSize)
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.fontSize = {ToFloatLiteral(resolvedFontSize)};");
+        }
+
+        if (style.LetterSpacing is { } letterSpacing)
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.letterSpacing = {ToFloatLiteral(letterSpacing)};");
+        }
+
+        if (TryMapUnityFontStyle(style.FontWeight, style.FontStyle, out var unityFontStyle)
+            && TryGetUnityFontStyleLiteral(unityFontStyle, out var unityFontStyleLiteral))
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.unityFontStyleAndWeight = {unityFontStyleLiteral};");
         }
 
         if (style.BorderRadius is { } borderRadius)
@@ -1155,6 +1405,42 @@ public sealed class UnityGenerator : IBackendGenerator
         return true;
     }
 
+    private static double? ResolveLineHeight(StyleSpec style, double? fontSize)
+    {
+        if (style.LineHeight is not { } lineHeight || lineHeight <= 0d)
+        {
+            return null;
+        }
+
+        if (lineHeight <= 5d && fontSize is { } explicitFontSize && explicitFontSize > 0d)
+        {
+            return explicitFontSize * lineHeight;
+        }
+
+        return lineHeight;
+    }
+
+    private static bool TryGetUnityFontStyleLiteral(string unityFontStyle, out string literal)
+    {
+        literal = unityFontStyle switch
+        {
+            "normal" => "UnityEngine.FontStyle.Normal",
+            "bold" => "UnityEngine.FontStyle.Bold",
+            "italic" => "UnityEngine.FontStyle.Italic",
+            "bold-and-italic" => "UnityEngine.FontStyle.BoldAndItalic",
+            _ => string.Empty
+        };
+
+        return literal.Length > 0;
+    }
+
+    private static bool ShouldWrapText(ComponentNode node)
+    {
+        return node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilTextGrowth, out var raw)
+            && raw is string textGrowth
+            && string.Equals(textGrowth, "fixed-width", StringComparison.OrdinalIgnoreCase);
+    }
+
     private static bool TryBuildAssignment(string accessor, UnityPlannedNode node, string property, string valueExpression, bool isStatic, out string assignment)
     {
         assignment = string.Empty;
@@ -1166,9 +1452,10 @@ public sealed class UnityGenerator : IBackendGenerator
             case ComponentType.Badge:
                 if (normalizedProperty is "text" or "value")
                 {
+                    var wrapTextLiteral = ShouldWrapText(node.Source) ? "true" : "false";
                     assignment = string.Join(Environment.NewLine,
                         $"{accessor}.text = {(isStatic ? valueExpression : "AsString(_viewModel." + valueExpression + ")")};",
-                        $"        ApplyTextLabelStyle({accessor});");
+                        $"        ApplyTextLabelStyle({accessor}, {wrapTextLiteral});");
                     return true;
                 }
                 break;
@@ -1408,12 +1695,6 @@ public sealed class UnityGenerator : IBackendGenerator
 
                 if (parentLayoutType is LayoutType.Vertical or LayoutType.Stack or LayoutType.Grid or LayoutType.Dock)
                 {
-                    if (!HasDefiniteCrossAxisSize(parentLayout?.Width))
-                    {
-                        AppendCssDeclaration(builder, propertyName, "auto");
-                        return;
-                    }
-
                     AppendCssDeclaration(builder, "align-self", "stretch");
                     return;
                 }

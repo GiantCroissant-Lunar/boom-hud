@@ -9,5 +9,6 @@ public static class BoomHudMetadataKeys
     public const string PencilTop = "boomhud:pencilTop";
     public const string PencilPosition = "boomhud:pencilPosition";
     public const string PencilClip = "boomhud:pencilClip";
+    public const string PencilTextGrowth = "boomhud:pencilTextGrowth";
     public const string PencilComponentRef = "boomhud:pencilComponentRef";
 }

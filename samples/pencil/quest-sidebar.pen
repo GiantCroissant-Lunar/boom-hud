@@ -1,0 +1,107 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "QSB01",
+      "x": 0,
+      "y": 0,
+      "name": "QuestSidebar",
+      "width": 420,
+      "height": 960,
+      "fill": "#070707",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 16,
+      "children": [
+        {
+          "type": "frame",
+          "id": "QSB02",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "#111111",
+          "stroke": { "thickness": 4, "fill": "#7E7E7E" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "gap": 6,
+          "padding": 12,
+          "children": [
+            { "type": "text", "id": "QSB03", "name": "Title", "fill": "#FFFFFF", "content": "QuestSidebar", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+            { "type": "text", "id": "QSB04", "name": "Zone", "fill": "#AAAAAA", "content": "DARKSTONE DISTRICT", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QSB05",
+          "name": "MinimapCard",
+          "width": "fill_container",
+          "height": 272,
+          "fill": "#111111",
+          "stroke": { "thickness": 4, "fill": "#7E7E7E" },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            { "type": "text", "id": "QSB06", "name": "MinimapLabel", "fill": "#FFFFFF", "content": "TACTICAL MAP", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "QSB07",
+              "name": "MapGrid",
+              "width": "fill_container",
+              "height": 220,
+              "fill": "#000000",
+              "stroke": { "thickness": 4, "fill": "#7E7E7E" },
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 8,
+              "children": [
+                { "type": "frame", "id": "QSB08", "name": "Row0", "width": "fill_container", "height": 32, "fill": "#000000", "gap": 4, "children": [ { "type": "rectangle", "id": "QSB09", "name": "Cell00", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB10", "name": "Cell01", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB11", "name": "Cell02", "width": 32, "height": 32, "fill": "#3D6A3D" }, { "type": "rectangle", "id": "QSB12", "name": "Cell03", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB13", "name": "Cell04", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB14", "name": "Cell05", "width": 32, "height": 32, "fill": "#232323" } ] },
+                { "type": "frame", "id": "QSB15", "name": "Row1", "width": "fill_container", "height": 32, "fill": "#000000", "gap": 4, "children": [ { "type": "rectangle", "id": "QSB16", "name": "Cell10", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB17", "name": "Cell11", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB18", "name": "Cell12", "width": 32, "height": 32, "fill": "#3D6A3D" }, { "type": "rectangle", "id": "QSB19", "name": "Cell13", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB20", "name": "Cell14", "width": 32, "height": 32, "fill": "#6C4B1E" }, { "type": "rectangle", "id": "QSB21", "name": "Cell15", "width": 32, "height": 32, "fill": "#232323" } ] },
+                { "type": "frame", "id": "QSB22", "name": "Row2", "width": "fill_container", "height": 32, "fill": "#000000", "gap": 4, "children": [ { "type": "rectangle", "id": "QSB23", "name": "Cell20", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB24", "name": "Cell21", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB25", "name": "Cell22", "width": 32, "height": 32, "fill": "#3D6A3D" }, { "type": "rectangle", "id": "QSB26", "name": "Cell23", "width": 32, "height": 32, "fill": "#4A78D4" }, { "type": "rectangle", "id": "QSB27", "name": "Cell24", "width": 32, "height": 32, "fill": "#6C4B1E" }, { "type": "rectangle", "id": "QSB28", "name": "Cell25", "width": 32, "height": 32, "fill": "#232323" } ] },
+                { "type": "frame", "id": "QSB29", "name": "Row3", "width": "fill_container", "height": 32, "fill": "#000000", "gap": 4, "children": [ { "type": "rectangle", "id": "QSB30", "name": "Cell30", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB31", "name": "Cell31", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB32", "name": "Cell32", "width": 32, "height": 32, "fill": "#3D6A3D" }, { "type": "rectangle", "id": "QSB33", "name": "Cell33", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB34", "name": "Cell34", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB35", "name": "Cell35", "width": 32, "height": 32, "fill": "#232323" } ] },
+                { "type": "frame", "id": "QSB36", "name": "Row4", "width": "fill_container", "height": 32, "fill": "#000000", "gap": 4, "children": [ { "type": "rectangle", "id": "QSB37", "name": "Cell40", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB38", "name": "Cell41", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB39", "name": "Cell42", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB40", "name": "Cell43", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB41", "name": "Cell44", "width": 32, "height": 32, "fill": "#232323" }, { "type": "rectangle", "id": "QSB42", "name": "Cell45", "width": 32, "height": 32, "fill": "#232323" } ] }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QSB43",
+          "name": "ObjectiveCard",
+          "width": "fill_container",
+          "height": 268,
+          "fill": "#111111",
+          "stroke": { "thickness": 4, "fill": "#7E7E7E" },
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "children": [
+            { "type": "text", "id": "QSB44", "name": "ObjectivesLabel", "fill": "#FFFFFF", "content": "ACTIVE OBJECTIVES", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "frame", "id": "QSB45", "name": "Objective1", "width": "fill_container", "height": 44, "fill": "#111111", "gap": 10, "children": [ { "type": "frame", "id": "QSB46", "name": "IconShell1", "width": 44, "height": 44, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "QSB47", "name": "ObjectiveIcon1", "width": 20, "height": 20, "iconFontName": "cross", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] }, { "type": "frame", "id": "QSB48", "name": "ObjectiveText1", "width": "fill_container", "height": "fill_container", "fill": "#111111", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "QSB49", "name": "ObjectiveTitle1", "fill": "#FFFFFF", "content": "Recover the ward key", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "QSB50", "name": "ObjectiveHint1", "fill": "#AAAAAA", "content": "Search the northern chapel.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "QSB51", "name": "Objective2", "width": "fill_container", "height": 44, "fill": "#111111", "gap": 10, "children": [ { "type": "frame", "id": "QSB52", "name": "IconShell2", "width": 44, "height": 44, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "QSB53", "name": "ObjectiveIcon2", "width": 20, "height": 20, "iconFontName": "flame", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] }, { "type": "frame", "id": "QSB54", "name": "ObjectiveText2", "width": "fill_container", "height": "fill_container", "fill": "#111111", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "QSB55", "name": "ObjectiveTitle2", "fill": "#FFFFFF", "content": "Stabilize the furnace", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "QSB56", "name": "ObjectiveHint2", "fill": "#AAAAAA", "content": "Mana pressure is dropping.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "QSB57", "name": "Objective3", "width": "fill_container", "height": 44, "fill": "#111111", "gap": 10, "children": [ { "type": "frame", "id": "QSB58", "name": "IconShell3", "width": 44, "height": 44, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "QSB59", "name": "ObjectiveIcon3", "width": 20, "height": 20, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] }, { "type": "frame", "id": "QSB60", "name": "ObjectiveText3", "width": "fill_container", "height": "fill_container", "fill": "#111111", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "QSB61", "name": "ObjectiveTitle3", "fill": "#FFFFFF", "content": "Hold the east passage", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "QSB62", "name": "ObjectiveHint3", "fill": "#AAAAAA", "content": "Reinforcements arrive in 02:10.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QSB63",
+          "name": "ResourceCard",
+          "width": "fill_container",
+          "height": 164,
+          "fill": "#111111",
+          "stroke": { "thickness": 4, "fill": "#7E7E7E" },
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "children": [
+            { "type": "text", "id": "QSB64", "name": "ResourcesLabel", "fill": "#FFFFFF", "content": "RESOURCES", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "frame", "id": "QSB65", "name": "HealthBar", "width": "fill_container", "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "QSB66", "name": "HealthFill", "width": 280, "height": 18, "fill": "#D44A4A" }, { "type": "text", "id": "QSB67", "x": 12, "y": 4, "name": "HealthText", "fill": "#FFFFFF", "content": "HEALTH 81%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "QSB68", "name": "ManaBar", "width": "fill_container", "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "QSB69", "name": "ManaFill", "width": 214, "height": 18, "fill": "#4A78D4" }, { "type": "text", "id": "QSB70", "x": 12, "y": 4, "name": "ManaText", "fill": "#FFFFFF", "content": "MANA 62%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "QSB71", "name": "SupplyBar", "width": "fill_container", "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "QSB72", "name": "SupplyFill", "width": 146, "height": 18, "fill": "#D49C4A" }, { "type": "text", "id": "QSB73", "x": 12, "y": 4, "name": "SupplyText", "fill": "#FFFFFF", "content": "SUPPLY 38%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }
+          ]
+        }
+      ]
+    }
+  ]
+}

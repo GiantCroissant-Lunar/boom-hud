@@ -1,0 +1,68 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "CTS01",
+      "x": 0,
+      "y": 0,
+      "name": "CombatToastStack",
+      "width": 960,
+      "height": 720,
+      "fill": "#050505",
+      "layout": "vertical",
+      "gap": 18,
+      "padding": 24,
+      "children": [
+        {
+          "type": "frame",
+          "id": "CTS02",
+          "name": "ToastOne",
+          "width": "fill_container",
+          "height": 180,
+          "fill": "#101010",
+          "stroke": { "thickness": 6, "fill": "#7E7E7E" },
+          "layout": "none",
+          "children": [
+            { "type": "frame", "id": "CTS03", "x": 16, "y": 16, "name": "IconPanel", "width": 132, "height": 132, "fill": "#000000", "stroke": { "thickness": 4, "fill": "#EAEAEA" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "CTS04", "name": "EventIcon", "width": 56, "height": 56, "iconFontName": "flame", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+            { "type": "frame", "id": "CTS05", "x": 168, "y": 18, "name": "Content", "width": 560, "height": 144, "fill": "#101010", "layout": "vertical", "gap": 10, "children": [ { "type": "text", "id": "CTS06", "name": "Title", "fill": "#FFFFFF", "content": "CRITICAL BURN DETECTED", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" }, { "type": "text", "id": "CTS07", "name": "Body", "fill": "#AAAAAA", "textGrowth": "fixed-width", "width": 540, "content": "The ignition lattice is unstable. Redirect coolant flow before the chamber overloads.", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "frame", "id": "CTS08", "name": "Progress", "width": 540, "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "CTS09", "name": "ProgressFill", "width": 312, "height": 18, "fill": "#D44A4A" }, { "type": "text", "id": "CTS10", "x": 12, "y": 4, "name": "ProgressText", "fill": "#FFFFFF", "content": "RESPONSE WINDOW 58%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CTS11", "x": 764, "y": 16, "name": "RewardColumn", "width": 164, "height": 132, "fill": "#0C0C0C", "stroke": { "thickness": 4, "fill": "#7E7E7E" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "CTS12", "name": "Tag", "fill": "#FFFFFF", "content": "ALERT", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "CTS13", "name": "Value", "fill": "#AAAAAA", "content": "+120 XP", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "CTS14", "name": "Time", "fill": "#AAAAAA", "content": "00:14", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CTS15", "x": 784, "y": 0, "name": "Badge", "width": 120, "height": 28, "fill": "#D44A4A", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CTS16", "name": "BadgeText", "fill": "#FFFFFF", "content": "PRIORITY", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CTS20",
+          "name": "ToastTwo",
+          "width": "fill_container",
+          "height": 180,
+          "fill": "#101010",
+          "stroke": { "thickness": 6, "fill": "#7E7E7E" },
+          "layout": "none",
+          "children": [
+            { "type": "frame", "id": "CTS21", "x": 16, "y": 16, "name": "IconPanel", "width": 132, "height": 132, "fill": "#000000", "stroke": { "thickness": 4, "fill": "#EAEAEA" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "CTS22", "name": "EventIcon", "width": 56, "height": 56, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+            { "type": "frame", "id": "CTS23", "x": 168, "y": 18, "name": "Content", "width": 560, "height": 144, "fill": "#101010", "layout": "vertical", "gap": 10, "children": [ { "type": "text", "id": "CTS24", "name": "Title", "fill": "#FFFFFF", "content": "WARD MATRIX HOLDING", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" }, { "type": "text", "id": "CTS25", "name": "Body", "fill": "#AAAAAA", "textGrowth": "fixed-width", "width": 540, "content": "Barrier anchors are synchronized. Redirect one guardian to the southern breach to prevent collapse.", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "frame", "id": "CTS26", "name": "Progress", "width": 540, "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "CTS27", "name": "ProgressFill", "width": 414, "height": 18, "fill": "#4A78D4" }, { "type": "text", "id": "CTS28", "x": 12, "y": 4, "name": "ProgressText", "fill": "#FFFFFF", "content": "WARD STABILITY 77%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CTS29", "x": 764, "y": 16, "name": "RewardColumn", "width": 164, "height": 132, "fill": "#0C0C0C", "stroke": { "thickness": 4, "fill": "#7E7E7E" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "CTS30", "name": "Tag", "fill": "#FFFFFF", "content": "DEFENSE", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "CTS31", "name": "Value", "fill": "#AAAAAA", "content": "+1 barrier", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "CTS32", "name": "Time", "fill": "#AAAAAA", "content": "00:21", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CTS33", "x": 792, "y": 0, "name": "Badge", "width": 104, "height": 28, "fill": "#4A78D4", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CTS34", "name": "BadgeText", "fill": "#FFFFFF", "content": "STABLE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CTS40",
+          "name": "ToastThree",
+          "width": "fill_container",
+          "height": 180,
+          "fill": "#101010",
+          "stroke": { "thickness": 6, "fill": "#7E7E7E" },
+          "layout": "none",
+          "children": [
+            { "type": "frame", "id": "CTS41", "x": 16, "y": 16, "name": "IconPanel", "width": 132, "height": 132, "fill": "#000000", "stroke": { "thickness": 4, "fill": "#EAEAEA" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "CTS42", "name": "EventIcon", "width": 56, "height": 56, "iconFontName": "moon", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+            { "type": "frame", "id": "CTS43", "x": 168, "y": 18, "name": "Content", "width": 560, "height": 144, "fill": "#101010", "layout": "vertical", "gap": 10, "children": [ { "type": "text", "id": "CTS44", "name": "Title", "fill": "#FFFFFF", "content": "SHADOW VEIL ACTIVE", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" }, { "type": "text", "id": "CTS45", "name": "Body", "fill": "#AAAAAA", "textGrowth": "fixed-width", "width": 540, "content": "Enemy scouts have lost visual contact. Maintain silence and move the party through the lower atrium.", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "frame", "id": "CTS46", "name": "Progress", "width": 540, "height": 22, "fill": "#1E1E1E", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "none", "children": [ { "type": "rectangle", "id": "CTS47", "name": "ProgressFill", "width": 236, "height": 18, "fill": "#7A5FD4" }, { "type": "text", "id": "CTS48", "x": 12, "y": 4, "name": "ProgressText", "fill": "#FFFFFF", "content": "VEIL DURATION 43%", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CTS49", "x": 764, "y": 16, "name": "RewardColumn", "width": 164, "height": 132, "fill": "#0C0C0C", "stroke": { "thickness": 4, "fill": "#7E7E7E" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "CTS50", "name": "Tag", "fill": "#FFFFFF", "content": "UTILITY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "CTS51", "name": "Value", "fill": "#AAAAAA", "content": "+stealth", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "CTS52", "name": "Time", "fill": "#AAAAAA", "content": "00:33", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CTS53", "x": 780, "y": 0, "name": "Badge", "width": 128, "height": 28, "fill": "#7A5FD4", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CTS54", "name": "BadgeText", "fill": "#FFFFFF", "content": "CONCEALED", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -237,6 +237,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 $"treatAsIcon: {Bool(node.Source.Type == ComponentType.Icon)});");
         }
 
+        if (ShouldApplyTextMetrics(node.Source))
+        {
+            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(ResolveLineSpacing(node.Source, widthDimension, heightDimension))}, wrapText: {Bool(ShouldWrapText(node.Source))});");
+        }
+
         foreach (var pair in Bindings(node.Source).Where(static pair => pair.StaticValue != null))
         {
             if (TryAssignment(node, pair.Property, pair.StaticValue!, staticValue: true, out var assignment))
@@ -467,6 +472,30 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return inferred <= 0d ? null : inferred;
     }
 
+    private static bool ShouldWrapText(ComponentNode node)
+        => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilTextGrowth, out var raw)
+            && raw is string textGrowth
+            && string.Equals(textGrowth, "fixed-width", StringComparison.OrdinalIgnoreCase);
+
+    private static bool ShouldApplyTextMetrics(ComponentNode node)
+        => node.Type is ComponentType.Label or ComponentType.Badge or ComponentType.Button or ComponentType.Checkbox or ComponentType.RadioButton or ComponentType.TextInput or ComponentType.TextArea;
+
+    private static double? ResolveLineSpacing(ComponentNode node, Dimension? widthDimension, Dimension? heightDimension)
+    {
+        if (node.Style?.LineHeight is not { } lineHeight || lineHeight <= 0d)
+        {
+            return null;
+        }
+
+        if (lineHeight <= 5d)
+        {
+            return lineHeight;
+        }
+
+        var fontSize = ResolveFontSize(node, widthDimension, heightDimension);
+        return fontSize is > 0d ? lineHeight / fontSize.Value : null;
+    }
+
     private static double Gap(Spacing? spacing, bool horizontal)
         => spacing == null ? 0d : horizontal ? Math.Max(spacing.Value.Left, spacing.Value.Right) : Math.Max(spacing.Value.Top, spacing.Value.Bottom);
 
@@ -559,6 +588,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
+    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetToggleText(Toggle toggle,string? value){if(TryLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}

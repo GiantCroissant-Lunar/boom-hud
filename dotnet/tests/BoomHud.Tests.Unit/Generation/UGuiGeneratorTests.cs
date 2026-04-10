@@ -255,6 +255,47 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_FixedWidthLabel_WithLineHeight_EmitsTextMetrics()
+    {
+        var doc = new HudDocument
+        {
+            Name = "WrappedHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Label,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.PencilTextGrowth] = "fixed-width"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontSize = 14,
+                            LineHeight = 1.4
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "Wrapped copy"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "WrappedHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.4f, wrapText: true);");
+        viewFile.Content.Should().Contain("text.lineSpacing=lineSpacing.Value;");
+        viewFile.Content.Should().Contain("text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;");
+    }
+
+    [Fact]
     public void Generate_AutoHeightLayoutRoot_UsesContentSizeFitter()
     {
         var doc = new HudDocument

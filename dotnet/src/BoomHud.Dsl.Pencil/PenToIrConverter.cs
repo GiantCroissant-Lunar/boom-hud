@@ -179,6 +179,10 @@ public sealed class PenToIrConverter
         {
             metadata[BoomHudMetadataKeys.PencilClip] = true;
         }
+        if (!string.IsNullOrWhiteSpace(node.TextGrowth))
+        {
+            metadata[BoomHudMetadataKeys.PencilTextGrowth] = node.TextGrowth;
+        }
         if (!string.IsNullOrWhiteSpace(sourceNode.Ref))
         {
             metadata[BoomHudMetadataKeys.PencilComponentRef] = sourceNode.Ref;
@@ -735,6 +739,8 @@ public sealed class PenToIrConverter
         var style = node.Style;
         var borderRadius = style?.BorderRadius ?? style?.CornerRadius;
         var primaryFill = node.Fill ?? style?.Fill ?? style?.Background;
+        var fontSizeSource = node.FontSize ?? style?.FontSize;
+        var typographyToken = ResolveInlineTypographyToken(fontSizeSource);
         var isTextLikeNode = string.Equals(node.Type, "text", StringComparison.OrdinalIgnoreCase)
             || string.Equals(node.Type, "icon_font", StringComparison.OrdinalIgnoreCase);
         var foregroundSource = style?.Foreground ?? node.Fill ?? (isTextLikeNode ? primaryFill : null);
@@ -750,10 +756,12 @@ public sealed class PenToIrConverter
             BackgroundToken = IsTokenRef(backgroundSource) ? ExtractTokenName(backgroundSource) : null,
             Foreground = ParseColorFromObject(foregroundSource),
             ForegroundToken = IsTokenRef(foregroundSource) ? ExtractTokenName(foregroundSource) : null,
-            FontSize = ParseDouble(node.FontSize ?? style?.FontSize),
-            FontFamily = node.IconFontFamily ?? node.FontFamily ?? style?.FontFamily,
-            FontWeight = ParseFontWeight(node.FontWeight ?? style?.FontWeight),
-            LetterSpacing = node.LetterSpacing ?? style?.LetterSpacing,
+            FontSize = typographyToken?.Size ?? ParseDouble(fontSizeSource),
+            LineHeight = typographyToken?.LineHeight,
+            FontFamily = node.IconFontFamily ?? node.FontFamily ?? style?.FontFamily ?? typographyToken?.Family,
+            FontSizeToken = IsTokenRef(fontSizeSource) ? ExtractTokenName(fontSizeSource) : null,
+            FontWeight = ParseOptionalFontWeight(node.FontWeight ?? style?.FontWeight) ?? ParseOptionalFontWeight(typographyToken?.Weight),
+            LetterSpacing = node.LetterSpacing ?? style?.LetterSpacing ?? typographyToken?.LetterSpacing,
             Border = ParseBorder(borderWidthSource, borderColorSource),
             BorderColorToken = IsTokenRef(borderColorSource) ? ExtractTokenName(borderColorSource) : null,
             BorderRadius = ParseDouble(borderRadius),
@@ -908,6 +916,31 @@ public sealed class PenToIrConverter
         }
     }
 
+    private PenTypographyTokenDto? ResolveInlineTypographyToken(object? value)
+    {
+        var typography = _pen.Tokens?.Typography;
+        if (typography == null || typography.Count == 0)
+        {
+            return null;
+        }
+
+        var tokenName = ExtractTokenName(value);
+        if (string.IsNullOrWhiteSpace(tokenName))
+        {
+            return null;
+        }
+
+        var normalizedTokenName = tokenName.Trim();
+        if (normalizedTokenName.StartsWith("typography.", StringComparison.OrdinalIgnoreCase))
+        {
+            normalizedTokenName = normalizedTokenName["typography.".Length..];
+        }
+
+        return typography.TryGetValue(normalizedTokenName, out var token)
+            ? token
+            : null;
+    }
+
     private static double? ParseDouble(object? value)
     {
         if (value == null) return null;
@@ -931,6 +964,9 @@ public sealed class PenToIrConverter
 
         return null;
     }
+
+    private static FontWeight? ParseOptionalFontWeight(object? value)
+        => value == null ? null : ParseFontWeight(value);
 
     private BorderSpec? ParseBorder(object? width, object? color)
     {

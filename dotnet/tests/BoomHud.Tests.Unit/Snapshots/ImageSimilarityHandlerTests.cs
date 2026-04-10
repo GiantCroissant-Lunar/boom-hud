@@ -53,6 +53,8 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         report.DeltaSimilarityPercent.Should().Be(100);
         report.OverallSimilarityPercent.Should().Be(100);
         report.Metrics.ChangedPixels.Should().Be(0);
+        report.Findings.Should().BeEmpty();
+        report.Analysis.Should().NotBeNull();
     }
 
     [Fact]
@@ -83,6 +85,7 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         report.Metrics.ChangedPercent.Should().BeGreaterThan(0);
         report.OverallSimilarityPercent.Should().BeLessThan(100);
         report.DiffPath.Should().Be(diffPath);
+        report.Findings.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -112,6 +115,7 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         report.Normalization!.Mode.Should().Be("stretch");
         report.Metrics.DimensionsMatch.Should().BeTrue();
         report.OverallSimilarityPercent.Should().Be(100);
+        report.Findings.Should().NotContain(f => f.Category == "dimension-mismatch");
     }
 
     [Fact]
@@ -139,6 +143,69 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         var report = LoadReport(reportPath);
         report.FailBelowOverallPercent.Should().Be(95);
         report.PassedThreshold.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Execute_WithDimensionMismatch_ReportsDimensionFinding()
+    {
+        var referencePath = Path.Combine(_tempDir, "reference-dimension.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-dimension.png");
+        var reportPath = Path.Combine(_tempDir, "report-dimension.json");
+
+        CreatePng(referencePath, 16, 16, new Rgba32(255, 255, 255, 255));
+        CreatePng(candidatePath, 8, 8, new Rgba32(255, 255, 255, 255));
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(referencePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            PrintSummary = false,
+            Tolerance = 0
+        });
+
+        exitCode.Should().Be(0);
+
+        var report = LoadReport(reportPath);
+        report.Findings.Should().Contain(f => f.Category == "dimension-mismatch");
+    }
+
+    [Fact]
+    public void Execute_WithRightEdgeDrift_ReportsEdgeFinding()
+    {
+        var referencePath = Path.Combine(_tempDir, "reference-right-edge.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-right-edge.png");
+        var reportPath = Path.Combine(_tempDir, "report-right-edge.json");
+
+        CreatePng(referencePath, 20, 20, new Rgba32(255, 255, 255, 255));
+        CreatePng(candidatePath, 20, 20, new Rgba32(255, 255, 255, 255));
+
+        using (var candidate = Image.Load<Rgba32>(candidatePath))
+        {
+            for (var y = 0; y < candidate.Height; y++)
+            {
+                for (var x = candidate.Width - 2; x < candidate.Width; x++)
+                {
+                    candidate[x, y] = new Rgba32(0, 0, 0, 255);
+                }
+            }
+
+            candidate.SaveAsPng(candidatePath);
+        }
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(referencePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            PrintSummary = false,
+            Tolerance = 0
+        });
+
+        exitCode.Should().Be(0);
+
+        var report = LoadReport(reportPath);
+        report.Findings.Should().Contain(f => f.Category == "edge-alignment-mismatch" && f.Region == "right-edge");
     }
 
     private static void CreatePng(string path, int width, int height, Rgba32 color)

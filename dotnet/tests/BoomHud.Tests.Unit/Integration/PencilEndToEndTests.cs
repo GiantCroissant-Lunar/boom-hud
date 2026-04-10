@@ -6,6 +6,7 @@ using BoomHud.Dsl.Pencil;
 using BoomHud.Gen.Godot;
 using BoomHud.Gen.React;
 using BoomHud.Gen.TerminalGui;
+using BoomHud.Gen.UGui;
 using BoomHud.Gen.Unity;
 using FluentAssertions;
 using Xunit;
@@ -770,5 +771,29 @@ public class PencilEndToEndTests
         });
 
         result.Success.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(@"samples\pencil\party-status-strip.pen", "PartyStatusStrip")]
+    [InlineData(@"samples\pencil\quest-sidebar.pen", "QuestSidebar")]
+    [InlineData(@"samples\pencil\combat-toast-stack.pen", "CombatToastStack")]
+    public void Parse_AdditionalFixtureSamples_UnityAndUGui_ProduceExpectedArtifacts(string sampleRelativePath, string documentName)
+    {
+        var samplePath = GetRepoFilePath(sampleRelativePath);
+        var penJson = File.ReadAllText(samplePath);
+
+        var document = _parser.Parse(penJson);
+        var unityResult = new UnityGenerator().Generate(document, _unityOptions);
+        var uguiResult = new UGuiGenerator().Generate(document, _unityOptions);
+
+        document.Name.Should().Be(documentName);
+
+        unityResult.Success.Should().BeTrue();
+        unityResult.Files.Should().Contain(f => f.Path == $"{documentName}View.uxml");
+        unityResult.Files.Should().Contain(f => f.Path == $"{documentName}View.uss");
+        unityResult.Files.Should().Contain(f => f.Path == $"{documentName}View.gen.cs");
+
+        uguiResult.Success.Should().BeTrue();
+        uguiResult.Files.Should().Contain(f => f.Path == $"{documentName}View.ugui.cs");
     }
 }

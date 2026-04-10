@@ -40,6 +40,11 @@ public sealed record StyleSpec
     public double? FontSize { get; init; }
 
     /// <summary>
+    /// Preferred line height from the source design.
+    /// </summary>
+    public double? LineHeight { get; init; }
+
+    /// <summary>
     /// Font family name.
     /// </summary>
     public string? FontFamily { get; init; }

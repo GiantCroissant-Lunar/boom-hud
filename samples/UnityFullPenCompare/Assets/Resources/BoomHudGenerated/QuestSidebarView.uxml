@@ -1,0 +1,98 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="QuestSidebar" class="boomhud-quest-sidebar">
+        <ui:VisualElement name="Header" class="boomhud-header">
+            <ui:Label name="Title" class="boomhud-title" />
+            <ui:Label name="Zone" class="boomhud-zone" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MinimapCard" class="boomhud-minimap-card">
+            <ui:Label name="MinimapLabel" class="boomhud-minimap-label" />
+            <ui:VisualElement name="MapGrid" class="boomhud-map-grid">
+                <ui:VisualElement name="Row0" class="boomhud-row0">
+                    <ui:VisualElement name="Cell00" class="boomhud-cell00" />
+                    <ui:VisualElement name="Cell01" class="boomhud-cell01" />
+                    <ui:VisualElement name="Cell02" class="boomhud-cell02" />
+                    <ui:VisualElement name="Cell03" class="boomhud-cell03" />
+                    <ui:VisualElement name="Cell04" class="boomhud-cell04" />
+                    <ui:VisualElement name="Cell05" class="boomhud-cell05" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Row1" class="boomhud-row1">
+                    <ui:VisualElement name="Cell10" class="boomhud-cell10" />
+                    <ui:VisualElement name="Cell11" class="boomhud-cell11" />
+                    <ui:VisualElement name="Cell12" class="boomhud-cell12" />
+                    <ui:VisualElement name="Cell13" class="boomhud-cell13" />
+                    <ui:VisualElement name="Cell14" class="boomhud-cell14" />
+                    <ui:VisualElement name="Cell15" class="boomhud-cell15" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Row2" class="boomhud-row2">
+                    <ui:VisualElement name="Cell20" class="boomhud-cell20" />
+                    <ui:VisualElement name="Cell21" class="boomhud-cell21" />
+                    <ui:VisualElement name="Cell22" class="boomhud-cell22" />
+                    <ui:VisualElement name="Cell23" class="boomhud-cell23" />
+                    <ui:VisualElement name="Cell24" class="boomhud-cell24" />
+                    <ui:VisualElement name="Cell25" class="boomhud-cell25" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Row3" class="boomhud-row3">
+                    <ui:VisualElement name="Cell30" class="boomhud-cell30" />
+                    <ui:VisualElement name="Cell31" class="boomhud-cell31" />
+                    <ui:VisualElement name="Cell32" class="boomhud-cell32" />
+                    <ui:VisualElement name="Cell33" class="boomhud-cell33" />
+                    <ui:VisualElement name="Cell34" class="boomhud-cell34" />
+                    <ui:VisualElement name="Cell35" class="boomhud-cell35" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Row4" class="boomhud-row4">
+                    <ui:VisualElement name="Cell40" class="boomhud-cell40" />
+                    <ui:VisualElement name="Cell41" class="boomhud-cell41" />
+                    <ui:VisualElement name="Cell42" class="boomhud-cell42" />
+                    <ui:VisualElement name="Cell43" class="boomhud-cell43" />
+                    <ui:VisualElement name="Cell44" class="boomhud-cell44" />
+                    <ui:VisualElement name="Cell45" class="boomhud-cell45" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ObjectiveCard" class="boomhud-objective-card">
+            <ui:Label name="ObjectivesLabel" class="boomhud-objectives-label" />
+            <ui:VisualElement name="Objective1" class="boomhud-objective1">
+                <ui:VisualElement name="IconShell1" class="boomhud-icon-shell1">
+                    <ui:Label name="ObjectiveIcon1" class="boomhud-objective-icon1" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ObjectiveText1" class="boomhud-objective-text1">
+                    <ui:Label name="ObjectiveTitle1" class="boomhud-objective-title1" />
+                    <ui:Label name="ObjectiveHint1" class="boomhud-objective-hint1" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Objective2" class="boomhud-objective2">
+                <ui:VisualElement name="IconShell2" class="boomhud-icon-shell2">
+                    <ui:Label name="ObjectiveIcon2" class="boomhud-objective-icon2" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ObjectiveText2" class="boomhud-objective-text2">
+                    <ui:Label name="ObjectiveTitle2" class="boomhud-objective-title2" />
+                    <ui:Label name="ObjectiveHint2" class="boomhud-objective-hint2" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Objective3" class="boomhud-objective3">
+                <ui:VisualElement name="IconShell3" class="boomhud-icon-shell3">
+                    <ui:Label name="ObjectiveIcon3" class="boomhud-objective-icon3" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ObjectiveText3" class="boomhud-objective-text3">
+                    <ui:Label name="ObjectiveTitle3" class="boomhud-objective-title3" />
+                    <ui:Label name="ObjectiveHint3" class="boomhud-objective-hint3" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ResourceCard" class="boomhud-resource-card">
+            <ui:Label name="ResourcesLabel" class="boomhud-resources-label" />
+            <ui:VisualElement name="HealthBar" class="boomhud-health-bar">
+                <ui:VisualElement name="HealthFill" class="boomhud-health-fill" />
+                <ui:Label name="HealthText" class="boomhud-health-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ManaBar" class="boomhud-mana-bar">
+                <ui:VisualElement name="ManaFill" class="boomhud-mana-fill" />
+                <ui:Label name="ManaText" class="boomhud-mana-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="SupplyBar" class="boomhud-supply-bar">
+                <ui:VisualElement name="SupplyFill" class="boomhud-supply-fill" />
+                <ui:Label name="SupplyText" class="boomhud-supply-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

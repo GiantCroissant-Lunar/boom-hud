@@ -1,0 +1,553 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "PSS01",
+      "x": 0,
+      "y": 0,
+      "name": "PartyStatusStrip",
+      "width": 1280,
+      "height": 320,
+      "fill": "#050505",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 24,
+      "children": [
+        {
+          "type": "frame",
+          "id": "PSS02",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#050505",
+          "children": [
+            {
+              "type": "text",
+              "id": "PSS03",
+              "name": "AreaName",
+              "fill": "#FFFFFF",
+              "content": "PartyStatusStrip",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "PSS04",
+              "name": "EncounterState",
+              "fill": "#AAAAAA",
+              "content": "ENCOUNTER READY",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PSS05",
+          "name": "MemberRow",
+          "width": "fill_container",
+          "height": 216,
+          "fill": "#050505",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "PSS10",
+              "name": "MemberA",
+              "width": 400,
+              "height": "fill_container",
+              "fill": "#101010",
+              "stroke": {
+                "thickness": 6,
+                "fill": "#7E7E7E"
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PSS11",
+                  "name": "HeroRow",
+                  "width": "fill_container",
+                  "height": 76,
+                  "fill": "#101010",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PSS12",
+                      "name": "Portrait",
+                      "width": 76,
+                      "height": 76,
+                      "fill": "#000000",
+                      "stroke": {
+                        "thickness": 4,
+                        "fill": "#EAEAEA"
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS13",
+                          "x": 18,
+                          "y": 18,
+                          "name": "RoleIcon",
+                          "width": 40,
+                          "height": 40,
+                          "iconFontName": "sword",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS14",
+                      "name": "Identity",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "#101010",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PSS15",
+                          "name": "MemberName",
+                          "fill": "#FFFFFF",
+                          "content": "Aelric",
+                          "fontFamily": "Press Start 2P",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "PSS16",
+                          "name": "MemberRole",
+                          "fill": "#AAAAAA",
+                          "content": "Frontline Vanguard",
+                          "fontFamily": "Press Start 2P",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS17",
+                  "name": "HpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": {
+                    "thickness": 2,
+                    "fill": "#8C8C8C"
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "PSS18",
+                      "name": "HpFill",
+                      "width": 282,
+                      "height": 18,
+                      "fill": "#D44A4A"
+                    },
+                    {
+                      "type": "text",
+                      "id": "PSS19",
+                      "x": 12,
+                      "y": 4,
+                      "name": "HpText",
+                      "fill": "#FFFFFF",
+                      "content": "HP 182 / 220",
+                      "fontFamily": "Press Start 2P",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS20",
+                  "name": "MpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": {
+                    "thickness": 2,
+                    "fill": "#8C8C8C"
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "PSS21",
+                      "name": "MpFill",
+                      "width": 198,
+                      "height": 18,
+                      "fill": "#4A78D4"
+                    },
+                    {
+                      "type": "text",
+                      "id": "PSS22",
+                      "x": 12,
+                      "y": 4,
+                      "name": "MpText",
+                      "fill": "#FFFFFF",
+                      "content": "MP 78 / 110",
+                      "fontFamily": "Press Start 2P",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS23",
+                  "name": "StatusRow",
+                  "width": "fill_container",
+                  "height": 56,
+                  "fill": "#101010",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PSS24",
+                      "name": "StatusBuff1",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#000000",
+                      "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS25",
+                          "name": "BuffIcon1",
+                          "width": 24,
+                          "height": 24,
+                          "iconFontName": "shield",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS26",
+                      "name": "StatusBuff2",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#000000",
+                      "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS27",
+                          "name": "BuffIcon2",
+                          "width": 24,
+                          "height": 24,
+                          "iconFontName": "flame",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS28",
+                      "name": "StatusBuff3",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#000000",
+                      "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS29",
+                          "name": "BuffIcon3",
+                          "width": 24,
+                          "height": 24,
+                          "iconFontName": "cross",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS30",
+                      "name": "StatusBuff4",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#000000",
+                      "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS31",
+                          "name": "BuffIcon4",
+                          "width": 24,
+                          "height": 24,
+                          "iconFontName": "moon",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PSS40",
+              "name": "MemberB",
+              "width": 400,
+              "height": "fill_container",
+              "fill": "#101010",
+              "stroke": {
+                "thickness": 6,
+                "fill": "#7E7E7E"
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PSS41",
+                  "name": "HeroRow",
+                  "width": "fill_container",
+                  "height": 76,
+                  "fill": "#101010",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PSS42",
+                      "name": "Portrait",
+                      "width": 76,
+                      "height": 76,
+                      "fill": "#000000",
+                      "stroke": {
+                        "thickness": 4,
+                        "fill": "#EAEAEA"
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PSS43",
+                          "x": 18,
+                          "y": 18,
+                          "name": "RoleIcon",
+                          "width": 40,
+                          "height": 40,
+                          "iconFontName": "sparkles",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS44",
+                      "name": "Identity",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "#101010",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PSS45",
+                          "name": "MemberName",
+                          "fill": "#FFFFFF",
+                          "content": "Lyra",
+                          "fontFamily": "Press Start 2P",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "PSS46",
+                          "name": "MemberRole",
+                          "fill": "#AAAAAA",
+                          "content": "Arcane Control",
+                          "fontFamily": "Press Start 2P",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS47",
+                  "name": "HpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                  "layout": "none",
+                  "children": [
+                    { "type": "rectangle", "id": "PSS48", "name": "HpFill", "width": 234, "height": 18, "fill": "#D44A4A" },
+                    { "type": "text", "id": "PSS49", "x": 12, "y": 4, "name": "HpText", "fill": "#FFFFFF", "content": "HP 144 / 220", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS50",
+                  "name": "MpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                  "layout": "none",
+                  "children": [
+                    { "type": "rectangle", "id": "PSS51", "name": "MpFill", "width": 296, "height": 18, "fill": "#4A78D4" },
+                    { "type": "text", "id": "PSS52", "x": 12, "y": 4, "name": "MpText", "fill": "#FFFFFF", "content": "MP 124 / 138", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS53",
+                  "name": "StatusRow",
+                  "width": "fill_container",
+                  "height": 56,
+                  "fill": "#101010",
+                  "gap": 8,
+                  "children": [
+                    { "type": "frame", "id": "PSS54", "name": "StatusBuff1", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS55", "name": "BuffIcon1", "width": 24, "height": 24, "iconFontName": "wand-sparkles", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS56", "name": "StatusBuff2", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS57", "name": "BuffIcon2", "width": 24, "height": 24, "iconFontName": "flask-conical", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS58", "name": "StatusBuff3", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS59", "name": "BuffIcon3", "width": 24, "height": 24, "iconFontName": "moon", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS60", "name": "StatusBuff4", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS61", "name": "BuffIcon4", "width": 24, "height": 24, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PSS70",
+              "name": "MemberC",
+              "width": 400,
+              "height": "fill_container",
+              "fill": "#101010",
+              "stroke": {
+                "thickness": 6,
+                "fill": "#7E7E7E"
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PSS71",
+                  "name": "HeroRow",
+                  "width": "fill_container",
+                  "height": 76,
+                  "fill": "#101010",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PSS72",
+                      "name": "Portrait",
+                      "width": 76,
+                      "height": 76,
+                      "fill": "#000000",
+                      "stroke": { "thickness": 4, "fill": "#EAEAEA" },
+                      "layout": "none",
+                      "children": [
+                        { "type": "icon_font", "id": "PSS73", "x": 18, "y": 18, "name": "RoleIcon", "width": 40, "height": 40, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#FFFFFF" }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PSS74",
+                      "name": "Identity",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "#101010",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        { "type": "text", "id": "PSS75", "name": "MemberName", "fill": "#FFFFFF", "content": "Serin", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+                        { "type": "text", "id": "PSS76", "name": "MemberRole", "fill": "#AAAAAA", "content": "Guardian Support", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS77",
+                  "name": "HpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                  "layout": "none",
+                  "children": [
+                    { "type": "rectangle", "id": "PSS78", "name": "HpFill", "width": 318, "height": 18, "fill": "#D44A4A" },
+                    { "type": "text", "id": "PSS79", "x": 12, "y": 4, "name": "HpText", "fill": "#FFFFFF", "content": "HP 210 / 220", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS80",
+                  "name": "MpBar",
+                  "width": "fill_container",
+                  "height": 22,
+                  "fill": "#1E1E1E",
+                  "stroke": { "thickness": 2, "fill": "#8C8C8C" },
+                  "layout": "none",
+                  "children": [
+                    { "type": "rectangle", "id": "PSS81", "name": "MpFill", "width": 154, "height": 18, "fill": "#4A78D4" },
+                    { "type": "text", "id": "PSS82", "x": 12, "y": 4, "name": "MpText", "fill": "#FFFFFF", "content": "MP 42 / 110", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSS83",
+                  "name": "StatusRow",
+                  "width": "fill_container",
+                  "height": 56,
+                  "fill": "#101010",
+                  "gap": 8,
+                  "children": [
+                    { "type": "frame", "id": "PSS84", "name": "StatusBuff1", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS85", "name": "BuffIcon1", "width": 24, "height": 24, "iconFontName": "cross", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS86", "name": "StatusBuff2", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS87", "name": "BuffIcon2", "width": 24, "height": 24, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS88", "name": "StatusBuff3", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS89", "name": "BuffIcon3", "width": 24, "height": 24, "iconFontName": "moon", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] },
+                    { "type": "frame", "id": "PSS90", "name": "StatusBuff4", "width": 56, "height": 56, "fill": "#000000", "stroke": { "thickness": 2, "fill": "#8C8C8C" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "icon_font", "id": "PSS91", "name": "BuffIcon4", "width": 24, "height": 24, "iconFontName": "flame", "iconFontFamily": "lucide", "fill": "#FFFFFF" } ] }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

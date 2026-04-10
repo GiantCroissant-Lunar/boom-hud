@@ -259,6 +259,7 @@ public class UnityGeneratorTests
                             Background = Color.Black,
                             FontFamily = "Press Start 2P",
                             FontSize = 18,
+                            LineHeight = 1.5,
                             FontWeight = FontWeight.Bold,
                             LetterSpacing = 1,
                             Opacity = 0.8,
@@ -282,6 +283,7 @@ public class UnityGeneratorTests
         ussFile.Content.Should().Contain("color: #FF0000;");
         ussFile.Content.Should().Contain("background-color: #000000;");
         ussFile.Content.Should().Contain("font-size: 18px;");
+        ussFile.Content.Should().Contain("line-height: 27px;");
         ussFile.Content.Should().Contain("letter-spacing: 1px;");
         ussFile.Content.Should().Contain("-unity-font-style: bold;");
         ussFile.Content.Should().Contain("opacity: 0.8;");
@@ -289,6 +291,9 @@ public class UnityGeneratorTests
 
         var controllerFile = result.Files.First(f => f.Path == "StyledHudView.gen.cs");
         controllerFile.Content.Should().Contain("ApplyFontFamily(TitleLabel, \"Press Start 2P\", 18f);");
+        controllerFile.Content.Should().Contain("TitleLabel.style.fontSize = 18f;");
+        controllerFile.Content.Should().Contain("TitleLabel.style.letterSpacing = 1f;");
+        controllerFile.Content.Should().Contain("TitleLabel.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Bold;");
         controllerFile.Content.Should().Contain("FontDefinition.FromSDFFont(fontAsset);");
     }
 
@@ -731,8 +736,43 @@ public class UnityGeneratorTests
         var controllerFile = result.Files.First(f => f.Path == "LabelHudView.gen.cs");
 
         controllerFile.Content.Should().Contain("Name.text = \"Theron\";");
-        controllerFile.Content.Should().Contain("ApplyTextLabelStyle(Name);");
+        controllerFile.Content.Should().Contain("ApplyTextLabelStyle(Name, false);");
         controllerFile.Content.Should().Contain("label.style.overflow = Overflow.Visible;");
+    }
+
+    [Fact]
+    public void Generate_FixedWidthPenText_EnablesWrappingForUnityLabels()
+    {
+        var doc = new HudDocument
+        {
+            Name = "WrappedHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Label,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.PencilTextGrowth] = "fixed-width"
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>()
+                        {
+                            ["text"] = "Wrapped copy"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var controllerFile = result.Files.First(f => f.Path == "WrappedHudView.gen.cs");
+
+        controllerFile.Content.Should().Contain("ApplyTextLabelStyle(Body, true);");
+        controllerFile.Content.Should().Contain("label.style.whiteSpace = wrapText ? WhiteSpace.Normal : WhiteSpace.NoWrap;");
     }
 
     [Fact]

@@ -551,6 +551,51 @@ public class PenParserTests
     }
 
     [Fact]
+    public void Parse_InlineTypographyToken_ResolvesTextMetrics()
+    {
+        var json = """
+            {
+                "tokens": {
+                    "typography": {
+                        "body": {
+                            "family": "Press Start 2P",
+                            "size": 8,
+                            "weight": "bold",
+                            "lineHeight": 1.4,
+                            "letterSpacing": 1
+                        }
+                    }
+                },
+                "nodes": [
+                    {
+                        "id": "root",
+                        "type": "frame",
+                        "children": [
+                            {
+                                "id": "label",
+                                "type": "text",
+                                "content": "Mage",
+                                "fontSize": "$typography.body"
+                            }
+                        ]
+                    }
+                ]
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+        var label = doc.Root.Children[0];
+
+        label.Style.Should().NotBeNull();
+        label.Style!.FontSize.Should().Be(8);
+        label.Style.FontFamily.Should().Be("Press Start 2P");
+        label.Style.FontWeight.Should().Be(FontWeight.Bold);
+        label.Style.LineHeight.Should().Be(1.4);
+        label.Style.LetterSpacing.Should().Be(1);
+        label.Style.FontSizeToken.Should().Be("typography.body");
+    }
+
+    [Fact]
     public void Parse_PenSpecificDimensionObjects_AreConverted()
     {
         var json = """

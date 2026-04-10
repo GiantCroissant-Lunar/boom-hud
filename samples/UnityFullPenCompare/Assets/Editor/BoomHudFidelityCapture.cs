@@ -90,7 +90,7 @@ namespace BoomHud.Compare.Editor
                 return;
             }
 
-            var context = PrepareScene(surface.unity.scene);
+            var context = PrepareScene(surface.unity);
             try
             {
                 var outputPath = ResolveManifestPath(Path.Combine(artifactsRoot, surface.unity.output ?? string.Empty));
@@ -116,7 +116,7 @@ namespace BoomHud.Compare.Editor
                 return;
             }
 
-            var context = PrepareScene(timeline.unity.scene);
+            var context = PrepareScene(timeline.unity);
             try
             {
                 var director = UnityEngine.Object.FindFirstObjectByType<PlayableDirector>();
@@ -143,8 +143,10 @@ namespace BoomHud.Compare.Editor
             }
         }
 
-        private static SceneCaptureContext PrepareScene(string sceneName)
+        private static SceneCaptureContext PrepareScene(FidelityUnityCapture capture)
         {
+            var sceneName = capture?.scene ?? throw new ArgumentNullException(nameof(capture));
+
             switch (sceneName)
             {
                 case "ExploreHudCompare":
@@ -167,12 +169,25 @@ namespace BoomHud.Compare.Editor
                     BoomHudUGuiComponentLabSetup.SetupScene();
                     break;
 
+                case "FixtureCompare":
+                    BoomHudFixtureCompareProjectSetup.SetupScene(
+                        capture.resourceBasePath,
+                        capture.generatedRootName,
+                        capture.generatedViewTypeName);
+                    break;
+
+                case "FixtureCompareUGui":
+                    BoomHudFixtureUGuiCompareProjectSetup.SetupScene(
+                        capture.generatedViewTypeName,
+                        capture.targetObjectName);
+                    break;
+
                 default:
                     throw new InvalidOperationException($"Unsupported Unity fidelity scene '{sceneName}'.");
             }
 
             UIDocument? document = null;
-            if (sceneName is "ExploreHudCompare" or "ComponentLab" or "CharPortraitMotionTimeline")
+            if (sceneName is "ExploreHudCompare" or "ComponentLab" or "CharPortraitMotionTimeline" or "FixtureCompare")
             {
                 document = UnityEngine.Object.FindFirstObjectByType<UIDocument>();
                 if (document == null)
@@ -215,6 +230,16 @@ namespace BoomHud.Compare.Editor
                 case "ComponentLabUGui":
                     UnityEngine.Object.FindFirstObjectByType<UGuiComponentLabPresenter>()?.Rebind();
                     break;
+
+                case "FixtureCompare":
+                    UnityEngine.Object.FindFirstObjectByType<FixtureHudPresenter>()
+                        ?.Configure(capture.resourceBasePath, capture.generatedRootName, capture.generatedViewTypeName);
+                    break;
+
+                case "FixtureCompareUGui":
+                    UnityEngine.Object.FindFirstObjectByType<FixtureUGuiPresenter>()
+                        ?.Configure(capture.generatedViewTypeName, capture.targetObjectName);
+                    break;
             }
 
             return new SceneCaptureContext(sceneName, document);
@@ -230,9 +255,10 @@ namespace BoomHud.Compare.Editor
             {
                 var target = WaitForTargetRectTransform(capture.targetObjectName);
                 WaitForRectTransformToSettle(target);
-                fullTexture = CaptureGameViewTexture(CaptureWidth, CaptureHeight);
+                fullTexture = CaptureCameraTexture(CaptureWidth, CaptureHeight);
                 target = WaitForTargetRectTransform(capture.targetObjectName);
                 croppedTexture = CropToRectTransform(fullTexture, target);
+                FlipTextureVertically(croppedTexture);
                 File.WriteAllBytes(outputPath, croppedTexture.EncodeToPNG());
             }
             finally
@@ -267,13 +293,12 @@ namespace BoomHud.Compare.Editor
             Texture2D? croppedTexture = null;
             try
             {
-                fullTexture = CaptureDocumentTexture(document, CaptureWidth, CaptureHeight);
                 document = ResolveActiveDocument(document);
                 var targetElement = WaitForTargetElement(document, capture.targetElementName);
                 ApplyCaptureTweaks(targetElement, capture);
                 EnsureTargetVisible(targetElement);
+                WaitForDocumentToSettle(document);
 
-                UnityEngine.Object.DestroyImmediate(fullTexture);
                 fullTexture = CaptureDocumentTexture(document, CaptureWidth, CaptureHeight);
                 document = ResolveActiveDocument(document);
                 targetElement = WaitForTargetElement(document, capture.targetElementName);
@@ -339,7 +364,6 @@ namespace BoomHud.Compare.Editor
             RenderTexture? renderTexture = null;
             var previousActive = RenderTexture.active;
             var originalPanelTargetTexture = panelSettings.targetTexture;
-            var originalCameraTargetTexture = mainCamera != null ? mainCamera.targetTexture : null;
 
             try
             {
@@ -353,22 +377,15 @@ namespace BoomHud.Compare.Editor
                 renderTexture.Create();
 
                 panelSettings.targetTexture = renderTexture;
-                if (mainCamera != null)
-                {
-                    mainCamera.targetTexture = renderTexture;
-                }
 
                 WaitForDocumentToSettle(document);
 
-                for (var attempt = 0; attempt < 4; attempt++)
+                for (var attempt = 0; attempt < 10; attempt++)
                 {
                     document.rootVisualElement.MarkDirtyRepaint();
-                    if (mainCamera != null)
-                    {
-                        mainCamera.Render();
-                    }
-
+                    PumpUiToolkitPanels();
                     UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+                    SceneView.RepaintAll();
                     EditorApplication.QueuePlayerLoopUpdate();
                     Thread.Sleep(100);
                 }
@@ -377,7 +394,6 @@ namespace BoomHud.Compare.Editor
                 var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
                 texture.ReadPixels(new Rect(0f, 0f, width, height), 0, 0);
                 texture.Apply();
-                FlipTextureVertically(texture);
                 return texture;
             }
             catch
@@ -388,10 +404,6 @@ namespace BoomHud.Compare.Editor
             {
                 RenderTexture.active = previousActive;
                 panelSettings.targetTexture = originalPanelTargetTexture;
-                if (mainCamera != null)
-                {
-                    mainCamera.targetTexture = originalCameraTargetTexture;
-                }
 
                 if (renderTexture != null)
                 {
@@ -437,6 +449,52 @@ namespace BoomHud.Compare.Editor
             }
 
             return CaptureTextureFromHostView(hostView, grabPixels, viewportRectPixels, width, height);
+        }
+
+        private static Texture2D CaptureCameraTexture(int width, int height)
+        {
+            var mainCamera = Camera.main ?? UnityEngine.Object.FindFirstObjectByType<Camera>();
+            if (mainCamera == null)
+            {
+                return CaptureGameViewTexture(width, height);
+            }
+
+            RenderTexture? renderTexture = null;
+            var previousActive = RenderTexture.active;
+            var originalCameraTargetTexture = mainCamera.targetTexture;
+
+            try
+            {
+                renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+                {
+                    name = "BoomHudFidelityCameraCapture",
+                    antiAliasing = 1,
+                    filterMode = FilterMode.Bilinear,
+                    hideFlags = HideFlags.HideAndDontSave
+                };
+                renderTexture.Create();
+
+                mainCamera.targetTexture = renderTexture;
+                mainCamera.Render();
+
+                RenderTexture.active = renderTexture;
+                var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+                texture.ReadPixels(new Rect(0f, 0f, width, height), 0, 0);
+                texture.Apply();
+                FlipTextureVertically(texture);
+                return texture;
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+                mainCamera.targetTexture = originalCameraTargetTexture;
+
+                if (renderTexture != null)
+                {
+                    renderTexture.Release();
+                    UnityEngine.Object.DestroyImmediate(renderTexture);
+                }
+            }
         }
 
         private static Texture2D CaptureTextureFromHostView(object hostView, MethodInfo grabPixels, Rect viewportRectPixels, int width, int height)
@@ -485,9 +543,11 @@ namespace BoomHud.Compare.Editor
             var scaleY = rootBounds.height > 0f ? fullTexture.height / rootBounds.height : 1f;
 
             var x = Mathf.Clamp(Mathf.RoundToInt((targetBounds.xMin - rootBounds.xMin) * scaleX), 0, fullTexture.width - 1);
-            var y = Mathf.Clamp(Mathf.RoundToInt((targetBounds.yMin - rootBounds.yMin) * scaleY), 0, fullTexture.height - 1);
             var width = Mathf.Clamp(Mathf.RoundToInt(targetBounds.width * scaleX), 1, fullTexture.width - x);
+            var bottom = Mathf.RoundToInt((targetBounds.yMax - rootBounds.yMin) * scaleY);
+            var y = Mathf.Clamp(fullTexture.height - bottom, 0, fullTexture.height - 1);
             var height = Mathf.Clamp(Mathf.RoundToInt(targetBounds.height * scaleY), 1, fullTexture.height - y);
+            height = Mathf.Clamp(height, 1, fullTexture.height - y);
 
             var pixels = fullTexture.GetPixels(x, y, width, height);
             var croppedTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
@@ -545,7 +605,6 @@ namespace BoomHud.Compare.Editor
             for (var attempt = 0; attempt < 20; attempt++)
             {
                 document = ResolveActiveDocument(document);
-                RebindAllHosts();
                 WaitForDocumentToSettle(document);
                 var targetElement = document.rootVisualElement?.Q<VisualElement>(targetElementName);
                 if (targetElement != null)
@@ -636,6 +695,7 @@ namespace BoomHud.Compare.Editor
                 "ExploreHudCompare" => "BoomHud Compare UI",
                 "ComponentLab" => "BoomHud Component Lab",
                 "CharPortraitMotionTimeline" => "BoomHud Char Portrait Motion Timeline",
+                "FixtureCompare" => "BoomHud Fixture Compare UI",
                 _ => null
             };
         }
@@ -802,6 +862,7 @@ namespace BoomHud.Compare.Editor
             for (var attempt = 0; attempt < 8; attempt++)
             {
                 root.MarkDirtyRepaint();
+                PumpUiToolkitPanels();
                 UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
                 SceneView.RepaintAll();
                 EditorApplication.QueuePlayerLoopUpdate();
@@ -812,6 +873,22 @@ namespace BoomHud.Compare.Editor
                     return;
                 }
             }
+        }
+
+        private static void PumpUiToolkitPanels()
+        {
+            var runtimeUtilityType = typeof(VisualElement).Assembly.GetType("UnityEngine.UIElements.UIElementsRuntimeUtility");
+            if (runtimeUtilityType == null)
+            {
+                return;
+            }
+
+            runtimeUtilityType.GetMethod("UpdatePanels", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.Invoke(null, null);
+            runtimeUtilityType.GetMethod("RepaintPanels", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.Invoke(null, new object[] { false });
+            runtimeUtilityType.GetMethod("RenderOffscreenPanels", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                ?.Invoke(null, null);
         }
 
         private static void WaitForRectTransformToSettle(RectTransform rectTransform)
@@ -1063,6 +1140,9 @@ namespace BoomHud.Compare.Editor
             public string scene = string.Empty;
             public string targetElementName = string.Empty;
             public string targetObjectName = string.Empty;
+            public string resourceBasePath = string.Empty;
+            public string generatedViewTypeName = string.Empty;
+            public string generatedRootName = string.Empty;
             public string output = string.Empty;
             public string outputDir = string.Empty;
             public float allIconMarginTop = float.NaN;

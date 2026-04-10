@@ -1,0 +1,109 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="PartyStatusStrip" class="boomhud-party-status-strip">
+        <ui:VisualElement name="Header" class="boomhud-header">
+            <ui:Label name="AreaName" class="boomhud-area-name" />
+            <ui:Label name="EncounterState" class="boomhud-encounter-state" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MemberRow" class="boomhud-member-row">
+            <ui:VisualElement name="MemberA" class="boomhud-member-a">
+                <ui:VisualElement name="HeroRow" class="boomhud-hero-row">
+                    <ui:VisualElement name="Portrait" class="boomhud-portrait">
+                        <ui:Label name="RoleIcon" class="boomhud-role-icon" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Identity" class="boomhud-identity">
+                        <ui:Label name="MemberName" class="boomhud-member-name" />
+                        <ui:Label name="MemberRole" class="boomhud-member-role" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="HpBar" class="boomhud-hp-bar">
+                    <ui:VisualElement name="HpFill" class="boomhud-hp-fill" />
+                    <ui:Label name="HpText" class="boomhud-hp-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="MpBar" class="boomhud-mp-bar">
+                    <ui:VisualElement name="MpFill" class="boomhud-mp-fill" />
+                    <ui:Label name="MpText" class="boomhud-mp-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="StatusRow" class="boomhud-status-row">
+                    <ui:VisualElement name="StatusBuff1" class="boomhud-status-buff1">
+                        <ui:Label name="BuffIcon1" class="boomhud-buff-icon1" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff2" class="boomhud-status-buff2">
+                        <ui:Label name="BuffIcon2" class="boomhud-buff-icon2" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff3" class="boomhud-status-buff3">
+                        <ui:Label name="BuffIcon3" class="boomhud-buff-icon3" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff4" class="boomhud-status-buff4">
+                        <ui:Label name="BuffIcon4" class="boomhud-buff-icon4" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MemberB" class="boomhud-member-b">
+                <ui:VisualElement name="HeroRow2" class="boomhud-hero-row2">
+                    <ui:VisualElement name="Portrait2" class="boomhud-portrait2">
+                        <ui:Label name="RoleIcon2" class="boomhud-role-icon2" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Identity2" class="boomhud-identity2">
+                        <ui:Label name="MemberName2" class="boomhud-member-name2" />
+                        <ui:Label name="MemberRole2" class="boomhud-member-role2" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="HpBar2" class="boomhud-hp-bar2">
+                    <ui:VisualElement name="HpFill2" class="boomhud-hp-fill2" />
+                    <ui:Label name="HpText2" class="boomhud-hp-text2" />
+                </ui:VisualElement>
+                <ui:VisualElement name="MpBar2" class="boomhud-mp-bar2">
+                    <ui:VisualElement name="MpFill2" class="boomhud-mp-fill2" />
+                    <ui:Label name="MpText2" class="boomhud-mp-text2" />
+                </ui:VisualElement>
+                <ui:VisualElement name="StatusRow2" class="boomhud-status-row2">
+                    <ui:VisualElement name="StatusBuff12" class="boomhud-status-buff12">
+                        <ui:Label name="BuffIcon12" class="boomhud-buff-icon12" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff22" class="boomhud-status-buff22">
+                        <ui:Label name="BuffIcon22" class="boomhud-buff-icon22" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff32" class="boomhud-status-buff32">
+                        <ui:Label name="BuffIcon32" class="boomhud-buff-icon32" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff42" class="boomhud-status-buff42">
+                        <ui:Label name="BuffIcon42" class="boomhud-buff-icon42" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MemberC" class="boomhud-member-c">
+                <ui:VisualElement name="HeroRow3" class="boomhud-hero-row3">
+                    <ui:VisualElement name="Portrait3" class="boomhud-portrait3">
+                        <ui:Label name="RoleIcon3" class="boomhud-role-icon3" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Identity3" class="boomhud-identity3">
+                        <ui:Label name="MemberName3" class="boomhud-member-name3" />
+                        <ui:Label name="MemberRole3" class="boomhud-member-role3" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="HpBar3" class="boomhud-hp-bar3">
+                    <ui:VisualElement name="HpFill3" class="boomhud-hp-fill3" />
+                    <ui:Label name="HpText3" class="boomhud-hp-text3" />
+                </ui:VisualElement>
+                <ui:VisualElement name="MpBar3" class="boomhud-mp-bar3">
+                    <ui:VisualElement name="MpFill3" class="boomhud-mp-fill3" />
+                    <ui:Label name="MpText3" class="boomhud-mp-text3" />
+                </ui:VisualElement>
+                <ui:VisualElement name="StatusRow3" class="boomhud-status-row3">
+                    <ui:VisualElement name="StatusBuff13" class="boomhud-status-buff13">
+                        <ui:Label name="BuffIcon13" class="boomhud-buff-icon13" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff23" class="boomhud-status-buff23">
+                        <ui:Label name="BuffIcon23" class="boomhud-buff-icon23" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff33" class="boomhud-status-buff33">
+                        <ui:Label name="BuffIcon33" class="boomhud-buff-icon33" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatusBuff43" class="boomhud-status-buff43">
+                        <ui:Label name="BuffIcon43" class="boomhud-buff-icon43" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
