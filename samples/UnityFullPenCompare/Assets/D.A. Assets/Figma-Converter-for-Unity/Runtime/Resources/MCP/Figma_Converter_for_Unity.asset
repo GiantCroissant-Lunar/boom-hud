@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8958357d8b8d9084f81f350ec5364699, type: 3}
+  m_Name: Figma_Converter_for_Unity
+  m_EditorClassIdentifier: 
+  Host: 127.0.0.1
+  Port: 8673
+  RpcVersion: 2.0
+  ProtocolVersion: 2024-11-05
+  ServerVersion: 1.0.0
+  McpTools:
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0013, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0011, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0017, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0014, type: 2}
+  - {fileID: 11400000, guid: f7a9b1c2d3e4567890abcdef12345683, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0015, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0012, type: 2}
+  - {fileID: 11400000, guid: c1d2e3f4a5b6789012345678cdef0016, type: 2}
+  _debug: 0

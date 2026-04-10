@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0f6f442cc89bce44eb315ccced722ba3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Dependency-Manager/Editor/DependencyManagerWindow.cs
+  uploadId: 882880

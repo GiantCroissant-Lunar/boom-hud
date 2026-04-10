@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6f224a41bf4148f2a9f9d6ef89bbf6e7
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Runtime/Resources/FuitkLocalizations.csv
+  uploadId: 882842

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 17fb79d4f451c954bb8a1be3f3f5d798
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Editor/Scripts/Tabs/TextFontsTab.Path.cs
+  uploadId: 882880

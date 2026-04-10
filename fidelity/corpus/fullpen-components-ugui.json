@@ -1,0 +1,170 @@
+{
+  "version": "1.0",
+  "sourcePen": "samples/pencil/full.pen",
+  "artifactsRoot": "build/fidelity/corpus/fullpen-components-ugui",
+  "tolerance": 8,
+  "staticThreshold": 80,
+  "timelineThreshold": 95,
+  "surfaces": [
+    {
+      "id": "action-button",
+      "pen": {
+        "nodeId": "DFxSR",
+        "output": "pen/static/action-button.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/action-button.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "ActionButton",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "action-button-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "ActionButtonRoot",
+        "output": "unity/static/action-button.png"
+      }
+    },
+    {
+      "id": "status-icon",
+      "pen": {
+        "nodeId": "pXhr5",
+        "output": "pen/static/status-icon.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/status-icon.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "StatusIcon",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "status-icon-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "StatusIconRoot",
+        "output": "unity/static/status-icon.png"
+      }
+    },
+    {
+      "id": "stat-bar",
+      "pen": {
+        "nodeId": "tP5Ym",
+        "output": "pen/static/stat-bar.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/stat-bar.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "StatBar",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "stat-bar-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "StatBarRoot",
+        "output": "unity/static/stat-bar.png"
+      }
+    },
+    {
+      "id": "message-log",
+      "pen": {
+        "nodeId": "bjsNG",
+        "output": "pen/static/message-log.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/message-log.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "MessageLog",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "message-log-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "MessageLogRoot",
+        "output": "unity/static/message-log.png"
+      }
+    },
+    {
+      "id": "minimap",
+      "pen": {
+        "nodeId": "hrbtA",
+        "output": "pen/static/minimap.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/minimap.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "Minimap",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "minimap-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "MinimapRoot",
+        "output": "unity/static/minimap.png"
+      }
+    },
+    {
+      "id": "char-portrait",
+      "pen": {
+        "nodeId": "j8BT0",
+        "output": "pen/static/char-portrait.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedComponentDemo",
+        "frame": 0,
+        "output": "remotion/static/char-portrait.png",
+        "trimTransparency": true,
+        "props": {
+          "componentId": "CharPortrait",
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "char-portrait-ugui",
+        "scene": "ComponentLabUGui",
+        "targetObjectName": "CharPortraitRoot",
+        "output": "unity/static/char-portrait.png"
+      }
+    },
+    {
+      "id": "full-hud",
+      "pen": {
+        "nodeId": "PYS9B",
+        "output": "pen/static/full-hud.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedFullPenDemo",
+        "frame": 0,
+        "output": "remotion/static/full-hud.png",
+        "props": {
+          "animated": false
+        }
+      },
+      "unity": {
+        "captureId": "full-hud-ugui",
+        "scene": "ExploreHudCompareUGui",
+        "targetObjectName": "ExploreHudRoot",
+        "output": "unity/static/full-hud.png"
+      }
+    }
+  ],
+  "timelines": []
+}

@@ -163,23 +163,15 @@ public sealed class PenToIrConverter
         {
             metadata[BoomHudMetadataKeys.OriginalPencilType] = node.Type;
         }
-        var legacyX = node.X;
-        var legacyY = node.Y;
-        var hasLegacyLeft = legacyX is not null;
-        var hasLegacyTop = legacyY is not null;
-        if (layout.IsAbsolutePositioned)
+        if (node.X is { } x)
         {
-            if (hasLegacyLeft) metadata[BoomHudMetadataKeys.PencilLeft] = legacyX;
-            if (hasLegacyTop) metadata[BoomHudMetadataKeys.PencilTop] = legacyY;
+            metadata[BoomHudMetadataKeys.PencilLeft] = x;
         }
-        else if (hasLegacyLeft || hasLegacyTop)
+        if (node.Y is { } y)
         {
-            var nodeName = string.IsNullOrWhiteSpace(nodeId)
-                ? (string.IsNullOrWhiteSpace(node.Name) ? sourceNode.Type : node.Name)
-                : nodeId;
-            _warnings.Add($"Pen node '{nodeName}' has x/y coordinates ({legacyX}, {legacyY}) but no explicit absolute layout. Coordinates will be ignored for absolute placement.");
+            metadata[BoomHudMetadataKeys.PencilTop] = y;
         }
-        if (layout.IsAbsolutePositioned)
+        if (HasAbsolutePosition(node))
         {
             metadata[BoomHudMetadataKeys.PencilPosition] = "absolute";
         }
@@ -605,8 +597,7 @@ public sealed class PenToIrConverter
 
         var layoutMode = mode ?? type ?? GetDefaultLayoutMode(node.Type);
         var layoutType = MapLayoutType(layoutMode, direction, position, out var usedFallbackLayout);
-        var isAbsoluteLayout = layoutType == LayoutType.Absolute;
-        var layout = new LayoutSpec
+        return new LayoutSpec
         {
             Type = layoutType,
             Width = ParseDimension(width),
@@ -614,22 +605,13 @@ public sealed class PenToIrConverter
             Gap = ParseSpacingUniform(gap),
             Padding = ParseSpacing(padding),
             Margin = ParseSpacing(margin),
-            Left = isAbsoluteLayout && node.X is { } x ? Dimension.Pixels(x) : null,
-            Top = isAbsoluteLayout && node.Y is { } y ? Dimension.Pixels(y) : null,
-            IsAbsolutePositioned = isAbsoluteLayout,
+            Left = node.X is { } x ? Dimension.Pixels(x) : null,
+            Top = node.Y is { } y ? Dimension.Pixels(y) : null,
+            IsAbsolutePositioned = HasAbsolutePosition(node),
             ClipContent = node.Clip is true,
             Align = MapAlignment(align ?? alignment),
             Justify = MapJustification(justify ?? GetJustifyFromAlignment(alignment ?? align))
         };
-
-        if (usedFallbackLayout && node.Children is { Count: > 0 })
-        {
-            var nodeName = string.IsNullOrWhiteSpace(node.Id) ? (string.IsNullOrWhiteSpace(node.Name) ? node.Type : node.Name) : node.Id;
-            var requestedLayout = string.IsNullOrWhiteSpace(layoutMode) ? "<missing>" : layoutMode;
-            _warnings.Add($"Pen node '{nodeName}' uses unsupported or missing layout mode '{requestedLayout}' and defaulted to LayoutType.Vertical.");
-        }
-
-        return layout;
     }
 
     private static string? GetDefaultLayoutMode(string? nodeType)
@@ -692,6 +674,34 @@ public sealed class PenToIrConverter
 
         usedFallback = normalized is not ("absolute" or "none" or "grid" or "vertical" or "horizontal" or "flex");
         return layoutType;
+    }
+
+    private static bool HasAbsolutePosition(PenNodeDto node)
+    {
+        if (node.Layout is PenLayoutDto layoutDto)
+        {
+            return string.Equals(layoutDto.Position, "absolute", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(layoutDto.Type, "absolute", StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (node.Layout is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Object)
+        {
+            if (jsonElement.TryGetProperty("position", out var position)
+                && position.ValueKind == JsonValueKind.String
+                && string.Equals(position.GetString(), "absolute", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (jsonElement.TryGetProperty("type", out var typeElement)
+                && typeElement.ValueKind == JsonValueKind.String
+                && string.Equals(typeElement.GetString(), "absolute", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Alignment MapAlignment(string? align)

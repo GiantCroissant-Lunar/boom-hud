@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 770aa939a9529e84b9ae29f4c40b6fc2, type: 3}
+  m_Name: FuitkConfig
+  m_EditorClassIdentifier: 
+  productVersion: 2.0.0
+  localizator:
+    locFile: {fileID: 4900000, guid: 6f224a41bf4148f2a9f9d6ef89bbf6e7, type: 3}
+    _language: 0
+  isLanguageInitialized: 1

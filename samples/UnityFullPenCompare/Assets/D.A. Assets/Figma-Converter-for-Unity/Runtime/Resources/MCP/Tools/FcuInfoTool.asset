@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6789012345678abcdef01, type: 3}
+  m_Name: FcuInfoTool
+  m_EditorClassIdentifier: 
+  ToolName: mcp_server_info
+  ToolDescription: '[NECESSARILY] Call this command to receive detailed instructions
+    on how to use this tool.'
+  Schema:
+    Type: object
+    Properties:
+      m_Keys: []
+      m_Values: []
+      rowCount: 1
+    Required: []
+  ResponseTemplates:
+    m_Keys:
+    - info
+    m_Values:
+    - "This server can perform several functions. The instructions for these functions
+      are divided into the corresponding sections below.\n\n1. Importing a Figma
+      layout into Unity. To perform the import, execute these commands in sequence.\n  
+      a. set_project_url;\n   b. download_project;\n   c. get_frame_list and follow
+      the additional instructions you receive as a result of this command;\n   d.
+      select_frames (based on the user's selection decision);\n   e. start_import_step
+      with arguments {\"step_index\": 0};\n   f. repeat start_import_step with the
+      next step index returned by the previous call, until the import is completed.\n\n2.
+      Getting documentation\n   Use get_documentation to fetch D.A. Assets documentation.\n  
+      This should be done in cases where a user asks questions about the asset's
+      functionality or features.\n   - Call without arguments to get documentation
+      structure (list of all sections)\n   - Call with 'url' argument to get content
+      of a specific page\n\n3. Creating prefabs\n   [this feature is currently unavailable
+      and under development]\n\n4. Script generation\n   [this feature is currently
+      unavailable and under development]"
+    rowCount: 20

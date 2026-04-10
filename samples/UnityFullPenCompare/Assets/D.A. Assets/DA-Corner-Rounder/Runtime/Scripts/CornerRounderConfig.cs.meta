@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8a486321d6b8467791f54d97bc545acc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {fileID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/DA-Corner-Rounder/Runtime/Scripts/CornerRounderConfig.cs
+  uploadId: 882880

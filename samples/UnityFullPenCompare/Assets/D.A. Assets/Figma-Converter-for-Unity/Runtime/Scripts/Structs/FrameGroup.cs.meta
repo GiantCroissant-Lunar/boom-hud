@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c589e027140671a49b63dba9d7e40fb5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Structs/FrameGroup.cs
+  uploadId: 882880

@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "sourcePen": "samples/pencil/full.pen",
+  "artifactsRoot": "build/fidelity/latest",
+  "tolerance": 8,
+  "staticThreshold": 97,
+  "timelineThreshold": 95,
+  "surfaces": [
+    {
+      "id": "full-hud",
+      "pen": {
+        "nodeId": "PYS9B",
+        "output": "pen/static/full-hud.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedFullPenDemo",
+        "frame": 0,
+        "output": "remotion/static/full-hud.png",
+        "props": {
+          "animated": false
+        }
+      },
+      "unity": {
+        "captureId": "full-hud",
+        "scene": "ExploreHudCompare",
+        "targetElementName": "ExploreHUD",
+        "output": "unity/static/full-hud.png"
+      }
+    },
+    {
+      "id": "char-portrait",
+      "pen": {
+        "nodeId": "j8BT0",
+        "output": "pen/static/char-portrait.png"
+      },
+      "remotion": {
+        "compositionId": "GeneratedMotionDemo",
+        "frame": 0,
+        "output": "remotion/static/char-portrait.png",
+        "trimTransparency": true,
+        "props": {
+          "animated": false,
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "char-portrait",
+        "scene": "ComponentLab",
+        "targetElementName": "ComponentCharPortrait",
+        "output": "unity/static/char-portrait.png"
+      }
+    }
+  ],
+  "timelines": [
+    {
+      "id": "char-portrait-sequence",
+      "motionJsonPath": "remotion/src/motion-samples/char-portrait.motion.json",
+      "unityGeneratedMotionPath": "samples/UnityFullPenCompare/Assets/Resources/BoomHudGenerated/CharPortraitMotion.gen.cs",
+      "metadataReport": "reports/char-portrait-metadata-parity.json",
+      "sampleFrames": [0, 14, 22, 24, 28, 34, 36, 42, 44, 48, 50, 54, 60, 66, 71],
+      "remotion": {
+        "compositionId": "GeneratedMotionDemo",
+        "outputDir": "remotion/timeline/char-portrait",
+        "trimTransparency": true,
+        "props": {
+          "animated": true,
+          "isolated": true
+        }
+      },
+      "unity": {
+        "captureId": "char-portrait-timeline",
+        "scene": "CharPortraitMotionTimeline",
+        "targetElementName": "ComponentCharPortrait",
+        "outputDir": "unity/timeline/char-portrait"
+      }
+    }
+  ]
+}

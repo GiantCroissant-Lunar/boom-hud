@@ -1,14 +1,16 @@
 import React from 'react';
 export interface StatusIconViewModel {
-  motionTargets?: Record<string, Partial<Record<'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color', number | boolean | string | readonly number[]>>>;
+  motionTargets?: Record<string, Partial<Record<'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color', number | boolean | string>>>;
+  motionScope?: string;
 }
 
 type BoomHudMotionProperty = 'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color';
-type BoomHudMotionScalar = number | boolean | string | readonly number[];
+type BoomHudMotionScalar = number | boolean | string;
 type BoomHudMotionTargetState = Partial<Record<BoomHudMotionProperty, BoomHudMotionScalar>>;
 type BoomHudMotionTargets = Record<string, BoomHudMotionTargetState>;
 const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;
 const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);
+const resolveMotionId = (scope: string | undefined, id?: string) => !id ? undefined : scope ? `${scope}/${id}` : id;
 const resolveIconText = (value: unknown, familyName?: string) => {
   const text = asText(value, '');
   if (!text || familyName?.trim().toLowerCase() !== 'lucide') return text;
@@ -69,9 +71,9 @@ const getMotionStyle = (targets: BoomHudMotionTargets | undefined, id?: string):
 
 export function StatusIconView(props: StatusIconViewModel): React.JSX.Element {
   return (
-    <div className='boomhud-node boomhud-component-statusicon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'center', justifyContent: 'center', fontWeight: '400', ...getMotionStyle(props.motionTargets, 'Component/StatusIcon') } } data-boomhud-id='Component/StatusIcon'>
-      <span className='boomhud-node boomhud-icon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'flex-start', justifyContent: 'flex-start', color: '#FFFFFF', fontFamily: 'lucide', fontWeight: '400', ...getMotionStyle(props.motionTargets, 'icon') } } data-boomhud-id='icon'>
-        {resolveIconText(getMotionText(props.motionTargets, 'icon') ?? ('flame'), 'lucide')}
+    <div className='boomhud-node boomhud-component-statusicon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'center', justifyContent: 'center', fontWeight: '400', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'Component/StatusIcon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'Component/StatusIcon')}>
+      <span className='boomhud-node boomhud-icon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'flex-start', justifyContent: 'flex-start', color: '#FFFFFF', fontFamily: 'lucide', fontWeight: '400', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'icon')}>
+        {resolveIconText(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('flame'), 'lucide')}
       </span>
     </div>
   );

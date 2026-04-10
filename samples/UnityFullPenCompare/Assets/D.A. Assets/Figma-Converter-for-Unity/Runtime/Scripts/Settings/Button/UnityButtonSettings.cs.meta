@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2d944031ca8f68d48819245371c1e9ac
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Settings/Button/UnityButtonSettings.cs
+  uploadId: 882880

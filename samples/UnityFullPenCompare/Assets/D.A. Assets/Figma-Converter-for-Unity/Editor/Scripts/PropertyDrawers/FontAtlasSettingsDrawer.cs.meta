@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 7bcab2071ac1b6f4989c81930c2c998b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Editor/Scripts/PropertyDrawers/FontAtlasSettingsDrawer.cs
+  uploadId: 882880

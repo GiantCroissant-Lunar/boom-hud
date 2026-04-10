@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: cf6418f948742bb45b06b5dd5d99a77d
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Editor/DA_Assets.UITK_Converter.Editor.asmdef
+  uploadId: 882842

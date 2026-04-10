@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 01f2d41f57c794b44a6bad6482d42e05
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Drawers/Canvas/AutoLayoutDrawers/LayoutElementDrawer.cs
+  uploadId: 882880

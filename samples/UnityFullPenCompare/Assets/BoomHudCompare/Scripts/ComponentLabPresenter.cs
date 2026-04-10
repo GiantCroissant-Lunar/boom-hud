@@ -13,9 +13,11 @@ namespace BoomHud.Compare
     public sealed class ComponentLabPresenter : BoomHudUiToolkitHost
     {
         private const string GeneratedBasePath = "BoomHudGenerated/";
-        private const float PartyMemberWidth = 122f;
+        private const float PartyMemberWidth = 130f;
         private const float DefaultHpWidth = 90f;
         private const float DefaultMpWidth = 60f;
+        private static readonly PartyMemberSpec s_referenceCharPortrait =
+            new PartyMemberSpec("Name", "shield", "ATK 10", "DEF 8", DefaultHpWidth, DefaultMpWidth, 0f);
 
         private static readonly PartyMemberSpec[] s_partyMembers =
         {
@@ -166,6 +168,7 @@ namespace BoomHud.Compare
         private void AddCharPortraitPreview(VisualElement gallery)
         {
             var surface = CreatePreviewCard(gallery, "CharPortrait", 280f, 220f);
+            surface.name = "CharPortraitPreviewSurface";
             surface.style.justifyContent = Justify.FlexStart;
             surface.style.alignItems = Align.Center;
             surface.style.overflow = Overflow.Visible;
@@ -175,9 +178,7 @@ namespace BoomHud.Compare
                 return;
             }
 
-            ApplyPartyMemberPresentation(view, s_partyMembers[0], 1f, 1f, useScanningText: false);
-
-            RegisterAnimatedCharPortrait(view, s_partyMembers[0], PreviewPlaybackMode.Loop);
+            ApplyPartyMemberPresentation(view, s_referenceCharPortrait, 1f, 1f, useScanningText: false);
         }
 
         private void AddPartyMemberLayoutPreview(VisualElement gallery)
@@ -195,6 +196,7 @@ namespace BoomHud.Compare
         private static void AddMinimapPreview(VisualElement gallery)
         {
             var surface = CreatePreviewCard(gallery, "Minimap", 360f, 380f);
+            surface.name = "MinimapPreviewSurface";
             var componentRoot = InstantiateGeneratedRoot(surface, "MinimapView");
             if (componentRoot == null)
             {
@@ -424,7 +426,7 @@ namespace BoomHud.Compare
                 for (var rowIndex = 0; rowIndex < 3; rowIndex++)
                 {
                     var row = new VisualElement();
-                    row.style.width = 252f;
+                    row.style.width = (PartyMemberWidth * 2f) + 8f;
                     row.style.flexDirection = FlexDirection.Row;
                     row.style.justifyContent = Justify.Center;
                     row.style.alignItems = Align.FlexStart;
@@ -477,8 +479,9 @@ namespace BoomHud.Compare
                 }
 
                 var generated = new CharPortraitView(componentRoot);
-                generated.Root.style.width = Length.Percent(100f);
+                generated.Root.style.width = PartyMemberWidth;
                 generated.Root.style.minWidth = PartyMemberWidth;
+                generated.Root.style.maxWidth = PartyMemberWidth;
 
                 var hpBar = TryAttachStatusBar(generated.Hp, generated.HpFill, HpFillColor);
                 var mpBar = TryAttachStatusBar(generated.Mp, generated.MpFill, MpFillColor);

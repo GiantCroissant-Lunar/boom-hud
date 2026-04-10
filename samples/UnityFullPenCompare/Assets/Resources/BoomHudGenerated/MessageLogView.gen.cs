@@ -74,31 +74,46 @@ public sealed class MessageLogView
     {
         Root.style.display = DisplayStyle.Flex;
         Root.SetEnabled(true);
+        Root.style.color = ParseStyleColor("#000000", null);
+        Root.style.backgroundColor = ParseStyleColor("#000000", null);
+        Root.style.borderLeftWidth = 2f;
+        Root.style.borderRightWidth = 2f;
+        Root.style.borderTopWidth = 2f;
+        Root.style.borderBottomWidth = 2f;
+        Root.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
         Line1.text = "Activity log line.";
         ApplyTextLabelStyle(Line1);
         Line1.style.display = DisplayStyle.Flex;
         Line1.SetEnabled(true);
         ApplyFontFamily(Line1, "Press Start 2P", 16f);
+        Line1.style.color = ParseStyleColor("#FFFFFF", null);
         Line2.text = "Second log entry.";
         ApplyTextLabelStyle(Line2);
         Line2.style.display = DisplayStyle.Flex;
         Line2.SetEnabled(true);
         ApplyFontFamily(Line2, "Press Start 2P", 16f);
+        Line2.style.color = ParseStyleColor("#FFFFFF", null);
         Line3.text = "Third log entry.";
         ApplyTextLabelStyle(Line3);
         Line3.style.display = DisplayStyle.Flex;
         Line3.SetEnabled(true);
         ApplyFontFamily(Line3, "Press Start 2P", 16f);
+        Line3.style.color = ParseStyleColor("#FFFFFF", null);
         Line4.text = "Fourth log entry.";
         ApplyTextLabelStyle(Line4);
         Line4.style.display = DisplayStyle.Flex;
         Line4.SetEnabled(true);
         ApplyFontFamily(Line4, "Press Start 2P", 16f);
+        Line4.style.color = ParseStyleColor("#AAAAAA", null);
         Line5.text = "Fifth log entry.";
         ApplyTextLabelStyle(Line5);
         Line5.style.display = DisplayStyle.Flex;
         Line5.SetEnabled(true);
         ApplyFontFamily(Line5, "Press Start 2P", 16f);
+        Line5.style.color = ParseStyleColor("#AAAAAA", null);
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -442,6 +457,10 @@ public sealed class MessageLogView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
+        if (boxWidth >= 32f && boxHeight >= 32f)
+        {
+            label.style.marginTop = -1f;
+        }
         label.style.fontSize = iconSize;
     }
 }

@@ -19,6 +19,10 @@ import {
   generatedMinimapDemoDurationInFrames,
   generatedMinimapDemoFramesPerSecond,
 } from "./GeneratedMinimapDemo";
+import {
+  GeneratedComponentDemo,
+  GeneratedComponentDemoSchema,
+} from "./GeneratedComponentDemo";
 
 export const RemotionRoot: React.FC = () => {
   // Default props for preview - will be overridden by CLI input
@@ -85,7 +89,7 @@ export const RemotionRoot: React.FC = () => {
         width={1280}
         height={720}
         schema={GeneratedMotionDemoSchema}
-        defaultProps={{}}
+        defaultProps={{ animated: true, isolated: false }}
       />
       <Composition
         id="GeneratedFullPenDemo"
@@ -106,6 +110,16 @@ export const RemotionRoot: React.FC = () => {
         height={720}
         schema={GeneratedMinimapDemoSchema}
         defaultProps={{ animated: false }}
+      />
+      <Composition
+        id="GeneratedComponentDemo"
+        component={GeneratedComponentDemo}
+        durationInFrames={1}
+        fps={30}
+        width={512}
+        height={512}
+        schema={GeneratedComponentDemoSchema}
+        defaultProps={{ componentId: "CharPortrait", isolated: true }}
       />
     </>
   );

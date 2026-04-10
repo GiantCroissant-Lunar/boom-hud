@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 15a2f557aa8cf53428ef0d81fc55ec92
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Runtime/Scripts/ComponentDrawer.cs
+  uploadId: 882842

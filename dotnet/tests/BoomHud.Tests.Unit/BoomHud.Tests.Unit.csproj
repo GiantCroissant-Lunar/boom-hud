@@ -31,6 +31,7 @@
     <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
     <Compile Include="Generation\ReactGeneratorTests.cs" />
     <Compile Include="Generation\RemotionGeneratorTests.cs" />
+    <Compile Include="Generation\UGuiGeneratorTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

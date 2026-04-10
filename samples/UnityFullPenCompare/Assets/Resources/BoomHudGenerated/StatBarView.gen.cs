@@ -66,8 +66,12 @@ public sealed class StatBarView
     {
         Root.style.display = DisplayStyle.Flex;
         Root.SetEnabled(true);
+        Root.style.color = ParseStyleColor("#333333", null);
+        Root.style.backgroundColor = ParseStyleColor("#333333", null);
         Fill.style.display = DisplayStyle.Flex;
         Fill.SetEnabled(true);
+        Fill.style.color = ParseStyleColor("#CCCCCC", null);
+        Fill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -411,6 +415,10 @@ public sealed class StatBarView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
+        if (boxWidth >= 32f && boxHeight >= 32f)
+        {
+            label.style.marginTop = -1f;
+        }
         label.style.fontSize = iconSize;
     }
 }

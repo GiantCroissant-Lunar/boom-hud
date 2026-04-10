@@ -290,8 +290,7 @@ public sealed class UnityGenerator : IBackendGenerator
 
     private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType)
     {
-        var sourceHasAbsoluteLayout = source.Layout?.Type == LayoutType.Absolute;
-        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source) || sourceHasAbsoluteLayout;
+        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source);
         if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
@@ -327,19 +326,7 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendOffsetStyle(builder, "top", top.Value);
         }
 
-        if (sourceHasAbsoluteLayout)
-        {
-            if (left == null)
-            {
-                AppendCssDeclaration(builder, "left", ToPixels(0));
-            }
-
-            if (top == null)
-            {
-                AppendCssDeclaration(builder, "top", ToPixels(0));
-            }
-        }
-        else if (sourceHasAbsolutePlacement && parentLayoutType == null)
+        if (sourceHasAbsolutePlacement && parentLayoutType == null)
         {
             if (left == null)
             {
@@ -607,7 +594,7 @@ public sealed class UnityGenerator : IBackendGenerator
 
         foreach (var node in flattenedNodes)
         {
-            AppendStaticAssignments(builder, node, plan.Root);
+            AppendStaticAssignments(builder, node, plan.Root, options.Theme);
         }
 
         builder.AppendLine("    }");
@@ -953,6 +940,10 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        label.style.height = boxHeight;");
         builder.AppendLine("        label.style.minWidth = boxWidth;");
         builder.AppendLine("        label.style.minHeight = boxHeight;");
+        builder.AppendLine("        if (boxWidth >= 32f && boxHeight >= 32f)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            label.style.marginTop = -1f;");
+        builder.AppendLine("        }");
         builder.AppendLine("        label.style.fontSize = iconSize;");
         builder.AppendLine("    }");
         builder.AppendLine("}");
@@ -1032,7 +1023,11 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
-    private static void AppendStaticAssignments(StringBuilder builder, UnityPlannedNode node, UnityPlannedNode root)
+    private static void AppendStaticAssignments(
+        StringBuilder builder,
+        UnityPlannedNode node,
+        UnityPlannedNode root,
+        ThemeDocument? theme)
     {
         var accessor = GetNodeAccessor(node, root);
 
@@ -1072,6 +1067,65 @@ public sealed class UnityGenerator : IBackendGenerator
         if (TryGetStaticFontFamilyAssignment(accessor, node, out var fontAssignment))
         {
             builder.AppendLine("        " + fontAssignment);
+        }
+
+        AppendStaticStyleAssignments(builder, accessor, node, theme);
+    }
+
+    private static void AppendStaticStyleAssignments(
+        StringBuilder builder,
+        string accessor,
+        UnityPlannedNode node,
+        ThemeDocument? theme)
+    {
+        var style = node.Source.Style;
+        if (style == null)
+        {
+            return;
+        }
+
+        var foreground = ResolveColor(style.Foreground, style.ForegroundToken, theme);
+        if (!string.IsNullOrWhiteSpace(foreground))
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.color = ParseStyleColor({ToStringLiteral(foreground)}, null);");
+        }
+
+        var background = ResolveColor(style.Background, style.BackgroundToken, theme);
+        if (!string.IsNullOrWhiteSpace(background))
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({ToStringLiteral(background)}, null);");
+        }
+
+        if (style.BorderRadius is { } borderRadius)
+        {
+            var radius = ToFloatLiteral(borderRadius);
+            AppendInvariantLine(builder, $"        {accessor}.style.borderTopLeftRadius = {radius};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderTopRightRadius = {radius};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderBottomLeftRadius = {radius};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderBottomRightRadius = {radius};");
+        }
+
+        if (style.Border is { } border)
+        {
+            var width = ToFloatLiteral(border.Width);
+            AppendInvariantLine(builder, $"        {accessor}.style.borderLeftWidth = {width};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderRightWidth = {width};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderTopWidth = {width};");
+            AppendInvariantLine(builder, $"        {accessor}.style.borderBottomWidth = {width};");
+
+            var borderColor = ResolveColor(border.Color, style.BorderColorToken, theme);
+            if (!string.IsNullOrWhiteSpace(borderColor))
+            {
+                AppendInvariantLine(builder, $"        {accessor}.style.borderLeftColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderRightColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderTopColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderBottomColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
+            }
+        }
+
+        if (style.Opacity is { } opacity)
+        {
+            AppendInvariantLine(builder, $"        {accessor}.style.opacity = {ToFloatLiteral(opacity)};");
         }
     }
 
@@ -1376,12 +1430,6 @@ public sealed class UnityGenerator : IBackendGenerator
 
                 if (parentLayoutType == LayoutType.Horizontal)
                 {
-                    if (!HasDefiniteCrossAxisSize(parentLayout?.Height))
-                    {
-                        AppendCssDeclaration(builder, propertyName, "auto");
-                        return;
-                    }
-
                     AppendCssDeclaration(builder, "align-self", "stretch");
                     return;
                 }

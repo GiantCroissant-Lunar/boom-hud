@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3e8d630cfaa4a2349b0ec9ac0d4d8b56
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Examples.txt
+  uploadId: 882880

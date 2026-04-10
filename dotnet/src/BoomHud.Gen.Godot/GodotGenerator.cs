@@ -65,7 +65,7 @@ public sealed class GodotGenerator : IBackendGenerator
                         Type = GeneratedFileType.Other
                     });
                 }
-                
+
                 // ViewModel Interfaces
                 if (options.EmitViewModelInterfaces)
                 {
@@ -109,8 +109,8 @@ public sealed class GodotGenerator : IBackendGenerator
                     Type = GeneratedFileType.Other
                 });
             }
-            
-             // Main ViewModel Interface
+
+            // Main ViewModel Interface
             if (options.EmitViewModelInterfaces)
             {
                 var mainVmCode = GenerateViewModelInterface(document, options);
@@ -251,7 +251,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 var instanceId = FindPackedSceneId(extResources, def.Name);
                 if (instanceId != null)
                 {
-                    sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(parentPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]" );
+                    sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(parentPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
                     AppendCommonNodeProperties(sb, child);
                     continue;
                 }
@@ -292,6 +292,43 @@ public sealed class GodotGenerator : IBackendGenerator
                 sb.AppendLine("text = \"" + EscapeString(text) + "\"");
             }
         }
+
+        AppendAbsoluteLayoutProperties(sb, node.Layout);
+    }
+
+    private static void AppendAbsoluteLayoutProperties(StringBuilder sb, LayoutSpec? layout)
+    {
+        if (layout == null || layout.Type != LayoutType.Absolute)
+        {
+            return;
+        }
+
+        AppendTscnOffset(sb, layout.Left, "anchor_left", "offset_left");
+        AppendTscnOffset(sb, layout.Top, "anchor_top", "offset_top");
+    }
+
+    private static void AppendTscnOffset(StringBuilder sb, Dimension? dimension, string anchorProperty, string offsetProperty)
+    {
+        if (dimension == null)
+        {
+            sb.Append(anchorProperty).AppendLine(" = 0.0");
+            sb.Append(offsetProperty).AppendLine(" = 0");
+            return;
+        }
+
+        if (dimension.Value.Unit == DimensionUnit.Percent)
+        {
+            sb.Append(anchorProperty)
+                .Append(" = ")
+                .AppendLine(((double)(dimension.Value.Value / 100.0)).ToString(System.Globalization.CultureInfo.InvariantCulture));
+            sb.Append(offsetProperty).AppendLine(" = 0");
+            return;
+        }
+
+        sb.Append(anchorProperty).AppendLine(" = 0.0");
+        sb.Append(offsetProperty)
+            .Append(" = ")
+            .AppendLine(((float)dimension.Value.Value).ToString(System.Globalization.CultureInfo.InvariantCulture));
     }
 
     private static bool TryGetUnboundStringProperty(ComponentNode node, string key, out string value)
@@ -454,7 +491,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.AppendLine($"public const string BoomHudContractId = \"{EscapeString(contractId)}\";");
         cb.AppendLine($"public static readonly string[] BoomHudNormalizedPseudoNodes = {FormatStringArrayLiteral(normalizedPseudoNodes)};");
         cb.AppendLine();
-        
+
         // ViewModel field
         cb.AppendLine($"private I{document.Name}ViewModel? _viewModel;");
         cb.AppendLine();
@@ -466,7 +503,7 @@ public sealed class GodotGenerator : IBackendGenerator
         // We should generate fields for everything that had an original ID, using the NEW unique name.
         var componentFields = new List<(string OriginalId, string UniqueName, string Type)>();
         CollectComponentFields(document.Root, nodeNames, componentFields);
-        
+
         if (componentFields.Count > 0)
         {
             cb.AppendLine("// Control references");
@@ -565,10 +602,10 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.AppendLine();
         cb.AppendLine("private void BuildUi()");
         cb.OpenBlock();
-        
+
         // Root setup (this)
         GenerateRootSetup(cb, document.Root, nodeNames, diagnostics);
-        
+
         // Children setup
         // Note: For the root node, we are adding children to *this*
         GenerateChildrenSetup(cb, document.Root, "this", nodeNames, diagnostics, components);
@@ -599,7 +636,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.OpenBlock();
         cb.AppendLine("if (_viewModel == null) return;");
         cb.AppendLine();
-        
+
         var bindings = new List<(string PropertyName, List<BindingOp> Ops)>();
         CollectBindings(document.Root, nodeNames, bindings);
 
@@ -607,7 +644,7 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             cb.AppendLine("switch (e.PropertyName)");
             cb.OpenBlock();
-            
+
             foreach (var group in bindings)
             {
                 cb.AppendLine($"case \"{group.PropertyName}\":");
@@ -619,7 +656,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 cb.AppendLine("break;");
                 cb.Outdent();
             }
-            
+
             cb.CloseBlock();
         }
 
@@ -631,7 +668,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.OpenBlock();
         cb.AppendLine("if (_viewModel == null) return;");
         cb.AppendLine();
-        
+
         foreach (var group in bindings)
         {
             foreach (var op in group.Ops)
@@ -688,13 +725,13 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.AppendLine();
         cb.AppendLine("private void ApplyVmProperty(string path, System.Text.Json.JsonElement value)");
         cb.OpenBlock();
-        
+
         if (bindings.Count > 0)
         {
             cb.AppendLine("// Map VM property paths to control updates");
             cb.AppendLine("switch (path)");
             cb.OpenBlock();
-            
+
             // Group bindings by their full path (including nested like "Debug.Enabled")
             var pathBindings = new Dictionary<string, List<BindingOp>>();
             foreach (var group in bindings)
@@ -710,7 +747,7 @@ public sealed class GodotGenerator : IBackendGenerator
                     pathBindings[key].Add(op);
                 }
             }
-            
+
             foreach (var (path, ops) in pathBindings)
             {
                 cb.AppendLine($"case \"{path}\":");
@@ -722,7 +759,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 cb.AppendLine("break;");
                 cb.Outdent();
             }
-            
+
             cb.CloseBlock();
         }
         else
@@ -732,7 +769,7 @@ public sealed class GodotGenerator : IBackendGenerator
         }
 
         cb.CloseBlock();
-        
+
         // Public accessors
         if (componentFields.Count > 0)
         {
@@ -757,7 +794,7 @@ public sealed class GodotGenerator : IBackendGenerator
     {
         // Generate code to assign a JsonElement value to a control property
         var targetProp = op.TargetProperty;
-        
+
         switch (targetProp)
         {
             case "Text":
@@ -798,7 +835,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 // Use type name as fallback
                 baseName = MapComponentType(node.Type);
             }
-            
+
             baseName = ToCamelCase(SanitizeIdentifier(baseName)); // Ensure valid identifier start
 
             var candidate = baseName;
@@ -846,7 +883,7 @@ public sealed class GodotGenerator : IBackendGenerator
     private static void GenerateChildrenSetup(CodeBuilder cb, ComponentNode parentNode, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, IReadOnlyDictionary<string, HudComponentDefinition> components)
     {
         var parentLayoutType = parentNode.Layout?.Type ?? LayoutType.Vertical; // Default logic
-        
+
         foreach (var child in parentNode.Children)
         {
             GenerateChildComponent(cb, child, parentVar, nodeNames, diagnostics, parentLayoutType, components);
@@ -923,10 +960,10 @@ public sealed class GodotGenerator : IBackendGenerator
             {
                 text = s;
             }
-            
+
             // Use a stable ID if possible, otherwise random is risky for regeneration but okay for runtime init
             var itemId = node.Id?.GetHashCode() ?? Guid.NewGuid().GetHashCode();
-            
+
             cb.AppendLine($"{parentVar}.AddItem(\"{text}\", (int){itemId});");
             return;
         }
@@ -943,7 +980,7 @@ public sealed class GodotGenerator : IBackendGenerator
 
         if (!nodeNames.TryGetValue(node, out var uniqueName))
         {
-             uniqueName = $"c{Guid.NewGuid():N}".Substring(0, 8);
+            uniqueName = $"c{Guid.NewGuid():N}".Substring(0, 8);
         }
 
         var isField = node.Id != null;
@@ -958,18 +995,18 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             cb.AppendLine($"var {varName} = new {typeName}();");
         }
-        
+
         cb.AppendLine($"{varName}.Name = \"{node.SlotKey ?? node.Id ?? typeName}\";");
 
         // Layout
         GenerateLayoutSetup(cb, node.Layout, varName, parentLayoutType);
-        
+
         // Style
         GenerateStyleSetup(cb, node.Style, varName);
-        
+
         // Properties
         GenerateComponentProperties(cb, node, varName, isRoot: false);
-        
+
         // Add to parent
         cb.AppendLine($"{parentVar}.AddChild({varName});");
 
@@ -1028,7 +1065,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.OpenBlock();
         cb.AppendLine("var d = new CompositeDisposable();");
         cb.AppendLine("root.SetViewModel(vm);");
-        cb.AppendLine("d.Add(new DisposableAction(() => root.SetViewModel(null)));" );
+        cb.AppendLine("d.Add(new DisposableAction(() => root.SetViewModel(null)));");
 
         var nodeNames = AssignUniqueNames(document.Root);
         var childInstances = new List<(ComponentNode Node, HudComponentDefinition Def)>();
@@ -1046,7 +1083,7 @@ public sealed class GodotGenerator : IBackendGenerator
         }
 
         cb.AppendLine();
-        cb.AppendLine("return d;" );
+        cb.AppendLine("return d;");
         cb.CloseBlock();
 
         cb.CloseBlock();
@@ -1158,11 +1195,21 @@ public sealed class GodotGenerator : IBackendGenerator
     private static void GenerateLayoutSetup(CodeBuilder cb, LayoutSpec? layout, string varName, LayoutType? parentLayoutType)
     {
         if (layout == null) return;
+        var isAbsoluteLayout = layout.Type == LayoutType.Absolute;
 
         // Godot sizing logic:
         // SizeFlags: Used inside Containers (VBox, HBox, Grid)
         // Anchors/Offsets: Used inside Control (Absolute, Dock)
-        
+
+        if (isAbsoluteLayout)
+        {
+            cb.AppendLine($"if ((object){varName} is Control c)");
+            cb.OpenBlock();
+            AppendAbsoluteOffset(cb, "c", layout.Left, "AnchorLeft", "OffsetLeft");
+            AppendAbsoluteOffset(cb, "c", layout.Top, "AnchorTop", "OffsetTop");
+            cb.CloseBlock();
+        }
+
         // 1. Min/Custom Size + 2. Size Flags (Control-only properties)
         var needsControlLayout =
             (layout.Width != null && layout.Width.Value.Unit == DimensionUnit.Pixels)
@@ -1227,12 +1274,12 @@ public sealed class GodotGenerator : IBackendGenerator
         if (layout.Gap != null)
         {
             var gap = (int)layout.Gap.Value.Top; // Simplify to uniform/primary axis for now
-            // We need to check if 'varName' is actually a BoxContainer or GridContainer
-            // Since we don't have the type info easily here without casting, we can try adding an override or setting property if we know the type.
-            // But MapComponentType/GetContainerType is string-based.
-            // Use 'AddThemeConstantOverride' which works on any Control, though it only affects Containers if they look for it.
-            // VBox/HBox look for "separation", Grid looks for "h_separation"/"v_separation".
-            
+                                                 // We need to check if 'varName' is actually a BoxContainer or GridContainer
+                                                 // Since we don't have the type info easily here without casting, we can try adding an override or setting property if we know the type.
+                                                 // But MapComponentType/GetContainerType is string-based.
+                                                 // Use 'AddThemeConstantOverride' which works on any Control, though it only affects Containers if they look for it.
+                                                 // VBox/HBox look for "separation", Grid looks for "h_separation"/"v_separation".
+
             cb.AppendLine($"{varName}.AddThemeConstantOverride(\"separation\", {gap});");
             cb.AppendLine($"{varName}.AddThemeConstantOverride(\"h_separation\", {gap});");
             cb.AppendLine($"{varName}.AddThemeConstantOverride(\"v_separation\", {gap});");
@@ -1255,6 +1302,31 @@ public sealed class GodotGenerator : IBackendGenerator
         }
     }
 
+    private static void AppendAbsoluteOffset(CodeBuilder cb, string controlName, Dimension? offset, string anchorProperty, string positionProperty)
+    {
+        if (offset == null)
+        {
+            cb.AppendLine($"{controlName}.{anchorProperty} = 0f;");
+            cb.AppendLine($"{controlName}.{positionProperty} = 0f;");
+            return;
+        }
+
+        switch (offset.Value.Unit)
+        {
+            case DimensionUnit.Percent:
+                cb.AppendLine($"{controlName}.{anchorProperty} = {(float)(offset.Value.Value / 100.0)}f;");
+                cb.AppendLine($"{controlName}.{positionProperty} = 0f;");
+                break;
+
+            case DimensionUnit.Pixels:
+            case DimensionUnit.Cells:
+            default:
+                cb.AppendLine($"{controlName}.{anchorProperty} = 0f;");
+                cb.AppendLine($"{controlName}.{positionProperty} = {(float)offset.Value.Value}f;");
+                break;
+        }
+    }
+
     private static void GenerateStyleSetup(CodeBuilder cb, StyleSpec? style, string varName)
     {
         if (style == null) return;
@@ -1263,7 +1335,7 @@ public sealed class GodotGenerator : IBackendGenerator
         if (style.Foreground != null)
         {
             var c = style.Foreground.Value;
-            cb.AppendLine($"{varName}.AddThemeColorOverride(\"font_color\", new Color({c.R/255f}f, {c.G/255f}f, {c.B/255f}f, {c.A/255f}f));");
+            cb.AppendLine($"{varName}.AddThemeColorOverride(\"font_color\", new Color({c.R / 255f}f, {c.G / 255f}f, {c.B / 255f}f, {c.A / 255f}f));");
         }
 
         // Background - Tricky, usually requires a StyleBox.
@@ -1289,7 +1361,7 @@ public sealed class GodotGenerator : IBackendGenerator
         }
         else if (node.Properties.TryGetValue("value", out var valueProp) && !valueProp.IsBound)
         {
-             // Fallback for Label/Button
+            // Fallback for Label/Button
             cb.AppendLine($"{varName}.Set(\"text\", \"{EscapeString(valueProp.Value?.ToString() ?? "")}\");");
         }
 
@@ -1311,16 +1383,16 @@ public sealed class GodotGenerator : IBackendGenerator
     private static void GenerateBindingAssignment(CodeBuilder cb, BindingOp op)
     {
         var valueExpr = $"_viewModel.{op.ViewModelProperty}";
-        
+
         // Format
         if (!string.IsNullOrEmpty(op.Format))
         {
             valueExpr = $"string.Format(\"{EscapeString(op.Format)}\", {valueExpr})";
         }
-        else 
+        else
         {
-             // Basic ToString handling
-             valueExpr = $"Convert.ToString({valueExpr}) ?? \"\"";
+            // Basic ToString handling
+            valueExpr = $"Convert.ToString({valueExpr}) ?? \"\"";
         }
 
         var targetProp = op.TargetProperty.ToLowerInvariant();
@@ -1331,24 +1403,24 @@ public sealed class GodotGenerator : IBackendGenerator
         }
         else if (targetProp == "visible")
         {
-             // bool conversion
-             cb.AppendLine($"{op.ControlName}.Visible = Convert.ToBoolean(_viewModel.{op.ViewModelProperty});");
+            // bool conversion
+            cb.AppendLine($"{op.ControlName}.Visible = Convert.ToBoolean(_viewModel.{op.ViewModelProperty});");
         }
         else if (targetProp == "enabled")
         {
-             // disabled = !enabled
-             cb.AppendLine($"{op.ControlName}.Set(\"disabled\", !Convert.ToBoolean(_viewModel.{op.ViewModelProperty}));");
+            // disabled = !enabled
+            cb.AppendLine($"{op.ControlName}.Set(\"disabled\", !Convert.ToBoolean(_viewModel.{op.ViewModelProperty}));");
         }
         else if (targetProp == "value")
         {
-             // For Range-based controls (ProgressBar, Slider)
-             // Ensure double conversion
-             cb.AppendLine($"{op.ControlName}.Value = Convert.ToDouble(_viewModel.{op.ViewModelProperty});");
+            // For Range-based controls (ProgressBar, Slider)
+            // Ensure double conversion
+            cb.AppendLine($"{op.ControlName}.Value = Convert.ToDouble(_viewModel.{op.ViewModelProperty});");
         }
         else if (targetProp == "checked")
         {
-             // For CheckBox/BaseButton
-             cb.AppendLine($"{op.ControlName}.ButtonPressed = Convert.ToBoolean(_viewModel.{op.ViewModelProperty});");
+            // For CheckBox/BaseButton
+            cb.AppendLine($"{op.ControlName}.ButtonPressed = Convert.ToBoolean(_viewModel.{op.ViewModelProperty});");
         }
         // Add more property mappings as needed
     }
@@ -1360,7 +1432,7 @@ public sealed class GodotGenerator : IBackendGenerator
             var type = MapComponentType(node.Type);
             if (node.Type == ComponentType.Container)
                 type = GetContainerType(node.Layout?.Type ?? LayoutType.Vertical);
-                
+
             fields.Add((node.Id, uniqueName, type));
         }
         foreach (var child in node.Children) CollectComponentFields(child, nodeNames, fields);
@@ -1370,7 +1442,7 @@ public sealed class GodotGenerator : IBackendGenerator
     {
         // Recursively collect all bindings
         var nodeOps = new List<BindingOp>();
-        
+
         // Use the mapped unique variable name. If it wasn't a field, we still used a local var with the unique name.
         // Wait, binding updates need to access the control. If it's NOT a field, we can't update it from PropertyChanged handler!
         // So BOUND controls MUST be fields. 
@@ -1386,21 +1458,21 @@ public sealed class GodotGenerator : IBackendGenerator
         // So node.Id is essentially never null coming from Figma.
         // So EVERY node becomes a field? That's a lot of fields.
         // But `SanitizeId` returns camelCase.
-        
+
         // `nodeNames.TryGetValue(node, out var varName)` should succeed for all nodes.
         // But we need to use `_varName` convention if it's a field.
-        
+
         // If `node.Id` is not null, it is a field `_uniqueName`.
-        
+
         var isField = node.Id != null;
         string? varName = null;
-        
+
         if (isField && nodeNames.TryGetValue(node, out var uniqueName))
         {
             varName = $"_{uniqueName}";
         }
 
-        if (varName == null) 
+        if (varName == null)
         {
             // If we can't target it as a field, we can't bind it.
             // But as established, FigmaParser ensures IDs.
@@ -1409,8 +1481,8 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             foreach (var b in node.Bindings)
             {
-                 var member = !string.IsNullOrWhiteSpace(b.Key) ? b.Key! : b.Path;
-                 nodeOps.Add(new BindingOp { ControlName = varName, TargetProperty = b.Property, ViewModelProperty = member.Replace(".", ""), Format = b.Format });
+                var member = !string.IsNullOrWhiteSpace(b.Key) ? b.Key! : b.Path;
+                nodeOps.Add(new BindingOp { ControlName = varName, TargetProperty = b.Property, ViewModelProperty = member.Replace(".", ""), Format = b.Format });
             }
         }
 
@@ -1446,7 +1518,7 @@ public sealed class GodotGenerator : IBackendGenerator
         ComponentType.Checkbox => "CheckBox",
         ComponentType.ProgressBar => "ProgressBar",
         ComponentType.Slider => "HSlider", // or VSlider based on layout
-        ComponentType.Icon => "Label", 
+        ComponentType.Icon => "Label",
         ComponentType.Badge => "Label",
         ComponentType.Image => "TextureRect",
         ComponentType.MenuBar => "MenuBar",
@@ -1502,7 +1574,7 @@ public sealed class GodotGenerator : IBackendGenerator
         var cb = new CodeBuilder();
 
         var viewModelNamespace = options.ViewModelNamespace ?? options.Namespace;
-        
+
         if (options.IncludeComments)
         {
             cb.AppendLine("// <auto-generated>");
@@ -1521,7 +1593,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.AppendLine();
         cb.AppendLine("using System.ComponentModel;");
         cb.AppendLine();
-        
+
         if (options.IncludeComments)
         {
             cb.AppendLine("/// <summary>");
@@ -1531,17 +1603,17 @@ public sealed class GodotGenerator : IBackendGenerator
 
         cb.AppendLine($"public interface I{document.Name}ViewModel : INotifyPropertyChanged");
         cb.OpenBlock();
-        
+
         // Collect all binding paths
         var bindingPaths = new HashSet<string>();
         CollectBindingPaths(document.Root, bindingPaths);
-        
+
         foreach (var path in bindingPaths.OrderBy(p => p))
         {
             var propertyName = path.Replace(".", "");
             cb.AppendLine($"object? {propertyName} {{ get; }}");
         }
-        
+
         cb.CloseBlock();
         return cb.ToString();
     }

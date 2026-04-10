@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bf7a0e3098f1445bcd963714ac5c84, type: 3}
+  m_Name: Flexible Image
+  m_EditorClassIdentifier: DA_Assets.DM::DA_Assets.DM.DependencyItem
+  TypeAndAssembly: JeffGrawAssets.FlexibleUI.FlexibleImage, JeffGrawAssets.FlexibleUI.Runtime
+  ScriptingDefineSymbol: FLEXIBLE_IMAGE_EXISTS
+  ExpectedPaths: []
+  UnexpectedPaths: []
+  DependentAsmdefAssets: []
+  GeneratedAsmdefName: 
+  GeneratedAsmdefReferences: []
+  GeneratedEditorAsmdefName: 
+  GeneratedEditorAsmdefReferences: []
+  RequiredAsmdefs:
+  - {fileID: 5897886265953266890, guid: c0e37c852e10dfe468c75334a7f08d3a, type: 3}
+  - {fileID: 5897886265953266890, guid: 619127109c1702d449ef506056349973, type: 3}
+  isEnabled: 0
+  scriptGuid: 
+  statusLabel: Not found
+  disabledManually: 0

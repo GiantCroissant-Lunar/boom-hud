@@ -152,127 +152,127 @@ public sealed class ExploreHudView
     public VisualElement PartyList { get; }
     public VisualElement Row1 { get; }
     public VisualElement Char1 { get; }
-    public VisualElement Face { get; }
-    public Label ClassIcon { get; }
-    public Label C1name { get; }
-    public VisualElement Hp { get; }
-    public VisualElement HpFill { get; }
-    public VisualElement Mp { get; }
-    public VisualElement MpFill { get; }
-    public VisualElement Stats { get; }
-    public Label Stat1 { get; }
-    public Label Stat2 { get; }
-    public VisualElement ActionGrid { get; }
-    public VisualElement Atk { get; }
-    public Label QEpO3 { get; }
-    public VisualElement Mag { get; }
-    public Label AIphN { get; }
-    public VisualElement Def { get; }
-    public Label E4QKZ { get; }
-    public VisualElement Item { get; }
-    public Label DVzX7 { get; }
+    public VisualElement Char1Face { get; }
+    public Label Char1FaceClassIcon { get; }
+    public Label Char1C1name { get; }
+    public VisualElement Char1Hp { get; }
+    public VisualElement Char1HpHpFill { get; }
+    public VisualElement Char1Mp { get; }
+    public VisualElement Char1MpMpFill { get; }
+    public VisualElement Char1Stats { get; }
+    public Label Char1StatsStat1 { get; }
+    public Label Char1StatsStat2 { get; }
+    public VisualElement Char1ActionGrid { get; }
+    public VisualElement Char1ActionGridAtk { get; }
+    public Label Char1ActionGridAtkQEpO3 { get; }
+    public VisualElement Char1ActionGridMag { get; }
+    public Label Char1ActionGridMagAIphN { get; }
+    public VisualElement Char1ActionGridDef { get; }
+    public Label Char1ActionGridDefE4QKZ { get; }
+    public VisualElement Char1ActionGridItem { get; }
+    public Label Char1ActionGridItemDVzX7 { get; }
     public VisualElement Char2 { get; }
-    public VisualElement Face2 { get; }
-    public Label ClassIcon2 { get; }
-    public Label C2name { get; }
-    public VisualElement Hp2 { get; }
-    public VisualElement HpFill2 { get; }
-    public VisualElement Mp2 { get; }
-    public VisualElement MpFill2 { get; }
-    public VisualElement Stats2 { get; }
-    public Label Stat12 { get; }
-    public Label Stat22 { get; }
-    public VisualElement ActionGrid2 { get; }
-    public VisualElement Atk2 { get; }
-    public Label QEpO32 { get; }
-    public VisualElement Mag2 { get; }
-    public Label AIphN2 { get; }
-    public VisualElement Def2 { get; }
-    public Label E4QKZ2 { get; }
-    public VisualElement Item2 { get; }
-    public Label DVzX72 { get; }
+    public VisualElement Char2Face { get; }
+    public Label Char2FaceClassIcon { get; }
+    public Label Char2C2name { get; }
+    public VisualElement Char2Hp { get; }
+    public VisualElement Char2HpHpFill { get; }
+    public VisualElement Char2Mp { get; }
+    public VisualElement Char2MpMpFill { get; }
+    public VisualElement Char2Stats { get; }
+    public Label Char2StatsStat1 { get; }
+    public Label Char2StatsStat2 { get; }
+    public VisualElement Char2ActionGrid { get; }
+    public VisualElement Char2ActionGridAtk { get; }
+    public Label Char2ActionGridAtkQEpO3 { get; }
+    public VisualElement Char2ActionGridMag { get; }
+    public Label Char2ActionGridMagAIphN { get; }
+    public VisualElement Char2ActionGridDef { get; }
+    public Label Char2ActionGridDefE4QKZ { get; }
+    public VisualElement Char2ActionGridItem { get; }
+    public Label Char2ActionGridItemDVzX7 { get; }
     public VisualElement Row2 { get; }
     public VisualElement Char3 { get; }
-    public VisualElement Face3 { get; }
-    public Label ClassIcon3 { get; }
-    public Label C3name { get; }
-    public VisualElement Hp3 { get; }
-    public VisualElement HpFill3 { get; }
-    public VisualElement Mp3 { get; }
-    public VisualElement MpFill3 { get; }
-    public VisualElement Stats3 { get; }
-    public Label Stat13 { get; }
-    public Label Stat23 { get; }
-    public VisualElement ActionGrid3 { get; }
-    public VisualElement Atk3 { get; }
-    public Label QEpO33 { get; }
-    public VisualElement Mag3 { get; }
-    public Label AIphN3 { get; }
-    public VisualElement Def3 { get; }
-    public Label E4QKZ3 { get; }
-    public VisualElement Item3 { get; }
-    public Label DVzX73 { get; }
+    public VisualElement Char3Face { get; }
+    public Label Char3FaceClassIcon { get; }
+    public Label Char3C3name { get; }
+    public VisualElement Char3Hp { get; }
+    public VisualElement Char3HpHpFill { get; }
+    public VisualElement Char3Mp { get; }
+    public VisualElement Char3MpMpFill { get; }
+    public VisualElement Char3Stats { get; }
+    public Label Char3StatsStat1 { get; }
+    public Label Char3StatsStat2 { get; }
+    public VisualElement Char3ActionGrid { get; }
+    public VisualElement Char3ActionGridAtk { get; }
+    public Label Char3ActionGridAtkQEpO3 { get; }
+    public VisualElement Char3ActionGridMag { get; }
+    public Label Char3ActionGridMagAIphN { get; }
+    public VisualElement Char3ActionGridDef { get; }
+    public Label Char3ActionGridDefE4QKZ { get; }
+    public VisualElement Char3ActionGridItem { get; }
+    public Label Char3ActionGridItemDVzX7 { get; }
     public VisualElement Char4 { get; }
-    public VisualElement Face4 { get; }
-    public Label ClassIcon4 { get; }
-    public Label C4name { get; }
-    public VisualElement Hp4 { get; }
-    public VisualElement HpFill4 { get; }
-    public VisualElement Mp4 { get; }
-    public VisualElement MpFill4 { get; }
-    public VisualElement Stats4 { get; }
-    public Label Stat14 { get; }
-    public Label Stat24 { get; }
-    public VisualElement ActionGrid4 { get; }
-    public VisualElement Atk4 { get; }
-    public Label QEpO34 { get; }
-    public VisualElement Mag4 { get; }
-    public Label AIphN4 { get; }
-    public VisualElement Def4 { get; }
-    public Label E4QKZ4 { get; }
-    public VisualElement Item4 { get; }
-    public Label DVzX74 { get; }
+    public VisualElement Char4Face { get; }
+    public Label Char4FaceClassIcon { get; }
+    public Label Char4C4name { get; }
+    public VisualElement Char4Hp { get; }
+    public VisualElement Char4HpHpFill { get; }
+    public VisualElement Char4Mp { get; }
+    public VisualElement Char4MpMpFill { get; }
+    public VisualElement Char4Stats { get; }
+    public Label Char4StatsStat1 { get; }
+    public Label Char4StatsStat2 { get; }
+    public VisualElement Char4ActionGrid { get; }
+    public VisualElement Char4ActionGridAtk { get; }
+    public Label Char4ActionGridAtkQEpO3 { get; }
+    public VisualElement Char4ActionGridMag { get; }
+    public Label Char4ActionGridMagAIphN { get; }
+    public VisualElement Char4ActionGridDef { get; }
+    public Label Char4ActionGridDefE4QKZ { get; }
+    public VisualElement Char4ActionGridItem { get; }
+    public Label Char4ActionGridItemDVzX7 { get; }
     public VisualElement Row3 { get; }
     public VisualElement Char5 { get; }
-    public VisualElement Face5 { get; }
-    public Label ClassIcon5 { get; }
-    public Label C5name { get; }
-    public VisualElement Hp5 { get; }
-    public VisualElement HpFill5 { get; }
-    public VisualElement Mp5 { get; }
-    public VisualElement MpFill5 { get; }
-    public VisualElement Stats5 { get; }
-    public Label Stat15 { get; }
-    public Label Stat25 { get; }
-    public VisualElement ActionGrid5 { get; }
-    public VisualElement Atk5 { get; }
-    public Label QEpO35 { get; }
-    public VisualElement Mag5 { get; }
-    public Label AIphN5 { get; }
-    public VisualElement Def5 { get; }
-    public Label E4QKZ5 { get; }
-    public VisualElement Item5 { get; }
-    public Label DVzX75 { get; }
+    public VisualElement Char5Face { get; }
+    public Label Char5FaceClassIcon { get; }
+    public Label Char5C5name { get; }
+    public VisualElement Char5Hp { get; }
+    public VisualElement Char5HpHpFill { get; }
+    public VisualElement Char5Mp { get; }
+    public VisualElement Char5MpMpFill { get; }
+    public VisualElement Char5Stats { get; }
+    public Label Char5StatsStat1 { get; }
+    public Label Char5StatsStat2 { get; }
+    public VisualElement Char5ActionGrid { get; }
+    public VisualElement Char5ActionGridAtk { get; }
+    public Label Char5ActionGridAtkQEpO3 { get; }
+    public VisualElement Char5ActionGridMag { get; }
+    public Label Char5ActionGridMagAIphN { get; }
+    public VisualElement Char5ActionGridDef { get; }
+    public Label Char5ActionGridDefE4QKZ { get; }
+    public VisualElement Char5ActionGridItem { get; }
+    public Label Char5ActionGridItemDVzX7 { get; }
     public VisualElement Char6 { get; }
-    public VisualElement Face6 { get; }
-    public Label ClassIcon6 { get; }
-    public Label C6name { get; }
-    public VisualElement Hp6 { get; }
-    public VisualElement HpFill6 { get; }
-    public VisualElement Mp6 { get; }
-    public VisualElement MpFill6 { get; }
-    public VisualElement Stats6 { get; }
-    public Label Stat16 { get; }
-    public Label Stat26 { get; }
-    public VisualElement ActionGrid6 { get; }
-    public VisualElement Atk6 { get; }
-    public Label QEpO36 { get; }
-    public VisualElement Mag6 { get; }
-    public Label AIphN6 { get; }
-    public VisualElement Def6 { get; }
-    public Label E4QKZ6 { get; }
-    public VisualElement Item6 { get; }
-    public Label DVzX76 { get; }
+    public VisualElement Char6Face { get; }
+    public Label Char6FaceClassIcon { get; }
+    public Label Char6C6name { get; }
+    public VisualElement Char6Hp { get; }
+    public VisualElement Char6HpHpFill { get; }
+    public VisualElement Char6Mp { get; }
+    public VisualElement Char6MpMpFill { get; }
+    public VisualElement Char6Stats { get; }
+    public Label Char6StatsStat1 { get; }
+    public Label Char6StatsStat2 { get; }
+    public VisualElement Char6ActionGrid { get; }
+    public VisualElement Char6ActionGridAtk { get; }
+    public Label Char6ActionGridAtkQEpO3 { get; }
+    public VisualElement Char6ActionGridMag { get; }
+    public Label Char6ActionGridMagAIphN { get; }
+    public VisualElement Char6ActionGridDef { get; }
+    public Label Char6ActionGridDefE4QKZ { get; }
+    public VisualElement Char6ActionGridItem { get; }
+    public Label Char6ActionGridItemDVzX7 { get; }
 
     public IExploreHudViewModel? ViewModel
     {
@@ -429,127 +429,127 @@ public sealed class ExploreHudView
         PartyList = Root.Q<VisualElement>("PartyList") ?? throw new InvalidOperationException("Could not find generated element 'PartyList'.");
         Row1 = Root.Q<VisualElement>("Row1") ?? throw new InvalidOperationException("Could not find generated element 'Row1'.");
         Char1 = Root.Q<VisualElement>("Char1") ?? throw new InvalidOperationException("Could not find generated element 'Char1'.");
-        Face = Root.Q<VisualElement>("Face") ?? throw new InvalidOperationException("Could not find generated element 'Face'.");
-        ClassIcon = Root.Q<Label>("ClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon'.");
-        C1name = Root.Q<Label>("C1name") ?? throw new InvalidOperationException("Could not find generated element 'C1name'.");
-        Hp = Root.Q<VisualElement>("Hp") ?? throw new InvalidOperationException("Could not find generated element 'Hp'.");
-        HpFill = Root.Q<VisualElement>("HpFill") ?? throw new InvalidOperationException("Could not find generated element 'HpFill'.");
-        Mp = Root.Q<VisualElement>("Mp") ?? throw new InvalidOperationException("Could not find generated element 'Mp'.");
-        MpFill = Root.Q<VisualElement>("MpFill") ?? throw new InvalidOperationException("Could not find generated element 'MpFill'.");
-        Stats = Root.Q<VisualElement>("Stats") ?? throw new InvalidOperationException("Could not find generated element 'Stats'.");
-        Stat1 = Root.Q<Label>("Stat1") ?? throw new InvalidOperationException("Could not find generated element 'Stat1'.");
-        Stat2 = Root.Q<Label>("Stat2") ?? throw new InvalidOperationException("Could not find generated element 'Stat2'.");
-        ActionGrid = Root.Q<VisualElement>("ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid'.");
-        Atk = Root.Q<VisualElement>("Atk") ?? throw new InvalidOperationException("Could not find generated element 'Atk'.");
-        QEpO3 = Root.Q<Label>("QEpO3") ?? throw new InvalidOperationException("Could not find generated element 'QEpO3'.");
-        Mag = Root.Q<VisualElement>("Mag") ?? throw new InvalidOperationException("Could not find generated element 'Mag'.");
-        AIphN = Root.Q<Label>("AIphN") ?? throw new InvalidOperationException("Could not find generated element 'AIphN'.");
-        Def = Root.Q<VisualElement>("Def") ?? throw new InvalidOperationException("Could not find generated element 'Def'.");
-        E4QKZ = Root.Q<Label>("E4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ'.");
-        Item = Root.Q<VisualElement>("Item") ?? throw new InvalidOperationException("Could not find generated element 'Item'.");
-        DVzX7 = Root.Q<Label>("DVzX7") ?? throw new InvalidOperationException("Could not find generated element 'DVzX7'.");
+        Char1Face = Root.Q<VisualElement>("Char1Face") ?? throw new InvalidOperationException("Could not find generated element 'Char1Face'.");
+        Char1FaceClassIcon = Root.Q<Label>("Char1FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char1FaceClassIcon'.");
+        Char1C1name = Root.Q<Label>("Char1C1name") ?? throw new InvalidOperationException("Could not find generated element 'Char1C1name'.");
+        Char1Hp = Root.Q<VisualElement>("Char1Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char1Hp'.");
+        Char1HpHpFill = Root.Q<VisualElement>("Char1HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char1HpHpFill'.");
+        Char1Mp = Root.Q<VisualElement>("Char1Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char1Mp'.");
+        Char1MpMpFill = Root.Q<VisualElement>("Char1MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char1MpMpFill'.");
+        Char1Stats = Root.Q<VisualElement>("Char1Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char1Stats'.");
+        Char1StatsStat1 = Root.Q<Label>("Char1StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char1StatsStat1'.");
+        Char1StatsStat2 = Root.Q<Label>("Char1StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char1StatsStat2'.");
+        Char1ActionGrid = Root.Q<VisualElement>("Char1ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGrid'.");
+        Char1ActionGridAtk = Root.Q<VisualElement>("Char1ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridAtk'.");
+        Char1ActionGridAtkQEpO3 = Root.Q<Label>("Char1ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridAtkQEpO3'.");
+        Char1ActionGridMag = Root.Q<VisualElement>("Char1ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridMag'.");
+        Char1ActionGridMagAIphN = Root.Q<Label>("Char1ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridMagAIphN'.");
+        Char1ActionGridDef = Root.Q<VisualElement>("Char1ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridDef'.");
+        Char1ActionGridDefE4QKZ = Root.Q<Label>("Char1ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridDefE4QKZ'.");
+        Char1ActionGridItem = Root.Q<VisualElement>("Char1ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridItem'.");
+        Char1ActionGridItemDVzX7 = Root.Q<Label>("Char1ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char1ActionGridItemDVzX7'.");
         Char2 = Root.Q<VisualElement>("Char2") ?? throw new InvalidOperationException("Could not find generated element 'Char2'.");
-        Face2 = Root.Q<VisualElement>("Face2") ?? throw new InvalidOperationException("Could not find generated element 'Face2'.");
-        ClassIcon2 = Root.Q<Label>("ClassIcon2") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon2'.");
-        C2name = Root.Q<Label>("C2name") ?? throw new InvalidOperationException("Could not find generated element 'C2name'.");
-        Hp2 = Root.Q<VisualElement>("Hp2") ?? throw new InvalidOperationException("Could not find generated element 'Hp2'.");
-        HpFill2 = Root.Q<VisualElement>("HpFill2") ?? throw new InvalidOperationException("Could not find generated element 'HpFill2'.");
-        Mp2 = Root.Q<VisualElement>("Mp2") ?? throw new InvalidOperationException("Could not find generated element 'Mp2'.");
-        MpFill2 = Root.Q<VisualElement>("MpFill2") ?? throw new InvalidOperationException("Could not find generated element 'MpFill2'.");
-        Stats2 = Root.Q<VisualElement>("Stats2") ?? throw new InvalidOperationException("Could not find generated element 'Stats2'.");
-        Stat12 = Root.Q<Label>("Stat12") ?? throw new InvalidOperationException("Could not find generated element 'Stat12'.");
-        Stat22 = Root.Q<Label>("Stat22") ?? throw new InvalidOperationException("Could not find generated element 'Stat22'.");
-        ActionGrid2 = Root.Q<VisualElement>("ActionGrid2") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid2'.");
-        Atk2 = Root.Q<VisualElement>("Atk2") ?? throw new InvalidOperationException("Could not find generated element 'Atk2'.");
-        QEpO32 = Root.Q<Label>("QEpO32") ?? throw new InvalidOperationException("Could not find generated element 'QEpO32'.");
-        Mag2 = Root.Q<VisualElement>("Mag2") ?? throw new InvalidOperationException("Could not find generated element 'Mag2'.");
-        AIphN2 = Root.Q<Label>("AIphN2") ?? throw new InvalidOperationException("Could not find generated element 'AIphN2'.");
-        Def2 = Root.Q<VisualElement>("Def2") ?? throw new InvalidOperationException("Could not find generated element 'Def2'.");
-        E4QKZ2 = Root.Q<Label>("E4QKZ2") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ2'.");
-        Item2 = Root.Q<VisualElement>("Item2") ?? throw new InvalidOperationException("Could not find generated element 'Item2'.");
-        DVzX72 = Root.Q<Label>("DVzX72") ?? throw new InvalidOperationException("Could not find generated element 'DVzX72'.");
+        Char2Face = Root.Q<VisualElement>("Char2Face") ?? throw new InvalidOperationException("Could not find generated element 'Char2Face'.");
+        Char2FaceClassIcon = Root.Q<Label>("Char2FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char2FaceClassIcon'.");
+        Char2C2name = Root.Q<Label>("Char2C2name") ?? throw new InvalidOperationException("Could not find generated element 'Char2C2name'.");
+        Char2Hp = Root.Q<VisualElement>("Char2Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char2Hp'.");
+        Char2HpHpFill = Root.Q<VisualElement>("Char2HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char2HpHpFill'.");
+        Char2Mp = Root.Q<VisualElement>("Char2Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char2Mp'.");
+        Char2MpMpFill = Root.Q<VisualElement>("Char2MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char2MpMpFill'.");
+        Char2Stats = Root.Q<VisualElement>("Char2Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char2Stats'.");
+        Char2StatsStat1 = Root.Q<Label>("Char2StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char2StatsStat1'.");
+        Char2StatsStat2 = Root.Q<Label>("Char2StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char2StatsStat2'.");
+        Char2ActionGrid = Root.Q<VisualElement>("Char2ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGrid'.");
+        Char2ActionGridAtk = Root.Q<VisualElement>("Char2ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridAtk'.");
+        Char2ActionGridAtkQEpO3 = Root.Q<Label>("Char2ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridAtkQEpO3'.");
+        Char2ActionGridMag = Root.Q<VisualElement>("Char2ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridMag'.");
+        Char2ActionGridMagAIphN = Root.Q<Label>("Char2ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridMagAIphN'.");
+        Char2ActionGridDef = Root.Q<VisualElement>("Char2ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridDef'.");
+        Char2ActionGridDefE4QKZ = Root.Q<Label>("Char2ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridDefE4QKZ'.");
+        Char2ActionGridItem = Root.Q<VisualElement>("Char2ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridItem'.");
+        Char2ActionGridItemDVzX7 = Root.Q<Label>("Char2ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char2ActionGridItemDVzX7'.");
         Row2 = Root.Q<VisualElement>("Row2") ?? throw new InvalidOperationException("Could not find generated element 'Row2'.");
         Char3 = Root.Q<VisualElement>("Char3") ?? throw new InvalidOperationException("Could not find generated element 'Char3'.");
-        Face3 = Root.Q<VisualElement>("Face3") ?? throw new InvalidOperationException("Could not find generated element 'Face3'.");
-        ClassIcon3 = Root.Q<Label>("ClassIcon3") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon3'.");
-        C3name = Root.Q<Label>("C3name") ?? throw new InvalidOperationException("Could not find generated element 'C3name'.");
-        Hp3 = Root.Q<VisualElement>("Hp3") ?? throw new InvalidOperationException("Could not find generated element 'Hp3'.");
-        HpFill3 = Root.Q<VisualElement>("HpFill3") ?? throw new InvalidOperationException("Could not find generated element 'HpFill3'.");
-        Mp3 = Root.Q<VisualElement>("Mp3") ?? throw new InvalidOperationException("Could not find generated element 'Mp3'.");
-        MpFill3 = Root.Q<VisualElement>("MpFill3") ?? throw new InvalidOperationException("Could not find generated element 'MpFill3'.");
-        Stats3 = Root.Q<VisualElement>("Stats3") ?? throw new InvalidOperationException("Could not find generated element 'Stats3'.");
-        Stat13 = Root.Q<Label>("Stat13") ?? throw new InvalidOperationException("Could not find generated element 'Stat13'.");
-        Stat23 = Root.Q<Label>("Stat23") ?? throw new InvalidOperationException("Could not find generated element 'Stat23'.");
-        ActionGrid3 = Root.Q<VisualElement>("ActionGrid3") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid3'.");
-        Atk3 = Root.Q<VisualElement>("Atk3") ?? throw new InvalidOperationException("Could not find generated element 'Atk3'.");
-        QEpO33 = Root.Q<Label>("QEpO33") ?? throw new InvalidOperationException("Could not find generated element 'QEpO33'.");
-        Mag3 = Root.Q<VisualElement>("Mag3") ?? throw new InvalidOperationException("Could not find generated element 'Mag3'.");
-        AIphN3 = Root.Q<Label>("AIphN3") ?? throw new InvalidOperationException("Could not find generated element 'AIphN3'.");
-        Def3 = Root.Q<VisualElement>("Def3") ?? throw new InvalidOperationException("Could not find generated element 'Def3'.");
-        E4QKZ3 = Root.Q<Label>("E4QKZ3") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ3'.");
-        Item3 = Root.Q<VisualElement>("Item3") ?? throw new InvalidOperationException("Could not find generated element 'Item3'.");
-        DVzX73 = Root.Q<Label>("DVzX73") ?? throw new InvalidOperationException("Could not find generated element 'DVzX73'.");
+        Char3Face = Root.Q<VisualElement>("Char3Face") ?? throw new InvalidOperationException("Could not find generated element 'Char3Face'.");
+        Char3FaceClassIcon = Root.Q<Label>("Char3FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char3FaceClassIcon'.");
+        Char3C3name = Root.Q<Label>("Char3C3name") ?? throw new InvalidOperationException("Could not find generated element 'Char3C3name'.");
+        Char3Hp = Root.Q<VisualElement>("Char3Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char3Hp'.");
+        Char3HpHpFill = Root.Q<VisualElement>("Char3HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char3HpHpFill'.");
+        Char3Mp = Root.Q<VisualElement>("Char3Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char3Mp'.");
+        Char3MpMpFill = Root.Q<VisualElement>("Char3MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char3MpMpFill'.");
+        Char3Stats = Root.Q<VisualElement>("Char3Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char3Stats'.");
+        Char3StatsStat1 = Root.Q<Label>("Char3StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char3StatsStat1'.");
+        Char3StatsStat2 = Root.Q<Label>("Char3StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char3StatsStat2'.");
+        Char3ActionGrid = Root.Q<VisualElement>("Char3ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGrid'.");
+        Char3ActionGridAtk = Root.Q<VisualElement>("Char3ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridAtk'.");
+        Char3ActionGridAtkQEpO3 = Root.Q<Label>("Char3ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridAtkQEpO3'.");
+        Char3ActionGridMag = Root.Q<VisualElement>("Char3ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridMag'.");
+        Char3ActionGridMagAIphN = Root.Q<Label>("Char3ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridMagAIphN'.");
+        Char3ActionGridDef = Root.Q<VisualElement>("Char3ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridDef'.");
+        Char3ActionGridDefE4QKZ = Root.Q<Label>("Char3ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridDefE4QKZ'.");
+        Char3ActionGridItem = Root.Q<VisualElement>("Char3ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridItem'.");
+        Char3ActionGridItemDVzX7 = Root.Q<Label>("Char3ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char3ActionGridItemDVzX7'.");
         Char4 = Root.Q<VisualElement>("Char4") ?? throw new InvalidOperationException("Could not find generated element 'Char4'.");
-        Face4 = Root.Q<VisualElement>("Face4") ?? throw new InvalidOperationException("Could not find generated element 'Face4'.");
-        ClassIcon4 = Root.Q<Label>("ClassIcon4") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon4'.");
-        C4name = Root.Q<Label>("C4name") ?? throw new InvalidOperationException("Could not find generated element 'C4name'.");
-        Hp4 = Root.Q<VisualElement>("Hp4") ?? throw new InvalidOperationException("Could not find generated element 'Hp4'.");
-        HpFill4 = Root.Q<VisualElement>("HpFill4") ?? throw new InvalidOperationException("Could not find generated element 'HpFill4'.");
-        Mp4 = Root.Q<VisualElement>("Mp4") ?? throw new InvalidOperationException("Could not find generated element 'Mp4'.");
-        MpFill4 = Root.Q<VisualElement>("MpFill4") ?? throw new InvalidOperationException("Could not find generated element 'MpFill4'.");
-        Stats4 = Root.Q<VisualElement>("Stats4") ?? throw new InvalidOperationException("Could not find generated element 'Stats4'.");
-        Stat14 = Root.Q<Label>("Stat14") ?? throw new InvalidOperationException("Could not find generated element 'Stat14'.");
-        Stat24 = Root.Q<Label>("Stat24") ?? throw new InvalidOperationException("Could not find generated element 'Stat24'.");
-        ActionGrid4 = Root.Q<VisualElement>("ActionGrid4") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid4'.");
-        Atk4 = Root.Q<VisualElement>("Atk4") ?? throw new InvalidOperationException("Could not find generated element 'Atk4'.");
-        QEpO34 = Root.Q<Label>("QEpO34") ?? throw new InvalidOperationException("Could not find generated element 'QEpO34'.");
-        Mag4 = Root.Q<VisualElement>("Mag4") ?? throw new InvalidOperationException("Could not find generated element 'Mag4'.");
-        AIphN4 = Root.Q<Label>("AIphN4") ?? throw new InvalidOperationException("Could not find generated element 'AIphN4'.");
-        Def4 = Root.Q<VisualElement>("Def4") ?? throw new InvalidOperationException("Could not find generated element 'Def4'.");
-        E4QKZ4 = Root.Q<Label>("E4QKZ4") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ4'.");
-        Item4 = Root.Q<VisualElement>("Item4") ?? throw new InvalidOperationException("Could not find generated element 'Item4'.");
-        DVzX74 = Root.Q<Label>("DVzX74") ?? throw new InvalidOperationException("Could not find generated element 'DVzX74'.");
+        Char4Face = Root.Q<VisualElement>("Char4Face") ?? throw new InvalidOperationException("Could not find generated element 'Char4Face'.");
+        Char4FaceClassIcon = Root.Q<Label>("Char4FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char4FaceClassIcon'.");
+        Char4C4name = Root.Q<Label>("Char4C4name") ?? throw new InvalidOperationException("Could not find generated element 'Char4C4name'.");
+        Char4Hp = Root.Q<VisualElement>("Char4Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char4Hp'.");
+        Char4HpHpFill = Root.Q<VisualElement>("Char4HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char4HpHpFill'.");
+        Char4Mp = Root.Q<VisualElement>("Char4Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char4Mp'.");
+        Char4MpMpFill = Root.Q<VisualElement>("Char4MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char4MpMpFill'.");
+        Char4Stats = Root.Q<VisualElement>("Char4Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char4Stats'.");
+        Char4StatsStat1 = Root.Q<Label>("Char4StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char4StatsStat1'.");
+        Char4StatsStat2 = Root.Q<Label>("Char4StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char4StatsStat2'.");
+        Char4ActionGrid = Root.Q<VisualElement>("Char4ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGrid'.");
+        Char4ActionGridAtk = Root.Q<VisualElement>("Char4ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridAtk'.");
+        Char4ActionGridAtkQEpO3 = Root.Q<Label>("Char4ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridAtkQEpO3'.");
+        Char4ActionGridMag = Root.Q<VisualElement>("Char4ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridMag'.");
+        Char4ActionGridMagAIphN = Root.Q<Label>("Char4ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridMagAIphN'.");
+        Char4ActionGridDef = Root.Q<VisualElement>("Char4ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridDef'.");
+        Char4ActionGridDefE4QKZ = Root.Q<Label>("Char4ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridDefE4QKZ'.");
+        Char4ActionGridItem = Root.Q<VisualElement>("Char4ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridItem'.");
+        Char4ActionGridItemDVzX7 = Root.Q<Label>("Char4ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char4ActionGridItemDVzX7'.");
         Row3 = Root.Q<VisualElement>("Row3") ?? throw new InvalidOperationException("Could not find generated element 'Row3'.");
         Char5 = Root.Q<VisualElement>("Char5") ?? throw new InvalidOperationException("Could not find generated element 'Char5'.");
-        Face5 = Root.Q<VisualElement>("Face5") ?? throw new InvalidOperationException("Could not find generated element 'Face5'.");
-        ClassIcon5 = Root.Q<Label>("ClassIcon5") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon5'.");
-        C5name = Root.Q<Label>("C5name") ?? throw new InvalidOperationException("Could not find generated element 'C5name'.");
-        Hp5 = Root.Q<VisualElement>("Hp5") ?? throw new InvalidOperationException("Could not find generated element 'Hp5'.");
-        HpFill5 = Root.Q<VisualElement>("HpFill5") ?? throw new InvalidOperationException("Could not find generated element 'HpFill5'.");
-        Mp5 = Root.Q<VisualElement>("Mp5") ?? throw new InvalidOperationException("Could not find generated element 'Mp5'.");
-        MpFill5 = Root.Q<VisualElement>("MpFill5") ?? throw new InvalidOperationException("Could not find generated element 'MpFill5'.");
-        Stats5 = Root.Q<VisualElement>("Stats5") ?? throw new InvalidOperationException("Could not find generated element 'Stats5'.");
-        Stat15 = Root.Q<Label>("Stat15") ?? throw new InvalidOperationException("Could not find generated element 'Stat15'.");
-        Stat25 = Root.Q<Label>("Stat25") ?? throw new InvalidOperationException("Could not find generated element 'Stat25'.");
-        ActionGrid5 = Root.Q<VisualElement>("ActionGrid5") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid5'.");
-        Atk5 = Root.Q<VisualElement>("Atk5") ?? throw new InvalidOperationException("Could not find generated element 'Atk5'.");
-        QEpO35 = Root.Q<Label>("QEpO35") ?? throw new InvalidOperationException("Could not find generated element 'QEpO35'.");
-        Mag5 = Root.Q<VisualElement>("Mag5") ?? throw new InvalidOperationException("Could not find generated element 'Mag5'.");
-        AIphN5 = Root.Q<Label>("AIphN5") ?? throw new InvalidOperationException("Could not find generated element 'AIphN5'.");
-        Def5 = Root.Q<VisualElement>("Def5") ?? throw new InvalidOperationException("Could not find generated element 'Def5'.");
-        E4QKZ5 = Root.Q<Label>("E4QKZ5") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ5'.");
-        Item5 = Root.Q<VisualElement>("Item5") ?? throw new InvalidOperationException("Could not find generated element 'Item5'.");
-        DVzX75 = Root.Q<Label>("DVzX75") ?? throw new InvalidOperationException("Could not find generated element 'DVzX75'.");
+        Char5Face = Root.Q<VisualElement>("Char5Face") ?? throw new InvalidOperationException("Could not find generated element 'Char5Face'.");
+        Char5FaceClassIcon = Root.Q<Label>("Char5FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char5FaceClassIcon'.");
+        Char5C5name = Root.Q<Label>("Char5C5name") ?? throw new InvalidOperationException("Could not find generated element 'Char5C5name'.");
+        Char5Hp = Root.Q<VisualElement>("Char5Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char5Hp'.");
+        Char5HpHpFill = Root.Q<VisualElement>("Char5HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char5HpHpFill'.");
+        Char5Mp = Root.Q<VisualElement>("Char5Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char5Mp'.");
+        Char5MpMpFill = Root.Q<VisualElement>("Char5MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char5MpMpFill'.");
+        Char5Stats = Root.Q<VisualElement>("Char5Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char5Stats'.");
+        Char5StatsStat1 = Root.Q<Label>("Char5StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char5StatsStat1'.");
+        Char5StatsStat2 = Root.Q<Label>("Char5StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char5StatsStat2'.");
+        Char5ActionGrid = Root.Q<VisualElement>("Char5ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGrid'.");
+        Char5ActionGridAtk = Root.Q<VisualElement>("Char5ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridAtk'.");
+        Char5ActionGridAtkQEpO3 = Root.Q<Label>("Char5ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridAtkQEpO3'.");
+        Char5ActionGridMag = Root.Q<VisualElement>("Char5ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridMag'.");
+        Char5ActionGridMagAIphN = Root.Q<Label>("Char5ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridMagAIphN'.");
+        Char5ActionGridDef = Root.Q<VisualElement>("Char5ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridDef'.");
+        Char5ActionGridDefE4QKZ = Root.Q<Label>("Char5ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridDefE4QKZ'.");
+        Char5ActionGridItem = Root.Q<VisualElement>("Char5ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridItem'.");
+        Char5ActionGridItemDVzX7 = Root.Q<Label>("Char5ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char5ActionGridItemDVzX7'.");
         Char6 = Root.Q<VisualElement>("Char6") ?? throw new InvalidOperationException("Could not find generated element 'Char6'.");
-        Face6 = Root.Q<VisualElement>("Face6") ?? throw new InvalidOperationException("Could not find generated element 'Face6'.");
-        ClassIcon6 = Root.Q<Label>("ClassIcon6") ?? throw new InvalidOperationException("Could not find generated element 'ClassIcon6'.");
-        C6name = Root.Q<Label>("C6name") ?? throw new InvalidOperationException("Could not find generated element 'C6name'.");
-        Hp6 = Root.Q<VisualElement>("Hp6") ?? throw new InvalidOperationException("Could not find generated element 'Hp6'.");
-        HpFill6 = Root.Q<VisualElement>("HpFill6") ?? throw new InvalidOperationException("Could not find generated element 'HpFill6'.");
-        Mp6 = Root.Q<VisualElement>("Mp6") ?? throw new InvalidOperationException("Could not find generated element 'Mp6'.");
-        MpFill6 = Root.Q<VisualElement>("MpFill6") ?? throw new InvalidOperationException("Could not find generated element 'MpFill6'.");
-        Stats6 = Root.Q<VisualElement>("Stats6") ?? throw new InvalidOperationException("Could not find generated element 'Stats6'.");
-        Stat16 = Root.Q<Label>("Stat16") ?? throw new InvalidOperationException("Could not find generated element 'Stat16'.");
-        Stat26 = Root.Q<Label>("Stat26") ?? throw new InvalidOperationException("Could not find generated element 'Stat26'.");
-        ActionGrid6 = Root.Q<VisualElement>("ActionGrid6") ?? throw new InvalidOperationException("Could not find generated element 'ActionGrid6'.");
-        Atk6 = Root.Q<VisualElement>("Atk6") ?? throw new InvalidOperationException("Could not find generated element 'Atk6'.");
-        QEpO36 = Root.Q<Label>("QEpO36") ?? throw new InvalidOperationException("Could not find generated element 'QEpO36'.");
-        Mag6 = Root.Q<VisualElement>("Mag6") ?? throw new InvalidOperationException("Could not find generated element 'Mag6'.");
-        AIphN6 = Root.Q<Label>("AIphN6") ?? throw new InvalidOperationException("Could not find generated element 'AIphN6'.");
-        Def6 = Root.Q<VisualElement>("Def6") ?? throw new InvalidOperationException("Could not find generated element 'Def6'.");
-        E4QKZ6 = Root.Q<Label>("E4QKZ6") ?? throw new InvalidOperationException("Could not find generated element 'E4QKZ6'.");
-        Item6 = Root.Q<VisualElement>("Item6") ?? throw new InvalidOperationException("Could not find generated element 'Item6'.");
-        DVzX76 = Root.Q<Label>("DVzX76") ?? throw new InvalidOperationException("Could not find generated element 'DVzX76'.");
+        Char6Face = Root.Q<VisualElement>("Char6Face") ?? throw new InvalidOperationException("Could not find generated element 'Char6Face'.");
+        Char6FaceClassIcon = Root.Q<Label>("Char6FaceClassIcon") ?? throw new InvalidOperationException("Could not find generated element 'Char6FaceClassIcon'.");
+        Char6C6name = Root.Q<Label>("Char6C6name") ?? throw new InvalidOperationException("Could not find generated element 'Char6C6name'.");
+        Char6Hp = Root.Q<VisualElement>("Char6Hp") ?? throw new InvalidOperationException("Could not find generated element 'Char6Hp'.");
+        Char6HpHpFill = Root.Q<VisualElement>("Char6HpHpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char6HpHpFill'.");
+        Char6Mp = Root.Q<VisualElement>("Char6Mp") ?? throw new InvalidOperationException("Could not find generated element 'Char6Mp'.");
+        Char6MpMpFill = Root.Q<VisualElement>("Char6MpMpFill") ?? throw new InvalidOperationException("Could not find generated element 'Char6MpMpFill'.");
+        Char6Stats = Root.Q<VisualElement>("Char6Stats") ?? throw new InvalidOperationException("Could not find generated element 'Char6Stats'.");
+        Char6StatsStat1 = Root.Q<Label>("Char6StatsStat1") ?? throw new InvalidOperationException("Could not find generated element 'Char6StatsStat1'.");
+        Char6StatsStat2 = Root.Q<Label>("Char6StatsStat2") ?? throw new InvalidOperationException("Could not find generated element 'Char6StatsStat2'.");
+        Char6ActionGrid = Root.Q<VisualElement>("Char6ActionGrid") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGrid'.");
+        Char6ActionGridAtk = Root.Q<VisualElement>("Char6ActionGridAtk") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridAtk'.");
+        Char6ActionGridAtkQEpO3 = Root.Q<Label>("Char6ActionGridAtkQEpO3") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridAtkQEpO3'.");
+        Char6ActionGridMag = Root.Q<VisualElement>("Char6ActionGridMag") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridMag'.");
+        Char6ActionGridMagAIphN = Root.Q<Label>("Char6ActionGridMagAIphN") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridMagAIphN'.");
+        Char6ActionGridDef = Root.Q<VisualElement>("Char6ActionGridDef") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridDef'.");
+        Char6ActionGridDefE4QKZ = Root.Q<Label>("Char6ActionGridDefE4QKZ") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridDefE4QKZ'.");
+        Char6ActionGridItem = Root.Q<VisualElement>("Char6ActionGridItem") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridItem'.");
+        Char6ActionGridItemDVzX7 = Root.Q<Label>("Char6ActionGridItemDVzX7") ?? throw new InvalidOperationException("Could not find generated element 'Char6ActionGridItemDVzX7'.");
 
         ApplyStaticValues();
         ViewModel = _initialViewModel;
@@ -568,675 +568,1376 @@ public sealed class ExploreHudView
     {
         Root.style.display = DisplayStyle.Flex;
         Root.SetEnabled(true);
+        Root.style.color = ParseStyleColor("#000000", null);
+        Root.style.backgroundColor = ParseStyleColor("#000000", null);
         HUD.style.display = DisplayStyle.Flex;
         HUD.SetEnabled(true);
+        HUD.style.color = ParseStyleColor("#888888", null);
+        HUD.style.backgroundColor = ParseStyleColor("#888888", null);
+        HUD.style.borderLeftWidth = 0f;
+        HUD.style.borderRightWidth = 0f;
+        HUD.style.borderTopWidth = 0f;
+        HUD.style.borderBottomWidth = 0f;
+        HUD.style.borderLeftColor = ParseStyleColor("#888888", null);
+        HUD.style.borderRightColor = ParseStyleColor("#888888", null);
+        HUD.style.borderTopColor = ParseStyleColor("#888888", null);
+        HUD.style.borderBottomColor = ParseStyleColor("#888888", null);
         Content.style.display = DisplayStyle.Flex;
         Content.SetEnabled(true);
+        Content.style.color = ParseStyleColor("#000000", null);
+        Content.style.backgroundColor = ParseStyleColor("#000000", null);
         MainArea.style.display = DisplayStyle.Flex;
         MainArea.SetEnabled(true);
+        MainArea.style.color = ParseStyleColor("#000000", null);
+        MainArea.style.backgroundColor = ParseStyleColor("#000000", null);
         Viewport.style.display = DisplayStyle.Flex;
         Viewport.SetEnabled(true);
+        Viewport.style.borderLeftWidth = 12f;
+        Viewport.style.borderRightWidth = 12f;
+        Viewport.style.borderTopWidth = 12f;
+        Viewport.style.borderBottomWidth = 12f;
+        Viewport.style.borderLeftColor = ParseStyleColor("#888888", null);
+        Viewport.style.borderRightColor = ParseStyleColor("#888888", null);
+        Viewport.style.borderTopColor = ParseStyleColor("#888888", null);
+        Viewport.style.borderBottomColor = ParseStyleColor("#888888", null);
         Compass.style.display = DisplayStyle.Flex;
         Compass.SetEnabled(true);
+        Compass.style.color = ParseStyleColor("#000000", null);
+        Compass.style.backgroundColor = ParseStyleColor("#000000", null);
+        Compass.style.borderLeftWidth = 12f;
+        Compass.style.borderRightWidth = 12f;
+        Compass.style.borderTopWidth = 12f;
+        Compass.style.borderBottomWidth = 12f;
+        Compass.style.borderLeftColor = ParseStyleColor("#888888", null);
+        Compass.style.borderRightColor = ParseStyleColor("#888888", null);
+        Compass.style.borderTopColor = ParseStyleColor("#888888", null);
+        Compass.style.borderBottomColor = ParseStyleColor("#888888", null);
         CompassN.text = "N";
         ApplyTextLabelStyle(CompassN);
         CompassN.style.display = DisplayStyle.Flex;
         CompassN.SetEnabled(true);
         ApplyFontFamily(CompassN, "Press Start 2P", 24f);
+        CompassN.style.color = ParseStyleColor("#FFFFFF", null);
         Zone.text = "Darkstone Crypt B1";
         ApplyTextLabelStyle(Zone);
         Zone.style.display = DisplayStyle.Flex;
         Zone.SetEnabled(true);
         ApplyFontFamily(Zone, "Press Start 2P", 16f);
+        Zone.style.color = ParseStyleColor("#AAAAAA", null);
         ActivityLog.style.display = DisplayStyle.Flex;
         ActivityLog.SetEnabled(true);
+        ActivityLog.style.color = ParseStyleColor("#000000", null);
+        ActivityLog.style.backgroundColor = ParseStyleColor("#000000", null);
+        ActivityLog.style.borderLeftWidth = 12f;
+        ActivityLog.style.borderRightWidth = 12f;
+        ActivityLog.style.borderTopWidth = 12f;
+        ActivityLog.style.borderBottomWidth = 12f;
+        ActivityLog.style.borderLeftColor = ParseStyleColor("#888888", null);
+        ActivityLog.style.borderRightColor = ParseStyleColor("#888888", null);
+        ActivityLog.style.borderTopColor = ParseStyleColor("#888888", null);
+        ActivityLog.style.borderBottomColor = ParseStyleColor("#888888", null);
         ActivityLogInner.style.display = DisplayStyle.Flex;
         ActivityLogInner.SetEnabled(true);
+        ActivityLogInner.style.color = ParseStyleColor("#000000", null);
+        ActivityLogInner.style.backgroundColor = ParseStyleColor("#000000", null);
+        ActivityLogInner.style.borderLeftWidth = 0f;
+        ActivityLogInner.style.borderRightWidth = 0f;
+        ActivityLogInner.style.borderTopWidth = 0f;
+        ActivityLogInner.style.borderBottomWidth = 0f;
+        ActivityLogInner.style.borderLeftColor = ParseStyleColor("#00000000", null);
+        ActivityLogInner.style.borderRightColor = ParseStyleColor("#00000000", null);
+        ActivityLogInner.style.borderTopColor = ParseStyleColor("#00000000", null);
+        ActivityLogInner.style.borderBottomColor = ParseStyleColor("#00000000", null);
         Log3.text = "You see a locked door.";
         ApplyTextLabelStyle(Log3);
         Log3.style.display = DisplayStyle.Flex;
         Log3.SetEnabled(true);
         ApplyFontFamily(Log3, "Press Start 2P", 16f);
+        Log3.style.color = ParseStyleColor("#AAAAAA", null);
         Log4.text = "Aelric attacks Slime!";
         ApplyTextLabelStyle(Log4);
         Log4.style.display = DisplayStyle.Flex;
         Log4.SetEnabled(true);
         ApplyFontFamily(Log4, "Press Start 2P", 16f);
+        Log4.style.color = ParseStyleColor("#FFFFFF", null);
         Log5.text = "12 damage dealt.";
         ApplyTextLabelStyle(Log5);
         Log5.style.display = DisplayStyle.Flex;
         Log5.SetEnabled(true);
         ApplyFontFamily(Log5, "Press Start 2P", 16f);
+        Log5.style.color = ParseStyleColor("#FFFFFF", null);
         Log6.text = "Lyra casts Fireball!";
         ApplyTextLabelStyle(Log6);
         Log6.style.display = DisplayStyle.Flex;
         Log6.SetEnabled(true);
         ApplyFontFamily(Log6, "Press Start 2P", 16f);
+        Log6.style.color = ParseStyleColor("#FFFFFF", null);
         P83Vj.text = "28 damage dealt!";
         ApplyTextLabelStyle(P83Vj);
         P83Vj.style.display = DisplayStyle.Flex;
         P83Vj.SetEnabled(true);
         ApplyFontFamily(P83Vj, "Press Start 2P", 16f);
+        P83Vj.style.color = ParseStyleColor("#FFFFFF", null);
         RightPanel.style.display = DisplayStyle.Flex;
         RightPanel.SetEnabled(true);
+        RightPanel.style.color = ParseStyleColor("#000000", null);
+        RightPanel.style.backgroundColor = ParseStyleColor("#000000", null);
+        RightPanel.style.borderLeftWidth = 12f;
+        RightPanel.style.borderRightWidth = 12f;
+        RightPanel.style.borderTopWidth = 12f;
+        RightPanel.style.borderBottomWidth = 12f;
+        RightPanel.style.borderLeftColor = ParseStyleColor("#888888", null);
+        RightPanel.style.borderRightColor = ParseStyleColor("#888888", null);
+        RightPanel.style.borderTopColor = ParseStyleColor("#888888", null);
+        RightPanel.style.borderBottomColor = ParseStyleColor("#888888", null);
         RightPanelInner.style.display = DisplayStyle.Flex;
         RightPanelInner.SetEnabled(true);
+        RightPanelInner.style.color = ParseStyleColor("#000000", null);
+        RightPanelInner.style.backgroundColor = ParseStyleColor("#000000", null);
+        RightPanelInner.style.borderLeftWidth = 0f;
+        RightPanelInner.style.borderRightWidth = 0f;
+        RightPanelInner.style.borderTopWidth = 0f;
+        RightPanelInner.style.borderBottomWidth = 0f;
+        RightPanelInner.style.borderLeftColor = ParseStyleColor("#00000000", null);
+        RightPanelInner.style.borderRightColor = ParseStyleColor("#00000000", null);
+        RightPanelInner.style.borderTopColor = ParseStyleColor("#00000000", null);
+        RightPanelInner.style.borderBottomColor = ParseStyleColor("#00000000", null);
         Minimap.style.display = DisplayStyle.Flex;
         Minimap.SetEnabled(true);
+        Minimap.style.color = ParseStyleColor("#111111", null);
+        Minimap.style.backgroundColor = ParseStyleColor("#111111", null);
+        Minimap.style.borderLeftWidth = 12f;
+        Minimap.style.borderRightWidth = 12f;
+        Minimap.style.borderTopWidth = 12f;
+        Minimap.style.borderBottomWidth = 12f;
+        Minimap.style.borderLeftColor = ParseStyleColor("#888888", null);
+        Minimap.style.borderRightColor = ParseStyleColor("#888888", null);
+        Minimap.style.borderTopColor = ParseStyleColor("#888888", null);
+        Minimap.style.borderBottomColor = ParseStyleColor("#888888", null);
         R0.style.display = DisplayStyle.Flex;
         R0.SetEnabled(true);
         N00.style.display = DisplayStyle.Flex;
         N00.SetEnabled(true);
+        N00.style.color = ParseStyleColor("#0A0A0A", null);
+        N00.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N01.style.display = DisplayStyle.Flex;
         N01.SetEnabled(true);
+        N01.style.color = ParseStyleColor("#0A0A0A", null);
+        N01.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N02.style.display = DisplayStyle.Flex;
         N02.SetEnabled(true);
+        N02.style.color = ParseStyleColor("#0A0A0A", null);
+        N02.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N03.style.display = DisplayStyle.Flex;
         N03.SetEnabled(true);
+        N03.style.color = ParseStyleColor("#222222", null);
+        N03.style.backgroundColor = ParseStyleColor("#222222", null);
         N04.style.display = DisplayStyle.Flex;
         N04.SetEnabled(true);
+        N04.style.color = ParseStyleColor("#222222", null);
+        N04.style.backgroundColor = ParseStyleColor("#222222", null);
         N05.style.display = DisplayStyle.Flex;
         N05.SetEnabled(true);
+        N05.style.color = ParseStyleColor("#0A0A0A", null);
+        N05.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N06.style.display = DisplayStyle.Flex;
         N06.SetEnabled(true);
+        N06.style.color = ParseStyleColor("#0A0A0A", null);
+        N06.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N07.style.display = DisplayStyle.Flex;
         N07.SetEnabled(true);
+        N07.style.color = ParseStyleColor("#0A0A0A", null);
+        N07.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N08.style.display = DisplayStyle.Flex;
         N08.SetEnabled(true);
+        N08.style.color = ParseStyleColor("#0A0A0A", null);
+        N08.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N09.style.display = DisplayStyle.Flex;
         N09.SetEnabled(true);
+        N09.style.color = ParseStyleColor("#0A0A0A", null);
+        N09.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R1.style.display = DisplayStyle.Flex;
         R1.SetEnabled(true);
         N10.style.display = DisplayStyle.Flex;
         N10.SetEnabled(true);
+        N10.style.color = ParseStyleColor("#0A0A0A", null);
+        N10.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N11.style.display = DisplayStyle.Flex;
         N11.SetEnabled(true);
+        N11.style.color = ParseStyleColor("#0A0A0A", null);
+        N11.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N12.style.display = DisplayStyle.Flex;
         N12.SetEnabled(true);
+        N12.style.color = ParseStyleColor("#222222", null);
+        N12.style.backgroundColor = ParseStyleColor("#222222", null);
         N13.style.display = DisplayStyle.Flex;
         N13.SetEnabled(true);
+        N13.style.color = ParseStyleColor("#333333", null);
+        N13.style.backgroundColor = ParseStyleColor("#333333", null);
         N14.style.display = DisplayStyle.Flex;
         N14.SetEnabled(true);
+        N14.style.color = ParseStyleColor("#333333", null);
+        N14.style.backgroundColor = ParseStyleColor("#333333", null);
         N15.style.display = DisplayStyle.Flex;
         N15.SetEnabled(true);
+        N15.style.color = ParseStyleColor("#222222", null);
+        N15.style.backgroundColor = ParseStyleColor("#222222", null);
         N16.style.display = DisplayStyle.Flex;
         N16.SetEnabled(true);
+        N16.style.color = ParseStyleColor("#0A0A0A", null);
+        N16.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N17.style.display = DisplayStyle.Flex;
         N17.SetEnabled(true);
+        N17.style.color = ParseStyleColor("#0A0A0A", null);
+        N17.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N18.style.display = DisplayStyle.Flex;
         N18.SetEnabled(true);
+        N18.style.color = ParseStyleColor("#0A0A0A", null);
+        N18.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N19.style.display = DisplayStyle.Flex;
         N19.SetEnabled(true);
+        N19.style.color = ParseStyleColor("#0A0A0A", null);
+        N19.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R2.style.display = DisplayStyle.Flex;
         R2.SetEnabled(true);
         N20.style.display = DisplayStyle.Flex;
         N20.SetEnabled(true);
+        N20.style.color = ParseStyleColor("#0A0A0A", null);
+        N20.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N21.style.display = DisplayStyle.Flex;
         N21.SetEnabled(true);
+        N21.style.color = ParseStyleColor("#222222", null);
+        N21.style.backgroundColor = ParseStyleColor("#222222", null);
         Lxixo.style.display = DisplayStyle.Flex;
         Lxixo.SetEnabled(true);
+        Lxixo.style.color = ParseStyleColor("#333333", null);
+        Lxixo.style.backgroundColor = ParseStyleColor("#333333", null);
         N23.style.display = DisplayStyle.Flex;
         N23.SetEnabled(true);
+        N23.style.color = ParseStyleColor("#444444", null);
+        N23.style.backgroundColor = ParseStyleColor("#444444", null);
         N24.style.display = DisplayStyle.Flex;
         N24.SetEnabled(true);
+        N24.style.color = ParseStyleColor("#333333", null);
+        N24.style.backgroundColor = ParseStyleColor("#333333", null);
         N25.style.display = DisplayStyle.Flex;
         N25.SetEnabled(true);
+        N25.style.color = ParseStyleColor("#333333", null);
+        N25.style.backgroundColor = ParseStyleColor("#333333", null);
         N26.style.display = DisplayStyle.Flex;
         N26.SetEnabled(true);
+        N26.style.color = ParseStyleColor("#222222", null);
+        N26.style.backgroundColor = ParseStyleColor("#222222", null);
         N27.style.display = DisplayStyle.Flex;
         N27.SetEnabled(true);
+        N27.style.color = ParseStyleColor("#0A0A0A", null);
+        N27.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         QZTGM.style.display = DisplayStyle.Flex;
         QZTGM.SetEnabled(true);
+        QZTGM.style.color = ParseStyleColor("#0A0A0A", null);
+        QZTGM.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N29.style.display = DisplayStyle.Flex;
         N29.SetEnabled(true);
+        N29.style.color = ParseStyleColor("#0A0A0A", null);
+        N29.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R3.style.display = DisplayStyle.Flex;
         R3.SetEnabled(true);
         N30.style.display = DisplayStyle.Flex;
         N30.SetEnabled(true);
+        N30.style.color = ParseStyleColor("#0A0A0A", null);
+        N30.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N31.style.display = DisplayStyle.Flex;
         N31.SetEnabled(true);
+        N31.style.color = ParseStyleColor("#222222", null);
+        N31.style.backgroundColor = ParseStyleColor("#222222", null);
         N32.style.display = DisplayStyle.Flex;
         N32.SetEnabled(true);
+        N32.style.color = ParseStyleColor("#333333", null);
+        N32.style.backgroundColor = ParseStyleColor("#333333", null);
         N33.style.display = DisplayStyle.Flex;
         N33.SetEnabled(true);
+        N33.style.color = ParseStyleColor("#222222", null);
+        N33.style.backgroundColor = ParseStyleColor("#222222", null);
         N34.style.display = DisplayStyle.Flex;
         N34.SetEnabled(true);
+        N34.style.color = ParseStyleColor("#222222", null);
+        N34.style.backgroundColor = ParseStyleColor("#222222", null);
         LODSH.style.display = DisplayStyle.Flex;
         LODSH.SetEnabled(true);
+        LODSH.style.color = ParseStyleColor("#333333", null);
+        LODSH.style.backgroundColor = ParseStyleColor("#333333", null);
         N36.style.display = DisplayStyle.Flex;
         N36.SetEnabled(true);
+        N36.style.color = ParseStyleColor("#333333", null);
+        N36.style.backgroundColor = ParseStyleColor("#333333", null);
         N37.style.display = DisplayStyle.Flex;
         N37.SetEnabled(true);
+        N37.style.color = ParseStyleColor("#222222", null);
+        N37.style.backgroundColor = ParseStyleColor("#222222", null);
         N38.style.display = DisplayStyle.Flex;
         N38.SetEnabled(true);
+        N38.style.color = ParseStyleColor("#0A0A0A", null);
+        N38.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         Bfqim.style.display = DisplayStyle.Flex;
         Bfqim.SetEnabled(true);
+        Bfqim.style.color = ParseStyleColor("#0A0A0A", null);
+        Bfqim.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R4.style.display = DisplayStyle.Flex;
         R4.SetEnabled(true);
         N40.style.display = DisplayStyle.Flex;
         N40.SetEnabled(true);
+        N40.style.color = ParseStyleColor("#0A0A0A", null);
+        N40.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N41.style.display = DisplayStyle.Flex;
         N41.SetEnabled(true);
+        N41.style.color = ParseStyleColor("#0A0A0A", null);
+        N41.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N42.style.display = DisplayStyle.Flex;
         N42.SetEnabled(true);
+        N42.style.color = ParseStyleColor("#222222", null);
+        N42.style.backgroundColor = ParseStyleColor("#222222", null);
         Bbvcn.style.display = DisplayStyle.Flex;
         Bbvcn.SetEnabled(true);
+        Bbvcn.style.color = ParseStyleColor("#0A0A0A", null);
+        Bbvcn.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N44.style.display = DisplayStyle.Flex;
         N44.SetEnabled(true);
+        N44.style.color = ParseStyleColor("#0A0A0A", null);
+        N44.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N45.style.display = DisplayStyle.Flex;
         N45.SetEnabled(true);
+        N45.style.color = ParseStyleColor("#333333", null);
+        N45.style.backgroundColor = ParseStyleColor("#333333", null);
         N46.style.display = DisplayStyle.Flex;
         N46.SetEnabled(true);
+        N46.style.color = ParseStyleColor("#444444", null);
+        N46.style.backgroundColor = ParseStyleColor("#444444", null);
         N47.style.display = DisplayStyle.Flex;
         N47.SetEnabled(true);
+        N47.style.color = ParseStyleColor("#333333", null);
+        N47.style.backgroundColor = ParseStyleColor("#333333", null);
         N48.style.display = DisplayStyle.Flex;
         N48.SetEnabled(true);
+        N48.style.color = ParseStyleColor("#222222", null);
+        N48.style.backgroundColor = ParseStyleColor("#222222", null);
         N49.style.display = DisplayStyle.Flex;
         N49.SetEnabled(true);
+        N49.style.color = ParseStyleColor("#0A0A0A", null);
+        N49.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R5.style.display = DisplayStyle.Flex;
         R5.SetEnabled(true);
         N50.style.display = DisplayStyle.Flex;
         N50.SetEnabled(true);
+        N50.style.color = ParseStyleColor("#0A0A0A", null);
+        N50.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N51.style.display = DisplayStyle.Flex;
         N51.SetEnabled(true);
+        N51.style.color = ParseStyleColor("#0A0A0A", null);
+        N51.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N52.style.display = DisplayStyle.Flex;
         N52.SetEnabled(true);
+        N52.style.color = ParseStyleColor("#222222", null);
+        N52.style.backgroundColor = ParseStyleColor("#222222", null);
         N53.style.display = DisplayStyle.Flex;
         N53.SetEnabled(true);
+        N53.style.color = ParseStyleColor("#0A0A0A", null);
+        N53.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N54.style.display = DisplayStyle.Flex;
         N54.SetEnabled(true);
+        N54.style.color = ParseStyleColor("#0A0A0A", null);
+        N54.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N55.style.display = DisplayStyle.Flex;
         N55.SetEnabled(true);
+        N55.style.color = ParseStyleColor("#333333", null);
+        N55.style.backgroundColor = ParseStyleColor("#333333", null);
         N56.style.display = DisplayStyle.Flex;
         N56.SetEnabled(true);
+        N56.style.color = ParseStyleColor("#FFFFFF", null);
+        N56.style.backgroundColor = ParseStyleColor("#FFFFFF", null);
         N57.style.display = DisplayStyle.Flex;
         N57.SetEnabled(true);
+        N57.style.color = ParseStyleColor("#333333", null);
+        N57.style.backgroundColor = ParseStyleColor("#333333", null);
         N58.style.display = DisplayStyle.Flex;
         N58.SetEnabled(true);
+        N58.style.color = ParseStyleColor("#222222", null);
+        N58.style.backgroundColor = ParseStyleColor("#222222", null);
         N59.style.display = DisplayStyle.Flex;
         N59.SetEnabled(true);
+        N59.style.color = ParseStyleColor("#0A0A0A", null);
+        N59.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         Bmfhw.style.display = DisplayStyle.Flex;
         Bmfhw.SetEnabled(true);
         N60.style.display = DisplayStyle.Flex;
         N60.SetEnabled(true);
+        N60.style.color = ParseStyleColor("#0A0A0A", null);
+        N60.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N61.style.display = DisplayStyle.Flex;
         N61.SetEnabled(true);
+        N61.style.color = ParseStyleColor("#0A0A0A", null);
+        N61.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N62.style.display = DisplayStyle.Flex;
         N62.SetEnabled(true);
+        N62.style.color = ParseStyleColor("#222222", null);
+        N62.style.backgroundColor = ParseStyleColor("#222222", null);
         N63.style.display = DisplayStyle.Flex;
         N63.SetEnabled(true);
+        N63.style.color = ParseStyleColor("#0A0A0A", null);
+        N63.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N64.style.display = DisplayStyle.Flex;
         N64.SetEnabled(true);
+        N64.style.color = ParseStyleColor("#0A0A0A", null);
+        N64.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N65.style.display = DisplayStyle.Flex;
         N65.SetEnabled(true);
+        N65.style.color = ParseStyleColor("#333333", null);
+        N65.style.backgroundColor = ParseStyleColor("#333333", null);
         N66.style.display = DisplayStyle.Flex;
         N66.SetEnabled(true);
+        N66.style.color = ParseStyleColor("#333333", null);
+        N66.style.backgroundColor = ParseStyleColor("#333333", null);
         N67.style.display = DisplayStyle.Flex;
         N67.SetEnabled(true);
+        N67.style.color = ParseStyleColor("#222222", null);
+        N67.style.backgroundColor = ParseStyleColor("#222222", null);
         N68.style.display = DisplayStyle.Flex;
         N68.SetEnabled(true);
+        N68.style.color = ParseStyleColor("#0A0A0A", null);
+        N68.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N69.style.display = DisplayStyle.Flex;
         N69.SetEnabled(true);
+        N69.style.color = ParseStyleColor("#0A0A0A", null);
+        N69.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R7.style.display = DisplayStyle.Flex;
         R7.SetEnabled(true);
         N70.style.display = DisplayStyle.Flex;
         N70.SetEnabled(true);
+        N70.style.color = ParseStyleColor("#0A0A0A", null);
+        N70.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N71.style.display = DisplayStyle.Flex;
         N71.SetEnabled(true);
+        N71.style.color = ParseStyleColor("#0A0A0A", null);
+        N71.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N72.style.display = DisplayStyle.Flex;
         N72.SetEnabled(true);
+        N72.style.color = ParseStyleColor("#0A0A0A", null);
+        N72.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N73.style.display = DisplayStyle.Flex;
         N73.SetEnabled(true);
+        N73.style.color = ParseStyleColor("#0A0A0A", null);
+        N73.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N74.style.display = DisplayStyle.Flex;
         N74.SetEnabled(true);
+        N74.style.color = ParseStyleColor("#0A0A0A", null);
+        N74.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N75.style.display = DisplayStyle.Flex;
         N75.SetEnabled(true);
+        N75.style.color = ParseStyleColor("#222222", null);
+        N75.style.backgroundColor = ParseStyleColor("#222222", null);
         N76.style.display = DisplayStyle.Flex;
         N76.SetEnabled(true);
+        N76.style.color = ParseStyleColor("#222222", null);
+        N76.style.backgroundColor = ParseStyleColor("#222222", null);
         N77.style.display = DisplayStyle.Flex;
         N77.SetEnabled(true);
+        N77.style.color = ParseStyleColor("#0A0A0A", null);
+        N77.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N78.style.display = DisplayStyle.Flex;
         N78.SetEnabled(true);
+        N78.style.color = ParseStyleColor("#0A0A0A", null);
+        N78.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N79.style.display = DisplayStyle.Flex;
         N79.SetEnabled(true);
+        N79.style.color = ParseStyleColor("#0A0A0A", null);
+        N79.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R8.style.display = DisplayStyle.Flex;
         R8.SetEnabled(true);
         N80.style.display = DisplayStyle.Flex;
         N80.SetEnabled(true);
+        N80.style.color = ParseStyleColor("#0A0A0A", null);
+        N80.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N81.style.display = DisplayStyle.Flex;
         N81.SetEnabled(true);
+        N81.style.color = ParseStyleColor("#0A0A0A", null);
+        N81.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N82.style.display = DisplayStyle.Flex;
         N82.SetEnabled(true);
+        N82.style.color = ParseStyleColor("#0A0A0A", null);
+        N82.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N83.style.display = DisplayStyle.Flex;
         N83.SetEnabled(true);
+        N83.style.color = ParseStyleColor("#0A0A0A", null);
+        N83.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N84.style.display = DisplayStyle.Flex;
         N84.SetEnabled(true);
+        N84.style.color = ParseStyleColor("#0A0A0A", null);
+        N84.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N85.style.display = DisplayStyle.Flex;
         N85.SetEnabled(true);
+        N85.style.color = ParseStyleColor("#0A0A0A", null);
+        N85.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N86.style.display = DisplayStyle.Flex;
         N86.SetEnabled(true);
+        N86.style.color = ParseStyleColor("#0A0A0A", null);
+        N86.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N87.style.display = DisplayStyle.Flex;
         N87.SetEnabled(true);
+        N87.style.color = ParseStyleColor("#0A0A0A", null);
+        N87.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N88.style.display = DisplayStyle.Flex;
         N88.SetEnabled(true);
+        N88.style.color = ParseStyleColor("#0A0A0A", null);
+        N88.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N89.style.display = DisplayStyle.Flex;
         N89.SetEnabled(true);
+        N89.style.color = ParseStyleColor("#0A0A0A", null);
+        N89.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         R9.style.display = DisplayStyle.Flex;
         R9.SetEnabled(true);
         N90.style.display = DisplayStyle.Flex;
         N90.SetEnabled(true);
+        N90.style.color = ParseStyleColor("#0A0A0A", null);
+        N90.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N91.style.display = DisplayStyle.Flex;
         N91.SetEnabled(true);
+        N91.style.color = ParseStyleColor("#0A0A0A", null);
+        N91.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N92.style.display = DisplayStyle.Flex;
         N92.SetEnabled(true);
+        N92.style.color = ParseStyleColor("#0A0A0A", null);
+        N92.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N93.style.display = DisplayStyle.Flex;
         N93.SetEnabled(true);
+        N93.style.color = ParseStyleColor("#0A0A0A", null);
+        N93.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N94.style.display = DisplayStyle.Flex;
         N94.SetEnabled(true);
+        N94.style.color = ParseStyleColor("#0A0A0A", null);
+        N94.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N95.style.display = DisplayStyle.Flex;
         N95.SetEnabled(true);
+        N95.style.color = ParseStyleColor("#0A0A0A", null);
+        N95.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N96.style.display = DisplayStyle.Flex;
         N96.SetEnabled(true);
+        N96.style.color = ParseStyleColor("#0A0A0A", null);
+        N96.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N97.style.display = DisplayStyle.Flex;
         N97.SetEnabled(true);
+        N97.style.color = ParseStyleColor("#0A0A0A", null);
+        N97.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N98.style.display = DisplayStyle.Flex;
         N98.SetEnabled(true);
+        N98.style.color = ParseStyleColor("#0A0A0A", null);
+        N98.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         N99.style.display = DisplayStyle.Flex;
         N99.SetEnabled(true);
+        N99.style.color = ParseStyleColor("#0A0A0A", null);
+        N99.style.backgroundColor = ParseStyleColor("#0A0A0A", null);
         Sep.style.display = DisplayStyle.Flex;
         Sep.SetEnabled(true);
+        Sep.style.color = ParseStyleColor("#AAAAAA", null);
+        Sep.style.backgroundColor = ParseStyleColor("#AAAAAA", null);
         PartyList.style.display = DisplayStyle.Flex;
         PartyList.SetEnabled(true);
         Row1.style.display = DisplayStyle.Flex;
         Row1.SetEnabled(true);
         Char1.style.display = DisplayStyle.Flex;
         Char1.SetEnabled(true);
-        Face.style.display = DisplayStyle.Flex;
-        Face.SetEnabled(true);
-        ClassIcon.text = ResolveIconText("sword", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon, 32f, 32f);
-        ClassIcon.style.display = DisplayStyle.Flex;
-        ClassIcon.SetEnabled(true);
-        ApplyFontFamily(ClassIcon, "lucide", 32f);
-        C1name.text = "Aelric";
-        ApplyTextLabelStyle(C1name);
-        C1name.style.display = DisplayStyle.Flex;
-        C1name.SetEnabled(true);
-        ApplyFontFamily(C1name, "Press Start 2P", 8f);
-        Hp.style.display = DisplayStyle.Flex;
-        Hp.SetEnabled(true);
-        HpFill.style.display = DisplayStyle.Flex;
-        HpFill.SetEnabled(true);
-        Mp.style.display = DisplayStyle.Flex;
-        Mp.SetEnabled(true);
-        MpFill.style.display = DisplayStyle.Flex;
-        MpFill.SetEnabled(true);
-        Stats.style.display = DisplayStyle.Flex;
-        Stats.SetEnabled(true);
-        Stat1.text = "ATK 12";
-        ApplyTextLabelStyle(Stat1);
-        Stat1.style.display = DisplayStyle.Flex;
-        Stat1.SetEnabled(true);
-        ApplyFontFamily(Stat1, "Press Start 2P", 8f);
-        Stat2.text = "DEF 8";
-        ApplyTextLabelStyle(Stat2);
-        Stat2.style.display = DisplayStyle.Flex;
-        Stat2.SetEnabled(true);
-        ApplyFontFamily(Stat2, "Press Start 2P", 8f);
-        ActionGrid.style.display = DisplayStyle.Flex;
-        ActionGrid.SetEnabled(true);
-        Atk.style.display = DisplayStyle.Flex;
-        Atk.SetEnabled(true);
-        QEpO3.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO3, 16f, 16f);
-        QEpO3.style.display = DisplayStyle.Flex;
-        QEpO3.SetEnabled(true);
-        ApplyFontFamily(QEpO3, "lucide", 16f);
-        Mag.style.display = DisplayStyle.Flex;
-        Mag.SetEnabled(true);
-        AIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN, 16f, 16f);
-        AIphN.style.display = DisplayStyle.Flex;
-        AIphN.SetEnabled(true);
-        ApplyFontFamily(AIphN, "lucide", 16f);
-        Def.style.display = DisplayStyle.Flex;
-        Def.SetEnabled(true);
-        E4QKZ.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ, 16f, 16f);
-        E4QKZ.style.display = DisplayStyle.Flex;
-        E4QKZ.SetEnabled(true);
-        ApplyFontFamily(E4QKZ, "lucide", 16f);
-        Item.style.display = DisplayStyle.Flex;
-        Item.SetEnabled(true);
-        DVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX7, 16f, 16f);
-        DVzX7.style.display = DisplayStyle.Flex;
-        DVzX7.SetEnabled(true);
-        ApplyFontFamily(DVzX7, "lucide", 16f);
+        Char1.style.color = ParseStyleColor("#000000", null);
+        Char1.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1Face.style.display = DisplayStyle.Flex;
+        Char1Face.SetEnabled(true);
+        Char1Face.style.color = ParseStyleColor("#000000", null);
+        Char1Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1Face.style.borderLeftWidth = 6f;
+        Char1Face.style.borderRightWidth = 6f;
+        Char1Face.style.borderTopWidth = 6f;
+        Char1Face.style.borderBottomWidth = 6f;
+        Char1Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char1Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char1Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char1Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char1FaceClassIcon.text = ResolveIconText("sword", "lucide", 32f);
+        ApplyIconLabelStyle(Char1FaceClassIcon, 32f, 32f);
+        Char1FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char1FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char1FaceClassIcon, "lucide", 32f);
+        Char1FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char1C1name.text = "Aelric";
+        ApplyTextLabelStyle(Char1C1name);
+        Char1C1name.style.display = DisplayStyle.Flex;
+        Char1C1name.SetEnabled(true);
+        ApplyFontFamily(Char1C1name, "Press Start 2P", 8f);
+        Char1C1name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char1Hp.style.display = DisplayStyle.Flex;
+        Char1Hp.SetEnabled(true);
+        Char1Hp.style.color = ParseStyleColor("#333333", null);
+        Char1Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char1HpHpFill.style.display = DisplayStyle.Flex;
+        Char1HpHpFill.SetEnabled(true);
+        Char1HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char1HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char1Mp.style.display = DisplayStyle.Flex;
+        Char1Mp.SetEnabled(true);
+        Char1Mp.style.color = ParseStyleColor("#333333", null);
+        Char1Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char1MpMpFill.style.display = DisplayStyle.Flex;
+        Char1MpMpFill.SetEnabled(true);
+        Char1MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char1MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char1Stats.style.display = DisplayStyle.Flex;
+        Char1Stats.SetEnabled(true);
+        Char1StatsStat1.text = "ATK 12";
+        ApplyTextLabelStyle(Char1StatsStat1);
+        Char1StatsStat1.style.display = DisplayStyle.Flex;
+        Char1StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char1StatsStat1, "Press Start 2P", 8f);
+        Char1StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char1StatsStat2.text = "DEF 8";
+        ApplyTextLabelStyle(Char1StatsStat2);
+        Char1StatsStat2.style.display = DisplayStyle.Flex;
+        Char1StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char1StatsStat2, "Press Start 2P", 8f);
+        Char1StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char1ActionGrid.style.display = DisplayStyle.Flex;
+        Char1ActionGrid.SetEnabled(true);
+        Char1ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char1ActionGridAtk.SetEnabled(true);
+        Char1ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char1ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1ActionGridAtk.style.borderLeftWidth = 2f;
+        Char1ActionGridAtk.style.borderRightWidth = 2f;
+        Char1ActionGridAtk.style.borderTopWidth = 2f;
+        Char1ActionGridAtk.style.borderBottomWidth = 2f;
+        Char1ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char1ActionGridAtkQEpO3, 16f, 16f);
+        Char1ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char1ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char1ActionGridAtkQEpO3, "lucide", 16f);
+        Char1ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridMag.style.display = DisplayStyle.Flex;
+        Char1ActionGridMag.SetEnabled(true);
+        Char1ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char1ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1ActionGridMag.style.borderLeftWidth = 2f;
+        Char1ActionGridMag.style.borderRightWidth = 2f;
+        Char1ActionGridMag.style.borderTopWidth = 2f;
+        Char1ActionGridMag.style.borderBottomWidth = 2f;
+        Char1ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char1ActionGridMagAIphN, 16f, 16f);
+        Char1ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char1ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char1ActionGridMagAIphN, "lucide", 16f);
+        Char1ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridDef.style.display = DisplayStyle.Flex;
+        Char1ActionGridDef.SetEnabled(true);
+        Char1ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char1ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1ActionGridDef.style.borderLeftWidth = 2f;
+        Char1ActionGridDef.style.borderRightWidth = 2f;
+        Char1ActionGridDef.style.borderTopWidth = 2f;
+        Char1ActionGridDef.style.borderBottomWidth = 2f;
+        Char1ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char1ActionGridDefE4QKZ, 16f, 16f);
+        Char1ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char1ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char1ActionGridDefE4QKZ, "lucide", 16f);
+        Char1ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridItem.style.display = DisplayStyle.Flex;
+        Char1ActionGridItem.SetEnabled(true);
+        Char1ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char1ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char1ActionGridItem.style.borderLeftWidth = 2f;
+        Char1ActionGridItem.style.borderRightWidth = 2f;
+        Char1ActionGridItem.style.borderTopWidth = 2f;
+        Char1ActionGridItem.style.borderBottomWidth = 2f;
+        Char1ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char1ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char1ActionGridItemDVzX7, 16f, 16f);
+        Char1ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char1ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char1ActionGridItemDVzX7, "lucide", 16f);
+        Char1ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
         Char2.style.display = DisplayStyle.Flex;
         Char2.SetEnabled(true);
-        Face2.style.display = DisplayStyle.Flex;
-        Face2.SetEnabled(true);
-        ClassIcon2.text = ResolveIconText("sparkles", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon2, 32f, 32f);
-        ClassIcon2.style.display = DisplayStyle.Flex;
-        ClassIcon2.SetEnabled(true);
-        ApplyFontFamily(ClassIcon2, "lucide", 32f);
-        C2name.text = "Lyra";
-        ApplyTextLabelStyle(C2name);
-        C2name.style.display = DisplayStyle.Flex;
-        C2name.SetEnabled(true);
-        ApplyFontFamily(C2name, "Press Start 2P", 8f);
-        Hp2.style.display = DisplayStyle.Flex;
-        Hp2.SetEnabled(true);
-        HpFill2.style.display = DisplayStyle.Flex;
-        HpFill2.SetEnabled(true);
-        Mp2.style.display = DisplayStyle.Flex;
-        Mp2.SetEnabled(true);
-        MpFill2.style.display = DisplayStyle.Flex;
-        MpFill2.SetEnabled(true);
-        Stats2.style.display = DisplayStyle.Flex;
-        Stats2.SetEnabled(true);
-        Stat12.text = "ATK 6";
-        ApplyTextLabelStyle(Stat12);
-        Stat12.style.display = DisplayStyle.Flex;
-        Stat12.SetEnabled(true);
-        ApplyFontFamily(Stat12, "Press Start 2P", 8f);
-        Stat22.text = "MAG 14";
-        ApplyTextLabelStyle(Stat22);
-        Stat22.style.display = DisplayStyle.Flex;
-        Stat22.SetEnabled(true);
-        ApplyFontFamily(Stat22, "Press Start 2P", 8f);
-        ActionGrid2.style.display = DisplayStyle.Flex;
-        ActionGrid2.SetEnabled(true);
-        Atk2.style.display = DisplayStyle.Flex;
-        Atk2.SetEnabled(true);
-        QEpO32.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO32, 16f, 16f);
-        QEpO32.style.display = DisplayStyle.Flex;
-        QEpO32.SetEnabled(true);
-        ApplyFontFamily(QEpO32, "lucide", 16f);
-        Mag2.style.display = DisplayStyle.Flex;
-        Mag2.SetEnabled(true);
-        AIphN2.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN2, 16f, 16f);
-        AIphN2.style.display = DisplayStyle.Flex;
-        AIphN2.SetEnabled(true);
-        ApplyFontFamily(AIphN2, "lucide", 16f);
-        Def2.style.display = DisplayStyle.Flex;
-        Def2.SetEnabled(true);
-        E4QKZ2.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ2, 16f, 16f);
-        E4QKZ2.style.display = DisplayStyle.Flex;
-        E4QKZ2.SetEnabled(true);
-        ApplyFontFamily(E4QKZ2, "lucide", 16f);
-        Item2.style.display = DisplayStyle.Flex;
-        Item2.SetEnabled(true);
-        DVzX72.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX72, 16f, 16f);
-        DVzX72.style.display = DisplayStyle.Flex;
-        DVzX72.SetEnabled(true);
-        ApplyFontFamily(DVzX72, "lucide", 16f);
+        Char2.style.color = ParseStyleColor("#000000", null);
+        Char2.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2Face.style.display = DisplayStyle.Flex;
+        Char2Face.SetEnabled(true);
+        Char2Face.style.color = ParseStyleColor("#000000", null);
+        Char2Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2Face.style.borderLeftWidth = 6f;
+        Char2Face.style.borderRightWidth = 6f;
+        Char2Face.style.borderTopWidth = 6f;
+        Char2Face.style.borderBottomWidth = 6f;
+        Char2Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char2Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char2Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char2Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char2FaceClassIcon.text = ResolveIconText("sparkles", "lucide", 32f);
+        ApplyIconLabelStyle(Char2FaceClassIcon, 32f, 32f);
+        Char2FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char2FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char2FaceClassIcon, "lucide", 32f);
+        Char2FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char2C2name.text = "Lyra";
+        ApplyTextLabelStyle(Char2C2name);
+        Char2C2name.style.display = DisplayStyle.Flex;
+        Char2C2name.SetEnabled(true);
+        ApplyFontFamily(Char2C2name, "Press Start 2P", 8f);
+        Char2C2name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char2Hp.style.display = DisplayStyle.Flex;
+        Char2Hp.SetEnabled(true);
+        Char2Hp.style.color = ParseStyleColor("#333333", null);
+        Char2Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char2HpHpFill.style.display = DisplayStyle.Flex;
+        Char2HpHpFill.SetEnabled(true);
+        Char2HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char2HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char2Mp.style.display = DisplayStyle.Flex;
+        Char2Mp.SetEnabled(true);
+        Char2Mp.style.color = ParseStyleColor("#333333", null);
+        Char2Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char2MpMpFill.style.display = DisplayStyle.Flex;
+        Char2MpMpFill.SetEnabled(true);
+        Char2MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char2MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char2Stats.style.display = DisplayStyle.Flex;
+        Char2Stats.SetEnabled(true);
+        Char2StatsStat1.text = "ATK 6";
+        ApplyTextLabelStyle(Char2StatsStat1);
+        Char2StatsStat1.style.display = DisplayStyle.Flex;
+        Char2StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char2StatsStat1, "Press Start 2P", 8f);
+        Char2StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char2StatsStat2.text = "MAG 14";
+        ApplyTextLabelStyle(Char2StatsStat2);
+        Char2StatsStat2.style.display = DisplayStyle.Flex;
+        Char2StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char2StatsStat2, "Press Start 2P", 8f);
+        Char2StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char2ActionGrid.style.display = DisplayStyle.Flex;
+        Char2ActionGrid.SetEnabled(true);
+        Char2ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char2ActionGridAtk.SetEnabled(true);
+        Char2ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char2ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2ActionGridAtk.style.borderLeftWidth = 2f;
+        Char2ActionGridAtk.style.borderRightWidth = 2f;
+        Char2ActionGridAtk.style.borderTopWidth = 2f;
+        Char2ActionGridAtk.style.borderBottomWidth = 2f;
+        Char2ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char2ActionGridAtkQEpO3, 16f, 16f);
+        Char2ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char2ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char2ActionGridAtkQEpO3, "lucide", 16f);
+        Char2ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridMag.style.display = DisplayStyle.Flex;
+        Char2ActionGridMag.SetEnabled(true);
+        Char2ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char2ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2ActionGridMag.style.borderLeftWidth = 2f;
+        Char2ActionGridMag.style.borderRightWidth = 2f;
+        Char2ActionGridMag.style.borderTopWidth = 2f;
+        Char2ActionGridMag.style.borderBottomWidth = 2f;
+        Char2ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char2ActionGridMagAIphN, 16f, 16f);
+        Char2ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char2ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char2ActionGridMagAIphN, "lucide", 16f);
+        Char2ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridDef.style.display = DisplayStyle.Flex;
+        Char2ActionGridDef.SetEnabled(true);
+        Char2ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char2ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2ActionGridDef.style.borderLeftWidth = 2f;
+        Char2ActionGridDef.style.borderRightWidth = 2f;
+        Char2ActionGridDef.style.borderTopWidth = 2f;
+        Char2ActionGridDef.style.borderBottomWidth = 2f;
+        Char2ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char2ActionGridDefE4QKZ, 16f, 16f);
+        Char2ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char2ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char2ActionGridDefE4QKZ, "lucide", 16f);
+        Char2ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridItem.style.display = DisplayStyle.Flex;
+        Char2ActionGridItem.SetEnabled(true);
+        Char2ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char2ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char2ActionGridItem.style.borderLeftWidth = 2f;
+        Char2ActionGridItem.style.borderRightWidth = 2f;
+        Char2ActionGridItem.style.borderTopWidth = 2f;
+        Char2ActionGridItem.style.borderBottomWidth = 2f;
+        Char2ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char2ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char2ActionGridItemDVzX7, 16f, 16f);
+        Char2ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char2ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char2ActionGridItemDVzX7, "lucide", 16f);
+        Char2ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
         Row2.style.display = DisplayStyle.Flex;
         Row2.SetEnabled(true);
         Char3.style.display = DisplayStyle.Flex;
         Char3.SetEnabled(true);
-        Face3.style.display = DisplayStyle.Flex;
-        Face3.SetEnabled(true);
-        ClassIcon3.text = ResolveIconText("shield", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon3, 32f, 32f);
-        ClassIcon3.style.display = DisplayStyle.Flex;
-        ClassIcon3.SetEnabled(true);
-        ApplyFontFamily(ClassIcon3, "lucide", 32f);
-        C3name.text = "Theron";
-        ApplyTextLabelStyle(C3name);
-        C3name.style.display = DisplayStyle.Flex;
-        C3name.SetEnabled(true);
-        ApplyFontFamily(C3name, "Press Start 2P", 8f);
-        Hp3.style.display = DisplayStyle.Flex;
-        Hp3.SetEnabled(true);
-        HpFill3.style.display = DisplayStyle.Flex;
-        HpFill3.SetEnabled(true);
-        Mp3.style.display = DisplayStyle.Flex;
-        Mp3.SetEnabled(true);
-        MpFill3.style.display = DisplayStyle.Flex;
-        MpFill3.SetEnabled(true);
-        Stats3.style.display = DisplayStyle.Flex;
-        Stats3.SetEnabled(true);
-        Stat13.text = "ATK 14";
-        ApplyTextLabelStyle(Stat13);
-        Stat13.style.display = DisplayStyle.Flex;
-        Stat13.SetEnabled(true);
-        ApplyFontFamily(Stat13, "Press Start 2P", 8f);
-        Stat23.text = "DEF 12";
-        ApplyTextLabelStyle(Stat23);
-        Stat23.style.display = DisplayStyle.Flex;
-        Stat23.SetEnabled(true);
-        ApplyFontFamily(Stat23, "Press Start 2P", 8f);
-        ActionGrid3.style.display = DisplayStyle.Flex;
-        ActionGrid3.SetEnabled(true);
-        Atk3.style.display = DisplayStyle.Flex;
-        Atk3.SetEnabled(true);
-        QEpO33.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO33, 16f, 16f);
-        QEpO33.style.display = DisplayStyle.Flex;
-        QEpO33.SetEnabled(true);
-        ApplyFontFamily(QEpO33, "lucide", 16f);
-        Mag3.style.display = DisplayStyle.Flex;
-        Mag3.SetEnabled(true);
-        AIphN3.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN3, 16f, 16f);
-        AIphN3.style.display = DisplayStyle.Flex;
-        AIphN3.SetEnabled(true);
-        ApplyFontFamily(AIphN3, "lucide", 16f);
-        Def3.style.display = DisplayStyle.Flex;
-        Def3.SetEnabled(true);
-        E4QKZ3.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ3, 16f, 16f);
-        E4QKZ3.style.display = DisplayStyle.Flex;
-        E4QKZ3.SetEnabled(true);
-        ApplyFontFamily(E4QKZ3, "lucide", 16f);
-        Item3.style.display = DisplayStyle.Flex;
-        Item3.SetEnabled(true);
-        DVzX73.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX73, 16f, 16f);
-        DVzX73.style.display = DisplayStyle.Flex;
-        DVzX73.SetEnabled(true);
-        ApplyFontFamily(DVzX73, "lucide", 16f);
+        Char3.style.color = ParseStyleColor("#000000", null);
+        Char3.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3Face.style.display = DisplayStyle.Flex;
+        Char3Face.SetEnabled(true);
+        Char3Face.style.color = ParseStyleColor("#000000", null);
+        Char3Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3Face.style.borderLeftWidth = 6f;
+        Char3Face.style.borderRightWidth = 6f;
+        Char3Face.style.borderTopWidth = 6f;
+        Char3Face.style.borderBottomWidth = 6f;
+        Char3Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char3Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char3Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char3Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char3FaceClassIcon.text = ResolveIconText("shield", "lucide", 32f);
+        ApplyIconLabelStyle(Char3FaceClassIcon, 32f, 32f);
+        Char3FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char3FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char3FaceClassIcon, "lucide", 32f);
+        Char3FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char3C3name.text = "Theron";
+        ApplyTextLabelStyle(Char3C3name);
+        Char3C3name.style.display = DisplayStyle.Flex;
+        Char3C3name.SetEnabled(true);
+        ApplyFontFamily(Char3C3name, "Press Start 2P", 8f);
+        Char3C3name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char3Hp.style.display = DisplayStyle.Flex;
+        Char3Hp.SetEnabled(true);
+        Char3Hp.style.color = ParseStyleColor("#333333", null);
+        Char3Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char3HpHpFill.style.display = DisplayStyle.Flex;
+        Char3HpHpFill.SetEnabled(true);
+        Char3HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char3HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char3Mp.style.display = DisplayStyle.Flex;
+        Char3Mp.SetEnabled(true);
+        Char3Mp.style.color = ParseStyleColor("#333333", null);
+        Char3Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char3MpMpFill.style.display = DisplayStyle.Flex;
+        Char3MpMpFill.SetEnabled(true);
+        Char3MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char3MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char3Stats.style.display = DisplayStyle.Flex;
+        Char3Stats.SetEnabled(true);
+        Char3StatsStat1.text = "ATK 14";
+        ApplyTextLabelStyle(Char3StatsStat1);
+        Char3StatsStat1.style.display = DisplayStyle.Flex;
+        Char3StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char3StatsStat1, "Press Start 2P", 8f);
+        Char3StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char3StatsStat2.text = "DEF 12";
+        ApplyTextLabelStyle(Char3StatsStat2);
+        Char3StatsStat2.style.display = DisplayStyle.Flex;
+        Char3StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char3StatsStat2, "Press Start 2P", 8f);
+        Char3StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char3ActionGrid.style.display = DisplayStyle.Flex;
+        Char3ActionGrid.SetEnabled(true);
+        Char3ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char3ActionGridAtk.SetEnabled(true);
+        Char3ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char3ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3ActionGridAtk.style.borderLeftWidth = 2f;
+        Char3ActionGridAtk.style.borderRightWidth = 2f;
+        Char3ActionGridAtk.style.borderTopWidth = 2f;
+        Char3ActionGridAtk.style.borderBottomWidth = 2f;
+        Char3ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char3ActionGridAtkQEpO3, 16f, 16f);
+        Char3ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char3ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char3ActionGridAtkQEpO3, "lucide", 16f);
+        Char3ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridMag.style.display = DisplayStyle.Flex;
+        Char3ActionGridMag.SetEnabled(true);
+        Char3ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char3ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3ActionGridMag.style.borderLeftWidth = 2f;
+        Char3ActionGridMag.style.borderRightWidth = 2f;
+        Char3ActionGridMag.style.borderTopWidth = 2f;
+        Char3ActionGridMag.style.borderBottomWidth = 2f;
+        Char3ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char3ActionGridMagAIphN, 16f, 16f);
+        Char3ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char3ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char3ActionGridMagAIphN, "lucide", 16f);
+        Char3ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridDef.style.display = DisplayStyle.Flex;
+        Char3ActionGridDef.SetEnabled(true);
+        Char3ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char3ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3ActionGridDef.style.borderLeftWidth = 2f;
+        Char3ActionGridDef.style.borderRightWidth = 2f;
+        Char3ActionGridDef.style.borderTopWidth = 2f;
+        Char3ActionGridDef.style.borderBottomWidth = 2f;
+        Char3ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char3ActionGridDefE4QKZ, 16f, 16f);
+        Char3ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char3ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char3ActionGridDefE4QKZ, "lucide", 16f);
+        Char3ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridItem.style.display = DisplayStyle.Flex;
+        Char3ActionGridItem.SetEnabled(true);
+        Char3ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char3ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char3ActionGridItem.style.borderLeftWidth = 2f;
+        Char3ActionGridItem.style.borderRightWidth = 2f;
+        Char3ActionGridItem.style.borderTopWidth = 2f;
+        Char3ActionGridItem.style.borderBottomWidth = 2f;
+        Char3ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char3ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char3ActionGridItemDVzX7, 16f, 16f);
+        Char3ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char3ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char3ActionGridItemDVzX7, "lucide", 16f);
+        Char3ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
         Char4.style.display = DisplayStyle.Flex;
         Char4.SetEnabled(true);
-        Face4.style.display = DisplayStyle.Flex;
-        Face4.SetEnabled(true);
-        ClassIcon4.text = ResolveIconText("moon", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon4, 32f, 32f);
-        ClassIcon4.style.display = DisplayStyle.Flex;
-        ClassIcon4.SetEnabled(true);
-        ApplyFontFamily(ClassIcon4, "lucide", 32f);
-        C4name.text = "Selene";
-        ApplyTextLabelStyle(C4name);
-        C4name.style.display = DisplayStyle.Flex;
-        C4name.SetEnabled(true);
-        ApplyFontFamily(C4name, "Press Start 2P", 8f);
-        Hp4.style.display = DisplayStyle.Flex;
-        Hp4.SetEnabled(true);
-        HpFill4.style.display = DisplayStyle.Flex;
-        HpFill4.SetEnabled(true);
-        Mp4.style.display = DisplayStyle.Flex;
-        Mp4.SetEnabled(true);
-        MpFill4.style.display = DisplayStyle.Flex;
-        MpFill4.SetEnabled(true);
-        Stats4.style.display = DisplayStyle.Flex;
-        Stats4.SetEnabled(true);
-        Stat14.text = "ATK 5";
-        ApplyTextLabelStyle(Stat14);
-        Stat14.style.display = DisplayStyle.Flex;
-        Stat14.SetEnabled(true);
-        ApplyFontFamily(Stat14, "Press Start 2P", 8f);
-        Stat24.text = "MAG 16";
-        ApplyTextLabelStyle(Stat24);
-        Stat24.style.display = DisplayStyle.Flex;
-        Stat24.SetEnabled(true);
-        ApplyFontFamily(Stat24, "Press Start 2P", 8f);
-        ActionGrid4.style.display = DisplayStyle.Flex;
-        ActionGrid4.SetEnabled(true);
-        Atk4.style.display = DisplayStyle.Flex;
-        Atk4.SetEnabled(true);
-        QEpO34.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO34, 16f, 16f);
-        QEpO34.style.display = DisplayStyle.Flex;
-        QEpO34.SetEnabled(true);
-        ApplyFontFamily(QEpO34, "lucide", 16f);
-        Mag4.style.display = DisplayStyle.Flex;
-        Mag4.SetEnabled(true);
-        AIphN4.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN4, 16f, 16f);
-        AIphN4.style.display = DisplayStyle.Flex;
-        AIphN4.SetEnabled(true);
-        ApplyFontFamily(AIphN4, "lucide", 16f);
-        Def4.style.display = DisplayStyle.Flex;
-        Def4.SetEnabled(true);
-        E4QKZ4.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ4, 16f, 16f);
-        E4QKZ4.style.display = DisplayStyle.Flex;
-        E4QKZ4.SetEnabled(true);
-        ApplyFontFamily(E4QKZ4, "lucide", 16f);
-        Item4.style.display = DisplayStyle.Flex;
-        Item4.SetEnabled(true);
-        DVzX74.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX74, 16f, 16f);
-        DVzX74.style.display = DisplayStyle.Flex;
-        DVzX74.SetEnabled(true);
-        ApplyFontFamily(DVzX74, "lucide", 16f);
+        Char4.style.color = ParseStyleColor("#000000", null);
+        Char4.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4Face.style.display = DisplayStyle.Flex;
+        Char4Face.SetEnabled(true);
+        Char4Face.style.color = ParseStyleColor("#000000", null);
+        Char4Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4Face.style.borderLeftWidth = 6f;
+        Char4Face.style.borderRightWidth = 6f;
+        Char4Face.style.borderTopWidth = 6f;
+        Char4Face.style.borderBottomWidth = 6f;
+        Char4Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char4Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char4Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char4Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char4FaceClassIcon.text = ResolveIconText("moon", "lucide", 32f);
+        ApplyIconLabelStyle(Char4FaceClassIcon, 32f, 32f);
+        Char4FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char4FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char4FaceClassIcon, "lucide", 32f);
+        Char4FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char4C4name.text = "Selene";
+        ApplyTextLabelStyle(Char4C4name);
+        Char4C4name.style.display = DisplayStyle.Flex;
+        Char4C4name.SetEnabled(true);
+        ApplyFontFamily(Char4C4name, "Press Start 2P", 8f);
+        Char4C4name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char4Hp.style.display = DisplayStyle.Flex;
+        Char4Hp.SetEnabled(true);
+        Char4Hp.style.color = ParseStyleColor("#333333", null);
+        Char4Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char4HpHpFill.style.display = DisplayStyle.Flex;
+        Char4HpHpFill.SetEnabled(true);
+        Char4HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char4HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char4Mp.style.display = DisplayStyle.Flex;
+        Char4Mp.SetEnabled(true);
+        Char4Mp.style.color = ParseStyleColor("#333333", null);
+        Char4Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char4MpMpFill.style.display = DisplayStyle.Flex;
+        Char4MpMpFill.SetEnabled(true);
+        Char4MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char4MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char4Stats.style.display = DisplayStyle.Flex;
+        Char4Stats.SetEnabled(true);
+        Char4StatsStat1.text = "ATK 5";
+        ApplyTextLabelStyle(Char4StatsStat1);
+        Char4StatsStat1.style.display = DisplayStyle.Flex;
+        Char4StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char4StatsStat1, "Press Start 2P", 8f);
+        Char4StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char4StatsStat2.text = "MAG 16";
+        ApplyTextLabelStyle(Char4StatsStat2);
+        Char4StatsStat2.style.display = DisplayStyle.Flex;
+        Char4StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char4StatsStat2, "Press Start 2P", 8f);
+        Char4StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char4ActionGrid.style.display = DisplayStyle.Flex;
+        Char4ActionGrid.SetEnabled(true);
+        Char4ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char4ActionGridAtk.SetEnabled(true);
+        Char4ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char4ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4ActionGridAtk.style.borderLeftWidth = 2f;
+        Char4ActionGridAtk.style.borderRightWidth = 2f;
+        Char4ActionGridAtk.style.borderTopWidth = 2f;
+        Char4ActionGridAtk.style.borderBottomWidth = 2f;
+        Char4ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char4ActionGridAtkQEpO3, 16f, 16f);
+        Char4ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char4ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char4ActionGridAtkQEpO3, "lucide", 16f);
+        Char4ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridMag.style.display = DisplayStyle.Flex;
+        Char4ActionGridMag.SetEnabled(true);
+        Char4ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char4ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4ActionGridMag.style.borderLeftWidth = 2f;
+        Char4ActionGridMag.style.borderRightWidth = 2f;
+        Char4ActionGridMag.style.borderTopWidth = 2f;
+        Char4ActionGridMag.style.borderBottomWidth = 2f;
+        Char4ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char4ActionGridMagAIphN, 16f, 16f);
+        Char4ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char4ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char4ActionGridMagAIphN, "lucide", 16f);
+        Char4ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridDef.style.display = DisplayStyle.Flex;
+        Char4ActionGridDef.SetEnabled(true);
+        Char4ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char4ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4ActionGridDef.style.borderLeftWidth = 2f;
+        Char4ActionGridDef.style.borderRightWidth = 2f;
+        Char4ActionGridDef.style.borderTopWidth = 2f;
+        Char4ActionGridDef.style.borderBottomWidth = 2f;
+        Char4ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char4ActionGridDefE4QKZ, 16f, 16f);
+        Char4ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char4ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char4ActionGridDefE4QKZ, "lucide", 16f);
+        Char4ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridItem.style.display = DisplayStyle.Flex;
+        Char4ActionGridItem.SetEnabled(true);
+        Char4ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char4ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char4ActionGridItem.style.borderLeftWidth = 2f;
+        Char4ActionGridItem.style.borderRightWidth = 2f;
+        Char4ActionGridItem.style.borderTopWidth = 2f;
+        Char4ActionGridItem.style.borderBottomWidth = 2f;
+        Char4ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char4ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char4ActionGridItemDVzX7, 16f, 16f);
+        Char4ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char4ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char4ActionGridItemDVzX7, "lucide", 16f);
+        Char4ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
         Row3.style.display = DisplayStyle.Flex;
         Row3.SetEnabled(true);
         Char5.style.display = DisplayStyle.Flex;
         Char5.SetEnabled(true);
-        Face5.style.display = DisplayStyle.Flex;
-        Face5.SetEnabled(true);
-        ClassIcon5.text = ResolveIconText("cross", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon5, 32f, 32f);
-        ClassIcon5.style.display = DisplayStyle.Flex;
-        ClassIcon5.SetEnabled(true);
-        ApplyFontFamily(ClassIcon5, "lucide", 32f);
-        C5name.text = "Elara";
-        ApplyTextLabelStyle(C5name);
-        C5name.style.display = DisplayStyle.Flex;
-        C5name.SetEnabled(true);
-        ApplyFontFamily(C5name, "Press Start 2P", 8f);
-        Hp5.style.display = DisplayStyle.Flex;
-        Hp5.SetEnabled(true);
-        HpFill5.style.display = DisplayStyle.Flex;
-        HpFill5.SetEnabled(true);
-        Mp5.style.display = DisplayStyle.Flex;
-        Mp5.SetEnabled(true);
-        MpFill5.style.display = DisplayStyle.Flex;
-        MpFill5.SetEnabled(true);
-        Stats5.style.display = DisplayStyle.Flex;
-        Stats5.SetEnabled(true);
-        Stat15.text = "ATK 4";
-        ApplyTextLabelStyle(Stat15);
-        Stat15.style.display = DisplayStyle.Flex;
-        Stat15.SetEnabled(true);
-        ApplyFontFamily(Stat15, "Press Start 2P", 8f);
-        Stat25.text = "MAG 11";
-        ApplyTextLabelStyle(Stat25);
-        Stat25.style.display = DisplayStyle.Flex;
-        Stat25.SetEnabled(true);
-        ApplyFontFamily(Stat25, "Press Start 2P", 8f);
-        ActionGrid5.style.display = DisplayStyle.Flex;
-        ActionGrid5.SetEnabled(true);
-        Atk5.style.display = DisplayStyle.Flex;
-        Atk5.SetEnabled(true);
-        QEpO35.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO35, 16f, 16f);
-        QEpO35.style.display = DisplayStyle.Flex;
-        QEpO35.SetEnabled(true);
-        ApplyFontFamily(QEpO35, "lucide", 16f);
-        Mag5.style.display = DisplayStyle.Flex;
-        Mag5.SetEnabled(true);
-        AIphN5.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN5, 16f, 16f);
-        AIphN5.style.display = DisplayStyle.Flex;
-        AIphN5.SetEnabled(true);
-        ApplyFontFamily(AIphN5, "lucide", 16f);
-        Def5.style.display = DisplayStyle.Flex;
-        Def5.SetEnabled(true);
-        E4QKZ5.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ5, 16f, 16f);
-        E4QKZ5.style.display = DisplayStyle.Flex;
-        E4QKZ5.SetEnabled(true);
-        ApplyFontFamily(E4QKZ5, "lucide", 16f);
-        Item5.style.display = DisplayStyle.Flex;
-        Item5.SetEnabled(true);
-        DVzX75.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX75, 16f, 16f);
-        DVzX75.style.display = DisplayStyle.Flex;
-        DVzX75.SetEnabled(true);
-        ApplyFontFamily(DVzX75, "lucide", 16f);
+        Char5.style.color = ParseStyleColor("#000000", null);
+        Char5.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5Face.style.display = DisplayStyle.Flex;
+        Char5Face.SetEnabled(true);
+        Char5Face.style.color = ParseStyleColor("#000000", null);
+        Char5Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5Face.style.borderLeftWidth = 6f;
+        Char5Face.style.borderRightWidth = 6f;
+        Char5Face.style.borderTopWidth = 6f;
+        Char5Face.style.borderBottomWidth = 6f;
+        Char5Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char5Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char5Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char5Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char5FaceClassIcon.text = ResolveIconText("cross", "lucide", 32f);
+        ApplyIconLabelStyle(Char5FaceClassIcon, 32f, 32f);
+        Char5FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char5FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char5FaceClassIcon, "lucide", 32f);
+        Char5FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char5C5name.text = "Elara";
+        ApplyTextLabelStyle(Char5C5name);
+        Char5C5name.style.display = DisplayStyle.Flex;
+        Char5C5name.SetEnabled(true);
+        ApplyFontFamily(Char5C5name, "Press Start 2P", 8f);
+        Char5C5name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char5Hp.style.display = DisplayStyle.Flex;
+        Char5Hp.SetEnabled(true);
+        Char5Hp.style.color = ParseStyleColor("#333333", null);
+        Char5Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char5HpHpFill.style.display = DisplayStyle.Flex;
+        Char5HpHpFill.SetEnabled(true);
+        Char5HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char5HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char5Mp.style.display = DisplayStyle.Flex;
+        Char5Mp.SetEnabled(true);
+        Char5Mp.style.color = ParseStyleColor("#333333", null);
+        Char5Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char5MpMpFill.style.display = DisplayStyle.Flex;
+        Char5MpMpFill.SetEnabled(true);
+        Char5MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char5MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char5Stats.style.display = DisplayStyle.Flex;
+        Char5Stats.SetEnabled(true);
+        Char5StatsStat1.text = "ATK 4";
+        ApplyTextLabelStyle(Char5StatsStat1);
+        Char5StatsStat1.style.display = DisplayStyle.Flex;
+        Char5StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char5StatsStat1, "Press Start 2P", 8f);
+        Char5StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char5StatsStat2.text = "MAG 11";
+        ApplyTextLabelStyle(Char5StatsStat2);
+        Char5StatsStat2.style.display = DisplayStyle.Flex;
+        Char5StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char5StatsStat2, "Press Start 2P", 8f);
+        Char5StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char5ActionGrid.style.display = DisplayStyle.Flex;
+        Char5ActionGrid.SetEnabled(true);
+        Char5ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char5ActionGridAtk.SetEnabled(true);
+        Char5ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char5ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5ActionGridAtk.style.borderLeftWidth = 2f;
+        Char5ActionGridAtk.style.borderRightWidth = 2f;
+        Char5ActionGridAtk.style.borderTopWidth = 2f;
+        Char5ActionGridAtk.style.borderBottomWidth = 2f;
+        Char5ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char5ActionGridAtkQEpO3, 16f, 16f);
+        Char5ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char5ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char5ActionGridAtkQEpO3, "lucide", 16f);
+        Char5ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridMag.style.display = DisplayStyle.Flex;
+        Char5ActionGridMag.SetEnabled(true);
+        Char5ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char5ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5ActionGridMag.style.borderLeftWidth = 2f;
+        Char5ActionGridMag.style.borderRightWidth = 2f;
+        Char5ActionGridMag.style.borderTopWidth = 2f;
+        Char5ActionGridMag.style.borderBottomWidth = 2f;
+        Char5ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char5ActionGridMagAIphN, 16f, 16f);
+        Char5ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char5ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char5ActionGridMagAIphN, "lucide", 16f);
+        Char5ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridDef.style.display = DisplayStyle.Flex;
+        Char5ActionGridDef.SetEnabled(true);
+        Char5ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char5ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5ActionGridDef.style.borderLeftWidth = 2f;
+        Char5ActionGridDef.style.borderRightWidth = 2f;
+        Char5ActionGridDef.style.borderTopWidth = 2f;
+        Char5ActionGridDef.style.borderBottomWidth = 2f;
+        Char5ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char5ActionGridDefE4QKZ, 16f, 16f);
+        Char5ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char5ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char5ActionGridDefE4QKZ, "lucide", 16f);
+        Char5ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridItem.style.display = DisplayStyle.Flex;
+        Char5ActionGridItem.SetEnabled(true);
+        Char5ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char5ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char5ActionGridItem.style.borderLeftWidth = 2f;
+        Char5ActionGridItem.style.borderRightWidth = 2f;
+        Char5ActionGridItem.style.borderTopWidth = 2f;
+        Char5ActionGridItem.style.borderBottomWidth = 2f;
+        Char5ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char5ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char5ActionGridItemDVzX7, 16f, 16f);
+        Char5ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char5ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char5ActionGridItemDVzX7, "lucide", 16f);
+        Char5ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
         Char6.style.display = DisplayStyle.Flex;
         Char6.SetEnabled(true);
-        Face6.style.display = DisplayStyle.Flex;
-        Face6.SetEnabled(true);
-        ClassIcon6.text = ResolveIconText("flame", "lucide", 32f);
-        ApplyIconLabelStyle(ClassIcon6, 32f, 32f);
-        ClassIcon6.style.display = DisplayStyle.Flex;
-        ClassIcon6.SetEnabled(true);
-        ApplyFontFamily(ClassIcon6, "lucide", 32f);
-        C6name.text = "Darius";
-        ApplyTextLabelStyle(C6name);
-        C6name.style.display = DisplayStyle.Flex;
-        C6name.SetEnabled(true);
-        ApplyFontFamily(C6name, "Press Start 2P", 8f);
-        Hp6.style.display = DisplayStyle.Flex;
-        Hp6.SetEnabled(true);
-        HpFill6.style.display = DisplayStyle.Flex;
-        HpFill6.SetEnabled(true);
-        Mp6.style.display = DisplayStyle.Flex;
-        Mp6.SetEnabled(true);
-        MpFill6.style.display = DisplayStyle.Flex;
-        MpFill6.SetEnabled(true);
-        Stats6.style.display = DisplayStyle.Flex;
-        Stats6.SetEnabled(true);
-        Stat16.text = "ATK 16";
-        ApplyTextLabelStyle(Stat16);
-        Stat16.style.display = DisplayStyle.Flex;
-        Stat16.SetEnabled(true);
-        ApplyFontFamily(Stat16, "Press Start 2P", 8f);
-        Stat26.text = "DEF 10";
-        ApplyTextLabelStyle(Stat26);
-        Stat26.style.display = DisplayStyle.Flex;
-        Stat26.SetEnabled(true);
-        ApplyFontFamily(Stat26, "Press Start 2P", 8f);
-        ActionGrid6.style.display = DisplayStyle.Flex;
-        ActionGrid6.SetEnabled(true);
-        Atk6.style.display = DisplayStyle.Flex;
-        Atk6.SetEnabled(true);
-        QEpO36.text = ResolveIconText("swords", "lucide", 16f);
-        ApplyIconLabelStyle(QEpO36, 16f, 16f);
-        QEpO36.style.display = DisplayStyle.Flex;
-        QEpO36.SetEnabled(true);
-        ApplyFontFamily(QEpO36, "lucide", 16f);
-        Mag6.style.display = DisplayStyle.Flex;
-        Mag6.SetEnabled(true);
-        AIphN6.text = ResolveIconText("wand-sparkles", "lucide", 16f);
-        ApplyIconLabelStyle(AIphN6, 16f, 16f);
-        AIphN6.style.display = DisplayStyle.Flex;
-        AIphN6.SetEnabled(true);
-        ApplyFontFamily(AIphN6, "lucide", 16f);
-        Def6.style.display = DisplayStyle.Flex;
-        Def6.SetEnabled(true);
-        E4QKZ6.text = ResolveIconText("shield", "lucide", 16f);
-        ApplyIconLabelStyle(E4QKZ6, 16f, 16f);
-        E4QKZ6.style.display = DisplayStyle.Flex;
-        E4QKZ6.SetEnabled(true);
-        ApplyFontFamily(E4QKZ6, "lucide", 16f);
-        Item6.style.display = DisplayStyle.Flex;
-        Item6.SetEnabled(true);
-        DVzX76.text = ResolveIconText("flask-conical", "lucide", 16f);
-        ApplyIconLabelStyle(DVzX76, 16f, 16f);
-        DVzX76.style.display = DisplayStyle.Flex;
-        DVzX76.SetEnabled(true);
-        ApplyFontFamily(DVzX76, "lucide", 16f);
+        Char6.style.color = ParseStyleColor("#000000", null);
+        Char6.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6Face.style.display = DisplayStyle.Flex;
+        Char6Face.SetEnabled(true);
+        Char6Face.style.color = ParseStyleColor("#000000", null);
+        Char6Face.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6Face.style.borderLeftWidth = 6f;
+        Char6Face.style.borderRightWidth = 6f;
+        Char6Face.style.borderTopWidth = 6f;
+        Char6Face.style.borderBottomWidth = 6f;
+        Char6Face.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char6Face.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char6Face.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char6Face.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char6FaceClassIcon.text = ResolveIconText("flame", "lucide", 32f);
+        ApplyIconLabelStyle(Char6FaceClassIcon, 32f, 32f);
+        Char6FaceClassIcon.style.display = DisplayStyle.Flex;
+        Char6FaceClassIcon.SetEnabled(true);
+        ApplyFontFamily(Char6FaceClassIcon, "lucide", 32f);
+        Char6FaceClassIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        Char6C6name.text = "Darius";
+        ApplyTextLabelStyle(Char6C6name);
+        Char6C6name.style.display = DisplayStyle.Flex;
+        Char6C6name.SetEnabled(true);
+        ApplyFontFamily(Char6C6name, "Press Start 2P", 8f);
+        Char6C6name.style.color = ParseStyleColor("#FFFFFF", null);
+        Char6Hp.style.display = DisplayStyle.Flex;
+        Char6Hp.SetEnabled(true);
+        Char6Hp.style.color = ParseStyleColor("#333333", null);
+        Char6Hp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char6HpHpFill.style.display = DisplayStyle.Flex;
+        Char6HpHpFill.SetEnabled(true);
+        Char6HpHpFill.style.color = ParseStyleColor("#CCCCCC", null);
+        Char6HpHpFill.style.backgroundColor = ParseStyleColor("#CCCCCC", null);
+        Char6Mp.style.display = DisplayStyle.Flex;
+        Char6Mp.SetEnabled(true);
+        Char6Mp.style.color = ParseStyleColor("#333333", null);
+        Char6Mp.style.backgroundColor = ParseStyleColor("#333333", null);
+        Char6MpMpFill.style.display = DisplayStyle.Flex;
+        Char6MpMpFill.SetEnabled(true);
+        Char6MpMpFill.style.color = ParseStyleColor("#777777", null);
+        Char6MpMpFill.style.backgroundColor = ParseStyleColor("#777777", null);
+        Char6Stats.style.display = DisplayStyle.Flex;
+        Char6Stats.SetEnabled(true);
+        Char6StatsStat1.text = "ATK 16";
+        ApplyTextLabelStyle(Char6StatsStat1);
+        Char6StatsStat1.style.display = DisplayStyle.Flex;
+        Char6StatsStat1.SetEnabled(true);
+        ApplyFontFamily(Char6StatsStat1, "Press Start 2P", 8f);
+        Char6StatsStat1.style.color = ParseStyleColor("#AAAAAA", null);
+        Char6StatsStat2.text = "DEF 10";
+        ApplyTextLabelStyle(Char6StatsStat2);
+        Char6StatsStat2.style.display = DisplayStyle.Flex;
+        Char6StatsStat2.SetEnabled(true);
+        ApplyFontFamily(Char6StatsStat2, "Press Start 2P", 8f);
+        Char6StatsStat2.style.color = ParseStyleColor("#AAAAAA", null);
+        Char6ActionGrid.style.display = DisplayStyle.Flex;
+        Char6ActionGrid.SetEnabled(true);
+        Char6ActionGridAtk.style.display = DisplayStyle.Flex;
+        Char6ActionGridAtk.SetEnabled(true);
+        Char6ActionGridAtk.style.color = ParseStyleColor("#000000", null);
+        Char6ActionGridAtk.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6ActionGridAtk.style.borderLeftWidth = 2f;
+        Char6ActionGridAtk.style.borderRightWidth = 2f;
+        Char6ActionGridAtk.style.borderTopWidth = 2f;
+        Char6ActionGridAtk.style.borderBottomWidth = 2f;
+        Char6ActionGridAtk.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridAtk.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridAtk.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridAtk.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridAtkQEpO3.text = ResolveIconText("swords", "lucide", 16f);
+        ApplyIconLabelStyle(Char6ActionGridAtkQEpO3, 16f, 16f);
+        Char6ActionGridAtkQEpO3.style.display = DisplayStyle.Flex;
+        Char6ActionGridAtkQEpO3.SetEnabled(true);
+        ApplyFontFamily(Char6ActionGridAtkQEpO3, "lucide", 16f);
+        Char6ActionGridAtkQEpO3.style.color = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridMag.style.display = DisplayStyle.Flex;
+        Char6ActionGridMag.SetEnabled(true);
+        Char6ActionGridMag.style.color = ParseStyleColor("#000000", null);
+        Char6ActionGridMag.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6ActionGridMag.style.borderLeftWidth = 2f;
+        Char6ActionGridMag.style.borderRightWidth = 2f;
+        Char6ActionGridMag.style.borderTopWidth = 2f;
+        Char6ActionGridMag.style.borderBottomWidth = 2f;
+        Char6ActionGridMag.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridMag.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridMag.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridMag.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridMagAIphN.text = ResolveIconText("wand-sparkles", "lucide", 16f);
+        ApplyIconLabelStyle(Char6ActionGridMagAIphN, 16f, 16f);
+        Char6ActionGridMagAIphN.style.display = DisplayStyle.Flex;
+        Char6ActionGridMagAIphN.SetEnabled(true);
+        ApplyFontFamily(Char6ActionGridMagAIphN, "lucide", 16f);
+        Char6ActionGridMagAIphN.style.color = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridDef.style.display = DisplayStyle.Flex;
+        Char6ActionGridDef.SetEnabled(true);
+        Char6ActionGridDef.style.color = ParseStyleColor("#000000", null);
+        Char6ActionGridDef.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6ActionGridDef.style.borderLeftWidth = 2f;
+        Char6ActionGridDef.style.borderRightWidth = 2f;
+        Char6ActionGridDef.style.borderTopWidth = 2f;
+        Char6ActionGridDef.style.borderBottomWidth = 2f;
+        Char6ActionGridDef.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridDef.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridDef.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridDef.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridDefE4QKZ.text = ResolveIconText("shield", "lucide", 16f);
+        ApplyIconLabelStyle(Char6ActionGridDefE4QKZ, 16f, 16f);
+        Char6ActionGridDefE4QKZ.style.display = DisplayStyle.Flex;
+        Char6ActionGridDefE4QKZ.SetEnabled(true);
+        ApplyFontFamily(Char6ActionGridDefE4QKZ, "lucide", 16f);
+        Char6ActionGridDefE4QKZ.style.color = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridItem.style.display = DisplayStyle.Flex;
+        Char6ActionGridItem.SetEnabled(true);
+        Char6ActionGridItem.style.color = ParseStyleColor("#000000", null);
+        Char6ActionGridItem.style.backgroundColor = ParseStyleColor("#000000", null);
+        Char6ActionGridItem.style.borderLeftWidth = 2f;
+        Char6ActionGridItem.style.borderRightWidth = 2f;
+        Char6ActionGridItem.style.borderTopWidth = 2f;
+        Char6ActionGridItem.style.borderBottomWidth = 2f;
+        Char6ActionGridItem.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridItem.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridItem.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridItem.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
+        Char6ActionGridItemDVzX7.text = ResolveIconText("flask-conical", "lucide", 16f);
+        ApplyIconLabelStyle(Char6ActionGridItemDVzX7, 16f, 16f);
+        Char6ActionGridItemDVzX7.style.display = DisplayStyle.Flex;
+        Char6ActionGridItemDVzX7.SetEnabled(true);
+        ApplyFontFamily(Char6ActionGridItemDVzX7, "lucide", 16f);
+        Char6ActionGridItemDVzX7.style.color = ParseStyleColor("#FFFFFF", null);
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -1580,6 +2281,10 @@ public sealed class ExploreHudView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
+        if (boxWidth >= 32f && boxHeight >= 32f)
+        {
+            label.style.marginTop = -1f;
+        }
         label.style.fontSize = iconSize;
     }
 }

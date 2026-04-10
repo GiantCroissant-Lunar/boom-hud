@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bf7a0e3098f1445bcd963714ac5c84, type: 3}
+  m_Name: DTT's Procedural UI
+  m_EditorClassIdentifier: DA_Assets.Shared.Editor::DA_Assets.DM.DependencyItem
+  TypeAndAssembly: DTT.UI.ProceduralUI.RoundedImage, DTT.ProceduralUI.Runtime
+  ScriptingDefineSymbol: PROCEDURAL_UI_ASSET_STORE_RELEASE
+  ExpectedPaths: []
+  UnexpectedPaths: []
+  DependentAsmdefAssets: []
+  GeneratedAsmdefName: 
+  GeneratedAsmdefReferences: []
+  GeneratedEditorAsmdefName: 
+  GeneratedEditorAsmdefReferences: []
+  RequiredAsmdefs:
+  - {fileID: 5897886265953266890, guid: 016eaa710b675c144b35d3c84b68dcf5, type: 3}
+  - {fileID: 5897886265953266890, guid: 8cd99ad64d54db84685816ac23042f54, type: 3}
+  isEnabled: 0
+  scriptGuid: 
+  statusLabel: Not found
+  disabledManually: 0

@@ -28,6 +28,7 @@
     <ProjectReference Include="..\BoomHud.Gen.Godot\BoomHud.Gen.Godot.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.React\BoomHud.Gen.React.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.Remotion\BoomHud.Gen.Remotion.csproj" />
+    <ProjectReference Include="..\BoomHud.Gen.UGui\BoomHud.Gen.UGui.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.Unity\BoomHud.Gen.Unity.csproj" />
   </ItemGroup>
 

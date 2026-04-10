@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f675803ca1a220e449451fc8e6fb81fd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Dependency-Manager/Dependencies/TextMeshPro.asset
+  uploadId: 882880

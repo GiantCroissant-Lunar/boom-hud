@@ -75,7 +75,13 @@ public sealed class RemotionGenerator : IBackendGenerator
         builder.AppendLine("import { AbsoluteFill, Sequence } from 'remotion';");
         builder.AppendLine("import { MotionScene, parseMotionDocument, type MotionSequence } from './motion';");
         builder.AppendLine();
-        builder.AppendLine($"import {{ {document.Name}View, type {document.Name}ViewModel }} from './{document.Name}View';");
+        builder.Append("import { ")
+            .Append(document.Name)
+            .Append("View, type ")
+            .Append(document.Name)
+            .Append("ViewModel } from './")
+            .Append(document.Name)
+            .AppendLine("View';");
         builder.AppendLine();
         builder.Append("const motionDocument = parseMotionDocument(`");
         builder.AppendLine();
@@ -115,7 +121,7 @@ public sealed class RemotionGenerator : IBackendGenerator
             builder.AppendLine();
         }
 
-        builder.AppendLine($"export const {document.Name}MotionSequences = [");
+        builder.Append("export const ").Append(document.Name).AppendLine("MotionSequences = [");
         foreach (var sequence in sequences)
         {
             builder.AppendLine("  {");
@@ -130,15 +136,15 @@ public sealed class RemotionGenerator : IBackendGenerator
         builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequenceId")).Append(" = ").Append(ToStringLiteral(defaultSequence.Id)).AppendLine(";");
         builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequence")).Append(" = ").Append(defaultSequence.SequenceVariable).AppendLine(";");
         builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionDurationInFrames")).Append(" = ").Append(defaultSequence.DurationVariable).AppendLine(";");
-        builder.Append("export const ").Append(document.Name).AppendLine("MotionFramesPerSecond = motionDocument.framesPerSecond;");
-        builder.Append("export const ").Append(document.Name).AppendLine("FramesPerSecond = motionDocument.framesPerSecond;");
-        builder.Append("export const ").Append(document.Name).AppendLine("MotionSequence = ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequence")).AppendLine(";");
-        builder.Append("export const ").Append(document.Name).AppendLine("MotionDurationInFrames = ").Append(ToSafeIdentifier(document.Name + "DefaultMotionDurationInFrames")).AppendLine(";");
+        builder.Append("export const ").Append(document.Name).Append("MotionFramesPerSecond = motionDocument.framesPerSecond;").AppendLine();
+        builder.Append("export const ").Append(document.Name).Append("FramesPerSecond = motionDocument.framesPerSecond;").AppendLine();
+        builder.Append("export const ").Append(document.Name).Append("MotionSequence = ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequence")).Append(';').AppendLine();
+        builder.Append("export const ").Append(document.Name).Append("MotionDurationInFrames = ").Append(ToSafeIdentifier(document.Name + "DefaultMotionDurationInFrames")).Append(';').AppendLine();
         builder.AppendLine();
         builder.AppendLine();
 
-        builder.Append("export const ").Append(document.Name).AppendLine("MotionComposition = (viewModel: ")
-            .Append(document.Name).AppendLine("ViewModel): React.JSX.Element =>");
+        builder.Append("export const ").Append(document.Name).Append("MotionComposition = (viewModel: ")
+            .Append(document.Name).Append("ViewModel): React.JSX.Element =>").AppendLine();
         builder.AppendLine("{");
         builder.AppendLine("  return (");
         builder.AppendLine("    <AbsoluteFill>");
@@ -149,8 +155,13 @@ public sealed class RemotionGenerator : IBackendGenerator
         builder.AppendLine("}>");
         builder.AppendLine("        <MotionScene");
         builder.AppendLine("          document={motionDocument}");
-        builder.AppendLine($"          sequence={{ {ToSafeIdentifier(document.Name + "DefaultMotionSequence")} }}");
-        builder.AppendLine($"          component={{ {document.Name}View }}");
+        builder.Append("          sequence={")
+            .Append(ToSafeIdentifier(document.Name + "DefaultMotionSequence"))
+            .AppendLine("}");
+        builder.Append("          component={")
+            .Append(document.Name)
+            .Append("View")
+            .AppendLine("}");
         builder.AppendLine("          viewModel={viewModel}");
         builder.AppendLine("        />");
         builder.AppendLine("      </Sequence>");

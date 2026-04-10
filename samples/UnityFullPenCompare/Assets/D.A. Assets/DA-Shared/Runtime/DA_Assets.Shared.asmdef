@@ -1,0 +1,17 @@
+{
+    "name": "DA_Assets.Shared",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.UnityWebRequestModule",
+        "UnityEngine.UnityWebRequestTextureModule"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

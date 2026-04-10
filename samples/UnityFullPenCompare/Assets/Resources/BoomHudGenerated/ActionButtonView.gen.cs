@@ -66,11 +66,22 @@ public sealed class ActionButtonView
     {
         Root.style.display = DisplayStyle.Flex;
         Root.SetEnabled(true);
+        Root.style.color = ParseStyleColor("#000000", null);
+        Root.style.backgroundColor = ParseStyleColor("#000000", null);
+        Root.style.borderLeftWidth = 2f;
+        Root.style.borderRightWidth = 2f;
+        Root.style.borderTopWidth = 2f;
+        Root.style.borderBottomWidth = 2f;
+        Root.style.borderLeftColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderRightColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderTopColor = ParseStyleColor("#FFFFFF", null);
+        Root.style.borderBottomColor = ParseStyleColor("#FFFFFF", null);
         Icon.text = ResolveIconText("swords", "lucide", 16f);
         ApplyIconLabelStyle(Icon, 16f, 16f);
         Icon.style.display = DisplayStyle.Flex;
         Icon.SetEnabled(true);
         ApplyFontFamily(Icon, "lucide", 16f);
+        Icon.style.color = ParseStyleColor("#FFFFFF", null);
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -414,6 +425,10 @@ public sealed class ActionButtonView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
+        if (boxWidth >= 32f && boxHeight >= 32f)
+        {
+            label.style.marginTop = -1f;
+        }
         label.style.fontSize = iconSize;
     }
 }

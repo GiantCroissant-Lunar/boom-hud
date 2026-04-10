@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 02f61173ede7e324ba92a65806f5a5e3
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/DA-Shared/Editor/Resources/mcp_proxy.txt
+  uploadId: 882880

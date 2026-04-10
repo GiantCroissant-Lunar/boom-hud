@@ -1,0 +1,2 @@
+Starting from version 1.2.3, the asset manual is available only as a web version.
+Link: https://da-assets.gitbook.io/docs/fcu-uitk/introduction

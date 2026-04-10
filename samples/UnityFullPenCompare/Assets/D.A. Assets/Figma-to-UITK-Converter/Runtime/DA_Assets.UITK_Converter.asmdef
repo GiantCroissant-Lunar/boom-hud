@@ -1,0 +1,20 @@
+{
+    "name": "DA_Assets.UITK_Converter",
+    "rootNamespace": "DA_Assets.FCU",
+    "references": [
+        "GUID:fd2d248e310f8234eb351b83126b632e",
+        "GUID:1b74e700d4693d342a6732b0ca624858",
+        "GUID:18f4a329dd82a544b9708a339d2ef8c9",
+        "GUID:3f2527220f3101d41befe04ed02d001f",
+        "GUID:20d7c11c9c91aa4428ccd059506c1f18"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

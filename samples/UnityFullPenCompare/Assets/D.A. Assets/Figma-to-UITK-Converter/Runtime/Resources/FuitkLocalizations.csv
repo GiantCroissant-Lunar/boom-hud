@@ -1,0 +1,4 @@
+﻿﻿key,en-US,ja-JP,ko-KR,zh-CN,es-ES,de-DE,fr-FR,id-ID,hi-IN
+log_instantiate_game_objects,Creating UITK game objects.,UITK 用のゲームオブジェクトを作成しています。,UITK 게임 오브젝트를 생성합니다.,正在创建 UITK 游戏对象。,Creando game objects de UITK.,Erstelle UITK-GameObjects.,Création des GameObjects UITK.,Membuat game object UITK.,UITK game objects बनाए जा रहे हैं।
+log_gameobject_missing,GameObject is null for '{0}'.,「{0}」の GameObject が null です。,'{0}'의 GameObject가 null입니다.,“{0}” 的 GameObject 为空。,El GameObject de '{0}' es nulo.,GameObject von „{0}“ ist null.,Le GameObject de « {0} » est nul.,GameObject adalah null untuk '{0}'.,'{0}' के लिए GameObject null है।
+log_sync_helper_missing,SyncHelper is null for '{0}'.,「{0}」の SyncHelper が null です。,'{0}'의 SyncHelper가 null입니다.,“{0}” 的 SyncHelper 为空。,El SyncHelper de '{0}' es nulo.,SyncHelper von „{0}“ ist null.,Le SyncHelper de « {0} » est nul.,SyncHelper adalah null untuk '{0}'.,'{0}' के लिए SyncHelper null है।

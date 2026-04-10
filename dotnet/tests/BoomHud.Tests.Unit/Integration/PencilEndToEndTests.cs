@@ -4,6 +4,7 @@ using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Dsl.Pencil;
 using BoomHud.Gen.Godot;
+using BoomHud.Gen.React;
 using BoomHud.Gen.TerminalGui;
 using BoomHud.Gen.Unity;
 using FluentAssertions;
@@ -696,5 +697,78 @@ public class PencilEndToEndTests
         minimap.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
         charPortrait.Root.Layout.Should().NotBeNull();
         charPortrait.Root.Layout!.Type.Should().Be(LayoutType.Vertical);
+    }
+
+    [Fact]
+    public void Parse_ReusablePenRefs_PreserveCompositionIntentInIr()
+    {
+        var penJson = """
+            {
+              "nodes": [
+                {
+                  "id": "action-button",
+                  "type": "frame",
+                  "name": "Component/ActionButton",
+                  "reusable": true,
+                  "layout": { "mode": "vertical", "width": 28, "height": 28 },
+                  "children": [
+                    {
+                      "id": "icon",
+                      "type": "text",
+                      "name": "Icon",
+                      "content": "swords"
+                    }
+                  ]
+                },
+                {
+                  "id": "toolbar",
+                  "type": "frame",
+                  "name": "Toolbar",
+                  "layout": { "mode": "horizontal", "gap": 2 },
+                  "children": [
+                    {
+                      "id": "attack",
+                      "type": "ref",
+                      "ref": "action-button"
+                    },
+                    {
+                      "id": "skill",
+                      "type": "ref",
+                      "ref": "action-button",
+                      "descendants": {
+                        "icon": {
+                          "content": "sparkles"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+            """;
+
+        var document = _parser.Parse(penJson);
+
+        document.Components.Should().ContainKey("action-button");
+        document.Root.Name.Should().Be("Toolbar");
+        document.Root.Children.Should().HaveCount(2);
+        document.Root.Children.Should().OnlyContain(child => child.ComponentRefId == "action-button");
+
+        var firstInstance = document.Root.Children[0];
+        var secondInstance = document.Root.Children[1];
+        firstInstance.Children.Should().ContainSingle();
+        secondInstance.Children.Should().ContainSingle();
+        firstInstance.Children[0].Properties["Text"].Value.Should().Be("swords");
+        secondInstance.Children[0].Properties["Text"].Value.Should().Be("sparkles");
+
+        var reactGenerator = new ReactGenerator();
+        var result = reactGenerator.Generate(document, new GenerationOptions
+        {
+            Namespace = "Generated.Hud",
+            IncludeComments = true,
+            UseNullableAnnotations = true
+        });
+
+        result.Success.Should().BeTrue();
     }
 }

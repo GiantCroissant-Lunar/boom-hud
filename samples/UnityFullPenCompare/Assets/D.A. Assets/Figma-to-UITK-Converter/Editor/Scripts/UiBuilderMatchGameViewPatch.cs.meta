@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: f6d206a2002ccb44b862ed00c8bf006b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Editor/Scripts/UiBuilderMatchGameViewPatch.cs
+  uploadId: 882842

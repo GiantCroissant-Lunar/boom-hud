@@ -6,6 +6,7 @@ import {
   getSequenceDurationFrames,
   getRequiredMotionSequence,
   parseMotionDocument,
+  resolveSequenceStateAtFrame,
 } from "./motion";
 import { CharPortraitView } from "./generated/CharPortraitView";
 import type { CharPortraitViewModel } from "./generated/CharPortraitView";
@@ -22,12 +23,39 @@ export const generatedMotionDemoDurationInFrames = getSequenceDurationFrames(
 
 export const generatedMotionDemoFramesPerSecond = motionDocument.framesPerSecond;
 
-export const GeneratedMotionDemoSchema = z.object({});
+const finalMotionTargets = resolveSequenceStateAtFrame(
+  motionDocument,
+  generatedMotionDemoSequence,
+  generatedMotionDemoDurationInFrames,
+);
+
+export const GeneratedMotionDemoSchema = z.object({
+  animated: z.boolean().default(true),
+  isolated: z.boolean().default(false),
+});
 export type GeneratedMotionDemoSchema = z.infer<typeof GeneratedMotionDemoSchema>;
 
 const demoViewModel: CharPortraitViewModel = {};
 
-export const GeneratedMotionDemo: React.FC<GeneratedMotionDemoSchema> = () => {
+export const GeneratedMotionDemo: React.FC<GeneratedMotionDemoSchema> = ({
+  animated = true,
+  isolated = false,
+}) => {
+  const content = animated ? (
+    <MotionScene
+      document={motionDocument}
+      sequence={generatedMotionDemoSequence}
+      component={CharPortraitView}
+      viewModel={demoViewModel}
+    />
+  ) : (
+    <CharPortraitView {...demoViewModel} motionTargets={finalMotionTargets} />
+  );
+
+  if (isolated) {
+    return <div style={{ display: "inline-flex" }}>{content}</div>;
+  }
+
   return (
     <AbsoluteFill
       style={{
@@ -37,12 +65,7 @@ export const GeneratedMotionDemo: React.FC<GeneratedMotionDemoSchema> = () => {
         justifyContent: "center",
       }}
     >
-      <MotionScene
-        document={motionDocument}
-        sequence={generatedMotionDemoSequence}
-        component={CharPortraitView}
-        viewModel={demoViewModel}
-      />
+      {content}
     </AbsoluteFill>
   );
 };

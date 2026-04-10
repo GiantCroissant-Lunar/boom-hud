@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 9715ebee720c7734e8ea9a9a39feb0b7
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Runtime/Scripts/StyleBuilders/ImageStyleBuilder.cs
+  uploadId: 882842

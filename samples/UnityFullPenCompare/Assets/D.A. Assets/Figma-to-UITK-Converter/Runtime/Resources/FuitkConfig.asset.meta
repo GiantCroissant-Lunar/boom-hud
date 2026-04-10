@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 42a40123c7c802f4d8b8bf1347dc5c01
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Runtime/Resources/FuitkConfig.asset
+  uploadId: 882842

@@ -4,6 +4,7 @@ using BoomHud.Gen.Godot;
 using BoomHud.Gen.React;
 using BoomHud.Gen.Remotion;
 using BoomHud.Gen.TerminalGui;
+using BoomHud.Gen.UGui;
 using BoomHud.Gen.Unity;
 
 namespace BoomHud.Cli.Backends;
@@ -37,7 +38,11 @@ internal static class BackendCatalog
         new(
             CanonicalName: "Unity",
             Aliases: ["unity", "unity-uitoolkit", "uitoolkit"],
-            CreateGenerator: static () => new UnityGenerator())
+            CreateGenerator: static () => new UnityGenerator()),
+        new(
+            CanonicalName: "UGui",
+            Aliases: ["ugui", "unity-ugui", "unity-ui", "u-gui"],
+            CreateGenerator: static () => new UGuiGenerator())
     ];
 
     private static readonly Dictionary<string, BackendRegistration> _registrationsByAlias = BuildAliasMap();

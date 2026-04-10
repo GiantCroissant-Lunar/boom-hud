@@ -148,3 +148,13 @@ tasks:
     desc: Verify Foundation/backend test ownership and project references
     cmds:
       - pwsh -NoProfile -File scripts/verify-test-graph.ps1
+
+  verify:fidelity:first-pass:
+    desc: Run the first-pass Pen → Remotion → Unity fidelity workflow
+    cmds:
+      - pwsh -NoProfile -File scripts/run-pen-remotion-unity-fidelity.ps1
+
+  verify:fidelity:corpus:
+    desc: Run the component fidelity corpus and enforce the current quality floor
+    cmds:
+      - pwsh -NoProfile -File scripts/run-fidelity-corpus.ps1

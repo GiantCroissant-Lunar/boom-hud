@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3ca7693daa75fb8448ab50c2c14cd0fc
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272042
+  packageName: Figma to UI Toolkit Converter
+  packageVersion: 2.0.0
+  assetPath: Assets/D.A. Assets/Figma-to-UITK-Converter/Manual.txt
+  uploadId: 882842

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 3b8acdca220bff546be94f777c9f4122
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Structs/RateLimitWindowData.cs
+  uploadId: 882880

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Gen.UGui</AssemblyName>
+    <RootNamespace>BoomHud.Gen.UGui</RootNamespace>
+    <PackageId>BoomHud.UGui</PackageId>
+    <Description>Unity uGUI runtime builder generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;unity;ugui;generator;boomhud</PackageTags>
+    <NoWarn>$(NoWarn);CA1305</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

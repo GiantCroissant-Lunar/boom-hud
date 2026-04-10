@@ -6,12 +6,12 @@ It exists because the raw attempt folders under `build/_artifacts/latest/` are u
 
 ## Current trusted baseline
 
-- Date: 2026-04-09
-- Reference: [j8BT0.png](/C:/lunar-horse/plate-projects/boom-hud/build/_artifacts/latest/screenshots/j8BT0.png)
-- Unity capture: Play-mode live window capture cropped to the `CharPortrait` region
-- Overall similarity: `57.36%`
-- Report: [score-report-play-baseline.json](/C:/lunar-horse/plate-projects/boom-hud/build/_artifacts/latest/manual-charportrait-kilo/20260409-075135/score-report-play-baseline.json)
-- Diff: [score-diff-play-baseline.png](/C:/lunar-horse/plate-projects/boom-hud/build/_artifacts/latest/manual-charportrait-kilo/20260409-075135/score-diff-play-baseline.png)
+- Date: 2026-04-10
+- Reference: [j8BT0.png](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/pen/static/j8BT0.png)
+- Unity capture: Play-mode game-view capture at 2x, cropped to the isolated `ComponentCharPortrait` region in `ComponentLab`
+- Overall similarity: `82.33%`
+- Report: [charportrait-pen-vs-unity-static-generator-classicon-neg1.json](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/reports/charportrait-pen-vs-unity-static-generator-classicon-neg1.json)
+- Diff: [charportrait-pen-vs-unity-static-generator-classicon-neg1.diff.png](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/diffs/charportrait-pen-vs-unity-static-generator-classicon-neg1.diff.png)
 
 ## Preconditions that changed the results
 
@@ -25,6 +25,59 @@ It exists because the raw attempt folders under `build/_artifacts/latest/` are u
 3. Edit-mode Game-view capture is still less trustworthy than Play-mode capture. Validated comparisons for `CharPortrait` should currently prefer Play mode.
 
 ## Valid attempts
+
+### 2026-04-10: Component Lab width recovery
+
+- Attempt type: compare-harness repair
+- Summary: the isolated `CharPortrait` preview in `ComponentLabPresenter.cs` was still forcing a `122px` width, while the generated `CharPortrait` component is `130px` wide in both the pen source and generated USS.
+- Patch:
+  - align the isolated preview sample values to the pen reference
+  - restore `PartyMemberWidth` to `130f`
+  - stop overriding the generated root into a narrower layout
+- Outcome: accepted
+- Evidence:
+  - live Unity bounds probe for `ComponentCharPortrait`: `130 x 160`
+  - [component-lab-char-portrait-gameview-2x-cropped.png](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/unity/static/component-lab-char-portrait-gameview-2x-cropped.png)
+  - [charportrait-pen-vs-unity-static-gameview-2x.json](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/reports/charportrait-pen-vs-unity-static-gameview-2x.json)
+- Notes: this is the new trusted starting point. The remaining diff is concentrated in icon rendering and exact edge placement, not broad layout collapse.
+
+### 2026-04-10: small-text line-height removal
+
+- Attempt type: generator hypothesis
+- Summary: tested removing the `line-height: 12px` override for `Press Start 2P` labels at `<= 8px`.
+- Outcome: rejected
+- Evidence:
+  - [charportrait-pen-vs-unity-static-lineheight-test.json](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/reports/charportrait-pen-vs-unity-static-lineheight-test.json)
+- Reason: true zero-delta on the trusted capture path. The component stayed at the same `82.26%` score.
+
+### 2026-04-10: raw TTF font swap
+
+- Attempt type: runtime rendering experiment
+- Summary: temporarily swapped `CharPortrait` labels from the bundled `FontAsset` path to the raw `lucide.ttf` and `PressStart2P-Regular.ttf` fonts at runtime.
+- Outcome: rejected
+- Evidence:
+  - [charportrait-pen-vs-unity-static-ttf-test.json](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/reports/charportrait-pen-vs-unity-static-ttf-test.json)
+- Reason: score dropped to `81.88%`, so the current SDF font path is better than the raw TTF fallback for this component.
+
+### 2026-04-10: large face-icon vertical nudge
+
+- Attempt type: generator hypothesis
+- Summary: tested a `-1px` vertical nudge only for large icon labels (`32px` boxes) in `ApplyIconLabelStyle`.
+- Patch: in [UnityGenerator.cs](/C:/lunar-horse/plate-projects/boom-hud/dotnet/src/BoomHud.Gen.Unity/UnityGenerator.cs), add `label.style.marginTop = -1f;` when `boxWidth >= 32f && boxHeight >= 32f`.
+- Outcome: accepted
+- Evidence:
+  - [component-lab-char-portrait-generator-classicon-neg1-2x-cropped.png](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/unity/static/component-lab-char-portrait-generator-classicon-neg1-2x-cropped.png)
+  - [charportrait-pen-vs-unity-static-generator-classicon-neg1.json](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/current/reports/charportrait-pen-vs-unity-static-generator-classicon-neg1.json)
+- Notes: this is a small but real gain on the trusted play-mode path, moving the component from `82.26%` to `82.33%`.
+
+### 2026-04-10: deterministic tweak-capture hook
+
+- Attempt type: tooling improvement
+- Summary: added tweak fields and a public entry point to [BoomHudFidelityCapture.cs](/C:/lunar-horse/plate-projects/boom-hud/samples/UnityFullPenCompare/Assets/Editor/BoomHudFidelityCapture.cs) so capture manifests can apply icon-margin experiments without manual runtime pokes.
+- Outcome: partial
+- Evidence:
+  - manifests under [build/fidelity/icon-loop/manifests](/C:/lunar-horse/plate-projects/boom-hud/build/fidelity/icon-loop/manifests)
+- Notes: the tweak hook works, but the current edit-mode crop path still returns the full Game View instead of an element-aligned crop for `CharPortrait`, so it is not yet a replacement for the trusted play-mode scorer.
 
 ### 2026-04-09: host-fix baseline recovery
 
@@ -99,5 +152,7 @@ These runs are still worth remembering, but they should not be used as evidence 
 1. The experiment loop is now trustworthy only when baseline and candidate are measured through the same validated Play-mode capture path.
 2. `ApplyIconLabelStyle` size inset by itself is not enough to move the `CharPortrait` score.
 3. Removing text label padding and margins in `ApplyTextLabelStyle` makes the component worse, so the remaining text drift is not explained by default label chrome alone.
-4. The remaining visible misses are still dominated by text/icon rendering treatment and small alignment offsets, not large structural layout collapse.
-5. Future attempts should continue as one-hypothesis patches and append their outcome here.
+4. The old `57.36%` baseline should no longer be treated as the current component state. After fixing the compare harness and landing the large-icon nudge, the trusted isolated static baseline is `82.33%`.
+5. The remaining visible misses are dominated by icon rendering treatment and small alignment offsets, not large structural layout collapse.
+6. The new `BoomHudFidelityCapture` tweak hook is useful for structured experiments, but its crop path still needs repair before it can replace the manual play-mode scorer.
+7. Future attempts should continue as one-hypothesis patches and append their outcome here.

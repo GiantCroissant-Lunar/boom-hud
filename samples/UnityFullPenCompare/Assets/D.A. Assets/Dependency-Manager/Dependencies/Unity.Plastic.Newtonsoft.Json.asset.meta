@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3dd49842b6bad1f4db45ba5ea273eb21
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Dependency-Manager/Dependencies/Unity.Plastic.Newtonsoft.Json.asset
+  uploadId: 882880

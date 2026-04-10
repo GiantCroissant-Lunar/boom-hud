@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce052722ed547544eb4bbaf99ed6d422, type: 3}
+  m_Name: StepperTool
+  m_EditorClassIdentifier: 
+  ToolName: start_import_step
+  ToolDescription: |-
+    Runs an import step by index.
+    The agent must call this command and follow the instructions returned by its execution.
+  Schema:
+    Type: object
+    Properties:
+      m_Keys:
+      - step_index
+      m_Values:
+      - Type: integer
+        Description: Import step index to execute (0-based). Use 0 to initialize
+          the import.
+    Required:
+    - step_index
+  ResponseTemplates:
+    m_Keys: []
+    m_Values: []

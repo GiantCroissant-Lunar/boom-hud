@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 3bb29d41d7c64d90ab4071a2ae98c174
+timeCreated: 1753728200
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Sprite/SpriteBatchWriter.cs
+  uploadId: 882880

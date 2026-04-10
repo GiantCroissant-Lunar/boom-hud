@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f5da493b28874d34a81836a2b024dc06
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198134
+  packageName: Figma Converter for Unity
+  packageVersion: 7.0.0
+  assetPath: Assets/D.A. Assets/Figma-Converter-for-Unity/Runtime/Scripts/Drawers/Canvas/ButtonDrawers/DAButtonDrawer.cs
+  uploadId: 882880
