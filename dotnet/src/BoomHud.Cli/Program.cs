@@ -44,7 +44,7 @@ public static class Program
             inputOption.AddAlias("--in");
             var rootComponentOption = new Option<string?>("--root", "Root component name to generate. For a single input, selects a reusable component from that document; for multiple inputs, selects the composition root.");
             var manifestOption = new Option<FileInfo?>("--manifest", "Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.");
-            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, unity, all)");
+            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, remotion, unity, all)");
             var formatOption = new Option<string?>("--format", "Input format (pen, figma, ir). Auto-detected from extension if omitted.");
             var outputOption = new Option<DirectoryInfo?>("--output", "Output directory for generated files");
             var namespaceOption = new Option<string>("--namespace", () => "Generated", "Namespace for generated code");
@@ -633,9 +633,10 @@ public static class Program
         var targets = BackendCatalog.ResolveTargets(target);
         if (motionDocument != null
             && !targets.Contains("Godot", StringComparer.Ordinal)
+            && !targets.Contains("Remotion", StringComparer.Ordinal)
             && !targets.Contains("Unity", StringComparer.Ordinal))
         {
-            Console.WriteLine("Warning: motion input is currently consumed by the Godot and Unity backends only.");
+            Console.WriteLine("Warning: motion input is currently consumed by the Godot, Remotion, and Unity backends only.");
         }
 
         foreach (var backend in targets)

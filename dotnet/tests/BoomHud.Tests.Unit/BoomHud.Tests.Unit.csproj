@@ -30,6 +30,7 @@
     <Compile Include="Cli\BackendCatalogTests.cs" />
     <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
     <Compile Include="Generation\ReactGeneratorTests.cs" />
+    <Compile Include="Generation\RemotionGeneratorTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

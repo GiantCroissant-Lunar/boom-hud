@@ -2,6 +2,7 @@ using BoomHud.Cli.Backends;
 using BoomHud.Gen.Godot;
 using BoomHud.Gen.React;
 using BoomHud.Gen.TerminalGui;
+using BoomHud.Gen.Remotion;
 using BoomHud.Gen.Unity;
 using FluentAssertions;
 using Xunit;
@@ -21,9 +22,9 @@ public sealed class BackendCatalogTests
     [Fact]
     public void ResolveTargets_SupportsCommaSeparatedManifestTargets()
     {
-        var targets = BackendCatalog.ResolveTargets("godot,terminalgui,react,unity");
+        var targets = BackendCatalog.ResolveTargets("godot,terminalgui,react,remotion,unity");
 
-        targets.Should().Equal(["Godot", "TerminalGui", "React", "Unity"]);
+        targets.Should().Equal(["Godot", "TerminalGui", "React", "Remotion", "Unity"]);
     }
 
     [Fact]
@@ -39,6 +40,7 @@ public sealed class BackendCatalogTests
     {
         BackendCatalog.CreateGenerator("Godot").Should().BeOfType<GodotGenerator>();
         BackendCatalog.CreateGenerator("React").Should().BeOfType<ReactGenerator>();
+        BackendCatalog.CreateGenerator("Remotion").Should().BeOfType<RemotionGenerator>();
         BackendCatalog.CreateGenerator("TerminalGui").Should().BeOfType<TerminalGuiGenerator>();
         BackendCatalog.CreateGenerator("Unity").Should().BeOfType<UnityGenerator>();
     }

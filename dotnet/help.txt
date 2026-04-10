@@ -12,7 +12,7 @@ Options:
   --root <root>                                Root component name for multi-input composition. If omitted, first input's root is used.
   --manifest <manifest>                        Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.
   --format <format>                            Input format (pen, figma, ir). Auto-detected from extension if omitted.
-  --target <target>                            Target backend (terminalGui, avalonia, godot, all) [default: terminalGui]
+  --target <target>                            Target backend (terminalGui, avalonia, godot, react, remotion, unity, all) [default: terminalGui]
   --output <output>                            Output directory for generated files
   --namespace <namespace>                      Namespace for generated code [default: Generated]
   --viewmodel-namespace <viewmodel-namespace>  Namespace for generated (or externally-provided) ViewModel interfaces (defaults to --namespace)
