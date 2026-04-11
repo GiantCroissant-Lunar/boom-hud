@@ -444,6 +444,7 @@ public static class Program
             var rulesCommand = new Command("rules", "Rule planning and sweep commands");
             rulesCommand.AddCommand(RulesPlanCommand.Build());
             rulesCommand.AddCommand(RulesSweepCommand.Build());
+            rulesCommand.AddCommand(RulesSweepRemotionCommand.Build());
 
             rootCommand.AddCommand(generateCommand);
             rootCommand.AddCommand(validateCommand);

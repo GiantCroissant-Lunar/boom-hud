@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { z } from "zod";
+import { FontReadyGate } from "./FontReadyGate";
 import { ActionButtonView } from "./generated/ActionButtonView";
 import { CharPortraitView } from "./generated/CharPortraitView";
 import { MessageLogView } from "./generated/MessageLogView";
@@ -49,19 +50,21 @@ export const GeneratedComponentDemo: React.FC<GeneratedComponentDemoSchema> = ({
   const content = <div style={{ display: "inline-flex" }}>{renderComponent(componentId)}</div>;
 
   if (isolated) {
-    return content;
+    return <FontReadyGate>{content}</FontReadyGate>;
   }
 
   return (
-    <AbsoluteFill
-      style={{
-        background: "#050505",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {content}
-    </AbsoluteFill>
+    <FontReadyGate>
+      <AbsoluteFill
+        style={{
+          background: "#050505",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {content}
+      </AbsoluteFill>
+    </FontReadyGate>
   );
 };

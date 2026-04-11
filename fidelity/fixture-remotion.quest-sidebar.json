@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "artifactsRoot": "build/fixture-remotion/latest",
+  "surfaces": [
+    {
+      "id": "quest-sidebar",
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "output": "captures/quest-sidebar.png",
+        "trimTransparency": true,
+        "props": {
+          "fixtureId": "QuestSidebar",
+          "isolated": true,
+          "canvasWidth": 840,
+          "canvasHeight": 1920,
+          "renderScale": 2
+        }
+      }
+    }
+  ]
+}

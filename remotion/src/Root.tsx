@@ -23,6 +23,10 @@ import {
   GeneratedComponentDemo,
   GeneratedComponentDemoSchema,
 } from "./GeneratedComponentDemo";
+import {
+  GeneratedFixtureDemo,
+  GeneratedFixtureDemoSchema,
+} from "./GeneratedFixtureDemo";
 
 export const RemotionRoot: React.FC = () => {
   // Default props for preview - will be overridden by CLI input
@@ -42,10 +46,21 @@ export const RemotionRoot: React.FC = () => {
     currentSnapshots: [],
   };
 
+  const defaultFixtureProps: GeneratedFixtureDemoSchema = {
+    fixtureId: "QuestSidebar",
+    isolated: true,
+    canvasWidth: 840,
+    canvasHeight: 1920,
+    renderScale: 2,
+  };
+
   // Get input props from CLI or use defaults
-  const inputProps = getInputProps() as Partial<SnapshotsSchema & CompareSchema>;
+  const inputProps = getInputProps() as Partial<
+    SnapshotsSchema & CompareSchema & GeneratedFixtureDemoSchema
+  >;
   const props = { ...defaultProps, ...inputProps };
   const compareProps = { ...defaultCompareProps, ...inputProps };
+  const fixtureProps = { ...defaultFixtureProps, ...inputProps };
 
   // Calculate duration based on snapshots
   const snapshotCount = props.snapshots?.length || 1;
@@ -120,6 +135,16 @@ export const RemotionRoot: React.FC = () => {
         height={512}
         schema={GeneratedComponentDemoSchema}
         defaultProps={{ componentId: "CharPortrait", isolated: true }}
+      />
+      <Composition
+        id="GeneratedFixtureDemo"
+        component={GeneratedFixtureDemo}
+        durationInFrames={1}
+        fps={30}
+        width={fixtureProps.canvasWidth}
+        height={fixtureProps.canvasHeight}
+        schema={GeneratedFixtureDemoSchema}
+        defaultProps={fixtureProps}
       />
     </>
   );

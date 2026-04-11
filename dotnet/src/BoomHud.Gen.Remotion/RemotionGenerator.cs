@@ -6,6 +6,7 @@ using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.React;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.Remotion;
 
@@ -26,7 +27,7 @@ public sealed class RemotionGenerator : IBackendGenerator
 
     public GenerationResult Generate(HudDocument document, GenerationOptions options)
     {
-        var reactResult = new ReactGenerator().Generate(document, options);
+        var reactResult = new ReactGenerator("remotion").Generate(document, options);
         var diagnostics = new List<Diagnostic>(reactResult.Diagnostics);
         var files = new List<GeneratedFile>(reactResult.Files);
 
@@ -41,7 +42,10 @@ public sealed class RemotionGenerator : IBackendGenerator
 
         try
         {
-            var motionContent = GenerateMotionComposition(document, options.Motion, diagnostics);
+            var resolver = new RuleResolver(options.RuleSet, "remotion");
+            var effectiveMotion = MotionPolicyService.Apply(options.Motion, resolver, document.Name);
+            AddPortableMotionDiagnostics(effectiveMotion, diagnostics);
+            var motionContent = GenerateMotionComposition(document, effectiveMotion, diagnostics);
             files.Add(new GeneratedFile
             {
                 Path = $"{document.Name}MotionComposition.tsx",
@@ -59,6 +63,22 @@ public sealed class RemotionGenerator : IBackendGenerator
             Files = files,
             Diagnostics = diagnostics
         };
+    }
+
+    private static void AddPortableMotionDiagnostics(MotionDocument motion, List<Diagnostic> diagnostics)
+    {
+        var existing = new HashSet<(string Code, string Message)>(
+            motion.LoadDiagnostics.Select(diagnostic => (diagnostic.Code, diagnostic.Message)));
+
+        foreach (var diagnostic in motion.ValidatePortableContract())
+        {
+            if (!existing.Add((diagnostic.Code, diagnostic.Message)))
+            {
+                continue;
+            }
+
+            diagnostics.Add(Diagnostic.Warning(diagnostic.Message, diagnostic.SourceFile, diagnostic.Code));
+        }
     }
 
     private static string GenerateMotionComposition(

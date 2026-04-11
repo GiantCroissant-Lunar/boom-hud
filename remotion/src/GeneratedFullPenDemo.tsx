@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { z } from "zod";
+import { FontReadyGate } from "./FontReadyGate";
 import {
   MotionScene,
   getRequiredMotionSequence,
@@ -40,24 +41,26 @@ export const GeneratedFullPenDemo: React.FC<GeneratedFullPenDemoSchema> = ({
   animated = false,
 }) => {
   return (
-    <AbsoluteFill
-      style={{
-        background: "#050505",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {animated ? (
-        <MotionScene
-          document={motionDocument}
-          sequence={generatedFullPenDemoSequence}
-          component={ExploreHudView}
-          viewModel={demoViewModel}
-        />
-      ) : (
-        <ExploreHudView {...demoViewModel} motionTargets={finalMotionTargets} />
-      )}
-    </AbsoluteFill>
+    <FontReadyGate>
+      <AbsoluteFill
+        style={{
+          background: "#050505",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {animated ? (
+          <MotionScene
+            document={motionDocument}
+            sequence={generatedFullPenDemoSequence}
+            component={ExploreHudView}
+            viewModel={demoViewModel}
+          />
+        ) : (
+          <ExploreHudView {...demoViewModel} motionTargets={finalMotionTargets} />
+        )}
+      </AbsoluteFill>
+    </FontReadyGate>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { z } from "zod";
+import { FontReadyGate } from "./FontReadyGate";
 import {
   MotionScene,
   getSequenceDurationFrames,
@@ -53,19 +54,25 @@ export const GeneratedMotionDemo: React.FC<GeneratedMotionDemoSchema> = ({
   );
 
   if (isolated) {
-    return <div style={{ display: "inline-flex" }}>{content}</div>;
+    return (
+      <FontReadyGate>
+        <div style={{ display: "inline-flex" }}>{content}</div>
+      </FontReadyGate>
+    );
   }
 
   return (
-    <AbsoluteFill
-      style={{
-        background: "#050505",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {content}
-    </AbsoluteFill>
+    <FontReadyGate>
+      <AbsoluteFill
+        style={{
+          background: "#050505",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {content}
+      </AbsoluteFill>
+    </FontReadyGate>
   );
 };

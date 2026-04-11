@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
     <ProjectReference Include="..\BoomHud.Gen.React\BoomHud.Gen.React.csproj" />
   </ItemGroup>
 

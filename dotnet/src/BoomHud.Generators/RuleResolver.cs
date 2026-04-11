@@ -393,13 +393,69 @@ public static class LayoutPolicyService
     public static Spacing? ResolvePadding(Spacing? spacing, ResolvedGeneratorPolicy policy)
     {
         var resolved = policy.Layout.Padding is { } padding ? Spacing.Uniform(padding) : spacing;
-        return ApplySpacingDelta(resolved, policy.Layout.PaddingDelta);
+        resolved = ApplySpacingDelta(resolved, policy.Layout.PaddingDelta);
+
+        if (resolved == null
+            && (policy.Layout.PaddingTop != null
+                || policy.Layout.PaddingRight != null
+                || policy.Layout.PaddingBottom != null
+                || policy.Layout.PaddingLeft != null
+                || policy.Layout.PaddingTopDelta != null
+                || policy.Layout.PaddingRightDelta != null
+                || policy.Layout.PaddingBottomDelta != null
+                || policy.Layout.PaddingLeftDelta != null))
+        {
+            resolved = Spacing.Zero;
+        }
+
+        if (resolved == null)
+        {
+            return null;
+        }
+
+        var current = resolved ?? Spacing.Zero;
+        return new Spacing(
+            ResolveSpacingEdge(current.Top, policy.Layout.PaddingTop, policy.Layout.PaddingTopDelta),
+            ResolveSpacingEdge(current.Right, policy.Layout.PaddingRight, policy.Layout.PaddingRightDelta),
+            ResolveSpacingEdge(current.Bottom, policy.Layout.PaddingBottom, policy.Layout.PaddingBottomDelta),
+            ResolveSpacingEdge(current.Left, policy.Layout.PaddingLeft, policy.Layout.PaddingLeftDelta));
     }
 
     public static double ResolveOffsetAdjustment(string axis, ResolvedGeneratorPolicy policy)
         => axis == "x"
             ? (policy.Layout.OffsetX ?? 0d) + (policy.Layout.OffsetXDelta ?? 0d)
             : (policy.Layout.OffsetY ?? 0d) + (policy.Layout.OffsetYDelta ?? 0d);
+
+    public static Dimension? ResolveInset(string edge, Dimension? dimension, ResolvedGeneratorPolicy policy)
+    {
+        var (absolute, delta) = edge.Trim().ToLowerInvariant() switch
+        {
+            "top" => (policy.Layout.InsetTop, policy.Layout.InsetTopDelta),
+            "right" => (policy.Layout.InsetRight, policy.Layout.InsetRightDelta),
+            "bottom" => (policy.Layout.InsetBottom, policy.Layout.InsetBottomDelta),
+            "left" => (policy.Layout.InsetLeft, policy.Layout.InsetLeftDelta),
+            _ => throw new ArgumentOutOfRangeException(nameof(edge), edge, "Inset edge must be top, right, bottom, or left.")
+        };
+
+        var resolved = absolute switch
+        {
+            { } value => Dimension.Pixels(value),
+            _ => dimension
+        };
+
+        if (delta is not { } deltaValue || Math.Abs(deltaValue) <= double.Epsilon)
+        {
+            return resolved;
+        }
+
+        return resolved switch
+        {
+            { Unit: DimensionUnit.Pixels } pixels => Dimension.Pixels(pixels.Value + deltaValue),
+            { Unit: DimensionUnit.Cells } cells => new Dimension(cells.Value + deltaValue, DimensionUnit.Cells),
+            null => Dimension.Pixels(deltaValue),
+            _ => resolved
+        };
+    }
 
     public static string? ResolveAnchorPreset(ResolvedGeneratorPolicy policy)
         => string.IsNullOrWhiteSpace(policy.Layout.AnchorPreset) ? null : policy.Layout.AnchorPreset;
@@ -436,4 +492,15 @@ public static class LayoutPolicyService
 
     private static double ClampNonNegative(double value)
         => value < 0d ? 0d : value;
+
+    private static double ResolveSpacingEdge(double baseline, double? absolute, double? delta)
+    {
+        var resolved = absolute ?? baseline;
+        if (delta is { } amount)
+        {
+            resolved += amount;
+        }
+
+        return ClampNonNegative(resolved);
+    }
 }

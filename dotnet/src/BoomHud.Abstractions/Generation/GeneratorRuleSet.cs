@@ -181,6 +181,22 @@ public sealed record GeneratorLayoutRuleAction
 
     public double? PaddingDelta { get; init; }
 
+    public double? PaddingTop { get; init; }
+
+    public double? PaddingTopDelta { get; init; }
+
+    public double? PaddingRight { get; init; }
+
+    public double? PaddingRightDelta { get; init; }
+
+    public double? PaddingBottom { get; init; }
+
+    public double? PaddingBottomDelta { get; init; }
+
+    public double? PaddingLeft { get; init; }
+
+    public double? PaddingLeftDelta { get; init; }
+
     public double? OffsetX { get; init; }
 
     public double? OffsetXDelta { get; init; }
@@ -188,6 +204,22 @@ public sealed record GeneratorLayoutRuleAction
     public double? OffsetY { get; init; }
 
     public double? OffsetYDelta { get; init; }
+
+    public double? InsetTop { get; init; }
+
+    public double? InsetTopDelta { get; init; }
+
+    public double? InsetRight { get; init; }
+
+    public double? InsetRightDelta { get; init; }
+
+    public double? InsetBottom { get; init; }
+
+    public double? InsetBottomDelta { get; init; }
+
+    public double? InsetLeft { get; init; }
+
+    public double? InsetLeftDelta { get; init; }
 
     public string? AnchorPreset { get; init; }
 
@@ -360,6 +392,22 @@ public sealed record ResolvedGeneratorLayoutPolicy
 
     public double? PaddingDelta { get; init; }
 
+    public double? PaddingTop { get; init; }
+
+    public double? PaddingTopDelta { get; init; }
+
+    public double? PaddingRight { get; init; }
+
+    public double? PaddingRightDelta { get; init; }
+
+    public double? PaddingBottom { get; init; }
+
+    public double? PaddingBottomDelta { get; init; }
+
+    public double? PaddingLeft { get; init; }
+
+    public double? PaddingLeftDelta { get; init; }
+
     public double? OffsetX { get; init; }
 
     public double? OffsetXDelta { get; init; }
@@ -367,6 +415,22 @@ public sealed record ResolvedGeneratorLayoutPolicy
     public double? OffsetY { get; init; }
 
     public double? OffsetYDelta { get; init; }
+
+    public double? InsetTop { get; init; }
+
+    public double? InsetTopDelta { get; init; }
+
+    public double? InsetRight { get; init; }
+
+    public double? InsetRightDelta { get; init; }
+
+    public double? InsetBottom { get; init; }
+
+    public double? InsetBottomDelta { get; init; }
+
+    public double? InsetLeft { get; init; }
+
+    public double? InsetLeftDelta { get; init; }
 
     public ResolvedGeneratorLayoutPolicy Apply(GeneratorLayoutRuleAction? action)
         => action == null
@@ -385,10 +449,26 @@ public sealed record ResolvedGeneratorLayoutPolicy
                 GapDelta = AddDelta(GapDelta, action.GapDelta),
                 Padding = action.Padding ?? Padding,
                 PaddingDelta = AddDelta(PaddingDelta, action.PaddingDelta),
+                PaddingTop = action.PaddingTop ?? PaddingTop,
+                PaddingTopDelta = AddDelta(PaddingTopDelta, action.PaddingTopDelta),
+                PaddingRight = action.PaddingRight ?? PaddingRight,
+                PaddingRightDelta = AddDelta(PaddingRightDelta, action.PaddingRightDelta),
+                PaddingBottom = action.PaddingBottom ?? PaddingBottom,
+                PaddingBottomDelta = AddDelta(PaddingBottomDelta, action.PaddingBottomDelta),
+                PaddingLeft = action.PaddingLeft ?? PaddingLeft,
+                PaddingLeftDelta = AddDelta(PaddingLeftDelta, action.PaddingLeftDelta),
                 OffsetX = action.OffsetX ?? OffsetX,
                 OffsetXDelta = AddDelta(OffsetXDelta, action.OffsetXDelta),
                 OffsetY = action.OffsetY ?? OffsetY,
                 OffsetYDelta = AddDelta(OffsetYDelta, action.OffsetYDelta),
+                InsetTop = action.InsetTop ?? InsetTop,
+                InsetTopDelta = AddDelta(InsetTopDelta, action.InsetTopDelta),
+                InsetRight = action.InsetRight ?? InsetRight,
+                InsetRightDelta = AddDelta(InsetRightDelta, action.InsetRightDelta),
+                InsetBottom = action.InsetBottom ?? InsetBottom,
+                InsetBottomDelta = AddDelta(InsetBottomDelta, action.InsetBottomDelta),
+                InsetLeft = action.InsetLeft ?? InsetLeft,
+                InsetLeftDelta = AddDelta(InsetLeftDelta, action.InsetLeftDelta),
                 AnchorPreset = action.AnchorPreset ?? AnchorPreset,
                 PivotPreset = action.PivotPreset ?? PivotPreset,
                 EdgeInsetPolicy = action.EdgeInsetPolicy ?? EdgeInsetPolicy,

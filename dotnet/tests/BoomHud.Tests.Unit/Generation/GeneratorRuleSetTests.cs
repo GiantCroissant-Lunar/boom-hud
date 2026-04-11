@@ -67,8 +67,12 @@ public sealed class GeneratorRuleSetTests
                   "edgeAlignment": "end",
                   "gap": 6,
                   "padding": 8,
+                  "paddingTop": 10,
+                  "paddingLeftDelta": 3,
                   "offsetX": 3,
-                  "offsetY": -2
+                  "offsetY": -2,
+                  "insetRight": 14,
+                  "insetBottomDelta": -5
                 }
               }
             }
@@ -104,8 +108,12 @@ public sealed class GeneratorRuleSetTests
         rule.Action.Layout.PreferredHeightDelta.Should().Be(12);
         rule.Action.Layout.Gap.Should().Be(6);
         rule.Action.Layout.Padding.Should().Be(8);
+        rule.Action.Layout.PaddingTop.Should().Be(10);
+        rule.Action.Layout.PaddingLeftDelta.Should().Be(3);
         rule.Action.Layout.OffsetX.Should().Be(3);
         rule.Action.Layout.OffsetY.Should().Be(-2);
+        rule.Action.Layout.InsetRight.Should().Be(14);
+        rule.Action.Layout.InsetBottomDelta.Should().Be(-5);
     }
 
     [Fact]

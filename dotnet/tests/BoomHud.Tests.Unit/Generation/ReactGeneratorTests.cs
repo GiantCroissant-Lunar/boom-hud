@@ -327,4 +327,175 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("backgroundPosition: 'center'");
         tsx.Should().Contain("backgroundRepeat: 'no-repeat'");
     }
+
+    [Fact]
+    public void Generate_WithRuleSet_AppliesCanonicalLayoutAndTextPolicies()
+    {
+        var document = new HudDocument
+        {
+            Name = "RuleHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label
+                    }
+                ]
+            }
+        };
+
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "react",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                Gap = 10,
+                                Padding = 4,
+                                FlexAlignmentPreset = "center"
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "react",
+                            NodeId = "title"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Text = new GeneratorTextRuleAction
+                            {
+                                FontFamily = "Orbitron",
+                                FontSize = 18,
+                                WrapText = false
+                            },
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PositionMode = "absolute",
+                                OffsetX = 12,
+                                OffsetY = 6
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, options);
+        var tsx = result.Files.First(file => file.Path == "RuleHudView.tsx").Content;
+
+        tsx.Should().Contain("gap: '10px'");
+        tsx.Should().Contain("padding: '4px'");
+        tsx.Should().Contain("alignItems: 'center'");
+        tsx.Should().Contain("justifyContent: 'center'");
+        tsx.Should().Contain("fontFamily: 'Orbitron'");
+        tsx.Should().Contain("fontSize: '18px'");
+        tsx.Should().Contain("whiteSpace: 'nowrap'");
+        tsx.Should().Contain("position: 'absolute'");
+        tsx.Should().Contain("left: '12px'");
+        tsx.Should().Contain("top: '6px'");
+    }
+
+    [Fact]
+    public void Generate_WithEdgePaddingAndInsets_AppliesPerEdgeLayoutPolicies()
+    {
+        var document = new HudDocument
+        {
+            Name = "InsetHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Padding = new Spacing(2)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Badge
+                    }
+                ]
+            }
+        };
+
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "react",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PaddingLeft = 10,
+                                PaddingRightDelta = 2,
+                                PaddingBottom = 6
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "react",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PositionMode = "absolute",
+                                InsetRight = 8,
+                                InsetBottom = 3
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, options);
+        var tsx = result.Files.First(file => file.Path == "InsetHudView.tsx").Content;
+
+        tsx.Should().Contain("padding: '2px 4px 6px 10px'");
+        tsx.Should().Contain("position: 'absolute'");
+        tsx.Should().Contain("right: '8px'");
+        tsx.Should().Contain("bottom: '3px'");
+        tsx.Should().NotContain("left: '0px'");
+        tsx.Should().NotContain("top: '0px'");
+    }
 }

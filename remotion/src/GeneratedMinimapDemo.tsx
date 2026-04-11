@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { z } from "zod";
+import { FontReadyGate } from "./FontReadyGate";
 import {
   MotionScene,
   getRequiredMotionSequence,
@@ -53,19 +54,21 @@ export const GeneratedMinimapDemo: React.FC<GeneratedMinimapDemoSchema> = ({
   animated = false,
 }) => {
   return (
-    <AbsoluteFill style={viewportStyle}>
-      <div style={stageStyle}>
-        {animated ? (
-          <MotionScene
-            document={motionDocument}
-            sequence={generatedMinimapDemoSequence}
-            component={MinimapView}
-            viewModel={demoViewModel}
-          />
-        ) : (
-          <MinimapView {...demoViewModel} motionTargets={finalMotionTargets} />
-        )}
-      </div>
-    </AbsoluteFill>
+    <FontReadyGate>
+      <AbsoluteFill style={viewportStyle}>
+        <div style={stageStyle}>
+          {animated ? (
+            <MotionScene
+              document={motionDocument}
+              sequence={generatedMinimapDemoSequence}
+              component={MinimapView}
+              viewModel={demoViewModel}
+            />
+          ) : (
+            <MinimapView {...demoViewModel} motionTargets={finalMotionTargets} />
+          )}
+        </div>
+      </AbsoluteFill>
+    </FontReadyGate>
   );
 };

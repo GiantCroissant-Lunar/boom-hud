@@ -3,11 +3,19 @@ using System.Text;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.React;
 
 public sealed class ReactGenerator : IBackendGenerator
 {
+    private readonly string _ruleBackend;
+
+    public ReactGenerator(string ruleBackend = "react")
+    {
+        _ruleBackend = string.IsNullOrWhiteSpace(ruleBackend) ? "react" : ruleBackend;
+    }
+
     public string TargetFramework => "React";
     public ICapabilityManifest Capabilities => ReactCapabilities.Instance;
 
@@ -23,6 +31,8 @@ public sealed class ReactGenerator : IBackendGenerator
 
         try
         {
+            var resolver = new RuleResolver(options.RuleSet, _ruleBackend);
+
             foreach (var component in document.Components.Values)
             {
                 EmitArtifacts(new HudDocument
@@ -32,10 +42,10 @@ public sealed class ReactGenerator : IBackendGenerator
                     Root = component.Root,
                     Styles = document.Styles,
                     Components = document.Components
-                }, options, diagnostics, files);
+                }, options, diagnostics, files, resolver);
             }
 
-            EmitArtifacts(document, options, diagnostics, files);
+            EmitArtifacts(document, options, diagnostics, files, resolver);
         }
         catch (Exception ex)
         {
@@ -45,17 +55,31 @@ public sealed class ReactGenerator : IBackendGenerator
         return new GenerationResult { Files = files, Diagnostics = diagnostics };
     }
 
-    private static void EmitArtifacts(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
+    private static void EmitArtifacts(
+        HudDocument document,
+        GenerationOptions options,
+        List<Diagnostic> diagnostics,
+        List<GeneratedFile> files,
+        RuleResolver resolver)
     {
         var props = CollectProps(document.Root).OrderBy(static x => x, StringComparer.Ordinal).ToList();
-        files.Add(new GeneratedFile { Path = $"{document.Name}View.tsx", Content = GenerateTsx(document, props, diagnostics), Type = GeneratedFileType.SourceCode });
+        files.Add(new GeneratedFile
+        {
+            Path = $"{document.Name}View.tsx",
+            Content = GenerateTsx(document, props, diagnostics, resolver),
+            Type = GeneratedFileType.SourceCode
+        });
         if (options.EmitViewModelInterfaces)
         {
             files.Add(new GeneratedFile { Path = $"I{document.Name}ViewModel.g.ts", Content = GenerateContract(document.Name, props), Type = GeneratedFileType.SourceCode });
         }
     }
 
-    private static string GenerateTsx(HudDocument document, IReadOnlyList<string> props, List<Diagnostic> diagnostics)
+    private static string GenerateTsx(
+        HudDocument document,
+        IReadOnlyList<string> props,
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var imports = CollectRefs(document.Root, document.Components, diagnostics, document.Name);
         var builder = new StringBuilder();
@@ -135,7 +159,7 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine();
         builder.Append("export function ").Append(document.Name).Append("View(props: ").Append(document.Name).AppendLine("ViewModel): React.JSX.Element {");
         builder.AppendLine("  return (");
-        builder.Append(RenderNode(document.Root, 2, null, document.Components, diagnostics));
+        builder.Append(RenderNode(document.Name, document.Root, 2, null, document.Components, diagnostics, resolver));
         builder.AppendLine("  );");
         builder.AppendLine("}");
         builder.Append("export default ").Append(document.Name).AppendLine("View;");
@@ -157,24 +181,40 @@ public sealed class ReactGenerator : IBackendGenerator
         return builder.ToString();
     }
 
-    private static string RenderNode(ComponentNode node, int indentLevel, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics)
+    private static string RenderNode(
+        string documentName,
+        ComponentNode node,
+        int indentLevel,
+        LayoutType? parentLayout,
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
+        var policy = resolver.Resolve(documentName, node);
         var indent = new string(' ', indentLevel * 2);
         if (node.Visible.IsBound)
         {
             return indent + $"asBool(props.{PropName(node.Visible.BindingPath!)}) ? (\n" +
-                RenderCore(node, indentLevel + 1, parentLayout, components, diagnostics) +
+                RenderCore(documentName, node, policy, indentLevel + 1, parentLayout, components, diagnostics, resolver) +
                 indent + ") : null\n";
         }
 
         if (node.Visible.Value == false) return indent + "null\n";
-        return RenderCore(node, indentLevel, parentLayout, components, diagnostics);
+        return RenderCore(documentName, node, policy, indentLevel, parentLayout, components, diagnostics, resolver);
     }
 
-    private static string RenderCore(ComponentNode node, int indentLevel, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics)
+    private static string RenderCore(
+        string documentName,
+        ComponentNode node,
+        ResolvedGeneratorPolicy policy,
+        int indentLevel,
+        LayoutType? parentLayout,
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var indent = new string(' ', indentLevel * 2);
-        var style = BuildStyle(node, parentLayout);
+        var style = BuildStyle(node, parentLayout, policy);
         var motionIdExpression = string.IsNullOrWhiteSpace(node.Id)
             ? null
             : $"resolveMotionId(props.motionScope, {Ts(node.Id)})";
@@ -199,18 +239,7 @@ public sealed class ReactGenerator : IBackendGenerator
             return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View motionTargets={{props.motionTargets}} motionScope={{{childMotionScope}}} />\n" + indent + "</div>\n";
         }
 
-        var tag = node.Type switch
-        {
-            ComponentType.Label or ComponentType.Badge or ComponentType.Icon => "span",
-            ComponentType.Button or ComponentType.MenuItem => "button",
-            ComponentType.Panel => "section",
-            ComponentType.MenuBar => "nav",
-            ComponentType.Image => "img",
-            ComponentType.TextInput => "input",
-            ComponentType.TextArea => "textarea",
-            ComponentType.Checkbox or ComponentType.RadioButton => "input",
-            _ => "div"
-        };
+        var tag = ResolveTag(node, policy, diagnostics);
 
         if (node.Type == ComponentType.Image)
         {
@@ -265,44 +294,52 @@ public sealed class ReactGenerator : IBackendGenerator
             }
             builder.Append(indent).Append("  {").Append(finalText).AppendLine("}");
         }
-        foreach (var child in node.Children) builder.Append(RenderNode(child, indentLevel + 1, node.Layout?.Type, components, diagnostics));
+        foreach (var child in node.Children)
+        {
+            builder.Append(RenderNode(documentName, child, indentLevel + 1, node.Layout?.Type, components, diagnostics, resolver));
+        }
         builder.Append(indent).Append("</").Append(tag).AppendLine(">");
         return builder.ToString();
     }
 
-    private static string BuildStyle(ComponentNode node, LayoutType? parentLayout)
+    private static string BuildStyle(ComponentNode node, LayoutType? parentLayout, ResolvedGeneratorPolicy policy)
     {
         var style = new List<string>();
         var layout = node.Layout;
+        var widthDimension = layout?.Width ?? node.Style?.Width;
+        var heightDimension = layout?.Height ?? node.Style?.Height;
+        if (LayoutPolicyService.ResolvePadding(layout?.Padding, policy) is { } policyPadding)
+        {
+            style.Add($"padding: {Ts(SpacingToCss(policyPadding))}");
+        }
+
         if (layout != null)
         {
             if (layout.Type == LayoutType.Horizontal) style.Add("display: 'flex', flexDirection: 'row'");
             if (layout.Type is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock) style.Add("display: 'flex', flexDirection: 'column'");
             if (layout.Type == LayoutType.Grid) style.Add("display: 'grid'");
-            if (layout.Gap is { } gap) style.Add($"gap: {Ts(SpacingToCss(gap))}");
-            if (layout.Padding is { } padding) style.Add($"padding: {Ts(SpacingToCss(padding))}");
+            if (LayoutPolicyService.ResolveGap(layout.Gap, policy) is { } gap) style.Add($"gap: {Ts(SpacingToCss(gap))}");
             if (layout.Margin is { } margin) style.Add($"margin: {Ts(SpacingToCss(margin))}");
-            AppendDimension(style, "width", layout.Width, parentLayout);
-            AppendDimension(style, "height", layout.Height, parentLayout);
-            AppendDimension(style, "minWidth", layout.MinWidth, parentLayout);
-            AppendDimension(style, "minHeight", layout.MinHeight, parentLayout);
-            AppendDimension(style, "maxWidth", layout.MaxWidth, parentLayout);
-            AppendDimension(style, "maxHeight", layout.MaxHeight, parentLayout);
-            if (layout.Align is { } align) style.Add($"alignItems: {Ts(align switch { Alignment.Start => "flex-start", Alignment.Center => "center", Alignment.End => "flex-end", _ => "stretch" })}");
-            if (layout.Justify is { } justify) style.Add($"justifyContent: {Ts(justify switch { Justification.Start => "flex-start", Justification.Center => "center", Justification.End => "flex-end", Justification.SpaceBetween => "space-between", Justification.SpaceAround => "space-around", Justification.SpaceEvenly => "space-evenly", _ => "flex-start" })}");
+            AppendDimension(style, "width", layout.Width, parentLayout, policy, applyPolicyPreferredSize: true);
+            AppendDimension(style, "height", layout.Height, parentLayout, policy, applyPolicyPreferredSize: true);
+            AppendDimension(style, "minWidth", layout.MinWidth, parentLayout, policy);
+            AppendDimension(style, "minHeight", layout.MinHeight, parentLayout, policy);
+            AppendDimension(style, "maxWidth", layout.MaxWidth, parentLayout, policy);
+            AppendDimension(style, "maxHeight", layout.MaxHeight, parentLayout, policy);
+            if (layout.Type == LayoutType.Absolute && node.Children.Count > 0) style.Add("position: 'relative'");
+            if (layout.Align is { } align) style.Add($"alignItems: {Ts(MapAlignment(align))}");
+            if (layout.Justify is { } justify) style.Add($"justifyContent: {Ts(MapJustification(justify))}");
             if (layout.Weight is { } weight) style.Add($"flexGrow: {weight.ToString(CultureInfo.InvariantCulture)}");
         }
 
-        if (node.Style is { } visual)
+        var visual = node.Style;
+        if (visual != null)
         {
             if (visual.Foreground is { } foreground) style.Add($"color: {Ts(foreground.ToHex())}");
             if (visual.Background is { } background) style.Add($"backgroundColor: {Ts(background.ToHex())}");
             if (visual.BackgroundImage is { } backgroundImage) AppendBackgroundImageStyle(style, backgroundImage);
-            if (visual.FontSize is { } fontSize) style.Add($"fontSize: {Ts($"{fontSize.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
-            if (!string.IsNullOrWhiteSpace(visual.FontFamily)) style.Add($"fontFamily: {Ts(visual.FontFamily)}");
             if (visual.FontWeight is { } weight) style.Add($"fontWeight: {Ts(weight == FontWeight.Bold ? "700" : weight == FontWeight.Light ? "300" : "400")}");
             if (visual.FontStyle is { } fontStyle) style.Add($"fontStyle: {Ts(fontStyle == FontStyle.Italic ? "italic" : "normal")}");
-            if (visual.LetterSpacing is { } spacing) style.Add($"letterSpacing: {Ts($"{spacing.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
             if (visual.Opacity is { } opacity) style.Add($"opacity: {opacity.ToString(CultureInfo.InvariantCulture)}");
             if (visual.BorderRadius is { } borderRadius) style.Add($"borderRadius: {Ts($"{borderRadius.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
             if (visual.Border is { } border)
@@ -312,19 +349,43 @@ public sealed class ReactGenerator : IBackendGenerator
             }
         }
 
-        var hasExplicitAbsolutePlacement = HasExplicitAbsolutePlacement(node, layout);
+        var fontSize = node.Type == ComponentType.Icon
+            ? IconPolicyService.ResolveFontSize(policy) ?? TextPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy)
+            : TextPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy);
+        if (fontSize is > 0d) style.Add($"fontSize: {Ts($"{fontSize.Value.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+        if (TextPolicyService.ResolveFontFamily(node, policy) is { } fontFamily && !string.IsNullOrWhiteSpace(fontFamily))
+        {
+            style.Add($"fontFamily: {Ts(fontFamily)}");
+        }
+        if (TextPolicyService.ResolveLineHeight(visual, fontSize, policy) is { } lineHeight) style.Add($"lineHeight: {Ts($"{lineHeight.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+        if (TextPolicyService.ResolveLetterSpacing(node, policy) is { } spacing) style.Add($"letterSpacing: {Ts($"{spacing.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+
+        if (node.Type is ComponentType.Label or ComponentType.Badge or ComponentType.Icon or ComponentType.Button or ComponentType.TextInput or ComponentType.TextArea)
+        {
+            style.Add($"whiteSpace: {Ts(TextPolicyService.ShouldWrapText(node, policy) ? "normal" : "nowrap")}");
+        }
+
+        ApplyLayoutPolicyOverrides(style, policy);
+
+        var hasExplicitAbsolutePlacement = LayoutPolicyService.HasAbsolutePlacement(node, policy);
         if (parentLayout == LayoutType.Absolute || hasExplicitAbsolutePlacement)
         {
             style.Add("position: 'absolute'");
             var left = ResolveAbsoluteOffset(node, layout, static currentLayout => currentLayout.Left, BoomHudMetadataKeys.PencilLeft);
             var top = ResolveAbsoluteOffset(node, layout, static currentLayout => currentLayout.Top, BoomHudMetadataKeys.PencilTop);
+            left = LayoutPolicyService.ResolveInset("left", ApplyOffsetAdjustment(left, LayoutPolicyService.ResolveOffsetAdjustment("x", policy)), policy);
+            top = LayoutPolicyService.ResolveInset("top", ApplyOffsetAdjustment(top, LayoutPolicyService.ResolveOffsetAdjustment("y", policy)), policy);
+            var right = LayoutPolicyService.ResolveInset("right", null, policy);
+            var bottom = LayoutPolicyService.ResolveInset("bottom", null, policy);
             AppendPositionDimension(style, "left", left);
             AppendPositionDimension(style, "top", top);
+            AppendPositionDimension(style, "right", right);
+            AppendPositionDimension(style, "bottom", bottom);
 
             if (hasExplicitAbsolutePlacement)
             {
-                if (left == null) style.Add("left: '0px'");
-                if (top == null) style.Add("top: '0px'");
+                if (left == null && right == null) style.Add("left: '0px'");
+                if (top == null && bottom == null) style.Add("top: '0px'");
             }
         }
 
@@ -390,18 +451,48 @@ public sealed class ReactGenerator : IBackendGenerator
         }
     }
 
-    private static void AppendDimension(List<string> style, string key, Dimension? dimension, LayoutType? parentLayout)
+    private static void AppendDimension(
+        List<string> style,
+        string key,
+        Dimension? dimension,
+        LayoutType? parentLayout,
+        ResolvedGeneratorPolicy policy,
+        bool applyPolicyPreferredSize = false)
     {
-        if (dimension == null) return;
+        if (dimension == null)
+        {
+            if (key is "width" or "height")
+            {
+                var flexibleSize = LayoutPolicyService.ResolveFlexibleSize(
+                    null,
+                    key,
+                    parentLayout,
+                    isFlexibleContainer: true,
+                    policy);
+                if (flexibleSize is { } value)
+                {
+                    AppendFlexibleDimensionStyle(style, key, value, parentLayout);
+                }
+            }
+            return;
+        }
+
         switch (dimension.Value.Unit)
         {
-            case DimensionUnit.Pixels: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString("0.##", CultureInfo.InvariantCulture)}px")}"); break;
+            case DimensionUnit.Pixels:
+                style.Add($"{key}: {Ts($"{ResolveDimensionValue(key, dimension.Value, policy, applyPolicyPreferredSize).ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+                break;
             case DimensionUnit.Percent: style.Add($"{key}: {Ts($"{dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}%")}"); break;
             case DimensionUnit.Auto: style.Add($"{key}: 'auto'"); break;
             case DimensionUnit.Fill:
-                style.Add(FillDimensionStyle(key, parentLayout));
+                AppendFlexibleDimensionStyle(style, key, dimension.Value.Value == 0 ? 1d : dimension.Value.Value, parentLayout);
                 break;
-            case DimensionUnit.Star: style.Add($"flexGrow: {dimension.Value.Value.ToString(CultureInfo.InvariantCulture)}"); break;
+            case DimensionUnit.Star:
+                AppendFlexibleDimensionStyle(style, key, dimension.Value.Value == 0 ? 1d : dimension.Value.Value, parentLayout);
+                break;
+            case DimensionUnit.Cells:
+                style.Add($"{key}: {Ts($"{ResolveDimensionValue(key, dimension.Value, policy, applyPolicyPreferredSize).ToString("0.##", CultureInfo.InvariantCulture)}px")}");
+                break;
         }
     }
 
@@ -423,20 +514,210 @@ public sealed class ReactGenerator : IBackendGenerator
         }
     }
 
-    private static string FillDimensionStyle(string key, LayoutType? parentLayout)
+    private static void AppendFlexibleDimensionStyle(List<string> style, string key, double value, LayoutType? parentLayout)
     {
         if (key == "width")
         {
-            return parentLayout == LayoutType.Horizontal ? "flex: '1 1 0'" : "alignSelf: 'stretch'";
+            if (parentLayout == LayoutType.Horizontal)
+            {
+                if (Math.Abs(value - 1d) < double.Epsilon)
+                {
+                    style.Add("flex: '1 1 0'");
+                }
+                else
+                {
+                    style.Add($"flexGrow: {value.ToString(CultureInfo.InvariantCulture)}");
+                    style.Add("flexBasis: '0'");
+                }
+                return;
+            }
+
+            style.Add("alignSelf: 'stretch'");
+            return;
         }
 
         if (key == "height")
         {
-            return parentLayout is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock ? "flex: '1 1 0'" : "alignSelf: 'stretch'";
+            if (parentLayout is LayoutType.Vertical or LayoutType.Stack or LayoutType.Dock)
+            {
+                if (Math.Abs(value - 1d) < double.Epsilon)
+                {
+                    style.Add("flex: '1 1 0'");
+                }
+                else
+                {
+                    style.Add($"flexGrow: {value.ToString(CultureInfo.InvariantCulture)}");
+                    style.Add("flexBasis: '0'");
+                }
+                return;
+            }
+
+            style.Add("alignSelf: 'stretch'");
+            return;
         }
 
-        return key.Contains("Width", StringComparison.Ordinal) ? "alignSelf: 'stretch'" : "flexGrow: 1";
+        style.Add(key.Contains("Width", StringComparison.Ordinal) ? "alignSelf: 'stretch'" : $"flexGrow: {value.ToString(CultureInfo.InvariantCulture)}");
     }
+
+    private static string ResolveTag(ComponentNode node, ResolvedGeneratorPolicy policy, List<Diagnostic> diagnostics)
+    {
+        if (!string.IsNullOrWhiteSpace(policy.ControlType))
+        {
+            var mappedTag = policy.ControlType.Trim() switch
+            {
+                "Label" => "span",
+                "Button" => "button",
+                "TextField" => "input",
+                "Toggle" => "input",
+                "ProgressBar" => "div",
+                "Slider" => "div",
+                "ScrollView" => "div",
+                "Image" => "img",
+                "VisualElement" => "div",
+                _ => null
+            };
+
+            if (mappedTag != null)
+            {
+                return mappedTag;
+            }
+
+            diagnostics.Add(Diagnostic.Warning(
+                $"React control override '{policy.ControlType}' is not recognized; using default mapping.",
+                node.Id,
+                "BHR1003"));
+        }
+
+        return node.Type switch
+        {
+            ComponentType.Label or ComponentType.Badge or ComponentType.Icon => "span",
+            ComponentType.Button or ComponentType.MenuItem => "button",
+            ComponentType.Panel => "section",
+            ComponentType.MenuBar => "nav",
+            ComponentType.Image => "img",
+            ComponentType.TextInput => "input",
+            ComponentType.TextArea => "textarea",
+            ComponentType.Checkbox or ComponentType.RadioButton => "input",
+            _ => "div"
+        };
+    }
+
+    private static void ApplyLayoutPolicyOverrides(List<string> style, ResolvedGeneratorPolicy policy)
+    {
+        if (LayoutPolicyService.ResolvePositionMode(policy) is { } positionMode)
+        {
+            var normalizedPosition = positionMode.Trim().ToLowerInvariant();
+            if (normalizedPosition is "absolute" or "relative")
+            {
+                style.Add($"position: {Ts(normalizedPosition)}");
+            }
+        }
+
+        if (LayoutPolicyService.ResolveFlexAlignmentPreset(policy) is not { } alignmentPreset)
+        {
+            return;
+        }
+
+        switch (alignmentPreset.Trim().ToLowerInvariant())
+        {
+            case "top-left":
+            case "start":
+                style.Add("alignItems: 'flex-start'");
+                style.Add("justifyContent: 'flex-start'");
+                break;
+            case "top-center":
+                style.Add("alignItems: 'center'");
+                style.Add("justifyContent: 'flex-start'");
+                break;
+            case "top-right":
+                style.Add("alignItems: 'flex-end'");
+                style.Add("justifyContent: 'flex-start'");
+                break;
+            case "middle-left":
+                style.Add("alignItems: 'flex-start'");
+                style.Add("justifyContent: 'center'");
+                break;
+            case "center":
+            case "middle-center":
+                style.Add("alignItems: 'center'");
+                style.Add("justifyContent: 'center'");
+                break;
+            case "middle-right":
+                style.Add("alignItems: 'flex-end'");
+                style.Add("justifyContent: 'center'");
+                break;
+            case "bottom-left":
+                style.Add("alignItems: 'flex-start'");
+                style.Add("justifyContent: 'flex-end'");
+                break;
+            case "bottom-center":
+                style.Add("alignItems: 'center'");
+                style.Add("justifyContent: 'flex-end'");
+                break;
+            case "bottom-right":
+            case "end":
+                style.Add("alignItems: 'flex-end'");
+                style.Add("justifyContent: 'flex-end'");
+                break;
+            case "stretch":
+                style.Add("alignItems: 'stretch'");
+                break;
+        }
+    }
+
+    private static Dimension? ApplyOffsetAdjustment(Dimension? dimension, double offset)
+    {
+        if (Math.Abs(offset) <= double.Epsilon)
+        {
+            return dimension;
+        }
+
+        return dimension switch
+        {
+            { Unit: DimensionUnit.Pixels } pixels => Dimension.Pixels(pixels.Value + offset),
+            { Unit: DimensionUnit.Cells } cells => new Dimension(cells.Value + offset, DimensionUnit.Cells),
+            null => Dimension.Pixels(offset),
+            _ => dimension
+        };
+    }
+
+    private static double ResolveDimensionValue(
+        string key,
+        Dimension dimension,
+        ResolvedGeneratorPolicy policy,
+        bool applyPolicyPreferredSize)
+    {
+        if (!applyPolicyPreferredSize)
+        {
+            return dimension.Value;
+        }
+
+        return key switch
+        {
+            "width" => LayoutPolicyService.ResolvePreferredSize(dimension, "width", policy) ?? dimension.Value,
+            "height" => LayoutPolicyService.ResolvePreferredSize(dimension, "height", policy) ?? dimension.Value,
+            _ => dimension.Value
+        };
+    }
+
+    private static string MapAlignment(Alignment alignment) => alignment switch
+    {
+        Alignment.Start => "flex-start",
+        Alignment.Center => "center",
+        Alignment.End => "flex-end",
+        _ => "stretch"
+    };
+
+    private static string MapJustification(Justification justification) => justification switch
+    {
+        Justification.Start => "flex-start",
+        Justification.Center => "center",
+        Justification.End => "flex-end",
+        Justification.SpaceBetween => "space-between",
+        Justification.SpaceAround => "space-around",
+        Justification.SpaceEvenly => "space-evenly",
+        _ => "flex-start"
+    };
 
     private static string? TextExpr(ComponentNode node, IReadOnlyList<string> names, string? fallback)
     {
