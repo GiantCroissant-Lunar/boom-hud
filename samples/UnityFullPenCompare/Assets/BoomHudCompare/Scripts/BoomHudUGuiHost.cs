@@ -68,6 +68,29 @@ namespace BoomHud.Compare
         {
         }
 
+        protected virtual void ConfigureCanvasScaler(CanvasScaler scaler)
+        {
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1280f, 720f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+
+        protected virtual void ConfigureCanvas(Canvas canvas, Camera mainCamera)
+        {
+            if (mainCamera != null)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = mainCamera;
+                canvas.planeDistance = 1f;
+            }
+            else
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.worldCamera = null;
+            }
+        }
+
         protected static RectTransform CreateRect(string name, Transform parent)
         {
             var gameObject = new GameObject(name, typeof(RectTransform));
@@ -137,26 +160,12 @@ namespace BoomHud.Compare
         {
             var canvas = GetComponent<Canvas>();
             var mainCamera = Camera.main;
-            if (mainCamera != null)
-            {
-                canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = mainCamera;
-                canvas.planeDistance = 1f;
-            }
-            else
-            {
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.worldCamera = null;
-            }
-
+            ConfigureCanvas(canvas, mainCamera);
             canvas.pixelPerfect = false;
             canvas.sortingOrder = 0;
 
             var scaler = GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280f, 720f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 0.5f;
+            ConfigureCanvasScaler(scaler);
         }
 
         private RectTransform EnsureGeneratedRoot()

@@ -1050,7 +1050,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon1.style.alignItems = ParseAlign("flex-start");
         ObjectiveIcon1.style.justifyContent = ParseJustify("flex-start");
         ObjectiveIcon1.text = ResolveIconText("cross", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon1, 20f, 20f);
+        ApplyIconLabelStyle(ObjectiveIcon1, 20f, 20f, 0f, true, "fit-box", 0f);
         ObjectiveIcon1.style.display = DisplayStyle.Flex;
         ObjectiveIcon1.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon1, "lucide", 20f);
@@ -1166,7 +1166,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon2.style.alignItems = ParseAlign("flex-start");
         ObjectiveIcon2.style.justifyContent = ParseJustify("flex-start");
         ObjectiveIcon2.text = ResolveIconText("flame", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon2, 20f, 20f);
+        ApplyIconLabelStyle(ObjectiveIcon2, 20f, 20f, 0f, true, "fit-box", 0f);
         ObjectiveIcon2.style.display = DisplayStyle.Flex;
         ObjectiveIcon2.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon2, "lucide", 20f);
@@ -1282,7 +1282,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon3.style.alignItems = ParseAlign("flex-start");
         ObjectiveIcon3.style.justifyContent = ParseJustify("flex-start");
         ObjectiveIcon3.text = ResolveIconText("shield", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon3, 20f, 20f);
+        ApplyIconLabelStyle(ObjectiveIcon3, 20f, 20f, 0f, true, "fit-box", 0f);
         ObjectiveIcon3.style.display = DisplayStyle.Flex;
         ObjectiveIcon3.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon3, "lucide", 20f);
@@ -1993,15 +1993,15 @@ public sealed class QuestSidebarView
         };
     }
 
-    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight)
+    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight, float baselineOffset, bool opticalCentering, string sizeMode, float explicitFontSize)
     {
-        var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
+        var iconSize = explicitFontSize > 0f ? explicitFontSize : string.Equals(sizeMode, "match-height", StringComparison.OrdinalIgnoreCase) ? Mathf.Max(1f, boxHeight) : Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
         label.style.unityTextAlign = TextAnchor.MiddleCenter;
         label.style.unityFontStyleAndWeight = FontStyle.Normal;
         label.style.whiteSpace = WhiteSpace.NoWrap;
         label.style.flexShrink = 0;
-        label.style.alignItems = Align.Center;
-        label.style.justifyContent = Justify.Center;
+        label.style.alignItems = opticalCentering ? Align.Center : Align.FlexStart;
+        label.style.justifyContent = opticalCentering ? Justify.Center : Justify.FlexStart;
         label.style.overflow = Overflow.Visible;
         label.style.paddingLeft = 0f;
         label.style.paddingTop = 0f;
@@ -2011,9 +2011,13 @@ public sealed class QuestSidebarView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
-        if (boxWidth >= 32f && boxHeight >= 32f)
+        if (opticalCentering && boxWidth >= 32f && boxHeight >= 32f && Mathf.Approximately(baselineOffset, 0f))
         {
             label.style.marginTop = -1f;
+        }
+        else if (!Mathf.Approximately(baselineOffset, 0f))
+        {
+            label.style.marginTop = baselineOffset;
         }
         label.style.fontSize = iconSize;
     }

@@ -375,7 +375,7 @@ public sealed class PartyStatusStripView
         RoleIcon.style.alignItems = ParseAlign("flex-start");
         RoleIcon.style.justifyContent = ParseJustify("flex-start");
         RoleIcon.text = ResolveIconText("sword", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon, 40f, 40f);
+        ApplyIconLabelStyle(RoleIcon, 40f, 40f, 0f, true, "fit-box", 0f);
         RoleIcon.style.display = DisplayStyle.Flex;
         RoleIcon.SetEnabled(true);
         ApplyFontFamily(RoleIcon, "lucide", 40f);
@@ -621,7 +621,7 @@ public sealed class PartyStatusStripView
         BuffIcon1.style.alignItems = ParseAlign("flex-start");
         BuffIcon1.style.justifyContent = ParseJustify("flex-start");
         BuffIcon1.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon1, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon1, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon1.style.display = DisplayStyle.Flex;
         BuffIcon1.SetEnabled(true);
         ApplyFontFamily(BuffIcon1, "lucide", 24f);
@@ -665,7 +665,7 @@ public sealed class PartyStatusStripView
         BuffIcon2.style.alignItems = ParseAlign("flex-start");
         BuffIcon2.style.justifyContent = ParseJustify("flex-start");
         BuffIcon2.text = ResolveIconText("flame", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon2, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon2, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon2.style.display = DisplayStyle.Flex;
         BuffIcon2.SetEnabled(true);
         ApplyFontFamily(BuffIcon2, "lucide", 24f);
@@ -709,7 +709,7 @@ public sealed class PartyStatusStripView
         BuffIcon3.style.alignItems = ParseAlign("flex-start");
         BuffIcon3.style.justifyContent = ParseJustify("flex-start");
         BuffIcon3.text = ResolveIconText("cross", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon3, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon3, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon3.style.display = DisplayStyle.Flex;
         BuffIcon3.SetEnabled(true);
         ApplyFontFamily(BuffIcon3, "lucide", 24f);
@@ -753,7 +753,7 @@ public sealed class PartyStatusStripView
         BuffIcon4.style.alignItems = ParseAlign("flex-start");
         BuffIcon4.style.justifyContent = ParseJustify("flex-start");
         BuffIcon4.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon4, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon4, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon4.style.display = DisplayStyle.Flex;
         BuffIcon4.SetEnabled(true);
         ApplyFontFamily(BuffIcon4, "lucide", 24f);
@@ -842,7 +842,7 @@ public sealed class PartyStatusStripView
         RoleIcon2.style.alignItems = ParseAlign("flex-start");
         RoleIcon2.style.justifyContent = ParseJustify("flex-start");
         RoleIcon2.text = ResolveIconText("sparkles", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon2, 40f, 40f);
+        ApplyIconLabelStyle(RoleIcon2, 40f, 40f, 0f, true, "fit-box", 0f);
         RoleIcon2.style.display = DisplayStyle.Flex;
         RoleIcon2.SetEnabled(true);
         ApplyFontFamily(RoleIcon2, "lucide", 40f);
@@ -1088,7 +1088,7 @@ public sealed class PartyStatusStripView
         BuffIcon12.style.alignItems = ParseAlign("flex-start");
         BuffIcon12.style.justifyContent = ParseJustify("flex-start");
         BuffIcon12.text = ResolveIconText("wand-sparkles", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon12, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon12, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon12.style.display = DisplayStyle.Flex;
         BuffIcon12.SetEnabled(true);
         ApplyFontFamily(BuffIcon12, "lucide", 24f);
@@ -1132,7 +1132,7 @@ public sealed class PartyStatusStripView
         BuffIcon22.style.alignItems = ParseAlign("flex-start");
         BuffIcon22.style.justifyContent = ParseJustify("flex-start");
         BuffIcon22.text = ResolveIconText("flask-conical", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon22, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon22, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon22.style.display = DisplayStyle.Flex;
         BuffIcon22.SetEnabled(true);
         ApplyFontFamily(BuffIcon22, "lucide", 24f);
@@ -1176,7 +1176,7 @@ public sealed class PartyStatusStripView
         BuffIcon32.style.alignItems = ParseAlign("flex-start");
         BuffIcon32.style.justifyContent = ParseJustify("flex-start");
         BuffIcon32.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon32, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon32, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon32.style.display = DisplayStyle.Flex;
         BuffIcon32.SetEnabled(true);
         ApplyFontFamily(BuffIcon32, "lucide", 24f);
@@ -1220,7 +1220,7 @@ public sealed class PartyStatusStripView
         BuffIcon42.style.alignItems = ParseAlign("flex-start");
         BuffIcon42.style.justifyContent = ParseJustify("flex-start");
         BuffIcon42.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon42, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon42, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon42.style.display = DisplayStyle.Flex;
         BuffIcon42.SetEnabled(true);
         ApplyFontFamily(BuffIcon42, "lucide", 24f);
@@ -1309,7 +1309,7 @@ public sealed class PartyStatusStripView
         RoleIcon3.style.alignItems = ParseAlign("flex-start");
         RoleIcon3.style.justifyContent = ParseJustify("flex-start");
         RoleIcon3.text = ResolveIconText("shield", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon3, 40f, 40f);
+        ApplyIconLabelStyle(RoleIcon3, 40f, 40f, 0f, true, "fit-box", 0f);
         RoleIcon3.style.display = DisplayStyle.Flex;
         RoleIcon3.SetEnabled(true);
         ApplyFontFamily(RoleIcon3, "lucide", 40f);
@@ -1555,7 +1555,7 @@ public sealed class PartyStatusStripView
         BuffIcon13.style.alignItems = ParseAlign("flex-start");
         BuffIcon13.style.justifyContent = ParseJustify("flex-start");
         BuffIcon13.text = ResolveIconText("cross", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon13, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon13, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon13.style.display = DisplayStyle.Flex;
         BuffIcon13.SetEnabled(true);
         ApplyFontFamily(BuffIcon13, "lucide", 24f);
@@ -1599,7 +1599,7 @@ public sealed class PartyStatusStripView
         BuffIcon23.style.alignItems = ParseAlign("flex-start");
         BuffIcon23.style.justifyContent = ParseJustify("flex-start");
         BuffIcon23.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon23, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon23, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon23.style.display = DisplayStyle.Flex;
         BuffIcon23.SetEnabled(true);
         ApplyFontFamily(BuffIcon23, "lucide", 24f);
@@ -1643,7 +1643,7 @@ public sealed class PartyStatusStripView
         BuffIcon33.style.alignItems = ParseAlign("flex-start");
         BuffIcon33.style.justifyContent = ParseJustify("flex-start");
         BuffIcon33.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon33, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon33, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon33.style.display = DisplayStyle.Flex;
         BuffIcon33.SetEnabled(true);
         ApplyFontFamily(BuffIcon33, "lucide", 24f);
@@ -1687,7 +1687,7 @@ public sealed class PartyStatusStripView
         BuffIcon43.style.alignItems = ParseAlign("flex-start");
         BuffIcon43.style.justifyContent = ParseJustify("flex-start");
         BuffIcon43.text = ResolveIconText("flame", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon43, 24f, 24f);
+        ApplyIconLabelStyle(BuffIcon43, 24f, 24f, 0f, true, "fit-box", 0f);
         BuffIcon43.style.display = DisplayStyle.Flex;
         BuffIcon43.SetEnabled(true);
         ApplyFontFamily(BuffIcon43, "lucide", 24f);
@@ -2104,15 +2104,15 @@ public sealed class PartyStatusStripView
         };
     }
 
-    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight)
+    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight, float baselineOffset, bool opticalCentering, string sizeMode, float explicitFontSize)
     {
-        var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
+        var iconSize = explicitFontSize > 0f ? explicitFontSize : string.Equals(sizeMode, "match-height", StringComparison.OrdinalIgnoreCase) ? Mathf.Max(1f, boxHeight) : Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
         label.style.unityTextAlign = TextAnchor.MiddleCenter;
         label.style.unityFontStyleAndWeight = FontStyle.Normal;
         label.style.whiteSpace = WhiteSpace.NoWrap;
         label.style.flexShrink = 0;
-        label.style.alignItems = Align.Center;
-        label.style.justifyContent = Justify.Center;
+        label.style.alignItems = opticalCentering ? Align.Center : Align.FlexStart;
+        label.style.justifyContent = opticalCentering ? Justify.Center : Justify.FlexStart;
         label.style.overflow = Overflow.Visible;
         label.style.paddingLeft = 0f;
         label.style.paddingTop = 0f;
@@ -2122,9 +2122,13 @@ public sealed class PartyStatusStripView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
-        if (boxWidth >= 32f && boxHeight >= 32f)
+        if (opticalCentering && boxWidth >= 32f && boxHeight >= 32f && Mathf.Approximately(baselineOffset, 0f))
         {
             label.style.marginTop = -1f;
+        }
+        else if (!Mathf.Approximately(baselineOffset, 0f))
+        {
+            label.style.marginTop = baselineOffset;
         }
         label.style.fontSize = iconSize;
     }

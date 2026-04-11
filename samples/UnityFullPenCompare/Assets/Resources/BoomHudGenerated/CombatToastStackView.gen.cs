@@ -236,7 +236,7 @@ public sealed class CombatToastStackView
         EventIcon.style.alignItems = ParseAlign("flex-start");
         EventIcon.style.justifyContent = ParseJustify("flex-start");
         EventIcon.text = ResolveIconText("flame", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon, 56f, 56f);
+        ApplyIconLabelStyle(EventIcon, 56f, 56f, 0f, true, "fit-box", 0f);
         EventIcon.style.display = DisplayStyle.Flex;
         EventIcon.SetEnabled(true);
         ApplyFontFamily(EventIcon, "lucide", 56f);
@@ -556,7 +556,7 @@ public sealed class CombatToastStackView
         EventIcon2.style.alignItems = ParseAlign("flex-start");
         EventIcon2.style.justifyContent = ParseJustify("flex-start");
         EventIcon2.text = ResolveIconText("shield", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon2, 56f, 56f);
+        ApplyIconLabelStyle(EventIcon2, 56f, 56f, 0f, true, "fit-box", 0f);
         EventIcon2.style.display = DisplayStyle.Flex;
         EventIcon2.SetEnabled(true);
         ApplyFontFamily(EventIcon2, "lucide", 56f);
@@ -876,7 +876,7 @@ public sealed class CombatToastStackView
         EventIcon3.style.alignItems = ParseAlign("flex-start");
         EventIcon3.style.justifyContent = ParseJustify("flex-start");
         EventIcon3.text = ResolveIconText("moon", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon3, 56f, 56f);
+        ApplyIconLabelStyle(EventIcon3, 56f, 56f, 0f, true, "fit-box", 0f);
         EventIcon3.style.display = DisplayStyle.Flex;
         EventIcon3.SetEnabled(true);
         ApplyFontFamily(EventIcon3, "lucide", 56f);
@@ -1541,15 +1541,15 @@ public sealed class CombatToastStackView
         };
     }
 
-    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight)
+    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight, float baselineOffset, bool opticalCentering, string sizeMode, float explicitFontSize)
     {
-        var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
+        var iconSize = explicitFontSize > 0f ? explicitFontSize : string.Equals(sizeMode, "match-height", StringComparison.OrdinalIgnoreCase) ? Mathf.Max(1f, boxHeight) : Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));
         label.style.unityTextAlign = TextAnchor.MiddleCenter;
         label.style.unityFontStyleAndWeight = FontStyle.Normal;
         label.style.whiteSpace = WhiteSpace.NoWrap;
         label.style.flexShrink = 0;
-        label.style.alignItems = Align.Center;
-        label.style.justifyContent = Justify.Center;
+        label.style.alignItems = opticalCentering ? Align.Center : Align.FlexStart;
+        label.style.justifyContent = opticalCentering ? Justify.Center : Justify.FlexStart;
         label.style.overflow = Overflow.Visible;
         label.style.paddingLeft = 0f;
         label.style.paddingTop = 0f;
@@ -1559,9 +1559,13 @@ public sealed class CombatToastStackView
         label.style.height = boxHeight;
         label.style.minWidth = boxWidth;
         label.style.minHeight = boxHeight;
-        if (boxWidth >= 32f && boxHeight >= 32f)
+        if (opticalCentering && boxWidth >= 32f && boxHeight >= 32f && Mathf.Approximately(baselineOffset, 0f))
         {
             label.style.marginTop = -1f;
+        }
+        else if (!Mathf.Approximately(baselineOffset, 0f))
+        {
+            label.style.marginTop = baselineOffset;
         }
         label.style.fontSize = iconSize;
     }

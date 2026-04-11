@@ -558,32 +558,12 @@ namespace BoomHud.Compare.Editor
 
         private static Texture2D CropToRectTransform(Texture2D fullTexture, RectTransform target)
         {
-            var worldCorners = new Vector3[4];
-            target.GetWorldCorners(worldCorners);
-
             var canvas = target.GetComponentInParent<Canvas>();
             var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
                 ? canvas.worldCamera ?? Camera.main
                 : null;
 
-            var minX = float.PositiveInfinity;
-            var minY = float.PositiveInfinity;
-            var maxX = float.NegativeInfinity;
-            var maxY = float.NegativeInfinity;
-
-            foreach (var corner in worldCorners)
-            {
-                var viewportPoint = camera != null
-                    ? camera.WorldToViewportPoint(corner)
-                    : ScreenPointToViewport(RectTransformUtility.WorldToScreenPoint(null, corner));
-
-                minX = Mathf.Min(minX, viewportPoint.x);
-                minY = Mathf.Min(minY, viewportPoint.y);
-                maxX = Mathf.Max(maxX, viewportPoint.x);
-                maxY = Mathf.Max(maxY, viewportPoint.y);
-            }
-
-            if (!float.IsFinite(minX) || !float.IsFinite(minY) || !float.IsFinite(maxX) || !float.IsFinite(maxY) || maxX <= minX || maxY <= minY)
+            if (!TryResolveViewportBounds(target, camera, out var minX, out var minY, out var maxX, out var maxY))
             {
                 throw new InvalidOperationException($"Could not resolve crop bounds for RectTransform '{target.name}'.");
             }
@@ -598,6 +578,107 @@ namespace BoomHud.Compare.Editor
             croppedTexture.SetPixels(pixels);
             croppedTexture.Apply();
             return croppedTexture;
+        }
+
+        private static bool TryResolveViewportBounds(
+            RectTransform target,
+            Camera? camera,
+            out float minX,
+            out float minY,
+            out float maxX,
+            out float maxY)
+        {
+            if (TryAccumulateViewportBounds(GetWorldCorners(target), camera, out minX, out minY, out maxX, out maxY))
+            {
+                return true;
+            }
+
+            if (TryAccumulateViewportBounds(GetPreferredWorldCorners(target), camera, out minX, out minY, out maxX, out maxY))
+            {
+                return true;
+            }
+
+            var descendantBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(target);
+            if (descendantBounds.size.sqrMagnitude > 0f)
+            {
+                var descendantCorners = new[]
+                {
+                    target.TransformPoint(new Vector3(descendantBounds.min.x, descendantBounds.min.y, descendantBounds.center.z)),
+                    target.TransformPoint(new Vector3(descendantBounds.min.x, descendantBounds.max.y, descendantBounds.center.z)),
+                    target.TransformPoint(new Vector3(descendantBounds.max.x, descendantBounds.max.y, descendantBounds.center.z)),
+                    target.TransformPoint(new Vector3(descendantBounds.max.x, descendantBounds.min.y, descendantBounds.center.z))
+                };
+
+                if (TryAccumulateViewportBounds(descendantCorners, camera, out minX, out minY, out maxX, out maxY))
+                {
+                    return true;
+                }
+            }
+
+            minX = minY = maxX = maxY = 0f;
+            return false;
+        }
+
+        private static Vector3[] GetWorldCorners(RectTransform target)
+        {
+            var worldCorners = new Vector3[4];
+            target.GetWorldCorners(worldCorners);
+            return worldCorners;
+        }
+
+        private static Vector3[] GetPreferredWorldCorners(RectTransform target)
+        {
+            var width = ResolvePreferredWidth(target);
+            var height = ResolvePreferredHeight(target);
+            if (width <= 0f || height <= 0f)
+            {
+                return Array.Empty<Vector3>();
+            }
+
+            var pivot = target.pivot;
+            var min = new Vector3(-pivot.x * width, -pivot.y * height, 0f);
+            var max = new Vector3((1f - pivot.x) * width, (1f - pivot.y) * height, 0f);
+
+            return new[]
+            {
+                target.TransformPoint(new Vector3(min.x, min.y, 0f)),
+                target.TransformPoint(new Vector3(min.x, max.y, 0f)),
+                target.TransformPoint(new Vector3(max.x, max.y, 0f)),
+                target.TransformPoint(new Vector3(max.x, min.y, 0f))
+            };
+        }
+
+        private static bool TryAccumulateViewportBounds(
+            Vector3[] worldCorners,
+            Camera? camera,
+            out float minX,
+            out float minY,
+            out float maxX,
+            out float maxY)
+        {
+            minX = float.PositiveInfinity;
+            minY = float.PositiveInfinity;
+            maxX = float.NegativeInfinity;
+            maxY = float.NegativeInfinity;
+
+            foreach (var corner in worldCorners)
+            {
+                var viewportPoint = camera != null
+                    ? camera.WorldToViewportPoint(corner)
+                    : ScreenPointToViewport(RectTransformUtility.WorldToScreenPoint(null, corner));
+
+                minX = Mathf.Min(minX, viewportPoint.x);
+                minY = Mathf.Min(minY, viewportPoint.y);
+                maxX = Mathf.Max(maxX, viewportPoint.x);
+                maxY = Mathf.Max(maxY, viewportPoint.y);
+            }
+
+            return float.IsFinite(minX) &&
+                   float.IsFinite(minY) &&
+                   float.IsFinite(maxX) &&
+                   float.IsFinite(maxY) &&
+                   maxX > minX &&
+                   maxY > minY;
         }
 
         private static VisualElement WaitForTargetElement(UIDocument document, string targetElementName)
@@ -620,6 +701,7 @@ namespace BoomHud.Compare.Editor
 
         private static RectTransform WaitForTargetRectTransform(string targetObjectName)
         {
+            RectTransform? lastResolved = null;
             for (var attempt = 0; attempt < 20; attempt++)
             {
                 RebindAllUGuiHosts();
@@ -628,10 +710,20 @@ namespace BoomHud.Compare.Editor
                 Thread.Sleep(100);
 
                 var target = GameObject.Find(targetObjectName);
-                if (target != null && target.TryGetComponent<RectTransform>(out var rectTransform) && HasMeaningfulRect(rectTransform))
+                if (target != null && target.TryGetComponent<RectTransform>(out var rectTransform))
                 {
-                    return rectTransform;
+                    lastResolved = rectTransform;
+                    ForceRebuildLayoutChain(rectTransform);
+                    if (HasMeaningfulRect(rectTransform) || HasPreferredRect(rectTransform))
+                    {
+                        return rectTransform;
+                    }
                 }
+            }
+
+            if (lastResolved != null)
+            {
+                return lastResolved;
             }
 
             throw new InvalidOperationException($"Could not resolve target object '{targetObjectName}'.");
@@ -896,7 +988,7 @@ namespace BoomHud.Compare.Editor
             for (var attempt = 0; attempt < 8; attempt++)
             {
                 Canvas.ForceUpdateCanvases();
-                LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+                ForceRebuildLayoutChain(rectTransform);
                 UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
                 SceneView.RepaintAll();
                 EditorApplication.QueuePlayerLoopUpdate();
@@ -906,7 +998,43 @@ namespace BoomHud.Compare.Editor
                 {
                     return;
                 }
+
+                ApplyPreferredSizeFallback(rectTransform);
             }
+        }
+
+        private static void FitTargetToSurface(RectTransform target)
+        {
+            if (target.parent is not RectTransform surface)
+            {
+                return;
+            }
+
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(surface);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(target);
+
+            var preferredWidth = Mathf.Max(target.rect.width, ResolvePreferredWidth(target));
+            var preferredHeight = Mathf.Max(target.rect.height, ResolvePreferredHeight(target));
+            var canvas = target.GetComponentInParent<Canvas>();
+            var scaleFactor = canvas != null ? Mathf.Max(0.0001f, canvas.scaleFactor) : 1f;
+            var safeWidth = Mathf.Max(surface.rect.width, Screen.width / scaleFactor);
+            var safeHeight = Mathf.Max(surface.rect.height, Screen.height / scaleFactor);
+            if (preferredWidth <= 0f || preferredHeight <= 0f || safeWidth <= 0f || safeHeight <= 0f)
+            {
+                return;
+            }
+
+            var scale = Mathf.Min(1f, safeWidth / preferredWidth, safeHeight / preferredHeight);
+            target.anchorMin = new Vector2(0.5f, 0.5f);
+            target.anchorMax = new Vector2(0.5f, 0.5f);
+            target.pivot = new Vector2(0.5f, 0.5f);
+            target.anchoredPosition = Vector2.zero;
+            target.localScale = new Vector3(scale, scale, 1f);
+
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(surface);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(target);
         }
 
         private static bool HasResolvedLayout(VisualElement? element)
@@ -930,6 +1058,73 @@ namespace BoomHud.Compare.Editor
         {
             var rect = rectTransform.rect;
             return !float.IsNaN(rect.width) && !float.IsNaN(rect.height) && rect.width > 0f && rect.height > 0f;
+        }
+
+        private static bool HasPreferredRect(RectTransform rectTransform)
+        {
+            var preferredWidth = ResolvePreferredWidth(rectTransform);
+            var preferredHeight = ResolvePreferredHeight(rectTransform);
+            return preferredWidth > 0f && preferredHeight > 0f;
+        }
+
+        private static float ResolvePreferredWidth(RectTransform rectTransform)
+        {
+            var preferredWidth = LayoutUtility.GetPreferredWidth(rectTransform);
+            if (preferredWidth > 0f)
+            {
+                return preferredWidth;
+            }
+
+            if (rectTransform.TryGetComponent<LayoutElement>(out var layoutElement) && layoutElement.preferredWidth > 0f)
+            {
+                return layoutElement.preferredWidth;
+            }
+
+            return rectTransform.sizeDelta.x;
+        }
+
+        private static float ResolvePreferredHeight(RectTransform rectTransform)
+        {
+            var preferredHeight = LayoutUtility.GetPreferredHeight(rectTransform);
+            if (preferredHeight > 0f)
+            {
+                return preferredHeight;
+            }
+
+            if (rectTransform.TryGetComponent<LayoutElement>(out var layoutElement) && layoutElement.preferredHeight > 0f)
+            {
+                return layoutElement.preferredHeight;
+            }
+
+            return rectTransform.sizeDelta.y;
+        }
+
+        private static void ApplyPreferredSizeFallback(RectTransform rectTransform)
+        {
+            if (HasMeaningfulRect(rectTransform))
+            {
+                return;
+            }
+
+            var preferredWidth = ResolvePreferredWidth(rectTransform);
+            var preferredHeight = ResolvePreferredHeight(rectTransform);
+            if (preferredWidth <= 0f || preferredHeight <= 0f)
+            {
+                return;
+            }
+
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, preferredWidth);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, preferredHeight);
+        }
+
+        private static void ForceRebuildLayoutChain(RectTransform rectTransform)
+        {
+            RectTransform? current = rectTransform;
+            while (current != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(current);
+                current = current.parent as RectTransform;
+            }
         }
 
         private static Vector3 ScreenPointToViewport(Vector2 screenPoint)

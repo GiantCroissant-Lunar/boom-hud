@@ -42,6 +42,13 @@ namespace BoomHud.Compare
             RenameAndCenterGeneratedRoot(_view);
         }
 
+        protected override void ConfigureCanvasScaler(CanvasScaler scaler)
+        {
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+            scaler.scaleFactor = 1f;
+            scaler.referencePixelsPerUnit = 100f;
+        }
+
         protected override void Unbind()
         {
             _view = null;
@@ -78,6 +85,8 @@ namespace BoomHud.Compare
             generatedRoot.anchoredPosition = Vector2.zero;
             generatedRoot.localScale = Vector3.one;
 
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(generatedRoot);
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(generatedRoot);
         }
