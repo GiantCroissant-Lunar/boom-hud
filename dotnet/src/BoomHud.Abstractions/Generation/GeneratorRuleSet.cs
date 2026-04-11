@@ -93,6 +93,14 @@ public sealed record GeneratorRuleSelector
 
     public ComponentType? ComponentType { get; init; }
 
+    public string? FontFamily { get; init; }
+
+    public string? TextGrowth { get; init; }
+
+    public string? SemanticClass { get; init; }
+
+    public string? SizeBand { get; init; }
+
     public string? MetadataKey { get; init; }
 
     public string? MetadataValue { get; init; }
@@ -316,7 +324,11 @@ public sealed record ResolvedGeneratorTextPolicy
 
     public double? FontSize { get; init; }
 
+    public double? FontSizeDelta { get; init; }
+
     public double? LetterSpacing { get; init; }
+
+    public double? LetterSpacingDelta { get; init; }
 
     public string? TextGrowth { get; init; }
 
@@ -328,8 +340,10 @@ public sealed record ResolvedGeneratorTextPolicy
                 LineHeight = action.LineHeight ?? LineHeight,
                 WrapText = action.WrapText ?? WrapText,
                 FontFamily = action.FontFamily ?? FontFamily,
-                FontSize = action.FontSize ?? AddDelta(FontSize, action.FontSizeDelta),
-                LetterSpacing = action.LetterSpacing ?? AddDelta(LetterSpacing, action.LetterSpacingDelta),
+                FontSize = action.FontSize ?? FontSize,
+                FontSizeDelta = action.FontSize is { } ? null : AddDelta(FontSizeDelta, action.FontSizeDelta),
+                LetterSpacing = action.LetterSpacing ?? LetterSpacing,
+                LetterSpacingDelta = action.LetterSpacing is { } ? null : AddDelta(LetterSpacingDelta, action.LetterSpacingDelta),
                 TextGrowth = action.TextGrowth ?? TextGrowth
             };
 
@@ -349,6 +363,8 @@ public sealed record ResolvedGeneratorIconPolicy
 
     public double? FontSize { get; init; }
 
+    public double? FontSizeDelta { get; init; }
+
     public ResolvedGeneratorIconPolicy Apply(GeneratorIconRuleAction? action)
         => action == null
             ? this
@@ -357,7 +373,8 @@ public sealed record ResolvedGeneratorIconPolicy
                 BaselineOffset = action.BaselineOffset ?? AddDelta(BaselineOffset, action.BaselineOffsetDelta),
                 OpticalCentering = action.OpticalCentering ?? OpticalCentering,
                 SizeMode = action.SizeMode ?? SizeMode,
-                FontSize = action.FontSize ?? AddDelta(FontSize, action.FontSizeDelta)
+                FontSize = action.FontSize ?? FontSize,
+                FontSizeDelta = action.FontSize is { } ? null : AddDelta(FontSizeDelta, action.FontSizeDelta)
             };
 
     private static double? AddDelta(double? baseline, double? delta)

@@ -3,6 +3,17 @@ using BoomHud.Abstractions.IR;
 
 namespace BoomHud.Generators;
 
+public readonly record struct RuleSelectionContext(
+    ComponentNode? Parent,
+    ComponentNode? Grandparent,
+    int SiblingIndex)
+{
+    public static RuleSelectionContext Root => new(null, null, 0);
+
+    public RuleSelectionContext ForChild(ComponentNode parent, int siblingIndex)
+        => new(parent, Parent, siblingIndex);
+}
+
 public sealed class RuleResolver
 {
     private readonly string _backend;
@@ -17,10 +28,13 @@ public sealed class RuleResolver
     }
 
     public ResolvedGeneratorPolicy Resolve(string documentName, ComponentNode node)
+        => Resolve(documentName, node, RuleSelectionContext.Root);
+
+    public ResolvedGeneratorPolicy Resolve(string documentName, ComponentNode node, RuleSelectionContext context)
     {
         var resolved = new ResolvedGeneratorPolicy();
         foreach (var match in _rules
-                     .Where(candidate => Matches(candidate.Rule.Selector, documentName, node))
+                     .Where(candidate => Matches(candidate.Rule.Selector, documentName, node, context))
                      .OrderBy(candidate => GeneratorRulePlanner.GetPhaseOrder(candidate.Rule.Phase))
                      .ThenBy(candidate => GeneratorRulePlanner.GetSpecificity(candidate.Rule.Selector))
                      .ThenBy(candidate => candidate.Index))
@@ -48,7 +62,7 @@ public sealed class RuleResolver
         return resolved;
     }
 
-    private bool Matches(GeneratorRuleSelector selector, string documentName, ComponentNode node)
+    private bool Matches(GeneratorRuleSelector selector, string documentName, ComponentNode node, RuleSelectionContext context)
     {
         if (!string.IsNullOrWhiteSpace(selector.Backend)
             && !string.Equals(selector.Backend, _backend, StringComparison.OrdinalIgnoreCase))
@@ -85,6 +99,39 @@ public sealed class RuleResolver
         if (selector.ComponentType is { } componentType && componentType != node.Type)
         {
             return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.FontFamily))
+        {
+            var nodeFontFamily = RuleSelectorClassifier.ResolveFontFamily(node);
+            if (!string.Equals(selector.FontFamily, nodeFontFamily, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.TextGrowth))
+        {
+            var nodeTextGrowth = RuleSelectorClassifier.ResolveTextGrowth(node);
+            if (!string.Equals(selector.TextGrowth, nodeTextGrowth, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.SemanticClass)
+            && !RuleSelectorClassifier.HasSemanticClass(node, context, selector.SemanticClass))
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.SizeBand))
+        {
+            var nodeSizeBand = RuleSelectorClassifier.ResolveSizeBand(node);
+            if (!string.Equals(selector.SizeBand, nodeSizeBand, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
         }
 
         if (string.IsNullOrWhiteSpace(selector.MetadataKey))
@@ -155,6 +202,159 @@ public sealed class RuleResolver
     private sealed record OrderedRule(GeneratorRule Rule, int Index);
 }
 
+internal static class RuleSelectorClassifier
+{
+    public static string? ResolveFontFamily(ComponentNode node)
+        => node.Style?.FontFamily;
+
+    public static string? ResolveTextGrowth(ComponentNode node)
+        => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilTextGrowth, out var rawTextGrowth)
+            ? GeneratorRuleMetadata.NormalizeValue(rawTextGrowth)
+            : null;
+
+    public static bool HasSemanticClass(ComponentNode node, RuleSelectionContext context, string semanticClass)
+    {
+        if (string.IsNullOrWhiteSpace(semanticClass))
+        {
+            return false;
+        }
+
+        return semanticClass.Trim().ToLowerInvariant() switch
+        {
+            "pixel-text" => IsPixelText(node),
+            "icon-glyph" => IsIconGlyph(node),
+            "icon-shell" => IsIconShell(node),
+            "heading-label" => IsHeadingLabel(node, context),
+            "stacked-text-line" => IsStackedTextLine(node, context),
+            "stacked-text-group" => IsStackedTextGroup(node),
+            _ => false
+        };
+    }
+
+    public static string? ResolveSizeBand(ComponentNode node)
+    {
+        var nominalSize = ResolveNominalSize(node);
+        if (nominalSize is not > 0d)
+        {
+            return null;
+        }
+
+        return nominalSize.Value switch
+        {
+            <= 8.5d => "xsmall",
+            <= 10.5d => "small",
+            <= 14.5d => "medium",
+            <= 24d => "large",
+            _ => "xlarge"
+        };
+    }
+
+    private static bool IsPixelText(ComponentNode node)
+    {
+        if (node.Type == ComponentType.Icon)
+        {
+            return false;
+        }
+
+        var textGrowth = ResolveTextGrowth(node);
+        if (string.Equals(textGrowth, "fixed-width", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var fontFamily = ResolveFontFamily(node);
+        if (string.IsNullOrWhiteSpace(fontFamily))
+        {
+            return false;
+        }
+
+        var normalized = fontFamily.Trim().ToLowerInvariant();
+        return normalized.Contains("press start", StringComparison.Ordinal)
+               || normalized.Contains("pixel", StringComparison.Ordinal)
+               || normalized.Contains("bitmap", StringComparison.Ordinal)
+               || normalized.Contains("arcade", StringComparison.Ordinal);
+    }
+
+    private static bool IsIconGlyph(ComponentNode node)
+    {
+        if (node.Type == ComponentType.Icon)
+        {
+            return true;
+        }
+
+        var fontFamily = ResolveFontFamily(node);
+        return string.Equals(fontFamily, "lucide", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsIconShell(ComponentNode node)
+        => node.Type == ComponentType.Container
+           && node.Children.Count == 1
+           && IsIconGlyph(node.Children[0]);
+
+    private static bool IsHeadingLabel(ComponentNode node, RuleSelectionContext context)
+    {
+        if (!IsTextLabel(node) || context.SiblingIndex != 0)
+        {
+            return false;
+        }
+
+        if (!IsVerticalTextContainer(context.Parent) || context.Parent!.Children.Count < 2)
+        {
+            return false;
+        }
+
+        return context.Parent.Children
+            .Skip(1)
+            .Any(static child => !IsTextLabel(child));
+    }
+
+    private static bool IsStackedTextLine(ComponentNode node, RuleSelectionContext context)
+        => IsTextLabel(node)
+           && IsVerticalTextContainer(context.Parent)
+           && context.Parent!.Children.Count >= 2
+           && context.Parent.Children.All(static child => IsTextLabel(child));
+
+    private static bool IsStackedTextGroup(ComponentNode node)
+        => node.Type is ComponentType.Container or ComponentType.Panel or ComponentType.Stack
+           && IsVerticalTextContainer(node)
+           && node.Children.Count >= 2
+           && node.Children.All(static child => IsTextLabel(child));
+
+    private static bool IsTextLabel(ComponentNode node)
+        => node.Type is ComponentType.Label or ComponentType.Badge
+           && !IsIconGlyph(node);
+
+    private static bool IsVerticalTextContainer(ComponentNode? node)
+        => node?.Layout?.Type is LayoutType.Vertical or LayoutType.Stack;
+
+    private static double? ResolveNominalSize(ComponentNode node)
+    {
+        if (node.Style?.FontSize is > 0d and var fontSize)
+        {
+            return fontSize;
+        }
+
+        var width = Pixels(node.Layout?.Width ?? node.Style?.Width);
+        var height = Pixels(node.Layout?.Height ?? node.Style?.Height);
+
+        return (width, height) switch
+        {
+            ({ } w, { } h) when w > 0d && h > 0d => Math.Min(w, h),
+            ({ } w, null) when w > 0d => w,
+            (null, { } h) when h > 0d => h,
+            _ => null
+        };
+    }
+
+    private static double? Pixels(Dimension? dimension)
+        => dimension switch
+        {
+            { Unit: DimensionUnit.Pixels } pixels => pixels.Value,
+            { Unit: DimensionUnit.Cells } cells => cells.Value,
+            _ => null
+        };
+}
+
 public static class TextPolicyService
 {
     public static string? ResolveFontFamily(ComponentNode node, ResolvedGeneratorPolicy policy)
@@ -210,36 +410,48 @@ public static class TextPolicyService
 
     public static double? ResolveFontSize(ComponentNode node, Dimension? widthDimension, Dimension? heightDimension, ResolvedGeneratorPolicy policy)
     {
-        if (policy.Text.FontSize is { } policyFontSize and > 0d)
+        double? fontSize = policy.Text.FontSize is { } policyFontSize and > 0d
+            ? policyFontSize
+            : null;
+
+        if (fontSize is not > 0d && node.Style?.FontSize is { } explicitFontSize)
         {
-            return policyFontSize;
+            fontSize = explicitFontSize;
         }
 
-        if (node.Style?.FontSize is { } explicitFontSize)
+        if (fontSize is not > 0d && node.Type == ComponentType.Icon)
         {
-            return explicitFontSize;
+            var width = Pixels(widthDimension);
+            var height = Pixels(heightDimension);
+            var inferred = (width, height) switch
+            {
+                ({ } w, { } h) => Math.Min(w, h),
+                ({ } w, null) => w,
+                (null, { } h) => h,
+                _ => 16d
+            };
+
+            fontSize = inferred <= 0d ? null : inferred;
         }
 
-        if (node.Type != ComponentType.Icon)
+        if (policy.Text.FontSizeDelta is { } fontSizeDelta)
         {
-            return null;
+            fontSize = (fontSize ?? 0d) + fontSizeDelta;
         }
 
-        var width = Pixels(widthDimension);
-        var height = Pixels(heightDimension);
-        var inferred = (width, height) switch
-        {
-            ({ } w, { } h) => Math.Min(w, h),
-            ({ } w, null) => w,
-            (null, { } h) => h,
-            _ => 16d
-        };
-
-        return inferred <= 0d ? null : inferred;
+        return fontSize is > 0d ? fontSize : null;
     }
 
     public static double? ResolveLetterSpacing(ComponentNode node, ResolvedGeneratorPolicy policy)
-        => policy.Text.LetterSpacing ?? node.Style?.LetterSpacing;
+    {
+        double? letterSpacing = policy.Text.LetterSpacing ?? node.Style?.LetterSpacing;
+        if (policy.Text.LetterSpacingDelta is { } letterSpacingDelta)
+        {
+            letterSpacing = (letterSpacing ?? 0d) + letterSpacingDelta;
+        }
+
+        return letterSpacing;
+    }
 
     private static double? Pixels(Dimension? dimension)
         => dimension switch
@@ -261,8 +473,47 @@ public static class IconPolicyService
     public static string ResolveSizeMode(ResolvedGeneratorPolicy policy)
         => string.IsNullOrWhiteSpace(policy.Icon.SizeMode) ? "fit-box" : policy.Icon.SizeMode!;
 
-    public static double? ResolveFontSize(ResolvedGeneratorPolicy policy)
-        => policy.Icon.FontSize is > 0d ? policy.Icon.FontSize : null;
+    public static double? ResolveFontSize(ComponentNode node, Dimension? widthDimension, Dimension? heightDimension, ResolvedGeneratorPolicy policy)
+    {
+        if (policy.Icon.FontSize is not > 0d && policy.Icon.FontSizeDelta is not { })
+        {
+            return null;
+        }
+
+        double? fontSize = policy.Icon.FontSize is > 0d
+            ? policy.Icon.FontSize
+            : null;
+
+        if (fontSize is not > 0d)
+        {
+            var width = Pixels(widthDimension);
+            var height = Pixels(heightDimension);
+            var inferred = (width, height) switch
+            {
+                ({ } w, { } h) => Math.Min(w, h),
+                ({ } w, null) => w,
+                (null, { } h) => h,
+                _ => 16d
+            };
+
+            fontSize = inferred <= 0d ? null : inferred;
+        }
+
+        if (policy.Icon.FontSizeDelta is { } fontSizeDelta)
+        {
+            fontSize = (fontSize ?? 0d) + fontSizeDelta;
+        }
+
+        return fontSize is > 0d ? fontSize : null;
+    }
+
+    private static double? Pixels(Dimension? dimension)
+        => dimension switch
+        {
+            { Unit: DimensionUnit.Pixels } pixels => pixels.Value,
+            { Unit: DimensionUnit.Cells } cells => cells.Value,
+            _ => null
+        };
 }
 
 public static class LayoutPolicyService
@@ -302,6 +553,14 @@ public static class LayoutPolicyService
         bool isFlexibleContainer,
         ResolvedGeneratorPolicy policy)
     {
+        var explicitPreference = axis == "width"
+            ? policy.Layout.PreferContentWidth
+            : policy.Layout.PreferContentHeight;
+        if (explicitPreference == true)
+        {
+            return null;
+        }
+
         if (dimension is { Unit: DimensionUnit.Fill or DimensionUnit.Star })
         {
             return dimension.Value.Value == 0 ? 1d : dimension.Value.Value;

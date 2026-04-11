@@ -45,6 +45,51 @@
       }
     },
     {
+      "name": "quest-sidebar-unity-heading-label-hug-content",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "semanticClass": "heading-label"
+      },
+      "action": {
+        "layout": {
+          "preferContentHeight": true
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-unity-stacked-text-line-hug-content",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "semanticClass": "stacked-text-line"
+      },
+      "action": {
+        "layout": {
+          "preferContentHeight": true
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-unity-stacked-text-group-gap-tight",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "semanticClass": "stacked-text-group"
+      },
+      "action": {
+        "layout": {
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
       "name": "quest-sidebar-ugui-edge-inset",
       "phase": "layout",
       "cost": 1.0,

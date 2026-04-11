@@ -39,6 +39,10 @@ public sealed class GeneratorRuleSetTests
                 "nodeId": "body",
                 "sourceNodeId": "QSB56",
                 "componentType": "label",
+                "fontFamily": "Press Start 2P",
+                "textGrowth": "fixed-width",
+                "semanticClass": "pixel-text",
+                "sizeBand": "xsmall",
                 "metadataKey": "boomhud:pencilTextGrowth",
                 "metadataValue": "fixed-width"
               },
@@ -93,6 +97,10 @@ public sealed class GeneratorRuleSetTests
         rule.Effects[0].Key.Should().Be("text.wrap.adjusted");
         rule.Selector.ComponentType.Should().Be(ComponentType.Label);
         rule.Selector.SourceNodeId.Should().Be("QSB56");
+        rule.Selector.FontFamily.Should().Be("Press Start 2P");
+        rule.Selector.TextGrowth.Should().Be("fixed-width");
+        rule.Selector.SemanticClass.Should().Be("pixel-text");
+        rule.Selector.SizeBand.Should().Be("xsmall");
         rule.Action.ControlType.Should().Be("TextField");
         rule.Action.Text!.LineHeight.Should().Be(1.4);
         rule.Action.Text.WrapText.Should().BeTrue();
@@ -280,6 +288,352 @@ public sealed class GeneratorRuleSetTests
         var policy = resolver.Resolve("QuestSidebar", node);
 
         policy.Text.WrapText.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Resolve_SemanticAndStyleSelectorsMatchPixelTextAndIconShells()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        SemanticClass = "pixel-text",
+                        FontFamily = "Press Start 2P",
+                        TextGrowth = "fixed-width",
+                        SizeBand = "small"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            FontSizeDelta = 1,
+                            LetterSpacing = 0.25
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        SemanticClass = "icon-shell",
+                        SizeBand = "xlarge"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            PreferredWidthDelta = -2,
+                            PreferredHeightDelta = -2
+                        }
+                    }
+                }
+            ]
+        };
+
+        var pixelTextNode = new ComponentNode
+        {
+            Id = "title",
+            Type = ComponentType.Label,
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 10
+            },
+            InstanceOverrides = new Dictionary<string, object?>
+            {
+                [BoomHudMetadataKeys.PencilTextGrowth] = "fixed-width"
+            }
+        };
+
+        var iconShellNode = new ComponentNode
+        {
+            Id = "shell",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Width = Dimension.Pixels(44),
+                Height = Dimension.Pixels(44)
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = "icon",
+                    Type = ComponentType.Icon,
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "lucide"
+                    },
+                    Layout = new LayoutSpec
+                    {
+                        Width = Dimension.Pixels(20),
+                        Height = Dimension.Pixels(20)
+                    }
+                }
+            ]
+        };
+
+        var resolver = new RuleResolver(ruleSet, "remotion");
+        var pixelPolicy = resolver.Resolve("QuestSidebar", pixelTextNode);
+        var shellPolicy = resolver.Resolve("QuestSidebar", iconShellNode);
+
+        pixelPolicy.Text.FontSize.Should().BeNull();
+        pixelPolicy.Text.FontSizeDelta.Should().Be(1);
+        pixelPolicy.Text.LetterSpacing.Should().Be(0.25);
+        TextPolicyService.ResolveFontSize(pixelTextNode, pixelTextNode.Layout?.Width ?? pixelTextNode.Style?.Width, pixelTextNode.Layout?.Height ?? pixelTextNode.Style?.Height, pixelPolicy).Should().Be(11);
+        shellPolicy.Layout.PreferredWidthDelta.Should().Be(-2);
+        shellPolicy.Layout.PreferredHeightDelta.Should().Be(-2);
+    }
+
+    [Fact]
+    public void Resolve_FontDeltasApplyRelativeToSourceMetrics()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        NodeId = "body"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            FontSize = 12,
+                            LetterSpacing = 0.2
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        NodeId = "body"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            FontSizeDelta = 2,
+                            LetterSpacingDelta = 0.1
+                        },
+                        Icon = new GeneratorIconRuleAction
+                        {
+                            FontSizeDelta = -1
+                        }
+                    }
+                }
+            ]
+        };
+
+        var node = new ComponentNode
+        {
+            Id = "body",
+            Type = ComponentType.Icon,
+            Style = new StyleSpec
+            {
+                FontSize = 10,
+                LetterSpacing = 0.05
+            },
+            Layout = new LayoutSpec
+            {
+                Width = Dimension.Pixels(20),
+                Height = Dimension.Pixels(18)
+            }
+        };
+
+        var resolver = new RuleResolver(ruleSet, "remotion");
+        var policy = resolver.Resolve("QuestSidebar", node);
+
+        policy.Text.FontSize.Should().Be(12);
+        policy.Text.FontSizeDelta.Should().Be(2);
+        policy.Text.LetterSpacing.Should().Be(0.2);
+        policy.Text.LetterSpacingDelta.Should().Be(0.1);
+        policy.Icon.FontSize.Should().BeNull();
+        policy.Icon.FontSizeDelta.Should().Be(-1);
+        TextPolicyService.ResolveFontSize(node, node.Layout?.Width, node.Layout?.Height, policy).Should().Be(14);
+        TextPolicyService.ResolveLetterSpacing(node, policy).Should().BeApproximately(0.3, 0.0001);
+        IconPolicyService.ResolveFontSize(node, node.Layout?.Width, node.Layout?.Height, policy).Should().Be(17);
+    }
+
+    [Fact]
+    public void Resolve_StructuralSemanticRolesMatchHeadingAndStackedTextPatterns()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        SemanticClass = "heading-label"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            PreferContentHeight = true
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        SemanticClass = "stacked-text-line"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            PreferContentHeight = true
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "remotion",
+                        SemanticClass = "stacked-text-group"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            GapDelta = -3
+                        }
+                    }
+                }
+            ]
+        };
+
+        var headingLabel = new ComponentNode
+        {
+            Id = "SectionHeading",
+            Type = ComponentType.Label,
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 10
+            }
+        };
+
+        var contentPanel = new ComponentNode
+        {
+            Id = "SectionBody",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Absolute
+            }
+        };
+
+        var headingParent = new ComponentNode
+        {
+            Id = "SectionCard",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Vertical,
+                Gap = Spacing.Uniform(10)
+            },
+            Children =
+            [
+                headingLabel,
+                contentPanel
+            ]
+        };
+
+        var stackedTitle = new ComponentNode
+        {
+            Id = "ObjectiveTitle",
+            Type = ComponentType.Label,
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 9
+            }
+        };
+
+        var stackedHint = new ComponentNode
+        {
+            Id = "ObjectiveHint",
+            Type = ComponentType.Label,
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 8
+            }
+        };
+
+        var stackedParent = new ComponentNode
+        {
+            Id = "ObjectiveText",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Vertical,
+                Gap = Spacing.Uniform(6)
+            },
+            Children =
+            [
+                stackedTitle,
+                stackedHint
+            ]
+        };
+
+        var resolver = new RuleResolver(ruleSet, "remotion");
+        var headingPolicy = resolver.Resolve("QuestSidebar", headingLabel, new RuleSelectionContext(headingParent, null, 0));
+        var stackedLinePolicy = resolver.Resolve("QuestSidebar", stackedTitle, new RuleSelectionContext(stackedParent, null, 0));
+        var stackedGroupPolicy = resolver.Resolve("QuestSidebar", stackedParent);
+
+        headingPolicy.Layout.PreferContentHeight.Should().BeTrue();
+        stackedLinePolicy.Layout.PreferContentHeight.Should().BeTrue();
+        stackedGroupPolicy.Layout.GapDelta.Should().Be(-3);
+    }
+
+    [Fact]
+    public void ResolveFlexibleSize_PreferContentHeightSuppressesDefaultFlexGrowth()
+    {
+        var baseline = LayoutPolicyService.ResolveFlexibleSize(
+            null,
+            "height",
+            LayoutType.Vertical,
+            isFlexibleContainer: true,
+            new ResolvedGeneratorPolicy());
+
+        var policy = new ResolvedGeneratorPolicy
+        {
+            Layout = new ResolvedGeneratorLayoutPolicy
+            {
+                PreferContentHeight = true
+            }
+        };
+
+        var resolved = LayoutPolicyService.ResolveFlexibleSize(
+            null,
+            "height",
+            LayoutType.Vertical,
+            isFlexibleContainer: true,
+            policy);
+
+        baseline.Should().Be(1);
+        resolved.Should().BeNull();
     }
 
     [Fact]

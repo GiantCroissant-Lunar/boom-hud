@@ -490,11 +490,15 @@ public sealed class UnityGenerator : IBackendGenerator
     {
         var style = node.Source.Style;
         var policy = node.Policy;
+        var widthDimension = node.Source.Layout?.Width ?? style?.Width;
+        var heightDimension = node.Source.Layout?.Height ?? style?.Height;
+        var resolvedFontSize = TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, policy);
+        var resolvedLetterSpacing = TextPolicyService.ResolveLetterSpacing(node.Source, policy);
         if (style == null
             && string.IsNullOrWhiteSpace(policy.Text.FontFamily)
-            && policy.Text.FontSize is not > 0d
+            && resolvedFontSize is not > 0d
             && policy.Text.LineHeight is not > 0d
-            && policy.Text.LetterSpacing is not > 0d)
+            && resolvedLetterSpacing is not > 0d)
         {
             return;
         }
@@ -512,8 +516,7 @@ public sealed class UnityGenerator : IBackendGenerator
         }
 
         var fontFamily = policy.Text.FontFamily ?? style?.FontFamily;
-        var fontSize = policy.Text.FontSize
-            ?? (style == null ? null : ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes));
+        var fontSize = resolvedFontSize;
         if (fontSize != null)
         {
             AppendCssDeclaration(builder, "font-size", ToPixels(fontSize.Value));
@@ -530,7 +533,7 @@ public sealed class UnityGenerator : IBackendGenerator
             }
         }
 
-        if (TextPolicyService.ResolveLetterSpacing(node.Source, policy) is { } letterSpacing)
+        if (resolvedLetterSpacing is { } letterSpacing)
         {
             AppendCssDeclaration(builder, "letter-spacing", ToPixels(letterSpacing));
         }
@@ -1410,8 +1413,11 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({ToStringLiteral(background)}, null);");
         }
 
-        var fontSize = node.Policy.Text.FontSize
-            ?? ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes);
+        var fontSize = TextPolicyService.ResolveFontSize(
+            node.Source,
+            node.Source.Layout?.Width ?? style.Width,
+            node.Source.Layout?.Height ?? style.Height,
+            node.Policy);
         if (fontSize is { } resolvedFontSize)
         {
             AppendInvariantLine(builder, $"        {accessor}.style.fontSize = {ToFloatLiteral(resolvedFontSize)};");
@@ -1516,7 +1522,11 @@ public sealed class UnityGenerator : IBackendGenerator
             var baselineOffset = ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy));
             var opticalCentering = IconPolicyService.UseOpticalCentering(node.Policy) ? "true" : "false";
             var sizeMode = ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
-            var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(node.Policy) ?? 0d);
+            var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(
+                node.Source,
+                node.Source.Layout?.Width ?? node.Source.Style?.Width,
+                node.Source.Layout?.Height ?? node.Source.Style?.Height,
+                node.Policy) ?? 0d);
             assignment = string.Join(Environment.NewLine,
                 $"{accessor}.text = {textExpression};",
                 $"        ApplyIconLabelStyle({accessor}, {iconWidth}, {iconHeight}, {baselineOffset}, {opticalCentering}, {sizeMode}, {explicitIconFontSize});");

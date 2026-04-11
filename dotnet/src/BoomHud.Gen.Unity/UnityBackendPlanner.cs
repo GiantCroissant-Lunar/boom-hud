@@ -39,7 +39,7 @@ internal sealed class UnityBackendPlanner
             rootBaseName = document.Name + "Root";
         }
 
-        var root = PlanNode(document.Root, rootBaseName);
+        var root = PlanNode(document.Root, rootBaseName, parent: null, grandparent: null, siblingIndex: 0);
 
         var viewModelProperties = _bindingIdentifiersByPath
             .OrderBy(static pair => pair.Value, StringComparer.Ordinal)
@@ -59,18 +59,18 @@ internal sealed class UnityBackendPlanner
         };
     }
 
-    private UnityPlannedNode PlanNode(ComponentNode node, string? baseName)
+    private UnityPlannedNode PlanNode(ComponentNode node, string? baseName, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex)
     {
         RegisterBindingPaths(node);
 
         var plannedName = ReserveNodeName(baseName);
-        var policy = _ruleResolver?.Resolve(_documentName, node) ?? new ResolvedGeneratorPolicy();
+        var policy = _ruleResolver?.Resolve(_documentName, node, new RuleSelectionContext(parent, grandparent, siblingIndex)) ?? new ResolvedGeneratorPolicy();
         var mapping = MapElement(node, policy);
         var children = node.Children
             .Select((child, index) =>
             {
                 var childBaseName = child.Id ?? child.SlotKey ?? child.Type.ToString() + index.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
-                return PlanNode(child, childBaseName);
+                return PlanNode(child, childBaseName, node, parent, index);
             })
             .ToList();
 

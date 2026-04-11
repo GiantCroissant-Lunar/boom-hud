@@ -158,6 +158,26 @@ public static class GeneratorRulePlanner
             score++;
         }
 
+        if (!string.IsNullOrWhiteSpace(selector.FontFamily))
+        {
+            score++;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.TextGrowth))
+        {
+            score++;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.SemanticClass))
+        {
+            score++;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selector.SizeBand))
+        {
+            score++;
+        }
+
         if (!string.IsNullOrWhiteSpace(selector.MetadataKey))
         {
             score++;

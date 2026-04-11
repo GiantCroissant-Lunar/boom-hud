@@ -296,4 +296,20 @@ public sealed class GeneratorRulePlannerTests
         withMotion.AppliedRules[0].Action.Layout!.PaddingDelta.Should().Be(4);
         withMotion.AppliedRules[1].Action.Motion!.DurationQuantizationFrames.Should().Be(8);
     }
+
+    [Fact]
+    public void GetSpecificity_CountsSemanticAndStyleSelectors()
+    {
+        var selector = new GeneratorRuleSelector
+        {
+            Backend = "remotion",
+            ComponentType = ComponentType.Label,
+            FontFamily = "Press Start 2P",
+            TextGrowth = "fixed-width",
+            SemanticClass = "pixel-text",
+            SizeBand = "small"
+        };
+
+        GeneratorRulePlanner.GetSpecificity(selector).Should().Be(6);
+    }
 }
