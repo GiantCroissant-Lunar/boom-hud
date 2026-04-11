@@ -67,4 +67,11 @@ public sealed class ComposeManifestDto
     /// </summary>
     [JsonPropertyName("namespace")]
     public string? Namespace { get; set; }
+
+    /// <summary>
+    /// Path to a generator rule set JSON file (relative to manifest).
+    /// If omitted, uses CLI --rules.
+    /// </summary>
+    [JsonPropertyName("rules")]
+    public string? Rules { get; set; }
 }

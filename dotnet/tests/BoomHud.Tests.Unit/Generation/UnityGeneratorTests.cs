@@ -626,7 +626,7 @@ public class UnityGeneratorTests
         var controllerFile = result.Files.First(f => f.Path == "IconHudView.gen.cs");
 
         controllerFile.Content.Should().Contain("Icon.text = ResolveIconText(\"swords\", null, 16f);");
-        controllerFile.Content.Should().Contain("ApplyIconLabelStyle(Icon, 16f, 16f);");
+        controllerFile.Content.Should().Contain("ApplyIconLabelStyle(Icon, 16f, 16f, 0f, true, \"fit-box\", 0f);");
         controllerFile.Content.Should().Contain("return NormalizeIconText(value);");
         controllerFile.Content.Should().Contain("\"swords\" => \"⚔\"");
     }
@@ -812,7 +812,7 @@ public class UnityGeneratorTests
         var controllerFile = result.Files.First(f => f.Path == "PortraitHudView.gen.cs");
 
         controllerFile.Content.Should().Contain("ClassIcon.text = ResolveIconText(\"shield\", \"lucide\", 32f);");
-        controllerFile.Content.Should().Contain("ApplyIconLabelStyle(ClassIcon, 32f, 32f);");
+        controllerFile.Content.Should().Contain("ApplyIconLabelStyle(ClassIcon, 32f, 32f, 0f, true, \"fit-box\", 0f);");
         controllerFile.Content.Should().Contain("ApplyFontFamily(ClassIcon, \"lucide\", 32f);");
         controllerFile.Content.Should().Contain("private static bool TryLoadSdfFontAsset(string familyName, out FontAsset fontAsset)");
         controllerFile.Content.Should().Contain("var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));");
@@ -865,5 +865,436 @@ public class UnityGeneratorTests
         viewModelFile.Content.Should().Contain("object? PanelBorderTone { get; }");
         viewModelFile.Content.Should().Contain("object? PanelBorderWidth { get; }");
         viewModelFile.Content.Should().Contain("object? PanelOpacity { get; }");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_RemapsLabelToTextField()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "title",
+                            ComponentType = ComponentType.Label
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            ControlType = "TextField"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "RuleHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "Ready"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var uxmlFile = result.Files.First(f => f.Path == "RuleHudView.uxml");
+        var controllerFile = result.Files.First(f => f.Path == "RuleHudView.gen.cs");
+
+        uxmlFile.Content.Should().Contain("<ui:TextField name=\"Title\" class=\"boomhud-title\" />");
+        controllerFile.Content.Should().Contain("public TextField Title { get; }");
+        controllerFile.Content.Should().Contain("Title = Root.Q<TextField>(\"Title\") ?? throw new InvalidOperationException");
+        controllerFile.Content.Should().Contain("Title.value = \"Ready\";");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_OverridesTextIconAndLayoutPolicies()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "body"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Text = new GeneratorTextRuleAction
+                            {
+                                WrapText = true,
+                                LineHeight = 1.6,
+                                FontFamily = "Press Start 2P",
+                                FontSize = 15,
+                                LetterSpacing = 1
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "classIcon"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Icon = new GeneratorIconRuleAction
+                            {
+                                BaselineOffset = 2,
+                                OpticalCentering = false,
+                                SizeMode = "match-height",
+                                FontSize = 22
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                Gap = 10,
+                                Padding = 6
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                ForceAbsolutePositioning = true,
+                                OffsetX = 4,
+                                OffsetY = 5
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PolicyHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(2),
+                    Padding = new Spacing(1)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontSize = 12
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "Wrapped copy"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "classIcon",
+                        Type = ComponentType.Icon,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(24),
+                            Height = Dimension.Pixels(24)
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "shield"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Container
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var ussFile = result.Files.First(f => f.Path == "PolicyHudView.uss");
+        var controllerFile = result.Files.First(f => f.Path == "PolicyHudView.gen.cs");
+
+        ussFile.Content.Should().Contain("font-size: 15px;");
+        ussFile.Content.Should().Contain("line-height: 24px;");
+        ussFile.Content.Should().Contain("letter-spacing: 1px;");
+        ussFile.Content.Should().Contain(".boomhud-badge {");
+        ussFile.Content.Should().Contain("position: absolute;");
+        ussFile.Content.Should().Contain("left: 4px;");
+        ussFile.Content.Should().Contain("top: 5px;");
+        ussFile.Content.Should().Contain("gap: 10px;");
+        ussFile.Content.Should().Contain("padding-top: 6px;");
+        controllerFile.Content.Should().Contain("ApplyTextLabelStyle(Body, true);");
+        controllerFile.Content.Should().Contain("ApplyFontFamily(Body, \"Press Start 2P\", 15f);");
+        controllerFile.Content.Should().Contain("Body.style.fontSize = 15f;");
+        controllerFile.Content.Should().Contain("Body.style.letterSpacing = 1f;");
+        controllerFile.Content.Should().Contain("ApplyIconLabelStyle(ClassIcon, 24f, 24f, 2f, false, \"match-height\", 22f);");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_PositionModeAndFlexAlignmentPreset_AppliesLayoutOverrides()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "card"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PositionMode = "relative",
+                                FlexAlignmentPreset = "center"
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PresetHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "card",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Left = Dimension.Pixels(10),
+                            Top = Dimension.Pixels(14),
+                            Width = Dimension.Pixels(120),
+                            Height = Dimension.Pixels(80)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var ussFile = result.Files.First(f => f.Path == "PresetHudView.uss");
+
+        ussFile.Content.Should().Contain(".boomhud-card {");
+        ussFile.Content.Should().Contain("position: relative;");
+        ussFile.Content.Should().Contain("align-items: center;");
+        ussFile.Content.Should().Contain("justify-content: center;");
+        ussFile.Content.Should().NotContain(".boomhud-card {\r\n    position: absolute;");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_LayoutDeltas_AppliesGapPaddingAndOffsetAdjustments()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                GapDelta = 2,
+                                PaddingDelta = 3
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                ForceAbsolutePositioning = true,
+                                OffsetXDelta = 3,
+                                OffsetYDelta = -2
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "DeltaHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(4),
+                    Padding = new Spacing(1)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Left = Dimension.Pixels(5),
+                            Top = Dimension.Pixels(10),
+                            Width = Dimension.Pixels(40),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var ussFile = result.Files.First(f => f.Path == "DeltaHudView.uss");
+
+        ussFile.Content.Should().Contain("gap: 6px;");
+        ussFile.Content.Should().Contain("padding-top: 4px;");
+        ussFile.Content.Should().Contain(".boomhud-badge {");
+        ussFile.Content.Should().Contain("left: 8px;");
+        ussFile.Content.Should().Contain("top: 8px;");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_PreferredSizeDeltas_AdjustsWidthAndHeightStyles()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            NodeId = "card"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PreferredWidthDelta = -20,
+                                PreferredHeightDelta = 15
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PreferredSizeHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "card",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(120),
+                            Height = Dimension.Pixels(80)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var ussFile = result.Files.First(f => f.Path == "PreferredSizeHudView.uss");
+
+        ussFile.Content.Should().Contain(".boomhud-card {");
+        ussFile.Content.Should().Contain("width: 100px;");
+        ussFile.Content.Should().Contain("height: 95px;");
     }
 }

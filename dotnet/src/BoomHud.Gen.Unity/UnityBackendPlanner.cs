@@ -1,6 +1,7 @@
 using System.Text;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.Unity;
 
@@ -11,6 +12,8 @@ internal sealed class UnityBackendPlanner
     private readonly HashSet<string> _usedNodeNames = new(StringComparer.Ordinal);
     private readonly Dictionary<string, string> _bindingIdentifiersByPath = new(StringComparer.Ordinal);
     private readonly HashSet<string> _usedBindingIdentifiers = new(StringComparer.Ordinal);
+    private string _documentName = string.Empty;
+    private RuleResolver? _ruleResolver;
     private int _generatedNodeIndex;
 
     private UnityBackendPlanner(GenerationOptions options)
@@ -28,6 +31,8 @@ internal sealed class UnityBackendPlanner
 
     private UnityBackendPlan Build(HudDocument document)
     {
+        _documentName = document.Name;
+        _ruleResolver = new RuleResolver(_options.RuleSet, "unity");
         var rootBaseName = document.Root.Id;
         if (string.IsNullOrWhiteSpace(rootBaseName))
         {
@@ -59,7 +64,8 @@ internal sealed class UnityBackendPlanner
         RegisterBindingPaths(node);
 
         var plannedName = ReserveNodeName(baseName);
-        var mapping = MapElement(node);
+        var policy = _ruleResolver?.Resolve(_documentName, node) ?? new ResolvedGeneratorPolicy();
+        var mapping = MapElement(node, policy);
         var children = node.Children
             .Select((child, index) =>
             {
@@ -76,6 +82,7 @@ internal sealed class UnityBackendPlanner
             UxmlTag = mapping.UxmlTag,
             CssClass = "boomhud-" + ToKebabCase(plannedName),
             IsFallback = mapping.IsFallback,
+            Policy = policy,
             Children = children
         };
     }
@@ -151,8 +158,22 @@ internal sealed class UnityBackendPlanner
         return name;
     }
 
-    private (string ElementType, string UxmlTag, bool IsFallback) MapElement(ComponentNode node)
+    private (string ElementType, string UxmlTag, bool IsFallback) MapElement(ComponentNode node, ResolvedGeneratorPolicy policy)
     {
+        if (!string.IsNullOrWhiteSpace(policy.ControlType))
+        {
+            var overrideMapping = TryMapControlOverride(policy.ControlType!);
+            if (overrideMapping != null)
+            {
+                return overrideMapping.Value;
+            }
+
+            _diagnostics.Add(Diagnostic.Warning(
+                $"Unity UI Toolkit control override '{policy.ControlType}' is not recognized; using default mapping.",
+                node.Id,
+                code: "BHU1003"));
+        }
+
         if (node.Layout?.Type == LayoutType.Grid)
         {
             _diagnostics.Add(Diagnostic.Warning(
@@ -201,6 +222,23 @@ internal sealed class UnityBackendPlanner
             code: "BHU1000"));
 
         return ("VisualElement", "VisualElement", true);
+    }
+
+    private static (string ElementType, string UxmlTag, bool IsFallback)? TryMapControlOverride(string controlType)
+    {
+        return controlType.Trim() switch
+        {
+            "Label" => ("Label", "Label", false),
+            "Button" => ("Button", "Button", false),
+            "TextField" => ("TextField", "TextField", false),
+            "Toggle" => ("Toggle", "Toggle", false),
+            "ProgressBar" => ("ProgressBar", "ProgressBar", false),
+            "Slider" => ("Slider", "Slider", false),
+            "ScrollView" => ("ScrollView", "ScrollView", false),
+            "Image" => ("Image", "Image", false),
+            "VisualElement" => ("VisualElement", "VisualElement", false),
+            _ => null
+        };
     }
 
     private static string ToIdentifier(string? value)

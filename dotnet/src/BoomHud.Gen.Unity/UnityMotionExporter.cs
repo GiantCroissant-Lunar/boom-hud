@@ -4,6 +4,7 @@ using System.Text;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.Unity;
 
@@ -40,13 +41,15 @@ public static class UnityMotionExporter
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var resolver = new RuleResolver(options.RuleSet, "unity");
+        var effectiveMotion = MotionPolicyService.Apply(motion, resolver, document.Name);
 
-        AddPortableMotionDiagnostics(motion, diagnostics);
+        AddPortableMotionDiagnostics(effectiveMotion, diagnostics);
 
         try
         {
             var targetInfos = CollectTargetInfos(plan);
-            var code = GenerateMotionClass(document, motion, options, targetInfos, diagnostics);
+            var code = GenerateMotionClass(document, effectiveMotion, options, targetInfos, diagnostics, resolver);
             files.Add(new GeneratedFile
             {
                 Path = $"{document.Name}Motion.gen.cs",
@@ -79,7 +82,8 @@ public static class UnityMotionExporter
         MotionDocument motion,
         GenerationOptions options,
         Dictionary<string, UnityMotionTargetInfo> targetInfos,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var className = $"{document.Name}Motion";
         var builder = new StringBuilder();
@@ -161,7 +165,7 @@ public static class UnityMotionExporter
         builder.AppendLine("    }");
 
         var clipRuntimeInfos = motion.Clips
-            .Select(clip => AnalyzeClip(document, clip, targetInfos, diagnostics))
+            .Select(clip => AnalyzeClip(document, clip, targetInfos, diagnostics, resolver))
             .ToList();
 
         foreach (var clipInfo in clipRuntimeInfos)
@@ -353,25 +357,28 @@ public static class UnityMotionExporter
         HudDocument document,
         MotionClip clip,
         Dictionary<string, UnityMotionTargetInfo> targetInfos,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var fields = new List<UnityMotionFieldInfo>();
         var actions = new List<string>();
 
         foreach (var track in clip.Tracks)
         {
-            if (!TryResolveTarget(track, document, targetInfos, out var targetInfo))
+            if (!TryResolveTarget(track, document, targetInfos, resolver, out var targetInfo))
             {
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Motion target '{track.TargetId}' was not found in HUD document '{document.Name}' and will be skipped.",
-                    code: "BHU2001"));
+                var policy = MotionPolicyService.ResolveTargetResolutionPolicy(resolver, document.Name, track, clip.Id);
+                var message = $"Motion target '{track.TargetId}' was not found in HUD document '{document.Name}'.";
+                diagnostics.Add(MotionPolicyService.IsErrorPolicy(policy)
+                    ? Diagnostic.Error($"{message} Target resolution policy is set to error.", code: "BHU2001")
+                    : Diagnostic.Warning($"{message} It will be skipped.", code: "BHU2001"));
                 continue;
             }
 
             var runtimeChannels = new Dictionary<MotionProperty, UnityMotionChannelInfo>();
             foreach (var channel in track.Channels)
             {
-                if (!TryMapProperty(channel.Property, targetInfo.ElementType, diagnostics, track.TargetId))
+                if (!TryMapProperty(channel.Property, targetInfo.ElementType, diagnostics, track.TargetId, resolver, document.Name, track, clip.Id))
                 {
                     continue;
                 }
@@ -486,6 +493,7 @@ public static class UnityMotionExporter
         MotionTrack track,
         HudDocument document,
         IReadOnlyDictionary<string, UnityMotionTargetInfo> targetInfos,
+        RuleResolver resolver,
         out UnityMotionTargetInfo targetInfo)
     {
         if (targetInfos.TryGetValue(track.TargetId, out targetInfo!))
@@ -540,7 +548,11 @@ public static class UnityMotionExporter
         MotionProperty property,
         string elementType,
         List<Diagnostic> diagnostics,
-        string targetId)
+        string targetId,
+        RuleResolver resolver,
+        string documentName,
+        MotionTrack track,
+        string clipId)
     {
         switch (property)
         {
@@ -561,16 +573,29 @@ public static class UnityMotionExporter
                     return true;
                 }
 
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Unity motion export does not support text mutation on target '{targetId}' ({elementType}).",
-                    code: "BHU2002"));
+                ReportUnsupportedProperty(diagnostics, resolver, documentName, track, clipId, property,
+                    $"Unity motion export does not support text mutation on target '{targetId}' ({elementType}).");
                 return false;
             default:
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Unity motion export does not support property '{property}' on target '{targetId}' yet.",
-                    code: "BHU2002"));
+                ReportUnsupportedProperty(diagnostics, resolver, documentName, track, clipId, property,
+                    $"Unity motion export does not support property '{property}' on target '{targetId}' yet.");
                 return false;
         }
+    }
+
+    private static void ReportUnsupportedProperty(
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver,
+        string documentName,
+        MotionTrack track,
+        string clipId,
+        MotionProperty property,
+        string message)
+    {
+        var policy = MotionPolicyService.ResolveRuntimePropertySupportFallback(resolver, documentName, track, property, clipId);
+        diagnostics.Add(MotionPolicyService.IsErrorPolicy(policy)
+            ? Diagnostic.Error(message, code: "BHU2002")
+            : Diagnostic.Warning(message, code: "BHU2002"));
     }
 
     private static bool SupportsTextMutation(string elementType)

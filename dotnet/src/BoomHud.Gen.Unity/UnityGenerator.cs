@@ -4,6 +4,7 @@ using System.Text.Json;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.Unity;
 
@@ -175,8 +176,8 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.Append(node.CssClass);
         builder.AppendLine(" {");
 
-        AppendLayoutStyles(builder, node.Source, parentLayoutType, parentLayout, parentGap, siblingIndex);
-        AppendVisualStyles(builder, node.Source.Style, theme);
+        AppendLayoutStyles(builder, node, parentLayoutType, parentLayout, parentGap, siblingIndex);
+        AppendVisualStyles(builder, node, theme);
 
         builder.AppendLine("}");
         builder.AppendLine();
@@ -184,18 +185,19 @@ public sealed class UnityGenerator : IBackendGenerator
         for (var index = 0; index < node.Children.Count; index++)
         {
             var child = node.Children[index];
-            AppendUssNode(builder, child, theme, node.Source.Layout?.Type, node.Source.Layout, node.Source.Layout?.Gap, index);
+            AppendUssNode(builder, child, theme, node.Source.Layout?.Type, node.Source.Layout, LayoutPolicyService.ResolveGap(node.Source.Layout?.Gap, node.Policy), index);
         }
     }
 
     private static void AppendLayoutStyles(
         StringBuilder builder,
-        ComponentNode source,
+        UnityPlannedNode node,
         LayoutType? parentLayoutType,
         LayoutSpec? parentLayout,
         Spacing? parentGap,
         int siblingIndex)
     {
+        var source = node.Source;
         var layout = source.Layout;
         var style = source.Style;
 
@@ -225,16 +227,16 @@ public sealed class UnityGenerator : IBackendGenerator
                     break;
             }
 
-            AppendAbsolutePlacementStyles(builder, source, parentLayoutType);
+            AppendAbsolutePlacementStyles(builder, source, parentLayoutType, node.Policy);
 
-            AppendDimensionStyles(builder, "width", layout.Width, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "height", layout.Height, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "min-width", layout.MinWidth, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "min-height", layout.MinHeight, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "max-width", layout.MaxWidth, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "max-height", layout.MaxHeight, parentLayoutType, parentLayout);
+            AppendDimensionStyles(builder, "width", layout.Width, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "height", layout.Height, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "min-width", layout.MinWidth, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "min-height", layout.MinHeight, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "max-width", layout.MaxWidth, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "max-height", layout.MaxHeight, parentLayoutType, parentLayout, node.Policy);
             AppendSpacingStyles(builder, "margin", MergeParentGapIntoMargin(layout.Margin, parentLayoutType, parentGap, siblingIndex));
-            AppendSpacingStyles(builder, "padding", layout.Padding);
+            AppendSpacingStyles(builder, "padding", LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy));
             if (layout.ClipContent)
             {
                 AppendCssDeclaration(builder, "overflow", "hidden");
@@ -259,10 +261,75 @@ public sealed class UnityGenerator : IBackendGenerator
             }
         }
 
+        AppendPolicyLayoutOverrides(builder, node.Policy);
+
         if (style != null)
         {
-            AppendDimensionStyles(builder, "width", style.Width, parentLayoutType, parentLayout);
-            AppendDimensionStyles(builder, "height", style.Height, parentLayoutType, parentLayout);
+            AppendDimensionStyles(builder, "width", style.Width, parentLayoutType, parentLayout, node.Policy);
+            AppendDimensionStyles(builder, "height", style.Height, parentLayoutType, parentLayout, node.Policy);
+        }
+    }
+
+    private static void AppendPolicyLayoutOverrides(StringBuilder builder, ResolvedGeneratorPolicy policy)
+    {
+        if (LayoutPolicyService.ResolvePositionMode(policy) is { } positionMode)
+        {
+            var normalizedPosition = positionMode.Trim().ToLowerInvariant();
+            if (normalizedPosition is "absolute" or "relative")
+            {
+                AppendCssDeclaration(builder, "position", normalizedPosition);
+            }
+        }
+
+        if (LayoutPolicyService.ResolveFlexAlignmentPreset(policy) is not { } alignmentPreset)
+        {
+            return;
+        }
+
+        switch (alignmentPreset.Trim().ToLowerInvariant())
+        {
+            case "top-left":
+            case "start":
+                AppendCssDeclaration(builder, "align-items", "flex-start");
+                AppendCssDeclaration(builder, "justify-content", "flex-start");
+                break;
+            case "top-center":
+                AppendCssDeclaration(builder, "align-items", "center");
+                AppendCssDeclaration(builder, "justify-content", "flex-start");
+                break;
+            case "top-right":
+                AppendCssDeclaration(builder, "align-items", "flex-end");
+                AppendCssDeclaration(builder, "justify-content", "flex-start");
+                break;
+            case "middle-left":
+                AppendCssDeclaration(builder, "align-items", "flex-start");
+                AppendCssDeclaration(builder, "justify-content", "center");
+                break;
+            case "center":
+            case "middle-center":
+                AppendCssDeclaration(builder, "align-items", "center");
+                AppendCssDeclaration(builder, "justify-content", "center");
+                break;
+            case "middle-right":
+                AppendCssDeclaration(builder, "align-items", "flex-end");
+                AppendCssDeclaration(builder, "justify-content", "center");
+                break;
+            case "bottom-left":
+                AppendCssDeclaration(builder, "align-items", "flex-start");
+                AppendCssDeclaration(builder, "justify-content", "flex-end");
+                break;
+            case "bottom-center":
+                AppendCssDeclaration(builder, "align-items", "center");
+                AppendCssDeclaration(builder, "justify-content", "flex-end");
+                break;
+            case "bottom-right":
+            case "end":
+                AppendCssDeclaration(builder, "align-items", "flex-end");
+                AppendCssDeclaration(builder, "justify-content", "flex-end");
+                break;
+            case "stretch":
+                AppendCssDeclaration(builder, "align-items", "stretch");
+                break;
         }
     }
 
@@ -288,9 +355,9 @@ public sealed class UnityGenerator : IBackendGenerator
         };
     }
 
-    private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType)
+    private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType, ResolvedGeneratorPolicy policy)
     {
-        var sourceHasAbsolutePlacement = HasAbsolutePlacement(source);
+        var sourceHasAbsolutePlacement = LayoutPolicyService.HasAbsolutePlacement(source, policy);
         if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
@@ -303,6 +370,15 @@ public sealed class UnityGenerator : IBackendGenerator
         }
 
         var left = ResolveAbsoluteOffset(source, static layout => layout.Left, BoomHudMetadataKeys.PencilLeft);
+        var offsetX = LayoutPolicyService.ResolveOffsetAdjustment("x", policy);
+        if (left is { Unit: DimensionUnit.Pixels } leftPixels && !double.IsNaN(offsetX) && Math.Abs(offsetX) > double.Epsilon)
+        {
+            left = Dimension.Pixels(leftPixels.Value + offsetX);
+        }
+        else if (left == null && hasAbsoluteCoordinates && Math.Abs(offsetX) > double.Epsilon)
+        {
+            left = Dimension.Pixels(offsetX);
+        }
         if (left != null)
         {
             if (!hasAbsoluteCoordinates)
@@ -315,6 +391,15 @@ public sealed class UnityGenerator : IBackendGenerator
         }
 
         var top = ResolveAbsoluteOffset(source, static layout => layout.Top, BoomHudMetadataKeys.PencilTop);
+        var offsetY = LayoutPolicyService.ResolveOffsetAdjustment("y", policy);
+        if (top is { Unit: DimensionUnit.Pixels } topPixels && !double.IsNaN(offsetY) && Math.Abs(offsetY) > double.Epsilon)
+        {
+            top = Dimension.Pixels(topPixels.Value + offsetY);
+        }
+        else if (top == null && hasAbsoluteCoordinates && Math.Abs(offsetY) > double.Epsilon)
+        {
+            top = Dimension.Pixels(offsetY);
+        }
         if (top != null)
         {
             if (!hasAbsoluteCoordinates)
@@ -370,22 +455,6 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
-    private static bool HasAbsolutePlacement(ComponentNode source)
-    {
-        if (source.Layout?.IsAbsolutePositioned == true)
-        {
-            return true;
-        }
-
-        if (!source.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilPosition, out var raw) || raw == null)
-        {
-            return false;
-        }
-
-        return raw is string stringValue
-            && string.Equals(stringValue, "absolute", StringComparison.OrdinalIgnoreCase);
-    }
-
     private static Dimension? ResolveAbsoluteOffset(
         ComponentNode source,
         Func<LayoutSpec, Dimension?> selector,
@@ -417,58 +486,66 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
-    private static void AppendVisualStyles(StringBuilder builder, StyleSpec? style, ThemeDocument? theme)
+    private static void AppendVisualStyles(StringBuilder builder, UnityPlannedNode node, ThemeDocument? theme)
     {
-        if (style == null)
+        var style = node.Source.Style;
+        var policy = node.Policy;
+        if (style == null
+            && string.IsNullOrWhiteSpace(policy.Text.FontFamily)
+            && policy.Text.FontSize is not > 0d
+            && policy.Text.LineHeight is not > 0d
+            && policy.Text.LetterSpacing is not > 0d)
         {
             return;
         }
 
-        var foreground = ResolveColor(style.Foreground, style.ForegroundToken, theme);
+        var foreground = style == null ? null : ResolveColor(style.Foreground, style.ForegroundToken, theme);
         if (foreground != null)
         {
             AppendCssDeclaration(builder, "color", foreground);
         }
 
-        var background = ResolveColor(style.Background, style.BackgroundToken, theme);
+        var background = style == null ? null : ResolveColor(style.Background, style.BackgroundToken, theme);
         if (background != null)
         {
             AppendCssDeclaration(builder, "background-color", background);
         }
 
-        var fontSize = ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes);
+        var fontFamily = policy.Text.FontFamily ?? style?.FontFamily;
+        var fontSize = policy.Text.FontSize
+            ?? (style == null ? null : ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes));
         if (fontSize != null)
         {
             AppendCssDeclaration(builder, "font-size", ToPixels(fontSize.Value));
 
-            var lineHeight = ResolveLineHeight(style, fontSize.Value);
+            var lineHeight = TextPolicyService.ResolveLineHeight(style, fontSize.Value, policy);
             if (lineHeight != null)
             {
                 AppendCssDeclaration(builder, "line-height", ToPixels(lineHeight.Value));
             }
-            else if (string.Equals(style.FontFamily, "Press Start 2P", StringComparison.Ordinal)
+            else if (string.Equals(fontFamily, "Press Start 2P", StringComparison.Ordinal)
                 && fontSize.Value <= 8d)
             {
                 AppendCssDeclaration(builder, "line-height", "12px");
             }
         }
 
-        if (style.LetterSpacing is { } letterSpacing)
+        if (TextPolicyService.ResolveLetterSpacing(node.Source, policy) is { } letterSpacing)
         {
             AppendCssDeclaration(builder, "letter-spacing", ToPixels(letterSpacing));
         }
 
-        if (TryMapUnityFontStyle(style.FontWeight, style.FontStyle, out var unityFontStyle))
+        if (style != null && TryMapUnityFontStyle(style.FontWeight, style.FontStyle, out var unityFontStyle))
         {
             AppendCssDeclaration(builder, "-unity-font-style", unityFontStyle);
         }
 
-        if (style.Opacity is { } opacity)
+        if (style?.Opacity is { } opacity)
         {
             AppendCssDeclaration(builder, "opacity", opacity.ToString(CultureInfo.InvariantCulture));
         }
 
-        if (style.BorderRadius is { } borderRadius)
+        if (style?.BorderRadius is { } borderRadius)
         {
             AppendCssDeclaration(builder, "border-top-left-radius", ToPixels(borderRadius));
             AppendCssDeclaration(builder, "border-top-right-radius", ToPixels(borderRadius));
@@ -476,7 +553,7 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendCssDeclaration(builder, "border-bottom-right-radius", ToPixels(borderRadius));
         }
 
-        if (style.Border is { } border)
+        if (style?.Border is { } border)
         {
             AppendCssDeclaration(builder, "border-left-width", ToPixels(border.Width));
             AppendCssDeclaration(builder, "border-right-width", ToPixels(border.Width));
@@ -1011,15 +1088,15 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        };");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine("    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight)");
+        builder.AppendLine("    private static void ApplyIconLabelStyle(Label label, float boxWidth, float boxHeight, float baselineOffset, bool opticalCentering, string sizeMode, float explicitFontSize)");
         builder.AppendLine("    {");
-        builder.AppendLine("        var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));");
+        builder.AppendLine("        var iconSize = explicitFontSize > 0f ? explicitFontSize : string.Equals(sizeMode, \"match-height\", StringComparison.OrdinalIgnoreCase) ? Mathf.Max(1f, boxHeight) : Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));");
         builder.AppendLine("        label.style.unityTextAlign = TextAnchor.MiddleCenter;");
         builder.AppendLine("        label.style.unityFontStyleAndWeight = FontStyle.Normal;");
         builder.AppendLine("        label.style.whiteSpace = WhiteSpace.NoWrap;");
         builder.AppendLine("        label.style.flexShrink = 0;");
-        builder.AppendLine("        label.style.alignItems = Align.Center;");
-        builder.AppendLine("        label.style.justifyContent = Justify.Center;");
+        builder.AppendLine("        label.style.alignItems = opticalCentering ? Align.Center : Align.FlexStart;");
+        builder.AppendLine("        label.style.justifyContent = opticalCentering ? Justify.Center : Justify.FlexStart;");
         builder.AppendLine("        label.style.overflow = Overflow.Visible;");
         builder.AppendLine("        label.style.paddingLeft = 0f;");
         builder.AppendLine("        label.style.paddingTop = 0f;");
@@ -1029,9 +1106,13 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        label.style.height = boxHeight;");
         builder.AppendLine("        label.style.minWidth = boxWidth;");
         builder.AppendLine("        label.style.minHeight = boxHeight;");
-        builder.AppendLine("        if (boxWidth >= 32f && boxHeight >= 32f)");
+        builder.AppendLine("        if (opticalCentering && boxWidth >= 32f && boxHeight >= 32f && Mathf.Approximately(baselineOffset, 0f))");
         builder.AppendLine("        {");
         builder.AppendLine("            label.style.marginTop = -1f;");
+        builder.AppendLine("        }");
+        builder.AppendLine("        else if (!Mathf.Approximately(baselineOffset, 0f))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            label.style.marginTop = baselineOffset;");
         builder.AppendLine("        }");
         builder.AppendLine("        label.style.fontSize = iconSize;");
         builder.AppendLine("    }");
@@ -1133,7 +1214,7 @@ public sealed class UnityGenerator : IBackendGenerator
                 theme,
                 node.Source.Layout?.Type,
                 node.Source.Layout,
-                node.Source.Layout?.Gap,
+                LayoutPolicyService.ResolveGap(node.Source.Layout?.Gap, node.Policy),
                 index);
         }
     }
@@ -1150,12 +1231,12 @@ public sealed class UnityGenerator : IBackendGenerator
     {
         var accessor = GetNodeAccessor(node, root);
 
-        if (node.Source.Type == ComponentType.TextArea && accessor != "Root")
+        if (node.Source.Type == ComponentType.TextArea && node.ElementType == "TextField" && accessor != "Root")
         {
             AppendInvariantLine(builder, $"        {accessor}.multiline = true;");
         }
 
-        AppendStaticLayoutAssignments(builder, accessor, node.Source, parentLayoutType, parentLayout, parentGap, siblingIndex);
+        AppendStaticLayoutAssignments(builder, accessor, node, parentLayoutType, parentLayout, parentGap, siblingIndex);
 
         foreach (var binding in GetBindings(node.Source))
         {
@@ -1196,14 +1277,14 @@ public sealed class UnityGenerator : IBackendGenerator
     private static void AppendStaticLayoutAssignments(
         StringBuilder builder,
         string accessor,
-        ComponentNode source,
+        UnityPlannedNode node,
         LayoutType? parentLayoutType,
         LayoutSpec? parentLayout,
         Spacing? parentGap,
         int siblingIndex)
     {
         var declarations = new StringBuilder();
-        AppendLayoutStyles(declarations, source, parentLayoutType, parentLayout, parentGap, siblingIndex);
+        AppendLayoutStyles(declarations, node, parentLayoutType, parentLayout, parentGap, siblingIndex);
 
         var lines = declarations.ToString()
             .Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -1329,13 +1410,14 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({ToStringLiteral(background)}, null);");
         }
 
-        var fontSize = ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes);
+        var fontSize = node.Policy.Text.FontSize
+            ?? ResolveDimension(style.FontSize, style.FontSizeToken, theme?.FontSizes);
         if (fontSize is { } resolvedFontSize)
         {
             AppendInvariantLine(builder, $"        {accessor}.style.fontSize = {ToFloatLiteral(resolvedFontSize)};");
         }
 
-        if (style.LetterSpacing is { } letterSpacing)
+        if (TextPolicyService.ResolveLetterSpacing(node.Source, node.Policy) is { } letterSpacing)
         {
             AppendInvariantLine(builder, $"        {accessor}.style.letterSpacing = {ToFloatLiteral(letterSpacing)};");
         }
@@ -1382,42 +1464,26 @@ public sealed class UnityGenerator : IBackendGenerator
     private static bool TryGetStaticFontFamilyAssignment(string accessor, UnityPlannedNode node, out string assignment)
     {
         assignment = string.Empty;
-
-        var style = node.Source.Style;
-
-        if (style == null || string.IsNullOrWhiteSpace(style.FontFamily))
+        if (!SupportsFontFamily(node))
         {
             return false;
         }
 
-        var fontSizeValue = style.FontSize;
-        if (fontSizeValue == null && node.Source.Type == ComponentType.Icon)
+        var fontFamily = TextPolicyService.ResolveFontFamily(node.Source, node.Policy);
+        if (string.IsNullOrWhiteSpace(fontFamily))
         {
-            fontSizeValue = GetNodePixelDimension(node.Source.Layout?.Width)
-                ?? GetNodePixelDimension(node.Source.Layout?.Height)
-                ?? GetNodePixelDimension(node.Source.Style?.Width)
-                ?? GetNodePixelDimension(node.Source.Style?.Height)
-                ?? 16d;
+            return false;
         }
+
+        var fontSizeValue = TextPolicyService.ResolveFontSize(
+            node.Source,
+            node.Source.Layout?.Width ?? node.Source.Style?.Width,
+            node.Source.Layout?.Height ?? node.Source.Style?.Height,
+            node.Policy);
 
         var fontSize = ToFloatLiteral(fontSizeValue ?? 16d);
-        assignment = $"ApplyFontFamily({accessor}, {ToStringLiteral(style.FontFamily)}, {fontSize});";
+        assignment = $"ApplyFontFamily({accessor}, {ToStringLiteral(fontFamily)}, {fontSize});";
         return true;
-    }
-
-    private static double? ResolveLineHeight(StyleSpec style, double? fontSize)
-    {
-        if (style.LineHeight is not { } lineHeight || lineHeight <= 0d)
-        {
-            return null;
-        }
-
-        if (lineHeight <= 5d && fontSize is { } explicitFontSize && explicitFontSize > 0d)
-        {
-            return explicitFontSize * lineHeight;
-        }
-
-        return lineHeight;
     }
 
     private static bool TryGetUnityFontStyleLiteral(string unityFontStyle, out string literal)
@@ -1434,63 +1500,56 @@ public sealed class UnityGenerator : IBackendGenerator
         return literal.Length > 0;
     }
 
-    private static bool ShouldWrapText(ComponentNode node)
-    {
-        return node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilTextGrowth, out var raw)
-            && raw is string textGrowth
-            && string.Equals(textGrowth, "fixed-width", StringComparison.OrdinalIgnoreCase);
-    }
-
     private static bool TryBuildAssignment(string accessor, UnityPlannedNode node, string property, string valueExpression, bool isStatic, out string assignment)
     {
         assignment = string.Empty;
         var normalizedProperty = property.ToLowerInvariant();
 
-        switch (node.Source.Type)
+        if (IsIconLabelNode(node) && normalizedProperty is "text" or "value")
         {
-            case ComponentType.Label:
-            case ComponentType.Badge:
+            var rawTextExpression = isStatic ? valueExpression : $"AsString(_viewModel.{valueExpression})";
+            var iconFontFamily = ToNullableStringLiteral(TextPolicyService.ResolveFontFamily(node.Source, node.Policy));
+            var iconPointSize = ToFloatLiteral(TextPolicyService.ResolveFontSize(node.Source, node.Source.Layout?.Width ?? node.Source.Style?.Width, node.Source.Layout?.Height ?? node.Source.Style?.Height, node.Policy) ?? 16d);
+            var textExpression = $"ResolveIconText({rawTextExpression}, {iconFontFamily}, {iconPointSize})";
+            var iconWidth = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Width) ?? GetNodePixelDimension(node.Source.Style?.Width) ?? 16d);
+            var iconHeight = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Height) ?? GetNodePixelDimension(node.Source.Style?.Height) ?? 16d);
+            var baselineOffset = ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy));
+            var opticalCentering = IconPolicyService.UseOpticalCentering(node.Policy) ? "true" : "false";
+            var sizeMode = ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
+            var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(node.Policy) ?? 0d);
+            assignment = string.Join(Environment.NewLine,
+                $"{accessor}.text = {textExpression};",
+                $"        ApplyIconLabelStyle({accessor}, {iconWidth}, {iconHeight}, {baselineOffset}, {opticalCentering}, {sizeMode}, {explicitIconFontSize});");
+            return true;
+        }
+
+        switch (node.ElementType)
+        {
+            case "Label":
                 if (normalizedProperty is "text" or "value")
                 {
-                    var wrapTextLiteral = ShouldWrapText(node.Source) ? "true" : "false";
+                    var wrapTextLiteral = TextPolicyService.ShouldWrapText(node.Source, node.Policy) ? "true" : "false";
                     assignment = string.Join(Environment.NewLine,
                         $"{accessor}.text = {(isStatic ? valueExpression : "AsString(_viewModel." + valueExpression + ")")};",
                         $"        ApplyTextLabelStyle({accessor}, {wrapTextLiteral});");
                     return true;
                 }
                 break;
-            case ComponentType.Button:
+            case "Button":
                 if (normalizedProperty is "text" or "value")
                 {
                     assignment = $"{accessor}.text = {(isStatic ? valueExpression : "AsString(_viewModel." + valueExpression + ")")};";
                     return true;
                 }
                 break;
-            case ComponentType.Icon:
-                if (normalizedProperty is "text" or "value")
-                {
-                    var rawTextExpression = isStatic ? valueExpression : $"AsString(_viewModel.{valueExpression})";
-                    var iconFontFamily = ToNullableStringLiteral(node.Source.Style?.FontFamily);
-                    var iconPointSize = ToFloatLiteral(node.Source.Style?.FontSize ?? GetNodePixelDimension(node.Source.Layout?.Width) ?? GetNodePixelDimension(node.Source.Layout?.Height) ?? 16d);
-                    var textExpression = $"ResolveIconText({rawTextExpression}, {iconFontFamily}, {iconPointSize})";
-                    var iconWidth = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Width) ?? GetNodePixelDimension(node.Source.Style?.Width) ?? 16d);
-                    var iconHeight = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Height) ?? GetNodePixelDimension(node.Source.Style?.Height) ?? 16d);
-                    assignment = string.Join(Environment.NewLine,
-                        $"{accessor}.text = {textExpression};",
-                        $"        ApplyIconLabelStyle({accessor}, {iconWidth}, {iconHeight});");
-                    return true;
-                }
-                break;
-            case ComponentType.TextInput:
-            case ComponentType.TextArea:
+            case "TextField":
                 if (normalizedProperty is "text" or "value")
                 {
                     assignment = $"{accessor}.value = {(isStatic ? valueExpression : "AsString(_viewModel." + valueExpression + ")")};";
                     return true;
                 }
                 break;
-            case ComponentType.Checkbox:
-            case ComponentType.RadioButton:
+            case "Toggle":
                 if (normalizedProperty == "value")
                 {
                     assignment = $"{accessor}.value = {(isStatic ? valueExpression : "AsBool(_viewModel." + valueExpression + ")")};";
@@ -1503,7 +1562,7 @@ public sealed class UnityGenerator : IBackendGenerator
                     return true;
                 }
                 break;
-            case ComponentType.ProgressBar:
+            case "ProgressBar":
                 if (normalizedProperty == "value")
                 {
                     assignment = $"{accessor}.value = {(isStatic ? valueExpression : "AsFloat(_viewModel." + valueExpression + ")")};";
@@ -1522,14 +1581,14 @@ public sealed class UnityGenerator : IBackendGenerator
                     return true;
                 }
                 break;
-            case ComponentType.Slider:
+            case "Slider":
                 if (normalizedProperty == "value")
                 {
                     assignment = $"{accessor}.value = {(isStatic ? valueExpression : "AsFloat(_viewModel." + valueExpression + ")")};";
                     return true;
                 }
                 break;
-            case ComponentType.Image:
+            case "Image":
                 if (normalizedProperty == "tooltip")
                 {
                     assignment = $"{accessor}.tooltip = {(isStatic ? valueExpression : "AsString(_viewModel." + valueExpression + ")")};";
@@ -1540,6 +1599,12 @@ public sealed class UnityGenerator : IBackendGenerator
 
         return false;
     }
+
+    private static bool SupportsFontFamily(UnityPlannedNode node)
+        => node.ElementType is "Label" or "Button" or "TextField" or "Toggle";
+
+    private static bool IsIconLabelNode(UnityPlannedNode node)
+        => node.Source.Type == ComponentType.Icon && node.ElementType == "Label";
 
     private static bool TryMapUnityFontStyle(FontWeight? fontWeight, FontStyle? fontStyle, out string unityFontStyle)
     {
@@ -1642,7 +1707,8 @@ public sealed class UnityGenerator : IBackendGenerator
         string propertyName,
         Dimension? dimension,
         LayoutType? parentLayoutType,
-        LayoutSpec? parentLayout)
+        LayoutSpec? parentLayout,
+        ResolvedGeneratorPolicy policy)
     {
         if (dimension == null)
         {
@@ -1652,13 +1718,13 @@ public sealed class UnityGenerator : IBackendGenerator
         switch (dimension.Value.Unit)
         {
             case DimensionUnit.Pixels:
-                AppendCssDeclaration(builder, propertyName, ToPixels(dimension.Value.Value));
+                AppendCssDeclaration(builder, propertyName, ToPixels(ResolveDimensionValue(propertyName, dimension.Value.Value, policy)));
                 break;
             case DimensionUnit.Percent:
                 AppendCssDeclaration(builder, propertyName, dimension.Value.Value.ToString(CultureInfo.InvariantCulture) + "%");
                 break;
             case DimensionUnit.Cells:
-                AppendCssDeclaration(builder, propertyName, ToPixels(dimension.Value.Value));
+                AppendCssDeclaration(builder, propertyName, ToPixels(ResolveDimensionValue(propertyName, dimension.Value.Value, policy)));
                 break;
             case DimensionUnit.Auto:
                 AppendCssDeclaration(builder, propertyName, "auto");
@@ -1673,6 +1739,18 @@ public sealed class UnityGenerator : IBackendGenerator
                     parentLayout);
                 break;
         }
+    }
+
+    private static double ResolveDimensionValue(string propertyName, double value, ResolvedGeneratorPolicy policy)
+    {
+        var delta = propertyName == "width"
+            ? policy.Layout.PreferredWidthDelta
+            : propertyName == "height"
+                ? policy.Layout.PreferredHeightDelta
+                : null;
+
+        var adjusted = value + (delta ?? 0d);
+        return adjusted > 0d ? adjusted : value;
     }
 
     private static void AppendFillDimensionStyles(

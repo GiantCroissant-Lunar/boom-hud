@@ -275,6 +275,254 @@ public sealed class UnityMotionExporterTests
     }
 
     [Fact]
+    public void Generate_WithMotionRuleSet_AppliesQuantizationFillModeAndEasingOverrides()
+    {
+        var document = new HudDocument
+        {
+            Name = "DebugOverlay",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children = [new ComponentNode { Id = "version", Type = ComponentType.Label }]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "DebugOverlayMotion",
+            FramesPerSecond = 30,
+            DefaultSequenceId = "introSequence",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 60,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "fadeRoot",
+                            TargetId = "root",
+                            TargetKind = MotionTargetKind.Root,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Opacity,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(0), Easing = MotionEasing.EaseOut },
+                                        new MotionKeyframe { Frame = 15, Value = MotionValue.FromNumber(1), Easing = MotionEasing.EaseOut }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            Sequences =
+            [
+                new MotionSequence
+                {
+                    Id = "introSequence",
+                    Name = "Intro Sequence",
+                    Items =
+                    [
+                        new MotionSequenceItem
+                        {
+                            ClipId = "intro",
+                            StartFrame = 0,
+                            FillMode = MotionSequenceFillMode.HoldEnd
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            DocumentName = "DebugOverlay",
+                            ClipId = "intro"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "durationQuantization",
+                            NumberValue = 16
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            DocumentName = "DebugOverlay",
+                            SequenceId = "introSequence"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "fillModePolicy",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["fillMode"] = "HoldBoth"
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            DocumentName = "DebugOverlay",
+                            TrackId = "fadeRoot",
+                            MotionProperty = MotionProperty.Opacity
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "easingRemap",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["easing"] = "Linear"
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = UnityMotionExporter.Generate(document, motion, options);
+
+        result.Success.Should().BeTrue();
+        var file = result.Files.First(f => f.Path == "DebugOverlayMotion.gen.cs").Content;
+        file.Should().Contain("public const string DefaultSequenceId = \"introSequence\";");
+        file.Should().Contain("FillMode = TimelineSequenceFillMode.HoldBoth");
+        file.Should().Contain("=> 64,");
+        file.Should().Contain("EaseMode.Linear");
+    }
+
+    [Fact]
+    public void Generate_WithErrorFallbackPolicies_EmitsErrorsForMissingTargetsAndUnsupportedProperties()
+    {
+        var document = new HudDocument
+        {
+            Name = "DebugOverlay",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children = [new ComponentNode { Id = "portrait", Type = ComponentType.Image }]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "DebugOverlayMotion",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 30,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "unsupported",
+                            TargetId = "portrait",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.SpriteFrame,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromText("frame-a") }]
+                                }
+                            ]
+                        },
+                        new MotionTrack
+                        {
+                            Id = "missing",
+                            TargetId = "does-not-exist",
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Opacity,
+                                    Keyframes = [new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(1) }]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = UnityMotionExporter.Generate(document, motion, _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            DocumentName = "DebugOverlay",
+                            TargetId = "portrait",
+                            MotionProperty = MotionProperty.SpriteFrame
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "runtimePropertySupportFallback",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["runtimePropertySupportFallback"] = "error"
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "unity",
+                            DocumentName = "DebugOverlay",
+                            TargetId = "does-not-exist"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "targetResolutionPolicy",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["targetResolutionPolicy"] = "error"
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+
+        result.Diagnostics.Should().Contain(d => d.Code == "BHU2001" && d.Severity == BoomHud.Abstractions.Generation.DiagnosticSeverity.Error);
+        result.Diagnostics.Should().Contain(d => d.Code == "BHU2002" && d.Severity == BoomHud.Abstractions.Generation.DiagnosticSeverity.Error);
+    }
+
+    [Fact]
     public void Generate_ResolvesTargetsByTargetIdForRootComponentAndElementTracks()
     {
         var document = new HudDocument

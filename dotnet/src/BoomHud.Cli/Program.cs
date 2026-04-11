@@ -14,6 +14,7 @@ using BoomHud.Abstractions.Snapshots;
 using BoomHud.Abstractions.Tokens;
 using BoomHud.Cli.Backends;
 using BoomHud.Cli.Commands.Baseline;
+using BoomHud.Cli.Commands.Rules;
 using BoomHud.Cli.Handlers.Baseline;
 using BoomHud.Dsl;
 using BoomHud.Dsl.Figma;
@@ -58,6 +59,7 @@ public static class Program
             var annotationsOption = new Option<FileInfo?>("--annotations", "Optional BoomHud annotations JSON file (bindings, semantics) applied after parsing");
             var variablesOption = new Option<FileInfo?>("--variables", "Optional Figma variables JSON file for theme tokens");
             var motionOption = new Option<FileInfo?>("--motion", "Optional Motion JSON file to emit animation artifacts for supported backends");
+            var rulesOption = new Option<FileInfo?>("--rules", "Optional generator rule set JSON file");
             var themeNameOption = new Option<string?>("--theme-name", "Optional theme name (defaults to variables filename)");
             var themeCollectionOption = new Option<string?>("--theme-collection", "Optional Figma variables collection name");
             var themeModeOption = new Option<string?>("--theme-mode", "Optional Figma variables mode id or name (e.g. \"Light\")");
@@ -85,6 +87,7 @@ public static class Program
             generateCommand.AddOption(annotationsOption);
             generateCommand.AddOption(variablesOption);
             generateCommand.AddOption(motionOption);
+            generateCommand.AddOption(rulesOption);
             generateCommand.AddOption(themeNameOption);
             generateCommand.AddOption(themeCollectionOption);
             generateCommand.AddOption(themeModeOption);
@@ -111,6 +114,7 @@ public static class Program
                 var annotations = context.ParseResult.GetValueForOption(annotationsOption);
                 var variables = context.ParseResult.GetValueForOption(variablesOption);
                 var motion = context.ParseResult.GetValueForOption(motionOption);
+                var rules = context.ParseResult.GetValueForOption(rulesOption);
                 var themeName = context.ParseResult.GetValueForOption(themeNameOption);
                 var themeCollection = context.ParseResult.GetValueForOption(themeCollectionOption);
                 var themeMode = context.ParseResult.GetValueForOption(themeModeOption);
@@ -180,6 +184,16 @@ public static class Program
                     }
                 }
 
+                var effectiveRules = rules;
+                if (effectiveRules == null && loadedManifest?.Rules != null)
+                {
+                    var manifestRulesPath = loadedManifest.ResolveRulesPath(manifest!.FullName);
+                    if (manifestRulesPath != null)
+                    {
+                        effectiveRules = new FileInfo(manifestRulesPath);
+                    }
+                }
+
                 // Merge namespace: CLI takes precedence (but only if explicitly set)
                 var effectiveNamespace = @namespace;
                 if (effectiveNamespace == "Generated" && loadedManifest?.Namespace != null)
@@ -211,6 +225,7 @@ public static class Program
                     annotations,
                     variables,
                     motion,
+                    effectiveRules,
                     themeName,
                     themeCollection,
                     themeMode,
@@ -426,6 +441,10 @@ public static class Program
             baselineCommand.AddCommand(baselineScoreCommand);
             baselineCommand.AddCommand(baselineDiffCommand);
 
+            var rulesCommand = new Command("rules", "Rule planning and sweep commands");
+            rulesCommand.AddCommand(RulesPlanCommand.Build());
+            rulesCommand.AddCommand(RulesSweepCommand.Build());
+
             rootCommand.AddCommand(generateCommand);
             rootCommand.AddCommand(validateCommand);
             rootCommand.AddCommand(initCommand);
@@ -434,6 +453,7 @@ public static class Program
             rootCommand.AddCommand(videoCommand);
             rootCommand.AddCommand(reviewCommand);
             rootCommand.AddCommand(baselineCommand);
+            rootCommand.AddCommand(rulesCommand);
 
             return await rootCommand.InvokeAsync(args);
         }
@@ -461,6 +481,7 @@ public static class Program
         FileInfo? annotations,
         FileInfo? variables,
         FileInfo? motion,
+        FileInfo? rules,
         string? themeName,
         string? themeCollection,
         string? themeMode,
@@ -612,6 +633,18 @@ public static class Program
             }
         }
 
+        GeneratorRuleSet? ruleSet = null;
+        if (rules != null)
+        {
+            if (!rules.Exists)
+            {
+                throw new FileNotFoundException($"Rules file not found: {rules.FullName}");
+            }
+
+            Console.WriteLine($"Loading generator rules from: {rules.FullName}");
+            ruleSet = GeneratorRuleSet.LoadFromFile(rules.FullName);
+        }
+
         var options = new GenerationOptions
         {
             Namespace = @namespace,
@@ -624,6 +657,7 @@ public static class Program
             OutputDirectory = outputRoot,
             Theme = theme,
             Motion = motionDocument,
+            RuleSet = ruleSet,
             MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
             IncludeComments = true,
             UseNullableAnnotations = true,

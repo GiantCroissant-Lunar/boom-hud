@@ -66,6 +66,12 @@ public sealed record ComposeManifest
     public string? Namespace { get; init; }
 
     /// <summary>
+    /// Optional path to generator rules JSON (relative to manifest).
+    /// If omitted, uses CLI --rules.
+    /// </summary>
+    public string? Rules { get; init; }
+
+    /// <summary>
     /// Loads a compose manifest from a JSON file.
     /// </summary>
     public static ComposeManifest LoadFromFile(string filePath)
@@ -106,6 +112,7 @@ public sealed record ComposeManifest
             Targets = dto.Targets?.AsReadOnly(),
             Output = dto.Output,
             Namespace = dto.Namespace,
+            Rules = dto.Rules,
             LoadDiagnostics = diagnostics.AsReadOnly()
         };
     }
@@ -143,6 +150,19 @@ public sealed record ComposeManifest
 
         var manifestDir = Path.GetDirectoryName(Path.GetFullPath(manifestPath)) ?? ".";
         return Path.GetFullPath(Path.Combine(manifestDir, Output));
+    }
+
+    /// <summary>
+    /// Resolves the generator rules path relative to the manifest file location.
+    /// Returns null if no rules path is specified.
+    /// </summary>
+    public string? ResolveRulesPath(string manifestPath)
+    {
+        if (string.IsNullOrEmpty(Rules))
+            return null;
+
+        var manifestDir = Path.GetDirectoryName(Path.GetFullPath(manifestPath)) ?? ".";
+        return Path.GetFullPath(Path.Combine(manifestDir, Rules));
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()

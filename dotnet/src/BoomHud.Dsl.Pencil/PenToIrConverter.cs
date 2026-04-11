@@ -163,6 +163,10 @@ public sealed class PenToIrConverter
         {
             metadata[BoomHudMetadataKeys.OriginalPencilType] = node.Type;
         }
+        if (!string.IsNullOrWhiteSpace(sourceNode.Id))
+        {
+            metadata[BoomHudMetadataKeys.OriginalPencilId] = sourceNode.Id;
+        }
         if (node.X is { } x)
         {
             metadata[BoomHudMetadataKeys.PencilLeft] = x;

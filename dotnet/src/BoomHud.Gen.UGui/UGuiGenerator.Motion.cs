@@ -4,6 +4,7 @@ using System.Text;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.UGui;
 
@@ -22,7 +23,10 @@ public sealed partial class UGuiGenerator
             return;
         }
 
-        AddPortableMotionDiagnostics(motion, diagnostics);
+        var resolver = new RuleResolver(options.RuleSet, "ugui");
+        var effectiveMotion = MotionPolicyService.Apply(motion, resolver, document.Name);
+
+        AddPortableMotionDiagnostics(effectiveMotion, diagnostics);
 
         try
         {
@@ -30,7 +34,7 @@ public sealed partial class UGuiGenerator
             files.Add(new GeneratedFile
             {
                 Path = $"{document.Name}Motion.gen.cs",
-                Content = GenerateMotionClass(document, motion, options, targetInfos, diagnostics),
+                Content = GenerateMotionClass(document, effectiveMotion, options, targetInfos, diagnostics, resolver),
                 Type = GeneratedFileType.SourceCode
             });
 
@@ -52,7 +56,8 @@ public sealed partial class UGuiGenerator
         MotionDocument motion,
         GenerationOptions options,
         Dictionary<string, UGuiMotionTargetInfo> targetInfos,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var builder = new StringBuilder();
 
@@ -133,7 +138,7 @@ public sealed partial class UGuiGenerator
         builder.AppendLine("    }");
 
         var clipInfos = motion.Clips
-            .Select(clip => AnalyzeMotionClip(document, clip, targetInfos, diagnostics))
+            .Select(clip => AnalyzeMotionClip(document, clip, targetInfos, diagnostics, resolver))
             .ToList();
 
         foreach (var clipInfo in clipInfos)
@@ -316,25 +321,28 @@ public sealed partial class UGuiGenerator
         HudDocument document,
         MotionClip clip,
         Dictionary<string, UGuiMotionTargetInfo> targetInfos,
-        List<Diagnostic> diagnostics)
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver)
     {
         var fields = new List<UGuiMotionFieldInfo>();
         var actions = new List<string>();
 
         foreach (var track in clip.Tracks)
         {
-            if (!TryResolveMotionTarget(track, document, targetInfos, out var targetInfo))
+            if (!TryResolveMotionTarget(track, document, targetInfos, resolver, out var targetInfo))
             {
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Motion target '{track.TargetId}' was not found in HUD document '{document.Name}' and will be skipped.",
-                    code: "BHUG2001"));
+                var policy = MotionPolicyService.ResolveTargetResolutionPolicy(resolver, document.Name, track, clip.Id);
+                var message = $"Motion target '{track.TargetId}' was not found in HUD document '{document.Name}'.";
+                diagnostics.Add(MotionPolicyService.IsErrorPolicy(policy)
+                    ? Diagnostic.Error($"{message} Target resolution policy is set to error.", code: "BHUG2001")
+                    : Diagnostic.Warning($"{message} It will be skipped.", code: "BHUG2001"));
                 continue;
             }
 
             var runtimeChannels = new Dictionary<MotionProperty, UGuiMotionChannelInfo>();
             foreach (var channel in track.Channels)
             {
-                if (!TryMapMotionProperty(channel.Property, targetInfo.FieldType, diagnostics, track.TargetId))
+                if (!TryMapMotionProperty(channel.Property, targetInfo.FieldType, diagnostics, track.TargetId, resolver, document.Name, track, clip.Id))
                 {
                     continue;
                 }
@@ -475,6 +483,7 @@ public sealed partial class UGuiGenerator
         MotionTrack track,
         HudDocument document,
         IReadOnlyDictionary<string, UGuiMotionTargetInfo> targetInfos,
+        RuleResolver resolver,
         out UGuiMotionTargetInfo targetInfo)
     {
         if (targetInfos.TryGetValue(track.TargetId, out targetInfo!))
@@ -494,7 +503,11 @@ public sealed partial class UGuiGenerator
         MotionProperty property,
         string fieldType,
         List<Diagnostic> diagnostics,
-        string targetId)
+        string targetId,
+        RuleResolver resolver,
+        string documentName,
+        MotionTrack track,
+        string clipId)
     {
         switch (property)
         {
@@ -515,16 +528,29 @@ public sealed partial class UGuiGenerator
                     return true;
                 }
 
-                diagnostics.Add(Diagnostic.Warning(
-                    $"uGUI motion export does not support text mutation on target '{targetId}' ({fieldType}).",
-                    code: "BHUG2002"));
+                ReportUnsupportedMotionProperty(diagnostics, resolver, documentName, track, clipId, property,
+                    $"uGUI motion export does not support text mutation on target '{targetId}' ({fieldType}).");
                 return false;
             default:
-                diagnostics.Add(Diagnostic.Warning(
-                    $"uGUI motion export does not support property '{property}' on target '{targetId}' yet.",
-                    code: "BHUG2002"));
+                ReportUnsupportedMotionProperty(diagnostics, resolver, documentName, track, clipId, property,
+                    $"uGUI motion export does not support property '{property}' on target '{targetId}' yet.");
                 return false;
         }
+    }
+
+    private static void ReportUnsupportedMotionProperty(
+        List<Diagnostic> diagnostics,
+        RuleResolver resolver,
+        string documentName,
+        MotionTrack track,
+        string clipId,
+        MotionProperty property,
+        string message)
+    {
+        var policy = MotionPolicyService.ResolveRuntimePropertySupportFallback(resolver, documentName, track, property, clipId);
+        diagnostics.Add(MotionPolicyService.IsErrorPolicy(policy)
+            ? Diagnostic.Error(message, code: "BHUG2002")
+            : Diagnostic.Warning(message, code: "BHUG2002"));
     }
 
     private static bool SupportsMotionTextMutation(string fieldType)

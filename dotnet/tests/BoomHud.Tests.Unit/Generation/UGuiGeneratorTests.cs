@@ -478,4 +478,563 @@ public sealed class UGuiGeneratorTests
         hostFile.Content.Should().Contain("if (root.childCount == 1 && root.GetChild(0) is RectTransform childRoot && TryBindExisting(childRoot, out boundView))");
         result.Diagnostics.Should().BeEmpty();
     }
+
+    [Fact]
+    public void Generate_WithMotionRuleSet_AppliesMotionPoliciesForUGui()
+    {
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label
+                    }
+                ]
+            }
+        };
+
+        var motion = new MotionDocument
+        {
+            Name = "StatusHudMotion",
+            FramesPerSecond = 30,
+            DefaultSequenceId = "introSequence",
+            Clips =
+            [
+                new MotionClip
+                {
+                    Id = "intro",
+                    Name = "Intro",
+                    DurationFrames = 60,
+                    Tracks =
+                    [
+                        new MotionTrack
+                        {
+                            Id = "rootTrack",
+                            TargetId = "root",
+                            TargetKind = MotionTargetKind.Root,
+                            Channels =
+                            [
+                                new MotionChannel
+                                {
+                                    Property = MotionProperty.Opacity,
+                                    Keyframes =
+                                    [
+                                        new MotionKeyframe { Frame = 0, Value = MotionValue.FromNumber(0), Easing = MotionEasing.EaseOut },
+                                        new MotionKeyframe { Frame = 12, Value = MotionValue.FromNumber(1), Easing = MotionEasing.EaseOut }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            Sequences =
+            [
+                new MotionSequence
+                {
+                    Id = "introSequence",
+                    Name = "Intro Sequence",
+                    Items =
+                    [
+                        new MotionSequenceItem
+                        {
+                            ClipId = "intro",
+                            StartFrame = 0,
+                            FillMode = MotionSequenceFillMode.HoldEnd
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var result = _generator.Generate(doc, _options with
+        {
+            Motion = motion,
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            DocumentName = "StatusHud",
+                            ClipId = "intro"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "durationQuantization",
+                            NumberValue = 16
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            DocumentName = "StatusHud",
+                            SequenceId = "introSequence"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "fillModePolicy",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["fillMode"] = "HoldBoth"
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Phase = GeneratorRulePhase.Motion,
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            DocumentName = "StatusHud",
+                            TrackId = "rootTrack",
+                            MotionProperty = MotionProperty.Opacity
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "easingRemap",
+                            Parameters = new Dictionary<string, string>
+                            {
+                                ["easing"] = "Linear"
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+
+        var motionFile = result.Files.First(f => f.Path == "StatusHudMotion.gen.cs").Content;
+        motionFile.Should().Contain("public const string DefaultSequenceId = \"introSequence\";");
+        motionFile.Should().Contain("FillMode = TimelineSequenceFillMode.HoldBoth");
+        motionFile.Should().Contain("=> 64,");
+        motionFile.Should().Contain("EaseMode.Linear");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_RemapsLabelToInputField()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "title",
+                            ComponentType = ComponentType.Label
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            ControlType = "InputField"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "RuleHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "Ready"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var viewFile = result.Files.First(f => f.Path == "RuleHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("public InputField Title { get; }");
+        viewFile.Content.Should().Contain("Title = CreateInput(\"Title\", Root, false);");
+        viewFile.Content.Should().Contain("Title.text = \"Ready\";");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_OverridesTextIconAndLayoutPolicies()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "body"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Text = new GeneratorTextRuleAction
+                            {
+                                WrapText = true,
+                                LineHeight = 1.6,
+                                FontSize = 18
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "classIcon"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Icon = new GeneratorIconRuleAction
+                            {
+                                BaselineOffset = 1.5,
+                                OpticalCentering = false,
+                                SizeMode = "match-height",
+                                FontSize = 20
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                Gap = 9,
+                                Padding = 7
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                ForceAbsolutePositioning = true,
+                                OffsetX = 3,
+                                OffsetY = 4
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PolicyHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(2),
+                    Padding = new Spacing(1)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontSize = 14
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "Wrapped copy"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "classIcon",
+                        Type = ComponentType.Icon,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(24),
+                            Height = Dimension.Pixels(24)
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "shield"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Container
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var viewFile = result.Files.First(f => f.Path == "PolicyHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyStyle(Body, fg: null, bg: null, fontFamily: null, fontSize: 18");
+        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.6f, wrapText: true);");
+        viewFile.Content.Should().Contain("ApplyIconMetrics(ClassIcon, boxWidth: 24f, boxHeight: 24f, baselineOffset: 1.5f, opticalCentering: false, sizeMode: \"match-height\", explicitFontSize: 20f);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 9f, 7, 7, 7, 7);");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(Badge), width: null, height: null, left: 3f, top: 4f, absolute: true);");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_AnchorPivotAndRectTransformMode_EmitsRectTransformOverrides()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                AnchorPreset = "top-center",
+                                PivotPreset = "center",
+                                RectTransformMode = "stretch-parent"
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "AnchorHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(40),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var viewFile = result.Files.First(f => f.Path == "AnchorHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyRectAnchorPreset(RectOf(Badge), \"top-center\");");
+        viewFile.Content.Should().Contain("ApplyRectPivotPreset(RectOf(Badge), \"center\");");
+        viewFile.Content.Should().Contain("ApplyRectTransformMode(RectOf(Badge), \"stretch-parent\");");
+        viewFile.Content.Should().Contain("private static void ApplyRectAnchorPreset(RectTransform rect,string preset)");
+        viewFile.Content.Should().Contain("private static void ApplyRectPivotPreset(RectTransform rect,string preset)");
+        viewFile.Content.Should().Contain("private static void ApplyRectTransformMode(RectTransform rect,string mode)");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_LayoutDeltasAndEdgeInsetPolicy_EmitsAdjustedLayoutOverrides()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "root"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                GapDelta = 2,
+                                PaddingDelta = 3
+                            }
+                        }
+                    },
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "badge"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                ForceAbsolutePositioning = true,
+                                OffsetXDelta = 3,
+                                OffsetYDelta = -2,
+                                EdgeInsetPolicy = "match-parent"
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "DeltaHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(4),
+                    Padding = new Spacing(1)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "badge",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Left = Dimension.Pixels(5),
+                            Top = Dimension.Pixels(10),
+                            Width = Dimension.Pixels(40),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var viewFile = result.Files.First(f => f.Path == "DeltaHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4);");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(Badge), width: 40f, height: 20f, left: 8f, top: 8f, absolute: true);");
+        viewFile.Content.Should().Contain("ApplyEdgeInsetPolicy(RectOf(Badge), \"match-parent\");");
+        viewFile.Content.Should().Contain("private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy)");
+    }
+
+    [Fact]
+    public void Generate_WithRuleSet_PreferredSizeDeltas_AdjustsLayoutSizing()
+    {
+        var options = _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                Rules =
+                [
+                    new GeneratorRule
+                    {
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            NodeId = "card"
+                        },
+                        Action = new GeneratorRuleAction
+                        {
+                            Layout = new GeneratorLayoutRuleAction
+                            {
+                                PreferredWidthDelta = -20,
+                                PreferredHeightDelta = 15
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PreferredSizeHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "card",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(120),
+                            Height = Dimension.Pixels(80)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var viewFile = result.Files.First(f => f.Path == "PreferredSizeHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(Card), ignoreLayout: false, preferredWidth: 100f, preferredHeight: 95f, flexibleWidth: null, flexibleHeight: null);");
+    }
 }

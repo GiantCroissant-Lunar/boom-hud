@@ -19,6 +19,7 @@ public class ComposeManifestTests
             "pencil/debug-overlay.pen"
           ],
           "tokens": "../tokens.ir.json",
+          "rules": "../rules/generation-rules.json",
           "targets": ["godot", "terminalgui"],
           "output": "generated",
           "namespace": "MyGame.Hud"
@@ -35,6 +36,7 @@ public class ComposeManifestTests
         manifest.Sources[0].Should().Be("figma/main-hud.figma.json");
         manifest.Sources[1].Should().Be("pencil/debug-overlay.pen");
         manifest.Tokens.Should().Be("../tokens.ir.json");
+        manifest.Rules.Should().Be("../rules/generation-rules.json");
         manifest.Targets.Should().BeEquivalentTo(["godot", "terminalgui"]);
         manifest.Output.Should().Be("generated");
         manifest.Namespace.Should().Be("MyGame.Hud");
@@ -58,6 +60,7 @@ public class ComposeManifestTests
         manifest.Root.Should().BeNull();
         manifest.Sources.Should().HaveCount(1);
         manifest.Tokens.Should().BeNull();
+        manifest.Rules.Should().BeNull();
         manifest.Targets.Should().BeNull();
         manifest.Output.Should().BeNull();
         manifest.Namespace.Should().BeNull();
@@ -124,6 +127,23 @@ public class ComposeManifestTests
 
         // Assert
         resolved.Should().BeNull();
+    }
+
+    [Fact]
+    public void ResolveRulesPath_RelativePath_ResolvesCorrectly()
+    {
+        var json = """
+        {
+          "sources": ["input.pen"],
+          "rules": "../rules/generation-rules.json"
+        }
+        """;
+        var manifest = ComposeManifest.LoadFromJson(json);
+
+        var manifestPath = Path.Combine(Path.GetTempPath(), "project", "ui", "boom-hud.compose.json");
+        var resolved = manifest.ResolveRulesPath(manifestPath);
+
+        resolved.Should().EndWith(Path.Combine("project", "rules", "generation-rules.json"));
     }
 
     [Fact]

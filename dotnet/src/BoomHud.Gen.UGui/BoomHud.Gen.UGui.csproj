@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
   </ItemGroup>
 
 </Project>

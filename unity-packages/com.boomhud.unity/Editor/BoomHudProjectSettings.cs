@@ -12,6 +12,8 @@ namespace BoomHud.Unity.Editor
         internal const string DefaultMotionSourceRoot = "BoomHud";
         internal const string DefaultUiToolkitGeneratedOutputPath = "Assets/BoomHudGenerated";
         internal const string DefaultUGuiGeneratedOutputPath = "Assets/BoomHudGeneratedUGui";
+        internal const string DefaultGenerationRuleAssetPath = "Assets/BoomHudGenerated/Rules/BoomHudGenerationRules.asset";
+        internal const string DefaultGenerationRuleJsonPath = "BoomHud/generation-rules.json";
         internal const string DefaultTimelineSceneOutputRoot = "Assets/BoomHudGenerated/TimelineScenes";
         internal const string DefaultTimelineAssetOutputRoot = "Assets/BoomHudGenerated/Timelines";
         internal const string DefaultTimelinePanelSettingsAssetPath = "Assets/BoomHudGenerated/Settings/BoomHudPanelSettings.asset";
@@ -20,6 +22,8 @@ namespace BoomHud.Unity.Editor
         [SerializeField] private string _motionSourceRoot = DefaultMotionSourceRoot;
         [SerializeField] private string _uiToolkitGeneratedOutputPath = DefaultUiToolkitGeneratedOutputPath;
         [SerializeField] private string _uGuiGeneratedOutputPath = DefaultUGuiGeneratedOutputPath;
+        [SerializeField] private string _generationRuleAssetPath = DefaultGenerationRuleAssetPath;
+        [SerializeField] private string _generationRuleJsonPath = DefaultGenerationRuleJsonPath;
         [SerializeField] private string _timelineSceneOutputRoot = DefaultTimelineSceneOutputRoot;
         [SerializeField] private string _timelineAssetOutputRoot = DefaultTimelineAssetOutputRoot;
         [SerializeField] private string _timelinePanelSettingsAssetPath = DefaultTimelinePanelSettingsAssetPath;
@@ -34,6 +38,10 @@ namespace BoomHud.Unity.Editor
 
         internal string UGuiGeneratedOutputPath => NormalizeAssetPath(_uGuiGeneratedOutputPath, DefaultUGuiGeneratedOutputPath);
 
+        internal string GenerationRuleAssetPath => NormalizeAssetPath(_generationRuleAssetPath, DefaultGenerationRuleAssetPath);
+
+        internal string GenerationRuleJsonPath => NormalizeProjectRelativePath(_generationRuleJsonPath, DefaultGenerationRuleJsonPath);
+
         internal string TimelineSceneOutputRoot => NormalizeAssetPath(_timelineSceneOutputRoot, DefaultTimelineSceneOutputRoot);
 
         internal string TimelineAssetOutputRoot => NormalizeAssetPath(_timelineAssetOutputRoot, DefaultTimelineAssetOutputRoot);
@@ -46,6 +54,8 @@ namespace BoomHud.Unity.Editor
             _motionSourceRoot = MotionSourceRoot;
             _uiToolkitGeneratedOutputPath = UiToolkitGeneratedOutputPath;
             _uGuiGeneratedOutputPath = UGuiGeneratedOutputPath;
+            _generationRuleAssetPath = GenerationRuleAssetPath;
+            _generationRuleJsonPath = GenerationRuleJsonPath;
             _timelineSceneOutputRoot = TimelineSceneOutputRoot;
             _timelineAssetOutputRoot = TimelineAssetOutputRoot;
             _timelinePanelSettingsAssetPath = TimelinePanelSettingsAssetPath;
@@ -58,6 +68,8 @@ namespace BoomHud.Unity.Editor
             _motionSourceRoot = DefaultMotionSourceRoot;
             _uiToolkitGeneratedOutputPath = DefaultUiToolkitGeneratedOutputPath;
             _uGuiGeneratedOutputPath = DefaultUGuiGeneratedOutputPath;
+            _generationRuleAssetPath = DefaultGenerationRuleAssetPath;
+            _generationRuleJsonPath = DefaultGenerationRuleJsonPath;
             _timelineSceneOutputRoot = DefaultTimelineSceneOutputRoot;
             _timelineAssetOutputRoot = DefaultTimelineAssetOutputRoot;
             _timelinePanelSettingsAssetPath = DefaultTimelinePanelSettingsAssetPath;
@@ -99,6 +111,7 @@ namespace BoomHud.Unity.Editor
                     "motion",
                     "UIToolkit",
                     "uGUI",
+                    "rules",
                     "timeline",
                     "PanelSettings"
                 }
@@ -127,6 +140,34 @@ namespace BoomHud.Unity.Editor
             EditorGUILayout.PropertyField(
                 _settingsObject.FindProperty("_uGuiGeneratedOutputPath"),
                 new GUIContent("uGUI Output", "Asset path for generated uGUI code and related assets."));
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Generation Rules", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                _settingsObject.FindProperty("_generationRuleAssetPath"),
+                new GUIContent("Rule Asset", "Asset path for the editor-authored ScriptableObject rule set."));
+            EditorGUILayout.PropertyField(
+                _settingsObject.FindProperty("_generationRuleJsonPath"),
+                new GUIContent("Rule JSON Path", "Project-relative or absolute JSON path exported for CLI generation."));
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Export Rule JSON"))
+            {
+                _settingsObject.ApplyModifiedPropertiesWithoutUndo();
+                settings.SaveSettings();
+                BoomHudGenerationRuleSetUtility.ExportDefaultRuleSetJson();
+                GUIUtility.ExitGUI();
+            }
+
+            if (GUILayout.Button("Import Rule JSON"))
+            {
+                _settingsObject.ApplyModifiedPropertiesWithoutUndo();
+                settings.SaveSettings();
+                BoomHudGenerationRuleSetUtility.ImportDefaultRuleSetJson();
+                GUIUtility.ExitGUI();
+            }
+
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Timeline", EditorStyles.boldLabel);
@@ -178,6 +219,12 @@ namespace BoomHud.Unity.Editor
             if (!BoomHudProjectSettings.IsAssetsPath(uGuiPath))
             {
                 EditorGUILayout.HelpBox("uGUI Output must be an asset path under Assets/.", MessageType.Error);
+            }
+
+            var ruleAssetPath = settingsObject.FindProperty("_generationRuleAssetPath").stringValue;
+            if (!BoomHudProjectSettings.IsAssetsPath(ruleAssetPath))
+            {
+                EditorGUILayout.HelpBox("Rule Asset must be an asset path under Assets/.", MessageType.Error);
             }
 
             var scenePath = settingsObject.FindProperty("_timelineSceneOutputRoot").stringValue;

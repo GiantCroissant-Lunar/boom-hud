@@ -1,4 +1,5 @@
 using BoomHud.Abstractions.IR;
+using BoomHud.Abstractions.Generation;
 
 namespace BoomHud.Gen.Unity;
 
@@ -26,6 +27,8 @@ internal sealed record UnityPlannedNode
     public required string CssClass { get; init; }
 
     public required bool IsFallback { get; init; }
+
+    public required ResolvedGeneratorPolicy Policy { get; init; }
 
     public required IReadOnlyList<UnityPlannedNode> Children { get; init; }
 }

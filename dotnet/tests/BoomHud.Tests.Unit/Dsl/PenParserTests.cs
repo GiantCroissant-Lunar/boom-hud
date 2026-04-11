@@ -118,6 +118,35 @@ public class PenParserTests
     }
 
     [Fact]
+    public void Parse_NodePreservesOriginalPencilIdInInstanceOverrides()
+    {
+        var json = """
+            {
+                "nodes": [
+                    {
+                        "id": "root",
+                        "type": "frame",
+                        "children": [
+                            {
+                                "id": "QSB56",
+                                "type": "text",
+                                "name": "Objective Hint",
+                                "content": "Find the brazier"
+                            }
+                        ]
+                    }
+                ]
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        var label = doc.Root.Children[0];
+        label.InstanceOverrides.Should().ContainKey(BoomHudMetadataKeys.OriginalPencilId);
+        label.InstanceOverrides[BoomHudMetadataKeys.OriginalPencilId].Should().Be("QSB56");
+    }
+
+    [Fact]
     public void Parse_InlineBinding_CreatesBindingSpec()
     {
         var json = """

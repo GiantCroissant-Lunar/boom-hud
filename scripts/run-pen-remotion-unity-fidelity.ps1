@@ -2,6 +2,7 @@
 param(
     [string]$RepoRoot = "",
     [string]$ManifestPath = "fidelity\pen-remotion-unity.fullpen.json",
+    [string]$RulesPath = "",
     [string]$UnityProjectPath = "",
     [string]$UnityExe = "",
     [switch]$SkipDotNet,
@@ -320,6 +321,8 @@ if ([string]::IsNullOrWhiteSpace($UnityProjectPath))
     $UnityProjectPath = Join-Path $RepoRoot "samples\UnityFullPenCompare"
 }
 
+$UnityProjectPath = Resolve-AbsolutePath $UnityProjectPath
+
 $manifestAbsolutePath = Resolve-AbsolutePath $ManifestPath
 $manifest = Get-Content $manifestAbsolutePath -Raw | ConvertFrom-Json -Depth 20
 $artifactsRoot = Resolve-AbsolutePath $manifest.artifactsRoot
@@ -344,15 +347,23 @@ if (-not $SkipDotNet)
     )
 
     Write-Section "Regenerating Unity and React artifacts from $sourcePen"
-    Invoke-DotNetCli @(
+    $unityOutputPath = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
+    $uguiOutputPath = Join-Path $UnityProjectPath "Assets/BoomHudGeneratedUGui"
+    $unityGenerateArgs = @(
         "run",
         "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
         "--",
         "generate", $sourcePen,
         "--target", "unity",
-        "--output", "samples/UnityFullPenCompare/Assets/Resources/BoomHudGenerated",
+        "--output", $unityOutputPath,
         "--namespace", "Generated.Hud"
     )
+    if (-not [string]::IsNullOrWhiteSpace($RulesPath))
+    {
+        $unityGenerateArgs += @("--rules", $RulesPath)
+    }
+    Invoke-DotNetCli $unityGenerateArgs
+
     Invoke-DotNetCli @(
         "run",
         "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
@@ -361,15 +372,20 @@ if (-not $SkipDotNet)
         "--target", "react",
         "--output", "remotion/src/generated"
     )
-    Invoke-DotNetCli @(
+    $uguiGenerateArgs = @(
         "run",
         "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
         "--",
         "generate", $sourcePen,
         "--target", "ugui",
-        "--output", "samples/UnityFullPenCompare/Assets/BoomHudGeneratedUGui",
+        "--output", $uguiOutputPath,
         "--namespace", "Generated.Hud.UGui"
     )
+    if (-not [string]::IsNullOrWhiteSpace($RulesPath))
+    {
+        $uguiGenerateArgs += @("--rules", $RulesPath)
+    }
+    Invoke-DotNetCli $uguiGenerateArgs
 }
 
 $timelineEntries = @($manifest.timelines)

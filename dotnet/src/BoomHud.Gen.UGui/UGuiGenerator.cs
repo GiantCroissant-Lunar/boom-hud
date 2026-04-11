@@ -3,6 +3,7 @@ using System.Text;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators;
 
 namespace BoomHud.Gen.UGui;
 
@@ -46,7 +47,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
     {
-        var plan = Planner.Create(document, diagnostics);
+        var plan = Planner.Create(document, diagnostics, options.RuleSet);
         files.Add(new GeneratedFile { Path = $"{document.Name}View.ugui.cs", Content = GenerateView(document, plan, options, diagnostics), Type = GeneratedFileType.SourceCode });
         if (options.EmitViewModelInterfaces)
         {
@@ -197,12 +198,36 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var rect = accessor == "Root" ? "Root" : $"RectOf({accessor})";
         var layout = node.Source.Layout;
         var style = node.Source.Style;
-        var absolute = parentLayout == LayoutType.Absolute || HasExplicitAbsolutePlacement(node.Source);
+        var absolute = parentLayout == LayoutType.Absolute || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
         var widthDimension = layout?.Width ?? style?.Width;
         var heightDimension = layout?.Height ?? style?.Height;
+        var anchorPreset = LayoutPolicyService.ResolveAnchorPreset(node.Policy);
+        var pivotPreset = LayoutPolicyService.ResolvePivotPreset(node.Policy);
+        var rectTransformMode = LayoutPolicyService.ResolveRectTransformMode(node.Policy);
+        var edgeInsetPolicy = LayoutPolicyService.ResolveEdgeInsetPolicy(node.Policy);
 
-        builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(Pixels(widthDimension))}, height: {ToNullableFloatLiteral(Pixels(heightDimension))}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft) : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop) : null)}, absolute: {Bool(absolute)});");
-        builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? Pixels(widthDimension) : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? Pixels(heightDimension) : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, widthDimension, "width", parentLayout) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, heightDimension, "height", parentLayout) : null)});");
+        builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(Pixels(widthDimension))}, height: {ToNullableFloatLiteral(Pixels(heightDimension))}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
+        if (!string.IsNullOrWhiteSpace(anchorPreset))
+        {
+            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {ToStringLiteral(anchorPreset)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(pivotPreset))
+        {
+            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {ToStringLiteral(pivotPreset)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(rectTransformMode))
+        {
+            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {ToStringLiteral(rectTransformMode)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(edgeInsetPolicy))
+        {
+            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {ToStringLiteral(edgeInsetPolicy)});");
+        }
+
+        builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, widthDimension, "width") : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, heightDimension, "height") : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, widthDimension, "width", parentLayout) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, heightDimension, "height", parentLayout) : null)});");
         builder.AppendLine($"{indent}ApplyContentSizeFit({rect}, horizontal: {Bool(!absolute && ShouldContentFit(node, widthDimension, "width", parentLayout))}, vertical: {Bool(!absolute && ShouldContentFit(node, heightDimension, "height", parentLayout))});");
 
         if (layout != null && ShouldEmitLayoutGroup(node))
@@ -210,16 +235,16 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             switch (layout.Type)
             {
                 case LayoutType.Horizontal:
-                    builder.AppendLine($"{indent}ApplyHorizontalLayout({rect}, {ToFloatLiteral(Gap(layout.Gap, true))}, {ToRectOffsetArgs(layout.Padding)});");
+                    builder.AppendLine($"{indent}ApplyHorizontalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), true))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});");
                     break;
                 case LayoutType.Vertical:
                 case LayoutType.Stack:
-                    builder.AppendLine($"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(layout.Gap, false))}, {ToRectOffsetArgs(layout.Padding)});");
+                    builder.AppendLine($"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});");
                     break;
                 case LayoutType.Grid:
                 case LayoutType.Dock:
                     diagnostics.Add(Diagnostic.Warning($"Unity uGUI falls back to vertical layout for '{layout.Type}'.", node.Source.Id, "BHUG1001"));
-                    builder.AppendLine($"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(layout.Gap, false))}, {ToRectOffsetArgs(layout.Padding)});");
+                    builder.AppendLine($"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});");
                     break;
             }
         }
@@ -230,16 +255,24 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 $"{indent}ApplyStyle({accessor}, " +
                 $"fg: {ToNullableStringLiteral(style?.Foreground?.ToHex())}, " +
                 $"bg: {ToNullableStringLiteral(style?.Background?.ToHex())}, " +
-                $"fontFamily: {ToNullableStringLiteral(style?.FontFamily)}, " +
-                $"fontSize: {ToNullableIntLiteral(ResolveFontSize(node.Source, widthDimension, heightDimension))}, " +
+                $"fontFamily: {ToNullableStringLiteral(TextPolicyService.ResolveFontFamily(node.Source, node.Policy))}, " +
+                $"fontSize: {ToNullableIntLiteral(TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy))}, " +
                 $"borderColor: {ToNullableStringLiteral(style?.Border?.Color?.ToHex())}, " +
                 $"borderWidth: {ToNullableFloatLiteral(style?.Border is { Width: > 0 } border ? border.Width : null)}, " +
-                $"treatAsIcon: {Bool(node.Source.Type == ComponentType.Icon)});");
+                $"treatAsIcon: {Bool(IsIconTextNode(node))});");
         }
 
-        if (ShouldApplyTextMetrics(node.Source))
+        if (IsIconTextNode(node))
         {
-            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(ResolveLineSpacing(node.Source, widthDimension, heightDimension))}, wrapText: {Bool(ShouldWrapText(node.Source))});");
+            var width = Pixels(widthDimension) ?? 16d;
+            var height = Pixels(heightDimension) ?? 16d;
+            builder.AppendLine(
+                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(IconPolicyService.ResolveFontSize(node.Policy) ?? 0d)});");
+        }
+
+        if (ShouldApplyTextMetrics(node))
+        {
+            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(TextPolicyService.ResolveLineSpacing(node.Source, widthDimension, heightDimension, node.Policy))}, wrapText: {Bool(TextPolicyService.ShouldWrapText(node.Source, node.Policy))});");
         }
 
         foreach (var pair in Bindings(node.Source).Where(static pair => pair.StaticValue != null))
@@ -255,7 +288,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             builder.AppendLine($"{indent}{accessor}.gameObject.SetActive({Bool(node.Source.Visible.Value != false)});");
         }
 
-        if (!node.Source.Enabled.IsBound && IsSelectable(node.Source.Type))
+        if (!node.Source.Enabled.IsBound && IsSelectable(node))
         {
             builder.AppendLine($"{indent}ApplyEnabled({accessor}, {Bool(node.Source.Enabled.Value != false)});");
         }
@@ -286,7 +319,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             builder.AppendLine($"{indent}{accessor}.gameObject.SetActive(AsBool(_viewModel.{visible}, true));");
         }
 
-        if (node.Source.Enabled.IsBound && IsSelectable(node.Source.Type) && TryIdentifier(plan, node.Source.Enabled.BindingPath!, out var enabled))
+        if (node.Source.Enabled.IsBound && IsSelectable(node) && TryIdentifier(plan, node.Source.Enabled.BindingPath!, out var enabled))
         {
             builder.AppendLine($"{indent}ApplyEnabled({accessor}, AsBool(_viewModel.{enabled}, true));");
         }
@@ -311,33 +344,32 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var accessor = node.FieldName == "Root" ? "Root" : node.FieldName;
         var normalized = Normalize(property);
         var textValue = staticValue ? value : $"AsString({value})";
-        switch (node.Source.Type)
+
+        if (IsIconTextNode(node) && normalized is "text" or "content" or "value")
         {
-            case ComponentType.Label:
-            case ComponentType.Badge:
+            assignment = $"{accessor}.text = ResolveIconText({textValue});";
+            return true;
+        }
+
+        switch (node.FieldType)
+        {
+            case "Text":
                 if (normalized is "text" or "content" or "value") { assignment = $"{accessor}.text = {textValue};"; return true; }
                 break;
-            case ComponentType.Icon:
-                if (normalized is "text" or "content" or "value") { assignment = $"{accessor}.text = ResolveIconText({textValue});"; return true; }
-                break;
-            case ComponentType.Button:
-            case ComponentType.MenuItem:
+            case "Button":
                 if (normalized is "text" or "content" or "value") { assignment = $"SetButtonText({accessor}, {textValue});"; return true; }
                 break;
-            case ComponentType.TextInput:
-            case ComponentType.TextArea:
+            case "InputField":
                 if (normalized is "text" or "content" or "value") { assignment = $"{accessor}.text = {textValue};"; return true; }
                 break;
-            case ComponentType.Checkbox:
-            case ComponentType.RadioButton:
+            case "Toggle":
                 if (normalized is "checked" or "value") { assignment = $"{accessor}.isOn = {(staticValue ? value : $"AsBool({value}, false)")};"; return true; }
                 if (normalized is "text" or "content") { assignment = $"SetToggleText({accessor}, {textValue});"; return true; }
                 break;
-            case ComponentType.ProgressBar:
-            case ComponentType.Slider:
+            case "Slider":
                 if (normalized == "value") { assignment = $"{accessor}.value = {(staticValue ? value : $"AsFloat({value})")};"; return true; }
                 break;
-            case ComponentType.Image:
+            case "Image":
                 if (normalized is "source" or "src" or "value") { assignment = $"SetImage({accessor}, {textValue});"; return true; }
                 break;
         }
@@ -372,24 +404,32 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return true;
     }
 
-    private static bool HasExplicitAbsolutePlacement(ComponentNode node)
-        => node.Layout?.IsAbsolutePositioned == true
-            || node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilPosition, out var raw)
-            && raw is string value
-            && string.Equals(value, "absolute", StringComparison.OrdinalIgnoreCase);
-
-    private static double? AbsoluteOffset(ComponentNode node, Func<LayoutSpec, Dimension?> selector, string metadataKey)
+    private static double? AbsoluteOffset(ComponentNode node, Func<LayoutSpec, Dimension?> selector, string metadataKey, ResolvedGeneratorPolicy policy, string axis)
     {
-        if (node.Layout != null && selector(node.Layout) is { Unit: DimensionUnit.Pixels } dimension) return dimension.Value;
-        if (!node.InstanceOverrides.TryGetValue(metadataKey, out var raw) || raw == null) return null;
-        return raw switch
+        double? value = null;
+        if (node.Layout != null && selector(node.Layout) is { Unit: DimensionUnit.Pixels } dimension)
         {
-            double d => d,
-            float f => f,
-            int i => i,
-            long l => l,
-            _ => null
-        };
+            value = dimension.Value;
+        }
+        else if (node.InstanceOverrides.TryGetValue(metadataKey, out var raw) && raw != null)
+        {
+            value = raw switch
+            {
+                double d => d,
+                float f => f,
+                int i => i,
+                long l => l,
+                _ => null
+            };
+        }
+
+        var adjustment = LayoutPolicyService.ResolveOffsetAdjustment(axis, policy);
+        if (value == null)
+        {
+            return Math.Abs(adjustment) > double.Epsilon ? adjustment : null;
+        }
+
+        return value + adjustment;
     }
 
     private static double? Pixels(Dimension? dimension)
@@ -401,26 +441,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         };
 
     private static double? FlexibleSize(PlannedNode node, Dimension? dimension, string axis, LayoutType? parentLayout)
-    {
-        if (dimension is { Unit: DimensionUnit.Fill or DimensionUnit.Star })
-        {
-            return dimension.Value.Value == 0 ? 1d : dimension.Value.Value;
-        }
+        => LayoutPolicyService.ResolveFlexibleSize(dimension, axis, parentLayout, IsFlexibleContainer(node), node.Policy);
 
-        if (dimension != null || parentLayout == null || !IsFlexibleContainer(node))
-        {
-            return null;
-        }
-
-        return (axis, parentLayout) switch
-        {
-            ("width", LayoutType.Horizontal) => 1d,
-            ("height", LayoutType.Vertical or LayoutType.Stack) => 1d,
-            ("width", LayoutType.Vertical or LayoutType.Stack or LayoutType.Grid or LayoutType.Dock) => 1d,
-            ("height", LayoutType.Horizontal) => 1d,
-            _ => null
-        };
-    }
+    private static double? PreferredSize(PlannedNode node, Dimension? dimension, string axis)
+        => LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy);
 
     private static bool IsFlexibleContainer(PlannedNode node)
         => node.ComponentView != null
@@ -433,68 +457,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             && node.FieldType is "RectTransform" or "ScrollRect";
 
     private static bool ShouldContentFit(PlannedNode node, Dimension? dimension, string axis, LayoutType? parentLayout)
-    {
-        if (parentLayout != null || node.Source.Layout == null || !IsFlexibleContainer(node))
-        {
-            return false;
-        }
+        => LayoutPolicyService.ShouldPreferContentSize(axis, parentLayout != null, node.Source.Layout, IsFlexibleContainer(node), node.Policy);
 
-        return axis switch
-        {
-            "width" => dimension is null or { Unit: DimensionUnit.Auto },
-            "height" => dimension is null or { Unit: DimensionUnit.Auto },
-            _ => false
-        };
-    }
-
-    private static double? ResolveFontSize(ComponentNode node, Dimension? widthDimension, Dimension? heightDimension)
-    {
-        if (node.Style?.FontSize is { } explicitFontSize)
-        {
-            return explicitFontSize;
-        }
-
-        if (node.Type != ComponentType.Icon)
-        {
-            return null;
-        }
-
-        var width = Pixels(widthDimension);
-        var height = Pixels(heightDimension);
-        var inferred = (width, height) switch
-        {
-            ({ } w, { } h) => Math.Min(w, h),
-            ({ } w, null) => w,
-            (null, { } h) => h,
-            _ => 16d
-        };
-
-        return inferred <= 0d ? null : inferred;
-    }
-
-    private static bool ShouldWrapText(ComponentNode node)
-        => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.PencilTextGrowth, out var raw)
-            && raw is string textGrowth
-            && string.Equals(textGrowth, "fixed-width", StringComparison.OrdinalIgnoreCase);
-
-    private static bool ShouldApplyTextMetrics(ComponentNode node)
-        => node.Type is ComponentType.Label or ComponentType.Badge or ComponentType.Button or ComponentType.Checkbox or ComponentType.RadioButton or ComponentType.TextInput or ComponentType.TextArea;
-
-    private static double? ResolveLineSpacing(ComponentNode node, Dimension? widthDimension, Dimension? heightDimension)
-    {
-        if (node.Style?.LineHeight is not { } lineHeight || lineHeight <= 0d)
-        {
-            return null;
-        }
-
-        if (lineHeight <= 5d)
-        {
-            return lineHeight;
-        }
-
-        var fontSize = ResolveFontSize(node, widthDimension, heightDimension);
-        return fontSize is > 0d ? lineHeight / fontSize.Value : null;
-    }
+    private static bool ShouldApplyTextMetrics(PlannedNode node)
+        => node.FieldType is "Text" or "Button" or "Toggle" or "InputField";
 
     private static double Gap(Spacing? spacing, bool horizontal)
         => spacing == null ? 0d : horizontal ? Math.Max(spacing.Value.Left, spacing.Value.Right) : Math.Max(spacing.Value.Top, spacing.Value.Bottom);
@@ -527,8 +493,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             _ => $"CreateRect(\"{node.Name}\", {parentAccessor})"
         };
 
-    private static bool IsSelectable(ComponentType type)
-        => type is ComponentType.Button or ComponentType.MenuItem or ComponentType.Checkbox or ComponentType.RadioButton or ComponentType.ProgressBar or ComponentType.Slider or ComponentType.TextInput or ComponentType.TextArea;
+    private static bool IsSelectable(PlannedNode node)
+        => node.FieldType is "Button" or "Toggle" or "Slider" or "InputField";
+
+    private static bool IsIconTextNode(PlannedNode node)
+        => node.Source.Type == ComponentType.Icon && node.FieldType == "Text";
 
     private static string Normalize(string property)
         => new string(property.Where(char.IsLetterOrDigit).ToArray()).ToLowerInvariant();
@@ -586,8 +555,14 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
+    private static void ApplyRectAnchorPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);break;case "top-center":rect.anchorMin=new Vector2(0.5f,1f);rect.anchorMax=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.anchorMin=new Vector2(1f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "center":case "middle-center":rect.anchorMin=new Vector2(0.5f,0.5f);rect.anchorMax=new Vector2(0.5f,0.5f);break;case "stretch":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-horizontal":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-vertical":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(0f,1f);break;}}
+    private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
+    private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
+    private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
+    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,baselineOffset);}
     private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
@@ -608,11 +583,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private sealed class Planner
     {
-        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics)
+        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics, GeneratorRuleSet? ruleSet)
         {
             var names = new HashSet<string>(StringComparer.Ordinal);
             var props = new Dictionary<string, ViewModelProperty>(StringComparer.Ordinal);
-            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, forceRoot: true);
+            var ruleResolver = new RuleResolver(ruleSet, "ugui");
+            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, ruleResolver, document.Name, forceRoot: true);
             return new PlanDocument
             {
                 Root = root,
@@ -621,16 +597,17 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             };
         }
 
-        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, bool forceRoot = false)
+        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, RuleResolver ruleResolver, string documentName, bool forceRoot = false)
         {
             Track(source, props);
             var baseName = forceRoot ? document.Name + "Root" : Pascal(source.Id ?? fallbackName);
             var fieldName = forceRoot ? "Root" : Unique(baseName, names);
-            var fieldType = ResolveFieldType(source, document, out var componentView);
+            var policy = ruleResolver.Resolve(documentName, source);
+            var fieldType = ResolveFieldType(source, document, diagnostics, policy, out var componentView);
             var children = componentView == null
-                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props)).ToList()
+                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props, ruleResolver, documentName)).ToList()
                 : [];
-            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, Source = source, Children = children };
+            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, Source = source, Policy = policy, Children = children };
         }
 
         private static void Track(ComponentNode node, Dictionary<string, ViewModelProperty> props)
@@ -646,13 +623,26 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             if (!props.ContainsKey(path)) props[path] = new ViewModelProperty { Path = path, Identifier = ToPropertyIdentifier(path) };
         }
 
-        private static string ResolveFieldType(ComponentNode source, HudDocument document, out string? componentView)
+        private static string ResolveFieldType(ComponentNode source, HudDocument document, List<Diagnostic> diagnostics, ResolvedGeneratorPolicy policy, out string? componentView)
         {
             componentView = null;
             if (source.ComponentRefId != null && source.Children.Count == 0 && document.Components.TryGetValue(source.ComponentRefId, out var component))
             {
                 componentView = component.Name;
                 return "RectTransform";
+            }
+
+            if (!string.IsNullOrWhiteSpace(policy.ControlType))
+            {
+                if (TryMapControlOverride(policy.ControlType!, out var overrideFieldType))
+                {
+                    return overrideFieldType;
+                }
+
+                diagnostics.Add(Diagnostic.Warning(
+                    $"Unity uGUI control override '{policy.ControlType}' is not recognized; using default mapping.",
+                    source.Id,
+                    "BHUG1003"));
             }
 
             return source.Type switch
@@ -666,6 +656,24 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 ComponentType.ScrollView or ComponentType.ListBox or ComponentType.ListView or ComponentType.TreeView or ComponentType.DataGrid or ComponentType.Timeline => "ScrollRect",
                 _ => "RectTransform"
             };
+        }
+
+        private static bool TryMapControlOverride(string controlType, out string fieldType)
+        {
+            fieldType = controlType.Trim() switch
+            {
+                "Label" or "Text" => "Text",
+                "Button" => "Button",
+                "TextField" or "InputField" => "InputField",
+                "Toggle" => "Toggle",
+                "ProgressBar" or "Slider" => "Slider",
+                "Image" => "Image",
+                "ScrollView" or "ScrollRect" => "ScrollRect",
+                "Container" or "RectTransform" => "RectTransform",
+                _ => string.Empty
+            };
+
+            return fieldType.Length > 0;
         }
 
         private static string Unique(string baseName, HashSet<string> names)
@@ -710,6 +718,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         public required string FieldType { get; init; }
         public string? ComponentView { get; init; }
         public required ComponentNode Source { get; init; }
+        public required ResolvedGeneratorPolicy Policy { get; init; }
         public required IReadOnlyList<PlannedNode> Children { get; init; }
     }
 

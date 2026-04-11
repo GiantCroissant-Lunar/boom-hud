@@ -73,11 +73,14 @@ public sealed record GenerationOptions
     /// Backends may use this to emit shared resources or token-based styling.
     /// </summary>
     public ThemeDocument? Theme { get; init; }
-    
+
     /// <summary>
     /// Optional motion document for backends that can emit animation artifacts.
     /// </summary>
     public MotionDocument? Motion { get; init; }
+
+    public GeneratorRuleSet? RuleSet { get; init; }
+
     public IReadOnlyDictionary<string, string> DescriptionReplacements { get; init; }
         = new Dictionary<string, string>();
 }
