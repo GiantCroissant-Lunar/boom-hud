@@ -39,7 +39,7 @@ namespace BoomHud.Compare
             background.color = new Color(0.08f, 0.08f, 0.08f, 1f);
 
             _view = CreateGeneratedViewInstance(root);
-            RenameAndCenterGeneratedRoot(_view);
+            RenameGeneratedRoot(_view);
         }
 
         protected override void ConfigureCanvasScaler(CanvasScaler scaler)
@@ -70,7 +70,7 @@ namespace BoomHud.Compare
             }
         }
 
-        private void RenameAndCenterGeneratedRoot(object generatedView)
+        private void RenameGeneratedRoot(object generatedView)
         {
             var rootProperty = generatedView.GetType().GetProperty("Root", BindingFlags.Instance | BindingFlags.Public);
             if (rootProperty?.GetValue(generatedView) is not RectTransform generatedRoot)

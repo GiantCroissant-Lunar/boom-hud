@@ -255,7 +255,7 @@ namespace BoomHud.Compare.Editor
             {
                 var target = WaitForTargetRectTransform(capture.targetObjectName);
                 WaitForRectTransformToSettle(target);
-                fullTexture = CaptureCameraTexture(CaptureWidth, CaptureHeight);
+                fullTexture = CaptureCameraTexture(ResolveCaptureWidth(capture), ResolveCaptureHeight(capture));
                 target = WaitForTargetRectTransform(capture.targetObjectName);
                 croppedTexture = CropToRectTransform(fullTexture, target);
                 FlipTextureVertically(croppedTexture);
@@ -299,7 +299,7 @@ namespace BoomHud.Compare.Editor
                 EnsureTargetVisible(targetElement);
                 WaitForDocumentToSettle(document);
 
-                fullTexture = CaptureDocumentTexture(document, CaptureWidth, CaptureHeight);
+                fullTexture = CaptureDocumentTexture(document, ResolveCaptureWidth(capture), ResolveCaptureHeight(capture));
                 document = ResolveActiveDocument(document);
                 targetElement = WaitForTargetElement(document, capture.targetElementName);
                 ApplyCaptureTweaks(targetElement, capture);
@@ -358,6 +358,12 @@ namespace BoomHud.Compare.Editor
                 }
             }
         }
+
+        private static int ResolveCaptureWidth(FidelityUnityCapture capture)
+            => capture.captureWidth > 0 ? capture.captureWidth : CaptureWidth;
+
+        private static int ResolveCaptureHeight(FidelityUnityCapture capture)
+            => capture.captureHeight > 0 ? capture.captureHeight : CaptureHeight;
 
         private static Texture2D? TryCaptureOffscreen(UIDocument document, PanelSettings panelSettings, Camera? mainCamera, int width, int height)
         {
@@ -1340,6 +1346,8 @@ namespace BoomHud.Compare.Editor
             public string generatedRootName = string.Empty;
             public string output = string.Empty;
             public string outputDir = string.Empty;
+            public int captureWidth;
+            public int captureHeight;
             public float allIconMarginTop = float.NaN;
             public float classIconMarginTop = float.NaN;
             public float actionIconMarginTop = float.NaN;

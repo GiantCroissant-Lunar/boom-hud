@@ -241,6 +241,7 @@ public sealed class CombatToastStackView
         EventIcon.SetEnabled(true);
         ApplyFontFamily(EventIcon, "lucide", 56f);
         EventIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        EventIcon.style.fontSize = 56f;
         Content.style.flexDirection = ParseFlexDirection("column");
         Content.style.position = ParsePosition("absolute");
         Content.style.left = ParseStyleLength("168px");
@@ -561,6 +562,7 @@ public sealed class CombatToastStackView
         EventIcon2.SetEnabled(true);
         ApplyFontFamily(EventIcon2, "lucide", 56f);
         EventIcon2.style.color = ParseStyleColor("#FFFFFF", null);
+        EventIcon2.style.fontSize = 56f;
         Content2.style.flexDirection = ParseFlexDirection("column");
         Content2.style.position = ParsePosition("absolute");
         Content2.style.left = ParseStyleLength("168px");
@@ -881,6 +883,7 @@ public sealed class CombatToastStackView
         EventIcon3.SetEnabled(true);
         ApplyFontFamily(EventIcon3, "lucide", 56f);
         EventIcon3.style.color = ParseStyleColor("#FFFFFF", null);
+        EventIcon3.style.fontSize = 56f;
         Content3.style.flexDirection = ParseFlexDirection("column");
         Content3.style.position = ParsePosition("absolute");
         Content3.style.left = ParseStyleLength("168px");

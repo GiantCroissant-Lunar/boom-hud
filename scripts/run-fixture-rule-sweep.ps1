@@ -139,6 +139,23 @@ function Get-ReferencePathForSurface([string]$SurfaceId)
     }
 }
 
+function Get-ImageDimensions([string]$ImagePath)
+{
+    Add-Type -AssemblyName System.Drawing
+    $image = [System.Drawing.Image]::FromFile($ImagePath)
+    try
+    {
+        return [pscustomobject]@{
+            Width = [int]$image.Width
+            Height = [int]$image.Height
+        }
+    }
+    finally
+    {
+        $image.Dispose()
+    }
+}
+
 function New-RunCompareManifest(
     [string]$BaseManifestPath,
     [string]$RunRoot,
@@ -151,6 +168,29 @@ function New-RunCompareManifest(
     {
         $captureFileName = "$($surface.id).png"
         $surface.unity.output = (Join-Path $RunRoot (Join-Path "captures" $captureFileName))
+        if (-not [string]::IsNullOrWhiteSpace([string](Get-OptionalPropertyValue -Source $surface.unity -PropertyName "targetObjectName")))
+        {
+            $referencePath = Get-ReferencePathForSurface -SurfaceId $surface.id
+            $dimensions = Get-ImageDimensions -ImagePath $referencePath
+
+            if ($null -eq $surface.unity.PSObject.Properties["captureWidth"])
+            {
+                $surface.unity | Add-Member -NotePropertyName "captureWidth" -NotePropertyValue $dimensions.Width
+            }
+            else
+            {
+                $surface.unity.captureWidth = $dimensions.Width
+            }
+
+            if ($null -eq $surface.unity.PSObject.Properties["captureHeight"])
+            {
+                $surface.unity | Add-Member -NotePropertyName "captureHeight" -NotePropertyValue $dimensions.Height
+            }
+            else
+            {
+                $surface.unity.captureHeight = $dimensions.Height
+            }
+        }
     }
 
     $manifestsRoot = Join-Path $RunRoot "manifests"

@@ -380,6 +380,7 @@ public sealed class PartyStatusStripView
         RoleIcon.SetEnabled(true);
         ApplyFontFamily(RoleIcon, "lucide", 40f);
         RoleIcon.style.color = ParseStyleColor("#FFFFFF", null);
+        RoleIcon.style.fontSize = 40f;
         Identity.style.flexDirection = ParseFlexDirection("column");
         Identity.style.flexGrow = ParseStyleFloat("1");
         Identity.style.alignSelf = ParseAlign("stretch");
@@ -626,6 +627,7 @@ public sealed class PartyStatusStripView
         BuffIcon1.SetEnabled(true);
         ApplyFontFamily(BuffIcon1, "lucide", 24f);
         BuffIcon1.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon1.style.fontSize = 24f;
         StatusBuff2.style.flexDirection = ParseFlexDirection("column");
         StatusBuff2.style.width = ParseStyleLength("56px");
         StatusBuff2.style.height = ParseStyleLength("56px");
@@ -670,6 +672,7 @@ public sealed class PartyStatusStripView
         BuffIcon2.SetEnabled(true);
         ApplyFontFamily(BuffIcon2, "lucide", 24f);
         BuffIcon2.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon2.style.fontSize = 24f;
         StatusBuff3.style.flexDirection = ParseFlexDirection("column");
         StatusBuff3.style.width = ParseStyleLength("56px");
         StatusBuff3.style.height = ParseStyleLength("56px");
@@ -714,6 +717,7 @@ public sealed class PartyStatusStripView
         BuffIcon3.SetEnabled(true);
         ApplyFontFamily(BuffIcon3, "lucide", 24f);
         BuffIcon3.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon3.style.fontSize = 24f;
         StatusBuff4.style.flexDirection = ParseFlexDirection("column");
         StatusBuff4.style.width = ParseStyleLength("56px");
         StatusBuff4.style.height = ParseStyleLength("56px");
@@ -758,6 +762,7 @@ public sealed class PartyStatusStripView
         BuffIcon4.SetEnabled(true);
         ApplyFontFamily(BuffIcon4, "lucide", 24f);
         BuffIcon4.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon4.style.fontSize = 24f;
         MemberB.style.flexDirection = ParseFlexDirection("column");
         MemberB.style.width = ParseStyleLength("400px");
         MemberB.style.alignSelf = ParseAlign("stretch");
@@ -847,6 +852,7 @@ public sealed class PartyStatusStripView
         RoleIcon2.SetEnabled(true);
         ApplyFontFamily(RoleIcon2, "lucide", 40f);
         RoleIcon2.style.color = ParseStyleColor("#FFFFFF", null);
+        RoleIcon2.style.fontSize = 40f;
         Identity2.style.flexDirection = ParseFlexDirection("column");
         Identity2.style.flexGrow = ParseStyleFloat("1");
         Identity2.style.alignSelf = ParseAlign("stretch");
@@ -1093,6 +1099,7 @@ public sealed class PartyStatusStripView
         BuffIcon12.SetEnabled(true);
         ApplyFontFamily(BuffIcon12, "lucide", 24f);
         BuffIcon12.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon12.style.fontSize = 24f;
         StatusBuff22.style.flexDirection = ParseFlexDirection("column");
         StatusBuff22.style.width = ParseStyleLength("56px");
         StatusBuff22.style.height = ParseStyleLength("56px");
@@ -1137,6 +1144,7 @@ public sealed class PartyStatusStripView
         BuffIcon22.SetEnabled(true);
         ApplyFontFamily(BuffIcon22, "lucide", 24f);
         BuffIcon22.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon22.style.fontSize = 24f;
         StatusBuff32.style.flexDirection = ParseFlexDirection("column");
         StatusBuff32.style.width = ParseStyleLength("56px");
         StatusBuff32.style.height = ParseStyleLength("56px");
@@ -1181,6 +1189,7 @@ public sealed class PartyStatusStripView
         BuffIcon32.SetEnabled(true);
         ApplyFontFamily(BuffIcon32, "lucide", 24f);
         BuffIcon32.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon32.style.fontSize = 24f;
         StatusBuff42.style.flexDirection = ParseFlexDirection("column");
         StatusBuff42.style.width = ParseStyleLength("56px");
         StatusBuff42.style.height = ParseStyleLength("56px");
@@ -1225,6 +1234,7 @@ public sealed class PartyStatusStripView
         BuffIcon42.SetEnabled(true);
         ApplyFontFamily(BuffIcon42, "lucide", 24f);
         BuffIcon42.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon42.style.fontSize = 24f;
         MemberC.style.flexDirection = ParseFlexDirection("column");
         MemberC.style.width = ParseStyleLength("400px");
         MemberC.style.alignSelf = ParseAlign("stretch");
@@ -1314,6 +1324,7 @@ public sealed class PartyStatusStripView
         RoleIcon3.SetEnabled(true);
         ApplyFontFamily(RoleIcon3, "lucide", 40f);
         RoleIcon3.style.color = ParseStyleColor("#FFFFFF", null);
+        RoleIcon3.style.fontSize = 40f;
         Identity3.style.flexDirection = ParseFlexDirection("column");
         Identity3.style.flexGrow = ParseStyleFloat("1");
         Identity3.style.alignSelf = ParseAlign("stretch");
@@ -1560,6 +1571,7 @@ public sealed class PartyStatusStripView
         BuffIcon13.SetEnabled(true);
         ApplyFontFamily(BuffIcon13, "lucide", 24f);
         BuffIcon13.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon13.style.fontSize = 24f;
         StatusBuff23.style.flexDirection = ParseFlexDirection("column");
         StatusBuff23.style.width = ParseStyleLength("56px");
         StatusBuff23.style.height = ParseStyleLength("56px");
@@ -1604,6 +1616,7 @@ public sealed class PartyStatusStripView
         BuffIcon23.SetEnabled(true);
         ApplyFontFamily(BuffIcon23, "lucide", 24f);
         BuffIcon23.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon23.style.fontSize = 24f;
         StatusBuff33.style.flexDirection = ParseFlexDirection("column");
         StatusBuff33.style.width = ParseStyleLength("56px");
         StatusBuff33.style.height = ParseStyleLength("56px");
@@ -1648,6 +1661,7 @@ public sealed class PartyStatusStripView
         BuffIcon33.SetEnabled(true);
         ApplyFontFamily(BuffIcon33, "lucide", 24f);
         BuffIcon33.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon33.style.fontSize = 24f;
         StatusBuff43.style.flexDirection = ParseFlexDirection("column");
         StatusBuff43.style.width = ParseStyleLength("56px");
         StatusBuff43.style.height = ParseStyleLength("56px");
@@ -1692,6 +1706,7 @@ public sealed class PartyStatusStripView
         BuffIcon43.SetEnabled(true);
         ApplyFontFamily(BuffIcon43, "lucide", 24f);
         BuffIcon43.style.color = ParseStyleColor("#FFFFFF", null);
+        BuffIcon43.style.fontSize = 24f;
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

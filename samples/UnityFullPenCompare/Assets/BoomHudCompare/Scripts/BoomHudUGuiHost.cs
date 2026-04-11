@@ -135,7 +135,7 @@ namespace BoomHud.Compare
             rectTransform.offsetMax = new Vector2(-right, -top);
         }
 
-        protected static void FitPreviewToSurface(RectTransform preview, RectTransform surface, float padding = 8f)
+        protected static void FitPreviewToSurface(RectTransform preview, RectTransform surface, float padding = 8f, bool allowEnlarge = false)
         {
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(preview);
@@ -147,7 +147,11 @@ namespace BoomHud.Compare
 
             var scaleX = preferredWidth > 0f ? safeWidth / preferredWidth : 1f;
             var scaleY = preferredHeight > 0f ? safeHeight / preferredHeight : 1f;
-            var scale = Mathf.Min(1f, scaleX, scaleY);
+            var scale = Mathf.Min(scaleX, scaleY);
+            if (!allowEnlarge)
+            {
+                scale = Mathf.Min(1f, scale);
+            }
 
             preview.anchorMin = new Vector2(0.5f, 0.5f);
             preview.anchorMax = new Vector2(0.5f, 0.5f);

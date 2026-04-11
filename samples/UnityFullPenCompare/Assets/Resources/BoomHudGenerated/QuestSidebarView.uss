@@ -877,6 +877,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     color: #FFFFFF;
+    font-size: 20px;
 }
 
 .boomhud-objective-text1 {
@@ -991,6 +992,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     color: #FFFFFF;
+    font-size: 20px;
 }
 
 .boomhud-objective-text2 {
@@ -1105,6 +1107,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     color: #FFFFFF;
+    font-size: 20px;
 }
 
 .boomhud-objective-text3 {

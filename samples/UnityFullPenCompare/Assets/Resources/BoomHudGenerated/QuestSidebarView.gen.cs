@@ -1055,6 +1055,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon1.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon1, "lucide", 20f);
         ObjectiveIcon1.style.color = ParseStyleColor("#FFFFFF", null);
+        ObjectiveIcon1.style.fontSize = 20f;
         ObjectiveText1.style.flexDirection = ParseFlexDirection("column");
         ObjectiveText1.style.flexGrow = ParseStyleFloat("1");
         ObjectiveText1.style.alignSelf = ParseAlign("stretch");
@@ -1171,6 +1172,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon2.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon2, "lucide", 20f);
         ObjectiveIcon2.style.color = ParseStyleColor("#FFFFFF", null);
+        ObjectiveIcon2.style.fontSize = 20f;
         ObjectiveText2.style.flexDirection = ParseFlexDirection("column");
         ObjectiveText2.style.flexGrow = ParseStyleFloat("1");
         ObjectiveText2.style.alignSelf = ParseAlign("stretch");
@@ -1287,6 +1289,7 @@ public sealed class QuestSidebarView
         ObjectiveIcon3.SetEnabled(true);
         ApplyFontFamily(ObjectiveIcon3, "lucide", 20f);
         ObjectiveIcon3.style.color = ParseStyleColor("#FFFFFF", null);
+        ObjectiveIcon3.style.fontSize = 20f;
         ObjectiveText3.style.flexDirection = ParseFlexDirection("column");
         ObjectiveText3.style.flexGrow = ParseStyleFloat("1");
         ObjectiveText3.style.alignSelf = ParseAlign("stretch");

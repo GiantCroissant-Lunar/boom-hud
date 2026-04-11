@@ -331,6 +331,173 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_TextStackChildrenWithContentHug_PropagatesVerticalHugToContainer()
+    {
+        var doc = new HudDocument
+        {
+            Name = "ObjectiveHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "iconShell",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(44),
+                            Height = Dimension.Pixels(44)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "icon",
+                                Type = ComponentType.Icon,
+                                Layout = new LayoutSpec
+                                {
+                                    Width = Dimension.Pixels(20),
+                                    Height = Dimension.Pixels(20)
+                                }
+                            }
+                        ]
+                    },
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "title",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["text"] = "Recover the key"
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "hint",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["text"] = "Search the chapel."
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Name = "stacked-line-hug",
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        DocumentName = "ObjectiveHud",
+                        SemanticClass = "stacked-text-line"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            PreferContentHeight = true
+                        }
+                    }
+                }
+            ]
+        };
+
+        var result = _generator.Generate(doc, _options with { RuleSet = ruleSet });
+        var viewFile = result.Files.First(f => f.Path == "ObjectiveHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(Body), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(Body), horizontal: false, vertical: true);");
+    }
+
+    [Fact]
+    public void Generate_LayoutAlignmentPreset_EmitsUguiLayoutGroupAlignment()
+    {
+        var doc = new HudDocument
+        {
+            Name = "AlignedHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = Spacing.Uniform(6),
+                    Padding = Spacing.Uniform(4)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "icon",
+                        Type = ComponentType.Icon,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(20),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Name = "center-layout",
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        DocumentName = "AlignedHud",
+                        NodeId = "root"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            FlexAlignmentPreset = "center"
+                        }
+                    }
+                }
+            ]
+        };
+
+        var result = _generator.Generate(doc, _options with { RuleSet = ruleSet });
+        var viewFile = result.Files.First(f => f.Path == "AlignedHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4, \"center\");");
+        viewFile.Content.Should().Contain("ApplyLayoutAlignment(group,alignmentPreset);");
+    }
+
+    [Fact]
     public void Generate_EmitsPrefabBindingApi_ForExistingHierarchy()
     {
         var doc = new HudDocument
