@@ -213,9 +213,9 @@ function New-PlannedRuleArtifact(
     }
 }
 
-function Invoke-GenerateReactFixtureSet([string]$RulesPath)
+function Invoke-GenerateRemotionFixtureSet([string]$RulesPath)
 {
-    $reactOutputPath = Join-Path $RepoRoot "remotion/src/generated"
+    $remotionOutputPath = Join-Path $RepoRoot "remotion/src/generated"
     $fixtures = @(
         (Resolve-AbsolutePath "samples/pencil/party-status-strip.pen"),
         (Resolve-AbsolutePath "samples/pencil/quest-sidebar.pen"),
@@ -229,8 +229,8 @@ function Invoke-GenerateReactFixtureSet([string]$RulesPath)
             "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
             "--",
             "generate", $fixture,
-            "--target", "react",
-            "--output", $reactOutputPath
+            "--target", "remotion",
+            "--output", $remotionOutputPath
         )
 
         if (-not [string]::IsNullOrWhiteSpace($RulesPath))
@@ -408,8 +408,8 @@ try
         New-Item -ItemType Directory -Force -Path $runRoot | Out-Null
         $plannedRuleArtifact = New-PlannedRuleArtifact -RulePath $candidate.RulePath -RunRoot $runRoot -Label $candidate.Label
 
-        Write-Section "Generating React fixtures for $($candidate.Label)"
-        Invoke-GenerateReactFixtureSet -RulesPath $plannedRuleArtifact.executableRulesPath
+        Write-Section "Generating Remotion fixtures for $($candidate.Label)"
+        Invoke-GenerateRemotionFixtureSet -RulesPath $plannedRuleArtifact.executableRulesPath
 
         Write-Section "Rendering Remotion fixtures for $($candidate.Label)"
         $runManifestPath = New-RunRemotionManifest -BaseManifestPath $RemotionManifestPath -RunRoot $runRoot -Label $candidate.Label
@@ -441,8 +441,8 @@ finally
 {
     if (-not $NoRestoreDefault)
     {
-        Write-Section "Restoring default no-rules React fixture generation"
-        Invoke-GenerateReactFixtureSet -RulesPath ""
+        Write-Section "Restoring default no-rules Remotion fixture generation"
+        Invoke-GenerateRemotionFixtureSet -RulesPath ""
     }
 }
 

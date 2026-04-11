@@ -292,9 +292,37 @@ public sealed class ReactGeneratorTests
         var result = _generator.Generate(document, _options);
         var tsx = result.Files.First(file => file.Path == "IconHudView.tsx").Content;
 
-        tsx.Should().Contain("const resolveIconText = (value: unknown, familyName?: string) => {");
-        tsx.Should().Contain("case 'shield': return '⛨'");
-        tsx.Should().Contain("{resolveIconText(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('shield'), 'lucide')}");
+        tsx.Should().Contain("const renderLucideIcon = (token: string): React.JSX.Element | string => {");
+        tsx.Should().Contain("case 'shield': return <svg {...common}><path d='M12 3l7 3v6c0 5-3.5 8.8-7 9-3.5-.2-7-4-7-9V6l7-3Z' /></svg>;");
+        tsx.Should().Contain("{renderIconContent(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('shield'), 'lucide')}");
+    }
+
+    [Fact]
+    public void Generate_WithRemotionBackend_AliasesPressStartFontFamily()
+    {
+        var document = new HudDocument
+        {
+            Name = "FontHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Style = new StyleSpec
+                {
+                    FontFamily = "Press Start 2P"
+                },
+                Properties = new Dictionary<string, BindableValue<object?>>()
+                {
+                    ["text"] = "Quest"
+                }
+            }
+        };
+
+        var result = new ReactGenerator("remotion").Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "FontHudView.tsx").Content;
+
+        tsx.Should().Contain("fontFamily: 'BoomHudPressStart2P'");
+        tsx.Should().NotContain("fontFamily: 'Press Start 2P'");
     }
 
     [Fact]

@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "remotion-heading-label-hug-content",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "backend": "remotion",
+        "documentName": "QuestSidebar",
+        "semanticClass": "heading-label"
+      },
+      "action": {
+        "layout": {
+          "preferContentHeight": true
+        }
+      }
+    },
+    {
+      "name": "remotion-stacked-text-line-hug-content",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "backend": "remotion",
+        "documentName": "QuestSidebar",
+        "semanticClass": "stacked-text-line"
+      },
+      "action": {
+        "layout": {
+          "preferContentHeight": true
+        }
+      }
+    },
+    {
+      "name": "remotion-stacked-text-group-gap-tight",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "backend": "remotion",
+        "documentName": "QuestSidebar",
+        "semanticClass": "stacked-text-group"
+      },
+      "action": {
+        "layout": {
+          "gapDelta": -3.0
+        }
+      }
+    }
+  ]
+}

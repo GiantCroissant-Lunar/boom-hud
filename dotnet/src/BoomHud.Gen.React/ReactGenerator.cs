@@ -42,10 +42,10 @@ public sealed class ReactGenerator : IBackendGenerator
                     Root = component.Root,
                     Styles = document.Styles,
                     Components = document.Components
-                }, options, diagnostics, files, resolver);
+                }, options, diagnostics, files, resolver, _ruleBackend);
             }
 
-            EmitArtifacts(document, options, diagnostics, files, resolver);
+            EmitArtifacts(document, options, diagnostics, files, resolver, _ruleBackend);
         }
         catch (Exception ex)
         {
@@ -60,13 +60,14 @@ public sealed class ReactGenerator : IBackendGenerator
         GenerationOptions options,
         List<Diagnostic> diagnostics,
         List<GeneratedFile> files,
-        RuleResolver resolver)
+        RuleResolver resolver,
+        string ruleBackend)
     {
         var props = CollectProps(document.Root).OrderBy(static x => x, StringComparer.Ordinal).ToList();
         files.Add(new GeneratedFile
         {
             Path = $"{document.Name}View.tsx",
-            Content = GenerateTsx(document, props, diagnostics, resolver),
+            Content = GenerateTsx(document, props, diagnostics, resolver, ruleBackend),
             Type = GeneratedFileType.SourceCode
         });
         if (options.EmitViewModelInterfaces)
@@ -79,7 +80,8 @@ public sealed class ReactGenerator : IBackendGenerator
         HudDocument document,
         IReadOnlyList<string> props,
         List<Diagnostic> diagnostics,
-        RuleResolver resolver)
+        RuleResolver resolver,
+        string ruleBackend)
     {
         var imports = CollectRefs(document.Root, document.Components, diagnostics, document.Name);
         var builder = new StringBuilder();
@@ -99,21 +101,35 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine("const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;");
         builder.AppendLine("const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);");
         builder.AppendLine("const resolveMotionId = (scope: string | undefined, id?: string) => !id ? undefined : scope ? `${scope}/${id}` : id;");
-        builder.AppendLine("const resolveIconText = (value: unknown, familyName?: string) => {");
+        builder.AppendLine("const renderLucideIcon = (token: string): React.JSX.Element | string => {");
+        builder.AppendLine("  const common = {");
+        builder.AppendLine("    width: '100%',");
+        builder.AppendLine("    height: '100%',");
+        builder.AppendLine("    viewBox: '0 0 24 24',");
+        builder.AppendLine("    fill: 'none',");
+        builder.AppendLine("    stroke: 'currentColor',");
+        builder.AppendLine("    strokeWidth: 2,");
+        builder.AppendLine("    strokeLinecap: 'round' as const,");
+        builder.AppendLine("    strokeLinejoin: 'round' as const,");
+        builder.AppendLine("    'aria-hidden': true");
+        builder.AppendLine("  };");
+        builder.AppendLine("  switch (token) {");
+        builder.AppendLine("    case 'cross': return <svg {...common}><path d='M12 5v14' /><path d='M5 12h14' /></svg>;");
+        builder.AppendLine("    case 'shield': return <svg {...common}><path d='M12 3l7 3v6c0 5-3.5 8.8-7 9-3.5-.2-7-4-7-9V6l7-3Z' /></svg>;");
+        builder.AppendLine("    case 'flame': return <svg {...common}><path d='M12 3s4 4 4 8a4 4 0 1 1-8 0c0-2.6 1.4-4.7 4-8Z' /><path d='M12 13c1.2 1 2 2.1 2 3.3A2 2 0 1 1 10 16c0-1.2.8-2.3 2-3Z' /></svg>;");
+        builder.AppendLine("    case 'moon': return <svg {...common}><path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z' /></svg>;");
+        builder.AppendLine("    case 'sparkles':");
+        builder.AppendLine("    case 'wand-sparkles': return <svg {...common}><path d='M12 3v4' /><path d='M12 17v4' /><path d='M3 12h4' /><path d='M17 12h4' /><path d='m6 6 2.5 2.5' /><path d='M15.5 15.5 18 18' /><path d='m18 6-2.5 2.5' /><path d='M8.5 15.5 6 18' /></svg>;");
+        builder.AppendLine("    case 'flask-conical': return <svg {...common}><path d='M10 3v5l-5.5 9.5A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-2.5L14 8V3' /><path d='M8.5 13h7' /></svg>;");
+        builder.AppendLine("    case 'sword': return <svg {...common}><path d='m14.5 4.5 5 5' /><path d='M13 6 6 13' /><path d='m5 14 5 5' /><path d='M4 20h6' /><path d='M17 3h4v4' /></svg>;");
+        builder.AppendLine("    case 'swords': return <svg {...common}><path d='m14.5 4.5 5 5' /><path d='M13 6 6 13' /><path d='m5 14 5 5' /><path d='M4 20h6' /><path d='m9.5 4.5-5 5' /><path d='M11 6l7 7' /><path d='m19 14-5 5' /><path d='M14 20h6' /></svg>;");
+        builder.AppendLine("    default: return token;");
+        builder.AppendLine("  }");
+        builder.AppendLine("};");
+        builder.AppendLine("const renderIconContent = (value: unknown, familyName?: string): React.ReactNode => {");
         builder.AppendLine("  const text = asText(value, '');");
         builder.AppendLine("  if (!text || familyName?.trim().toLowerCase() !== 'lucide') return text;");
-        builder.AppendLine("  switch (text) {");
-        builder.AppendLine("    case 'sword': return '†';");
-        builder.AppendLine("    case 'swords': return '⚔';");
-        builder.AppendLine("    case 'sparkles': return '✦';");
-        builder.AppendLine("    case 'wand-sparkles': return '✦';");
-        builder.AppendLine("    case 'shield': return '⛨';");
-        builder.AppendLine("    case 'flask-conical': return '⚗';");
-        builder.AppendLine("    case 'flame': return '✹';");
-        builder.AppendLine("    case 'moon': return '☾';");
-        builder.AppendLine("    case 'cross': return '✚';");
-        builder.AppendLine("    default: return text;");
-        builder.AppendLine("  }");
+        builder.AppendLine("  return renderLucideIcon(text);");
         builder.AppendLine("};");
         builder.AppendLine("const formatValue = (value: unknown, format?: string, fallback = '') => !format ? asText(value, fallback) : format.replace(/\\{0(?:\\:[^}]*)?\\}/g, asText(value, fallback));");
         builder.AppendLine("const clampPercent = (value: unknown) => `${Math.max(0, Math.min(100, typeof value === 'number' ? value : 0))}%`;");
@@ -159,7 +175,7 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine();
         builder.Append("export function ").Append(document.Name).Append("View(props: ").Append(document.Name).AppendLine("ViewModel): React.JSX.Element {");
         builder.AppendLine("  return (");
-        builder.Append(RenderNode(document.Name, document.Root, 2, null, document.Components, diagnostics, resolver));
+        builder.Append(RenderNode(document.Name, document.Root, 2, null, null, null, 0, document.Components, diagnostics, resolver, ruleBackend));
         builder.AppendLine("  );");
         builder.AppendLine("}");
         builder.Append("export default ").Append(document.Name).AppendLine("View;");
@@ -186,21 +202,25 @@ public sealed class ReactGenerator : IBackendGenerator
         ComponentNode node,
         int indentLevel,
         LayoutType? parentLayout,
+        ComponentNode? parentNode,
+        ComponentNode? grandparentNode,
+        int siblingIndex,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
         List<Diagnostic> diagnostics,
-        RuleResolver resolver)
+        RuleResolver resolver,
+        string ruleBackend)
     {
-        var policy = resolver.Resolve(documentName, node);
+        var policy = resolver.Resolve(documentName, node, new RuleSelectionContext(parentNode, grandparentNode, siblingIndex));
         var indent = new string(' ', indentLevel * 2);
         if (node.Visible.IsBound)
         {
             return indent + $"asBool(props.{PropName(node.Visible.BindingPath!)}) ? (\n" +
-                RenderCore(documentName, node, policy, indentLevel + 1, parentLayout, components, diagnostics, resolver) +
+                RenderCore(documentName, node, policy, indentLevel + 1, parentLayout, parentNode, components, diagnostics, resolver, ruleBackend) +
                 indent + ") : null\n";
         }
 
         if (node.Visible.Value == false) return indent + "null\n";
-        return RenderCore(documentName, node, policy, indentLevel, parentLayout, components, diagnostics, resolver);
+        return RenderCore(documentName, node, policy, indentLevel, parentLayout, parentNode, components, diagnostics, resolver, ruleBackend);
     }
 
     private static string RenderCore(
@@ -209,12 +229,14 @@ public sealed class ReactGenerator : IBackendGenerator
         ResolvedGeneratorPolicy policy,
         int indentLevel,
         LayoutType? parentLayout,
+        ComponentNode? parentNode,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
         List<Diagnostic> diagnostics,
-        RuleResolver resolver)
+        RuleResolver resolver,
+        string ruleBackend)
     {
         var indent = new string(' ', indentLevel * 2);
-        var style = BuildStyle(node, parentLayout, policy);
+        var style = BuildStyle(node, parentLayout, policy, ruleBackend);
         var motionIdExpression = string.IsNullOrWhiteSpace(node.Id)
             ? null
             : $"resolveMotionId(props.motionScope, {Ts(node.Id)})";
@@ -290,19 +312,20 @@ public sealed class ReactGenerator : IBackendGenerator
                 : $"getMotionText(props.motionTargets, {motionIdExpression}) ?? ({text})";
             if (node.Type == ComponentType.Icon)
             {
-                finalText = $"resolveIconText({finalText}, {Ts(node.Style?.FontFamily ?? string.Empty)})";
+                finalText = $"renderIconContent({finalText}, {Ts(ResolveLogicalFontFamily(node, policy) ?? string.Empty)})";
             }
             builder.Append(indent).Append("  {").Append(finalText).AppendLine("}");
         }
-        foreach (var child in node.Children)
+        for (var childIndex = 0; childIndex < node.Children.Count; childIndex++)
         {
-            builder.Append(RenderNode(documentName, child, indentLevel + 1, node.Layout?.Type, components, diagnostics, resolver));
+            var child = node.Children[childIndex];
+            builder.Append(RenderNode(documentName, child, indentLevel + 1, node.Layout?.Type, node, parentNode, childIndex, components, diagnostics, resolver, ruleBackend));
         }
         builder.Append(indent).Append("</").Append(tag).AppendLine(">");
         return builder.ToString();
     }
 
-    private static string BuildStyle(ComponentNode node, LayoutType? parentLayout, ResolvedGeneratorPolicy policy)
+    private static string BuildStyle(ComponentNode node, LayoutType? parentLayout, ResolvedGeneratorPolicy policy, string ruleBackend)
     {
         var style = new List<string>();
         var layout = node.Layout;
@@ -350,10 +373,10 @@ public sealed class ReactGenerator : IBackendGenerator
         }
 
         var fontSize = node.Type == ComponentType.Icon
-            ? IconPolicyService.ResolveFontSize(policy) ?? TextPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy)
+            ? IconPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy) ?? TextPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy)
             : TextPolicyService.ResolveFontSize(node, widthDimension, heightDimension, policy);
         if (fontSize is > 0d) style.Add($"fontSize: {Ts($"{fontSize.Value.ToString("0.##", CultureInfo.InvariantCulture)}px")}");
-        if (TextPolicyService.ResolveFontFamily(node, policy) is { } fontFamily && !string.IsNullOrWhiteSpace(fontFamily))
+        if (ResolveRuntimeFontFamily(node, policy, ruleBackend) is { } fontFamily && !string.IsNullOrWhiteSpace(fontFamily))
         {
             style.Add($"fontFamily: {Ts(fontFamily)}");
         }
@@ -756,6 +779,25 @@ public sealed class ReactGenerator : IBackendGenerator
 
     private static BindingSpec? FindBinding(ComponentNode node, params string[] names)
         => node.Bindings.FirstOrDefault(binding => names.Any(name => string.Equals(binding.Property, name, StringComparison.OrdinalIgnoreCase)));
+
+    private static string? ResolveLogicalFontFamily(ComponentNode node, ResolvedGeneratorPolicy policy)
+        => TextPolicyService.ResolveFontFamily(node, policy);
+
+    private static string? ResolveRuntimeFontFamily(ComponentNode node, ResolvedGeneratorPolicy policy, string ruleBackend)
+    {
+        var fontFamily = ResolveLogicalFontFamily(node, policy);
+        if (string.IsNullOrWhiteSpace(fontFamily))
+        {
+            return fontFamily;
+        }
+
+        return IsRemotionBackend(ruleBackend) && string.Equals(fontFamily, "Press Start 2P", StringComparison.Ordinal)
+            ? "BoomHudPressStart2P"
+            : fontFamily;
+    }
+
+    private static bool IsRemotionBackend(string ruleBackend)
+        => string.Equals(ruleBackend, "remotion", StringComparison.OrdinalIgnoreCase);
 
     private static bool TryGetProperty(ComponentNode node, string name, out BindableValue<object?> bindable)
     {
