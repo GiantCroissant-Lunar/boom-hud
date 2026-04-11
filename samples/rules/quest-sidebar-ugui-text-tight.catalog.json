@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "quest-sidebar-wrap-copy",
+      "phase": "text",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.text-or-icon-metrics-mismatch",
+          "value": "present"
+        }
+      ],
+      "effects": [
+        {
+          "key": "text.wrap.adjusted",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "sourceNodeId": "QSB56",
+        "componentType": "label"
+      },
+      "template": {
+        "kind": "wrapPolicy",
+        "boolValue": true
+      }
+    },
+    {
+      "name": "quest-sidebar-line-height",
+      "phase": "text",
+      "cost": 1.2,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "sourceNodeId": "QSB56",
+        "componentType": "label"
+      },
+      "action": {
+        "text": {
+          "lineHeight": 1.35
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-label-font-tight",
+      "phase": "text",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.text-or-icon-metrics-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "componentType": "label"
+      },
+      "template": {
+        "kind": "fontSizeDelta",
+        "numberValue": -1.0
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-label-line-height-tight",
+      "phase": "text",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "componentType": "label"
+      },
+      "action": {
+        "text": {
+          "lineHeight": 1.0
+        }
+      }
+    }
+  ]
+}

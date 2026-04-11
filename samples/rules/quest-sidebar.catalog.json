@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "quest-sidebar-wrap-copy",
+      "phase": "text",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.text-or-icon-metrics-mismatch",
+          "value": "present"
+        }
+      ],
+      "effects": [
+        {
+          "key": "text.wrap.adjusted",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "sourceNodeId": "QSB56",
+        "componentType": "label"
+      },
+      "template": {
+        "kind": "wrapPolicy",
+        "boolValue": true
+      }
+    },
+    {
+      "name": "quest-sidebar-line-height",
+      "phase": "text",
+      "cost": 1.2,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "unity",
+        "sourceNodeId": "QSB56",
+        "componentType": "label"
+      },
+      "action": {
+        "text": {
+          "lineHeight": 1.35
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-edge-inset",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "edgeInsetPolicy",
+        "parameters": {
+          "edgeInsetPolicy": "match-parent"
+        }
+      }
+    }
+  ]
+}

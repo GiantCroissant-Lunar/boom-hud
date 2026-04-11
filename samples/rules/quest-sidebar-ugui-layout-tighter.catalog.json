@@ -1,0 +1,222 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "quest-sidebar-ugui-label-font-tighter",
+      "phase": "text",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.text-or-icon-metrics-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "componentType": "label"
+      },
+      "action": {
+        "text": {
+          "fontSizeDelta": -1.0,
+          "lineHeight": 0.95
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-card-tighter",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB43",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -52.0,
+          "gapDelta": -3.0,
+          "paddingDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-row-tighter-1",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB45",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -8.0,
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-row-tighter-2",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB51",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -8.0,
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-row-tighter-3",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB57",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -8.0,
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-text-tighter-1",
+      "phase": "layout",
+      "cost": 1.2,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB48",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-text-tighter-2",
+      "phase": "layout",
+      "cost": 1.2,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB54",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-objective-text-tighter-3",
+      "phase": "layout",
+      "cost": 1.2,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB60",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "gapDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-resource-card-tighter",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB63",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -28.0,
+          "gapDelta": -3.0,
+          "paddingDelta": -3.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-resource-bars-tighter-1",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB65",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -2.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-resource-bars-tighter-2",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB68",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -2.0
+        }
+      }
+    },
+    {
+      "name": "quest-sidebar-ugui-resource-bars-tighter-3",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "QuestSidebar",
+        "backend": "ugui",
+        "sourceNodeId": "QSB71",
+        "componentType": "container"
+      },
+      "action": {
+        "layout": {
+          "preferredHeightDelta": -2.0
+        }
+      }
+    }
+  ]
+}

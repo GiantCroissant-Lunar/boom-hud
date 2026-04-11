@@ -1,0 +1,128 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "party-hud-tighten-layout",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "effects": [
+        {
+          "key": "layout.adjusted",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyHud",
+        "backend": "unity",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "paddingDelta",
+        "numberValue": -2
+      }
+    },
+    {
+      "name": "party-hud-name-wrap",
+      "phase": "text",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "layout.adjusted",
+          "value": "true"
+        }
+      ],
+      "effects": [
+        {
+          "key": "text.wrap.adjusted",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyHud",
+        "backend": "unity",
+        "nodeId": "char1/name",
+        "componentType": "label"
+      },
+      "template": {
+        "kind": "wrapPolicy",
+        "boolValue": true
+      }
+    },
+    {
+      "name": "party-hud-quantize-intro",
+      "phase": "motion",
+      "cost": 1.2,
+      "preconditions": [
+        {
+          "key": "motion.enabled",
+          "value": "true"
+        }
+      ],
+      "effects": [
+        {
+          "key": "motion.sequence.normalized",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyHud",
+        "backend": "unity",
+        "clipId": "intro"
+      },
+      "template": {
+        "kind": "durationQuantization",
+        "numberValue": 8
+      }
+    },
+    {
+      "name": "party-hud-hold-sequence",
+      "phase": "motion",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "motion.sequence.normalized",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyHud",
+        "backend": "unity",
+        "sequenceId": "introSequence"
+      },
+      "template": {
+        "kind": "fillModePolicy",
+        "parameters": {
+          "fillMode": "HoldEnd"
+        }
+      }
+    },
+    {
+      "name": "party-hud-step-name-text",
+      "phase": "motion",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "motion.enabled",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyHud",
+        "backend": "unity",
+        "trackId": "nameTrack",
+        "targetId": "char1/name",
+        "motionProperty": "text"
+      },
+      "template": {
+        "kind": "textStepPolicy",
+        "boolValue": true
+      }
+    }
+  ]
+}

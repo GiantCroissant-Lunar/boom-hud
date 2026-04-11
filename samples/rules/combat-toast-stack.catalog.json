@@ -1,0 +1,58 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "toast-stack-absolute-items",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "CombatToastStack",
+        "backend": "unity",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "absolutePositionPolicy",
+        "boolValue": true
+      }
+    },
+    {
+      "name": "toast-stack-translate-y",
+      "phase": "layout",
+      "cost": 1.1,
+      "selector": {
+        "documentName": "CombatToastStack",
+        "backend": "unity",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "translateAdjustment",
+        "numberValue": -4,
+        "parameters": {
+          "axis": "y"
+        }
+      }
+    },
+    {
+      "name": "toast-stack-ugui-rect-mode",
+      "phase": "layout",
+      "cost": 1.0,
+      "selector": {
+        "documentName": "CombatToastStack",
+        "backend": "ugui",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "rectTransformMode",
+        "parameters": {
+          "rectTransformMode": "absolute-overlay"
+        }
+      }
+    }
+  ]
+}

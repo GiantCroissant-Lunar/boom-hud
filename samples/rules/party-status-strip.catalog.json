@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "name": "party-strip-tighten-gap",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "effects": [
+        {
+          "key": "layout.adjusted",
+          "value": "true"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyStatusStrip",
+        "backend": "unity",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "gapDelta",
+        "numberValue": -2
+      }
+    },
+    {
+      "name": "party-strip-icon-center",
+      "phase": "icon",
+      "cost": 1.0,
+      "selector": {
+        "documentName": "PartyStatusStrip",
+        "backend": "unity",
+        "componentType": "icon"
+      },
+      "template": {
+        "kind": "iconCenteringPolicy",
+        "boolValue": true
+      }
+    },
+    {
+      "name": "party-strip-ugui-top-left",
+      "phase": "layout",
+      "cost": 1.0,
+      "preconditions": [
+        {
+          "key": "finding.edge-alignment-mismatch",
+          "value": "present"
+        }
+      ],
+      "selector": {
+        "documentName": "PartyStatusStrip",
+        "backend": "ugui",
+        "componentType": "container"
+      },
+      "template": {
+        "kind": "anchorPreset",
+        "parameters": {
+          "anchorPreset": "top-left"
+        }
+      }
+    }
+  ]
+}
