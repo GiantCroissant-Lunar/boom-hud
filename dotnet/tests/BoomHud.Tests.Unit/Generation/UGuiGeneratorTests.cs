@@ -673,6 +673,114 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_OverflowingCardShell_PreservesIntrinsicCardHeightInHorizontalShell()
+    {
+        var doc = new HudDocument
+        {
+            Name = "PartyStripHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Height = Dimension.Pixels(216)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "memberA",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(400),
+                            Gap = Spacing.Uniform(12),
+                            Padding = Spacing.Uniform(12)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "heroRow",
+                                Type = ComponentType.Container,
+                                Layout = new LayoutSpec
+                                {
+                                    Type = LayoutType.Horizontal,
+                                    Height = Dimension.Pixels(76)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "hpBar",
+                                Type = ComponentType.ProgressBar,
+                                Layout = new LayoutSpec
+                                {
+                                    Height = Dimension.Pixels(22)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "mpBar",
+                                Type = ComponentType.ProgressBar,
+                                Layout = new LayoutSpec
+                                {
+                                    Height = Dimension.Pixels(22)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "statusRow",
+                                Type = ComponentType.Container,
+                                Layout = new LayoutSpec
+                                {
+                                    Type = LayoutType.Horizontal,
+                                    Height = Dimension.Pixels(56)
+                                },
+                                Children =
+                                [
+                                    new ComponentNode
+                                    {
+                                        Id = "statusBuff1",
+                                        Type = ComponentType.Container,
+                                        Layout = new LayoutSpec
+                                        {
+                                            Width = Dimension.Pixels(56),
+                                            Height = Dimension.Pixels(56)
+                                        }
+                                    },
+                                    new ComponentNode
+                                    {
+                                        Id = "statusBuff2",
+                                        Type = ComponentType.Container,
+                                        Layout = new LayoutSpec
+                                        {
+                                            Width = Dimension.Pixels(56),
+                                            Height = Dimension.Pixels(56)
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "PartyStripHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ConfigureRect(Root, width: null, height: 236f, left: null, top: null, absolute: false);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: null, preferredHeight: 236f, flexibleWidth: null, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 236f, flexibleWidth: null, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12, null, childControlWidth: true, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(RectOf(StatusRow), 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
+    }
+
+    [Fact]
     public void Generate_LayoutAlignmentPreset_EmitsUguiLayoutGroupAlignment()
     {
         var doc = new HudDocument
@@ -731,7 +839,7 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options with { RuleSet = ruleSet });
         var viewFile = result.Files.First(f => f.Path == "AlignedHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4, \"center\");");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4, \"center\", childControlWidth: false, childControlHeight: false);");
         viewFile.Content.Should().Contain("ApplyLayoutAlignment(group,alignmentPreset);");
     }
 
@@ -1222,6 +1330,7 @@ public sealed class UGuiGeneratorTests
         viewFile.Content.Should().Contain("ApplyStyle(Body, fg: null, bg: null, fontFamily: null, fontSize: 18");
         viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.6f, wrapText: true);");
         viewFile.Content.Should().Contain("ApplyIconMetrics(ClassIcon, boxWidth: 24f, boxHeight: 24f, baselineOffset: 1.5f, opticalCentering: false, sizeMode: \"match-height\", explicitFontSize: 20f);");
+        viewFile.Content.Should().Contain("rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);");
         viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 9f, 7, 7, 7, 7);");
         viewFile.Content.Should().Contain("ConfigureRect(RectOf(Badge), width: null, height: null, left: 3f, top: 4f, absolute: true);");
     }
@@ -1375,7 +1484,7 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, options);
         var viewFile = result.Files.First(f => f.Path == "DeltaHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4, null, childControlWidth: false, childControlHeight: false);");
         viewFile.Content.Should().Contain("ConfigureRect(RectOf(Badge), width: 40f, height: 20f, left: 8f, top: 8f, absolute: true);");
         viewFile.Content.Should().Contain("ApplyEdgeInsetPolicy(RectOf(Badge), \"match-parent\");");
         viewFile.Content.Should().Contain("private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy)");

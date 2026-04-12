@@ -249,6 +249,8 @@ namespace BoomHud.Compare.Editor
         private static void CaptureTargetObject(FidelityUnityCapture capture, string outputPath)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? throw new InvalidOperationException($"Could not resolve output directory for '{outputPath}'."));
+            var requestedWidth = ResolveCaptureWidth(capture);
+            var requestedHeight = ResolveCaptureHeight(capture);
 
             Texture2D? fullTexture = null;
             Texture2D? croppedTexture = null;
@@ -256,9 +258,10 @@ namespace BoomHud.Compare.Editor
             {
                 var target = WaitForTargetRectTransform(capture.targetObjectName);
                 WaitForRectTransformToSettle(target);
-                fullTexture = CaptureCameraTexture(ResolveCaptureWidth(capture), ResolveCaptureHeight(capture));
+                fullTexture = CaptureCameraTexture(requestedWidth, requestedHeight);
                 target = WaitForTargetRectTransform(capture.targetObjectName);
                 croppedTexture = CropToRectTransform(fullTexture, target);
+                croppedTexture = NormalizeCapturedTextureSize(croppedTexture, requestedWidth, requestedHeight);
                 FlipTextureVertically(croppedTexture);
                 File.WriteAllBytes(outputPath, croppedTexture.EncodeToPNG());
                 WriteActualLayoutSnapshot(outputPath, CreateUGuiLayoutSnapshot(capture, target));
@@ -281,6 +284,8 @@ namespace BoomHud.Compare.Editor
         {
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? throw new InvalidOperationException($"Could not resolve output directory for '{outputPath}'."));
             document = ResolveActiveDocument(document);
+            var requestedWidth = ResolveCaptureWidth(capture);
+            var requestedHeight = ResolveCaptureHeight(capture);
 
             if (freezeAnimatedPreviews)
             {
@@ -301,11 +306,12 @@ namespace BoomHud.Compare.Editor
                 EnsureTargetVisible(targetElement);
                 WaitForDocumentToSettle(document);
 
-                fullTexture = CaptureDocumentTexture(document, ResolveCaptureWidth(capture), ResolveCaptureHeight(capture));
+                fullTexture = CaptureDocumentTexture(document, requestedWidth, requestedHeight);
                 document = ResolveActiveDocument(document);
                 targetElement = WaitForTargetElement(document, capture.targetElementName);
                 ApplyCaptureTweaks(targetElement, capture);
                 croppedTexture = CropToElement(fullTexture, document.rootVisualElement, targetElement);
+                croppedTexture = NormalizeCapturedTextureSize(croppedTexture, requestedWidth, requestedHeight);
                 File.WriteAllBytes(outputPath, croppedTexture.EncodeToPNG());
                 WriteActualLayoutSnapshot(outputPath, CreateUiToolkitLayoutSnapshot(capture, targetElement));
             }
@@ -624,6 +630,52 @@ namespace BoomHud.Compare.Editor
             return croppedTexture;
         }
 
+        private static Texture2D NormalizeCapturedTextureSize(Texture2D texture, int requestedWidth, int requestedHeight)
+        {
+            if (requestedWidth <= 0 || requestedHeight <= 0)
+            {
+                return texture;
+            }
+
+            if (texture.width == requestedWidth && texture.height == requestedHeight)
+            {
+                return texture;
+            }
+
+            var resized = ResizeTextureNearestNeighbor(texture, requestedWidth, requestedHeight);
+            UnityEngine.Object.DestroyImmediate(texture);
+            return resized;
+        }
+
+        private static Texture2D ResizeTextureNearestNeighbor(Texture2D source, int width, int height)
+        {
+            var sourcePixels = source.GetPixels32();
+            var resizedPixels = new Color32[width * height];
+            var scaleX = source.width / (float)width;
+            var scaleY = source.height / (float)height;
+
+            for (var y = 0; y < height; y++)
+            {
+                var sourceY = Mathf.Clamp(Mathf.FloorToInt(y * scaleY), 0, source.height - 1);
+                var sourceRow = sourceY * source.width;
+                var targetRow = y * width;
+
+                for (var x = 0; x < width; x++)
+                {
+                    var sourceX = Mathf.Clamp(Mathf.FloorToInt(x * scaleX), 0, source.width - 1);
+                    resizedPixels[targetRow + x] = sourcePixels[sourceRow + sourceX];
+                }
+            }
+
+            var resized = new Texture2D(width, height, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Point
+            };
+            resized.SetPixels32(resizedPixels);
+            resized.Apply();
+            return resized;
+        }
+
         private static void WriteActualLayoutSnapshot(string outputPath, ActualLayoutSnapshot snapshot)
         {
             var snapshotPath = ResolveActualLayoutSnapshotPath(outputPath);
@@ -687,6 +739,8 @@ namespace BoomHud.Compare.Editor
                 Y = rect.y,
                 Width = rect.width,
                 Height = rect.height,
+                ScaleX = element.transform.scale.x,
+                ScaleY = element.transform.scale.y,
                 PreferredWidth = preferredSize.x > 0f ? preferredSize.x : -1f,
                 PreferredHeight = preferredSize.y > 0f ? preferredSize.y : -1f,
                 Text = element is TextElement uiText ? uiText.text : string.Empty,
@@ -725,6 +779,8 @@ namespace BoomHud.Compare.Editor
                 Y = rect.y,
                 Width = rect.width,
                 Height = rect.height,
+                ScaleX = target.localScale.x,
+                ScaleY = target.localScale.y,
                 PreferredWidth = preferredWidth > 0f ? preferredWidth : -1f,
                 PreferredHeight = preferredHeight > 0f ? preferredHeight : -1f,
                 Text = text != null ? text.text : string.Empty,
@@ -1666,6 +1722,8 @@ namespace BoomHud.Compare.Editor
             public float Y;
             public float Width;
             public float Height;
+            public float ScaleX = 1f;
+            public float ScaleY = 1f;
             public float PreferredWidth = -1f;
             public float PreferredHeight = -1f;
             public string Text = string.Empty;

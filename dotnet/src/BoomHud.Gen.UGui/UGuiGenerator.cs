@@ -140,10 +140,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine("    {");
         builder.AppendLine("        _componentOverrides = componentOverrides;");
         builder.AppendLine($"        Root = CreateRect(\"{plan.Root.Name}\", parent);");
-        AppendSetup(builder, plan.Root, "Root", parentLayout: null, document.Components, diagnostics, 2);
+        AppendSetup(builder, plan.Root, "Root", parentNode: null, document.Components, diagnostics, 2);
         foreach (var child in plan.Root.Children)
         {
-            AppendCreate(builder, child, "Root", plan.Root.Source.Layout?.Type, document.Components, diagnostics, 2);
+            AppendCreate(builder, child, "Root", plan.Root, document.Components, diagnostics, 2);
         }
         builder.AppendLine("        ApplyInstanceOverrides();");
         builder.AppendLine("        ViewModel = viewModel;");
@@ -229,7 +229,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return builder.ToString();
     }
 
-    private static void AppendCreate(StringBuilder builder, PlannedNode node, string parentAccessor, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, int indentLevel)
+    private static void AppendCreate(StringBuilder builder, PlannedNode node, string parentAccessor, PlannedNode? parentNode, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, int indentLevel)
     {
         var indent = new string(' ', indentLevel * 4);
         if (node.ComponentView != null)
@@ -240,20 +240,20 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             builder.AppendLine($"{indent}{node.FieldName}.name = \"{node.Name}\";");
             if (!IsSyntheticComponentInstance(node.Source))
             {
-                AppendSetup(builder, node, node.FieldName, parentLayout, components, diagnostics, indentLevel);
+                AppendSetup(builder, node, node.FieldName, parentNode, components, diagnostics, indentLevel);
             }
             return;
         }
 
         builder.AppendLine($"{indent}{node.FieldName} = {CreateCall(node, parentAccessor)};");
-        AppendSetup(builder, node, node.FieldName, parentLayout, components, diagnostics, indentLevel);
+        AppendSetup(builder, node, node.FieldName, parentNode, components, diagnostics, indentLevel);
         foreach (var child in node.Children)
         {
-            AppendCreate(builder, child, ChildParent(node), node.Source.Layout?.Type, components, diagnostics, indentLevel);
+            AppendCreate(builder, child, ChildParent(node), node, components, diagnostics, indentLevel);
         }
     }
 
-    private static void AppendSetup(StringBuilder builder, PlannedNode node, string accessor, LayoutType? parentLayout, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, int indentLevel)
+    private static void AppendSetup(StringBuilder builder, PlannedNode node, string accessor, PlannedNode? parentNode, IReadOnlyDictionary<string, HudComponentDefinition> components, List<Diagnostic> diagnostics, int indentLevel)
     {
         var indent = new string(' ', indentLevel * 4);
         var rect = accessor == "Root" ? "Root" : $"RectOf({accessor})";
@@ -262,6 +262,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var edgeContract = node.VisualNode?.EdgeContract;
         var textMetric = node.MetricProfile?.Text;
         var iconMetric = node.MetricProfile?.Icon;
+        var parentLayout = parentNode?.Source.Layout?.Type;
         var absolute = parentLayout == LayoutType.Absolute
                        || edgeContract?.Participation == LayoutParticipation.Overlay
                        || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
@@ -273,7 +274,14 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var edgeInsetPolicy = LayoutPolicyService.ResolveEdgeInsetPolicy(node.Policy);
         var flexAlignmentPreset = LayoutPolicyService.ResolveFlexAlignmentPreset(node.Policy);
 
-        builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(Pixels(widthDimension))}, height: {ToNullableFloatLiteral(Pixels(heightDimension))}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
+        var configuredWidth = absolute
+            ? Pixels(widthDimension)
+            : ConfigureSize(node, parentNode, widthDimension, "width");
+        var configuredHeight = absolute
+            ? Pixels(heightDimension)
+            : ConfigureSize(node, parentNode, heightDimension, "height");
+
+        builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(configuredWidth)}, height: {ToNullableFloatLiteral(configuredHeight)}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
         if (!string.IsNullOrWhiteSpace(anchorPreset))
         {
             builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {ToStringLiteral(anchorPreset)});");
@@ -300,30 +308,27 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var contentFitVertical = absolute
             ? ShouldAbsoluteContentFit(node, heightDimension, "height")
             : ShouldContentFit(node, "height", parentLayout);
-        builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, widthDimension, "width") : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, heightDimension, "height") : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, widthDimension, "width", parentLayout, contentFitHorizontal) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, heightDimension, "height", parentLayout, contentFitVertical) : null)});");
+        builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, parentNode, widthDimension, "width") : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, parentNode, heightDimension, "height") : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, parentNode, widthDimension, "width", parentLayout, contentFitHorizontal) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, parentNode, heightDimension, "height", parentLayout, contentFitVertical) : null)});");
         builder.AppendLine($"{indent}ApplyContentSizeFit({rect}, horizontal: {Bool(contentFitHorizontal)}, vertical: {Bool(contentFitVertical)});");
 
         if (layout != null && ShouldEmitLayoutGroup(node))
         {
+            var resolvedGap = LayoutPolicyService.ResolveGap(layout.Gap, node.Policy);
+            var resolvedPadding = LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy);
+            var shellLayout = ResolveShellLayout(node, parentNode, resolvedGap, resolvedPadding);
             switch (layout.Type)
             {
                 case LayoutType.Horizontal:
-                    builder.AppendLine(flexAlignmentPreset == null
-                        ? $"{indent}ApplyHorizontalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), true))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});"
-                        : $"{indent}ApplyHorizontalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), true))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))}, {ToStringLiteral(flexAlignmentPreset)});");
+                    builder.AppendLine($"{indent}{BuildHorizontalLayoutCall(rect, shellLayout, flexAlignmentPreset)}");
                     break;
                 case LayoutType.Vertical:
                 case LayoutType.Stack:
-                    builder.AppendLine(flexAlignmentPreset == null
-                        ? $"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});"
-                        : $"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))}, {ToStringLiteral(flexAlignmentPreset)});");
+                    builder.AppendLine($"{indent}{BuildVerticalLayoutCall(rect, shellLayout, flexAlignmentPreset)}");
                     break;
                 case LayoutType.Grid:
                 case LayoutType.Dock:
                     diagnostics.Add(Diagnostic.Warning($"Unity uGUI falls back to vertical layout for '{layout.Type}'.", node.Source.Id, "BHUG1001"));
-                    builder.AppendLine(flexAlignmentPreset == null
-                        ? $"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))});"
-                        : $"{indent}ApplyVerticalLayout({rect}, {ToFloatLiteral(Gap(LayoutPolicyService.ResolveGap(layout.Gap, node.Policy), false))}, {ToRectOffsetArgs(LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy))}, {ToStringLiteral(flexAlignmentPreset)});");
+                    builder.AppendLine($"{indent}{BuildVerticalLayoutCall(rect, shellLayout, flexAlignmentPreset)}");
                     break;
             }
         }
@@ -593,13 +598,107 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             _ => null
         };
 
-    private static double? FlexibleSize(PlannedNode node, Dimension? dimension, string axis, LayoutType? parentLayout, bool preferContentSize)
-        => preferContentSize
+    private static double? FlexibleSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis, LayoutType? parentLayout, bool preferContentSize)
+        => preferContentSize || ShouldPreservePreferredSizeInParent(node, parentNode, axis)
             ? null
             : LayoutPolicyService.ResolveFlexibleSize(dimension, axis, parentLayout, IsFlexibleContainer(node), node.Policy);
 
-    private static double? PreferredSize(PlannedNode node, Dimension? dimension, string axis)
-        => LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy);
+    private static double? ConfigureSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis)
+    {
+        if (Pixels(dimension) is { } explicitPixels)
+        {
+            return PromoteIntrinsicShellSize(node, axis, explicitPixels);
+        }
+
+        return ShouldPreservePreferredSizeInParent(node, parentNode, axis)
+            ? PreferredSize(node, parentNode, dimension, axis)
+            : null;
+    }
+
+    private static double? PreferredSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis)
+    {
+        if (LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy) is { } explicitPreferred)
+        {
+            return PromoteIntrinsicShellSize(node, axis, explicitPreferred);
+        }
+
+        return ShouldPreservePreferredSizeInParent(node, parentNode, axis)
+            ? EstimateIntrinsicAxisSize(node, axis)
+            : null;
+    }
+
+    private static double PromoteIntrinsicShellSize(PlannedNode node, string axis, double explicitSize)
+    {
+        if (!ShouldPromoteIntrinsicShellSize(node, axis))
+        {
+            return explicitSize;
+        }
+
+        var intrinsic = EstimateChildStackAxisSize(node, axis);
+        if (!intrinsic.HasValue)
+        {
+            return explicitSize;
+        }
+
+        var overflow = intrinsic.Value - explicitSize;
+        return overflow is > 6d and <= 64d
+            ? intrinsic.Value
+            : explicitSize;
+    }
+
+    private static bool ShouldPromoteIntrinsicShellSize(PlannedNode node, string axis)
+    {
+        if (node.ComponentView != null
+            || node.Children.Count == 0
+            || node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return false;
+        }
+
+        if (node.VisualNode?.EdgeContract.Participation == LayoutParticipation.Overlay
+            || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy))
+        {
+            return false;
+        }
+
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        return HasPinnedSize(dimension);
+    }
+
+    private static double? EstimateChildStackAxisSize(PlannedNode node, string axis)
+    {
+        if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return null;
+        }
+
+        var isHorizontal = node.Source.Layout.Type == LayoutType.Horizontal;
+        var mainAxis = isHorizontal ? "width" : "height";
+        var resolvedPadding = LayoutPolicyService.ResolvePadding(node.Source.Layout.Padding, node.Policy) ?? Spacing.Zero;
+        var gap = Gap(LayoutPolicyService.ResolveGap(node.Source.Layout.Gap, node.Policy), isHorizontal);
+        var childSizes = node.Children
+            .Select(child => ResolveNominalAxisSize(child, axis))
+            .Where(static value => value.HasValue)
+            .Select(static value => value!.Value)
+            .ToList();
+        if (childSizes.Count == 0)
+        {
+            return null;
+        }
+
+        var paddingTotal = axis == "width"
+            ? resolvedPadding.Left + resolvedPadding.Right
+            : resolvedPadding.Top + resolvedPadding.Bottom;
+        var gapTotal = axis == mainAxis
+            ? gap * Math.Max(0, node.Children.Count - 1)
+            : 0d;
+        var content = axis == mainAxis
+            ? childSizes.Sum()
+            : childSizes.Max();
+        return content + gapTotal + paddingTotal;
+    }
 
     private static bool IsFlexibleContainer(PlannedNode node)
         => node.ComponentView != null
@@ -693,6 +792,304 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static double Gap(Spacing? spacing, bool horizontal)
         => spacing == null ? 0d : horizontal ? Math.Max(spacing.Value.Left, spacing.Value.Right) : Math.Max(spacing.Value.Top, spacing.Value.Bottom);
 
+    private static ShellLayoutSettings ResolveShellLayout(PlannedNode node, PlannedNode? parentNode, Spacing? gap, Spacing? padding)
+    {
+        var resolvedPadding = padding ?? Spacing.Zero;
+        var horizontal = node.Source.Layout?.Type == LayoutType.Horizontal;
+        var settings = new ShellLayoutSettings
+        {
+            Gap = Gap(gap, horizontal),
+            Padding = resolvedPadding,
+            ChildControlWidth = ShouldControlChildAxis(node, "width"),
+            ChildControlHeight = ShouldControlChildAxis(node, "height")
+        };
+
+        return TryAdjustShellOverflow(node, parentNode, settings) is { } adjusted
+            ? adjusted
+            : settings;
+    }
+
+    private static ShellLayoutSettings? TryAdjustShellOverflow(PlannedNode node, PlannedNode? parentNode, ShellLayoutSettings settings)
+    {
+        if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return null;
+        }
+
+        var mainAxis = node.Source.Layout.Type == LayoutType.Horizontal ? "width" : "height";
+        if (ShouldPreservePreferredSizeInParent(node, parentNode, mainAxis))
+        {
+            return null;
+        }
+
+        var available = ResolveAvailableMainAxis(node, parentNode, mainAxis);
+        if (!available.HasValue || available.Value <= double.Epsilon)
+        {
+            return null;
+        }
+
+        var preferred = EstimatePreferredMainAxis(node, settings, mainAxis);
+        var overflow = preferred - available.Value;
+        if (overflow <= 6d || overflow > 48d)
+        {
+            return null;
+        }
+
+        var adjustable = mainAxis == "width"
+            ? settings.Padding.Left + settings.Padding.Right + (settings.Gap * Math.Max(0, node.Children.Count - 1))
+            : settings.Padding.Top + settings.Padding.Bottom + (settings.Gap * Math.Max(0, node.Children.Count - 1));
+        if (adjustable <= double.Epsilon)
+        {
+            return null;
+        }
+
+        var scale = Math.Clamp((adjustable - overflow) / adjustable, 0.25d, 1d);
+        var adjustedGap = settings.Gap * scale;
+        var adjustedPadding = mainAxis == "width"
+            ? new Spacing(
+                settings.Padding.Top,
+                settings.Padding.Right * scale,
+                settings.Padding.Bottom,
+                settings.Padding.Left * scale)
+            : new Spacing(
+                settings.Padding.Top * scale,
+                settings.Padding.Right,
+                settings.Padding.Bottom * scale,
+                settings.Padding.Left);
+
+        return settings with
+        {
+            Gap = adjustedGap,
+            Padding = adjustedPadding
+        };
+    }
+
+    private static double EstimatePreferredMainAxis(PlannedNode node, ShellLayoutSettings settings, string axis)
+    {
+        var childSizes = node.Children
+            .Select(child => ResolveNominalAxisSize(child, axis))
+            .Where(static value => value.HasValue)
+            .Select(static value => value!.Value)
+            .Sum();
+
+        var gapTotal = settings.Gap * Math.Max(0, node.Children.Count - 1);
+        var paddingTotal = axis == "width"
+            ? settings.Padding.Left + settings.Padding.Right
+            : settings.Padding.Top + settings.Padding.Bottom;
+        return childSizes + gapTotal + paddingTotal;
+    }
+
+    private static bool ShouldPreservePreferredSizeInParent(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (parentNode == null || !IsCrossAxisOfParent(parentNode, axis))
+        {
+            return false;
+        }
+
+        if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return false;
+        }
+
+        if (HasPinnedSize(axis == "width"
+                ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+                : node.Source.Layout?.Height ?? node.Source.Style?.Height))
+        {
+            return false;
+        }
+
+        var available = ResolveAvailableMainAxis(node, parentNode, axis);
+        var preferred = EstimateIntrinsicAxisSize(node, axis);
+        return available.HasValue
+            && preferred.HasValue
+            && preferred.Value > available.Value + 6d
+            && preferred.Value - available.Value <= 64d;
+    }
+
+    private static bool IsCrossAxisOfParent(PlannedNode parentNode, string axis)
+        => (axis == "height" && parentNode.Source.Layout?.Type == LayoutType.Horizontal)
+           || (axis == "width" && parentNode.Source.Layout?.Type is LayoutType.Vertical or LayoutType.Stack);
+
+    private static double? EstimateIntrinsicAxisSize(PlannedNode node, string axis)
+    {
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (Pixels(dimension) is { } explicitPixels)
+        {
+            return explicitPixels;
+        }
+
+        var policyPreferred = LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy);
+        if (policyPreferred.HasValue)
+        {
+            return policyPreferred.Value;
+        }
+
+        if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return node.VisualNode is null
+                ? null
+                : axis == "width"
+                    ? Pixels(node.VisualNode.Box.Width)
+                    : Pixels(node.VisualNode.Box.Height);
+        }
+
+        var isHorizontal = node.Source.Layout.Type == LayoutType.Horizontal;
+        var mainAxis = isHorizontal ? "width" : "height";
+        var resolvedPadding = LayoutPolicyService.ResolvePadding(node.Source.Layout.Padding, node.Policy) ?? Spacing.Zero;
+        var gap = Gap(LayoutPolicyService.ResolveGap(node.Source.Layout.Gap, node.Policy), isHorizontal);
+        var childSizes = node.Children
+            .Select(child => EstimateIntrinsicAxisSize(child, axis))
+            .Where(static value => value.HasValue)
+            .Select(static value => value!.Value)
+            .ToList();
+        if (childSizes.Count == 0)
+        {
+            return null;
+        }
+
+        var paddingTotal = axis == "width"
+            ? resolvedPadding.Left + resolvedPadding.Right
+            : resolvedPadding.Top + resolvedPadding.Bottom;
+        var gapTotal = axis == mainAxis
+            ? gap * Math.Max(0, node.Children.Count - 1)
+            : 0d;
+        var content = axis == mainAxis
+            ? childSizes.Sum()
+            : childSizes.Max();
+        return content + gapTotal + paddingTotal;
+    }
+
+    private static double? ResolveAvailableMainAxis(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        var ownDimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (Pixels(ownDimension) is { } ownPixels)
+        {
+            return ownPixels;
+        }
+
+        var edgeContract = node.VisualNode?.EdgeContract;
+        var fillAxis = axis == "width"
+            ? edgeContract?.WidthSizing == AxisSizing.Fill
+            : edgeContract?.HeightSizing == AxisSizing.Fill;
+        if (!fillAxis || parentNode == null)
+        {
+            if (parentNode == null || HasPinnedSize(ownDimension))
+            {
+                return null;
+            }
+
+            var parentLayoutType = parentNode.Source.Layout?.Type;
+            var alignedWithParentCrossAxis =
+                (axis == "height" && parentLayoutType == LayoutType.Horizontal)
+                || (axis == "width" && parentLayoutType is LayoutType.Vertical or LayoutType.Stack);
+            if (!alignedWithParentCrossAxis)
+            {
+                return null;
+            }
+        }
+
+        var parentDimension = axis == "width"
+            ? parentNode.Source.Layout?.Width ?? parentNode.Source.Style?.Width
+            : parentNode.Source.Layout?.Height ?? parentNode.Source.Style?.Height;
+        var parentPixels = Pixels(parentDimension);
+        if (!parentPixels.HasValue)
+        {
+            return null;
+        }
+
+        var parentPadding = LayoutPolicyService.ResolvePadding(parentNode.Source.Layout?.Padding, parentNode.Policy) ?? Spacing.Zero;
+        return axis == "width"
+            ? parentPixels.Value - parentPadding.Left - parentPadding.Right
+            : parentPixels.Value - parentPadding.Top - parentPadding.Bottom;
+    }
+
+    private static double? ResolveNominalAxisSize(PlannedNode node, string axis)
+    {
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (Pixels(dimension) is { } pixels)
+        {
+            return pixels;
+        }
+
+        var policyPreferred = PreferredSize(node, null, dimension, axis);
+        if (policyPreferred.HasValue)
+        {
+            return policyPreferred.Value;
+        }
+
+        if (EstimateIntrinsicAxisSize(node, axis) is { } intrinsic)
+        {
+            return intrinsic;
+        }
+
+        return node.VisualNode is null
+            ? null
+            : axis == "width"
+                ? Pixels(node.VisualNode.Box.Width)
+                : Pixels(node.VisualNode.Box.Height);
+    }
+
+    private static bool ShouldControlChildAxis(PlannedNode node, string axis)
+    {
+        if (node.Children.Count == 0)
+        {
+            return true;
+        }
+
+        foreach (var child in node.Children)
+        {
+            if (ShouldPreservePreferredSizeInParent(child, node, axis))
+            {
+                return false;
+            }
+
+            var dimension = axis == "width"
+                ? child.Source.Layout?.Width ?? child.Source.Style?.Width
+                : child.Source.Layout?.Height ?? child.Source.Style?.Height;
+            var edgeSizing = axis == "width"
+                ? child.VisualNode?.EdgeContract.WidthSizing
+                : child.VisualNode?.EdgeContract.HeightSizing;
+            if (!HasPinnedSize(dimension) || edgeSizing != AxisSizing.Fixed)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static string BuildHorizontalLayoutCall(string rect, ShellLayoutSettings settings, string? alignmentPreset)
+    {
+        var baseArgs = $"{rect}, {ToFloatLiteral(settings.Gap)}, {ToRectOffsetArgs(settings.Padding)}";
+        if (settings.ChildControlWidth && settings.ChildControlHeight)
+        {
+            return alignmentPreset == null
+                ? $"ApplyHorizontalLayout({baseArgs});"
+                : $"ApplyHorizontalLayout({baseArgs}, {ToStringLiteral(alignmentPreset)});";
+        }
+
+        return $"ApplyHorizontalLayout({baseArgs}, {ToNullableStringLiteral(alignmentPreset)}, childControlWidth: {Bool(settings.ChildControlWidth)}, childControlHeight: {Bool(settings.ChildControlHeight)});";
+    }
+
+    private static string BuildVerticalLayoutCall(string rect, ShellLayoutSettings settings, string? alignmentPreset)
+    {
+        var baseArgs = $"{rect}, {ToFloatLiteral(settings.Gap)}, {ToRectOffsetArgs(settings.Padding)}";
+        if (settings.ChildControlWidth && settings.ChildControlHeight)
+        {
+            return alignmentPreset == null
+                ? $"ApplyVerticalLayout({baseArgs});"
+                : $"ApplyVerticalLayout({baseArgs}, {ToStringLiteral(alignmentPreset)});";
+        }
+
+        return $"ApplyVerticalLayout({baseArgs}, {ToNullableStringLiteral(alignmentPreset)}, childControlWidth: {Bool(settings.ChildControlWidth)}, childControlHeight: {Bool(settings.ChildControlHeight)});";
+    }
+
     private static string ToRectOffsetArgs(Spacing? spacing)
     {
         var top = ToRectOffsetLiteral(spacing?.Top);
@@ -704,6 +1101,17 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private static string ToRectOffsetLiteral(double? value)
         => Convert.ToInt32(Math.Round(value ?? 0d, MidpointRounding.AwayFromZero), CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture);
+
+    private sealed record ShellLayoutSettings
+    {
+        public required double Gap { get; init; }
+
+        public required Spacing Padding { get; init; }
+
+        public required bool ChildControlWidth { get; init; }
+
+        public required bool ChildControlHeight { get; init; }
+    }
 
     private static string ChildParent(PlannedNode node)
         => node.FieldType == "ScrollRect" ? $"{ToCamel(node.FieldName)}Content" : $"RectOf({node.FieldName})";
@@ -794,8 +1202,8 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
@@ -807,7 +1215,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
-    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,baselineOffset);}
+    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
     private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
@@ -968,7 +1376,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         public required ResolvedGeneratorPolicy Policy { get; init; }
         public VisualNode? VisualNode { get; init; }
         public MetricProfileDefinition? MetricProfile { get; init; }
-        public required IReadOnlyList<PlannedNode> Children { get; init; }
+        public required List<PlannedNode> Children { get; init; }
     }
 
     private sealed record ViewModelProperty
