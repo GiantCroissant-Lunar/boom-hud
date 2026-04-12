@@ -1,0 +1,52 @@
+{
+  "Scopes": {
+    "PartyStatusStrip": [
+      "IPartyStatusStripViewModel.g.cs",
+      "ISyntheticContainerAF9ECAF6ViewModel.g.cs",
+      "ISyntheticContainerB978BB0BViewModel.g.cs",
+      "PartyStatusStrip.synthetic-components.json",
+      "PartyStatusStrip.visual-ir.json",
+      "PartyStatusStripView.gen.cs",
+      "PartyStatusStripView.uss",
+      "PartyStatusStripView.uxml",
+      "SyntheticContainerAF9ECAF6View.gen.cs",
+      "SyntheticContainerAF9ECAF6View.uss",
+      "SyntheticContainerAF9ECAF6View.uxml",
+      "SyntheticContainerB978BB0BView.gen.cs",
+      "SyntheticContainerB978BB0BView.uss",
+      "SyntheticContainerB978BB0BView.uxml"
+    ],
+    "QuestSidebar": [
+      "IQuestSidebarViewModel.g.cs",
+      "ISyntheticContainer9463CA59ViewModel.g.cs",
+      "ISyntheticContainerC520AC99ViewModel.g.cs",
+      "QuestSidebar.synthetic-components.json",
+      "QuestSidebar.visual-ir.json",
+      "QuestSidebarView.gen.cs",
+      "QuestSidebarView.uss",
+      "QuestSidebarView.uxml",
+      "SyntheticContainer9463CA59View.gen.cs",
+      "SyntheticContainer9463CA59View.uss",
+      "SyntheticContainer9463CA59View.uxml",
+      "SyntheticContainerC520AC99View.gen.cs",
+      "SyntheticContainerC520AC99View.uss",
+      "SyntheticContainerC520AC99View.uxml"
+    ],
+    "CombatToastStack": [
+      "CombatToastStack.synthetic-components.json",
+      "CombatToastStack.visual-ir.json",
+      "CombatToastStackView.gen.cs",
+      "CombatToastStackView.uss",
+      "CombatToastStackView.uxml",
+      "ICombatToastStackViewModel.g.cs",
+      "ISyntheticContainer61D6E26DViewModel.g.cs",
+      "ISyntheticContainerFC1FF3CBViewModel.g.cs",
+      "SyntheticContainer61D6E26DView.gen.cs",
+      "SyntheticContainer61D6E26DView.uss",
+      "SyntheticContainer61D6E26DView.uxml",
+      "SyntheticContainerFC1FF3CBView.gen.cs",
+      "SyntheticContainerFC1FF3CBView.uss",
+      "SyntheticContainerFC1FF3CBView.uxml"
+    ]
+  }
+}

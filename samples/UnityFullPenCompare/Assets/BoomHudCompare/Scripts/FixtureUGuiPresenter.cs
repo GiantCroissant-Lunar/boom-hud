@@ -60,6 +60,15 @@ namespace BoomHud.Compare
 
             try
             {
+                return Activator.CreateInstance(generatedViewType, new object?[] { root, null, null })
+                    ?? throw new InvalidOperationException($"Could not create generated view '{generatedViewType.FullName}'.");
+            }
+            catch (MissingMethodException)
+            {
+            }
+
+            try
+            {
                 return Activator.CreateInstance(generatedViewType, new object?[] { root, null })
                     ?? throw new InvalidOperationException($"Could not create generated view '{generatedViewType.FullName}'.");
             }

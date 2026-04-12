@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &101807797
+--- !u!1 &1153513072
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,12 +127,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 101807802}
-  - component: {fileID: 101807801}
-  - component: {fileID: 101807800}
-  - component: {fileID: 101807799}
-  - component: {fileID: 101807798}
-  - component: {fileID: 101807803}
+  - component: {fileID: 1153513077}
+  - component: {fileID: 1153513076}
+  - component: {fileID: 1153513075}
+  - component: {fileID: 1153513074}
+  - component: {fileID: 1153513073}
+  - component: {fileID: 1153513078}
   m_Layer: 0
   m_Name: BoomHud Char Portrait Motion Timeline
   m_TagString: Untagged
@@ -140,72 +140,54 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!320 &101807798
+--- !u!320 &1153513073
 PlayableDirector:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: -755930012359172936, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: -433844169049016169, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: 2691427040338463026, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: -2320030995622949306, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: -5847984402225297085, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: 1781633448825544986, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: -8775725047237467811, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: 4401745750596514085, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
-  - key: {fileID: 6715361903967082620, guid: 4645b4ce949840f4db270ed04392f835, type: 2}
-    value: {fileID: 101807800}
+  m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
---- !u!114 &101807799
+--- !u!114 &1153513074
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f24ca3971ab9544b84d0642e7521f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BoomHud.Unity.Timeline::BoomHud.Unity.Timeline.BoomHudMotionPreviewBootstrap
-  _director: {fileID: 101807798}
-  _host: {fileID: 101807800}
+  _director: {fileID: 1153513073}
+  _hostView: {fileID: 1153513075}
   _fallbackClipId: portraitIntro
   _preferTimelinePlayback: 1
   _disableDirectorWhenFallback: 1
---- !u!114 &101807800
+--- !u!114 &1153513075
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad6c1787f7db44140b093483fd73cd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Generated.Hud.CharPortraitMotionHost
   _rebindOnEnable: 1
-  _document: {fileID: 101807801}
+  _document: {fileID: 1153513076}
   _visualTree: {fileID: 0}
   _styleSheets: []
   _initialClip: portraitIntro
@@ -213,13 +195,13 @@ MonoBehaviour:
   _loop: 1
   _playbackSpeed: 1
   _useUnscaledTime: 1
---- !u!114 &101807801
+--- !u!114 &1153513076
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
@@ -236,13 +218,13 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &101807802
+--- !u!4 &1153513077
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -251,20 +233,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &101807803
+--- !u!114 &1153513078
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101807797}
+  m_GameObject: {fileID: 1153513072}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e10fbbde4afacf499aa5fdc7a33bb1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoomHud.Compare.MotionStagePresenter
   _generatedRootName: ComponentCharPortrait
---- !u!1 &2078973960
+--- !u!1 &1671253610
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,8 +254,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2078973962}
-  - component: {fileID: 2078973961}
+  - component: {fileID: 1671253612}
+  - component: {fileID: 1671253611}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -281,13 +263,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!20 &2078973961
+--- !u!20 &1671253611
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078973960}
+  m_GameObject: {fileID: 1671253610}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
@@ -332,13 +314,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &2078973962
+--- !u!4 &1671253612
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078973960}
+  m_GameObject: {fileID: 1671253610}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
@@ -351,5 +333,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 101807802}
-  - {fileID: 2078973962}
+  - {fileID: 1153513077}
+  - {fileID: 1671253612}

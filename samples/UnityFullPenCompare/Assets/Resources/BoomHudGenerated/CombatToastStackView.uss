@@ -43,57 +43,14 @@
 }
 
 .boomhud-icon-panel {
-    flex-direction: column;
     position: absolute;
-    left: 16px;
-    top: 16px;
-    width: 132px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #EAEAEA;
-    border-right-color: #EAEAEA;
-    border-top-color: #EAEAEA;
-    border-bottom-color: #EAEAEA;
-}
-
-.boomhud-event-icon {
-    flex-direction: column;
-    width: 56px;
-    height: 56px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 56px;
 }
 
 .boomhud-content {
-    flex-direction: column;
     position: absolute;
     left: 168px;
     top: 18px;
+    flex-direction: column;
     width: 560px;
     height: 144px;
     margin-top: 0px;
@@ -172,8 +129,8 @@
 }
 
 .boomhud-progress-fill {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 312px;
     height: 18px;
     margin-top: 0px;
@@ -191,10 +148,10 @@
 }
 
 .boomhud-progress-text {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -211,90 +168,14 @@
 }
 
 .boomhud-reward-column {
-    flex-direction: column;
     position: absolute;
-    left: 764px;
-    top: 16px;
-    width: 164px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 12px;
-    padding-right: 12px;
-    padding-bottom: 12px;
-    padding-left: 12px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #0C0C0C;
-    background-color: #0C0C0C;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #7E7E7E;
-    border-right-color: #7E7E7E;
-    border-top-color: #7E7E7E;
-    border-bottom-color: #7E7E7E;
-}
-
-.boomhud-tag {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 10px;
-    -unity-font-style: normal;
-}
-
-.boomhud-value {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-time {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
 }
 
 .boomhud-badge {
-    flex-direction: column;
     position: absolute;
     left: 784px;
     top: 0px;
+    flex-direction: column;
     width: 120px;
     height: 28px;
     margin-top: 0px;
@@ -356,57 +237,14 @@
 }
 
 .boomhud-icon-panel2 {
-    flex-direction: column;
     position: absolute;
-    left: 16px;
-    top: 16px;
-    width: 132px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #EAEAEA;
-    border-right-color: #EAEAEA;
-    border-top-color: #EAEAEA;
-    border-bottom-color: #EAEAEA;
-}
-
-.boomhud-event-icon2 {
-    flex-direction: column;
-    width: 56px;
-    height: 56px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 56px;
 }
 
 .boomhud-content2 {
-    flex-direction: column;
     position: absolute;
     left: 168px;
     top: 18px;
+    flex-direction: column;
     width: 560px;
     height: 144px;
     margin-top: 0px;
@@ -485,8 +323,8 @@
 }
 
 .boomhud-progress-fill2 {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 414px;
     height: 18px;
     margin-top: 0px;
@@ -504,10 +342,10 @@
 }
 
 .boomhud-progress-text2 {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -524,90 +362,14 @@
 }
 
 .boomhud-reward-column2 {
-    flex-direction: column;
     position: absolute;
-    left: 764px;
-    top: 16px;
-    width: 164px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 12px;
-    padding-right: 12px;
-    padding-bottom: 12px;
-    padding-left: 12px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #0C0C0C;
-    background-color: #0C0C0C;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #7E7E7E;
-    border-right-color: #7E7E7E;
-    border-top-color: #7E7E7E;
-    border-bottom-color: #7E7E7E;
-}
-
-.boomhud-tag2 {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 10px;
-    -unity-font-style: normal;
-}
-
-.boomhud-value2 {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-time2 {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
 }
 
 .boomhud-badge2 {
-    flex-direction: column;
     position: absolute;
     left: 792px;
     top: 0px;
+    flex-direction: column;
     width: 104px;
     height: 28px;
     margin-top: 0px;
@@ -669,57 +431,14 @@
 }
 
 .boomhud-icon-panel3 {
-    flex-direction: column;
     position: absolute;
-    left: 16px;
-    top: 16px;
-    width: 132px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #EAEAEA;
-    border-right-color: #EAEAEA;
-    border-top-color: #EAEAEA;
-    border-bottom-color: #EAEAEA;
-}
-
-.boomhud-event-icon3 {
-    flex-direction: column;
-    width: 56px;
-    height: 56px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 56px;
 }
 
 .boomhud-content3 {
-    flex-direction: column;
     position: absolute;
     left: 168px;
     top: 18px;
+    flex-direction: column;
     width: 560px;
     height: 144px;
     margin-top: 0px;
@@ -798,8 +517,8 @@
 }
 
 .boomhud-progress-fill3 {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 236px;
     height: 18px;
     margin-top: 0px;
@@ -817,10 +536,10 @@
 }
 
 .boomhud-progress-text3 {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -837,90 +556,14 @@
 }
 
 .boomhud-reward-column3 {
-    flex-direction: column;
     position: absolute;
-    left: 764px;
-    top: 16px;
-    width: 164px;
-    height: 132px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 12px;
-    padding-right: 12px;
-    padding-bottom: 12px;
-    padding-left: 12px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #0C0C0C;
-    background-color: #0C0C0C;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-    border-bottom-width: 4px;
-    border-left-color: #7E7E7E;
-    border-right-color: #7E7E7E;
-    border-top-color: #7E7E7E;
-    border-bottom-color: #7E7E7E;
-}
-
-.boomhud-tag3 {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 10px;
-    -unity-font-style: normal;
-}
-
-.boomhud-value3 {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-time3 {
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 9px;
-    -unity-font-style: normal;
 }
 
 .boomhud-badge3 {
-    flex-direction: column;
     position: absolute;
     left: 780px;
     top: 0px;
+    flex-direction: column;
     width: 128px;
     height: 28px;
     margin-top: 0px;

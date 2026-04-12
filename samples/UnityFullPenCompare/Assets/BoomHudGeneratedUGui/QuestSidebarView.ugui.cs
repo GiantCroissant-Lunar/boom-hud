@@ -5,6 +5,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Generated.Hud.UGui
 {
 public sealed class QuestSidebarView
 {
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IQuestSidebarViewModel? _viewModel;
     public RectTransform Root { get; }
     public RectTransform Header { get; }
@@ -23,12 +25,6 @@ public sealed class QuestSidebarView
     public Text MinimapLabel { get; }
     public RectTransform MapGrid { get; }
     public RectTransform Row0 { get; }
-    public RectTransform Cell00 { get; }
-    public RectTransform Cell01 { get; }
-    public RectTransform Cell02 { get; }
-    public RectTransform Cell03 { get; }
-    public RectTransform Cell04 { get; }
-    public RectTransform Cell05 { get; }
     public RectTransform Row1 { get; }
     public RectTransform Cell10 { get; }
     public RectTransform Cell11 { get; }
@@ -44,12 +40,6 @@ public sealed class QuestSidebarView
     public RectTransform Cell24 { get; }
     public RectTransform Cell25 { get; }
     public RectTransform Row3 { get; }
-    public RectTransform Cell30 { get; }
-    public RectTransform Cell31 { get; }
-    public RectTransform Cell32 { get; }
-    public RectTransform Cell33 { get; }
-    public RectTransform Cell34 { get; }
-    public RectTransform Cell35 { get; }
     public RectTransform Row4 { get; }
     public RectTransform Cell40 { get; }
     public RectTransform Cell41 { get; }
@@ -60,23 +50,8 @@ public sealed class QuestSidebarView
     public RectTransform ObjectiveCard { get; }
     public Text ObjectivesLabel { get; }
     public RectTransform Objective1 { get; }
-    public RectTransform IconShell1 { get; }
-    public Text ObjectiveIcon1 { get; }
-    public RectTransform ObjectiveText1 { get; }
-    public Text ObjectiveTitle1 { get; }
-    public Text ObjectiveHint1 { get; }
     public RectTransform Objective2 { get; }
-    public RectTransform IconShell2 { get; }
-    public Text ObjectiveIcon2 { get; }
-    public RectTransform ObjectiveText2 { get; }
-    public Text ObjectiveTitle2 { get; }
-    public Text ObjectiveHint2 { get; }
     public RectTransform Objective3 { get; }
-    public RectTransform IconShell3 { get; }
-    public Text ObjectiveIcon3 { get; }
-    public RectTransform ObjectiveText3 { get; }
-    public Text ObjectiveTitle3 { get; }
-    public Text ObjectiveHint3 { get; }
     public RectTransform ResourceCard { get; }
     public Text ResourcesLabel { get; }
     public RectTransform HealthBar { get; }
@@ -102,8 +77,9 @@ public sealed class QuestSidebarView
         }
     }
 
-    public QuestSidebarView(Transform? parent = null, IQuestSidebarViewModel? viewModel = null)
+    public QuestSidebarView(Transform? parent = null, IQuestSidebarViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
+        _componentOverrides = componentOverrides;
         Root = CreateRect("QuestSidebarRoot", parent);
         ConfigureRect(Root, width: 420f, height: 960f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 420f, preferredHeight: 960f, flexibleWidth: null, flexibleHeight: null);
@@ -156,49 +132,9 @@ public sealed class QuestSidebarView
         ApplyVerticalLayout(RectOf(MapGrid), 4f, 8, 8, 8, 8);
         ApplyStyle(MapGrid, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         MapGrid.gameObject.SetActive(true);
-        Row0 = CreateRect("Row0", RectOf(MapGrid));
-        ConfigureRect(RectOf(Row0), width: null, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Row0), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Row0), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row0), 4f, 0, 0, 0, 0);
-        ApplyStyle(Row0, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Row0.gameObject.SetActive(true);
-        Cell00 = CreateRect("Cell00", RectOf(Row0));
-        ConfigureRect(RectOf(Cell00), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell00), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell00), horizontal: false, vertical: false);
-        ApplyStyle(Cell00, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell00.gameObject.SetActive(true);
-        Cell01 = CreateRect("Cell01", RectOf(Row0));
-        ConfigureRect(RectOf(Cell01), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell01), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell01), horizontal: false, vertical: false);
-        ApplyStyle(Cell01, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell01.gameObject.SetActive(true);
-        Cell02 = CreateRect("Cell02", RectOf(Row0));
-        ConfigureRect(RectOf(Cell02), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell02), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell02), horizontal: false, vertical: false);
-        ApplyStyle(Cell02, fg: "#3D6A3D", bg: "#3D6A3D", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell02.gameObject.SetActive(true);
-        Cell03 = CreateRect("Cell03", RectOf(Row0));
-        ConfigureRect(RectOf(Cell03), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell03), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell03), horizontal: false, vertical: false);
-        ApplyStyle(Cell03, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell03.gameObject.SetActive(true);
-        Cell04 = CreateRect("Cell04", RectOf(Row0));
-        ConfigureRect(RectOf(Cell04), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell04), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell04), horizontal: false, vertical: false);
-        ApplyStyle(Cell04, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell04.gameObject.SetActive(true);
-        Cell05 = CreateRect("Cell05", RectOf(Row0));
-        ConfigureRect(RectOf(Cell05), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell05), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell05), horizontal: false, vertical: false);
-        ApplyStyle(Cell05, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell05.gameObject.SetActive(true);
+        var row0View = new SyntheticContainer9463CA59View(RectOf(MapGrid), null, null);
+        Row0 = row0View.Root;
+        Row0.name = "Row0";
         Row1 = CreateRect("Row1", RectOf(MapGrid));
         ConfigureRect(RectOf(Row1), width: null, height: 32f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row1), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
@@ -285,49 +221,9 @@ public sealed class QuestSidebarView
         ApplyContentSizeFit(RectOf(Cell25), horizontal: false, vertical: false);
         ApplyStyle(Cell25, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Cell25.gameObject.SetActive(true);
-        Row3 = CreateRect("Row3", RectOf(MapGrid));
-        ConfigureRect(RectOf(Row3), width: null, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Row3), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Row3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row3), 4f, 0, 0, 0, 0);
-        ApplyStyle(Row3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Row3.gameObject.SetActive(true);
-        Cell30 = CreateRect("Cell30", RectOf(Row3));
-        ConfigureRect(RectOf(Cell30), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell30), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell30), horizontal: false, vertical: false);
-        ApplyStyle(Cell30, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell30.gameObject.SetActive(true);
-        Cell31 = CreateRect("Cell31", RectOf(Row3));
-        ConfigureRect(RectOf(Cell31), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell31), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell31), horizontal: false, vertical: false);
-        ApplyStyle(Cell31, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell31.gameObject.SetActive(true);
-        Cell32 = CreateRect("Cell32", RectOf(Row3));
-        ConfigureRect(RectOf(Cell32), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell32), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell32), horizontal: false, vertical: false);
-        ApplyStyle(Cell32, fg: "#3D6A3D", bg: "#3D6A3D", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell32.gameObject.SetActive(true);
-        Cell33 = CreateRect("Cell33", RectOf(Row3));
-        ConfigureRect(RectOf(Cell33), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell33), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell33), horizontal: false, vertical: false);
-        ApplyStyle(Cell33, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell33.gameObject.SetActive(true);
-        Cell34 = CreateRect("Cell34", RectOf(Row3));
-        ConfigureRect(RectOf(Cell34), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell34), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell34), horizontal: false, vertical: false);
-        ApplyStyle(Cell34, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell34.gameObject.SetActive(true);
-        Cell35 = CreateRect("Cell35", RectOf(Row3));
-        ConfigureRect(RectOf(Cell35), width: 32f, height: 32f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Cell35), ignoreLayout: false, preferredWidth: 32f, preferredHeight: 32f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Cell35), horizontal: false, vertical: false);
-        ApplyStyle(Cell35, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Cell35.gameObject.SetActive(true);
+        var row3View = new SyntheticContainer9463CA59View(RectOf(MapGrid), null, null);
+        Row3 = row3View.Root;
+        Row3.name = "Row3";
         Row4 = CreateRect("Row4", RectOf(MapGrid));
         ConfigureRect(RectOf(Row4), width: null, height: 32f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row4), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
@@ -386,144 +282,43 @@ public sealed class QuestSidebarView
         ApplyTextMetrics(ObjectivesLabel, lineSpacing: null, wrapText: false);
         ObjectivesLabel.text = "ACTIVE OBJECTIVES";
         ObjectivesLabel.gameObject.SetActive(true);
-        Objective1 = CreateRect("Objective1", RectOf(ObjectiveCard));
-        ConfigureRect(RectOf(Objective1), width: null, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Objective1), ignoreLayout: false, preferredWidth: null, preferredHeight: 44f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Objective1), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Objective1), 10f, 0, 0, 0, 0);
-        ApplyStyle(Objective1, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Objective1.gameObject.SetActive(true);
-        IconShell1 = CreateRect("IconShell1", RectOf(Objective1));
-        ConfigureRect(RectOf(IconShell1), width: 44f, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(IconShell1), ignoreLayout: false, preferredWidth: 44f, preferredHeight: 44f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconShell1), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconShell1), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconShell1, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        IconShell1.gameObject.SetActive(true);
-        ObjectiveIcon1 = CreateText("ObjectiveIcon1", RectOf(IconShell1));
-        ConfigureRect(RectOf(ObjectiveIcon1), width: 20f, height: 20f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveIcon1), ignoreLayout: false, preferredWidth: 20f, preferredHeight: 20f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveIcon1), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveIcon1, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 20, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(ObjectiveIcon1, boxWidth: 20f, boxHeight: 20f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(ObjectiveIcon1, lineSpacing: null, wrapText: false);
-        ObjectiveIcon1.text = ResolveIconText("cross");
-        ObjectiveIcon1.gameObject.SetActive(true);
-        ObjectiveText1 = CreateRect("ObjectiveText1", RectOf(Objective1));
-        ConfigureRect(RectOf(ObjectiveText1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveText1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(ObjectiveText1), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ObjectiveText1), 6f, 0, 0, 0, 0);
-        ApplyStyle(ObjectiveText1, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ObjectiveText1.gameObject.SetActive(true);
-        ObjectiveTitle1 = CreateText("ObjectiveTitle1", RectOf(ObjectiveText1));
-        ConfigureRect(RectOf(ObjectiveTitle1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveTitle1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveTitle1), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveTitle1, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveTitle1, lineSpacing: null, wrapText: false);
-        ObjectiveTitle1.text = "Recover the ward key";
-        ObjectiveTitle1.gameObject.SetActive(true);
-        ObjectiveHint1 = CreateText("ObjectiveHint1", RectOf(ObjectiveText1));
-        ConfigureRect(RectOf(ObjectiveHint1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveHint1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveHint1), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveHint1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveHint1, lineSpacing: null, wrapText: false);
-        ObjectiveHint1.text = "Search the northern chapel.";
-        ObjectiveHint1.gameObject.SetActive(true);
-        Objective2 = CreateRect("Objective2", RectOf(ObjectiveCard));
-        ConfigureRect(RectOf(Objective2), width: null, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Objective2), ignoreLayout: false, preferredWidth: null, preferredHeight: 44f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Objective2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Objective2), 10f, 0, 0, 0, 0);
-        ApplyStyle(Objective2, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Objective2.gameObject.SetActive(true);
-        IconShell2 = CreateRect("IconShell2", RectOf(Objective2));
-        ConfigureRect(RectOf(IconShell2), width: 44f, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(IconShell2), ignoreLayout: false, preferredWidth: 44f, preferredHeight: 44f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconShell2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconShell2), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconShell2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        IconShell2.gameObject.SetActive(true);
-        ObjectiveIcon2 = CreateText("ObjectiveIcon2", RectOf(IconShell2));
-        ConfigureRect(RectOf(ObjectiveIcon2), width: 20f, height: 20f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveIcon2), ignoreLayout: false, preferredWidth: 20f, preferredHeight: 20f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveIcon2), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveIcon2, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 20, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(ObjectiveIcon2, boxWidth: 20f, boxHeight: 20f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(ObjectiveIcon2, lineSpacing: null, wrapText: false);
-        ObjectiveIcon2.text = ResolveIconText("flame");
-        ObjectiveIcon2.gameObject.SetActive(true);
-        ObjectiveText2 = CreateRect("ObjectiveText2", RectOf(Objective2));
-        ConfigureRect(RectOf(ObjectiveText2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveText2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(ObjectiveText2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ObjectiveText2), 6f, 0, 0, 0, 0);
-        ApplyStyle(ObjectiveText2, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ObjectiveText2.gameObject.SetActive(true);
-        ObjectiveTitle2 = CreateText("ObjectiveTitle2", RectOf(ObjectiveText2));
-        ConfigureRect(RectOf(ObjectiveTitle2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveTitle2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveTitle2), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveTitle2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveTitle2, lineSpacing: null, wrapText: false);
-        ObjectiveTitle2.text = "Stabilize the furnace";
-        ObjectiveTitle2.gameObject.SetActive(true);
-        ObjectiveHint2 = CreateText("ObjectiveHint2", RectOf(ObjectiveText2));
-        ConfigureRect(RectOf(ObjectiveHint2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveHint2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveHint2), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveHint2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveHint2, lineSpacing: null, wrapText: false);
-        ObjectiveHint2.text = "Mana pressure is dropping.";
-        ObjectiveHint2.gameObject.SetActive(true);
-        Objective3 = CreateRect("Objective3", RectOf(ObjectiveCard));
-        ConfigureRect(RectOf(Objective3), width: null, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Objective3), ignoreLayout: false, preferredWidth: null, preferredHeight: 44f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Objective3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Objective3), 10f, 0, 0, 0, 0);
-        ApplyStyle(Objective3, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Objective3.gameObject.SetActive(true);
-        IconShell3 = CreateRect("IconShell3", RectOf(Objective3));
-        ConfigureRect(RectOf(IconShell3), width: 44f, height: 44f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(IconShell3), ignoreLayout: false, preferredWidth: 44f, preferredHeight: 44f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconShell3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconShell3), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconShell3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        IconShell3.gameObject.SetActive(true);
-        ObjectiveIcon3 = CreateText("ObjectiveIcon3", RectOf(IconShell3));
-        ConfigureRect(RectOf(ObjectiveIcon3), width: 20f, height: 20f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveIcon3), ignoreLayout: false, preferredWidth: 20f, preferredHeight: 20f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveIcon3), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveIcon3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 20, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(ObjectiveIcon3, boxWidth: 20f, boxHeight: 20f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(ObjectiveIcon3, lineSpacing: null, wrapText: false);
-        ObjectiveIcon3.text = ResolveIconText("shield");
-        ObjectiveIcon3.gameObject.SetActive(true);
-        ObjectiveText3 = CreateRect("ObjectiveText3", RectOf(Objective3));
-        ConfigureRect(RectOf(ObjectiveText3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveText3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(ObjectiveText3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ObjectiveText3), 6f, 0, 0, 0, 0);
-        ApplyStyle(ObjectiveText3, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ObjectiveText3.gameObject.SetActive(true);
-        ObjectiveTitle3 = CreateText("ObjectiveTitle3", RectOf(ObjectiveText3));
-        ConfigureRect(RectOf(ObjectiveTitle3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveTitle3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveTitle3), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveTitle3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveTitle3, lineSpacing: null, wrapText: false);
-        ObjectiveTitle3.text = "Hold the east passage";
-        ObjectiveTitle3.gameObject.SetActive(true);
-        ObjectiveHint3 = CreateText("ObjectiveHint3", RectOf(ObjectiveText3));
-        ConfigureRect(RectOf(ObjectiveHint3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveHint3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ObjectiveHint3), horizontal: false, vertical: false);
-        ApplyStyle(ObjectiveHint3, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(ObjectiveHint3, lineSpacing: null, wrapText: false);
-        ObjectiveHint3.text = "Reinforcements arrive in 02:10.";
-        ObjectiveHint3.gameObject.SetActive(true);
+        var objective1View = new SyntheticContainerC520AC99View(RectOf(ObjectiveCard), null, null);
+        Objective1 = objective1View.Root;
+        Objective1.name = "Objective1";
+        var objective2View = new SyntheticContainerC520AC99View(RectOf(ObjectiveCard), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Stabilize the furnace"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Mana pressure is dropping."
+            }
+        });
+        Objective2 = objective2View.Root;
+        Objective2.name = "Objective2";
+        var objective3View = new SyntheticContainerC520AC99View(RectOf(ObjectiveCard), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Hold the east passage"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Reinforcements arrive in 02:10."
+            }
+        });
+        Objective3 = objective3View.Root;
+        Objective3.name = "Objective3";
         ResourceCard = CreateRect("ResourceCard", Root);
         ConfigureRect(RectOf(ResourceCard), width: null, height: 164f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(ResourceCard), ignoreLayout: false, preferredWidth: null, preferredHeight: 164f, flexibleWidth: 1f, flexibleHeight: null);
@@ -554,7 +349,7 @@ public sealed class QuestSidebarView
         HealthText = CreateText("HealthText", RectOf(HealthBar));
         ConfigureRect(RectOf(HealthText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(HealthText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HealthText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(HealthText), horizontal: true, vertical: true);
         ApplyStyle(HealthText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(HealthText, lineSpacing: null, wrapText: false);
         HealthText.text = "HEALTH 81%";
@@ -574,7 +369,7 @@ public sealed class QuestSidebarView
         ManaText = CreateText("ManaText", RectOf(ManaBar));
         ConfigureRect(RectOf(ManaText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(ManaText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ManaText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(ManaText), horizontal: true, vertical: true);
         ApplyStyle(ManaText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(ManaText, lineSpacing: null, wrapText: false);
         ManaText.text = "MANA 62%";
@@ -594,16 +389,18 @@ public sealed class QuestSidebarView
         SupplyText = CreateText("SupplyText", RectOf(SupplyBar));
         ConfigureRect(RectOf(SupplyText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(SupplyText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(SupplyText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(SupplyText), horizontal: true, vertical: true);
         ApplyStyle(SupplyText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(SupplyText, lineSpacing: null, wrapText: false);
         SupplyText.text = "SUPPLY 38%";
         SupplyText.gameObject.SetActive(true);
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    private QuestSidebarView(RectTransform root, IQuestSidebarViewModel? viewModel)
+    private QuestSidebarView(RectTransform root, IQuestSidebarViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)
     {
+        _componentOverrides = componentOverrides;
         Root = root;
         Header = RequireRect(Root, "Header");
         Title = RequireComponent<Text>(Root, "Header/Title");
@@ -612,12 +409,6 @@ public sealed class QuestSidebarView
         MinimapLabel = RequireComponent<Text>(Root, "MinimapCard/MinimapLabel");
         MapGrid = RequireRect(Root, "MinimapCard/MapGrid");
         Row0 = RequireRect(Root, "MinimapCard/MapGrid/Row0");
-        Cell00 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell00");
-        Cell01 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell01");
-        Cell02 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell02");
-        Cell03 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell03");
-        Cell04 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell04");
-        Cell05 = RequireRect(Root, "MinimapCard/MapGrid/Row0/Cell05");
         Row1 = RequireRect(Root, "MinimapCard/MapGrid/Row1");
         Cell10 = RequireRect(Root, "MinimapCard/MapGrid/Row1/Cell10");
         Cell11 = RequireRect(Root, "MinimapCard/MapGrid/Row1/Cell11");
@@ -633,12 +424,6 @@ public sealed class QuestSidebarView
         Cell24 = RequireRect(Root, "MinimapCard/MapGrid/Row2/Cell24");
         Cell25 = RequireRect(Root, "MinimapCard/MapGrid/Row2/Cell25");
         Row3 = RequireRect(Root, "MinimapCard/MapGrid/Row3");
-        Cell30 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell30");
-        Cell31 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell31");
-        Cell32 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell32");
-        Cell33 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell33");
-        Cell34 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell34");
-        Cell35 = RequireRect(Root, "MinimapCard/MapGrid/Row3/Cell35");
         Row4 = RequireRect(Root, "MinimapCard/MapGrid/Row4");
         Cell40 = RequireRect(Root, "MinimapCard/MapGrid/Row4/Cell40");
         Cell41 = RequireRect(Root, "MinimapCard/MapGrid/Row4/Cell41");
@@ -649,23 +434,8 @@ public sealed class QuestSidebarView
         ObjectiveCard = RequireRect(Root, "ObjectiveCard");
         ObjectivesLabel = RequireComponent<Text>(Root, "ObjectiveCard/ObjectivesLabel");
         Objective1 = RequireRect(Root, "ObjectiveCard/Objective1");
-        IconShell1 = RequireRect(Root, "ObjectiveCard/Objective1/IconShell1");
-        ObjectiveIcon1 = RequireComponent<Text>(Root, "ObjectiveCard/Objective1/IconShell1/ObjectiveIcon1");
-        ObjectiveText1 = RequireRect(Root, "ObjectiveCard/Objective1/ObjectiveText1");
-        ObjectiveTitle1 = RequireComponent<Text>(Root, "ObjectiveCard/Objective1/ObjectiveText1/ObjectiveTitle1");
-        ObjectiveHint1 = RequireComponent<Text>(Root, "ObjectiveCard/Objective1/ObjectiveText1/ObjectiveHint1");
         Objective2 = RequireRect(Root, "ObjectiveCard/Objective2");
-        IconShell2 = RequireRect(Root, "ObjectiveCard/Objective2/IconShell2");
-        ObjectiveIcon2 = RequireComponent<Text>(Root, "ObjectiveCard/Objective2/IconShell2/ObjectiveIcon2");
-        ObjectiveText2 = RequireRect(Root, "ObjectiveCard/Objective2/ObjectiveText2");
-        ObjectiveTitle2 = RequireComponent<Text>(Root, "ObjectiveCard/Objective2/ObjectiveText2/ObjectiveTitle2");
-        ObjectiveHint2 = RequireComponent<Text>(Root, "ObjectiveCard/Objective2/ObjectiveText2/ObjectiveHint2");
         Objective3 = RequireRect(Root, "ObjectiveCard/Objective3");
-        IconShell3 = RequireRect(Root, "ObjectiveCard/Objective3/IconShell3");
-        ObjectiveIcon3 = RequireComponent<Text>(Root, "ObjectiveCard/Objective3/IconShell3/ObjectiveIcon3");
-        ObjectiveText3 = RequireRect(Root, "ObjectiveCard/Objective3/ObjectiveText3");
-        ObjectiveTitle3 = RequireComponent<Text>(Root, "ObjectiveCard/Objective3/ObjectiveText3/ObjectiveTitle3");
-        ObjectiveHint3 = RequireComponent<Text>(Root, "ObjectiveCard/Objective3/ObjectiveText3/ObjectiveHint3");
         ResourceCard = RequireRect(Root, "ResourceCard");
         ResourcesLabel = RequireComponent<Text>(Root, "ResourceCard/ResourcesLabel");
         HealthBar = RequireRect(Root, "ResourceCard/HealthBar");
@@ -677,10 +447,48 @@ public sealed class QuestSidebarView
         SupplyBar = RequireRect(Root, "ResourceCard/SupplyBar");
         SupplyFill = RequireRect(Root, "ResourceCard/SupplyBar/SupplyFill");
         SupplyText = RequireComponent<Text>(Root, "ResourceCard/SupplyBar/SupplyText");
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    public static QuestSidebarView Bind(RectTransform root, IQuestSidebarViewModel? viewModel = null) => new(root, viewModel);
+    public static QuestSidebarView Bind(RectTransform root, IQuestSidebarViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null) return;
+        if (TryGetComponentOverrideValue("$/0/0", "Text", out var componentOverrideValue0))
+        {
+            Title.text = AsString(componentOverrideValue0);
+        }
+        if (TryGetComponentOverrideValue("$/0/1", "Text", out var componentOverrideValue1))
+        {
+            Zone.text = AsString(componentOverrideValue1);
+        }
+        if (TryGetComponentOverrideValue("$/1/0", "Text", out var componentOverrideValue2))
+        {
+            MinimapLabel.text = AsString(componentOverrideValue2);
+        }
+        if (TryGetComponentOverrideValue("$/2/0", "Text", out var componentOverrideValue3))
+        {
+            ObjectivesLabel.text = AsString(componentOverrideValue3);
+        }
+        if (TryGetComponentOverrideValue("$/3/0", "Text", out var componentOverrideValue4))
+        {
+            ResourcesLabel.text = AsString(componentOverrideValue4);
+        }
+        if (TryGetComponentOverrideValue("$/3/1/1", "Text", out var componentOverrideValue5))
+        {
+            HealthText.text = AsString(componentOverrideValue5);
+        }
+        if (TryGetComponentOverrideValue("$/3/2/1", "Text", out var componentOverrideValue6))
+        {
+            ManaText.text = AsString(componentOverrideValue6);
+        }
+        if (TryGetComponentOverrideValue("$/3/3/1", "Text", out var componentOverrideValue7))
+        {
+            SupplyText.text = AsString(componentOverrideValue7);
+        }
+    }
 
     public void Refresh()
     {
@@ -688,6 +496,22 @@ public sealed class QuestSidebarView
     }
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;
+        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
@@ -699,8 +523,8 @@ public sealed class QuestSidebarView
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
@@ -708,6 +532,7 @@ public sealed class QuestSidebarView
     private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
     private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
     private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}

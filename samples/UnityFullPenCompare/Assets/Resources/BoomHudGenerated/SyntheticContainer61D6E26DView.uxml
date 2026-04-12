@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="IconPanel" class="boomhud-icon-panel">
+        <ui:Label name="EventIcon" class="boomhud-event-icon" />
+    </ui:VisualElement>
+</ui:UXML>

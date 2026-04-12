@@ -21,6 +21,9 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, options, "terminalgui");
+        document = prepared.Document;
+        diagnostics.AddRange(prepared.Diagnostics);
 
         try
         {
@@ -100,6 +103,29 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         catch (Exception ex)
         {
             diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
+        }
+
+        if (GenerationDocumentPreprocessor.CreateSummaryArtifact(document.Name, prepared.SyntheticComponentization) is { } artifact)
+        {
+            files.Add(artifact);
+        }
+
+        if (options.EmitVisualIrArtifact
+            && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
+        {
+            files.Add(visualIrArtifact);
+        }
+
+        if (options.EmitVisualSynthesisArtifact
+            && GenerationDocumentPreprocessor.CreateVisualSynthesisArtifact(document.Name, prepared.VisualSynthesis) is { } visualSynthesisArtifact)
+        {
+            files.Add(visualSynthesisArtifact);
+        }
+
+        if (options.EmitVisualRefinementArtifact
+            && GenerationDocumentPreprocessor.CreateVisualRefinementArtifact(document.Name, prepared.VisualRefinement) is { } visualRefinementArtifact)
+        {
+            files.Add(visualRefinementArtifact);
         }
 
         return new GenerationResult
@@ -531,13 +557,13 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         string? previousChildVar = null;
         var layoutType = node.Layout?.Type ?? LayoutType.Vertical;
         var gap = (int)(node.Layout?.Gap?.Top ?? 0); // Assuming uniform gap for now
-        
+
         // Initial offset from padding (handled by View.Padding now)
         // var paddingX = (int)(node.Layout?.Padding?.Left ?? 0);
         // var paddingY = (int)(node.Layout?.Padding?.Top ?? 0);
-        
+
         // Scale gap if it looks like pixels
-        if (gap > 5) 
+        if (gap > 5)
         {
             if (layoutType == LayoutType.Horizontal) gap /= 12;
             else gap /= 24;
@@ -561,7 +587,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                     else
                         cb.AppendLine($"{childVar}.Y = Pos.Bottom({previousChildVar});");
                 }
-                
+
                 cb.AppendLine($"{childVar}.X = 0;");
             }
             else if (layoutType == LayoutType.Horizontal)
@@ -578,10 +604,10 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                     else
                         cb.AppendLine($"{childVar}.X = Pos.Right({previousChildVar});");
                 }
-                
+
                 cb.AppendLine($"{childVar}.Y = 0;");
             }
-            else 
+            else
             {
                 // Absolute or other: Default to 0,0 relative to parent padding
                 cb.AppendLine($"{childVar}.X = 0;");
@@ -726,33 +752,33 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         // If no explicit size was provided...
         // NEW LOGIC: Default to Fill for cross-axis stretch, Auto for main-axis.
-        
+
         if (layout.Width == null)
         {
-             if (parentLayoutType == LayoutType.Vertical)
-             {
-                 // Cross-axis stretch for Vertical parent
-                 cb.AppendLine($"{varName}.Width = Dim.Fill();");
-             }
-             else
-             {
-                 // Main-axis or unknown: Auto
-                 cb.AppendLine($"{varName}.Width = Dim.Auto();");
-             }
+            if (parentLayoutType == LayoutType.Vertical)
+            {
+                // Cross-axis stretch for Vertical parent
+                cb.AppendLine($"{varName}.Width = Dim.Fill();");
+            }
+            else
+            {
+                // Main-axis or unknown: Auto
+                cb.AppendLine($"{varName}.Width = Dim.Auto();");
+            }
         }
 
         if (layout.Height == null)
         {
-             if (parentLayoutType == LayoutType.Horizontal)
-             {
-                 // Cross-axis stretch for Horizontal parent
-                 cb.AppendLine($"{varName}.Height = Dim.Fill();");
-             }
-             else
-             {
-                 // Main-axis or unknown: Auto
-                 cb.AppendLine($"{varName}.Height = Dim.Auto();");
-             }
+            if (parentLayoutType == LayoutType.Horizontal)
+            {
+                // Cross-axis stretch for Horizontal parent
+                cb.AppendLine($"{varName}.Height = Dim.Fill();");
+            }
+            else
+            {
+                // Main-axis or unknown: Auto
+                cb.AppendLine($"{varName}.Height = Dim.Auto();");
+            }
         }
 
         // Margin
@@ -1188,12 +1214,12 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         if (dim.Unit == DimensionUnit.Pixels)
         {
             var value = (int)dim.Value;
-            
+
             // Heuristic: If it's huge (like full screen), maybe Fill is still appropriate?
             // But usually we want scaling.
             // Figma 1440 width -> TUI ~120 chars (1440/12)
             // Figma 1024 height -> TUI ~42 lines (1024/24)
-            
+
             if (context == "Width")
             {
                 var scaled = Math.Max(1, value);

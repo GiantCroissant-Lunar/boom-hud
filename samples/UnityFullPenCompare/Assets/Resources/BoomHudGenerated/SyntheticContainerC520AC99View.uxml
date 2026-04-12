@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="Objective1" class="boomhud-objective1">
+        <ui:VisualElement name="IconShell1" class="boomhud-icon-shell1">
+            <ui:Label name="ObjectiveIcon1" class="boomhud-objective-icon1" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ObjectiveText1" class="boomhud-objective-text1">
+            <ui:Label name="ObjectiveTitle1" class="boomhud-objective-title1" />
+            <ui:Label name="ObjectiveHint1" class="boomhud-objective-hint1" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

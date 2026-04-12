@@ -78,7 +78,7 @@ public sealed class ReactGeneratedAssetCopierTests : IDisposable
         var inputDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "missing-input"));
         var outputDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "missing-output"));
 
-        var result = ReactGeneratedAssetCopier.CopyBackgroundImageAssets(
+        var result = ReactGeneratedAssetCopier.PrepareBackgroundImageAssets(
             CreateDocument("./images/missing.png"),
             [new FileInfo(Path.Combine(inputDirectory.FullName, "hud.pen"))],
             outputDirectory.FullName);
@@ -86,6 +86,7 @@ public sealed class ReactGeneratedAssetCopierTests : IDisposable
         result.CopiedFiles.Should().BeEmpty();
         result.Warnings.Should().ContainSingle();
         result.Warnings[0].Should().Contain("./images/missing.png");
+        result.Document.Root.Style?.BackgroundImage.Should().BeNull();
         File.Exists(Path.Combine(outputDirectory.FullName, "images", "missing.png")).Should().BeFalse();
     }
 
@@ -95,12 +96,36 @@ public sealed class ReactGeneratedAssetCopierTests : IDisposable
         var inputDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "absolute-input"));
         var outputDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "absolute-output"));
 
-        var result = ReactGeneratedAssetCopier.CopyBackgroundImageAssets(
+        var result = ReactGeneratedAssetCopier.PrepareBackgroundImageAssets(
             CreateDocument("https://example.com/background.png"),
             [new FileInfo(Path.Combine(inputDirectory.FullName, "hud.pen"))],
             outputDirectory.FullName);
 
         result.CopiedFiles.Should().BeEmpty();
+        result.Warnings.Should().BeEmpty();
+        result.Document.Root.Style?.BackgroundImage?.Url.Should().Be("https://example.com/background.png");
+    }
+
+    [Fact]
+    public void PrepareBackgroundImageAssets_RewritesRemotionAssetsIntoPublicRoot()
+    {
+        var projectDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "remotion-project"));
+        var sourceDirectory = Directory.CreateDirectory(Path.Combine(projectDirectory.FullName, "src", "generated"));
+        var publicDirectory = Directory.CreateDirectory(Path.Combine(projectDirectory.FullName, "public"));
+        var inputDirectory = Directory.CreateDirectory(Path.Combine(_tempRoot, "remotion-input"));
+        var imageDirectory = Directory.CreateDirectory(Path.Combine(inputDirectory.FullName, "images"));
+        var sourceImagePath = Path.Combine(imageDirectory.FullName, "viewport.png");
+        File.WriteAllText(sourceImagePath, "viewport-image");
+
+        var result = ReactGeneratedAssetCopier.PrepareBackgroundImageAssets(
+            CreateDocument("./images/viewport.png"),
+            [new FileInfo(Path.Combine(inputDirectory.FullName, "hud.pen"))],
+            sourceDirectory.FullName);
+
+        var targetImagePath = Path.Combine(publicDirectory.FullName, "images", "viewport.png");
+        File.Exists(targetImagePath).Should().BeTrue();
+        File.ReadAllText(targetImagePath).Should().Be("viewport-image");
+        result.Document.Root.Style?.BackgroundImage?.Url.Should().Be("/images/viewport.png");
         result.Warnings.Should().BeEmpty();
     }
 

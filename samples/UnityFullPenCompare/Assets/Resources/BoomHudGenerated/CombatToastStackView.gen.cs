@@ -18,12 +18,12 @@ namespace Generated.Hud
 public sealed class CombatToastStackView
 {
     private readonly ICombatToastStackViewModel? _initialViewModel = null;
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private ICombatToastStackViewModel? _viewModel;
 
     public VisualElement Root { get; }
     public VisualElement ToastOne { get; }
     public VisualElement IconPanel { get; }
-    public Label EventIcon { get; }
     public VisualElement Content { get; }
     public Label Title { get; }
     public Label Body { get; }
@@ -31,14 +31,10 @@ public sealed class CombatToastStackView
     public VisualElement ProgressFill { get; }
     public Label ProgressText { get; }
     public VisualElement RewardColumn { get; }
-    public Label Tag { get; }
-    public Label Value { get; }
-    public Label Time { get; }
     public VisualElement Badge { get; }
     public Label BadgeText { get; }
     public VisualElement ToastTwo { get; }
     public VisualElement IconPanel2 { get; }
-    public Label EventIcon2 { get; }
     public VisualElement Content2 { get; }
     public Label Title2 { get; }
     public Label Body2 { get; }
@@ -46,14 +42,10 @@ public sealed class CombatToastStackView
     public VisualElement ProgressFill2 { get; }
     public Label ProgressText2 { get; }
     public VisualElement RewardColumn2 { get; }
-    public Label Tag2 { get; }
-    public Label Value2 { get; }
-    public Label Time2 { get; }
     public VisualElement Badge2 { get; }
     public Label BadgeText2 { get; }
     public VisualElement ToastThree { get; }
     public VisualElement IconPanel3 { get; }
-    public Label EventIcon3 { get; }
     public VisualElement Content3 { get; }
     public Label Title3 { get; }
     public Label Body3 { get; }
@@ -61,11 +53,14 @@ public sealed class CombatToastStackView
     public VisualElement ProgressFill3 { get; }
     public Label ProgressText3 { get; }
     public VisualElement RewardColumn3 { get; }
-    public Label Tag3 { get; }
-    public Label Value3 { get; }
-    public Label Time3 { get; }
     public VisualElement Badge3 { get; }
     public Label BadgeText3 { get; }
+    private readonly SyntheticContainer61D6E26DView? _iconPanelComponent;
+    private readonly SyntheticContainerFC1FF3CBView? _rewardColumnComponent;
+    private readonly SyntheticContainer61D6E26DView? _iconPanel2Component;
+    private readonly SyntheticContainerFC1FF3CBView? _rewardColumn2Component;
+    private readonly SyntheticContainer61D6E26DView? _iconPanel3Component;
+    private readonly SyntheticContainerFC1FF3CBView? _rewardColumn3Component;
 
     public ICombatToastStackViewModel? ViewModel
     {
@@ -78,6 +73,7 @@ public sealed class CombatToastStackView
             }
 
             _viewModel = value;
+            ApplyComponentViewModels();
 
             if (_viewModel != null)
             {
@@ -88,56 +84,98 @@ public sealed class CombatToastStackView
         }
     }
 
-    public CombatToastStackView(VisualElement root)
+    public CombatToastStackView(VisualElement root, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
         Root = root as VisualElement ?? throw new ArgumentException("Expected root element type VisualElement.", nameof(root));
+        _componentOverrides = componentOverrides;
         ToastOne = Root.Q<VisualElement>("ToastOne") ?? throw new InvalidOperationException("Could not find generated element 'ToastOne'.");
-        IconPanel = Root.Q<VisualElement>("IconPanel") ?? throw new InvalidOperationException("Could not find generated element 'IconPanel'.");
-        EventIcon = Root.Q<Label>("EventIcon") ?? throw new InvalidOperationException("Could not find generated element 'EventIcon'.");
+        var iconPanelPlaceholder = Root.Q<VisualElement>("IconPanel") ?? throw new InvalidOperationException("Could not find generated component placeholder 'IconPanel'.");
+        _iconPanelComponent = SyntheticContainer61D6E26DView.Attach(iconPanelPlaceholder, null);
+        IconPanel = _iconPanelComponent.Root;
         Content = Root.Q<VisualElement>("Content") ?? throw new InvalidOperationException("Could not find generated element 'Content'.");
         Title = Root.Q<Label>("Title") ?? throw new InvalidOperationException("Could not find generated element 'Title'.");
         Body = Root.Q<Label>("Body") ?? throw new InvalidOperationException("Could not find generated element 'Body'.");
         Progress = Root.Q<VisualElement>("Progress") ?? throw new InvalidOperationException("Could not find generated element 'Progress'.");
         ProgressFill = Root.Q<VisualElement>("ProgressFill") ?? throw new InvalidOperationException("Could not find generated element 'ProgressFill'.");
         ProgressText = Root.Q<Label>("ProgressText") ?? throw new InvalidOperationException("Could not find generated element 'ProgressText'.");
-        RewardColumn = Root.Q<VisualElement>("RewardColumn") ?? throw new InvalidOperationException("Could not find generated element 'RewardColumn'.");
-        Tag = Root.Q<Label>("Tag") ?? throw new InvalidOperationException("Could not find generated element 'Tag'.");
-        Value = Root.Q<Label>("Value") ?? throw new InvalidOperationException("Could not find generated element 'Value'.");
-        Time = Root.Q<Label>("Time") ?? throw new InvalidOperationException("Could not find generated element 'Time'.");
+        var rewardColumnPlaceholder = Root.Q<VisualElement>("RewardColumn") ?? throw new InvalidOperationException("Could not find generated component placeholder 'RewardColumn'.");
+        _rewardColumnComponent = SyntheticContainerFC1FF3CBView.Attach(rewardColumnPlaceholder, null);
+        RewardColumn = _rewardColumnComponent.Root;
         Badge = Root.Q<VisualElement>("Badge") ?? throw new InvalidOperationException("Could not find generated element 'Badge'.");
         BadgeText = Root.Q<Label>("BadgeText") ?? throw new InvalidOperationException("Could not find generated element 'BadgeText'.");
         ToastTwo = Root.Q<VisualElement>("ToastTwo") ?? throw new InvalidOperationException("Could not find generated element 'ToastTwo'.");
-        IconPanel2 = Root.Q<VisualElement>("IconPanel2") ?? throw new InvalidOperationException("Could not find generated element 'IconPanel2'.");
-        EventIcon2 = Root.Q<Label>("EventIcon2") ?? throw new InvalidOperationException("Could not find generated element 'EventIcon2'.");
+        var iconPanel2Placeholder = Root.Q<VisualElement>("IconPanel2") ?? throw new InvalidOperationException("Could not find generated component placeholder 'IconPanel2'.");
+        _iconPanel2Component = SyntheticContainer61D6E26DView.Attach(iconPanel2Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            }
+        });
+        IconPanel2 = _iconPanel2Component.Root;
         Content2 = Root.Q<VisualElement>("Content2") ?? throw new InvalidOperationException("Could not find generated element 'Content2'.");
         Title2 = Root.Q<Label>("Title2") ?? throw new InvalidOperationException("Could not find generated element 'Title2'.");
         Body2 = Root.Q<Label>("Body2") ?? throw new InvalidOperationException("Could not find generated element 'Body2'.");
         Progress2 = Root.Q<VisualElement>("Progress2") ?? throw new InvalidOperationException("Could not find generated element 'Progress2'.");
         ProgressFill2 = Root.Q<VisualElement>("ProgressFill2") ?? throw new InvalidOperationException("Could not find generated element 'ProgressFill2'.");
         ProgressText2 = Root.Q<Label>("ProgressText2") ?? throw new InvalidOperationException("Could not find generated element 'ProgressText2'.");
-        RewardColumn2 = Root.Q<VisualElement>("RewardColumn2") ?? throw new InvalidOperationException("Could not find generated element 'RewardColumn2'.");
-        Tag2 = Root.Q<Label>("Tag2") ?? throw new InvalidOperationException("Could not find generated element 'Tag2'.");
-        Value2 = Root.Q<Label>("Value2") ?? throw new InvalidOperationException("Could not find generated element 'Value2'.");
-        Time2 = Root.Q<Label>("Time2") ?? throw new InvalidOperationException("Could not find generated element 'Time2'.");
+        var rewardColumn2Placeholder = Root.Q<VisualElement>("RewardColumn2") ?? throw new InvalidOperationException("Could not find generated component placeholder 'RewardColumn2'.");
+        _rewardColumn2Component = SyntheticContainerFC1FF3CBView.Attach(rewardColumn2Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "DEFENSE"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "+1 barrier"
+            },
+            ["$/2"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "00:21"
+            }
+        });
+        RewardColumn2 = _rewardColumn2Component.Root;
         Badge2 = Root.Q<VisualElement>("Badge2") ?? throw new InvalidOperationException("Could not find generated element 'Badge2'.");
         BadgeText2 = Root.Q<Label>("BadgeText2") ?? throw new InvalidOperationException("Could not find generated element 'BadgeText2'.");
         ToastThree = Root.Q<VisualElement>("ToastThree") ?? throw new InvalidOperationException("Could not find generated element 'ToastThree'.");
-        IconPanel3 = Root.Q<VisualElement>("IconPanel3") ?? throw new InvalidOperationException("Could not find generated element 'IconPanel3'.");
-        EventIcon3 = Root.Q<Label>("EventIcon3") ?? throw new InvalidOperationException("Could not find generated element 'EventIcon3'.");
+        var iconPanel3Placeholder = Root.Q<VisualElement>("IconPanel3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'IconPanel3'.");
+        _iconPanel3Component = SyntheticContainer61D6E26DView.Attach(iconPanel3Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        IconPanel3 = _iconPanel3Component.Root;
         Content3 = Root.Q<VisualElement>("Content3") ?? throw new InvalidOperationException("Could not find generated element 'Content3'.");
         Title3 = Root.Q<Label>("Title3") ?? throw new InvalidOperationException("Could not find generated element 'Title3'.");
         Body3 = Root.Q<Label>("Body3") ?? throw new InvalidOperationException("Could not find generated element 'Body3'.");
         Progress3 = Root.Q<VisualElement>("Progress3") ?? throw new InvalidOperationException("Could not find generated element 'Progress3'.");
         ProgressFill3 = Root.Q<VisualElement>("ProgressFill3") ?? throw new InvalidOperationException("Could not find generated element 'ProgressFill3'.");
         ProgressText3 = Root.Q<Label>("ProgressText3") ?? throw new InvalidOperationException("Could not find generated element 'ProgressText3'.");
-        RewardColumn3 = Root.Q<VisualElement>("RewardColumn3") ?? throw new InvalidOperationException("Could not find generated element 'RewardColumn3'.");
-        Tag3 = Root.Q<Label>("Tag3") ?? throw new InvalidOperationException("Could not find generated element 'Tag3'.");
-        Value3 = Root.Q<Label>("Value3") ?? throw new InvalidOperationException("Could not find generated element 'Value3'.");
-        Time3 = Root.Q<Label>("Time3") ?? throw new InvalidOperationException("Could not find generated element 'Time3'.");
+        var rewardColumn3Placeholder = Root.Q<VisualElement>("RewardColumn3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'RewardColumn3'.");
+        _rewardColumn3Component = SyntheticContainerFC1FF3CBView.Attach(rewardColumn3Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "UTILITY"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "+stealth"
+            },
+            ["$/2"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "00:33"
+            }
+        });
+        RewardColumn3 = _rewardColumn3Component.Root;
         Badge3 = Root.Q<VisualElement>("Badge3") ?? throw new InvalidOperationException("Could not find generated element 'Badge3'.");
         BadgeText3 = Root.Q<Label>("BadgeText3") ?? throw new InvalidOperationException("Could not find generated element 'BadgeText3'.");
 
         ApplyStaticValues();
+        ApplyInstanceOverrides();
         ViewModel = _initialViewModel;
     }
 
@@ -148,6 +186,75 @@ public sealed class CombatToastStackView
             return;
         }
 
+    }
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null)
+        {
+            return;
+        }
+
+        if (TryGetComponentOverrideValue("$/0/1/0", "Text", out var componentOverrideValue0))
+        {
+            Title.text = AsString(componentOverrideValue0);
+            ApplyTextLabelStyle(Title, false);
+        }
+        if (TryGetComponentOverrideValue("$/0/1/1", "Text", out var componentOverrideValue1))
+        {
+            Body.text = AsString(componentOverrideValue1);
+            ApplyTextLabelStyle(Body, true);
+        }
+        if (TryGetComponentOverrideValue("$/0/1/2/1", "Text", out var componentOverrideValue2))
+        {
+            ProgressText.text = AsString(componentOverrideValue2);
+            ApplyTextLabelStyle(ProgressText, false);
+        }
+        if (TryGetComponentOverrideValue("$/0/3/0", "Text", out var componentOverrideValue3))
+        {
+            BadgeText.text = AsString(componentOverrideValue3);
+            ApplyTextLabelStyle(BadgeText, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/0", "Text", out var componentOverrideValue4))
+        {
+            Title2.text = AsString(componentOverrideValue4);
+            ApplyTextLabelStyle(Title2, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/1", "Text", out var componentOverrideValue5))
+        {
+            Body2.text = AsString(componentOverrideValue5);
+            ApplyTextLabelStyle(Body2, true);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/2/1", "Text", out var componentOverrideValue6))
+        {
+            ProgressText2.text = AsString(componentOverrideValue6);
+            ApplyTextLabelStyle(ProgressText2, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/3/0", "Text", out var componentOverrideValue7))
+        {
+            BadgeText2.text = AsString(componentOverrideValue7);
+            ApplyTextLabelStyle(BadgeText2, false);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/0", "Text", out var componentOverrideValue8))
+        {
+            Title3.text = AsString(componentOverrideValue8);
+            ApplyTextLabelStyle(Title3, false);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/1", "Text", out var componentOverrideValue9))
+        {
+            Body3.text = AsString(componentOverrideValue9);
+            ApplyTextLabelStyle(Body3, true);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/2/1", "Text", out var componentOverrideValue10))
+        {
+            ProgressText3.text = AsString(componentOverrideValue10);
+            ApplyTextLabelStyle(ProgressText3, false);
+        }
+        if (TryGetComponentOverrideValue("$/2/3/0", "Text", out var componentOverrideValue11))
+        {
+            BadgeText3.text = AsString(componentOverrideValue11);
+            ApplyTextLabelStyle(BadgeText3, false);
+        }
     }
 
     private void ApplyStaticValues()
@@ -194,58 +301,13 @@ public sealed class CombatToastStackView
         ToastOne.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         ToastOne.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         ToastOne.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        IconPanel.style.flexDirection = ParseFlexDirection("column");
         IconPanel.style.position = ParsePosition("absolute");
-        IconPanel.style.left = ParseStyleLength("16px");
-        IconPanel.style.top = ParseStyleLength("16px");
-        IconPanel.style.width = ParseStyleLength("132px");
-        IconPanel.style.height = ParseStyleLength("132px");
-        IconPanel.style.marginTop = ParseStyleFloat("0px");
-        IconPanel.style.marginRight = ParseStyleFloat("0px");
-        IconPanel.style.marginBottom = ParseStyleFloat("0px");
-        IconPanel.style.marginLeft = ParseStyleFloat("0px");
-        IconPanel.style.paddingTop = ParseStyleFloat("0px");
-        IconPanel.style.paddingRight = ParseStyleFloat("0px");
-        IconPanel.style.paddingBottom = ParseStyleFloat("0px");
-        IconPanel.style.paddingLeft = ParseStyleFloat("0px");
-        IconPanel.style.alignItems = ParseAlign("center");
-        IconPanel.style.justifyContent = ParseJustify("center");
         IconPanel.style.display = DisplayStyle.Flex;
         IconPanel.SetEnabled(true);
-        IconPanel.style.color = ParseStyleColor("#000000", null);
-        IconPanel.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconPanel.style.borderLeftWidth = 4f;
-        IconPanel.style.borderRightWidth = 4f;
-        IconPanel.style.borderTopWidth = 4f;
-        IconPanel.style.borderBottomWidth = 4f;
-        IconPanel.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        EventIcon.style.flexDirection = ParseFlexDirection("column");
-        EventIcon.style.width = ParseStyleLength("56px");
-        EventIcon.style.height = ParseStyleLength("56px");
-        EventIcon.style.marginTop = ParseStyleFloat("0px");
-        EventIcon.style.marginRight = ParseStyleFloat("0px");
-        EventIcon.style.marginBottom = ParseStyleFloat("0px");
-        EventIcon.style.marginLeft = ParseStyleFloat("0px");
-        EventIcon.style.paddingTop = ParseStyleFloat("0px");
-        EventIcon.style.paddingRight = ParseStyleFloat("0px");
-        EventIcon.style.paddingBottom = ParseStyleFloat("0px");
-        EventIcon.style.paddingLeft = ParseStyleFloat("0px");
-        EventIcon.style.alignItems = ParseAlign("flex-start");
-        EventIcon.style.justifyContent = ParseJustify("flex-start");
-        EventIcon.text = ResolveIconText("flame", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon, 56f, 56f, 0f, true, "fit-box", 0f);
-        EventIcon.style.display = DisplayStyle.Flex;
-        EventIcon.SetEnabled(true);
-        ApplyFontFamily(EventIcon, "lucide", 56f);
-        EventIcon.style.color = ParseStyleColor("#FFFFFF", null);
-        EventIcon.style.fontSize = 56f;
-        Content.style.flexDirection = ParseFlexDirection("column");
         Content.style.position = ParsePosition("absolute");
         Content.style.left = ParseStyleLength("168px");
         Content.style.top = ParseStyleLength("18px");
+        Content.style.flexDirection = ParseFlexDirection("column");
         Content.style.width = ParseStyleLength("560px");
         Content.style.height = ParseStyleLength("144px");
         Content.style.marginTop = ParseStyleFloat("0px");
@@ -326,8 +388,8 @@ public sealed class CombatToastStackView
         Progress.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         Progress.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         Progress.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ProgressFill.style.flexDirection = ParseFlexDirection("column");
         ProgressFill.style.position = ParsePosition("absolute");
+        ProgressFill.style.flexDirection = ParseFlexDirection("column");
         ProgressFill.style.width = ParseStyleLength("312px");
         ProgressFill.style.height = ParseStyleLength("18px");
         ProgressFill.style.marginTop = ParseStyleFloat("0px");
@@ -344,10 +406,10 @@ public sealed class CombatToastStackView
         ProgressFill.SetEnabled(true);
         ProgressFill.style.color = ParseStyleColor("#D44A4A", null);
         ProgressFill.style.backgroundColor = ParseStyleColor("#D44A4A", null);
-        ProgressText.style.flexDirection = ParseFlexDirection("column");
         ProgressText.style.position = ParsePosition("absolute");
         ProgressText.style.left = ParseStyleLength("12px");
         ProgressText.style.top = ParseStyleLength("4px");
+        ProgressText.style.flexDirection = ParseFlexDirection("column");
         ProgressText.style.marginTop = ParseStyleFloat("0px");
         ProgressText.style.marginRight = ParseStyleFloat("0px");
         ProgressText.style.marginBottom = ParseStyleFloat("0px");
@@ -366,95 +428,13 @@ public sealed class CombatToastStackView
         ProgressText.style.color = ParseStyleColor("#FFFFFF", null);
         ProgressText.style.fontSize = 9f;
         ProgressText.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        RewardColumn.style.flexDirection = ParseFlexDirection("column");
         RewardColumn.style.position = ParsePosition("absolute");
-        RewardColumn.style.left = ParseStyleLength("764px");
-        RewardColumn.style.top = ParseStyleLength("16px");
-        RewardColumn.style.width = ParseStyleLength("164px");
-        RewardColumn.style.height = ParseStyleLength("132px");
-        RewardColumn.style.marginTop = ParseStyleFloat("0px");
-        RewardColumn.style.marginRight = ParseStyleFloat("0px");
-        RewardColumn.style.marginBottom = ParseStyleFloat("0px");
-        RewardColumn.style.marginLeft = ParseStyleFloat("0px");
-        RewardColumn.style.paddingTop = ParseStyleFloat("12px");
-        RewardColumn.style.paddingRight = ParseStyleFloat("12px");
-        RewardColumn.style.paddingBottom = ParseStyleFloat("12px");
-        RewardColumn.style.paddingLeft = ParseStyleFloat("12px");
-        RewardColumn.style.alignItems = ParseAlign("flex-start");
-        RewardColumn.style.justifyContent = ParseJustify("flex-start");
         RewardColumn.style.display = DisplayStyle.Flex;
         RewardColumn.SetEnabled(true);
-        RewardColumn.style.color = ParseStyleColor("#0C0C0C", null);
-        RewardColumn.style.backgroundColor = ParseStyleColor("#0C0C0C", null);
-        RewardColumn.style.borderLeftWidth = 4f;
-        RewardColumn.style.borderRightWidth = 4f;
-        RewardColumn.style.borderTopWidth = 4f;
-        RewardColumn.style.borderBottomWidth = 4f;
-        RewardColumn.style.borderLeftColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        Tag.style.flexDirection = ParseFlexDirection("column");
-        Tag.style.marginTop = ParseStyleFloat("0px");
-        Tag.style.marginRight = ParseStyleFloat("0px");
-        Tag.style.marginBottom = ParseStyleFloat("0px");
-        Tag.style.marginLeft = ParseStyleFloat("0px");
-        Tag.style.paddingTop = ParseStyleFloat("0px");
-        Tag.style.paddingRight = ParseStyleFloat("0px");
-        Tag.style.paddingBottom = ParseStyleFloat("0px");
-        Tag.style.paddingLeft = ParseStyleFloat("0px");
-        Tag.style.alignItems = ParseAlign("flex-start");
-        Tag.style.justifyContent = ParseJustify("flex-start");
-        Tag.text = "ALERT";
-        ApplyTextLabelStyle(Tag, false);
-        Tag.style.display = DisplayStyle.Flex;
-        Tag.SetEnabled(true);
-        ApplyFontFamily(Tag, "Press Start 2P", 10f);
-        Tag.style.color = ParseStyleColor("#FFFFFF", null);
-        Tag.style.fontSize = 10f;
-        Tag.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Value.style.flexDirection = ParseFlexDirection("column");
-        Value.style.marginTop = ParseStyleFloat("10px");
-        Value.style.marginRight = ParseStyleFloat("0px");
-        Value.style.marginBottom = ParseStyleFloat("0px");
-        Value.style.marginLeft = ParseStyleFloat("0px");
-        Value.style.paddingTop = ParseStyleFloat("0px");
-        Value.style.paddingRight = ParseStyleFloat("0px");
-        Value.style.paddingBottom = ParseStyleFloat("0px");
-        Value.style.paddingLeft = ParseStyleFloat("0px");
-        Value.style.alignItems = ParseAlign("flex-start");
-        Value.style.justifyContent = ParseJustify("flex-start");
-        Value.text = "+120 XP";
-        ApplyTextLabelStyle(Value, false);
-        Value.style.display = DisplayStyle.Flex;
-        Value.SetEnabled(true);
-        ApplyFontFamily(Value, "Press Start 2P", 9f);
-        Value.style.color = ParseStyleColor("#AAAAAA", null);
-        Value.style.fontSize = 9f;
-        Value.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Time.style.flexDirection = ParseFlexDirection("column");
-        Time.style.marginTop = ParseStyleFloat("10px");
-        Time.style.marginRight = ParseStyleFloat("0px");
-        Time.style.marginBottom = ParseStyleFloat("0px");
-        Time.style.marginLeft = ParseStyleFloat("0px");
-        Time.style.paddingTop = ParseStyleFloat("0px");
-        Time.style.paddingRight = ParseStyleFloat("0px");
-        Time.style.paddingBottom = ParseStyleFloat("0px");
-        Time.style.paddingLeft = ParseStyleFloat("0px");
-        Time.style.alignItems = ParseAlign("flex-start");
-        Time.style.justifyContent = ParseJustify("flex-start");
-        Time.text = "00:14";
-        ApplyTextLabelStyle(Time, false);
-        Time.style.display = DisplayStyle.Flex;
-        Time.SetEnabled(true);
-        ApplyFontFamily(Time, "Press Start 2P", 9f);
-        Time.style.color = ParseStyleColor("#AAAAAA", null);
-        Time.style.fontSize = 9f;
-        Time.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Badge.style.flexDirection = ParseFlexDirection("column");
         Badge.style.position = ParsePosition("absolute");
         Badge.style.left = ParseStyleLength("784px");
         Badge.style.top = ParseStyleLength("0px");
+        Badge.style.flexDirection = ParseFlexDirection("column");
         Badge.style.width = ParseStyleLength("120px");
         Badge.style.height = ParseStyleLength("28px");
         Badge.style.marginTop = ParseStyleFloat("0px");
@@ -515,58 +495,13 @@ public sealed class CombatToastStackView
         ToastTwo.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         ToastTwo.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         ToastTwo.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        IconPanel2.style.flexDirection = ParseFlexDirection("column");
         IconPanel2.style.position = ParsePosition("absolute");
-        IconPanel2.style.left = ParseStyleLength("16px");
-        IconPanel2.style.top = ParseStyleLength("16px");
-        IconPanel2.style.width = ParseStyleLength("132px");
-        IconPanel2.style.height = ParseStyleLength("132px");
-        IconPanel2.style.marginTop = ParseStyleFloat("0px");
-        IconPanel2.style.marginRight = ParseStyleFloat("0px");
-        IconPanel2.style.marginBottom = ParseStyleFloat("0px");
-        IconPanel2.style.marginLeft = ParseStyleFloat("0px");
-        IconPanel2.style.paddingTop = ParseStyleFloat("0px");
-        IconPanel2.style.paddingRight = ParseStyleFloat("0px");
-        IconPanel2.style.paddingBottom = ParseStyleFloat("0px");
-        IconPanel2.style.paddingLeft = ParseStyleFloat("0px");
-        IconPanel2.style.alignItems = ParseAlign("center");
-        IconPanel2.style.justifyContent = ParseJustify("center");
         IconPanel2.style.display = DisplayStyle.Flex;
         IconPanel2.SetEnabled(true);
-        IconPanel2.style.color = ParseStyleColor("#000000", null);
-        IconPanel2.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconPanel2.style.borderLeftWidth = 4f;
-        IconPanel2.style.borderRightWidth = 4f;
-        IconPanel2.style.borderTopWidth = 4f;
-        IconPanel2.style.borderBottomWidth = 4f;
-        IconPanel2.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel2.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel2.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel2.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        EventIcon2.style.flexDirection = ParseFlexDirection("column");
-        EventIcon2.style.width = ParseStyleLength("56px");
-        EventIcon2.style.height = ParseStyleLength("56px");
-        EventIcon2.style.marginTop = ParseStyleFloat("0px");
-        EventIcon2.style.marginRight = ParseStyleFloat("0px");
-        EventIcon2.style.marginBottom = ParseStyleFloat("0px");
-        EventIcon2.style.marginLeft = ParseStyleFloat("0px");
-        EventIcon2.style.paddingTop = ParseStyleFloat("0px");
-        EventIcon2.style.paddingRight = ParseStyleFloat("0px");
-        EventIcon2.style.paddingBottom = ParseStyleFloat("0px");
-        EventIcon2.style.paddingLeft = ParseStyleFloat("0px");
-        EventIcon2.style.alignItems = ParseAlign("flex-start");
-        EventIcon2.style.justifyContent = ParseJustify("flex-start");
-        EventIcon2.text = ResolveIconText("shield", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon2, 56f, 56f, 0f, true, "fit-box", 0f);
-        EventIcon2.style.display = DisplayStyle.Flex;
-        EventIcon2.SetEnabled(true);
-        ApplyFontFamily(EventIcon2, "lucide", 56f);
-        EventIcon2.style.color = ParseStyleColor("#FFFFFF", null);
-        EventIcon2.style.fontSize = 56f;
-        Content2.style.flexDirection = ParseFlexDirection("column");
         Content2.style.position = ParsePosition("absolute");
         Content2.style.left = ParseStyleLength("168px");
         Content2.style.top = ParseStyleLength("18px");
+        Content2.style.flexDirection = ParseFlexDirection("column");
         Content2.style.width = ParseStyleLength("560px");
         Content2.style.height = ParseStyleLength("144px");
         Content2.style.marginTop = ParseStyleFloat("0px");
@@ -647,8 +582,8 @@ public sealed class CombatToastStackView
         Progress2.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         Progress2.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         Progress2.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ProgressFill2.style.flexDirection = ParseFlexDirection("column");
         ProgressFill2.style.position = ParsePosition("absolute");
+        ProgressFill2.style.flexDirection = ParseFlexDirection("column");
         ProgressFill2.style.width = ParseStyleLength("414px");
         ProgressFill2.style.height = ParseStyleLength("18px");
         ProgressFill2.style.marginTop = ParseStyleFloat("0px");
@@ -665,10 +600,10 @@ public sealed class CombatToastStackView
         ProgressFill2.SetEnabled(true);
         ProgressFill2.style.color = ParseStyleColor("#4A78D4", null);
         ProgressFill2.style.backgroundColor = ParseStyleColor("#4A78D4", null);
-        ProgressText2.style.flexDirection = ParseFlexDirection("column");
         ProgressText2.style.position = ParsePosition("absolute");
         ProgressText2.style.left = ParseStyleLength("12px");
         ProgressText2.style.top = ParseStyleLength("4px");
+        ProgressText2.style.flexDirection = ParseFlexDirection("column");
         ProgressText2.style.marginTop = ParseStyleFloat("0px");
         ProgressText2.style.marginRight = ParseStyleFloat("0px");
         ProgressText2.style.marginBottom = ParseStyleFloat("0px");
@@ -687,95 +622,13 @@ public sealed class CombatToastStackView
         ProgressText2.style.color = ParseStyleColor("#FFFFFF", null);
         ProgressText2.style.fontSize = 9f;
         ProgressText2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        RewardColumn2.style.flexDirection = ParseFlexDirection("column");
         RewardColumn2.style.position = ParsePosition("absolute");
-        RewardColumn2.style.left = ParseStyleLength("764px");
-        RewardColumn2.style.top = ParseStyleLength("16px");
-        RewardColumn2.style.width = ParseStyleLength("164px");
-        RewardColumn2.style.height = ParseStyleLength("132px");
-        RewardColumn2.style.marginTop = ParseStyleFloat("0px");
-        RewardColumn2.style.marginRight = ParseStyleFloat("0px");
-        RewardColumn2.style.marginBottom = ParseStyleFloat("0px");
-        RewardColumn2.style.marginLeft = ParseStyleFloat("0px");
-        RewardColumn2.style.paddingTop = ParseStyleFloat("12px");
-        RewardColumn2.style.paddingRight = ParseStyleFloat("12px");
-        RewardColumn2.style.paddingBottom = ParseStyleFloat("12px");
-        RewardColumn2.style.paddingLeft = ParseStyleFloat("12px");
-        RewardColumn2.style.alignItems = ParseAlign("flex-start");
-        RewardColumn2.style.justifyContent = ParseJustify("flex-start");
         RewardColumn2.style.display = DisplayStyle.Flex;
         RewardColumn2.SetEnabled(true);
-        RewardColumn2.style.color = ParseStyleColor("#0C0C0C", null);
-        RewardColumn2.style.backgroundColor = ParseStyleColor("#0C0C0C", null);
-        RewardColumn2.style.borderLeftWidth = 4f;
-        RewardColumn2.style.borderRightWidth = 4f;
-        RewardColumn2.style.borderTopWidth = 4f;
-        RewardColumn2.style.borderBottomWidth = 4f;
-        RewardColumn2.style.borderLeftColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn2.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn2.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn2.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        Tag2.style.flexDirection = ParseFlexDirection("column");
-        Tag2.style.marginTop = ParseStyleFloat("0px");
-        Tag2.style.marginRight = ParseStyleFloat("0px");
-        Tag2.style.marginBottom = ParseStyleFloat("0px");
-        Tag2.style.marginLeft = ParseStyleFloat("0px");
-        Tag2.style.paddingTop = ParseStyleFloat("0px");
-        Tag2.style.paddingRight = ParseStyleFloat("0px");
-        Tag2.style.paddingBottom = ParseStyleFloat("0px");
-        Tag2.style.paddingLeft = ParseStyleFloat("0px");
-        Tag2.style.alignItems = ParseAlign("flex-start");
-        Tag2.style.justifyContent = ParseJustify("flex-start");
-        Tag2.text = "DEFENSE";
-        ApplyTextLabelStyle(Tag2, false);
-        Tag2.style.display = DisplayStyle.Flex;
-        Tag2.SetEnabled(true);
-        ApplyFontFamily(Tag2, "Press Start 2P", 10f);
-        Tag2.style.color = ParseStyleColor("#FFFFFF", null);
-        Tag2.style.fontSize = 10f;
-        Tag2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Value2.style.flexDirection = ParseFlexDirection("column");
-        Value2.style.marginTop = ParseStyleFloat("10px");
-        Value2.style.marginRight = ParseStyleFloat("0px");
-        Value2.style.marginBottom = ParseStyleFloat("0px");
-        Value2.style.marginLeft = ParseStyleFloat("0px");
-        Value2.style.paddingTop = ParseStyleFloat("0px");
-        Value2.style.paddingRight = ParseStyleFloat("0px");
-        Value2.style.paddingBottom = ParseStyleFloat("0px");
-        Value2.style.paddingLeft = ParseStyleFloat("0px");
-        Value2.style.alignItems = ParseAlign("flex-start");
-        Value2.style.justifyContent = ParseJustify("flex-start");
-        Value2.text = "+1 barrier";
-        ApplyTextLabelStyle(Value2, false);
-        Value2.style.display = DisplayStyle.Flex;
-        Value2.SetEnabled(true);
-        ApplyFontFamily(Value2, "Press Start 2P", 9f);
-        Value2.style.color = ParseStyleColor("#AAAAAA", null);
-        Value2.style.fontSize = 9f;
-        Value2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Time2.style.flexDirection = ParseFlexDirection("column");
-        Time2.style.marginTop = ParseStyleFloat("10px");
-        Time2.style.marginRight = ParseStyleFloat("0px");
-        Time2.style.marginBottom = ParseStyleFloat("0px");
-        Time2.style.marginLeft = ParseStyleFloat("0px");
-        Time2.style.paddingTop = ParseStyleFloat("0px");
-        Time2.style.paddingRight = ParseStyleFloat("0px");
-        Time2.style.paddingBottom = ParseStyleFloat("0px");
-        Time2.style.paddingLeft = ParseStyleFloat("0px");
-        Time2.style.alignItems = ParseAlign("flex-start");
-        Time2.style.justifyContent = ParseJustify("flex-start");
-        Time2.text = "00:21";
-        ApplyTextLabelStyle(Time2, false);
-        Time2.style.display = DisplayStyle.Flex;
-        Time2.SetEnabled(true);
-        ApplyFontFamily(Time2, "Press Start 2P", 9f);
-        Time2.style.color = ParseStyleColor("#AAAAAA", null);
-        Time2.style.fontSize = 9f;
-        Time2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Badge2.style.flexDirection = ParseFlexDirection("column");
         Badge2.style.position = ParsePosition("absolute");
         Badge2.style.left = ParseStyleLength("792px");
         Badge2.style.top = ParseStyleLength("0px");
+        Badge2.style.flexDirection = ParseFlexDirection("column");
         Badge2.style.width = ParseStyleLength("104px");
         Badge2.style.height = ParseStyleLength("28px");
         Badge2.style.marginTop = ParseStyleFloat("0px");
@@ -836,58 +689,13 @@ public sealed class CombatToastStackView
         ToastThree.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         ToastThree.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         ToastThree.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        IconPanel3.style.flexDirection = ParseFlexDirection("column");
         IconPanel3.style.position = ParsePosition("absolute");
-        IconPanel3.style.left = ParseStyleLength("16px");
-        IconPanel3.style.top = ParseStyleLength("16px");
-        IconPanel3.style.width = ParseStyleLength("132px");
-        IconPanel3.style.height = ParseStyleLength("132px");
-        IconPanel3.style.marginTop = ParseStyleFloat("0px");
-        IconPanel3.style.marginRight = ParseStyleFloat("0px");
-        IconPanel3.style.marginBottom = ParseStyleFloat("0px");
-        IconPanel3.style.marginLeft = ParseStyleFloat("0px");
-        IconPanel3.style.paddingTop = ParseStyleFloat("0px");
-        IconPanel3.style.paddingRight = ParseStyleFloat("0px");
-        IconPanel3.style.paddingBottom = ParseStyleFloat("0px");
-        IconPanel3.style.paddingLeft = ParseStyleFloat("0px");
-        IconPanel3.style.alignItems = ParseAlign("center");
-        IconPanel3.style.justifyContent = ParseJustify("center");
         IconPanel3.style.display = DisplayStyle.Flex;
         IconPanel3.SetEnabled(true);
-        IconPanel3.style.color = ParseStyleColor("#000000", null);
-        IconPanel3.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconPanel3.style.borderLeftWidth = 4f;
-        IconPanel3.style.borderRightWidth = 4f;
-        IconPanel3.style.borderTopWidth = 4f;
-        IconPanel3.style.borderBottomWidth = 4f;
-        IconPanel3.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel3.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel3.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        IconPanel3.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        EventIcon3.style.flexDirection = ParseFlexDirection("column");
-        EventIcon3.style.width = ParseStyleLength("56px");
-        EventIcon3.style.height = ParseStyleLength("56px");
-        EventIcon3.style.marginTop = ParseStyleFloat("0px");
-        EventIcon3.style.marginRight = ParseStyleFloat("0px");
-        EventIcon3.style.marginBottom = ParseStyleFloat("0px");
-        EventIcon3.style.marginLeft = ParseStyleFloat("0px");
-        EventIcon3.style.paddingTop = ParseStyleFloat("0px");
-        EventIcon3.style.paddingRight = ParseStyleFloat("0px");
-        EventIcon3.style.paddingBottom = ParseStyleFloat("0px");
-        EventIcon3.style.paddingLeft = ParseStyleFloat("0px");
-        EventIcon3.style.alignItems = ParseAlign("flex-start");
-        EventIcon3.style.justifyContent = ParseJustify("flex-start");
-        EventIcon3.text = ResolveIconText("moon", "lucide", 56f);
-        ApplyIconLabelStyle(EventIcon3, 56f, 56f, 0f, true, "fit-box", 0f);
-        EventIcon3.style.display = DisplayStyle.Flex;
-        EventIcon3.SetEnabled(true);
-        ApplyFontFamily(EventIcon3, "lucide", 56f);
-        EventIcon3.style.color = ParseStyleColor("#FFFFFF", null);
-        EventIcon3.style.fontSize = 56f;
-        Content3.style.flexDirection = ParseFlexDirection("column");
         Content3.style.position = ParsePosition("absolute");
         Content3.style.left = ParseStyleLength("168px");
         Content3.style.top = ParseStyleLength("18px");
+        Content3.style.flexDirection = ParseFlexDirection("column");
         Content3.style.width = ParseStyleLength("560px");
         Content3.style.height = ParseStyleLength("144px");
         Content3.style.marginTop = ParseStyleFloat("0px");
@@ -968,8 +776,8 @@ public sealed class CombatToastStackView
         Progress3.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         Progress3.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         Progress3.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ProgressFill3.style.flexDirection = ParseFlexDirection("column");
         ProgressFill3.style.position = ParsePosition("absolute");
+        ProgressFill3.style.flexDirection = ParseFlexDirection("column");
         ProgressFill3.style.width = ParseStyleLength("236px");
         ProgressFill3.style.height = ParseStyleLength("18px");
         ProgressFill3.style.marginTop = ParseStyleFloat("0px");
@@ -986,10 +794,10 @@ public sealed class CombatToastStackView
         ProgressFill3.SetEnabled(true);
         ProgressFill3.style.color = ParseStyleColor("#7A5FD4", null);
         ProgressFill3.style.backgroundColor = ParseStyleColor("#7A5FD4", null);
-        ProgressText3.style.flexDirection = ParseFlexDirection("column");
         ProgressText3.style.position = ParsePosition("absolute");
         ProgressText3.style.left = ParseStyleLength("12px");
         ProgressText3.style.top = ParseStyleLength("4px");
+        ProgressText3.style.flexDirection = ParseFlexDirection("column");
         ProgressText3.style.marginTop = ParseStyleFloat("0px");
         ProgressText3.style.marginRight = ParseStyleFloat("0px");
         ProgressText3.style.marginBottom = ParseStyleFloat("0px");
@@ -1008,95 +816,13 @@ public sealed class CombatToastStackView
         ProgressText3.style.color = ParseStyleColor("#FFFFFF", null);
         ProgressText3.style.fontSize = 9f;
         ProgressText3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        RewardColumn3.style.flexDirection = ParseFlexDirection("column");
         RewardColumn3.style.position = ParsePosition("absolute");
-        RewardColumn3.style.left = ParseStyleLength("764px");
-        RewardColumn3.style.top = ParseStyleLength("16px");
-        RewardColumn3.style.width = ParseStyleLength("164px");
-        RewardColumn3.style.height = ParseStyleLength("132px");
-        RewardColumn3.style.marginTop = ParseStyleFloat("0px");
-        RewardColumn3.style.marginRight = ParseStyleFloat("0px");
-        RewardColumn3.style.marginBottom = ParseStyleFloat("0px");
-        RewardColumn3.style.marginLeft = ParseStyleFloat("0px");
-        RewardColumn3.style.paddingTop = ParseStyleFloat("12px");
-        RewardColumn3.style.paddingRight = ParseStyleFloat("12px");
-        RewardColumn3.style.paddingBottom = ParseStyleFloat("12px");
-        RewardColumn3.style.paddingLeft = ParseStyleFloat("12px");
-        RewardColumn3.style.alignItems = ParseAlign("flex-start");
-        RewardColumn3.style.justifyContent = ParseJustify("flex-start");
         RewardColumn3.style.display = DisplayStyle.Flex;
         RewardColumn3.SetEnabled(true);
-        RewardColumn3.style.color = ParseStyleColor("#0C0C0C", null);
-        RewardColumn3.style.backgroundColor = ParseStyleColor("#0C0C0C", null);
-        RewardColumn3.style.borderLeftWidth = 4f;
-        RewardColumn3.style.borderRightWidth = 4f;
-        RewardColumn3.style.borderTopWidth = 4f;
-        RewardColumn3.style.borderBottomWidth = 4f;
-        RewardColumn3.style.borderLeftColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn3.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn3.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
-        RewardColumn3.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        Tag3.style.flexDirection = ParseFlexDirection("column");
-        Tag3.style.marginTop = ParseStyleFloat("0px");
-        Tag3.style.marginRight = ParseStyleFloat("0px");
-        Tag3.style.marginBottom = ParseStyleFloat("0px");
-        Tag3.style.marginLeft = ParseStyleFloat("0px");
-        Tag3.style.paddingTop = ParseStyleFloat("0px");
-        Tag3.style.paddingRight = ParseStyleFloat("0px");
-        Tag3.style.paddingBottom = ParseStyleFloat("0px");
-        Tag3.style.paddingLeft = ParseStyleFloat("0px");
-        Tag3.style.alignItems = ParseAlign("flex-start");
-        Tag3.style.justifyContent = ParseJustify("flex-start");
-        Tag3.text = "UTILITY";
-        ApplyTextLabelStyle(Tag3, false);
-        Tag3.style.display = DisplayStyle.Flex;
-        Tag3.SetEnabled(true);
-        ApplyFontFamily(Tag3, "Press Start 2P", 10f);
-        Tag3.style.color = ParseStyleColor("#FFFFFF", null);
-        Tag3.style.fontSize = 10f;
-        Tag3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Value3.style.flexDirection = ParseFlexDirection("column");
-        Value3.style.marginTop = ParseStyleFloat("10px");
-        Value3.style.marginRight = ParseStyleFloat("0px");
-        Value3.style.marginBottom = ParseStyleFloat("0px");
-        Value3.style.marginLeft = ParseStyleFloat("0px");
-        Value3.style.paddingTop = ParseStyleFloat("0px");
-        Value3.style.paddingRight = ParseStyleFloat("0px");
-        Value3.style.paddingBottom = ParseStyleFloat("0px");
-        Value3.style.paddingLeft = ParseStyleFloat("0px");
-        Value3.style.alignItems = ParseAlign("flex-start");
-        Value3.style.justifyContent = ParseJustify("flex-start");
-        Value3.text = "+stealth";
-        ApplyTextLabelStyle(Value3, false);
-        Value3.style.display = DisplayStyle.Flex;
-        Value3.SetEnabled(true);
-        ApplyFontFamily(Value3, "Press Start 2P", 9f);
-        Value3.style.color = ParseStyleColor("#AAAAAA", null);
-        Value3.style.fontSize = 9f;
-        Value3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Time3.style.flexDirection = ParseFlexDirection("column");
-        Time3.style.marginTop = ParseStyleFloat("10px");
-        Time3.style.marginRight = ParseStyleFloat("0px");
-        Time3.style.marginBottom = ParseStyleFloat("0px");
-        Time3.style.marginLeft = ParseStyleFloat("0px");
-        Time3.style.paddingTop = ParseStyleFloat("0px");
-        Time3.style.paddingRight = ParseStyleFloat("0px");
-        Time3.style.paddingBottom = ParseStyleFloat("0px");
-        Time3.style.paddingLeft = ParseStyleFloat("0px");
-        Time3.style.alignItems = ParseAlign("flex-start");
-        Time3.style.justifyContent = ParseJustify("flex-start");
-        Time3.text = "00:33";
-        ApplyTextLabelStyle(Time3, false);
-        Time3.style.display = DisplayStyle.Flex;
-        Time3.SetEnabled(true);
-        ApplyFontFamily(Time3, "Press Start 2P", 9f);
-        Time3.style.color = ParseStyleColor("#AAAAAA", null);
-        Time3.style.fontSize = 9f;
-        Time3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Badge3.style.flexDirection = ParseFlexDirection("column");
         Badge3.style.position = ParsePosition("absolute");
         Badge3.style.left = ParseStyleLength("780px");
         Badge3.style.top = ParseStyleLength("0px");
+        Badge3.style.flexDirection = ParseFlexDirection("column");
         Badge3.style.width = ParseStyleLength("128px");
         Badge3.style.height = ParseStyleLength("28px");
         Badge3.style.marginTop = ParseStyleFloat("0px");
@@ -1134,9 +860,91 @@ public sealed class CombatToastStackView
         BadgeText3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
     }
 
+    private void ApplyComponentViewModels()
+    {
+        if (_iconPanelComponent != null)
+        {
+            _iconPanelComponent.ViewModel = _viewModel is ISyntheticContainer61D6E26DViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_rewardColumnComponent != null)
+        {
+            _rewardColumnComponent.ViewModel = _viewModel is ISyntheticContainerFC1FF3CBViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_iconPanel2Component != null)
+        {
+            _iconPanel2Component.ViewModel = _viewModel is ISyntheticContainer61D6E26DViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_rewardColumn2Component != null)
+        {
+            _rewardColumn2Component.ViewModel = _viewModel is ISyntheticContainerFC1FF3CBViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_iconPanel3Component != null)
+        {
+            _iconPanel3Component.ViewModel = _viewModel is ISyntheticContainer61D6E26DViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_rewardColumn3Component != null)
+        {
+            _rewardColumn3Component.ViewModel = _viewModel is ISyntheticContainerFC1FF3CBViewModel componentViewModel ? componentViewModel : null;
+        }
+    }
+
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Refresh();
+    }
+
+    private const string VisualTreeResourcePath = "BoomHudGenerated/CombatToastStackView";
+    private const string StyleSheetResourcePath = "BoomHudGenerated/CombatToastStackView";
+    private const string GeneratedRootName = "CombatToastStack";
+    private static VisualTreeAsset? s_visualTreeAsset;
+    private static StyleSheet? s_generatedStyleSheet;
+
+    public static CombatToastStackView Create(VisualElement parent, string? instanceName = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (parent == null)
+        {
+            throw new ArgumentNullException(nameof(parent));
+        }
+
+        var root = CreateGeneratedRoot(instanceName);
+        parent.Add(root);
+        return new CombatToastStackView(root, componentOverrides);
+    }
+
+    public static CombatToastStackView Attach(VisualElement placeholder, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (placeholder == null)
+        {
+            throw new ArgumentNullException(nameof(placeholder));
+        }
+
+        var parent = placeholder.parent ?? throw new InvalidOperationException("Cannot attach a generated component without a parent element.");
+        var placeholderIndex = parent.IndexOf(placeholder);
+        var root = CreateGeneratedRoot(string.IsNullOrWhiteSpace(placeholder.name) ? null : placeholder.name);
+        parent.Insert(placeholderIndex, root);
+        placeholder.RemoveFromHierarchy();
+        return new CombatToastStackView(root, componentOverrides);
+    }
+
+    private static VisualElement CreateGeneratedRoot(string? instanceName)
+    {
+        s_visualTreeAsset ??= Resources.Load<VisualTreeAsset>(VisualTreeResourcePath)
+            ?? throw new InvalidOperationException($"Could not load VisualTreeAsset from Resources/{VisualTreeResourcePath}.uxml");
+        s_generatedStyleSheet ??= Resources.Load<StyleSheet>(StyleSheetResourcePath);
+
+        var staging = new VisualElement();
+        s_visualTreeAsset.CloneTree(staging);
+        var root = staging.Q<VisualElement>(GeneratedRootName)
+            ?? throw new InvalidOperationException($"Could not find generated root element '{GeneratedRootName}' after cloning the tree.");
+        root.RemoveFromHierarchy();
+        root.name = string.IsNullOrWhiteSpace(instanceName) ? GeneratedRootName : instanceName!;
+
+        if (s_generatedStyleSheet != null && !root.styleSheets.Contains(s_generatedStyleSheet))
+        {
+            root.styleSheets.Add(s_generatedStyleSheet);
+        }
+
+        return root;
     }
 
     private static readonly Dictionary<string, FontDefinition> s_fontDefinitions = new(StringComparer.OrdinalIgnoreCase);
@@ -1188,6 +996,31 @@ public sealed class CombatToastStackView
             long longValue => longValue != 0,
             _ => false
         };
+    }
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides))
+        {
+            return false;
+        }
+
+        if (propertyOverrides.TryGetValue(propertyName, out value))
+        {
+            return true;
+        }
+
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static StyleLength ParseStyleLength(string value)
@@ -1305,6 +1138,24 @@ public sealed class CombatToastStackView
         }
 
         return default;
+    }
+
+    private static void SetImageSource(Image image, string resourcePath)
+    {
+        if (string.IsNullOrWhiteSpace(resourcePath))
+        {
+            image.image = null;
+            return;
+        }
+
+        var normalized = resourcePath.Replace("\\", "/", StringComparison.Ordinal).TrimStart('/');
+        var extensionIndex = normalized.LastIndexOf('.');
+        if (extensionIndex > 0)
+        {
+            normalized = normalized[..extensionIndex];
+        }
+
+        image.image = Resources.Load<Texture2D>(normalized);
     }
 
     private static void ApplyTextLabelStyle(Label label, bool wrapText)

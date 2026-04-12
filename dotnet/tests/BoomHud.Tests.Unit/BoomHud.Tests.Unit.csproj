@@ -29,10 +29,19 @@
 
   <ItemGroup>
     <Compile Include="Cli\BackendCatalogTests.cs" />
+    <Compile Include="Cli\GeneratedFileWriterTests.cs" />
     <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
+    <Compile Include="Generation\AvaloniaGeneratorTests.cs" />
+    <Compile Include="Generation\GodotGeneratorTests.cs" />
+    <Compile Include="Generation\SyntheticComponentizationTests.cs" />
+    <Compile Include="Generation\VisualDocumentBuilderTests.cs" />
     <Compile Include="Generation\ReactGeneratorTests.cs" />
     <Compile Include="Generation\RemotionGeneratorTests.cs" />
+    <Compile Include="Generation\TerminalGuiGeneratorTests.cs" />
     <Compile Include="Generation\UGuiGeneratorTests.cs" />
+    <Compile Include="Generation\UnityGeneratorTests.cs" />
+    <Compile Include="Integration\EndToEndTests.cs" />
+    <Compile Include="Integration\PencilEndToEndTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

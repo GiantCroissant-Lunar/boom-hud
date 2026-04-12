@@ -173,6 +173,26 @@ function Invoke-DotNet([string[]]$Arguments, [string]$WorkingDirectory)
     }
 }
 
+function Get-MainVisualIrArtifact([string]$ArtifactsDirectory)
+{
+    if ([string]::IsNullOrWhiteSpace($ArtifactsDirectory) -or -not (Test-Path $ArtifactsDirectory))
+    {
+        return $null
+    }
+
+    $artifacts = @(
+        Get-ChildItem -Path $ArtifactsDirectory -Filter *.visual-ir.json -File -ErrorAction SilentlyContinue |
+            Sort-Object Name
+    )
+
+    if ($artifacts.Count -eq 0)
+    {
+        return $null
+    }
+
+    return $artifacts[0].FullName
+}
+
 function Invoke-PythonCrop([string]$InputPath, [string]$OutputPath, [hashtable]$Crop)
 {
     $script = @'
@@ -256,7 +276,8 @@ function Invoke-Generate()
         "generate", $PenPath,
         "--target", "unity",
         "--output", $generatedOutput,
-        "--namespace", "Generated.Hud"
+        "--namespace", "Generated.Hud",
+        "--emit-visual-ir"
     ) -WorkingDirectory $RepoRoot
 }
 
@@ -311,7 +332,7 @@ function Invoke-ScoreStage([string]$StageDir, [int]$ProcessId)
     }
 
     Write-Section "Scoring cropped pair"
-    Invoke-DotNet -Arguments @(
+    $scoreArgs = @(
         "run",
         "--project", $cliProject,
         "--",
@@ -322,7 +343,17 @@ function Invoke-ScoreStage([string]$StageDir, [int]$ProcessId)
         "--diff", $diffPath,
         "--out", $reportPath,
         "--tolerance", "8"
-    ) -WorkingDirectory $RepoRoot
+    )
+    $visualIrPath = Get-MainVisualIrArtifact -ArtifactsDirectory $generatedOutput
+    if (-not [string]::IsNullOrWhiteSpace($visualIrPath))
+    {
+        $scoreArgs += @(
+            "--visual-ir", $visualIrPath,
+            "--visual-refinement-out", (Join-Path $StageDir "score-refinement.json")
+        )
+    }
+
+    Invoke-DotNet -Arguments $scoreArgs -WorkingDirectory $RepoRoot
 
     $report = Get-Content $reportPath -Raw | ConvertFrom-Json
     return [pscustomobject]@{

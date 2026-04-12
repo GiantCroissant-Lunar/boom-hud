@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="RewardColumn" class="boomhud-reward-column">
+        <ui:Label name="Tag" class="boomhud-tag" />
+        <ui:Label name="Value" class="boomhud-value" />
+        <ui:Label name="Time" class="boomhud-time" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -23,6 +23,9 @@ public sealed class ReactGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, options, _ruleBackend);
+        document = prepared.Document;
+        diagnostics.AddRange(prepared.Diagnostics);
 
         if (options.EmitCompose)
         {
@@ -50,6 +53,29 @@ public sealed class ReactGenerator : IBackendGenerator
         catch (Exception ex)
         {
             diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
+        }
+
+        if (GenerationDocumentPreprocessor.CreateSummaryArtifact(document.Name, prepared.SyntheticComponentization) is { } artifact)
+        {
+            files.Add(artifact);
+        }
+
+        if (options.EmitVisualIrArtifact
+            && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
+        {
+            files.Add(visualIrArtifact);
+        }
+
+        if (options.EmitVisualSynthesisArtifact
+            && GenerationDocumentPreprocessor.CreateVisualSynthesisArtifact(document.Name, prepared.VisualSynthesis) is { } visualSynthesisArtifact)
+        {
+            files.Add(visualSynthesisArtifact);
+        }
+
+        if (options.EmitVisualRefinementArtifact
+            && GenerationDocumentPreprocessor.CreateVisualRefinementArtifact(document.Name, prepared.VisualRefinement) is { } visualRefinementArtifact)
+        {
+            files.Add(visualRefinementArtifact);
         }
 
         return new GenerationResult { Files = files, Diagnostics = diagnostics };
@@ -136,6 +162,14 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine("const asMotionNumber = (value: BoomHudMotionScalar | undefined) => typeof value === 'number' ? value : undefined;");
         builder.AppendLine("const asMotionText = (value: BoomHudMotionScalar | undefined) => typeof value === 'string' ? value : undefined;");
         builder.AppendLine("const getMotionTarget = (targets: BoomHudMotionTargets | undefined, id?: string) => id ? targets?.[id] : undefined;");
+        builder.AppendLine("const getOverrideValue = (overrides: Record<string, Partial<Record<string, unknown>>> | undefined, path: string, ...keys: string[]): unknown => {");
+        builder.AppendLine("  const entry = overrides?.[path];");
+        builder.AppendLine("  if (!entry) return undefined;");
+        builder.AppendLine("  for (const key of keys) {");
+        builder.AppendLine("    if (Object.prototype.hasOwnProperty.call(entry, key)) return entry[key];");
+        builder.AppendLine("  }");
+        builder.AppendLine("  return undefined;");
+        builder.AppendLine("};");
         builder.AppendLine("const getMotionText = (targets: BoomHudMotionTargets | undefined, id?: string) => asMotionText(getMotionTarget(targets, id)?.text);");
         builder.AppendLine("const getMotionSpriteFrame = (targets: BoomHudMotionTargets | undefined, id?: string) => asMotionText(getMotionTarget(targets, id)?.spriteFrame);");
         builder.AppendLine("const getMotionStyle = (targets: BoomHudMotionTargets | undefined, id?: string): React.CSSProperties => {");
@@ -175,7 +209,7 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.AppendLine();
         builder.Append("export function ").Append(document.Name).Append("View(props: ").Append(document.Name).AppendLine("ViewModel): React.JSX.Element {");
         builder.AppendLine("  return (");
-        builder.Append(RenderNode(document.Name, document.Root, 2, null, null, null, 0, document.Components, diagnostics, resolver, ruleBackend));
+        builder.Append(RenderNode(document.Name, document.Root, 2, null, null, null, 0, ComponentInstanceOverrideSupport.RootPath, document.Components, diagnostics, resolver, ruleBackend));
         builder.AppendLine("  );");
         builder.AppendLine("}");
         builder.Append("export default ").Append(document.Name).AppendLine("View;");
@@ -188,6 +222,7 @@ public sealed class ReactGenerator : IBackendGenerator
         builder.Append("export interface ").Append(name).AppendLine("ViewModel {");
         builder.AppendLine("  motionTargets?: Record<string, Partial<Record<'opacity' | 'positionX' | 'positionY' | 'positionZ' | 'scaleX' | 'scaleY' | 'scaleZ' | 'rotation' | 'rotationX' | 'rotationY' | 'width' | 'height' | 'visibility' | 'text' | 'spriteFrame' | 'color', number | boolean | string>>>;");
         builder.AppendLine("  motionScope?: string;");
+        builder.AppendLine("  componentOverrides?: Record<string, Partial<Record<string, unknown>>>;");
         foreach (var prop in props)
         {
             builder.Append("  ").Append(prop).AppendLine("?: unknown;");
@@ -205,6 +240,7 @@ public sealed class ReactGenerator : IBackendGenerator
         ComponentNode? parentNode,
         ComponentNode? grandparentNode,
         int siblingIndex,
+        string relativePath,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
         List<Diagnostic> diagnostics,
         RuleResolver resolver,
@@ -215,12 +251,12 @@ public sealed class ReactGenerator : IBackendGenerator
         if (node.Visible.IsBound)
         {
             return indent + $"asBool(props.{PropName(node.Visible.BindingPath!)}) ? (\n" +
-                RenderCore(documentName, node, policy, indentLevel + 1, parentLayout, parentNode, components, diagnostics, resolver, ruleBackend) +
+                RenderCore(documentName, node, policy, indentLevel + 1, parentLayout, parentNode, relativePath, components, diagnostics, resolver, ruleBackend) +
                 indent + ") : null\n";
         }
 
         if (node.Visible.Value == false) return indent + "null\n";
-        return RenderCore(documentName, node, policy, indentLevel, parentLayout, parentNode, components, diagnostics, resolver, ruleBackend);
+        return RenderCore(documentName, node, policy, indentLevel, parentLayout, parentNode, relativePath, components, diagnostics, resolver, ruleBackend);
     }
 
     private static string RenderCore(
@@ -230,6 +266,7 @@ public sealed class ReactGenerator : IBackendGenerator
         int indentLevel,
         LayoutType? parentLayout,
         ComponentNode? parentNode,
+        string relativePath,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
         List<Diagnostic> diagnostics,
         RuleResolver resolver,
@@ -252,20 +289,24 @@ public sealed class ReactGenerator : IBackendGenerator
 
         if (ShouldComposeComponentRef(node) && node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var component))
         {
-            if (node.InstanceOverrides.Count > 0)
+            var childMotionScope = motionIdExpression ?? "props.motionScope";
+            var componentOverrides = BuildComponentOverrideLiteral(node);
+            var componentOverridesProp = componentOverrides == null
+                ? string.Empty
+                : $" componentOverrides={{{componentOverrides}}}";
+            if (IsSyntheticComponentInstance(node))
             {
-                diagnostics.Add(Diagnostic.Warning($"React backend does not apply instance overrides for '{component.Name}' yet.", node.Id, "BHR1002"));
+                return indent + $"<{component.Name}View {{...props}} motionTargets={{props.motionTargets}} motionScope={{{childMotionScope}}}{componentOverridesProp} />\n";
             }
 
-            var childMotionScope = motionIdExpression ?? "props.motionScope";
-            return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View motionTargets={{props.motionTargets}} motionScope={{{childMotionScope}}} />\n" + indent + "</div>\n";
+            return indent + $"<div{common}>\n" + indent + $"  <{component.Name}View {{...props}} motionTargets={{props.motionTargets}} motionScope={{{childMotionScope}}}{componentOverridesProp} />\n" + indent + "</div>\n";
         }
 
         var tag = ResolveTag(node, policy, diagnostics);
 
         if (node.Type == ComponentType.Image)
         {
-            var sourceExpr = TextExpr(node, ["source", "src", "value"], "''");
+            var sourceExpr = ApplyOverride(relativePath, TextExpr(node, ["source", "src", "value"], "''"), ["source", "src", "value"]);
             var srcExpr = motionIdExpression == null
                 ? sourceExpr
                 : $"getMotionSpriteFrame(props.motionTargets, {motionIdExpression}) ?? ({sourceExpr})";
@@ -274,28 +315,28 @@ public sealed class ReactGenerator : IBackendGenerator
 
         if (node.Type == ComponentType.TextInput)
         {
-            return indent + $"<input{common} type=\"text\"{disabled} defaultValue={{{TextExpr(node, ["text", "content", "value"], "''")}}} />\n";
+            return indent + $"<input{common} type=\"text\"{disabled} defaultValue={{{ApplyOverride(relativePath, TextExpr(node, ["text", "content", "value"], "''"), ["text", "content", "value"])}}} />\n";
         }
 
         if (node.Type == ComponentType.TextArea)
         {
-            return indent + $"<textarea{common}{disabled} defaultValue={{{TextExpr(node, ["text", "content", "value"], "''")}}} />\n";
+            return indent + $"<textarea{common}{disabled} defaultValue={{{ApplyOverride(relativePath, TextExpr(node, ["text", "content", "value"], "''"), ["text", "content", "value"])}}} />\n";
         }
 
         if (node.Type is ComponentType.Checkbox or ComponentType.RadioButton)
         {
             var inputType = node.Type == ComponentType.Checkbox ? "checkbox" : "radio";
-            return indent + $"<input{common} type=\"{inputType}\" checked={{asBool({ValueExpr(node, ["checked", "value"], "false")}, false)}} readOnly{disabled} />\n";
+            return indent + $"<input{common} type=\"{inputType}\" checked={{asBool({ApplyOverride(relativePath, ValueExpr(node, ["checked", "value"], "false"), ["checked", "value"])}, false)}} readOnly{disabled} />\n";
         }
 
         if (node.Type == ComponentType.ProgressBar)
         {
             return indent + $"<div{common}>\n" +
-                indent + $"  <div style={{ {{ width: clampPercent({ValueExpr(node, ["value"], "0")}), height: '100%', backgroundColor: 'currentColor' }} }} />\n" +
+                indent + $"  <div style={{ {{ width: clampPercent({ApplyOverride(relativePath, ValueExpr(node, ["value"], "0"), ["value"])}), height: '100%', backgroundColor: 'currentColor' }} }} />\n" +
                 indent + "</div>\n";
         }
 
-        var text = TextExpr(node, ["text", "content", "value"], null);
+        var text = ApplyOverride(relativePath, TextExpr(node, ["text", "content", "value"], null), ["text", "content", "value"]);
         var builder = new StringBuilder();
         builder.Append(indent).Append('<').Append(tag).Append(common).Append(disabled);
         if (node.Children.Count == 0 && text == null)
@@ -319,7 +360,7 @@ public sealed class ReactGenerator : IBackendGenerator
         for (var childIndex = 0; childIndex < node.Children.Count; childIndex++)
         {
             var child = node.Children[childIndex];
-            builder.Append(RenderNode(documentName, child, indentLevel + 1, node.Layout?.Type, node, parentNode, childIndex, components, diagnostics, resolver, ruleBackend));
+            builder.Append(RenderNode(documentName, child, indentLevel + 1, node.Layout?.Type, node, parentNode, childIndex, ComponentInstanceOverrideSupport.ChildPath(relativePath, childIndex), components, diagnostics, resolver, ruleBackend));
         }
         builder.Append(indent).Append("</").Append(tag).AppendLine(">");
         return builder.ToString();
@@ -419,7 +460,7 @@ public sealed class ReactGenerator : IBackendGenerator
 
         if (FindBinding(node, "style.foreground", "foreground") is { } foregroundBinding) style.Add($"color: asText(props.{PropName(foregroundBinding.Path)}, {Ts(foregroundBinding.Fallback?.ToString() ?? string.Empty)})");
         if (FindBinding(node, "style.background", "background") is { } backgroundBinding) style.Add($"backgroundColor: asText(props.{PropName(backgroundBinding.Path)}, {Ts(backgroundBinding.Fallback?.ToString() ?? string.Empty)})");
-        return string.Join(", ", style);
+        return JoinStyleEntries(style);
     }
 
     private static string SpacingToCss(Spacing spacing)
@@ -472,6 +513,47 @@ public sealed class ReactGenerator : IBackendGenerator
                 style.Add("backgroundRepeat: 'no-repeat'");
                 break;
         }
+    }
+
+    private static string JoinStyleEntries(IReadOnlyList<string> styleEntries)
+    {
+        var flattenedEntries = new List<string>();
+        var indexByProperty = new Dictionary<string, int>(StringComparer.Ordinal);
+
+        foreach (var styleEntry in styleEntries)
+        {
+            foreach (var part in styleEntry.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                var propertyName = ExtractStylePropertyName(part);
+                if (propertyName == null)
+                {
+                    flattenedEntries.Add(part);
+                    continue;
+                }
+
+                if (indexByProperty.TryGetValue(propertyName, out var existingIndex))
+                {
+                    flattenedEntries[existingIndex] = part;
+                    continue;
+                }
+
+                indexByProperty[propertyName] = flattenedEntries.Count;
+                flattenedEntries.Add(part);
+            }
+        }
+
+        return string.Join(", ", flattenedEntries);
+    }
+
+    private static string? ExtractStylePropertyName(string styleEntry)
+    {
+        var separatorIndex = styleEntry.IndexOf(':', StringComparison.Ordinal);
+        if (separatorIndex <= 0)
+        {
+            return null;
+        }
+
+        return styleEntry[..separatorIndex].Trim();
     }
 
     private static void AppendDimension(
@@ -825,6 +907,9 @@ public sealed class ReactGenerator : IBackendGenerator
         _ => Ts(value.ToString() ?? string.Empty)
     };
 
+    private static string LiteralOrNull(object? value)
+        => value == null ? "null" : Literal(value);
+
     private static HashSet<string> CollectProps(ComponentNode node)
     {
         var props = new HashSet<string>(StringComparer.Ordinal);
@@ -868,6 +953,34 @@ public sealed class ReactGenerator : IBackendGenerator
 
     private static bool ShouldComposeComponentRef(ComponentNode node)
         => node.ComponentRefId != null && node.Children.Count == 0;
+
+    private static bool IsSyntheticComponentInstance(ComponentNode node)
+        => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.SyntheticComponentInstance, out var raw)
+           && raw is true;
+
+    private static string? ApplyOverride(string relativePath, string? expression, IReadOnlyList<string> propertyNames)
+    {
+        if (expression == null)
+        {
+            return null;
+        }
+
+        var overrideExpression = $"getOverrideValue(props.componentOverrides, {Ts(relativePath)}, {string.Join(", ", propertyNames.Select(Ts))})";
+        return $"({overrideExpression}) ?? ({expression})";
+    }
+
+    private static string? BuildComponentOverrideLiteral(ComponentNode node)
+    {
+        var overrides = ComponentInstanceOverrideSupport.GetPropertyOverrides(node);
+        if (overrides.Count == 0)
+        {
+            return null;
+        }
+
+        return "{ " + string.Join(", ",
+            overrides.Select(pathEntry =>
+                $"{Ts(pathEntry.Key)}: {{ {string.Join(", ", pathEntry.Value.Select(propertyEntry => $"{Ts(propertyEntry.Key)}: {LiteralOrNull(propertyEntry.Value)}"))} }}")) + " }";
+    }
 
     private static double? NumericMetadata(ComponentNode node, string key)
     {

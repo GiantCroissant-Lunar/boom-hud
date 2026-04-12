@@ -5,6 +5,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Generated.Hud.UGui
 {
 public sealed class PartyStatusStripView
 {
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IPartyStatusStripViewModel? _viewModel;
     public RectTransform Root { get; }
     public RectTransform Header { get; }
@@ -22,11 +24,6 @@ public sealed class PartyStatusStripView
     public RectTransform MemberRow { get; }
     public RectTransform MemberA { get; }
     public RectTransform HeroRow { get; }
-    public RectTransform Portrait { get; }
-    public Text RoleIcon { get; }
-    public RectTransform Identity { get; }
-    public Text MemberName { get; }
-    public Text MemberRole { get; }
     public RectTransform HpBar { get; }
     public RectTransform HpFill { get; }
     public Text HpText { get; }
@@ -35,20 +32,11 @@ public sealed class PartyStatusStripView
     public Text MpText { get; }
     public RectTransform StatusRow { get; }
     public RectTransform StatusBuff1 { get; }
-    public Text BuffIcon1 { get; }
     public RectTransform StatusBuff2 { get; }
-    public Text BuffIcon2 { get; }
     public RectTransform StatusBuff3 { get; }
-    public Text BuffIcon3 { get; }
     public RectTransform StatusBuff4 { get; }
-    public Text BuffIcon4 { get; }
     public RectTransform MemberB { get; }
     public RectTransform HeroRow2 { get; }
-    public RectTransform Portrait2 { get; }
-    public Text RoleIcon2 { get; }
-    public RectTransform Identity2 { get; }
-    public Text MemberName2 { get; }
-    public Text MemberRole2 { get; }
     public RectTransform HpBar2 { get; }
     public RectTransform HpFill2 { get; }
     public Text HpText2 { get; }
@@ -57,20 +45,11 @@ public sealed class PartyStatusStripView
     public Text MpText2 { get; }
     public RectTransform StatusRow2 { get; }
     public RectTransform StatusBuff12 { get; }
-    public Text BuffIcon12 { get; }
     public RectTransform StatusBuff22 { get; }
-    public Text BuffIcon22 { get; }
     public RectTransform StatusBuff32 { get; }
-    public Text BuffIcon32 { get; }
     public RectTransform StatusBuff42 { get; }
-    public Text BuffIcon42 { get; }
     public RectTransform MemberC { get; }
     public RectTransform HeroRow3 { get; }
-    public RectTransform Portrait3 { get; }
-    public Text RoleIcon3 { get; }
-    public RectTransform Identity3 { get; }
-    public Text MemberName3 { get; }
-    public Text MemberRole3 { get; }
     public RectTransform HpBar3 { get; }
     public RectTransform HpFill3 { get; }
     public Text HpText3 { get; }
@@ -79,13 +58,9 @@ public sealed class PartyStatusStripView
     public Text MpText3 { get; }
     public RectTransform StatusRow3 { get; }
     public RectTransform StatusBuff13 { get; }
-    public Text BuffIcon13 { get; }
     public RectTransform StatusBuff23 { get; }
-    public Text BuffIcon23 { get; }
     public RectTransform StatusBuff33 { get; }
-    public Text BuffIcon33 { get; }
     public RectTransform StatusBuff43 { get; }
-    public Text BuffIcon43 { get; }
 
     public IPartyStatusStripViewModel? ViewModel
     {
@@ -100,8 +75,9 @@ public sealed class PartyStatusStripView
         }
     }
 
-    public PartyStatusStripView(Transform? parent = null, IPartyStatusStripViewModel? viewModel = null)
+    public PartyStatusStripView(Transform? parent = null, IPartyStatusStripViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
+        _componentOverrides = componentOverrides;
         Root = CreateRect("PartyStatusStripRoot", parent);
         ConfigureRect(Root, width: 1280f, height: 320f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 1280f, preferredHeight: 320f, flexibleWidth: null, flexibleHeight: null);
@@ -146,51 +122,9 @@ public sealed class PartyStatusStripView
         ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12);
         ApplyStyle(MemberA, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberA.gameObject.SetActive(true);
-        HeroRow = CreateRect("HeroRow", RectOf(MemberA));
-        ConfigureRect(RectOf(HeroRow), width: null, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(HeroRow), ignoreLayout: false, preferredWidth: null, preferredHeight: 76f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HeroRow), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(HeroRow), 12f, 0, 0, 0, 0);
-        ApplyStyle(HeroRow, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        HeroRow.gameObject.SetActive(true);
-        Portrait = CreateRect("Portrait", RectOf(HeroRow));
-        ConfigureRect(RectOf(Portrait), width: 76f, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Portrait), ignoreLayout: false, preferredWidth: 76f, preferredHeight: 76f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Portrait), horizontal: false, vertical: false);
-        ApplyStyle(Portrait, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        Portrait.gameObject.SetActive(true);
-        RoleIcon = CreateText("RoleIcon", RectOf(Portrait));
-        ConfigureRect(RectOf(RoleIcon), width: 40f, height: 40f, left: 18f, top: 18f, absolute: true);
-        ApplyLayoutSizing(RectOf(RoleIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RoleIcon), horizontal: false, vertical: false);
-        ApplyStyle(RoleIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 40, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(RoleIcon, boxWidth: 40f, boxHeight: 40f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(RoleIcon, lineSpacing: null, wrapText: false);
-        RoleIcon.text = ResolveIconText("sword");
-        RoleIcon.gameObject.SetActive(true);
-        Identity = CreateRect("Identity", RectOf(HeroRow));
-        ConfigureRect(RectOf(Identity), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Identity), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Identity), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Identity), 8f, 0, 0, 0, 0);
-        ApplyStyle(Identity, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Identity.gameObject.SetActive(true);
-        MemberName = CreateText("MemberName", RectOf(Identity));
-        ConfigureRect(RectOf(MemberName), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberName), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberName), horizontal: false, vertical: false);
-        ApplyStyle(MemberName, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 14, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberName, lineSpacing: null, wrapText: false);
-        MemberName.text = "Aelric";
-        MemberName.gameObject.SetActive(true);
-        MemberRole = CreateText("MemberRole", RectOf(Identity));
-        ConfigureRect(RectOf(MemberRole), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberRole), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberRole), horizontal: false, vertical: false);
-        ApplyStyle(MemberRole, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberRole, lineSpacing: null, wrapText: false);
-        MemberRole.text = "Frontline Vanguard";
-        MemberRole.gameObject.SetActive(true);
+        var heroRowView = new SyntheticContainerAF9ECAF6View(RectOf(MemberA), null, null);
+        HeroRow = heroRowView.Root;
+        HeroRow.name = "HeroRow";
         HpBar = CreateRect("HpBar", RectOf(MemberA));
         ConfigureRect(RectOf(HpBar), width: null, height: 22f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(HpBar), ignoreLayout: false, preferredWidth: null, preferredHeight: 22f, flexibleWidth: 1f, flexibleHeight: null);
@@ -206,7 +140,7 @@ public sealed class PartyStatusStripView
         HpText = CreateText("HpText", RectOf(HpBar));
         ConfigureRect(RectOf(HpText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(HpText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HpText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(HpText), horizontal: true, vertical: true);
         ApplyStyle(HpText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(HpText, lineSpacing: null, wrapText: false);
         HpText.text = "HP 182 / 220";
@@ -226,7 +160,7 @@ public sealed class PartyStatusStripView
         MpText = CreateText("MpText", RectOf(MpBar));
         ConfigureRect(RectOf(MpText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(MpText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MpText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(MpText), horizontal: true, vertical: true);
         ApplyStyle(MpText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(MpText, lineSpacing: null, wrapText: false);
         MpText.text = "MP 78 / 110";
@@ -238,70 +172,36 @@ public sealed class PartyStatusStripView
         ApplyHorizontalLayout(RectOf(StatusRow), 8f, 0, 0, 0, 0);
         ApplyStyle(StatusRow, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow.gameObject.SetActive(true);
-        StatusBuff1 = CreateRect("StatusBuff1", RectOf(StatusRow));
-        ConfigureRect(RectOf(StatusBuff1), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff1), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff1), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff1), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff1, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff1.gameObject.SetActive(true);
-        BuffIcon1 = CreateText("BuffIcon1", RectOf(StatusBuff1));
-        ConfigureRect(RectOf(BuffIcon1), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon1), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon1), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon1, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon1, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon1, lineSpacing: null, wrapText: false);
-        BuffIcon1.text = ResolveIconText("shield");
-        BuffIcon1.gameObject.SetActive(true);
-        StatusBuff2 = CreateRect("StatusBuff2", RectOf(StatusRow));
-        ConfigureRect(RectOf(StatusBuff2), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff2), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff2), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff2.gameObject.SetActive(true);
-        BuffIcon2 = CreateText("BuffIcon2", RectOf(StatusBuff2));
-        ConfigureRect(RectOf(BuffIcon2), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon2), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon2), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon2, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon2, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon2, lineSpacing: null, wrapText: false);
-        BuffIcon2.text = ResolveIconText("flame");
-        BuffIcon2.gameObject.SetActive(true);
-        StatusBuff3 = CreateRect("StatusBuff3", RectOf(StatusRow));
-        ConfigureRect(RectOf(StatusBuff3), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff3), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff3), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff3.gameObject.SetActive(true);
-        BuffIcon3 = CreateText("BuffIcon3", RectOf(StatusBuff3));
-        ConfigureRect(RectOf(BuffIcon3), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon3), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon3), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon3, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon3, lineSpacing: null, wrapText: false);
-        BuffIcon3.text = ResolveIconText("cross");
-        BuffIcon3.gameObject.SetActive(true);
-        StatusBuff4 = CreateRect("StatusBuff4", RectOf(StatusRow));
-        ConfigureRect(RectOf(StatusBuff4), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff4), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff4), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff4), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff4, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff4.gameObject.SetActive(true);
-        BuffIcon4 = CreateText("BuffIcon4", RectOf(StatusBuff4));
-        ConfigureRect(RectOf(BuffIcon4), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon4), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon4), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon4, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon4, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon4, lineSpacing: null, wrapText: false);
-        BuffIcon4.text = ResolveIconText("moon");
-        BuffIcon4.gameObject.SetActive(true);
+        var statusBuff1View = new SyntheticContainerB978BB0BView(RectOf(StatusRow), null, null);
+        StatusBuff1 = statusBuff1View.Root;
+        StatusBuff1.name = "StatusBuff1";
+        var statusBuff2View = new SyntheticContainerB978BB0BView(RectOf(StatusRow), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            }
+        });
+        StatusBuff2 = statusBuff2View.Root;
+        StatusBuff2.name = "StatusBuff2";
+        var statusBuff3View = new SyntheticContainerB978BB0BView(RectOf(StatusRow), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "cross"
+            }
+        });
+        StatusBuff3 = statusBuff3View.Root;
+        StatusBuff3.name = "StatusBuff3";
+        var statusBuff4View = new SyntheticContainerB978BB0BView(RectOf(StatusRow), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff4 = statusBuff4View.Root;
+        StatusBuff4.name = "StatusBuff4";
         MemberB = CreateRect("MemberB", RectOf(MemberRow));
         ConfigureRect(RectOf(MemberB), width: 400f, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberB), ignoreLayout: false, preferredWidth: 400f, preferredHeight: null, flexibleWidth: null, flexibleHeight: 1f);
@@ -309,51 +209,23 @@ public sealed class PartyStatusStripView
         ApplyVerticalLayout(RectOf(MemberB), 12f, 12, 12, 12, 12);
         ApplyStyle(MemberB, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberB.gameObject.SetActive(true);
-        HeroRow2 = CreateRect("HeroRow2", RectOf(MemberB));
-        ConfigureRect(RectOf(HeroRow2), width: null, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(HeroRow2), ignoreLayout: false, preferredWidth: null, preferredHeight: 76f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HeroRow2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(HeroRow2), 12f, 0, 0, 0, 0);
-        ApplyStyle(HeroRow2, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        HeroRow2.gameObject.SetActive(true);
-        Portrait2 = CreateRect("Portrait2", RectOf(HeroRow2));
-        ConfigureRect(RectOf(Portrait2), width: 76f, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Portrait2), ignoreLayout: false, preferredWidth: 76f, preferredHeight: 76f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Portrait2), horizontal: false, vertical: false);
-        ApplyStyle(Portrait2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        Portrait2.gameObject.SetActive(true);
-        RoleIcon2 = CreateText("RoleIcon2", RectOf(Portrait2));
-        ConfigureRect(RectOf(RoleIcon2), width: 40f, height: 40f, left: 18f, top: 18f, absolute: true);
-        ApplyLayoutSizing(RectOf(RoleIcon2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RoleIcon2), horizontal: false, vertical: false);
-        ApplyStyle(RoleIcon2, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 40, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(RoleIcon2, boxWidth: 40f, boxHeight: 40f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(RoleIcon2, lineSpacing: null, wrapText: false);
-        RoleIcon2.text = ResolveIconText("sparkles");
-        RoleIcon2.gameObject.SetActive(true);
-        Identity2 = CreateRect("Identity2", RectOf(HeroRow2));
-        ConfigureRect(RectOf(Identity2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Identity2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Identity2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Identity2), 8f, 0, 0, 0, 0);
-        ApplyStyle(Identity2, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Identity2.gameObject.SetActive(true);
-        MemberName2 = CreateText("MemberName2", RectOf(Identity2));
-        ConfigureRect(RectOf(MemberName2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberName2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberName2), horizontal: false, vertical: false);
-        ApplyStyle(MemberName2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 14, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberName2, lineSpacing: null, wrapText: false);
-        MemberName2.text = "Lyra";
-        MemberName2.gameObject.SetActive(true);
-        MemberRole2 = CreateText("MemberRole2", RectOf(Identity2));
-        ConfigureRect(RectOf(MemberRole2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberRole2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberRole2), horizontal: false, vertical: false);
-        ApplyStyle(MemberRole2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberRole2, lineSpacing: null, wrapText: false);
-        MemberRole2.text = "Arcane Control";
-        MemberRole2.gameObject.SetActive(true);
+        var heroRow2View = new SyntheticContainerAF9ECAF6View(RectOf(MemberB), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "sparkles"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Lyra"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Arcane Control"
+            }
+        });
+        HeroRow2 = heroRow2View.Root;
+        HeroRow2.name = "HeroRow2";
         HpBar2 = CreateRect("HpBar2", RectOf(MemberB));
         ConfigureRect(RectOf(HpBar2), width: null, height: 22f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(HpBar2), ignoreLayout: false, preferredWidth: null, preferredHeight: 22f, flexibleWidth: 1f, flexibleHeight: null);
@@ -369,7 +241,7 @@ public sealed class PartyStatusStripView
         HpText2 = CreateText("HpText2", RectOf(HpBar2));
         ConfigureRect(RectOf(HpText2), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(HpText2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HpText2), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(HpText2), horizontal: true, vertical: true);
         ApplyStyle(HpText2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(HpText2, lineSpacing: null, wrapText: false);
         HpText2.text = "HP 144 / 220";
@@ -389,7 +261,7 @@ public sealed class PartyStatusStripView
         MpText2 = CreateText("MpText2", RectOf(MpBar2));
         ConfigureRect(RectOf(MpText2), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(MpText2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MpText2), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(MpText2), horizontal: true, vertical: true);
         ApplyStyle(MpText2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(MpText2, lineSpacing: null, wrapText: false);
         MpText2.text = "MP 124 / 138";
@@ -401,70 +273,36 @@ public sealed class PartyStatusStripView
         ApplyHorizontalLayout(RectOf(StatusRow2), 8f, 0, 0, 0, 0);
         ApplyStyle(StatusRow2, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow2.gameObject.SetActive(true);
-        StatusBuff12 = CreateRect("StatusBuff12", RectOf(StatusRow2));
-        ConfigureRect(RectOf(StatusBuff12), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff12), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff12), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff12), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff12, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff12.gameObject.SetActive(true);
-        BuffIcon12 = CreateText("BuffIcon12", RectOf(StatusBuff12));
-        ConfigureRect(RectOf(BuffIcon12), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon12), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon12), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon12, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon12, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon12, lineSpacing: null, wrapText: false);
-        BuffIcon12.text = ResolveIconText("wand-sparkles");
-        BuffIcon12.gameObject.SetActive(true);
-        StatusBuff22 = CreateRect("StatusBuff22", RectOf(StatusRow2));
-        ConfigureRect(RectOf(StatusBuff22), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff22), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff22), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff22), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff22, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff22.gameObject.SetActive(true);
-        BuffIcon22 = CreateText("BuffIcon22", RectOf(StatusBuff22));
-        ConfigureRect(RectOf(BuffIcon22), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon22), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon22), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon22, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon22, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon22, lineSpacing: null, wrapText: false);
-        BuffIcon22.text = ResolveIconText("flask-conical");
-        BuffIcon22.gameObject.SetActive(true);
-        StatusBuff32 = CreateRect("StatusBuff32", RectOf(StatusRow2));
-        ConfigureRect(RectOf(StatusBuff32), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff32), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff32), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff32), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff32, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff32.gameObject.SetActive(true);
-        BuffIcon32 = CreateText("BuffIcon32", RectOf(StatusBuff32));
-        ConfigureRect(RectOf(BuffIcon32), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon32), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon32), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon32, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon32, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon32, lineSpacing: null, wrapText: false);
-        BuffIcon32.text = ResolveIconText("moon");
-        BuffIcon32.gameObject.SetActive(true);
-        StatusBuff42 = CreateRect("StatusBuff42", RectOf(StatusRow2));
-        ConfigureRect(RectOf(StatusBuff42), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff42), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff42), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff42), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff42, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff42.gameObject.SetActive(true);
-        BuffIcon42 = CreateText("BuffIcon42", RectOf(StatusBuff42));
-        ConfigureRect(RectOf(BuffIcon42), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon42), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon42), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon42, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon42, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon42, lineSpacing: null, wrapText: false);
-        BuffIcon42.text = ResolveIconText("shield");
-        BuffIcon42.gameObject.SetActive(true);
+        var statusBuff12View = new SyntheticContainerB978BB0BView(RectOf(StatusRow2), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "wand-sparkles"
+            }
+        });
+        StatusBuff12 = statusBuff12View.Root;
+        StatusBuff12.name = "StatusBuff12";
+        var statusBuff22View = new SyntheticContainerB978BB0BView(RectOf(StatusRow2), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flask-conical"
+            }
+        });
+        StatusBuff22 = statusBuff22View.Root;
+        StatusBuff22.name = "StatusBuff22";
+        var statusBuff32View = new SyntheticContainerB978BB0BView(RectOf(StatusRow2), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff32 = statusBuff32View.Root;
+        StatusBuff32.name = "StatusBuff32";
+        var statusBuff42View = new SyntheticContainerB978BB0BView(RectOf(StatusRow2), null, null);
+        StatusBuff42 = statusBuff42View.Root;
+        StatusBuff42.name = "StatusBuff42";
         MemberC = CreateRect("MemberC", RectOf(MemberRow));
         ConfigureRect(RectOf(MemberC), width: 400f, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberC), ignoreLayout: false, preferredWidth: 400f, preferredHeight: null, flexibleWidth: null, flexibleHeight: 1f);
@@ -472,51 +310,23 @@ public sealed class PartyStatusStripView
         ApplyVerticalLayout(RectOf(MemberC), 12f, 12, 12, 12, 12);
         ApplyStyle(MemberC, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberC.gameObject.SetActive(true);
-        HeroRow3 = CreateRect("HeroRow3", RectOf(MemberC));
-        ConfigureRect(RectOf(HeroRow3), width: null, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(HeroRow3), ignoreLayout: false, preferredWidth: null, preferredHeight: 76f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HeroRow3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(HeroRow3), 12f, 0, 0, 0, 0);
-        ApplyStyle(HeroRow3, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        HeroRow3.gameObject.SetActive(true);
-        Portrait3 = CreateRect("Portrait3", RectOf(HeroRow3));
-        ConfigureRect(RectOf(Portrait3), width: 76f, height: 76f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Portrait3), ignoreLayout: false, preferredWidth: 76f, preferredHeight: 76f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Portrait3), horizontal: false, vertical: false);
-        ApplyStyle(Portrait3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        Portrait3.gameObject.SetActive(true);
-        RoleIcon3 = CreateText("RoleIcon3", RectOf(Portrait3));
-        ConfigureRect(RectOf(RoleIcon3), width: 40f, height: 40f, left: 18f, top: 18f, absolute: true);
-        ApplyLayoutSizing(RectOf(RoleIcon3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RoleIcon3), horizontal: false, vertical: false);
-        ApplyStyle(RoleIcon3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 40, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(RoleIcon3, boxWidth: 40f, boxHeight: 40f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(RoleIcon3, lineSpacing: null, wrapText: false);
-        RoleIcon3.text = ResolveIconText("shield");
-        RoleIcon3.gameObject.SetActive(true);
-        Identity3 = CreateRect("Identity3", RectOf(HeroRow3));
-        ConfigureRect(RectOf(Identity3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Identity3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Identity3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Identity3), 8f, 0, 0, 0, 0);
-        ApplyStyle(Identity3, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Identity3.gameObject.SetActive(true);
-        MemberName3 = CreateText("MemberName3", RectOf(Identity3));
-        ConfigureRect(RectOf(MemberName3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberName3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberName3), horizontal: false, vertical: false);
-        ApplyStyle(MemberName3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 14, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberName3, lineSpacing: null, wrapText: false);
-        MemberName3.text = "Serin";
-        MemberName3.gameObject.SetActive(true);
-        MemberRole3 = CreateText("MemberRole3", RectOf(Identity3));
-        ConfigureRect(RectOf(MemberRole3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MemberRole3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MemberRole3), horizontal: false, vertical: false);
-        ApplyStyle(MemberRole3, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(MemberRole3, lineSpacing: null, wrapText: false);
-        MemberRole3.text = "Guardian Support";
-        MemberRole3.gameObject.SetActive(true);
+        var heroRow3View = new SyntheticContainerAF9ECAF6View(RectOf(MemberC), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Serin"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Guardian Support"
+            }
+        });
+        HeroRow3 = heroRow3View.Root;
+        HeroRow3.name = "HeroRow3";
         HpBar3 = CreateRect("HpBar3", RectOf(MemberC));
         ConfigureRect(RectOf(HpBar3), width: null, height: 22f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(HpBar3), ignoreLayout: false, preferredWidth: null, preferredHeight: 22f, flexibleWidth: 1f, flexibleHeight: null);
@@ -532,7 +342,7 @@ public sealed class PartyStatusStripView
         HpText3 = CreateText("HpText3", RectOf(HpBar3));
         ConfigureRect(RectOf(HpText3), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(HpText3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(HpText3), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(HpText3), horizontal: true, vertical: true);
         ApplyStyle(HpText3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(HpText3, lineSpacing: null, wrapText: false);
         HpText3.text = "HP 210 / 220";
@@ -552,7 +362,7 @@ public sealed class PartyStatusStripView
         MpText3 = CreateText("MpText3", RectOf(MpBar3));
         ConfigureRect(RectOf(MpText3), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(MpText3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(MpText3), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(MpText3), horizontal: true, vertical: true);
         ApplyStyle(MpText3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(MpText3, lineSpacing: null, wrapText: false);
         MpText3.text = "MP 42 / 110";
@@ -564,75 +374,43 @@ public sealed class PartyStatusStripView
         ApplyHorizontalLayout(RectOf(StatusRow3), 8f, 0, 0, 0, 0);
         ApplyStyle(StatusRow3, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow3.gameObject.SetActive(true);
-        StatusBuff13 = CreateRect("StatusBuff13", RectOf(StatusRow3));
-        ConfigureRect(RectOf(StatusBuff13), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff13), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff13), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff13), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff13, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff13.gameObject.SetActive(true);
-        BuffIcon13 = CreateText("BuffIcon13", RectOf(StatusBuff13));
-        ConfigureRect(RectOf(BuffIcon13), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon13), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon13), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon13, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon13, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon13, lineSpacing: null, wrapText: false);
-        BuffIcon13.text = ResolveIconText("cross");
-        BuffIcon13.gameObject.SetActive(true);
-        StatusBuff23 = CreateRect("StatusBuff23", RectOf(StatusRow3));
-        ConfigureRect(RectOf(StatusBuff23), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff23), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff23), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff23), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff23, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff23.gameObject.SetActive(true);
-        BuffIcon23 = CreateText("BuffIcon23", RectOf(StatusBuff23));
-        ConfigureRect(RectOf(BuffIcon23), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon23), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon23), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon23, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon23, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon23, lineSpacing: null, wrapText: false);
-        BuffIcon23.text = ResolveIconText("shield");
-        BuffIcon23.gameObject.SetActive(true);
-        StatusBuff33 = CreateRect("StatusBuff33", RectOf(StatusRow3));
-        ConfigureRect(RectOf(StatusBuff33), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff33), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff33), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff33), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff33, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff33.gameObject.SetActive(true);
-        BuffIcon33 = CreateText("BuffIcon33", RectOf(StatusBuff33));
-        ConfigureRect(RectOf(BuffIcon33), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon33), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon33), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon33, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon33, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon33, lineSpacing: null, wrapText: false);
-        BuffIcon33.text = ResolveIconText("moon");
-        BuffIcon33.gameObject.SetActive(true);
-        StatusBuff43 = CreateRect("StatusBuff43", RectOf(StatusRow3));
-        ConfigureRect(RectOf(StatusBuff43), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(StatusBuff43), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(StatusBuff43), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(StatusBuff43), 0f, 0, 0, 0, 0);
-        ApplyStyle(StatusBuff43, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#8C8C8C", borderWidth: 2f, treatAsIcon: false);
-        StatusBuff43.gameObject.SetActive(true);
-        BuffIcon43 = CreateText("BuffIcon43", RectOf(StatusBuff43));
-        ConfigureRect(RectOf(BuffIcon43), width: 24f, height: 24f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(BuffIcon43), ignoreLayout: false, preferredWidth: 24f, preferredHeight: 24f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(BuffIcon43), horizontal: false, vertical: false);
-        ApplyStyle(BuffIcon43, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(BuffIcon43, boxWidth: 24f, boxHeight: 24f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(BuffIcon43, lineSpacing: null, wrapText: false);
-        BuffIcon43.text = ResolveIconText("flame");
-        BuffIcon43.gameObject.SetActive(true);
+        var statusBuff13View = new SyntheticContainerB978BB0BView(RectOf(StatusRow3), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "cross"
+            }
+        });
+        StatusBuff13 = statusBuff13View.Root;
+        StatusBuff13.name = "StatusBuff13";
+        var statusBuff23View = new SyntheticContainerB978BB0BView(RectOf(StatusRow3), null, null);
+        StatusBuff23 = statusBuff23View.Root;
+        StatusBuff23.name = "StatusBuff23";
+        var statusBuff33View = new SyntheticContainerB978BB0BView(RectOf(StatusRow3), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff33 = statusBuff33View.Root;
+        StatusBuff33.name = "StatusBuff33";
+        var statusBuff43View = new SyntheticContainerB978BB0BView(RectOf(StatusRow3), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            }
+        });
+        StatusBuff43 = statusBuff43View.Root;
+        StatusBuff43.name = "StatusBuff43";
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    private PartyStatusStripView(RectTransform root, IPartyStatusStripViewModel? viewModel)
+    private PartyStatusStripView(RectTransform root, IPartyStatusStripViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)
     {
+        _componentOverrides = componentOverrides;
         Root = root;
         Header = RequireRect(Root, "Header");
         AreaName = RequireComponent<Text>(Root, "Header/AreaName");
@@ -640,11 +418,6 @@ public sealed class PartyStatusStripView
         MemberRow = RequireRect(Root, "MemberRow");
         MemberA = RequireRect(Root, "MemberRow/MemberA");
         HeroRow = RequireRect(Root, "MemberRow/MemberA/HeroRow");
-        Portrait = RequireRect(Root, "MemberRow/MemberA/HeroRow/Portrait");
-        RoleIcon = RequireComponent<Text>(Root, "MemberRow/MemberA/HeroRow/Portrait/RoleIcon");
-        Identity = RequireRect(Root, "MemberRow/MemberA/HeroRow/Identity");
-        MemberName = RequireComponent<Text>(Root, "MemberRow/MemberA/HeroRow/Identity/MemberName");
-        MemberRole = RequireComponent<Text>(Root, "MemberRow/MemberA/HeroRow/Identity/MemberRole");
         HpBar = RequireRect(Root, "MemberRow/MemberA/HpBar");
         HpFill = RequireRect(Root, "MemberRow/MemberA/HpBar/HpFill");
         HpText = RequireComponent<Text>(Root, "MemberRow/MemberA/HpBar/HpText");
@@ -653,20 +426,11 @@ public sealed class PartyStatusStripView
         MpText = RequireComponent<Text>(Root, "MemberRow/MemberA/MpBar/MpText");
         StatusRow = RequireRect(Root, "MemberRow/MemberA/StatusRow");
         StatusBuff1 = RequireRect(Root, "MemberRow/MemberA/StatusRow/StatusBuff1");
-        BuffIcon1 = RequireComponent<Text>(Root, "MemberRow/MemberA/StatusRow/StatusBuff1/BuffIcon1");
         StatusBuff2 = RequireRect(Root, "MemberRow/MemberA/StatusRow/StatusBuff2");
-        BuffIcon2 = RequireComponent<Text>(Root, "MemberRow/MemberA/StatusRow/StatusBuff2/BuffIcon2");
         StatusBuff3 = RequireRect(Root, "MemberRow/MemberA/StatusRow/StatusBuff3");
-        BuffIcon3 = RequireComponent<Text>(Root, "MemberRow/MemberA/StatusRow/StatusBuff3/BuffIcon3");
         StatusBuff4 = RequireRect(Root, "MemberRow/MemberA/StatusRow/StatusBuff4");
-        BuffIcon4 = RequireComponent<Text>(Root, "MemberRow/MemberA/StatusRow/StatusBuff4/BuffIcon4");
         MemberB = RequireRect(Root, "MemberRow/MemberB");
         HeroRow2 = RequireRect(Root, "MemberRow/MemberB/HeroRow2");
-        Portrait2 = RequireRect(Root, "MemberRow/MemberB/HeroRow2/Portrait2");
-        RoleIcon2 = RequireComponent<Text>(Root, "MemberRow/MemberB/HeroRow2/Portrait2/RoleIcon2");
-        Identity2 = RequireRect(Root, "MemberRow/MemberB/HeroRow2/Identity2");
-        MemberName2 = RequireComponent<Text>(Root, "MemberRow/MemberB/HeroRow2/Identity2/MemberName2");
-        MemberRole2 = RequireComponent<Text>(Root, "MemberRow/MemberB/HeroRow2/Identity2/MemberRole2");
         HpBar2 = RequireRect(Root, "MemberRow/MemberB/HpBar2");
         HpFill2 = RequireRect(Root, "MemberRow/MemberB/HpBar2/HpFill2");
         HpText2 = RequireComponent<Text>(Root, "MemberRow/MemberB/HpBar2/HpText2");
@@ -675,20 +439,11 @@ public sealed class PartyStatusStripView
         MpText2 = RequireComponent<Text>(Root, "MemberRow/MemberB/MpBar2/MpText2");
         StatusRow2 = RequireRect(Root, "MemberRow/MemberB/StatusRow2");
         StatusBuff12 = RequireRect(Root, "MemberRow/MemberB/StatusRow2/StatusBuff12");
-        BuffIcon12 = RequireComponent<Text>(Root, "MemberRow/MemberB/StatusRow2/StatusBuff12/BuffIcon12");
         StatusBuff22 = RequireRect(Root, "MemberRow/MemberB/StatusRow2/StatusBuff22");
-        BuffIcon22 = RequireComponent<Text>(Root, "MemberRow/MemberB/StatusRow2/StatusBuff22/BuffIcon22");
         StatusBuff32 = RequireRect(Root, "MemberRow/MemberB/StatusRow2/StatusBuff32");
-        BuffIcon32 = RequireComponent<Text>(Root, "MemberRow/MemberB/StatusRow2/StatusBuff32/BuffIcon32");
         StatusBuff42 = RequireRect(Root, "MemberRow/MemberB/StatusRow2/StatusBuff42");
-        BuffIcon42 = RequireComponent<Text>(Root, "MemberRow/MemberB/StatusRow2/StatusBuff42/BuffIcon42");
         MemberC = RequireRect(Root, "MemberRow/MemberC");
         HeroRow3 = RequireRect(Root, "MemberRow/MemberC/HeroRow3");
-        Portrait3 = RequireRect(Root, "MemberRow/MemberC/HeroRow3/Portrait3");
-        RoleIcon3 = RequireComponent<Text>(Root, "MemberRow/MemberC/HeroRow3/Portrait3/RoleIcon3");
-        Identity3 = RequireRect(Root, "MemberRow/MemberC/HeroRow3/Identity3");
-        MemberName3 = RequireComponent<Text>(Root, "MemberRow/MemberC/HeroRow3/Identity3/MemberName3");
-        MemberRole3 = RequireComponent<Text>(Root, "MemberRow/MemberC/HeroRow3/Identity3/MemberRole3");
         HpBar3 = RequireRect(Root, "MemberRow/MemberC/HpBar3");
         HpFill3 = RequireRect(Root, "MemberRow/MemberC/HpBar3/HpFill3");
         HpText3 = RequireComponent<Text>(Root, "MemberRow/MemberC/HpBar3/HpText3");
@@ -697,17 +452,51 @@ public sealed class PartyStatusStripView
         MpText3 = RequireComponent<Text>(Root, "MemberRow/MemberC/MpBar3/MpText3");
         StatusRow3 = RequireRect(Root, "MemberRow/MemberC/StatusRow3");
         StatusBuff13 = RequireRect(Root, "MemberRow/MemberC/StatusRow3/StatusBuff13");
-        BuffIcon13 = RequireComponent<Text>(Root, "MemberRow/MemberC/StatusRow3/StatusBuff13/BuffIcon13");
         StatusBuff23 = RequireRect(Root, "MemberRow/MemberC/StatusRow3/StatusBuff23");
-        BuffIcon23 = RequireComponent<Text>(Root, "MemberRow/MemberC/StatusRow3/StatusBuff23/BuffIcon23");
         StatusBuff33 = RequireRect(Root, "MemberRow/MemberC/StatusRow3/StatusBuff33");
-        BuffIcon33 = RequireComponent<Text>(Root, "MemberRow/MemberC/StatusRow3/StatusBuff33/BuffIcon33");
         StatusBuff43 = RequireRect(Root, "MemberRow/MemberC/StatusRow3/StatusBuff43");
-        BuffIcon43 = RequireComponent<Text>(Root, "MemberRow/MemberC/StatusRow3/StatusBuff43/BuffIcon43");
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    public static PartyStatusStripView Bind(RectTransform root, IPartyStatusStripViewModel? viewModel = null) => new(root, viewModel);
+    public static PartyStatusStripView Bind(RectTransform root, IPartyStatusStripViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null) return;
+        if (TryGetComponentOverrideValue("$/0/0", "Text", out var componentOverrideValue0))
+        {
+            AreaName.text = AsString(componentOverrideValue0);
+        }
+        if (TryGetComponentOverrideValue("$/0/1", "Text", out var componentOverrideValue1))
+        {
+            EncounterState.text = AsString(componentOverrideValue1);
+        }
+        if (TryGetComponentOverrideValue("$/1/0/1/1", "Text", out var componentOverrideValue2))
+        {
+            HpText.text = AsString(componentOverrideValue2);
+        }
+        if (TryGetComponentOverrideValue("$/1/0/2/1", "Text", out var componentOverrideValue3))
+        {
+            MpText.text = AsString(componentOverrideValue3);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/1/1", "Text", out var componentOverrideValue4))
+        {
+            HpText2.text = AsString(componentOverrideValue4);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/2/1", "Text", out var componentOverrideValue5))
+        {
+            MpText2.text = AsString(componentOverrideValue5);
+        }
+        if (TryGetComponentOverrideValue("$/1/2/1/1", "Text", out var componentOverrideValue6))
+        {
+            HpText3.text = AsString(componentOverrideValue6);
+        }
+        if (TryGetComponentOverrideValue("$/1/2/2/1", "Text", out var componentOverrideValue7))
+        {
+            MpText3.text = AsString(componentOverrideValue7);
+        }
+    }
 
     public void Refresh()
     {
@@ -715,6 +504,22 @@ public sealed class PartyStatusStripView
     }
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;
+        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
@@ -726,8 +531,8 @@ public sealed class PartyStatusStripView
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
@@ -735,6 +540,7 @@ public sealed class PartyStatusStripView
     private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
     private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
     private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}

@@ -5,6 +5,7 @@ using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Generators;
+using BoomHud.Generators.VisualIR;
 
 namespace BoomHud.Gen.Unity;
 
@@ -21,6 +22,9 @@ public sealed class UnityGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, options, "unity");
+        document = prepared.Document;
+        diagnostics.AddRange(prepared.Diagnostics);
 
         if (options.EmitCompose)
         {
@@ -31,6 +35,7 @@ public sealed class UnityGenerator : IBackendGenerator
 
         try
         {
+            var visualPlan = VisualToUnityToolkitPlan.Build(prepared.VisualDocument);
             foreach (var component in document.Components.Values)
             {
                 var componentDocument = new HudDocument
@@ -42,10 +47,10 @@ public sealed class UnityGenerator : IBackendGenerator
                     Components = document.Components
                 };
 
-                EmitDocumentArtifacts(componentDocument, options, diagnostics, files);
+                EmitDocumentArtifacts(componentDocument, options, diagnostics, files, visualPlan);
             }
 
-            var mainPlan = EmitDocumentArtifacts(document, options, diagnostics, files);
+            var mainPlan = EmitDocumentArtifacts(document, options, diagnostics, files, visualPlan);
             if (options.Motion != null)
             {
                 var motionResult = UnityMotionExporter.Generate(document, mainPlan, options.Motion, options);
@@ -56,6 +61,29 @@ public sealed class UnityGenerator : IBackendGenerator
         catch (Exception ex)
         {
             diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
+        }
+
+        if (GenerationDocumentPreprocessor.CreateSummaryArtifact(document.Name, prepared.SyntheticComponentization) is { } artifact)
+        {
+            files.Add(artifact);
+        }
+
+        if (options.EmitVisualIrArtifact
+            && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
+        {
+            files.Add(visualIrArtifact);
+        }
+
+        if (options.EmitVisualSynthesisArtifact
+            && GenerationDocumentPreprocessor.CreateVisualSynthesisArtifact(document.Name, prepared.VisualSynthesis) is { } visualSynthesisArtifact)
+        {
+            files.Add(visualSynthesisArtifact);
+        }
+
+        if (options.EmitVisualRefinementArtifact
+            && GenerationDocumentPreprocessor.CreateVisualRefinementArtifact(document.Name, prepared.VisualRefinement) is { } visualRefinementArtifact)
+        {
+            files.Add(visualRefinementArtifact);
         }
 
         return new GenerationResult
@@ -69,9 +97,10 @@ public sealed class UnityGenerator : IBackendGenerator
         HudDocument document,
         GenerationOptions options,
         List<Diagnostic> diagnostics,
-        List<GeneratedFile> files)
+        List<GeneratedFile> files,
+        VisualToUnityToolkitPlan? visualPlan)
     {
-        var plan = UnityBackendPlanner.CreatePlan(document, options, diagnostics);
+        var plan = UnityBackendPlanner.CreatePlan(document, options, diagnostics, visualPlan);
 
         files.Add(new GeneratedFile
         {
@@ -200,11 +229,7 @@ public sealed class UnityGenerator : IBackendGenerator
         var source = node.Source;
         var layout = source.Layout;
         var style = source.Style;
-
-        if (layout == null && style == null)
-        {
-            return;
-        }
+        AppendAbsolutePlacementStyles(builder, source, parentLayoutType, node.Policy, node.VisualNode?.EdgeContract);
 
         if (layout != null)
         {
@@ -226,8 +251,6 @@ public sealed class UnityGenerator : IBackendGenerator
                     }
                     break;
             }
-
-            AppendAbsolutePlacementStyles(builder, source, parentLayoutType, node.Policy);
 
             AppendDimensionStyles(builder, "width", layout.Width, parentLayoutType, parentLayout, node.Policy);
             AppendDimensionStyles(builder, "height", layout.Height, parentLayoutType, parentLayout, node.Policy);
@@ -355,9 +378,10 @@ public sealed class UnityGenerator : IBackendGenerator
         };
     }
 
-    private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType, ResolvedGeneratorPolicy policy)
+    private static void AppendAbsolutePlacementStyles(StringBuilder builder, ComponentNode source, LayoutType? parentLayoutType, ResolvedGeneratorPolicy policy, EdgeContract? edgeContract)
     {
-        var sourceHasAbsolutePlacement = LayoutPolicyService.HasAbsolutePlacement(source, policy);
+        var sourceHasAbsolutePlacement = edgeContract?.Participation == LayoutParticipation.Overlay
+                                         || LayoutPolicyService.HasAbsolutePlacement(source, policy);
         if (parentLayoutType != LayoutType.Absolute && !sourceHasAbsolutePlacement)
         {
             return;
@@ -492,11 +516,17 @@ public sealed class UnityGenerator : IBackendGenerator
         var policy = node.Policy;
         var widthDimension = node.Source.Layout?.Width ?? style?.Width;
         var heightDimension = node.Source.Layout?.Height ?? style?.Height;
-        var resolvedFontSize = TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, policy);
-        var resolvedLetterSpacing = TextPolicyService.ResolveLetterSpacing(node.Source, policy);
+        var textMetric = node.MetricProfile?.Text;
+        var iconMetric = node.MetricProfile?.Icon;
+        var resolvedFontSize = iconMetric?.ResolvedFontSize
+                               ?? textMetric?.ResolvedFontSize
+                               ?? TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, policy);
+        var resolvedLetterSpacing = textMetric?.ResolvedLetterSpacing
+                                    ?? TextPolicyService.ResolveLetterSpacing(node.Source, policy);
         if (style == null
             && string.IsNullOrWhiteSpace(policy.Text.FontFamily)
             && resolvedFontSize is not > 0d
+            && textMetric?.ResolvedLineHeight is not > 0d
             && policy.Text.LineHeight is not > 0d
             && resolvedLetterSpacing is not > 0d)
         {
@@ -515,13 +545,17 @@ public sealed class UnityGenerator : IBackendGenerator
             AppendCssDeclaration(builder, "background-color", background);
         }
 
-        var fontFamily = policy.Text.FontFamily ?? style?.FontFamily;
+        var fontFamily = iconMetric?.ResolvedFontFamily
+                         ?? textMetric?.ResolvedFontFamily
+                         ?? policy.Text.FontFamily
+                         ?? style?.FontFamily;
         var fontSize = resolvedFontSize;
         if (fontSize != null)
         {
             AppendCssDeclaration(builder, "font-size", ToPixels(fontSize.Value));
 
-            var lineHeight = TextPolicyService.ResolveLineHeight(style, fontSize.Value, policy);
+            var lineHeight = textMetric?.ResolvedLineHeight
+                             ?? TextPolicyService.ResolveLineHeight(style, fontSize.Value, policy);
             if (lineHeight != null)
             {
                 AppendCssDeclaration(builder, "line-height", ToPixels(lineHeight.Value));
@@ -580,6 +614,7 @@ public sealed class UnityGenerator : IBackendGenerator
         var viewModelNamespace = plan.ViewModelNamespace;
         var flattenedNodes = Flatten(plan.Root).ToList();
         var queryNodes = flattenedNodes.Skip(1).ToList();
+        var componentNodes = queryNodes.Where(static node => node.ComponentView != null).ToList();
 
         if (options.IncludeComments)
         {
@@ -614,6 +649,7 @@ public sealed class UnityGenerator : IBackendGenerator
         AppendInvariantLine(builder, $"public sealed class {document.Name}View");
         builder.AppendLine("{");
         builder.AppendLine("    private readonly I" + document.Name + "ViewModel? _initialViewModel = null;");
+        builder.AppendLine("    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;");
         builder.AppendLine("    private I" + document.Name + "ViewModel? _viewModel;");
         builder.AppendLine();
         AppendInvariantLine(builder, $"    public {plan.Root.ElementType} Root {{ get; }}");
@@ -621,6 +657,11 @@ public sealed class UnityGenerator : IBackendGenerator
         foreach (var node in queryNodes)
         {
             AppendInvariantLine(builder, $"    public {node.ElementType} {node.Name} {{ get; }}");
+        }
+
+        foreach (var node in componentNodes)
+        {
+            AppendInvariantLine(builder, $"    private readonly {node.ComponentView}View? _{ToCamelCase(node.Name)}Component;");
         }
 
         builder.AppendLine();
@@ -635,6 +676,7 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("            }");
         builder.AppendLine();
         builder.AppendLine("            _viewModel = value;");
+        builder.AppendLine("            ApplyComponentViewModels();");
         builder.AppendLine();
         builder.AppendLine("            if (_viewModel != null)");
         builder.AppendLine("            {");
@@ -645,17 +687,28 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        }");
         builder.AppendLine("    }");
         builder.AppendLine();
-        AppendInvariantLine(builder, $"    public {document.Name}View(VisualElement root)");
+        AppendInvariantLine(builder, $"    public {document.Name}View(VisualElement root, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)");
         builder.AppendLine("    {");
         AppendInvariantLine(builder, $"        Root = root as {plan.Root.ElementType} ?? throw new ArgumentException(\"Expected root element type {plan.Root.ElementType}.\", nameof(root));");
+        builder.AppendLine("        _componentOverrides = componentOverrides;");
 
         foreach (var node in queryNodes)
         {
-            AppendInvariantLine(builder, $"        {node.Name} = Root.Q<{node.ElementType}>(\"{node.Name}\") ?? throw new InvalidOperationException(\"Could not find generated element '{node.Name}'.\");");
+            if (node.ComponentView != null)
+            {
+                AppendInvariantLine(builder, $"        var {ToCamelCase(node.Name)}Placeholder = Root.Q<VisualElement>(\"{node.Name}\") ?? throw new InvalidOperationException(\"Could not find generated component placeholder '{node.Name}'.\");");
+                AppendInvariantLine(builder, $"        _{ToCamelCase(node.Name)}Component = {node.ComponentView}View.Attach({ToCamelCase(node.Name)}Placeholder, {BuildComponentOverrideLiteral(node.Source) ?? "null"});");
+                AppendInvariantLine(builder, $"        {node.Name} = _{ToCamelCase(node.Name)}Component.Root;");
+            }
+            else
+            {
+                AppendInvariantLine(builder, $"        {node.Name} = Root.Q<{node.ElementType}>(\"{node.Name}\") ?? throw new InvalidOperationException(\"Could not find generated element '{node.Name}'.\");");
+            }
         }
 
         builder.AppendLine();
         builder.AppendLine("        ApplyStaticValues();");
+        builder.AppendLine("        ApplyInstanceOverrides();");
         builder.AppendLine("        ViewModel = _initialViewModel;");
         builder.AppendLine("    }");
         builder.AppendLine();
@@ -674,6 +727,17 @@ public sealed class UnityGenerator : IBackendGenerator
 
         builder.AppendLine("    }");
         builder.AppendLine();
+        builder.AppendLine("    private void ApplyInstanceOverrides()");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (_componentOverrides == null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        var componentOverrideIndex = 0;
+        AppendComponentOverrideAssignmentsRecursive(builder, plan.Root, plan.Root, ref componentOverrideIndex);
+        builder.AppendLine("    }");
+        builder.AppendLine();
         builder.AppendLine("    private void ApplyStaticValues()");
         builder.AppendLine("    {");
 
@@ -681,9 +745,74 @@ public sealed class UnityGenerator : IBackendGenerator
 
         builder.AppendLine("    }");
         builder.AppendLine();
+        builder.AppendLine("    private void ApplyComponentViewModels()");
+        builder.AppendLine("    {");
+        foreach (var node in componentNodes)
+        {
+            AppendInvariantLine(builder, $"        if (_{ToCamelCase(node.Name)}Component != null)");
+            builder.AppendLine("        {");
+            AppendInvariantLine(builder, $"            _{ToCamelCase(node.Name)}Component.ViewModel = _viewModel is I{node.ComponentView}ViewModel componentViewModel ? componentViewModel : null;");
+            builder.AppendLine("        }");
+        }
+        builder.AppendLine("    }");
+        builder.AppendLine();
         builder.AppendLine("    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)");
         builder.AppendLine("    {");
         builder.AppendLine("        Refresh();");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        AppendInvariantLine(builder, $"    private const string VisualTreeResourcePath = \"BoomHudGenerated/{document.Name}View\";");
+        AppendInvariantLine(builder, $"    private const string StyleSheetResourcePath = \"BoomHudGenerated/{document.Name}View\";");
+        AppendInvariantLine(builder, $"    private const string GeneratedRootName = \"{plan.Root.Name}\";");
+        builder.AppendLine("    private static VisualTreeAsset? s_visualTreeAsset;");
+        builder.AppendLine("    private static StyleSheet? s_generatedStyleSheet;");
+        builder.AppendLine();
+        AppendInvariantLine(builder, $"    public static {document.Name}View Create(VisualElement parent, string? instanceName = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (parent == null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            throw new ArgumentNullException(nameof(parent));");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        var root = CreateGeneratedRoot(instanceName);");
+        builder.AppendLine("        parent.Add(root);");
+        AppendInvariantLine(builder, $"        return new {document.Name}View(root, componentOverrides);");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        AppendInvariantLine(builder, $"    public static {document.Name}View Attach(VisualElement placeholder, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (placeholder == null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            throw new ArgumentNullException(nameof(placeholder));");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        var parent = placeholder.parent ?? throw new InvalidOperationException(\"Cannot attach a generated component without a parent element.\");");
+        builder.AppendLine("        var placeholderIndex = parent.IndexOf(placeholder);");
+        builder.AppendLine("        var root = CreateGeneratedRoot(string.IsNullOrWhiteSpace(placeholder.name) ? null : placeholder.name);");
+        builder.AppendLine("        parent.Insert(placeholderIndex, root);");
+        builder.AppendLine("        placeholder.RemoveFromHierarchy();");
+        AppendInvariantLine(builder, $"        return new {document.Name}View(root, componentOverrides);");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    private static VisualElement CreateGeneratedRoot(string? instanceName)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        s_visualTreeAsset ??= Resources.Load<VisualTreeAsset>(VisualTreeResourcePath)");
+        builder.AppendLine("            ?? throw new InvalidOperationException($\"Could not load VisualTreeAsset from Resources/{VisualTreeResourcePath}.uxml\");");
+        builder.AppendLine("        s_generatedStyleSheet ??= Resources.Load<StyleSheet>(StyleSheetResourcePath);");
+        builder.AppendLine();
+        builder.AppendLine("        var staging = new VisualElement();");
+        builder.AppendLine("        s_visualTreeAsset.CloneTree(staging);");
+        AppendInvariantLine(builder, $"        var root = staging.Q<{plan.Root.ElementType}>(GeneratedRootName)");
+        builder.AppendLine("            ?? throw new InvalidOperationException($\"Could not find generated root element '{GeneratedRootName}' after cloning the tree.\");");
+        builder.AppendLine("        root.RemoveFromHierarchy();");
+        builder.AppendLine("        root.name = string.IsNullOrWhiteSpace(instanceName) ? GeneratedRootName : instanceName!;");
+        builder.AppendLine();
+        builder.AppendLine("        if (s_generatedStyleSheet != null && !root.styleSheets.Contains(s_generatedStyleSheet))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            root.styleSheets.Add(s_generatedStyleSheet);");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        return root;");
         builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    private static readonly Dictionary<string, FontDefinition> s_fontDefinitions = new(StringComparer.OrdinalIgnoreCase);");
@@ -735,6 +864,31 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("            long longValue => longValue != 0,");
         builder.AppendLine("            _ => false");
         builder.AppendLine("        };");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        value = null;");
+        builder.AppendLine("        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return false;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        if (propertyOverrides.TryGetValue(propertyName, out value))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            return true;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        foreach (var candidate in propertyOverrides)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))");
+        builder.AppendLine("            {");
+        builder.AppendLine("                value = candidate.Value;");
+        builder.AppendLine("                return true;");
+        builder.AppendLine("            }");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        return false;");
         builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    private static StyleLength ParseStyleLength(string value)");
@@ -852,6 +1006,24 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.AppendLine("        }");
         builder.AppendLine();
         builder.AppendLine("        return default;");
+        builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine("    private static void SetImageSource(Image image, string resourcePath)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (string.IsNullOrWhiteSpace(resourcePath))");
+        builder.AppendLine("        {");
+        builder.AppendLine("            image.image = null;");
+        builder.AppendLine("            return;");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        var normalized = resourcePath.Replace(\"\\\\\", \"/\", StringComparison.Ordinal).TrimStart('/');");
+        builder.AppendLine("        var extensionIndex = normalized.LastIndexOf('.');");
+        builder.AppendLine("        if (extensionIndex > 0)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            normalized = normalized[..extensionIndex];");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+        builder.AppendLine("        image.image = Resources.Load<Texture2D>(normalized);");
         builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    private static void ApplyTextLabelStyle(Label label, bool wrapText)");
@@ -1222,6 +1394,41 @@ public sealed class UnityGenerator : IBackendGenerator
         }
     }
 
+    private static void AppendComponentOverrideAssignmentsRecursive(
+        StringBuilder builder,
+        UnityPlannedNode node,
+        UnityPlannedNode root,
+        ref int overrideIndex)
+    {
+        foreach (var property in node.Source.Properties.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
+        {
+            if (!ComponentInstanceOverrideSupport.IsSupportedProperty(node.Source, property.Key))
+            {
+                continue;
+            }
+
+            var accessor = GetNodeAccessor(node, root);
+            var overrideVariableName = FormattableString.Invariant($"componentOverrideValue{overrideIndex++}");
+            if (!TryBuildInstanceOverrideAssignment(accessor, node, property.Key, overrideVariableName, out var assignment))
+            {
+                continue;
+            }
+
+            AppendInvariantLine(builder, $"        if (TryGetComponentOverrideValue({ToStringLiteral(node.RelativePath)}, {ToStringLiteral(property.Key)}, out var {overrideVariableName}))");
+            builder.AppendLine("        {");
+            foreach (var line in assignment.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries))
+            {
+                builder.AppendLine("            " + line);
+            }
+            builder.AppendLine("        }");
+        }
+
+        foreach (var child in node.Children)
+        {
+            AppendComponentOverrideAssignmentsRecursive(builder, child, root, ref overrideIndex);
+        }
+    }
+
     private static void AppendStaticAssignments(
         StringBuilder builder,
         UnityPlannedNode node,
@@ -1387,6 +1594,103 @@ public sealed class UnityGenerator : IBackendGenerator
             default:
                 return false;
         }
+    }
+
+    private static bool TryBuildInstanceOverrideAssignment(string accessor, UnityPlannedNode node, string property, string valueExpression, out string assignment)
+    {
+        assignment = string.Empty;
+        var normalizedProperty = property.ToLowerInvariant();
+
+        if (IsIconLabelNode(node) && normalizedProperty is "text" or "value")
+        {
+            var iconFontFamily = ToNullableStringLiteral(TextPolicyService.ResolveFontFamily(node.Source, node.Policy));
+            var iconPointSize = ToFloatLiteral(TextPolicyService.ResolveFontSize(node.Source, node.Source.Layout?.Width ?? node.Source.Style?.Width, node.Source.Layout?.Height ?? node.Source.Style?.Height, node.Policy) ?? 16d);
+            var textExpression = $"ResolveIconText(AsString({valueExpression}), {iconFontFamily}, {iconPointSize})";
+            var iconWidth = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Width) ?? GetNodePixelDimension(node.Source.Style?.Width) ?? 16d);
+            var iconHeight = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Height) ?? GetNodePixelDimension(node.Source.Style?.Height) ?? 16d);
+            var baselineOffset = ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy));
+            var opticalCentering = IconPolicyService.UseOpticalCentering(node.Policy) ? "true" : "false";
+            var sizeMode = ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
+            var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(
+                node.Source,
+                node.Source.Layout?.Width ?? node.Source.Style?.Width,
+                node.Source.Layout?.Height ?? node.Source.Style?.Height,
+                node.Policy) ?? 0d);
+            assignment = string.Join(Environment.NewLine,
+                $"{accessor}.text = {textExpression};",
+                $"ApplyIconLabelStyle({accessor}, {iconWidth}, {iconHeight}, {baselineOffset}, {opticalCentering}, {sizeMode}, {explicitIconFontSize});");
+            return true;
+        }
+
+        switch (node.ElementType)
+        {
+            case "Label":
+                if (normalizedProperty is "text" or "value")
+                {
+                    var wrapTextLiteral = TextPolicyService.ShouldWrapText(node.Source, node.Policy) ? "true" : "false";
+                    assignment = string.Join(Environment.NewLine,
+                        $"{accessor}.text = AsString({valueExpression});",
+                        $"ApplyTextLabelStyle({accessor}, {wrapTextLiteral});");
+                    return true;
+                }
+                break;
+            case "Button":
+                if (normalizedProperty is "text" or "value")
+                {
+                    assignment = $"{accessor}.text = AsString({valueExpression});";
+                    return true;
+                }
+                break;
+            case "TextField":
+                if (normalizedProperty is "text" or "value")
+                {
+                    assignment = $"{accessor}.value = AsString({valueExpression});";
+                    return true;
+                }
+                break;
+            case "Toggle":
+                if (normalizedProperty == "value")
+                {
+                    assignment = $"{accessor}.value = AsBool({valueExpression});";
+                    return true;
+                }
+
+                if (normalizedProperty is "text" or "content")
+                {
+                    assignment = $"{accessor}.text = AsString({valueExpression});";
+                    return true;
+                }
+                break;
+            case "ProgressBar":
+                if (normalizedProperty == "value")
+                {
+                    assignment = $"{accessor}.value = AsFloat({valueExpression});";
+                    return true;
+                }
+
+                if (normalizedProperty is "text" or "content")
+                {
+                    assignment = $"{accessor}.title = AsString({valueExpression});";
+                    return true;
+                }
+                break;
+            case "Slider":
+                if (normalizedProperty == "value")
+                {
+                    assignment = $"{accessor}.value = AsFloat({valueExpression});";
+                    return true;
+                }
+                break;
+            case "Image":
+                if (normalizedProperty is "source" or "src" or "value")
+                {
+                    assignment = $"SetImageSource({accessor}, AsString({valueExpression}));";
+                    return true;
+                }
+                break;
+        }
+
+        return false;
     }
 
     private static void AppendStaticStyleAssignments(
@@ -1665,6 +1969,18 @@ public sealed class UnityGenerator : IBackendGenerator
 
     private static string GetNodeAccessor(UnityPlannedNode node, UnityPlannedNode root)
         => string.Equals(node.Name, root.Name, StringComparison.Ordinal) ? "Root" : node.Name;
+
+    private static string ToCamelCase(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        return value.Length == 1
+            ? value.ToLowerInvariant()
+            : char.ToLowerInvariant(value[0]) + value[1..];
+    }
 
     private static IEnumerable<UnityPlannedNode> Flatten(UnityPlannedNode root)
     {
@@ -2039,6 +2355,23 @@ public sealed class UnityGenerator : IBackendGenerator
             .Replace("\"", "&quot;", StringComparison.Ordinal)
             .Replace("<", "&lt;", StringComparison.Ordinal)
             .Replace(">", "&gt;", StringComparison.Ordinal);
+
+    private static string? BuildComponentOverrideLiteral(ComponentNode node)
+    {
+        var overrides = ComponentInstanceOverrideSupport.GetPropertyOverrides(node);
+        if (overrides.Count == 0)
+        {
+            return null;
+        }
+
+        return "new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)\n        {\n" +
+            string.Join(",\n",
+                overrides.Select(pathEntry =>
+                    $"            [{ToStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
+                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{ToStringLiteral(propertyEntry.Key)}] = {ToValueLiteral(propertyEntry.Value) ?? "null"}")) +
+                    "\n            }")) +
+            "\n        }";
+    }
 
     private static string? ToValueLiteral(object? value)
     {

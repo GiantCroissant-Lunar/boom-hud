@@ -20,6 +20,7 @@ namespace BoomHud.Compare.Editor
         private const string MenuPath = "Tools/BoomHud/Capture Fidelity Artifacts";
         private const int CaptureWidth = 1920;
         private const int CaptureHeight = 1080;
+        private const int MaxGameViewCaptureDimension = 4096;
 
         [MenuItem(MenuPath, priority = 104)]
         public static void CaptureFromMenu()
@@ -260,6 +261,7 @@ namespace BoomHud.Compare.Editor
                 croppedTexture = CropToRectTransform(fullTexture, target);
                 FlipTextureVertically(croppedTexture);
                 File.WriteAllBytes(outputPath, croppedTexture.EncodeToPNG());
+                WriteActualLayoutSnapshot(outputPath, CreateUGuiLayoutSnapshot(capture, target));
             }
             finally
             {
@@ -305,6 +307,7 @@ namespace BoomHud.Compare.Editor
                 ApplyCaptureTweaks(targetElement, capture);
                 croppedTexture = CropToElement(fullTexture, document.rootVisualElement, targetElement);
                 File.WriteAllBytes(outputPath, croppedTexture.EncodeToPNG());
+                WriteActualLayoutSnapshot(outputPath, CreateUiToolkitLayoutSnapshot(capture, targetElement));
             }
             finally
             {
@@ -335,18 +338,52 @@ namespace BoomHud.Compare.Editor
                     return offscreenTexture;
                 }
 
-                if (offscreenTexture != null)
+                Texture2D? gameViewTexture = null;
+                Exception? gameViewException = null;
+                try
                 {
-                    UnityEngine.Object.DestroyImmediate(offscreenTexture);
+                    gameViewTexture = CaptureGameViewTexture(width, height);
+                    if (HasMeaningfulContent(gameViewTexture))
+                    {
+                        if (offscreenTexture != null)
+                        {
+                            UnityEngine.Object.DestroyImmediate(offscreenTexture);
+                        }
+
+                        return gameViewTexture;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    gameViewException = exception;
                 }
 
-                var gameViewTexture = CaptureGameViewTexture(width, height);
-                if (HasMeaningfulContent(gameViewTexture))
+                if (offscreenTexture != null)
                 {
+                    if (gameViewTexture != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(gameViewTexture);
+                    }
+
+                    Debug.LogWarning(
+                        $"Falling back to the offscreen UI Toolkit capture despite a low-content heuristic result."
+                        + $"{FormatCaptureFailureSuffix(gameViewException)}");
+                    return offscreenTexture;
+                }
+
+                if (gameViewTexture != null)
+                {
+                    Debug.LogWarning("Falling back to the Unity Game View capture despite a low-content heuristic result.");
                     return gameViewTexture;
                 }
 
-                UnityEngine.Object.DestroyImmediate(gameViewTexture);
+                if (gameViewException != null)
+                {
+                    throw new InvalidOperationException(
+                        "Unity UI capture failed for both offscreen and Game View capture paths.",
+                        gameViewException);
+                }
+
                 throw new InvalidOperationException("Unity UI capture did not produce meaningful content.");
             }
             finally
@@ -430,8 +467,8 @@ namespace BoomHud.Compare.Editor
             FocusAndRepaintWindow(gameView);
 
             var viewportRectPixels = GetWindowPixelRect(gameView);
-            var width = Mathf.Max(fallbackWidth, Mathf.RoundToInt(viewportRectPixels.width));
-            var height = Mathf.Max(fallbackHeight, Mathf.RoundToInt(viewportRectPixels.height));
+            var width = ResolveRequestedCaptureDimension(fallbackWidth, viewportRectPixels.width);
+            var height = ResolveRequestedCaptureDimension(fallbackHeight, viewportRectPixels.height);
             if (width <= 0 || height <= 0)
             {
                 throw new InvalidOperationException("The Unity Game View reported an empty viewport.");
@@ -454,7 +491,8 @@ namespace BoomHud.Compare.Editor
                 throw new MissingMethodException(hostView.GetType().FullName, "GrabPixels");
             }
 
-            return CaptureTextureFromHostView(hostView, grabPixels, viewportRectPixels, width, height);
+            var captureRect = new Rect(viewportRectPixels.x, viewportRectPixels.y, width, height);
+            return CaptureTextureFromHostView(hostView, grabPixels, captureRect, width, height);
         }
 
         private static Texture2D CaptureCameraTexture(int width, int height)
@@ -584,6 +622,233 @@ namespace BoomHud.Compare.Editor
             croppedTexture.SetPixels(pixels);
             croppedTexture.Apply();
             return croppedTexture;
+        }
+
+        private static void WriteActualLayoutSnapshot(string outputPath, ActualLayoutSnapshot snapshot)
+        {
+            var snapshotPath = ResolveActualLayoutSnapshotPath(outputPath);
+            var snapshotDirectory = Path.GetDirectoryName(snapshotPath);
+            if (!string.IsNullOrWhiteSpace(snapshotDirectory))
+            {
+                Directory.CreateDirectory(snapshotDirectory);
+            }
+
+            File.WriteAllText(snapshotPath, JsonUtility.ToJson(snapshot, true));
+        }
+
+        private static string ResolveActualLayoutSnapshotPath(string outputPath)
+            => Path.Combine(
+                Path.GetDirectoryName(outputPath) ?? string.Empty,
+                $"{Path.GetFileNameWithoutExtension(outputPath)}.layout.actual.json");
+
+        private static ActualLayoutSnapshot CreateUiToolkitLayoutSnapshot(FidelityUnityCapture capture, VisualElement targetElement)
+            => new ActualLayoutSnapshot
+            {
+                Version = "1.0",
+                BackendFamily = "unity",
+                CaptureId = capture.captureId,
+                TargetName = string.IsNullOrWhiteSpace(capture.targetElementName) ? targetElement.name : capture.targetElementName,
+                Root = BuildUiToolkitLayoutNode(targetElement, null, "root")
+            };
+
+        private static ActualLayoutSnapshot CreateUGuiLayoutSnapshot(FidelityUnityCapture capture, RectTransform target)
+            => new ActualLayoutSnapshot
+            {
+                Version = "1.0",
+                BackendFamily = "ugui",
+                CaptureId = capture.captureId,
+                TargetName = string.IsNullOrWhiteSpace(capture.targetObjectName) ? target.name : capture.targetObjectName,
+                Root = BuildUGuiLayoutNode(target, null, "root")
+            };
+
+        private static ActualLayoutNode BuildUiToolkitLayoutNode(VisualElement element, VisualElement? parent, string localPath)
+        {
+            var rect = ResolveUiToolkitLocalRect(element, parent);
+            var clipContent = false;
+            var wrapText = element.resolvedStyle.whiteSpace == WhiteSpace.Normal;
+            var fontSize = element is TextElement textElement && !float.IsNaN(textElement.resolvedStyle.fontSize)
+                ? textElement.resolvedStyle.fontSize
+                : -1f;
+            var preferredSize = element is TextElement measuredTextElement
+                ? measuredTextElement.MeasureTextSize(
+                    measuredTextElement.text ?? string.Empty,
+                    0,
+                    VisualElement.MeasureMode.Undefined,
+                    0,
+                    VisualElement.MeasureMode.Undefined)
+                : Vector2.zero;
+
+            return new ActualLayoutNode
+            {
+                LocalPath = localPath,
+                Name = string.IsNullOrWhiteSpace(element.name) ? element.GetType().Name : element.name,
+                NodeType = element.GetType().Name,
+                X = rect.x,
+                Y = rect.y,
+                Width = rect.width,
+                Height = rect.height,
+                PreferredWidth = preferredSize.x > 0f ? preferredSize.x : -1f,
+                PreferredHeight = preferredSize.y > 0f ? preferredSize.y : -1f,
+                Text = element is TextElement uiText ? uiText.text : string.Empty,
+                FontSize = fontSize,
+                WrapText = wrapText,
+                ClipContent = clipContent,
+                PaddingLeft = element.resolvedStyle.paddingLeft,
+                PaddingTop = element.resolvedStyle.paddingTop,
+                PaddingRight = element.resolvedStyle.paddingRight,
+                PaddingBottom = element.resolvedStyle.paddingBottom,
+                MarginLeft = element.resolvedStyle.marginLeft,
+                MarginTop = element.resolvedStyle.marginTop,
+                MarginRight = element.resolvedStyle.marginRight,
+                MarginBottom = element.resolvedStyle.marginBottom,
+                Children = element.Children()
+                    .OfType<VisualElement>()
+                    .Select((child, index) => BuildUiToolkitLayoutNode(child, element, $"{localPath}/{index}"))
+                    .ToArray()
+            };
+        }
+
+        private static ActualLayoutNode BuildUGuiLayoutNode(RectTransform target, RectTransform? parent, string localPath)
+        {
+            var rect = ResolveUGuiLocalRect(target, parent);
+            var preferredWidth = ResolvePreferredWidth(target);
+            var preferredHeight = ResolvePreferredHeight(target);
+            var text = target.GetComponent<Text>();
+            var layoutGroup = target.GetComponent<LayoutGroup>();
+
+            return new ActualLayoutNode
+            {
+                LocalPath = localPath,
+                Name = target.name,
+                NodeType = ResolveUGuiNodeType(target),
+                X = rect.x,
+                Y = rect.y,
+                Width = rect.width,
+                Height = rect.height,
+                PreferredWidth = preferredWidth > 0f ? preferredWidth : -1f,
+                PreferredHeight = preferredHeight > 0f ? preferredHeight : -1f,
+                Text = text != null ? text.text : string.Empty,
+                FontSize = text != null ? text.fontSize : -1f,
+                WrapText = text != null && text.horizontalOverflow == HorizontalWrapMode.Wrap,
+                ClipContent = target.GetComponent<Mask>() != null || target.GetComponent<RectMask2D>() != null,
+                PaddingLeft = layoutGroup?.padding.left ?? 0,
+                PaddingTop = layoutGroup?.padding.top ?? 0,
+                PaddingRight = layoutGroup?.padding.right ?? 0,
+                PaddingBottom = layoutGroup?.padding.bottom ?? 0,
+                MarginLeft = 0,
+                MarginTop = 0,
+                MarginRight = 0,
+                MarginBottom = 0,
+                Children = target.Cast<Transform>()
+                    .OfType<RectTransform>()
+                    .Select((child, index) => BuildUGuiLayoutNode(child, target, $"{localPath}/{index}"))
+                    .ToArray()
+            };
+        }
+
+        private static Rect ResolveUiToolkitLocalRect(VisualElement element, VisualElement? parent)
+        {
+            if (parent == null)
+            {
+                var rootRect = ResolveElementRect(element, CaptureWidth, CaptureHeight);
+                return new Rect(0f, 0f, rootRect.width, rootRect.height);
+            }
+
+            var layout = element.layout;
+            if (!float.IsNaN(layout.x) && !float.IsNaN(layout.y) && layout.width > 0f && layout.height > 0f)
+            {
+                return layout;
+            }
+
+            var parentBounds = parent.worldBound;
+            var childBounds = element.worldBound;
+            return new Rect(
+                childBounds.xMin - parentBounds.xMin,
+                childBounds.yMin - parentBounds.yMin,
+                childBounds.width,
+                childBounds.height);
+        }
+
+        private static Rect ResolveUGuiLocalRect(RectTransform target, RectTransform? parent)
+        {
+            if (parent == null)
+            {
+                var width = Mathf.Max(target.rect.width, ResolvePreferredWidth(target));
+                var height = Mathf.Max(target.rect.height, ResolvePreferredHeight(target));
+                return new Rect(0f, 0f, width, height);
+            }
+
+            if (TryResolveLocalBounds(target, parent, out var left, out var top, out var widthBounds, out var heightBounds))
+            {
+                return new Rect(left, top, widthBounds, heightBounds);
+            }
+
+            var fallbackWidth = Mathf.Max(target.rect.width, ResolvePreferredWidth(target));
+            var fallbackHeight = Mathf.Max(target.rect.height, ResolvePreferredHeight(target));
+            return new Rect(0f, 0f, fallbackWidth, fallbackHeight);
+        }
+
+        private static bool TryResolveLocalBounds(
+            RectTransform target,
+            RectTransform parent,
+            out float left,
+            out float top,
+            out float width,
+            out float height)
+        {
+            var childCorners = GetWorldCorners(target);
+            var localCorners = childCorners
+                .Select(parent.InverseTransformPoint)
+                .ToArray();
+
+            if (localCorners.Length != 4)
+            {
+                left = top = width = height = 0f;
+                return false;
+            }
+
+            var minX = localCorners.Min(corner => corner.x);
+            var maxX = localCorners.Max(corner => corner.x);
+            var minY = localCorners.Min(corner => corner.y);
+            var maxY = localCorners.Max(corner => corner.y);
+            var parentRect = parent.rect;
+
+            left = minX - parentRect.xMin;
+            top = parentRect.yMax - maxY;
+            width = maxX - minX;
+            height = maxY - minY;
+
+            return width > 0f && height > 0f;
+        }
+
+        private static string ResolveUGuiNodeType(RectTransform target)
+        {
+            if (target.TryGetComponent<Text>(out _))
+            {
+                return nameof(Text);
+            }
+
+            if (target.TryGetComponent<UnityEngine.UI.Image>(out _))
+            {
+                return nameof(UnityEngine.UI.Image);
+            }
+
+            if (target.TryGetComponent<HorizontalLayoutGroup>(out _))
+            {
+                return nameof(HorizontalLayoutGroup);
+            }
+
+            if (target.TryGetComponent<VerticalLayoutGroup>(out _))
+            {
+                return nameof(VerticalLayoutGroup);
+            }
+
+            if (target.TryGetComponent<GridLayoutGroup>(out _))
+            {
+                return nameof(GridLayoutGroup);
+            }
+
+            return nameof(RectTransform);
         }
 
         private static bool TryResolveViewportBounds(
@@ -1150,29 +1415,57 @@ namespace BoomHud.Compare.Editor
 
             var baseline = pixels[0];
             var differingPixels = 0;
-            var brightPixels = 0;
+            var visiblePixels = 0;
+            var nonBlackPixels = 0;
 
             for (var index = 0; index < pixels.Length; index++)
             {
                 var pixel = pixels[index];
-                var delta = Mathf.Abs(pixel.r - baseline.r) + Mathf.Abs(pixel.g - baseline.g) + Mathf.Abs(pixel.b - baseline.b);
+                var delta =
+                    Mathf.Abs(pixel.r - baseline.r)
+                    + Mathf.Abs(pixel.g - baseline.g)
+                    + Mathf.Abs(pixel.b - baseline.b)
+                    + Mathf.Abs(pixel.a - baseline.a);
                 if (delta >= 12)
                 {
                     differingPixels++;
                 }
 
-                if (pixel.r >= 80 || pixel.g >= 80 || pixel.b >= 80)
+                if (pixel.a >= 8)
                 {
-                    brightPixels++;
+                    visiblePixels++;
                 }
 
-                if (differingPixels >= 256 && brightPixels >= 256)
+                if (pixel.r >= 16 || pixel.g >= 16 || pixel.b >= 16)
+                {
+                    nonBlackPixels++;
+                }
+
+                if ((differingPixels >= 256 && visiblePixels >= 64) || (visiblePixels >= 256 && nonBlackPixels >= 64))
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private static int ResolveRequestedCaptureDimension(int requestedDimension, float viewportDimension)
+        {
+            var resolvedDimension = requestedDimension > 0
+                ? requestedDimension
+                : Mathf.RoundToInt(viewportDimension);
+            return Mathf.Clamp(resolvedDimension, 1, MaxGameViewCaptureDimension);
+        }
+
+        private static string FormatCaptureFailureSuffix(Exception? exception)
+        {
+            if (exception == null)
+            {
+                return string.Empty;
+            }
+
+            return $" Game View fallback failed: {exception.GetType().Name}: {exception.Message}";
         }
 
         private static EditorWindow? GetGameViewWindow()
@@ -1351,6 +1644,43 @@ namespace BoomHud.Compare.Editor
             public float allIconMarginTop = float.NaN;
             public float classIconMarginTop = float.NaN;
             public float actionIconMarginTop = float.NaN;
+        }
+
+        [Serializable]
+        private sealed class ActualLayoutSnapshot
+        {
+            public string Version = string.Empty;
+            public string BackendFamily = string.Empty;
+            public string CaptureId = string.Empty;
+            public string TargetName = string.Empty;
+            public ActualLayoutNode Root = new();
+        }
+
+        [Serializable]
+        private sealed class ActualLayoutNode
+        {
+            public string LocalPath = string.Empty;
+            public string Name = string.Empty;
+            public string NodeType = string.Empty;
+            public float X;
+            public float Y;
+            public float Width;
+            public float Height;
+            public float PreferredWidth = -1f;
+            public float PreferredHeight = -1f;
+            public string Text = string.Empty;
+            public float FontSize = -1f;
+            public bool WrapText;
+            public bool ClipContent;
+            public float PaddingLeft;
+            public float PaddingTop;
+            public float PaddingRight;
+            public float PaddingBottom;
+            public float MarginLeft;
+            public float MarginTop;
+            public float MarginRight;
+            public float MarginBottom;
+            public ActualLayoutNode[] Children = Array.Empty<ActualLayoutNode>();
         }
     }
 }

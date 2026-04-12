@@ -35,10 +35,15 @@ public static class BaselineScoreCommand
 
         var diffOption = new Option<FileInfo?>("--diff", "Optional output path for a generated diff image");
         diffOption.AddAlias("-d");
+        var visualIrOption = new Option<FileInfo?>("--visual-ir", "Optional Visual IR artifact to convert the recursive score tree into a visual refinement plan");
+        var visualRefinementOutOption = new Option<FileInfo?>("--visual-refinement-out", "Optional output path for the generated visual refinement artifact");
+        var actualLayoutOption = new Option<FileInfo?>("--actual-layout", "Optional Unity actual-layout snapshot emitted beside the candidate image");
+        var measuredLayoutOutOption = new Option<FileInfo?>("--measured-layout-out", "Optional output path for the measured expected-vs-actual layout report");
 
         var normalizeOption = new Option<string>("--normalize", () => "off", "Normalize candidate to reference dimensions before scoring: off, stretch, or cover");
         var failBelowOption = new Option<double?>("--fail-below", "Fail with exit code 2 if overall similarity is below this percentage");
         var toleranceOption = new Option<int>("--tolerance", () => 8, "Per-channel delta tolerance (0-255)");
+        var visualRefinementBudgetOption = new Option<int>("--visual-refinement-budget", () => 4, "Maximum number of refinement actions to emit when --visual-ir is provided");
         var summaryOption = new Option<bool>("--summary", () => true, "Print summary to stdout");
         var verboseOption = new Option<bool>("--verbose", () => false, "Enable verbose output");
 
@@ -46,9 +51,14 @@ public static class BaselineScoreCommand
         command.AddOption(candidateOption);
         command.AddOption(outOption);
         command.AddOption(diffOption);
+        command.AddOption(visualIrOption);
+        command.AddOption(visualRefinementOutOption);
+        command.AddOption(actualLayoutOption);
+        command.AddOption(measuredLayoutOutOption);
         command.AddOption(normalizeOption);
         command.AddOption(failBelowOption);
         command.AddOption(toleranceOption);
+        command.AddOption(visualRefinementBudgetOption);
         command.AddOption(summaryOption);
         command.AddOption(verboseOption);
 
@@ -60,9 +70,14 @@ public static class BaselineScoreCommand
                 CandidateFile = context.ParseResult.GetValueForOption(candidateOption),
                 OutFile = context.ParseResult.GetValueForOption(outOption),
                 DiffFile = context.ParseResult.GetValueForOption(diffOption),
+                VisualIrFile = context.ParseResult.GetValueForOption(visualIrOption),
+                VisualRefinementOutFile = context.ParseResult.GetValueForOption(visualRefinementOutOption),
+                ActualLayoutFile = context.ParseResult.GetValueForOption(actualLayoutOption),
+                MeasuredLayoutOutFile = context.ParseResult.GetValueForOption(measuredLayoutOutOption),
                 NormalizeMode = context.ParseResult.GetValueForOption(normalizeOption) ?? "off",
                 FailBelowOverallPercent = context.ParseResult.GetValueForOption(failBelowOption),
                 Tolerance = context.ParseResult.GetValueForOption(toleranceOption),
+                VisualRefinementIterationBudget = context.ParseResult.GetValueForOption(visualRefinementBudgetOption),
                 PrintSummary = context.ParseResult.GetValueForOption(summaryOption),
                 Verbose = context.ParseResult.GetValueForOption(verboseOption)
             };

@@ -1,0 +1,126 @@
+.boomhud-row0 {
+    flex-direction: row;
+    width: 100%;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #000000;
+    background-color: #000000;
+}
+
+.boomhud-cell00 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #232323;
+    background-color: #232323;
+}
+
+.boomhud-cell01 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 4px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #232323;
+    background-color: #232323;
+}
+
+.boomhud-cell02 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 4px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #3D6A3D;
+    background-color: #3D6A3D;
+}
+
+.boomhud-cell03 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 4px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #232323;
+    background-color: #232323;
+}
+
+.boomhud-cell04 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 4px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #232323;
+    background-color: #232323;
+}
+
+.boomhud-cell05 {
+    flex-direction: column;
+    width: 32px;
+    height: 32px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 4px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #232323;
+    background-color: #232323;
+}
+

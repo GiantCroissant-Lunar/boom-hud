@@ -60,6 +60,9 @@ public static class Program
             var variablesOption = new Option<FileInfo?>("--variables", "Optional Figma variables JSON file for theme tokens");
             var motionOption = new Option<FileInfo?>("--motion", "Optional Motion JSON file to emit animation artifacts for supported backends");
             var rulesOption = new Option<FileInfo?>("--rules", "Optional generator rule set JSON file");
+            var emitVisualIrOption = new Option<bool>("--emit-visual-ir", "Emit a compiler-only Visual IR artifact alongside generated files");
+            var emitVisualSynthesisOption = new Option<bool>("--emit-visual-synthesis", "Emit a compiler-only Visual synthesis artifact alongside generated files");
+            var emitVisualRefinementOption = new Option<bool>("--emit-visual-refinement", "Emit a compiler-only Visual refinement artifact alongside generated files");
             var themeNameOption = new Option<string?>("--theme-name", "Optional theme name (defaults to variables filename)");
             var themeCollectionOption = new Option<string?>("--theme-collection", "Optional Figma variables collection name");
             var themeModeOption = new Option<string?>("--theme-mode", "Optional Figma variables mode id or name (e.g. \"Light\")");
@@ -88,6 +91,9 @@ public static class Program
             generateCommand.AddOption(variablesOption);
             generateCommand.AddOption(motionOption);
             generateCommand.AddOption(rulesOption);
+            generateCommand.AddOption(emitVisualIrOption);
+            generateCommand.AddOption(emitVisualSynthesisOption);
+            generateCommand.AddOption(emitVisualRefinementOption);
             generateCommand.AddOption(themeNameOption);
             generateCommand.AddOption(themeCollectionOption);
             generateCommand.AddOption(themeModeOption);
@@ -115,6 +121,9 @@ public static class Program
                 var variables = context.ParseResult.GetValueForOption(variablesOption);
                 var motion = context.ParseResult.GetValueForOption(motionOption);
                 var rules = context.ParseResult.GetValueForOption(rulesOption);
+                var emitVisualIr = context.ParseResult.GetValueForOption(emitVisualIrOption);
+                var emitVisualSynthesis = context.ParseResult.GetValueForOption(emitVisualSynthesisOption);
+                var emitVisualRefinement = context.ParseResult.GetValueForOption(emitVisualRefinementOption);
                 var themeName = context.ParseResult.GetValueForOption(themeNameOption);
                 var themeCollection = context.ParseResult.GetValueForOption(themeCollectionOption);
                 var themeMode = context.ParseResult.GetValueForOption(themeModeOption);
@@ -226,6 +235,9 @@ public static class Program
                     variables,
                     motion,
                     effectiveRules,
+                    emitVisualIr,
+                    emitVisualSynthesis,
+                    emitVisualRefinement,
                     themeName,
                     themeCollection,
                     themeMode,
@@ -483,6 +495,9 @@ public static class Program
         FileInfo? variables,
         FileInfo? motion,
         FileInfo? rules,
+        bool emitVisualIr,
+        bool emitVisualSynthesis,
+        bool emitVisualRefinement,
         string? themeName,
         string? themeCollection,
         string? themeMode,
@@ -659,6 +674,9 @@ public static class Program
             Theme = theme,
             Motion = motionDocument,
             RuleSet = ruleSet,
+            EmitVisualIrArtifact = emitVisualIr,
+            EmitVisualSynthesisArtifact = emitVisualSynthesis,
+            EmitVisualRefinementArtifact = emitVisualRefinement,
             MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
             IncludeComments = true,
             UseNullableAnnotations = true,
@@ -677,10 +695,21 @@ public static class Program
         foreach (var backend in targets)
         {
             var generator = BackendCatalog.CreateGenerator(backend);
+            var backendRoot = targets.Count > 1
+                ? Path.Combine(outputRoot, backend)
+                : outputRoot;
+            var backendDocument = document;
+            ReactGeneratedAssetPreparationResult? reactAssetPreparation = null;
+
+            if (string.Equals(backend, "React", StringComparison.Ordinal))
+            {
+                reactAssetPreparation = ReactGeneratedAssetCopier.PrepareBackgroundImageAssets(document, inputs, backendRoot);
+                backendDocument = reactAssetPreparation.Document;
+            }
 
             Console.WriteLine();
             Console.WriteLine($"=== Generating {backend} ===");
-            var result = generator.Generate(document, options);
+            var result = generator.Generate(backendDocument, options);
 
             if (result.Diagnostics.Count > 0)
             {
@@ -696,21 +725,16 @@ public static class Program
                 return 1;
             }
 
-            var backendRoot = targets.Count > 1
-                ? Path.Combine(outputRoot, backend)
-                : outputRoot;
+            WriteGeneratedFiles(backendRoot, backendDocument.Name, result.Files);
 
-            WriteGeneratedFiles(backendRoot, result.Files);
-
-            if (string.Equals(backend, "React", StringComparison.Ordinal))
+            if (reactAssetPreparation != null)
             {
-                var assetCopyResult = ReactGeneratedAssetCopier.CopyBackgroundImageAssets(document, inputs, backendRoot);
-                foreach (var copiedFile in assetCopyResult.CopiedFiles)
+                foreach (var copiedFile in reactAssetPreparation.CopiedFiles)
                 {
                     Console.WriteLine($"Copied React asset: {copiedFile}");
                 }
 
-                foreach (var warning in assetCopyResult.Warnings)
+                foreach (var warning in reactAssetPreparation.Warnings)
                 {
                     Console.WriteLine(warning);
                 }
@@ -1007,23 +1031,8 @@ public static class Program
         }
     }
 
-    private static void WriteGeneratedFiles(string outputRoot, IReadOnlyList<GeneratedFile> files)
-    {
-        Directory.CreateDirectory(outputRoot);
-
-        foreach (var file in files)
-        {
-            var targetPath = System.IO.Path.Combine(outputRoot, file.Path);
-            var dir = System.IO.Path.GetDirectoryName(targetPath);
-            if (!string.IsNullOrEmpty(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            File.WriteAllText(targetPath, file.Content);
-            Console.WriteLine($"Wrote: {targetPath}");
-        }
-    }
+    private static void WriteGeneratedFiles(string outputRoot, string scopeId, IReadOnlyList<GeneratedFile> files)
+        => GeneratedFileWriter.Write(outputRoot, scopeId, files, Console.Out);
 
     /// <summary>
     /// Loads token registry from explicit file or auto-discovers ui/tokens.ir.json.

@@ -146,129 +146,6 @@
 }
 
 .boomhud-row0 {
-    flex-direction: row;
-    align-self: stretch;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #000000;
-    background-color: #000000;
-}
-
-.boomhud-cell00 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell01 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell02 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #3D6A3D;
-    background-color: #3D6A3D;
-}
-
-.boomhud-cell03 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell04 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell05 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
 }
 
 .boomhud-row1 {
@@ -524,129 +401,6 @@
 }
 
 .boomhud-row3 {
-    flex-direction: row;
-    align-self: stretch;
-    height: 32px;
-    margin-top: 4px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #000000;
-    background-color: #000000;
-}
-
-.boomhud-cell30 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell31 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell32 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #3D6A3D;
-    background-color: #3D6A3D;
-}
-
-.boomhud-cell33 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell34 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
-}
-
-.boomhud-cell35 {
-    flex-direction: column;
-    width: 32px;
-    height: 32px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 4px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #232323;
-    background-color: #232323;
 }
 
 .boomhud-row4 {
@@ -819,348 +573,12 @@
 }
 
 .boomhud-objective1 {
-    flex-direction: row;
-    align-self: stretch;
-    height: 44px;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-icon-shell1 {
-    flex-direction: column;
-    width: 44px;
-    height: 44px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: #8C8C8C;
-    border-right-color: #8C8C8C;
-    border-top-color: #8C8C8C;
-    border-bottom-color: #8C8C8C;
-}
-
-.boomhud-objective-icon1 {
-    flex-direction: column;
-    width: 20px;
-    height: 20px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 20px;
-}
-
-.boomhud-objective-text1 {
-    flex-direction: column;
-    flex-grow: 1;
-    align-self: stretch;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 10px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-objective-title1 {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-objective-hint1 {
-    flex-direction: column;
-    margin-top: 6px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 8px;
-    line-height: 12px;
-    -unity-font-style: normal;
 }
 
 .boomhud-objective2 {
-    flex-direction: row;
-    align-self: stretch;
-    height: 44px;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-icon-shell2 {
-    flex-direction: column;
-    width: 44px;
-    height: 44px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: #8C8C8C;
-    border-right-color: #8C8C8C;
-    border-top-color: #8C8C8C;
-    border-bottom-color: #8C8C8C;
-}
-
-.boomhud-objective-icon2 {
-    flex-direction: column;
-    width: 20px;
-    height: 20px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 20px;
-}
-
-.boomhud-objective-text2 {
-    flex-direction: column;
-    flex-grow: 1;
-    align-self: stretch;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 10px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-objective-title2 {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-objective-hint2 {
-    flex-direction: column;
-    margin-top: 6px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 8px;
-    line-height: 12px;
-    -unity-font-style: normal;
 }
 
 .boomhud-objective3 {
-    flex-direction: row;
-    align-self: stretch;
-    height: 44px;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-icon-shell3 {
-    flex-direction: column;
-    width: 44px;
-    height: 44px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    background-color: #000000;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: #8C8C8C;
-    border-right-color: #8C8C8C;
-    border-top-color: #8C8C8C;
-    border-bottom-color: #8C8C8C;
-}
-
-.boomhud-objective-icon3 {
-    flex-direction: column;
-    width: 20px;
-    height: 20px;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 20px;
-}
-
-.boomhud-objective-text3 {
-    flex-direction: column;
-    flex-grow: 1;
-    align-self: stretch;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 10px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #111111;
-    background-color: #111111;
-}
-
-.boomhud-objective-title3 {
-    flex-direction: column;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #FFFFFF;
-    font-size: 9px;
-    -unity-font-style: normal;
-}
-
-.boomhud-objective-hint3 {
-    flex-direction: column;
-    margin-top: 6px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: #AAAAAA;
-    font-size: 8px;
-    line-height: 12px;
-    -unity-font-style: normal;
 }
 
 .boomhud-resource-card {
@@ -1233,8 +651,8 @@
 }
 
 .boomhud-health-fill {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 280px;
     height: 18px;
     margin-top: 0px;
@@ -1252,10 +670,10 @@
 }
 
 .boomhud-health-text {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1298,8 +716,8 @@
 }
 
 .boomhud-mana-fill {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 214px;
     height: 18px;
     margin-top: 0px;
@@ -1317,10 +735,10 @@
 }
 
 .boomhud-mana-text {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
@@ -1363,8 +781,8 @@
 }
 
 .boomhud-supply-fill {
-    flex-direction: column;
     position: absolute;
+    flex-direction: column;
     width: 146px;
     height: 18px;
     margin-top: 0px;
@@ -1382,10 +800,10 @@
 }
 
 .boomhud-supply-text {
-    flex-direction: column;
     position: absolute;
     left: 12px;
     top: 4px;
+    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;

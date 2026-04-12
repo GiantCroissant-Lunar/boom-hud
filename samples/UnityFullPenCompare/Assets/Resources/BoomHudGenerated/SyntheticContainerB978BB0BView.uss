@@ -1,0 +1,44 @@
+.boomhud-status-buff1 {
+    flex-direction: column;
+    width: 56px;
+    height: 56px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: #000000;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #8C8C8C;
+    border-right-color: #8C8C8C;
+    border-top-color: #8C8C8C;
+    border-bottom-color: #8C8C8C;
+}
+
+.boomhud-buff-icon1 {
+    flex-direction: column;
+    width: 24px;
+    height: 24px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 24px;
+}
+

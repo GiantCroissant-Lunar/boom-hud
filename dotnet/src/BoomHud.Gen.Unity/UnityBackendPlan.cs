@@ -1,5 +1,6 @@
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Generation;
+using BoomHud.Generators.VisualIR;
 
 namespace BoomHud.Gen.Unity;
 
@@ -18,7 +19,11 @@ internal sealed record UnityPlannedNode
 {
     public required ComponentNode Source { get; init; }
 
+    public required string RelativePath { get; init; }
+
     public required string Name { get; init; }
+
+    public string? ComponentView { get; init; }
 
     public required string ElementType { get; init; }
 
@@ -29,6 +34,10 @@ internal sealed record UnityPlannedNode
     public required bool IsFallback { get; init; }
 
     public required ResolvedGeneratorPolicy Policy { get; init; }
+
+    public VisualNode? VisualNode { get; init; }
+
+    public MetricProfileDefinition? MetricProfile { get; init; }
 
     public required IReadOnlyList<UnityPlannedNode> Children { get; init; }
 }

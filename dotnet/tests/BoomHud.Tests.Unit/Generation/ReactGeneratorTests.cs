@@ -1,6 +1,7 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Gen.React;
+using BoomHud.Generators;
 using FluentAssertions;
 using Xunit;
 
@@ -75,7 +76,7 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("playerShowHud?: unknown;");
         tsx.Should().Contain("getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'healthLabel'))");
         tsx.Should().Contain("formatValue(props.playerHealthText, '{0} HP', '')");
-        tsx.Should().Contain("width: clampPercent(props.playerHealthPercent)");
+        tsx.Should().Contain("width: clampPercent((getOverrideValue(props.componentOverrides, '$/1', 'value')) ?? (props.playerHealthPercent))");
         tsx.Should().Contain("asBool(props.playerShowHud)");
     }
 
@@ -108,7 +109,136 @@ public sealed class ReactGeneratorTests
 
         tsx.Should().Contain("import { ActionButtonView } from './ActionButtonView';");
         tsx.Should().Contain("data-boomhud-id={resolveMotionId(props.motionScope, 'primaryAction')}");
-        tsx.Should().Contain("<ActionButtonView motionTargets={props.motionTargets} motionScope={resolveMotionId(props.motionScope, 'primaryAction')} />");
+        tsx.Should().Contain("<ActionButtonView {...props} motionTargets={props.motionTargets} motionScope={resolveMotionId(props.motionScope, 'primaryAction')} />");
+    }
+
+    [Fact]
+    public void Generate_ComponentRefWithInstanceOverrides_PassesComponentOverridesProp()
+    {
+        var badge = new HudComponentDefinition
+        {
+            Id = "badge",
+            Name = "Badge",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "READY"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var document = new HudDocument
+        {
+            Name = "Hud",
+            Components = new Dictionary<string, HudComponentDefinition> { ["badge"] = badge },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "primaryBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge",
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = new Dictionary<string, object?>
+                            {
+                                [ComponentInstanceOverrideSupport.ChildPath(ComponentInstanceOverrideSupport.RootPath, 0)] = new Dictionary<string, object?>
+                                {
+                                    ["text"] = "GO"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "HudView.tsx").Content;
+
+        tsx.Should().Contain("componentOverrides={{ '$/0': { 'text': 'GO' } }}");
+        tsx.Should().NotContain("does not apply instance overrides");
+    }
+
+    [Fact]
+    public void Generate_WithSyntheticExactReuse_EmitsSummaryArtifact()
+    {
+        var document = new HudDocument
+        {
+            Name = "QuestHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    CreateStaticCard("card-alpha", 12, 32),
+                    CreateStaticCard("card-bravo", 312, 64)
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var summary = result.Files.Single(file => file.Path == "QuestHud.synthetic-components.json").Content;
+
+        summary.Should().Contain("\"ChosenGroupCount\": 1");
+        summary.Should().Contain("\"RewrittenOccurrenceCount\": 2");
+        summary.Should().Contain("\"Components\": [");
+    }
+
+    [Fact]
+    public void Generate_DefaultMode_DoesNotEmitVisualIrArtifact()
+    {
+        var document = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+
+        result.Files.Should().NotContain(file => file.Path == "VisualHud.visual-ir.json");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsVisualIrArtifact()
+    {
+        var document = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Style = new StyleSpec
+                {
+                    FontFamily = "Press Start 2P",
+                    FontSize = 12
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options with { EmitVisualIrArtifact = true });
+        var visualIr = result.Files.Single(file => file.Path == "VisualHud.visual-ir.json").Content;
+
+        visualIr.Should().Contain("\"DocumentName\": \"VisualHud\"");
+        visualIr.Should().Contain("\"BackendFamily\": \"react\"");
     }
 
     [Fact]
@@ -269,6 +399,32 @@ public sealed class ReactGeneratorTests
     }
 
     [Fact]
+    public void Generate_FillWidthAndHeight_DoesNotEmitDuplicateStyleKeys()
+    {
+        var document = new HudDocument
+        {
+            Name = "FillHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Width = Dimension.Fill,
+                    Height = Dimension.Fill
+                }
+            }
+        };
+
+        var result = _generator.Generate(document, _options);
+        var tsx = result.Files.First(file => file.Path == "FillHudView.tsx").Content;
+
+        tsx.Should().Contain("alignSelf: 'stretch'");
+        tsx.Should().Contain("alignSelf: 'stretch'", Exactly.Once());
+    }
+
+    [Fact]
     public void Generate_IconNode_NormalizesLucideTokens()
     {
         var document = new HudDocument
@@ -294,7 +450,7 @@ public sealed class ReactGeneratorTests
 
         tsx.Should().Contain("const renderLucideIcon = (token: string): React.JSX.Element | string => {");
         tsx.Should().Contain("case 'shield': return <svg {...common}><path d='M12 3l7 3v6c0 5-3.5 8.8-7 9-3.5-.2-7-4-7-9V6l7-3Z' /></svg>;");
-        tsx.Should().Contain("{renderIconContent(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('shield'), 'lucide')}");
+        tsx.Should().Contain("{renderIconContent(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ((getOverrideValue(props.componentOverrides, '$', 'text', 'content', 'value')) ?? ('shield')), 'lucide')}");
     }
 
     [Fact]
@@ -525,5 +681,91 @@ public sealed class ReactGeneratorTests
         tsx.Should().Contain("bottom: '3px'");
         tsx.Should().NotContain("left: '0px'");
         tsx.Should().NotContain("top: '0px'");
+    }
+
+    [Fact]
+    public void Generate_WithVisualPlanningArtifacts_EmitsSynthesisAndRefinementArtifacts()
+    {
+        var document = new HudDocument
+        {
+            Name = "QuestHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    CreateStaticCard("card-a", 0, 0),
+                    CreateStaticCard("card-b", 40, 0)
+                ]
+            }
+        };
+
+        var result = _generator.Generate(document, _options with
+        {
+            EmitVisualSynthesisArtifact = true,
+            EmitVisualRefinementArtifact = true
+        });
+
+        result.Files.Should().Contain(file => file.Path == "QuestHud.visual-synthesis.json");
+        result.Files.Should().Contain(file => file.Path == "QuestHud.visual-refinement.json");
+    }
+
+    private static ComponentNode CreateStaticCard(string cardId, double left, double top)
+    {
+        return new ComponentNode
+        {
+            Id = cardId,
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Horizontal,
+                Gap = new Spacing(8),
+                Padding = new Spacing(6),
+                Width = Dimension.Pixels(220),
+                Height = Dimension.Pixels(60)
+            },
+            Style = new StyleSpec
+            {
+                Background = Color.Parse("#101820"),
+                Border = new BorderSpec { Style = BorderStyle.Solid, Color = Color.Parse("#F5E6A8"), Width = 1 }
+            },
+            InstanceOverrides = new Dictionary<string, object?>
+            {
+                [BoomHudMetadataKeys.OriginalPencilId] = cardId,
+                [BoomHudMetadataKeys.PencilLeft] = left,
+                [BoomHudMetadataKeys.PencilTop] = top
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = cardId + "-title",
+                    Type = ComponentType.Label,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "QUEST"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Press Start 2P",
+                        FontSize = 12
+                    }
+                },
+                new ComponentNode
+                {
+                    Id = cardId + "-icon",
+                    Type = ComponentType.Icon,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "shield"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Lucide",
+                        FontSize = 18
+                    }
+                }
+            ]
+        };
     }
 }

@@ -1,0 +1,25 @@
+{
+  "CandidateGroupCount": 2,
+  "ChosenGroupCount": 2,
+  "RewrittenOccurrenceCount": 6,
+  "Components": [
+    {
+      "ComponentId": "synthetic:fc1ff3cb1952",
+      "ComponentName": "SyntheticContainerFC1FF3CB",
+      "RootType": "Container",
+      "OccurrenceCount": 3,
+      "NodeCount": 4,
+      "Depth": 2,
+      "SignatureHash": "fc1ff3cb195237bcc26f83d80e564a741c16ecb47c75f2c0402a09984f9002e4"
+    },
+    {
+      "ComponentId": "synthetic:61d6e26dda96",
+      "ComponentName": "SyntheticContainer61D6E26D",
+      "RootType": "Container",
+      "OccurrenceCount": 3,
+      "NodeCount": 2,
+      "Depth": 2,
+      "SignatureHash": "61d6e26dda967727f0373ecb4e4717b7958bf8b607217ef90ff6d974dba9a4f4"
+    }
+  ]
+}

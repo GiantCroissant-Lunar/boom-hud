@@ -751,7 +751,7 @@ public class PencilEndToEndTests
         var document = _parser.Parse(penJson);
 
         document.Components.Should().ContainKey("action-button");
-        document.Root.Name.Should().Be("Toolbar");
+        document.Name.Should().Be("Toolbar");
         document.Root.Children.Should().HaveCount(2);
         document.Root.Children.Should().OnlyContain(child => child.ComponentRefId == "action-button");
 

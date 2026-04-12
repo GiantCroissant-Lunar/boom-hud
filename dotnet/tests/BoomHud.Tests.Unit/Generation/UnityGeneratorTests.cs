@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.Unity;
+using BoomHud.Generators;
 using FluentAssertions;
 using Xunit;
 
@@ -39,6 +42,88 @@ public class UnityGeneratorTests
         var uxmlFile = result.Files.First(f => f.Path == "TestComponentView.uxml");
         uxmlFile.Content.Should().Contain("<ui:UXML xmlns:ui=\"UnityEngine.UIElements\">");
         uxmlFile.Content.Should().Contain("<ui:VisualElement name=\"TestComponentRoot\" class=\"boomhud-test-component-root\" />");
+    }
+
+    [Fact]
+    public void Generate_DefaultMode_DoesNotEmitVisualIrArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        result.Files.Should().NotContain(file => file.Path == "VisualHud.visual-ir.json");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsVisualIrArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Style = new StyleSpec
+                {
+                    FontFamily = "Press Start 2P",
+                    FontSize = 12
+                }
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with { EmitVisualIrArtifact = true });
+        var visualIr = result.Files.Single(file => file.Path == "VisualHud.visual-ir.json").Content;
+
+        visualIr.Should().Contain("\"DocumentName\": \"VisualHud\"");
+        visualIr.Should().Contain("\"BackendFamily\": \"unity\"");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsVisualPlanningArtifacts()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title-a",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "title-b",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "BONUS"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with
+        {
+            EmitVisualSynthesisArtifact = true,
+            EmitVisualRefinementArtifact = true
+        });
+
+        result.Files.Should().Contain(file => file.Path == "VisualHud.visual-synthesis.json");
+        result.Files.Should().Contain(file => file.Path == "VisualHud.visual-refinement.json");
     }
 
     [Fact]
@@ -188,6 +273,160 @@ public class UnityGeneratorTests
         result.Files.Should().Contain(f => f.Path == "TestView.uss");
         result.Files.Should().Contain(f => f.Path == "TestView.gen.cs");
         result.Files.Should().NotContain(f => f.Path == "ITestViewModel.g.cs");
+    }
+
+    [Fact]
+    public void Generate_ComponentRef_ComposesReferencedUnityView()
+    {
+        var badge = new HudComponentDefinition
+        {
+            Id = "badge",
+            Name = "Badge",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "READY"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                ["badge"] = badge
+            },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "readyBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge"
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        var viewFile = result.Files.First(f => f.Path == "StatusHudView.gen.cs");
+        viewFile.Content.Should().Contain("var readyBadgePlaceholder = Root.Q<VisualElement>(\"ReadyBadge\")");
+        viewFile.Content.Should().Contain("_readyBadgeComponent = BadgeView.Attach(readyBadgePlaceholder, null);");
+        viewFile.Content.Should().Contain("ReadyBadge = _readyBadgeComponent.Root;");
+
+        var badgeFile = result.Files.First(f => f.Path == "BadgeView.gen.cs");
+        badgeFile.Content.Should().Contain("public static BadgeView Attach(VisualElement placeholder, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)");
+        badgeFile.Content.Should().Contain("private static VisualElement CreateGeneratedRoot(string? instanceName)");
+    }
+
+    [Fact]
+    public void Generate_ComponentRefWithInstanceOverrides_PassesOverrideBagIntoAttachedView()
+    {
+        var badge = new HudComponentDefinition
+        {
+            Id = "badge",
+            Name = "Badge",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "READY"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                ["badge"] = badge
+            },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "readyBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge",
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = new Dictionary<string, object?>
+                            {
+                                [ComponentInstanceOverrideSupport.ChildPath(ComponentInstanceOverrideSupport.RootPath, 0)] = new Dictionary<string, object?>
+                                {
+                                    ["text"] = "GO"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "StatusHudView.gen.cs");
+        var badgeFile = result.Files.First(f => f.Path == "BadgeView.gen.cs");
+
+        viewFile.Content.Should().Contain("BadgeView.Attach(readyBadgePlaceholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)");
+        badgeFile.Content.Should().Contain("private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;");
+        badgeFile.Content.Should().Contain("private void ApplyInstanceOverrides()");
+        badgeFile.Content.Should().Contain("TryGetComponentOverrideValue(\"$/0\", \"text\", out var componentOverrideValue0)");
+    }
+
+    [Fact]
+    public void Generate_WithSyntheticExactReuse_EmitsSyntheticComponentArtifactsForUnity()
+    {
+        var doc = new HudDocument
+        {
+            Name = "QuestHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    CreateSyntheticCandidateCard("card-alpha", 12, 32),
+                    CreateSyntheticCandidateCard("card-bravo", 312, 64)
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        result.Files.Should().Contain(file => file.Path == "QuestHud.synthetic-components.json");
+        result.Files.Should().Contain(file => file.Path.StartsWith("Synthetic", StringComparison.Ordinal) && file.Path.EndsWith("View.uxml", StringComparison.Ordinal));
+        result.Files.Should().Contain(file => file.Path.StartsWith("Synthetic", StringComparison.Ordinal) && file.Path.EndsWith("View.gen.cs", StringComparison.Ordinal));
+
+        var viewFile = result.Files.First(f => f.Path == "QuestHudView.gen.cs");
+        viewFile.Content.Should().Contain("generated component placeholder");
+        viewFile.Content.Should().Contain("Attach(");
     }
 
     [Fact]
@@ -815,9 +1054,9 @@ public class UnityGeneratorTests
         controllerFile.Content.Should().Contain("ApplyIconLabelStyle(ClassIcon, 32f, 32f, 0f, true, \"fit-box\", 0f);");
         controllerFile.Content.Should().Contain("ApplyFontFamily(ClassIcon, \"lucide\", 32f);");
         controllerFile.Content.Should().Contain("private static bool TryLoadSdfFontAsset(string familyName, out FontAsset fontAsset)");
-        controllerFile.Content.Should().Contain("var iconSize = Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));");
-        controllerFile.Content.Should().Contain("label.style.alignItems = Align.Center;");
-        controllerFile.Content.Should().Contain("label.style.justifyContent = Justify.Center;");
+        controllerFile.Content.Should().Contain("var iconSize = explicitFontSize > 0f ? explicitFontSize : string.Equals(sizeMode, \"match-height\", StringComparison.OrdinalIgnoreCase) ? Mathf.Max(1f, boxHeight) : Mathf.Max(1f, Mathf.Min(boxWidth, boxHeight));");
+        controllerFile.Content.Should().Contain("label.style.alignItems = opticalCentering ? Align.Center : Align.FlexStart;");
+        controllerFile.Content.Should().Contain("label.style.justifyContent = opticalCentering ? Justify.Center : Justify.FlexStart;");
         controllerFile.Content.Should().Contain("label.style.overflow = Overflow.Visible;");
         controllerFile.Content.Should().Contain("label.style.width = boxWidth;");
         controllerFile.Content.Should().Contain("label.style.height = boxHeight;");
@@ -1069,8 +1308,9 @@ public class UnityGeneratorTests
         ussFile.Content.Should().Contain("position: absolute;");
         ussFile.Content.Should().Contain("left: 4px;");
         ussFile.Content.Should().Contain("top: 5px;");
-        ussFile.Content.Should().Contain("gap: 10px;");
         ussFile.Content.Should().Contain("padding-top: 6px;");
+        ussFile.Content.Should().Contain(".boomhud-class-icon {");
+        ussFile.Content.Should().Contain("margin-top: 10px;");
         controllerFile.Content.Should().Contain("ApplyTextLabelStyle(Body, true);");
         controllerFile.Content.Should().Contain("ApplyFontFamily(Body, \"Press Start 2P\", 15f);");
         controllerFile.Content.Should().Contain("Body.style.fontSize = 15f;");
@@ -1219,6 +1459,17 @@ public class UnityGeneratorTests
                             Width = Dimension.Pixels(40),
                             Height = Dimension.Pixels(20)
                         }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "detail",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(20),
+                            Height = Dimension.Pixels(10)
+                        }
                     }
                 ]
             }
@@ -1227,11 +1478,12 @@ public class UnityGeneratorTests
         var result = _generator.Generate(doc, options);
         var ussFile = result.Files.First(f => f.Path == "DeltaHudView.uss");
 
-        ussFile.Content.Should().Contain("gap: 6px;");
         ussFile.Content.Should().Contain("padding-top: 4px;");
         ussFile.Content.Should().Contain(".boomhud-badge {");
         ussFile.Content.Should().Contain("left: 8px;");
         ussFile.Content.Should().Contain("top: 8px;");
+        ussFile.Content.Should().Contain(".boomhud-detail {");
+        ussFile.Content.Should().Contain("margin-top: 6px;");
     }
 
     [Fact]
@@ -1296,5 +1548,64 @@ public class UnityGeneratorTests
         ussFile.Content.Should().Contain(".boomhud-card {");
         ussFile.Content.Should().Contain("width: 100px;");
         ussFile.Content.Should().Contain("height: 95px;");
+    }
+
+    private static ComponentNode CreateSyntheticCandidateCard(string cardId, double left, double top)
+    {
+        return new ComponentNode
+        {
+            Id = cardId,
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Horizontal,
+                Gap = new Spacing(8),
+                Padding = new Spacing(6),
+                Width = Dimension.Pixels(220),
+                Height = Dimension.Pixels(60)
+            },
+            Style = new StyleSpec
+            {
+                Background = Color.Parse("#101820"),
+                Border = new BorderSpec { Style = BorderStyle.Solid, Color = Color.Parse("#F5E6A8"), Width = 1 }
+            },
+            InstanceOverrides = new Dictionary<string, object?>
+            {
+                [BoomHudMetadataKeys.OriginalPencilId] = cardId,
+                [BoomHudMetadataKeys.PencilLeft] = left,
+                [BoomHudMetadataKeys.PencilTop] = top
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = cardId + "-title",
+                    Type = ComponentType.Label,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "QUEST"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Press Start 2P",
+                        FontSize = 12
+                    }
+                },
+                new ComponentNode
+                {
+                    Id = cardId + "-icon",
+                    Type = ComponentType.Icon,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "shield"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Lucide",
+                        FontSize = 18
+                    }
+                }
+            ]
+        };
     }
 }

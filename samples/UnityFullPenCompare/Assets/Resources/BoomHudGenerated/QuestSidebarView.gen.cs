@@ -18,6 +18,7 @@ namespace Generated.Hud
 public sealed class QuestSidebarView
 {
     private readonly IQuestSidebarViewModel? _initialViewModel = null;
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IQuestSidebarViewModel? _viewModel;
 
     public VisualElement Root { get; }
@@ -28,12 +29,6 @@ public sealed class QuestSidebarView
     public Label MinimapLabel { get; }
     public VisualElement MapGrid { get; }
     public VisualElement Row0 { get; }
-    public VisualElement Cell00 { get; }
-    public VisualElement Cell01 { get; }
-    public VisualElement Cell02 { get; }
-    public VisualElement Cell03 { get; }
-    public VisualElement Cell04 { get; }
-    public VisualElement Cell05 { get; }
     public VisualElement Row1 { get; }
     public VisualElement Cell10 { get; }
     public VisualElement Cell11 { get; }
@@ -49,12 +44,6 @@ public sealed class QuestSidebarView
     public VisualElement Cell24 { get; }
     public VisualElement Cell25 { get; }
     public VisualElement Row3 { get; }
-    public VisualElement Cell30 { get; }
-    public VisualElement Cell31 { get; }
-    public VisualElement Cell32 { get; }
-    public VisualElement Cell33 { get; }
-    public VisualElement Cell34 { get; }
-    public VisualElement Cell35 { get; }
     public VisualElement Row4 { get; }
     public VisualElement Cell40 { get; }
     public VisualElement Cell41 { get; }
@@ -65,23 +54,8 @@ public sealed class QuestSidebarView
     public VisualElement ObjectiveCard { get; }
     public Label ObjectivesLabel { get; }
     public VisualElement Objective1 { get; }
-    public VisualElement IconShell1 { get; }
-    public Label ObjectiveIcon1 { get; }
-    public VisualElement ObjectiveText1 { get; }
-    public Label ObjectiveTitle1 { get; }
-    public Label ObjectiveHint1 { get; }
     public VisualElement Objective2 { get; }
-    public VisualElement IconShell2 { get; }
-    public Label ObjectiveIcon2 { get; }
-    public VisualElement ObjectiveText2 { get; }
-    public Label ObjectiveTitle2 { get; }
-    public Label ObjectiveHint2 { get; }
     public VisualElement Objective3 { get; }
-    public VisualElement IconShell3 { get; }
-    public Label ObjectiveIcon3 { get; }
-    public VisualElement ObjectiveText3 { get; }
-    public Label ObjectiveTitle3 { get; }
-    public Label ObjectiveHint3 { get; }
     public VisualElement ResourceCard { get; }
     public Label ResourcesLabel { get; }
     public VisualElement HealthBar { get; }
@@ -93,6 +67,11 @@ public sealed class QuestSidebarView
     public VisualElement SupplyBar { get; }
     public VisualElement SupplyFill { get; }
     public Label SupplyText { get; }
+    private readonly SyntheticContainer9463CA59View? _row0Component;
+    private readonly SyntheticContainer9463CA59View? _row3Component;
+    private readonly SyntheticContainerC520AC99View? _objective1Component;
+    private readonly SyntheticContainerC520AC99View? _objective2Component;
+    private readonly SyntheticContainerC520AC99View? _objective3Component;
 
     public IQuestSidebarViewModel? ViewModel
     {
@@ -105,6 +84,7 @@ public sealed class QuestSidebarView
             }
 
             _viewModel = value;
+            ApplyComponentViewModels();
 
             if (_viewModel != null)
             {
@@ -115,22 +95,19 @@ public sealed class QuestSidebarView
         }
     }
 
-    public QuestSidebarView(VisualElement root)
+    public QuestSidebarView(VisualElement root, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
         Root = root as VisualElement ?? throw new ArgumentException("Expected root element type VisualElement.", nameof(root));
+        _componentOverrides = componentOverrides;
         Header = Root.Q<VisualElement>("Header") ?? throw new InvalidOperationException("Could not find generated element 'Header'.");
         Title = Root.Q<Label>("Title") ?? throw new InvalidOperationException("Could not find generated element 'Title'.");
         Zone = Root.Q<Label>("Zone") ?? throw new InvalidOperationException("Could not find generated element 'Zone'.");
         MinimapCard = Root.Q<VisualElement>("MinimapCard") ?? throw new InvalidOperationException("Could not find generated element 'MinimapCard'.");
         MinimapLabel = Root.Q<Label>("MinimapLabel") ?? throw new InvalidOperationException("Could not find generated element 'MinimapLabel'.");
         MapGrid = Root.Q<VisualElement>("MapGrid") ?? throw new InvalidOperationException("Could not find generated element 'MapGrid'.");
-        Row0 = Root.Q<VisualElement>("Row0") ?? throw new InvalidOperationException("Could not find generated element 'Row0'.");
-        Cell00 = Root.Q<VisualElement>("Cell00") ?? throw new InvalidOperationException("Could not find generated element 'Cell00'.");
-        Cell01 = Root.Q<VisualElement>("Cell01") ?? throw new InvalidOperationException("Could not find generated element 'Cell01'.");
-        Cell02 = Root.Q<VisualElement>("Cell02") ?? throw new InvalidOperationException("Could not find generated element 'Cell02'.");
-        Cell03 = Root.Q<VisualElement>("Cell03") ?? throw new InvalidOperationException("Could not find generated element 'Cell03'.");
-        Cell04 = Root.Q<VisualElement>("Cell04") ?? throw new InvalidOperationException("Could not find generated element 'Cell04'.");
-        Cell05 = Root.Q<VisualElement>("Cell05") ?? throw new InvalidOperationException("Could not find generated element 'Cell05'.");
+        var row0Placeholder = Root.Q<VisualElement>("Row0") ?? throw new InvalidOperationException("Could not find generated component placeholder 'Row0'.");
+        _row0Component = SyntheticContainer9463CA59View.Attach(row0Placeholder, null);
+        Row0 = _row0Component.Root;
         Row1 = Root.Q<VisualElement>("Row1") ?? throw new InvalidOperationException("Could not find generated element 'Row1'.");
         Cell10 = Root.Q<VisualElement>("Cell10") ?? throw new InvalidOperationException("Could not find generated element 'Cell10'.");
         Cell11 = Root.Q<VisualElement>("Cell11") ?? throw new InvalidOperationException("Could not find generated element 'Cell11'.");
@@ -145,13 +122,9 @@ public sealed class QuestSidebarView
         Cell23 = Root.Q<VisualElement>("Cell23") ?? throw new InvalidOperationException("Could not find generated element 'Cell23'.");
         Cell24 = Root.Q<VisualElement>("Cell24") ?? throw new InvalidOperationException("Could not find generated element 'Cell24'.");
         Cell25 = Root.Q<VisualElement>("Cell25") ?? throw new InvalidOperationException("Could not find generated element 'Cell25'.");
-        Row3 = Root.Q<VisualElement>("Row3") ?? throw new InvalidOperationException("Could not find generated element 'Row3'.");
-        Cell30 = Root.Q<VisualElement>("Cell30") ?? throw new InvalidOperationException("Could not find generated element 'Cell30'.");
-        Cell31 = Root.Q<VisualElement>("Cell31") ?? throw new InvalidOperationException("Could not find generated element 'Cell31'.");
-        Cell32 = Root.Q<VisualElement>("Cell32") ?? throw new InvalidOperationException("Could not find generated element 'Cell32'.");
-        Cell33 = Root.Q<VisualElement>("Cell33") ?? throw new InvalidOperationException("Could not find generated element 'Cell33'.");
-        Cell34 = Root.Q<VisualElement>("Cell34") ?? throw new InvalidOperationException("Could not find generated element 'Cell34'.");
-        Cell35 = Root.Q<VisualElement>("Cell35") ?? throw new InvalidOperationException("Could not find generated element 'Cell35'.");
+        var row3Placeholder = Root.Q<VisualElement>("Row3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'Row3'.");
+        _row3Component = SyntheticContainer9463CA59View.Attach(row3Placeholder, null);
+        Row3 = _row3Component.Root;
         Row4 = Root.Q<VisualElement>("Row4") ?? throw new InvalidOperationException("Could not find generated element 'Row4'.");
         Cell40 = Root.Q<VisualElement>("Cell40") ?? throw new InvalidOperationException("Could not find generated element 'Cell40'.");
         Cell41 = Root.Q<VisualElement>("Cell41") ?? throw new InvalidOperationException("Could not find generated element 'Cell41'.");
@@ -161,24 +134,43 @@ public sealed class QuestSidebarView
         Cell45 = Root.Q<VisualElement>("Cell45") ?? throw new InvalidOperationException("Could not find generated element 'Cell45'.");
         ObjectiveCard = Root.Q<VisualElement>("ObjectiveCard") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveCard'.");
         ObjectivesLabel = Root.Q<Label>("ObjectivesLabel") ?? throw new InvalidOperationException("Could not find generated element 'ObjectivesLabel'.");
-        Objective1 = Root.Q<VisualElement>("Objective1") ?? throw new InvalidOperationException("Could not find generated element 'Objective1'.");
-        IconShell1 = Root.Q<VisualElement>("IconShell1") ?? throw new InvalidOperationException("Could not find generated element 'IconShell1'.");
-        ObjectiveIcon1 = Root.Q<Label>("ObjectiveIcon1") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveIcon1'.");
-        ObjectiveText1 = Root.Q<VisualElement>("ObjectiveText1") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveText1'.");
-        ObjectiveTitle1 = Root.Q<Label>("ObjectiveTitle1") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveTitle1'.");
-        ObjectiveHint1 = Root.Q<Label>("ObjectiveHint1") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveHint1'.");
-        Objective2 = Root.Q<VisualElement>("Objective2") ?? throw new InvalidOperationException("Could not find generated element 'Objective2'.");
-        IconShell2 = Root.Q<VisualElement>("IconShell2") ?? throw new InvalidOperationException("Could not find generated element 'IconShell2'.");
-        ObjectiveIcon2 = Root.Q<Label>("ObjectiveIcon2") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveIcon2'.");
-        ObjectiveText2 = Root.Q<VisualElement>("ObjectiveText2") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveText2'.");
-        ObjectiveTitle2 = Root.Q<Label>("ObjectiveTitle2") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveTitle2'.");
-        ObjectiveHint2 = Root.Q<Label>("ObjectiveHint2") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveHint2'.");
-        Objective3 = Root.Q<VisualElement>("Objective3") ?? throw new InvalidOperationException("Could not find generated element 'Objective3'.");
-        IconShell3 = Root.Q<VisualElement>("IconShell3") ?? throw new InvalidOperationException("Could not find generated element 'IconShell3'.");
-        ObjectiveIcon3 = Root.Q<Label>("ObjectiveIcon3") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveIcon3'.");
-        ObjectiveText3 = Root.Q<VisualElement>("ObjectiveText3") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveText3'.");
-        ObjectiveTitle3 = Root.Q<Label>("ObjectiveTitle3") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveTitle3'.");
-        ObjectiveHint3 = Root.Q<Label>("ObjectiveHint3") ?? throw new InvalidOperationException("Could not find generated element 'ObjectiveHint3'.");
+        var objective1Placeholder = Root.Q<VisualElement>("Objective1") ?? throw new InvalidOperationException("Could not find generated component placeholder 'Objective1'.");
+        _objective1Component = SyntheticContainerC520AC99View.Attach(objective1Placeholder, null);
+        Objective1 = _objective1Component.Root;
+        var objective2Placeholder = Root.Q<VisualElement>("Objective2") ?? throw new InvalidOperationException("Could not find generated component placeholder 'Objective2'.");
+        _objective2Component = SyntheticContainerC520AC99View.Attach(objective2Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Stabilize the furnace"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Mana pressure is dropping."
+            }
+        });
+        Objective2 = _objective2Component.Root;
+        var objective3Placeholder = Root.Q<VisualElement>("Objective3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'Objective3'.");
+        _objective3Component = SyntheticContainerC520AC99View.Attach(objective3Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Hold the east passage"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Reinforcements arrive in 02:10."
+            }
+        });
+        Objective3 = _objective3Component.Root;
         ResourceCard = Root.Q<VisualElement>("ResourceCard") ?? throw new InvalidOperationException("Could not find generated element 'ResourceCard'.");
         ResourcesLabel = Root.Q<Label>("ResourcesLabel") ?? throw new InvalidOperationException("Could not find generated element 'ResourcesLabel'.");
         HealthBar = Root.Q<VisualElement>("HealthBar") ?? throw new InvalidOperationException("Could not find generated element 'HealthBar'.");
@@ -192,6 +184,7 @@ public sealed class QuestSidebarView
         SupplyText = Root.Q<Label>("SupplyText") ?? throw new InvalidOperationException("Could not find generated element 'SupplyText'.");
 
         ApplyStaticValues();
+        ApplyInstanceOverrides();
         ViewModel = _initialViewModel;
     }
 
@@ -202,6 +195,55 @@ public sealed class QuestSidebarView
             return;
         }
 
+    }
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null)
+        {
+            return;
+        }
+
+        if (TryGetComponentOverrideValue("$/0/0", "Text", out var componentOverrideValue0))
+        {
+            Title.text = AsString(componentOverrideValue0);
+            ApplyTextLabelStyle(Title, false);
+        }
+        if (TryGetComponentOverrideValue("$/0/1", "Text", out var componentOverrideValue1))
+        {
+            Zone.text = AsString(componentOverrideValue1);
+            ApplyTextLabelStyle(Zone, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/0", "Text", out var componentOverrideValue2))
+        {
+            MinimapLabel.text = AsString(componentOverrideValue2);
+            ApplyTextLabelStyle(MinimapLabel, false);
+        }
+        if (TryGetComponentOverrideValue("$/2/0", "Text", out var componentOverrideValue3))
+        {
+            ObjectivesLabel.text = AsString(componentOverrideValue3);
+            ApplyTextLabelStyle(ObjectivesLabel, false);
+        }
+        if (TryGetComponentOverrideValue("$/3/0", "Text", out var componentOverrideValue4))
+        {
+            ResourcesLabel.text = AsString(componentOverrideValue4);
+            ApplyTextLabelStyle(ResourcesLabel, false);
+        }
+        if (TryGetComponentOverrideValue("$/3/1/1", "Text", out var componentOverrideValue5))
+        {
+            HealthText.text = AsString(componentOverrideValue5);
+            ApplyTextLabelStyle(HealthText, false);
+        }
+        if (TryGetComponentOverrideValue("$/3/2/1", "Text", out var componentOverrideValue6))
+        {
+            ManaText.text = AsString(componentOverrideValue6);
+            ApplyTextLabelStyle(ManaText, false);
+        }
+        if (TryGetComponentOverrideValue("$/3/3/1", "Text", out var componentOverrideValue7))
+        {
+            SupplyText.text = AsString(componentOverrideValue7);
+            ApplyTextLabelStyle(SupplyText, false);
+        }
     }
 
     private void ApplyStaticValues()
@@ -355,125 +397,8 @@ public sealed class QuestSidebarView
         MapGrid.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         MapGrid.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         MapGrid.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        Row0.style.flexDirection = ParseFlexDirection("row");
-        Row0.style.alignSelf = ParseAlign("stretch");
-        Row0.style.height = ParseStyleLength("32px");
-        Row0.style.marginTop = ParseStyleFloat("0px");
-        Row0.style.marginRight = ParseStyleFloat("0px");
-        Row0.style.marginBottom = ParseStyleFloat("0px");
-        Row0.style.marginLeft = ParseStyleFloat("0px");
-        Row0.style.paddingTop = ParseStyleFloat("0px");
-        Row0.style.paddingRight = ParseStyleFloat("0px");
-        Row0.style.paddingBottom = ParseStyleFloat("0px");
-        Row0.style.paddingLeft = ParseStyleFloat("0px");
-        Row0.style.alignItems = ParseAlign("flex-start");
-        Row0.style.justifyContent = ParseJustify("flex-start");
         Row0.style.display = DisplayStyle.Flex;
         Row0.SetEnabled(true);
-        Row0.style.color = ParseStyleColor("#000000", null);
-        Row0.style.backgroundColor = ParseStyleColor("#000000", null);
-        Cell00.style.flexDirection = ParseFlexDirection("column");
-        Cell00.style.width = ParseStyleLength("32px");
-        Cell00.style.height = ParseStyleLength("32px");
-        Cell00.style.marginTop = ParseStyleFloat("0px");
-        Cell00.style.marginRight = ParseStyleFloat("0px");
-        Cell00.style.marginBottom = ParseStyleFloat("0px");
-        Cell00.style.marginLeft = ParseStyleFloat("0px");
-        Cell00.style.paddingTop = ParseStyleFloat("0px");
-        Cell00.style.paddingRight = ParseStyleFloat("0px");
-        Cell00.style.paddingBottom = ParseStyleFloat("0px");
-        Cell00.style.paddingLeft = ParseStyleFloat("0px");
-        Cell00.style.alignItems = ParseAlign("flex-start");
-        Cell00.style.justifyContent = ParseJustify("flex-start");
-        Cell00.style.display = DisplayStyle.Flex;
-        Cell00.SetEnabled(true);
-        Cell00.style.color = ParseStyleColor("#232323", null);
-        Cell00.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell01.style.flexDirection = ParseFlexDirection("column");
-        Cell01.style.width = ParseStyleLength("32px");
-        Cell01.style.height = ParseStyleLength("32px");
-        Cell01.style.marginTop = ParseStyleFloat("0px");
-        Cell01.style.marginRight = ParseStyleFloat("0px");
-        Cell01.style.marginBottom = ParseStyleFloat("0px");
-        Cell01.style.marginLeft = ParseStyleFloat("4px");
-        Cell01.style.paddingTop = ParseStyleFloat("0px");
-        Cell01.style.paddingRight = ParseStyleFloat("0px");
-        Cell01.style.paddingBottom = ParseStyleFloat("0px");
-        Cell01.style.paddingLeft = ParseStyleFloat("0px");
-        Cell01.style.alignItems = ParseAlign("flex-start");
-        Cell01.style.justifyContent = ParseJustify("flex-start");
-        Cell01.style.display = DisplayStyle.Flex;
-        Cell01.SetEnabled(true);
-        Cell01.style.color = ParseStyleColor("#232323", null);
-        Cell01.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell02.style.flexDirection = ParseFlexDirection("column");
-        Cell02.style.width = ParseStyleLength("32px");
-        Cell02.style.height = ParseStyleLength("32px");
-        Cell02.style.marginTop = ParseStyleFloat("0px");
-        Cell02.style.marginRight = ParseStyleFloat("0px");
-        Cell02.style.marginBottom = ParseStyleFloat("0px");
-        Cell02.style.marginLeft = ParseStyleFloat("4px");
-        Cell02.style.paddingTop = ParseStyleFloat("0px");
-        Cell02.style.paddingRight = ParseStyleFloat("0px");
-        Cell02.style.paddingBottom = ParseStyleFloat("0px");
-        Cell02.style.paddingLeft = ParseStyleFloat("0px");
-        Cell02.style.alignItems = ParseAlign("flex-start");
-        Cell02.style.justifyContent = ParseJustify("flex-start");
-        Cell02.style.display = DisplayStyle.Flex;
-        Cell02.SetEnabled(true);
-        Cell02.style.color = ParseStyleColor("#3D6A3D", null);
-        Cell02.style.backgroundColor = ParseStyleColor("#3D6A3D", null);
-        Cell03.style.flexDirection = ParseFlexDirection("column");
-        Cell03.style.width = ParseStyleLength("32px");
-        Cell03.style.height = ParseStyleLength("32px");
-        Cell03.style.marginTop = ParseStyleFloat("0px");
-        Cell03.style.marginRight = ParseStyleFloat("0px");
-        Cell03.style.marginBottom = ParseStyleFloat("0px");
-        Cell03.style.marginLeft = ParseStyleFloat("4px");
-        Cell03.style.paddingTop = ParseStyleFloat("0px");
-        Cell03.style.paddingRight = ParseStyleFloat("0px");
-        Cell03.style.paddingBottom = ParseStyleFloat("0px");
-        Cell03.style.paddingLeft = ParseStyleFloat("0px");
-        Cell03.style.alignItems = ParseAlign("flex-start");
-        Cell03.style.justifyContent = ParseJustify("flex-start");
-        Cell03.style.display = DisplayStyle.Flex;
-        Cell03.SetEnabled(true);
-        Cell03.style.color = ParseStyleColor("#232323", null);
-        Cell03.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell04.style.flexDirection = ParseFlexDirection("column");
-        Cell04.style.width = ParseStyleLength("32px");
-        Cell04.style.height = ParseStyleLength("32px");
-        Cell04.style.marginTop = ParseStyleFloat("0px");
-        Cell04.style.marginRight = ParseStyleFloat("0px");
-        Cell04.style.marginBottom = ParseStyleFloat("0px");
-        Cell04.style.marginLeft = ParseStyleFloat("4px");
-        Cell04.style.paddingTop = ParseStyleFloat("0px");
-        Cell04.style.paddingRight = ParseStyleFloat("0px");
-        Cell04.style.paddingBottom = ParseStyleFloat("0px");
-        Cell04.style.paddingLeft = ParseStyleFloat("0px");
-        Cell04.style.alignItems = ParseAlign("flex-start");
-        Cell04.style.justifyContent = ParseJustify("flex-start");
-        Cell04.style.display = DisplayStyle.Flex;
-        Cell04.SetEnabled(true);
-        Cell04.style.color = ParseStyleColor("#232323", null);
-        Cell04.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell05.style.flexDirection = ParseFlexDirection("column");
-        Cell05.style.width = ParseStyleLength("32px");
-        Cell05.style.height = ParseStyleLength("32px");
-        Cell05.style.marginTop = ParseStyleFloat("0px");
-        Cell05.style.marginRight = ParseStyleFloat("0px");
-        Cell05.style.marginBottom = ParseStyleFloat("0px");
-        Cell05.style.marginLeft = ParseStyleFloat("4px");
-        Cell05.style.paddingTop = ParseStyleFloat("0px");
-        Cell05.style.paddingRight = ParseStyleFloat("0px");
-        Cell05.style.paddingBottom = ParseStyleFloat("0px");
-        Cell05.style.paddingLeft = ParseStyleFloat("0px");
-        Cell05.style.alignItems = ParseAlign("flex-start");
-        Cell05.style.justifyContent = ParseJustify("flex-start");
-        Cell05.style.display = DisplayStyle.Flex;
-        Cell05.SetEnabled(true);
-        Cell05.style.color = ParseStyleColor("#232323", null);
-        Cell05.style.backgroundColor = ParseStyleColor("#232323", null);
         Row1.style.flexDirection = ParseFlexDirection("row");
         Row1.style.alignSelf = ParseAlign("stretch");
         Row1.style.height = ParseStyleLength("32px");
@@ -712,125 +637,8 @@ public sealed class QuestSidebarView
         Cell25.SetEnabled(true);
         Cell25.style.color = ParseStyleColor("#232323", null);
         Cell25.style.backgroundColor = ParseStyleColor("#232323", null);
-        Row3.style.flexDirection = ParseFlexDirection("row");
-        Row3.style.alignSelf = ParseAlign("stretch");
-        Row3.style.height = ParseStyleLength("32px");
-        Row3.style.marginTop = ParseStyleFloat("4px");
-        Row3.style.marginRight = ParseStyleFloat("0px");
-        Row3.style.marginBottom = ParseStyleFloat("0px");
-        Row3.style.marginLeft = ParseStyleFloat("0px");
-        Row3.style.paddingTop = ParseStyleFloat("0px");
-        Row3.style.paddingRight = ParseStyleFloat("0px");
-        Row3.style.paddingBottom = ParseStyleFloat("0px");
-        Row3.style.paddingLeft = ParseStyleFloat("0px");
-        Row3.style.alignItems = ParseAlign("flex-start");
-        Row3.style.justifyContent = ParseJustify("flex-start");
         Row3.style.display = DisplayStyle.Flex;
         Row3.SetEnabled(true);
-        Row3.style.color = ParseStyleColor("#000000", null);
-        Row3.style.backgroundColor = ParseStyleColor("#000000", null);
-        Cell30.style.flexDirection = ParseFlexDirection("column");
-        Cell30.style.width = ParseStyleLength("32px");
-        Cell30.style.height = ParseStyleLength("32px");
-        Cell30.style.marginTop = ParseStyleFloat("0px");
-        Cell30.style.marginRight = ParseStyleFloat("0px");
-        Cell30.style.marginBottom = ParseStyleFloat("0px");
-        Cell30.style.marginLeft = ParseStyleFloat("0px");
-        Cell30.style.paddingTop = ParseStyleFloat("0px");
-        Cell30.style.paddingRight = ParseStyleFloat("0px");
-        Cell30.style.paddingBottom = ParseStyleFloat("0px");
-        Cell30.style.paddingLeft = ParseStyleFloat("0px");
-        Cell30.style.alignItems = ParseAlign("flex-start");
-        Cell30.style.justifyContent = ParseJustify("flex-start");
-        Cell30.style.display = DisplayStyle.Flex;
-        Cell30.SetEnabled(true);
-        Cell30.style.color = ParseStyleColor("#232323", null);
-        Cell30.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell31.style.flexDirection = ParseFlexDirection("column");
-        Cell31.style.width = ParseStyleLength("32px");
-        Cell31.style.height = ParseStyleLength("32px");
-        Cell31.style.marginTop = ParseStyleFloat("0px");
-        Cell31.style.marginRight = ParseStyleFloat("0px");
-        Cell31.style.marginBottom = ParseStyleFloat("0px");
-        Cell31.style.marginLeft = ParseStyleFloat("4px");
-        Cell31.style.paddingTop = ParseStyleFloat("0px");
-        Cell31.style.paddingRight = ParseStyleFloat("0px");
-        Cell31.style.paddingBottom = ParseStyleFloat("0px");
-        Cell31.style.paddingLeft = ParseStyleFloat("0px");
-        Cell31.style.alignItems = ParseAlign("flex-start");
-        Cell31.style.justifyContent = ParseJustify("flex-start");
-        Cell31.style.display = DisplayStyle.Flex;
-        Cell31.SetEnabled(true);
-        Cell31.style.color = ParseStyleColor("#232323", null);
-        Cell31.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell32.style.flexDirection = ParseFlexDirection("column");
-        Cell32.style.width = ParseStyleLength("32px");
-        Cell32.style.height = ParseStyleLength("32px");
-        Cell32.style.marginTop = ParseStyleFloat("0px");
-        Cell32.style.marginRight = ParseStyleFloat("0px");
-        Cell32.style.marginBottom = ParseStyleFloat("0px");
-        Cell32.style.marginLeft = ParseStyleFloat("4px");
-        Cell32.style.paddingTop = ParseStyleFloat("0px");
-        Cell32.style.paddingRight = ParseStyleFloat("0px");
-        Cell32.style.paddingBottom = ParseStyleFloat("0px");
-        Cell32.style.paddingLeft = ParseStyleFloat("0px");
-        Cell32.style.alignItems = ParseAlign("flex-start");
-        Cell32.style.justifyContent = ParseJustify("flex-start");
-        Cell32.style.display = DisplayStyle.Flex;
-        Cell32.SetEnabled(true);
-        Cell32.style.color = ParseStyleColor("#3D6A3D", null);
-        Cell32.style.backgroundColor = ParseStyleColor("#3D6A3D", null);
-        Cell33.style.flexDirection = ParseFlexDirection("column");
-        Cell33.style.width = ParseStyleLength("32px");
-        Cell33.style.height = ParseStyleLength("32px");
-        Cell33.style.marginTop = ParseStyleFloat("0px");
-        Cell33.style.marginRight = ParseStyleFloat("0px");
-        Cell33.style.marginBottom = ParseStyleFloat("0px");
-        Cell33.style.marginLeft = ParseStyleFloat("4px");
-        Cell33.style.paddingTop = ParseStyleFloat("0px");
-        Cell33.style.paddingRight = ParseStyleFloat("0px");
-        Cell33.style.paddingBottom = ParseStyleFloat("0px");
-        Cell33.style.paddingLeft = ParseStyleFloat("0px");
-        Cell33.style.alignItems = ParseAlign("flex-start");
-        Cell33.style.justifyContent = ParseJustify("flex-start");
-        Cell33.style.display = DisplayStyle.Flex;
-        Cell33.SetEnabled(true);
-        Cell33.style.color = ParseStyleColor("#232323", null);
-        Cell33.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell34.style.flexDirection = ParseFlexDirection("column");
-        Cell34.style.width = ParseStyleLength("32px");
-        Cell34.style.height = ParseStyleLength("32px");
-        Cell34.style.marginTop = ParseStyleFloat("0px");
-        Cell34.style.marginRight = ParseStyleFloat("0px");
-        Cell34.style.marginBottom = ParseStyleFloat("0px");
-        Cell34.style.marginLeft = ParseStyleFloat("4px");
-        Cell34.style.paddingTop = ParseStyleFloat("0px");
-        Cell34.style.paddingRight = ParseStyleFloat("0px");
-        Cell34.style.paddingBottom = ParseStyleFloat("0px");
-        Cell34.style.paddingLeft = ParseStyleFloat("0px");
-        Cell34.style.alignItems = ParseAlign("flex-start");
-        Cell34.style.justifyContent = ParseJustify("flex-start");
-        Cell34.style.display = DisplayStyle.Flex;
-        Cell34.SetEnabled(true);
-        Cell34.style.color = ParseStyleColor("#232323", null);
-        Cell34.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell35.style.flexDirection = ParseFlexDirection("column");
-        Cell35.style.width = ParseStyleLength("32px");
-        Cell35.style.height = ParseStyleLength("32px");
-        Cell35.style.marginTop = ParseStyleFloat("0px");
-        Cell35.style.marginRight = ParseStyleFloat("0px");
-        Cell35.style.marginBottom = ParseStyleFloat("0px");
-        Cell35.style.marginLeft = ParseStyleFloat("4px");
-        Cell35.style.paddingTop = ParseStyleFloat("0px");
-        Cell35.style.paddingRight = ParseStyleFloat("0px");
-        Cell35.style.paddingBottom = ParseStyleFloat("0px");
-        Cell35.style.paddingLeft = ParseStyleFloat("0px");
-        Cell35.style.alignItems = ParseAlign("flex-start");
-        Cell35.style.justifyContent = ParseJustify("flex-start");
-        Cell35.style.display = DisplayStyle.Flex;
-        Cell35.SetEnabled(true);
-        Cell35.style.color = ParseStyleColor("#232323", null);
-        Cell35.style.backgroundColor = ParseStyleColor("#232323", null);
         Row4.style.flexDirection = ParseFlexDirection("row");
         Row4.style.alignSelf = ParseAlign("stretch");
         Row4.style.height = ParseStyleLength("32px");
@@ -994,357 +802,12 @@ public sealed class QuestSidebarView
         ObjectivesLabel.style.color = ParseStyleColor("#FFFFFF", null);
         ObjectivesLabel.style.fontSize = 10f;
         ObjectivesLabel.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Objective1.style.flexDirection = ParseFlexDirection("row");
-        Objective1.style.alignSelf = ParseAlign("stretch");
-        Objective1.style.height = ParseStyleLength("44px");
-        Objective1.style.marginTop = ParseStyleFloat("10px");
-        Objective1.style.marginRight = ParseStyleFloat("0px");
-        Objective1.style.marginBottom = ParseStyleFloat("0px");
-        Objective1.style.marginLeft = ParseStyleFloat("0px");
-        Objective1.style.paddingTop = ParseStyleFloat("0px");
-        Objective1.style.paddingRight = ParseStyleFloat("0px");
-        Objective1.style.paddingBottom = ParseStyleFloat("0px");
-        Objective1.style.paddingLeft = ParseStyleFloat("0px");
-        Objective1.style.alignItems = ParseAlign("flex-start");
-        Objective1.style.justifyContent = ParseJustify("flex-start");
         Objective1.style.display = DisplayStyle.Flex;
         Objective1.SetEnabled(true);
-        Objective1.style.color = ParseStyleColor("#111111", null);
-        Objective1.style.backgroundColor = ParseStyleColor("#111111", null);
-        IconShell1.style.flexDirection = ParseFlexDirection("column");
-        IconShell1.style.width = ParseStyleLength("44px");
-        IconShell1.style.height = ParseStyleLength("44px");
-        IconShell1.style.marginTop = ParseStyleFloat("0px");
-        IconShell1.style.marginRight = ParseStyleFloat("0px");
-        IconShell1.style.marginBottom = ParseStyleFloat("0px");
-        IconShell1.style.marginLeft = ParseStyleFloat("0px");
-        IconShell1.style.paddingTop = ParseStyleFloat("0px");
-        IconShell1.style.paddingRight = ParseStyleFloat("0px");
-        IconShell1.style.paddingBottom = ParseStyleFloat("0px");
-        IconShell1.style.paddingLeft = ParseStyleFloat("0px");
-        IconShell1.style.alignItems = ParseAlign("center");
-        IconShell1.style.justifyContent = ParseJustify("center");
-        IconShell1.style.display = DisplayStyle.Flex;
-        IconShell1.SetEnabled(true);
-        IconShell1.style.color = ParseStyleColor("#000000", null);
-        IconShell1.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconShell1.style.borderLeftWidth = 2f;
-        IconShell1.style.borderRightWidth = 2f;
-        IconShell1.style.borderTopWidth = 2f;
-        IconShell1.style.borderBottomWidth = 2f;
-        IconShell1.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        IconShell1.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        IconShell1.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        IconShell1.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ObjectiveIcon1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveIcon1.style.width = ParseStyleLength("20px");
-        ObjectiveIcon1.style.height = ParseStyleLength("20px");
-        ObjectiveIcon1.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveIcon1.style.alignItems = ParseAlign("flex-start");
-        ObjectiveIcon1.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveIcon1.text = ResolveIconText("cross", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon1, 20f, 20f, 0f, true, "fit-box", 0f);
-        ObjectiveIcon1.style.display = DisplayStyle.Flex;
-        ObjectiveIcon1.SetEnabled(true);
-        ApplyFontFamily(ObjectiveIcon1, "lucide", 20f);
-        ObjectiveIcon1.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveIcon1.style.fontSize = 20f;
-        ObjectiveText1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveText1.style.flexGrow = ParseStyleFloat("1");
-        ObjectiveText1.style.alignSelf = ParseAlign("stretch");
-        ObjectiveText1.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveText1.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveText1.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveText1.style.marginLeft = ParseStyleFloat("10px");
-        ObjectiveText1.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveText1.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveText1.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveText1.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveText1.style.alignItems = ParseAlign("flex-start");
-        ObjectiveText1.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveText1.style.display = DisplayStyle.Flex;
-        ObjectiveText1.SetEnabled(true);
-        ObjectiveText1.style.color = ParseStyleColor("#111111", null);
-        ObjectiveText1.style.backgroundColor = ParseStyleColor("#111111", null);
-        ObjectiveTitle1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveTitle1.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveTitle1.style.alignItems = ParseAlign("flex-start");
-        ObjectiveTitle1.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveTitle1.text = "Recover the ward key";
-        ApplyTextLabelStyle(ObjectiveTitle1, false);
-        ObjectiveTitle1.style.display = DisplayStyle.Flex;
-        ObjectiveTitle1.SetEnabled(true);
-        ApplyFontFamily(ObjectiveTitle1, "Press Start 2P", 9f);
-        ObjectiveTitle1.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveTitle1.style.fontSize = 9f;
-        ObjectiveTitle1.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        ObjectiveHint1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveHint1.style.marginTop = ParseStyleFloat("6px");
-        ObjectiveHint1.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveHint1.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveHint1.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveHint1.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveHint1.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveHint1.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveHint1.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveHint1.style.alignItems = ParseAlign("flex-start");
-        ObjectiveHint1.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveHint1.text = "Search the northern chapel.";
-        ApplyTextLabelStyle(ObjectiveHint1, false);
-        ObjectiveHint1.style.display = DisplayStyle.Flex;
-        ObjectiveHint1.SetEnabled(true);
-        ApplyFontFamily(ObjectiveHint1, "Press Start 2P", 8f);
-        ObjectiveHint1.style.color = ParseStyleColor("#AAAAAA", null);
-        ObjectiveHint1.style.fontSize = 8f;
-        ObjectiveHint1.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Objective2.style.flexDirection = ParseFlexDirection("row");
-        Objective2.style.alignSelf = ParseAlign("stretch");
-        Objective2.style.height = ParseStyleLength("44px");
-        Objective2.style.marginTop = ParseStyleFloat("10px");
-        Objective2.style.marginRight = ParseStyleFloat("0px");
-        Objective2.style.marginBottom = ParseStyleFloat("0px");
-        Objective2.style.marginLeft = ParseStyleFloat("0px");
-        Objective2.style.paddingTop = ParseStyleFloat("0px");
-        Objective2.style.paddingRight = ParseStyleFloat("0px");
-        Objective2.style.paddingBottom = ParseStyleFloat("0px");
-        Objective2.style.paddingLeft = ParseStyleFloat("0px");
-        Objective2.style.alignItems = ParseAlign("flex-start");
-        Objective2.style.justifyContent = ParseJustify("flex-start");
         Objective2.style.display = DisplayStyle.Flex;
         Objective2.SetEnabled(true);
-        Objective2.style.color = ParseStyleColor("#111111", null);
-        Objective2.style.backgroundColor = ParseStyleColor("#111111", null);
-        IconShell2.style.flexDirection = ParseFlexDirection("column");
-        IconShell2.style.width = ParseStyleLength("44px");
-        IconShell2.style.height = ParseStyleLength("44px");
-        IconShell2.style.marginTop = ParseStyleFloat("0px");
-        IconShell2.style.marginRight = ParseStyleFloat("0px");
-        IconShell2.style.marginBottom = ParseStyleFloat("0px");
-        IconShell2.style.marginLeft = ParseStyleFloat("0px");
-        IconShell2.style.paddingTop = ParseStyleFloat("0px");
-        IconShell2.style.paddingRight = ParseStyleFloat("0px");
-        IconShell2.style.paddingBottom = ParseStyleFloat("0px");
-        IconShell2.style.paddingLeft = ParseStyleFloat("0px");
-        IconShell2.style.alignItems = ParseAlign("center");
-        IconShell2.style.justifyContent = ParseJustify("center");
-        IconShell2.style.display = DisplayStyle.Flex;
-        IconShell2.SetEnabled(true);
-        IconShell2.style.color = ParseStyleColor("#000000", null);
-        IconShell2.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconShell2.style.borderLeftWidth = 2f;
-        IconShell2.style.borderRightWidth = 2f;
-        IconShell2.style.borderTopWidth = 2f;
-        IconShell2.style.borderBottomWidth = 2f;
-        IconShell2.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        IconShell2.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        IconShell2.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        IconShell2.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ObjectiveIcon2.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveIcon2.style.width = ParseStyleLength("20px");
-        ObjectiveIcon2.style.height = ParseStyleLength("20px");
-        ObjectiveIcon2.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveIcon2.style.alignItems = ParseAlign("flex-start");
-        ObjectiveIcon2.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveIcon2.text = ResolveIconText("flame", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon2, 20f, 20f, 0f, true, "fit-box", 0f);
-        ObjectiveIcon2.style.display = DisplayStyle.Flex;
-        ObjectiveIcon2.SetEnabled(true);
-        ApplyFontFamily(ObjectiveIcon2, "lucide", 20f);
-        ObjectiveIcon2.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveIcon2.style.fontSize = 20f;
-        ObjectiveText2.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveText2.style.flexGrow = ParseStyleFloat("1");
-        ObjectiveText2.style.alignSelf = ParseAlign("stretch");
-        ObjectiveText2.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveText2.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveText2.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveText2.style.marginLeft = ParseStyleFloat("10px");
-        ObjectiveText2.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveText2.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveText2.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveText2.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveText2.style.alignItems = ParseAlign("flex-start");
-        ObjectiveText2.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveText2.style.display = DisplayStyle.Flex;
-        ObjectiveText2.SetEnabled(true);
-        ObjectiveText2.style.color = ParseStyleColor("#111111", null);
-        ObjectiveText2.style.backgroundColor = ParseStyleColor("#111111", null);
-        ObjectiveTitle2.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveTitle2.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveTitle2.style.alignItems = ParseAlign("flex-start");
-        ObjectiveTitle2.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveTitle2.text = "Stabilize the furnace";
-        ApplyTextLabelStyle(ObjectiveTitle2, false);
-        ObjectiveTitle2.style.display = DisplayStyle.Flex;
-        ObjectiveTitle2.SetEnabled(true);
-        ApplyFontFamily(ObjectiveTitle2, "Press Start 2P", 9f);
-        ObjectiveTitle2.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveTitle2.style.fontSize = 9f;
-        ObjectiveTitle2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        ObjectiveHint2.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveHint2.style.marginTop = ParseStyleFloat("6px");
-        ObjectiveHint2.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveHint2.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveHint2.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveHint2.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveHint2.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveHint2.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveHint2.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveHint2.style.alignItems = ParseAlign("flex-start");
-        ObjectiveHint2.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveHint2.text = "Mana pressure is dropping.";
-        ApplyTextLabelStyle(ObjectiveHint2, false);
-        ObjectiveHint2.style.display = DisplayStyle.Flex;
-        ObjectiveHint2.SetEnabled(true);
-        ApplyFontFamily(ObjectiveHint2, "Press Start 2P", 8f);
-        ObjectiveHint2.style.color = ParseStyleColor("#AAAAAA", null);
-        ObjectiveHint2.style.fontSize = 8f;
-        ObjectiveHint2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Objective3.style.flexDirection = ParseFlexDirection("row");
-        Objective3.style.alignSelf = ParseAlign("stretch");
-        Objective3.style.height = ParseStyleLength("44px");
-        Objective3.style.marginTop = ParseStyleFloat("10px");
-        Objective3.style.marginRight = ParseStyleFloat("0px");
-        Objective3.style.marginBottom = ParseStyleFloat("0px");
-        Objective3.style.marginLeft = ParseStyleFloat("0px");
-        Objective3.style.paddingTop = ParseStyleFloat("0px");
-        Objective3.style.paddingRight = ParseStyleFloat("0px");
-        Objective3.style.paddingBottom = ParseStyleFloat("0px");
-        Objective3.style.paddingLeft = ParseStyleFloat("0px");
-        Objective3.style.alignItems = ParseAlign("flex-start");
-        Objective3.style.justifyContent = ParseJustify("flex-start");
         Objective3.style.display = DisplayStyle.Flex;
         Objective3.SetEnabled(true);
-        Objective3.style.color = ParseStyleColor("#111111", null);
-        Objective3.style.backgroundColor = ParseStyleColor("#111111", null);
-        IconShell3.style.flexDirection = ParseFlexDirection("column");
-        IconShell3.style.width = ParseStyleLength("44px");
-        IconShell3.style.height = ParseStyleLength("44px");
-        IconShell3.style.marginTop = ParseStyleFloat("0px");
-        IconShell3.style.marginRight = ParseStyleFloat("0px");
-        IconShell3.style.marginBottom = ParseStyleFloat("0px");
-        IconShell3.style.marginLeft = ParseStyleFloat("0px");
-        IconShell3.style.paddingTop = ParseStyleFloat("0px");
-        IconShell3.style.paddingRight = ParseStyleFloat("0px");
-        IconShell3.style.paddingBottom = ParseStyleFloat("0px");
-        IconShell3.style.paddingLeft = ParseStyleFloat("0px");
-        IconShell3.style.alignItems = ParseAlign("center");
-        IconShell3.style.justifyContent = ParseJustify("center");
-        IconShell3.style.display = DisplayStyle.Flex;
-        IconShell3.SetEnabled(true);
-        IconShell3.style.color = ParseStyleColor("#000000", null);
-        IconShell3.style.backgroundColor = ParseStyleColor("#000000", null);
-        IconShell3.style.borderLeftWidth = 2f;
-        IconShell3.style.borderRightWidth = 2f;
-        IconShell3.style.borderTopWidth = 2f;
-        IconShell3.style.borderBottomWidth = 2f;
-        IconShell3.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        IconShell3.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        IconShell3.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        IconShell3.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ObjectiveIcon3.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveIcon3.style.width = ParseStyleLength("20px");
-        ObjectiveIcon3.style.height = ParseStyleLength("20px");
-        ObjectiveIcon3.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveIcon3.style.alignItems = ParseAlign("flex-start");
-        ObjectiveIcon3.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveIcon3.text = ResolveIconText("shield", "lucide", 20f);
-        ApplyIconLabelStyle(ObjectiveIcon3, 20f, 20f, 0f, true, "fit-box", 0f);
-        ObjectiveIcon3.style.display = DisplayStyle.Flex;
-        ObjectiveIcon3.SetEnabled(true);
-        ApplyFontFamily(ObjectiveIcon3, "lucide", 20f);
-        ObjectiveIcon3.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveIcon3.style.fontSize = 20f;
-        ObjectiveText3.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveText3.style.flexGrow = ParseStyleFloat("1");
-        ObjectiveText3.style.alignSelf = ParseAlign("stretch");
-        ObjectiveText3.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveText3.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveText3.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveText3.style.marginLeft = ParseStyleFloat("10px");
-        ObjectiveText3.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveText3.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveText3.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveText3.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveText3.style.alignItems = ParseAlign("flex-start");
-        ObjectiveText3.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveText3.style.display = DisplayStyle.Flex;
-        ObjectiveText3.SetEnabled(true);
-        ObjectiveText3.style.color = ParseStyleColor("#111111", null);
-        ObjectiveText3.style.backgroundColor = ParseStyleColor("#111111", null);
-        ObjectiveTitle3.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveTitle3.style.marginTop = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveTitle3.style.alignItems = ParseAlign("flex-start");
-        ObjectiveTitle3.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveTitle3.text = "Hold the east passage";
-        ApplyTextLabelStyle(ObjectiveTitle3, false);
-        ObjectiveTitle3.style.display = DisplayStyle.Flex;
-        ObjectiveTitle3.SetEnabled(true);
-        ApplyFontFamily(ObjectiveTitle3, "Press Start 2P", 9f);
-        ObjectiveTitle3.style.color = ParseStyleColor("#FFFFFF", null);
-        ObjectiveTitle3.style.fontSize = 9f;
-        ObjectiveTitle3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        ObjectiveHint3.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveHint3.style.marginTop = ParseStyleFloat("6px");
-        ObjectiveHint3.style.marginRight = ParseStyleFloat("0px");
-        ObjectiveHint3.style.marginBottom = ParseStyleFloat("0px");
-        ObjectiveHint3.style.marginLeft = ParseStyleFloat("0px");
-        ObjectiveHint3.style.paddingTop = ParseStyleFloat("0px");
-        ObjectiveHint3.style.paddingRight = ParseStyleFloat("0px");
-        ObjectiveHint3.style.paddingBottom = ParseStyleFloat("0px");
-        ObjectiveHint3.style.paddingLeft = ParseStyleFloat("0px");
-        ObjectiveHint3.style.alignItems = ParseAlign("flex-start");
-        ObjectiveHint3.style.justifyContent = ParseJustify("flex-start");
-        ObjectiveHint3.text = "Reinforcements arrive in 02:10.";
-        ApplyTextLabelStyle(ObjectiveHint3, false);
-        ObjectiveHint3.style.display = DisplayStyle.Flex;
-        ObjectiveHint3.SetEnabled(true);
-        ApplyFontFamily(ObjectiveHint3, "Press Start 2P", 8f);
-        ObjectiveHint3.style.color = ParseStyleColor("#AAAAAA", null);
-        ObjectiveHint3.style.fontSize = 8f;
-        ObjectiveHint3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
         ResourceCard.style.flexDirection = ParseFlexDirection("column");
         ResourceCard.style.alignSelf = ParseAlign("stretch");
         ResourceCard.style.height = ParseStyleLength("164px");
@@ -1414,8 +877,8 @@ public sealed class QuestSidebarView
         HealthBar.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         HealthBar.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         HealthBar.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        HealthFill.style.flexDirection = ParseFlexDirection("column");
         HealthFill.style.position = ParsePosition("absolute");
+        HealthFill.style.flexDirection = ParseFlexDirection("column");
         HealthFill.style.width = ParseStyleLength("280px");
         HealthFill.style.height = ParseStyleLength("18px");
         HealthFill.style.marginTop = ParseStyleFloat("0px");
@@ -1432,10 +895,10 @@ public sealed class QuestSidebarView
         HealthFill.SetEnabled(true);
         HealthFill.style.color = ParseStyleColor("#D44A4A", null);
         HealthFill.style.backgroundColor = ParseStyleColor("#D44A4A", null);
-        HealthText.style.flexDirection = ParseFlexDirection("column");
         HealthText.style.position = ParsePosition("absolute");
         HealthText.style.left = ParseStyleLength("12px");
         HealthText.style.top = ParseStyleLength("4px");
+        HealthText.style.flexDirection = ParseFlexDirection("column");
         HealthText.style.marginTop = ParseStyleFloat("0px");
         HealthText.style.marginRight = ParseStyleFloat("0px");
         HealthText.style.marginBottom = ParseStyleFloat("0px");
@@ -1479,8 +942,8 @@ public sealed class QuestSidebarView
         ManaBar.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         ManaBar.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         ManaBar.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ManaFill.style.flexDirection = ParseFlexDirection("column");
         ManaFill.style.position = ParsePosition("absolute");
+        ManaFill.style.flexDirection = ParseFlexDirection("column");
         ManaFill.style.width = ParseStyleLength("214px");
         ManaFill.style.height = ParseStyleLength("18px");
         ManaFill.style.marginTop = ParseStyleFloat("0px");
@@ -1497,10 +960,10 @@ public sealed class QuestSidebarView
         ManaFill.SetEnabled(true);
         ManaFill.style.color = ParseStyleColor("#4A78D4", null);
         ManaFill.style.backgroundColor = ParseStyleColor("#4A78D4", null);
-        ManaText.style.flexDirection = ParseFlexDirection("column");
         ManaText.style.position = ParsePosition("absolute");
         ManaText.style.left = ParseStyleLength("12px");
         ManaText.style.top = ParseStyleLength("4px");
+        ManaText.style.flexDirection = ParseFlexDirection("column");
         ManaText.style.marginTop = ParseStyleFloat("0px");
         ManaText.style.marginRight = ParseStyleFloat("0px");
         ManaText.style.marginBottom = ParseStyleFloat("0px");
@@ -1544,8 +1007,8 @@ public sealed class QuestSidebarView
         SupplyBar.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         SupplyBar.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         SupplyBar.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        SupplyFill.style.flexDirection = ParseFlexDirection("column");
         SupplyFill.style.position = ParsePosition("absolute");
+        SupplyFill.style.flexDirection = ParseFlexDirection("column");
         SupplyFill.style.width = ParseStyleLength("146px");
         SupplyFill.style.height = ParseStyleLength("18px");
         SupplyFill.style.marginTop = ParseStyleFloat("0px");
@@ -1562,10 +1025,10 @@ public sealed class QuestSidebarView
         SupplyFill.SetEnabled(true);
         SupplyFill.style.color = ParseStyleColor("#D49C4A", null);
         SupplyFill.style.backgroundColor = ParseStyleColor("#D49C4A", null);
-        SupplyText.style.flexDirection = ParseFlexDirection("column");
         SupplyText.style.position = ParsePosition("absolute");
         SupplyText.style.left = ParseStyleLength("12px");
         SupplyText.style.top = ParseStyleLength("4px");
+        SupplyText.style.flexDirection = ParseFlexDirection("column");
         SupplyText.style.marginTop = ParseStyleFloat("0px");
         SupplyText.style.marginRight = ParseStyleFloat("0px");
         SupplyText.style.marginBottom = ParseStyleFloat("0px");
@@ -1586,9 +1049,87 @@ public sealed class QuestSidebarView
         SupplyText.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
     }
 
+    private void ApplyComponentViewModels()
+    {
+        if (_row0Component != null)
+        {
+            _row0Component.ViewModel = _viewModel is ISyntheticContainer9463CA59ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_row3Component != null)
+        {
+            _row3Component.ViewModel = _viewModel is ISyntheticContainer9463CA59ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_objective1Component != null)
+        {
+            _objective1Component.ViewModel = _viewModel is ISyntheticContainerC520AC99ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_objective2Component != null)
+        {
+            _objective2Component.ViewModel = _viewModel is ISyntheticContainerC520AC99ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_objective3Component != null)
+        {
+            _objective3Component.ViewModel = _viewModel is ISyntheticContainerC520AC99ViewModel componentViewModel ? componentViewModel : null;
+        }
+    }
+
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Refresh();
+    }
+
+    private const string VisualTreeResourcePath = "BoomHudGenerated/QuestSidebarView";
+    private const string StyleSheetResourcePath = "BoomHudGenerated/QuestSidebarView";
+    private const string GeneratedRootName = "QuestSidebar";
+    private static VisualTreeAsset? s_visualTreeAsset;
+    private static StyleSheet? s_generatedStyleSheet;
+
+    public static QuestSidebarView Create(VisualElement parent, string? instanceName = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (parent == null)
+        {
+            throw new ArgumentNullException(nameof(parent));
+        }
+
+        var root = CreateGeneratedRoot(instanceName);
+        parent.Add(root);
+        return new QuestSidebarView(root, componentOverrides);
+    }
+
+    public static QuestSidebarView Attach(VisualElement placeholder, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (placeholder == null)
+        {
+            throw new ArgumentNullException(nameof(placeholder));
+        }
+
+        var parent = placeholder.parent ?? throw new InvalidOperationException("Cannot attach a generated component without a parent element.");
+        var placeholderIndex = parent.IndexOf(placeholder);
+        var root = CreateGeneratedRoot(string.IsNullOrWhiteSpace(placeholder.name) ? null : placeholder.name);
+        parent.Insert(placeholderIndex, root);
+        placeholder.RemoveFromHierarchy();
+        return new QuestSidebarView(root, componentOverrides);
+    }
+
+    private static VisualElement CreateGeneratedRoot(string? instanceName)
+    {
+        s_visualTreeAsset ??= Resources.Load<VisualTreeAsset>(VisualTreeResourcePath)
+            ?? throw new InvalidOperationException($"Could not load VisualTreeAsset from Resources/{VisualTreeResourcePath}.uxml");
+        s_generatedStyleSheet ??= Resources.Load<StyleSheet>(StyleSheetResourcePath);
+
+        var staging = new VisualElement();
+        s_visualTreeAsset.CloneTree(staging);
+        var root = staging.Q<VisualElement>(GeneratedRootName)
+            ?? throw new InvalidOperationException($"Could not find generated root element '{GeneratedRootName}' after cloning the tree.");
+        root.RemoveFromHierarchy();
+        root.name = string.IsNullOrWhiteSpace(instanceName) ? GeneratedRootName : instanceName!;
+
+        if (s_generatedStyleSheet != null && !root.styleSheets.Contains(s_generatedStyleSheet))
+        {
+            root.styleSheets.Add(s_generatedStyleSheet);
+        }
+
+        return root;
     }
 
     private static readonly Dictionary<string, FontDefinition> s_fontDefinitions = new(StringComparer.OrdinalIgnoreCase);
@@ -1640,6 +1181,31 @@ public sealed class QuestSidebarView
             long longValue => longValue != 0,
             _ => false
         };
+    }
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides))
+        {
+            return false;
+        }
+
+        if (propertyOverrides.TryGetValue(propertyName, out value))
+        {
+            return true;
+        }
+
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static StyleLength ParseStyleLength(string value)
@@ -1757,6 +1323,24 @@ public sealed class QuestSidebarView
         }
 
         return default;
+    }
+
+    private static void SetImageSource(Image image, string resourcePath)
+    {
+        if (string.IsNullOrWhiteSpace(resourcePath))
+        {
+            image.image = null;
+            return;
+        }
+
+        var normalized = resourcePath.Replace("\\", "/", StringComparison.Ordinal).TrimStart('/');
+        var extensionIndex = normalized.LastIndexOf('.');
+        if (extensionIndex > 0)
+        {
+            normalized = normalized[..extensionIndex];
+        }
+
+        image.image = Resources.Load<Texture2D>(normalized);
     }
 
     private static void ApplyTextLabelStyle(Label label, bool wrapText)

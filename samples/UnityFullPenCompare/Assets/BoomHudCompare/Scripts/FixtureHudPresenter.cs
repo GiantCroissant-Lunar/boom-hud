@@ -101,12 +101,19 @@ namespace BoomHud.Compare
         {
             var generatedViewType = ResolveType(_generatedViewTypeName);
             var constructor = generatedViewType.GetConstructor(new[] { typeof(VisualElement) });
-            if (constructor == null)
+            if (constructor != null)
             {
-                throw new MissingMethodException(generatedViewType.FullName, ".ctor(VisualElement)");
+                return constructor.Invoke(new object[] { generatedRoot });
             }
 
-            return constructor.Invoke(new object[] { generatedRoot });
+            var overrideAwareConstructor = generatedViewType.GetConstructor(
+                new[] { typeof(VisualElement), typeof(System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IReadOnlyDictionary<string, object>>) });
+            if (overrideAwareConstructor != null)
+            {
+                return overrideAwareConstructor.Invoke(new object?[] { generatedRoot, null });
+            }
+
+            throw new MissingMethodException(generatedViewType.FullName, ".ctor(VisualElement)");
         }
 
         private static Type ResolveType(string typeName)

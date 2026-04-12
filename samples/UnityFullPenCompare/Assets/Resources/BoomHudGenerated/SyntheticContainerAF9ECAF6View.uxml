@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="HeroRow" class="boomhud-hero-row">
+        <ui:VisualElement name="Portrait" class="boomhud-portrait">
+            <ui:Label name="RoleIcon" class="boomhud-role-icon" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Identity" class="boomhud-identity">
+            <ui:Label name="MemberName" class="boomhud-member-name" />
+            <ui:Label name="MemberRole" class="boomhud-member-role" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

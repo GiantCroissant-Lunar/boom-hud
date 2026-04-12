@@ -21,6 +21,9 @@ public sealed class GodotGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, options, "godot");
+        document = prepared.Document;
+        diagnostics.AddRange(prepared.Diagnostics);
 
         try
         {
@@ -133,6 +136,29 @@ public sealed class GodotGenerator : IBackendGenerator
         catch (Exception ex)
         {
             diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
+        }
+
+        if (GenerationDocumentPreprocessor.CreateSummaryArtifact(document.Name, prepared.SyntheticComponentization) is { } artifact)
+        {
+            files.Add(artifact);
+        }
+
+        if (options.EmitVisualIrArtifact
+            && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
+        {
+            files.Add(visualIrArtifact);
+        }
+
+        if (options.EmitVisualSynthesisArtifact
+            && GenerationDocumentPreprocessor.CreateVisualSynthesisArtifact(document.Name, prepared.VisualSynthesis) is { } visualSynthesisArtifact)
+        {
+            files.Add(visualSynthesisArtifact);
+        }
+
+        if (options.EmitVisualRefinementArtifact
+            && GenerationDocumentPreprocessor.CreateVisualRefinementArtifact(document.Name, prepared.VisualRefinement) is { } visualRefinementArtifact)
+        {
+            files.Add(visualRefinementArtifact);
         }
 
         return new GenerationResult

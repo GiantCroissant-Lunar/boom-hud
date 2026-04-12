@@ -81,6 +81,26 @@ public sealed record GenerationOptions
 
     public GeneratorRuleSet? RuleSet { get; init; }
 
+    /// <summary>
+    /// Emit a compiler-only Visual IR artifact for diagnostics and future planning work.
+    /// </summary>
+    public bool EmitVisualIrArtifact { get; init; }
+
+    /// <summary>
+    /// Emit a compiler-only Visual synthesis artifact derived from the Visual IR planner.
+    /// </summary>
+    public bool EmitVisualSynthesisArtifact { get; init; }
+
+    /// <summary>
+    /// Emit a compiler-only Visual refinement artifact derived from recursive fidelity planning.
+    /// </summary>
+    public bool EmitVisualRefinementArtifact { get; init; }
+
+    /// <summary>
+    /// Maximum number of refinement actions to plan in one bounded Visual refinement pass.
+    /// </summary>
+    public int VisualRefinementIterationBudget { get; init; } = 4;
+
     public IReadOnlyDictionary<string, string> DescriptionReplacements { get; init; }
         = new Dictionary<string, string>();
 }

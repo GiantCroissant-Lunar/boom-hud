@@ -2,6 +2,7 @@ using System.Text;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Generators;
+using BoomHud.Generators.VisualIR;
 
 namespace BoomHud.Gen.Unity;
 
@@ -22,14 +23,17 @@ internal sealed class UnityBackendPlanner
     }
 
     public static UnityBackendPlan CreatePlan(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics)
+        => CreatePlan(document, options, diagnostics, visualPlan: null);
+
+    public static UnityBackendPlan CreatePlan(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, VisualToUnityToolkitPlan? visualPlan)
     {
         var planner = new UnityBackendPlanner(options);
-        var plan = planner.Build(document);
+        var plan = planner.Build(document, visualPlan);
         diagnostics.AddRange(planner._diagnostics);
         return plan;
     }
 
-    private UnityBackendPlan Build(HudDocument document)
+    private UnityBackendPlan Build(HudDocument document, VisualToUnityToolkitPlan? visualPlan)
     {
         _documentName = document.Name;
         _ruleResolver = new RuleResolver(_options.RuleSet, "unity");
@@ -39,7 +43,7 @@ internal sealed class UnityBackendPlanner
             rootBaseName = document.Name + "Root";
         }
 
-        var root = PlanNode(document.Root, rootBaseName, parent: null, grandparent: null, siblingIndex: 0);
+        var root = PlanNode(document.Root, rootBaseName, document, ComponentInstanceOverrideSupport.RootPath, parent: null, grandparent: null, siblingIndex: 0, visualPlan);
 
         var viewModelProperties = _bindingIdentifiersByPath
             .OrderBy(static pair => pair.Value, StringComparer.Ordinal)
@@ -59,32 +63,67 @@ internal sealed class UnityBackendPlanner
         };
     }
 
-    private UnityPlannedNode PlanNode(ComponentNode node, string? baseName, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex)
+    private UnityPlannedNode PlanNode(ComponentNode node, string? baseName, HudDocument document, string relativePath, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex, VisualToUnityToolkitPlan? visualPlan)
     {
         RegisterBindingPaths(node);
 
         var plannedName = ReserveNodeName(baseName);
         var policy = _ruleResolver?.Resolve(_documentName, node, new RuleSelectionContext(parent, grandparent, siblingIndex)) ?? new ResolvedGeneratorPolicy();
-        var mapping = MapElement(node, policy);
-        var children = node.Children
-            .Select((child, index) =>
-            {
-                var childBaseName = child.Id ?? child.SlotKey ?? child.Type.ToString() + index.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
-                return PlanNode(child, childBaseName, node, parent, index);
-            })
-            .ToList();
+        var componentView = ResolveComponentView(node, document);
+        var visualResolved = visualPlan?.Resolve(node.Id);
+        var mapping = MapElement(node, policy, componentView != null);
+        var children = componentView == null
+            ? node.Children
+                .Select((child, index) =>
+                {
+                    var childBaseName = child.Id ?? child.SlotKey ?? child.Type.ToString() + index.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
+                    return PlanNode(child, childBaseName, document, ComponentInstanceOverrideSupport.ChildPath(relativePath, index), node, parent, index, visualPlan);
+                })
+                .ToList()
+            : [];
 
         return new UnityPlannedNode
         {
             Source = node,
+            RelativePath = relativePath,
             Name = plannedName,
+            ComponentView = componentView,
             ElementType = mapping.ElementType,
             UxmlTag = mapping.UxmlTag,
             CssClass = "boomhud-" + ToKebabCase(plannedName),
             IsFallback = mapping.IsFallback,
             Policy = policy,
+            VisualNode = visualResolved?.Node,
+            MetricProfile = visualResolved?.MetricProfile,
             Children = children
         };
+    }
+
+    private string? ResolveComponentView(ComponentNode node, HudDocument document)
+    {
+        if (node.ComponentRefId == null || node.Children.Count > 0)
+        {
+            return null;
+        }
+
+        if (!document.Components.TryGetValue(node.ComponentRefId, out var component))
+        {
+            _diagnostics.Add(Diagnostic.Warning(
+                $"Component reference '{node.ComponentRefId}' was not found for Unity generation.",
+                node.Id,
+                code: "BHU1004"));
+            return null;
+        }
+
+        if (HasDynamicBindings(component.Root))
+        {
+            _diagnostics.Add(Diagnostic.Warning(
+                $"Unity component reference '{node.ComponentRefId}' contains dynamic bindings and requires the parent view model to implement I{component.Name}ViewModel.",
+                node.Id,
+                code: "BHU1005"));
+        }
+
+        return component.Name;
     }
 
     private void RegisterBindingPaths(ComponentNode node)
@@ -158,8 +197,35 @@ internal sealed class UnityBackendPlanner
         return name;
     }
 
-    private (string ElementType, string UxmlTag, bool IsFallback) MapElement(ComponentNode node, ResolvedGeneratorPolicy policy)
+    private static bool HasDynamicBindings(ComponentNode node)
     {
+        if (node.Visible.IsBound
+            || node.Enabled.IsBound
+            || node.Tooltip is { IsBound: true }
+            || node.Bindings.Count > 0
+            || node.Properties.Values.Any(static property => property.IsBound))
+        {
+            return true;
+        }
+
+        foreach (var child in node.Children)
+        {
+            if (HasDynamicBindings(child))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private (string ElementType, string UxmlTag, bool IsFallback) MapElement(ComponentNode node, ResolvedGeneratorPolicy policy, bool isComponentPlaceholder)
+    {
+        if (isComponentPlaceholder)
+        {
+            return ("VisualElement", "VisualElement", false);
+        }
+
         if (!string.IsNullOrWhiteSpace(policy.ControlType))
         {
             var overrideMapping = TryMapControlOverride(policy.ControlType!);

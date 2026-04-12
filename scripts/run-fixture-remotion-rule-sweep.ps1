@@ -53,9 +53,11 @@ function Invoke-ExternalCommand([string]$WorkingDirectory, [string]$FilePath, [s
     try
     {
         & $FilePath @Arguments
-        if ($LASTEXITCODE -ne 0)
+        $exitCodeVariable = Get-Variable -Name LASTEXITCODE -ErrorAction SilentlyContinue
+        $exitCode = if ($null -ne $exitCodeVariable) { [int]$exitCodeVariable.Value } else { 0 }
+        if ($exitCode -ne 0)
         {
-            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $LASTEXITCODE."
+            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $exitCode."
         }
     }
     finally
@@ -67,6 +69,26 @@ function Invoke-ExternalCommand([string]$WorkingDirectory, [string]$FilePath, [s
 function Invoke-DotNetCli([string[]]$Arguments)
 {
     Invoke-ExternalCommand -WorkingDirectory $RepoRoot -FilePath "dotnet" -Arguments $Arguments
+}
+
+function Get-MainVisualIrArtifact([string]$ArtifactsDirectory)
+{
+    if ([string]::IsNullOrWhiteSpace($ArtifactsDirectory) -or -not (Test-Path $ArtifactsDirectory))
+    {
+        return $null
+    }
+
+    $artifacts = @(
+        Get-ChildItem -Path $ArtifactsDirectory -Filter *.visual-ir.json -File -ErrorAction SilentlyContinue |
+            Sort-Object Name
+    )
+
+    if ($artifacts.Count -eq 0)
+    {
+        return $null
+    }
+
+    return $artifacts[0].FullName
 }
 
 function Invoke-RemotionCommand([string[]]$Arguments)
@@ -230,7 +252,8 @@ function Invoke-GenerateRemotionFixtureSet([string]$RulesPath)
             "--",
             "generate", $fixture,
             "--target", "remotion",
-            "--output", $remotionOutputPath
+            "--output", $remotionOutputPath,
+            "--emit-visual-ir"
         )
 
         if (-not [string]::IsNullOrWhiteSpace($RulesPath))
@@ -280,6 +303,7 @@ function Invoke-ScoreRun(
     $manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json -Depth 20
     $scoresRoot = Join-Path $RunRoot "scores"
     New-Item -ItemType Directory -Force -Path $scoresRoot | Out-Null
+    $remotionVisualIrPath = Get-MainVisualIrArtifact -ArtifactsDirectory (Join-Path $RepoRoot "remotion/src/generated")
 
     $surfaceResults = @()
     foreach ($surface in @($manifest.surfaces))
@@ -291,7 +315,7 @@ function Invoke-ScoreRun(
         $reportPath = Join-Path $scoresRoot "$surfaceId.json"
         $diffPath = Join-Path $scoresRoot "$surfaceId.diff.png"
 
-        Invoke-DotNetCli -Arguments @(
+        $scoreArgs = @(
             "run",
             "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
             "--",
@@ -303,7 +327,16 @@ function Invoke-ScoreRun(
             "--out", $reportPath,
             "--diff", $diffPath,
             "--summary", "true"
-        ) | Out-Host
+        )
+        if (-not [string]::IsNullOrWhiteSpace($remotionVisualIrPath))
+        {
+            $scoreArgs += @(
+                "--visual-ir", $remotionVisualIrPath,
+                "--visual-refinement-out", (Join-Path $scoresRoot "$surfaceId.visual-refinement.json")
+            )
+        }
+
+        Invoke-DotNetCli -Arguments $scoreArgs | Out-Host
 
         $report = Get-Content $reportPath -Raw | ConvertFrom-Json -Depth 20
         $surfaceResults += [pscustomobject]@{

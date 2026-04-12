@@ -11,21 +11,35 @@ type BoomHudMotionTargets = Record<string, BoomHudMotionTargetState>;
 const asBool = (value: unknown, fallback = true) => typeof value === 'boolean' ? value : fallback;
 const asText = (value: unknown, fallback = '') => value == null ? fallback : String(value);
 const resolveMotionId = (scope: string | undefined, id?: string) => !id ? undefined : scope ? `${scope}/${id}` : id;
-const resolveIconText = (value: unknown, familyName?: string) => {
+const renderLucideIcon = (token: string): React.JSX.Element | string => {
+  const common = {
+    width: '100%',
+    height: '100%',
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 2,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true
+  };
+  switch (token) {
+    case 'cross': return <svg {...common}><path d='M12 5v14' /><path d='M5 12h14' /></svg>;
+    case 'shield': return <svg {...common}><path d='M12 3l7 3v6c0 5-3.5 8.8-7 9-3.5-.2-7-4-7-9V6l7-3Z' /></svg>;
+    case 'flame': return <svg {...common}><path d='M12 3s4 4 4 8a4 4 0 1 1-8 0c0-2.6 1.4-4.7 4-8Z' /><path d='M12 13c1.2 1 2 2.1 2 3.3A2 2 0 1 1 10 16c0-1.2.8-2.3 2-3Z' /></svg>;
+    case 'moon': return <svg {...common}><path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z' /></svg>;
+    case 'sparkles':
+    case 'wand-sparkles': return <svg {...common}><path d='M12 3v4' /><path d='M12 17v4' /><path d='M3 12h4' /><path d='M17 12h4' /><path d='m6 6 2.5 2.5' /><path d='M15.5 15.5 18 18' /><path d='m18 6-2.5 2.5' /><path d='M8.5 15.5 6 18' /></svg>;
+    case 'flask-conical': return <svg {...common}><path d='M10 3v5l-5.5 9.5A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-2.5L14 8V3' /><path d='M8.5 13h7' /></svg>;
+    case 'sword': return <svg {...common}><path d='m14.5 4.5 5 5' /><path d='M13 6 6 13' /><path d='m5 14 5 5' /><path d='M4 20h6' /><path d='M17 3h4v4' /></svg>;
+    case 'swords': return <svg {...common}><path d='m14.5 4.5 5 5' /><path d='M13 6 6 13' /><path d='m5 14 5 5' /><path d='M4 20h6' /><path d='m9.5 4.5-5 5' /><path d='M11 6l7 7' /><path d='m19 14-5 5' /><path d='M14 20h6' /></svg>;
+    default: return token;
+  }
+};
+const renderIconContent = (value: unknown, familyName?: string): React.ReactNode => {
   const text = asText(value, '');
   if (!text || familyName?.trim().toLowerCase() !== 'lucide') return text;
-  switch (text) {
-    case 'sword': return '†';
-    case 'swords': return '⚔';
-    case 'sparkles': return '✦';
-    case 'wand-sparkles': return '✦';
-    case 'shield': return '⛨';
-    case 'flask-conical': return '⚗';
-    case 'flame': return '✹';
-    case 'moon': return '☾';
-    case 'cross': return '✚';
-    default: return text;
-  }
+  return renderLucideIcon(text);
 };
 const formatValue = (value: unknown, format?: string, fallback = '') => !format ? asText(value, fallback) : format.replace(/\{0(?:\:[^}]*)?\}/g, asText(value, fallback));
 const clampPercent = (value: unknown) => `${Math.max(0, Math.min(100, typeof value === 'number' ? value : 0))}%`;
@@ -71,9 +85,9 @@ const getMotionStyle = (targets: BoomHudMotionTargets | undefined, id?: string):
 
 export function StatusIconView(props: StatusIconViewModel): React.JSX.Element {
   return (
-    <div className='boomhud-node boomhud-component-statusicon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'center', justifyContent: 'center', fontWeight: '400', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'Component/StatusIcon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'Component/StatusIcon')}>
-      <span className='boomhud-node boomhud-icon' style={ { display: 'flex', flexDirection: 'column', padding: '0', margin: '0', width: '24px', height: '24px', alignItems: 'flex-start', justifyContent: 'flex-start', color: '#FFFFFF', fontFamily: 'lucide', fontWeight: '400', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'icon')}>
-        {resolveIconText(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('flame'), 'lucide')}
+    <div className='boomhud-node boomhud-component-statusicon' style={ { padding: '0', display: 'flex', flexDirection: 'column', margin: '0', width: '24px', height: '24px', alignItems: 'center', justifyContent: 'center', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'Component/StatusIcon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'Component/StatusIcon')}>
+      <span className='boomhud-node boomhud-icon' style={ { padding: '0', display: 'flex', flexDirection: 'column', margin: '0', width: '24px', height: '24px', alignItems: 'flex-start', justifyContent: 'flex-start', color: '#FFFFFF', fontSize: '24px', fontFamily: 'lucide', whiteSpace: 'nowrap', ...getMotionStyle(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) } } data-boomhud-id={resolveMotionId(props.motionScope, 'icon')}>
+        {renderIconContent(getMotionText(props.motionTargets, resolveMotionId(props.motionScope, 'icon')) ?? ('flame'), 'lucide')}
       </span>
     </div>
   );

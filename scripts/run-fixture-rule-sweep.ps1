@@ -57,15 +57,52 @@ function Invoke-ExternalCommand([string]$WorkingDirectory, [string]$FilePath, [s
     try
     {
         & $FilePath @Arguments
-        if ($LASTEXITCODE -ne 0)
+        $exitCodeVariable = Get-Variable -Name LASTEXITCODE -ErrorAction SilentlyContinue
+        $exitCode = if ($null -ne $exitCodeVariable) { [int]$exitCodeVariable.Value } else { 0 }
+        if ($exitCode -ne 0)
         {
-            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $LASTEXITCODE."
+            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $exitCode."
         }
     }
     finally
     {
         Pop-Location
     }
+}
+
+function Wait-ForUnityProjectAvailability(
+    [string]$ProjectPath,
+    [int]$TimeoutSeconds = 60)
+{
+    if ([string]::IsNullOrWhiteSpace($ProjectPath))
+    {
+        return
+    }
+
+    $projectPath = [System.IO.Path]::GetFullPath($ProjectPath)
+    $projectPathPattern = [regex]::Escape($projectPath)
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+
+    while ((Get-Date) -lt $deadline)
+    {
+        $unityProcesses = @(
+            Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+                Where-Object {
+                    $_.Name -eq "Unity.exe" -and
+                    -not [string]::IsNullOrWhiteSpace($_.CommandLine) -and
+                    $_.CommandLine -match $projectPathPattern
+                }
+        )
+
+        if ($unityProcesses.Count -eq 0)
+        {
+            return
+        }
+
+        Start-Sleep -Milliseconds 500
+    }
+
+    throw "Timed out waiting for Unity project '$projectPath' to become available."
 }
 
 function Resolve-PowerShellExecutable()
@@ -87,6 +124,52 @@ function Resolve-PowerShellExecutable()
 function Invoke-DotNetCli([string[]]$Arguments)
 {
     Invoke-ExternalCommand -WorkingDirectory $RepoRoot -FilePath "dotnet" -Arguments $Arguments
+}
+
+function Normalize-ArtifactStem([string]$Value)
+{
+    if ([string]::IsNullOrWhiteSpace($Value))
+    {
+        return ""
+    }
+
+    $trimmed = $Value -replace '\.visual-ir$', ''
+    $trimmed = $trimmed -replace '-(ugui|uitk|unity|react|remotion)$', ''
+    return ([regex]::Replace($trimmed, '[^a-zA-Z0-9]', '')).ToLowerInvariant()
+}
+
+function Get-VisualIrArtifact([string]$ArtifactsDirectory, [string]$Hint)
+{
+    if ([string]::IsNullOrWhiteSpace($ArtifactsDirectory) -or -not (Test-Path $ArtifactsDirectory))
+    {
+        return $null
+    }
+
+    $artifacts = @(
+        Get-ChildItem -Path $ArtifactsDirectory -Filter *.visual-ir.json -File -ErrorAction SilentlyContinue |
+            Sort-Object Name
+    )
+
+    if ($artifacts.Count -eq 0)
+    {
+        return $null
+    }
+
+    $normalizedHint = Normalize-ArtifactStem $Hint
+    if (-not [string]::IsNullOrWhiteSpace($normalizedHint))
+    {
+        $matched = $artifacts |
+            Where-Object {
+                (Normalize-ArtifactStem ([System.IO.Path]::GetFileNameWithoutExtension($_.Name))) -eq $normalizedHint
+            } |
+            Select-Object -First 1
+        if ($null -ne $matched)
+        {
+            return $matched.FullName
+        }
+    }
+
+    return $artifacts[0].FullName
 }
 
 function Wait-ForFileReady(
@@ -297,7 +380,8 @@ function Invoke-GenerateFixtureSet([string]$RulesPath)
             "generate", $fixture.Source,
             "--target", "unity",
             "--output", $unityOutputPath,
-            "--namespace", "Generated.Hud"
+            "--namespace", "Generated.Hud",
+            "--emit-visual-ir"
         )
 
         $uguiArgs = @(
@@ -307,7 +391,8 @@ function Invoke-GenerateFixtureSet([string]$RulesPath)
             "generate", $fixture.Source,
             "--target", "ugui",
             "--output", $uguiOutputPath,
-            "--namespace", "Generated.Hud.UGui"
+            "--namespace", "Generated.Hud.UGui",
+            "--emit-visual-ir"
         )
 
         if (-not [string]::IsNullOrWhiteSpace($RulesPath))
@@ -328,6 +413,7 @@ function Invoke-UnityCapture([string]$ManifestPath)
         throw "Unity capture requires -UnityExe."
     }
 
+    Wait-ForUnityProjectAvailability -ProjectPath $UnityProjectPath
     Invoke-ExternalCommand -WorkingDirectory $RepoRoot -FilePath $UnityExe -Arguments @(
         "-batchmode",
         "-quit",
@@ -335,6 +421,7 @@ function Invoke-UnityCapture([string]$ManifestPath)
         "-executeMethod", "BoomHud.Compare.Editor.BoomHudFidelityCapture.CaptureFromCommandLine",
         "--manifest", $ManifestPath
     )
+    Wait-ForUnityProjectAvailability -ProjectPath $UnityProjectPath
 }
 
 function Invoke-ScoreRun(
@@ -349,6 +436,8 @@ function Invoke-ScoreRun(
     $manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json -Depth 20
     $scoresRoot = Join-Path $RunRoot "scores"
     New-Item -ItemType Directory -Force -Path $scoresRoot | Out-Null
+    $unityVisualIrDirectory = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
+    $uguiVisualIrDirectory = Join-Path $UnityProjectPath "Assets/BoomHudGeneratedUGui"
 
     $surfaceResults = @()
     foreach ($surface in @($manifest.surfaces))
@@ -359,8 +448,9 @@ function Invoke-ScoreRun(
         Wait-ForFileReady -Path $candidatePath
         $reportPath = Join-Path $scoresRoot "$surfaceId.json"
         $diffPath = Join-Path $scoresRoot "$surfaceId.diff.png"
+        $actualLayoutPath = Join-Path (Split-Path -Parent $candidatePath) (([System.IO.Path]::GetFileNameWithoutExtension($candidatePath)) + ".layout.actual.json")
 
-        Invoke-DotNetCli -Arguments @(
+        $scoreArgs = @(
             "run",
             "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
             "--",
@@ -372,7 +462,26 @@ function Invoke-ScoreRun(
             "--out", $reportPath,
             "--diff", $diffPath,
             "--summary", "true"
-        ) | Out-Host
+        )
+        $visualIrDirectory = if ($surfaceId -like "*-ugui") { $uguiVisualIrDirectory } else { $unityVisualIrDirectory }
+        $visualIrPath = Get-VisualIrArtifact -ArtifactsDirectory $visualIrDirectory -Hint $surfaceId
+
+        if (-not [string]::IsNullOrWhiteSpace($visualIrPath))
+        {
+            $scoreArgs += @(
+                "--visual-ir", $visualIrPath,
+                "--visual-refinement-out", (Join-Path $scoresRoot "$surfaceId.visual-refinement.json")
+            )
+            if (Test-Path $actualLayoutPath)
+            {
+                $scoreArgs += @(
+                    "--actual-layout", $actualLayoutPath,
+                    "--measured-layout-out", (Join-Path $scoresRoot "$surfaceId.measured-layout.json")
+                )
+            }
+        }
+
+        Invoke-DotNetCli -Arguments $scoreArgs | Out-Host
 
         $report = Get-Content $reportPath -Raw | ConvertFrom-Json -Depth 20
         $surfaceResults += [pscustomobject]@{

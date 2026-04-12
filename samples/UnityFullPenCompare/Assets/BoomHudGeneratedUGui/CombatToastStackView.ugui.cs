@@ -5,6 +5,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
 using UnityEngine;
@@ -14,11 +15,11 @@ namespace Generated.Hud.UGui
 {
 public sealed class CombatToastStackView
 {
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private ICombatToastStackViewModel? _viewModel;
     public RectTransform Root { get; }
     public RectTransform ToastOne { get; }
     public RectTransform IconPanel { get; }
-    public Text EventIcon { get; }
     public RectTransform Content { get; }
     public Text Title { get; }
     public Text Body { get; }
@@ -26,14 +27,10 @@ public sealed class CombatToastStackView
     public RectTransform ProgressFill { get; }
     public Text ProgressText { get; }
     public RectTransform RewardColumn { get; }
-    public Text Tag { get; }
-    public Text Value { get; }
-    public Text Time { get; }
     public RectTransform Badge { get; }
     public Text BadgeText { get; }
     public RectTransform ToastTwo { get; }
     public RectTransform IconPanel2 { get; }
-    public Text EventIcon2 { get; }
     public RectTransform Content2 { get; }
     public Text Title2 { get; }
     public Text Body2 { get; }
@@ -41,14 +38,10 @@ public sealed class CombatToastStackView
     public RectTransform ProgressFill2 { get; }
     public Text ProgressText2 { get; }
     public RectTransform RewardColumn2 { get; }
-    public Text Tag2 { get; }
-    public Text Value2 { get; }
-    public Text Time2 { get; }
     public RectTransform Badge2 { get; }
     public Text BadgeText2 { get; }
     public RectTransform ToastThree { get; }
     public RectTransform IconPanel3 { get; }
-    public Text EventIcon3 { get; }
     public RectTransform Content3 { get; }
     public Text Title3 { get; }
     public Text Body3 { get; }
@@ -56,9 +49,6 @@ public sealed class CombatToastStackView
     public RectTransform ProgressFill3 { get; }
     public Text ProgressText3 { get; }
     public RectTransform RewardColumn3 { get; }
-    public Text Tag3 { get; }
-    public Text Value3 { get; }
-    public Text Time3 { get; }
     public RectTransform Badge3 { get; }
     public Text BadgeText3 { get; }
 
@@ -75,8 +65,9 @@ public sealed class CombatToastStackView
         }
     }
 
-    public CombatToastStackView(Transform? parent = null, ICombatToastStackViewModel? viewModel = null)
+    public CombatToastStackView(Transform? parent = null, ICombatToastStackViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
+        _componentOverrides = componentOverrides;
         Root = CreateRect("CombatToastStackRoot", parent);
         ConfigureRect(Root, width: 960f, height: 720f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 960f, preferredHeight: 720f, flexibleWidth: null, flexibleHeight: null);
@@ -90,22 +81,9 @@ public sealed class CombatToastStackView
         ApplyContentSizeFit(RectOf(ToastOne), horizontal: false, vertical: false);
         ApplyStyle(ToastOne, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastOne.gameObject.SetActive(true);
-        IconPanel = CreateRect("IconPanel", RectOf(ToastOne));
-        ConfigureRect(RectOf(IconPanel), width: 132f, height: 132f, left: 16f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(IconPanel), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconPanel), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconPanel), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconPanel, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        IconPanel.gameObject.SetActive(true);
-        EventIcon = CreateText("EventIcon", RectOf(IconPanel));
-        ConfigureRect(RectOf(EventIcon), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(EventIcon), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(EventIcon), horizontal: false, vertical: false);
-        ApplyStyle(EventIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 56, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(EventIcon, boxWidth: 56f, boxHeight: 56f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(EventIcon, lineSpacing: null, wrapText: false);
-        EventIcon.text = ResolveIconText("flame");
-        EventIcon.gameObject.SetActive(true);
+        var iconPanelView = new SyntheticContainer61D6E26DView(RectOf(ToastOne), null, null);
+        IconPanel = iconPanelView.Root;
+        IconPanel.name = "IconPanel";
         Content = CreateRect("Content", RectOf(ToastOne));
         ConfigureRect(RectOf(Content), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -144,42 +122,14 @@ public sealed class CombatToastStackView
         ProgressText = CreateText("ProgressText", RectOf(Progress));
         ConfigureRect(RectOf(ProgressText), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(ProgressText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ProgressText), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(ProgressText), horizontal: true, vertical: true);
         ApplyStyle(ProgressText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(ProgressText, lineSpacing: null, wrapText: false);
         ProgressText.text = "RESPONSE WINDOW 58%";
         ProgressText.gameObject.SetActive(true);
-        RewardColumn = CreateRect("RewardColumn", RectOf(ToastOne));
-        ConfigureRect(RectOf(RewardColumn), width: 164f, height: 132f, left: 764f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(RewardColumn), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RewardColumn), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(RewardColumn), 10f, 12, 12, 12, 12);
-        ApplyStyle(RewardColumn, fg: "#0C0C0C", bg: "#0C0C0C", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
-        RewardColumn.gameObject.SetActive(true);
-        Tag = CreateText("Tag", RectOf(RewardColumn));
-        ConfigureRect(RectOf(Tag), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Tag), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Tag), horizontal: false, vertical: false);
-        ApplyStyle(Tag, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 10, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Tag, lineSpacing: null, wrapText: false);
-        Tag.text = "ALERT";
-        Tag.gameObject.SetActive(true);
-        Value = CreateText("Value", RectOf(RewardColumn));
-        ConfigureRect(RectOf(Value), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Value), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Value), horizontal: false, vertical: false);
-        ApplyStyle(Value, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Value, lineSpacing: null, wrapText: false);
-        Value.text = "+120 XP";
-        Value.gameObject.SetActive(true);
-        Time = CreateText("Time", RectOf(RewardColumn));
-        ConfigureRect(RectOf(Time), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Time), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Time), horizontal: false, vertical: false);
-        ApplyStyle(Time, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Time, lineSpacing: null, wrapText: false);
-        Time.text = "00:14";
-        Time.gameObject.SetActive(true);
+        var rewardColumnView = new SyntheticContainerFC1FF3CBView(RectOf(ToastOne), null, null);
+        RewardColumn = rewardColumnView.Root;
+        RewardColumn.name = "RewardColumn";
         Badge = CreateRect("Badge", RectOf(ToastOne));
         ConfigureRect(RectOf(Badge), width: 120f, height: 28f, left: 784f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -201,22 +151,15 @@ public sealed class CombatToastStackView
         ApplyContentSizeFit(RectOf(ToastTwo), horizontal: false, vertical: false);
         ApplyStyle(ToastTwo, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastTwo.gameObject.SetActive(true);
-        IconPanel2 = CreateRect("IconPanel2", RectOf(ToastTwo));
-        ConfigureRect(RectOf(IconPanel2), width: 132f, height: 132f, left: 16f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(IconPanel2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconPanel2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconPanel2), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconPanel2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        IconPanel2.gameObject.SetActive(true);
-        EventIcon2 = CreateText("EventIcon2", RectOf(IconPanel2));
-        ConfigureRect(RectOf(EventIcon2), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(EventIcon2), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(EventIcon2), horizontal: false, vertical: false);
-        ApplyStyle(EventIcon2, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 56, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(EventIcon2, boxWidth: 56f, boxHeight: 56f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(EventIcon2, lineSpacing: null, wrapText: false);
-        EventIcon2.text = ResolveIconText("shield");
-        EventIcon2.gameObject.SetActive(true);
+        var iconPanel2View = new SyntheticContainer61D6E26DView(RectOf(ToastTwo), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            }
+        });
+        IconPanel2 = iconPanel2View.Root;
+        IconPanel2.name = "IconPanel2";
         Content2 = CreateRect("Content2", RectOf(ToastTwo));
         ConfigureRect(RectOf(Content2), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -255,42 +198,28 @@ public sealed class CombatToastStackView
         ProgressText2 = CreateText("ProgressText2", RectOf(Progress2));
         ConfigureRect(RectOf(ProgressText2), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(ProgressText2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ProgressText2), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(ProgressText2), horizontal: true, vertical: true);
         ApplyStyle(ProgressText2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(ProgressText2, lineSpacing: null, wrapText: false);
         ProgressText2.text = "WARD STABILITY 77%";
         ProgressText2.gameObject.SetActive(true);
-        RewardColumn2 = CreateRect("RewardColumn2", RectOf(ToastTwo));
-        ConfigureRect(RectOf(RewardColumn2), width: 164f, height: 132f, left: 764f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(RewardColumn2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RewardColumn2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(RewardColumn2), 10f, 12, 12, 12, 12);
-        ApplyStyle(RewardColumn2, fg: "#0C0C0C", bg: "#0C0C0C", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
-        RewardColumn2.gameObject.SetActive(true);
-        Tag2 = CreateText("Tag2", RectOf(RewardColumn2));
-        ConfigureRect(RectOf(Tag2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Tag2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Tag2), horizontal: false, vertical: false);
-        ApplyStyle(Tag2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 10, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Tag2, lineSpacing: null, wrapText: false);
-        Tag2.text = "DEFENSE";
-        Tag2.gameObject.SetActive(true);
-        Value2 = CreateText("Value2", RectOf(RewardColumn2));
-        ConfigureRect(RectOf(Value2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Value2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Value2), horizontal: false, vertical: false);
-        ApplyStyle(Value2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Value2, lineSpacing: null, wrapText: false);
-        Value2.text = "+1 barrier";
-        Value2.gameObject.SetActive(true);
-        Time2 = CreateText("Time2", RectOf(RewardColumn2));
-        ConfigureRect(RectOf(Time2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Time2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Time2), horizontal: false, vertical: false);
-        ApplyStyle(Time2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Time2, lineSpacing: null, wrapText: false);
-        Time2.text = "00:21";
-        Time2.gameObject.SetActive(true);
+        var rewardColumn2View = new SyntheticContainerFC1FF3CBView(RectOf(ToastTwo), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "DEFENSE"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "+1 barrier"
+            },
+            ["$/2"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "00:21"
+            }
+        });
+        RewardColumn2 = rewardColumn2View.Root;
+        RewardColumn2.name = "RewardColumn2";
         Badge2 = CreateRect("Badge2", RectOf(ToastTwo));
         ConfigureRect(RectOf(Badge2), width: 104f, height: 28f, left: 792f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -312,22 +241,15 @@ public sealed class CombatToastStackView
         ApplyContentSizeFit(RectOf(ToastThree), horizontal: false, vertical: false);
         ApplyStyle(ToastThree, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastThree.gameObject.SetActive(true);
-        IconPanel3 = CreateRect("IconPanel3", RectOf(ToastThree));
-        ConfigureRect(RectOf(IconPanel3), width: 132f, height: 132f, left: 16f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(IconPanel3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(IconPanel3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(IconPanel3), 0f, 0, 0, 0, 0);
-        ApplyStyle(IconPanel3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#EAEAEA", borderWidth: 4f, treatAsIcon: false);
-        IconPanel3.gameObject.SetActive(true);
-        EventIcon3 = CreateText("EventIcon3", RectOf(IconPanel3));
-        ConfigureRect(RectOf(EventIcon3), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(EventIcon3), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(EventIcon3), horizontal: false, vertical: false);
-        ApplyStyle(EventIcon3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 56, borderColor: null, borderWidth: null, treatAsIcon: true);
-        ApplyIconMetrics(EventIcon3, boxWidth: 56f, boxHeight: 56f, baselineOffset: 0f, opticalCentering: true, sizeMode: "fit-box", explicitFontSize: 0f);
-        ApplyTextMetrics(EventIcon3, lineSpacing: null, wrapText: false);
-        EventIcon3.text = ResolveIconText("moon");
-        EventIcon3.gameObject.SetActive(true);
+        var iconPanel3View = new SyntheticContainer61D6E26DView(RectOf(ToastThree), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        IconPanel3 = iconPanel3View.Root;
+        IconPanel3.name = "IconPanel3";
         Content3 = CreateRect("Content3", RectOf(ToastThree));
         ConfigureRect(RectOf(Content3), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -366,42 +288,28 @@ public sealed class CombatToastStackView
         ProgressText3 = CreateText("ProgressText3", RectOf(Progress3));
         ConfigureRect(RectOf(ProgressText3), width: null, height: null, left: 12f, top: 4f, absolute: true);
         ApplyLayoutSizing(RectOf(ProgressText3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(ProgressText3), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(ProgressText3), horizontal: true, vertical: true);
         ApplyStyle(ProgressText3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(ProgressText3, lineSpacing: null, wrapText: false);
         ProgressText3.text = "VEIL DURATION 43%";
         ProgressText3.gameObject.SetActive(true);
-        RewardColumn3 = CreateRect("RewardColumn3", RectOf(ToastThree));
-        ConfigureRect(RectOf(RewardColumn3), width: 164f, height: 132f, left: 764f, top: 16f, absolute: true);
-        ApplyLayoutSizing(RectOf(RewardColumn3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(RewardColumn3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(RewardColumn3), 10f, 12, 12, 12, 12);
-        ApplyStyle(RewardColumn3, fg: "#0C0C0C", bg: "#0C0C0C", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
-        RewardColumn3.gameObject.SetActive(true);
-        Tag3 = CreateText("Tag3", RectOf(RewardColumn3));
-        ConfigureRect(RectOf(Tag3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Tag3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Tag3), horizontal: false, vertical: false);
-        ApplyStyle(Tag3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 10, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Tag3, lineSpacing: null, wrapText: false);
-        Tag3.text = "UTILITY";
-        Tag3.gameObject.SetActive(true);
-        Value3 = CreateText("Value3", RectOf(RewardColumn3));
-        ConfigureRect(RectOf(Value3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Value3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Value3), horizontal: false, vertical: false);
-        ApplyStyle(Value3, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Value3, lineSpacing: null, wrapText: false);
-        Value3.text = "+stealth";
-        Value3.gameObject.SetActive(true);
-        Time3 = CreateText("Time3", RectOf(RewardColumn3));
-        ConfigureRect(RectOf(Time3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Time3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Time3), horizontal: false, vertical: false);
-        ApplyStyle(Time3, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
-        ApplyTextMetrics(Time3, lineSpacing: null, wrapText: false);
-        Time3.text = "00:33";
-        Time3.gameObject.SetActive(true);
+        var rewardColumn3View = new SyntheticContainerFC1FF3CBView(RectOf(ToastThree), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "UTILITY"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "+stealth"
+            },
+            ["$/2"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "00:33"
+            }
+        });
+        RewardColumn3 = rewardColumn3View.Root;
+        RewardColumn3.name = "RewardColumn3";
         Badge3 = CreateRect("Badge3", RectOf(ToastThree));
         ConfigureRect(RectOf(Badge3), width: 128f, height: 28f, left: 780f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
@@ -417,15 +325,16 @@ public sealed class CombatToastStackView
         ApplyTextMetrics(BadgeText3, lineSpacing: null, wrapText: false);
         BadgeText3.text = "CONCEALED";
         BadgeText3.gameObject.SetActive(true);
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    private CombatToastStackView(RectTransform root, ICombatToastStackViewModel? viewModel)
+    private CombatToastStackView(RectTransform root, ICombatToastStackViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)
     {
+        _componentOverrides = componentOverrides;
         Root = root;
         ToastOne = RequireRect(Root, "ToastOne");
         IconPanel = RequireRect(Root, "ToastOne/IconPanel");
-        EventIcon = RequireComponent<Text>(Root, "ToastOne/IconPanel/EventIcon");
         Content = RequireRect(Root, "ToastOne/Content");
         Title = RequireComponent<Text>(Root, "ToastOne/Content/Title");
         Body = RequireComponent<Text>(Root, "ToastOne/Content/Body");
@@ -433,14 +342,10 @@ public sealed class CombatToastStackView
         ProgressFill = RequireRect(Root, "ToastOne/Content/Progress/ProgressFill");
         ProgressText = RequireComponent<Text>(Root, "ToastOne/Content/Progress/ProgressText");
         RewardColumn = RequireRect(Root, "ToastOne/RewardColumn");
-        Tag = RequireComponent<Text>(Root, "ToastOne/RewardColumn/Tag");
-        Value = RequireComponent<Text>(Root, "ToastOne/RewardColumn/Value");
-        Time = RequireComponent<Text>(Root, "ToastOne/RewardColumn/Time");
         Badge = RequireRect(Root, "ToastOne/Badge");
         BadgeText = RequireComponent<Text>(Root, "ToastOne/Badge/BadgeText");
         ToastTwo = RequireRect(Root, "ToastTwo");
         IconPanel2 = RequireRect(Root, "ToastTwo/IconPanel2");
-        EventIcon2 = RequireComponent<Text>(Root, "ToastTwo/IconPanel2/EventIcon2");
         Content2 = RequireRect(Root, "ToastTwo/Content2");
         Title2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Title2");
         Body2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Body2");
@@ -448,14 +353,10 @@ public sealed class CombatToastStackView
         ProgressFill2 = RequireRect(Root, "ToastTwo/Content2/Progress2/ProgressFill2");
         ProgressText2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Progress2/ProgressText2");
         RewardColumn2 = RequireRect(Root, "ToastTwo/RewardColumn2");
-        Tag2 = RequireComponent<Text>(Root, "ToastTwo/RewardColumn2/Tag2");
-        Value2 = RequireComponent<Text>(Root, "ToastTwo/RewardColumn2/Value2");
-        Time2 = RequireComponent<Text>(Root, "ToastTwo/RewardColumn2/Time2");
         Badge2 = RequireRect(Root, "ToastTwo/Badge2");
         BadgeText2 = RequireComponent<Text>(Root, "ToastTwo/Badge2/BadgeText2");
         ToastThree = RequireRect(Root, "ToastThree");
         IconPanel3 = RequireRect(Root, "ToastThree/IconPanel3");
-        EventIcon3 = RequireComponent<Text>(Root, "ToastThree/IconPanel3/EventIcon3");
         Content3 = RequireRect(Root, "ToastThree/Content3");
         Title3 = RequireComponent<Text>(Root, "ToastThree/Content3/Title3");
         Body3 = RequireComponent<Text>(Root, "ToastThree/Content3/Body3");
@@ -463,15 +364,66 @@ public sealed class CombatToastStackView
         ProgressFill3 = RequireRect(Root, "ToastThree/Content3/Progress3/ProgressFill3");
         ProgressText3 = RequireComponent<Text>(Root, "ToastThree/Content3/Progress3/ProgressText3");
         RewardColumn3 = RequireRect(Root, "ToastThree/RewardColumn3");
-        Tag3 = RequireComponent<Text>(Root, "ToastThree/RewardColumn3/Tag3");
-        Value3 = RequireComponent<Text>(Root, "ToastThree/RewardColumn3/Value3");
-        Time3 = RequireComponent<Text>(Root, "ToastThree/RewardColumn3/Time3");
         Badge3 = RequireRect(Root, "ToastThree/Badge3");
         BadgeText3 = RequireComponent<Text>(Root, "ToastThree/Badge3/BadgeText3");
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    public static CombatToastStackView Bind(RectTransform root, ICombatToastStackViewModel? viewModel = null) => new(root, viewModel);
+    public static CombatToastStackView Bind(RectTransform root, ICombatToastStackViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null) return;
+        if (TryGetComponentOverrideValue("$/0/1/0", "Text", out var componentOverrideValue0))
+        {
+            Title.text = AsString(componentOverrideValue0);
+        }
+        if (TryGetComponentOverrideValue("$/0/1/1", "Text", out var componentOverrideValue1))
+        {
+            Body.text = AsString(componentOverrideValue1);
+        }
+        if (TryGetComponentOverrideValue("$/0/1/2/1", "Text", out var componentOverrideValue2))
+        {
+            ProgressText.text = AsString(componentOverrideValue2);
+        }
+        if (TryGetComponentOverrideValue("$/0/3/0", "Text", out var componentOverrideValue3))
+        {
+            BadgeText.text = AsString(componentOverrideValue3);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/0", "Text", out var componentOverrideValue4))
+        {
+            Title2.text = AsString(componentOverrideValue4);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/1", "Text", out var componentOverrideValue5))
+        {
+            Body2.text = AsString(componentOverrideValue5);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/2/1", "Text", out var componentOverrideValue6))
+        {
+            ProgressText2.text = AsString(componentOverrideValue6);
+        }
+        if (TryGetComponentOverrideValue("$/1/3/0", "Text", out var componentOverrideValue7))
+        {
+            BadgeText2.text = AsString(componentOverrideValue7);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/0", "Text", out var componentOverrideValue8))
+        {
+            Title3.text = AsString(componentOverrideValue8);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/1", "Text", out var componentOverrideValue9))
+        {
+            Body3.text = AsString(componentOverrideValue9);
+        }
+        if (TryGetComponentOverrideValue("$/2/1/2/1", "Text", out var componentOverrideValue10))
+        {
+            ProgressText3.text = AsString(componentOverrideValue10);
+        }
+        if (TryGetComponentOverrideValue("$/2/3/0", "Text", out var componentOverrideValue11))
+        {
+            BadgeText3.text = AsString(componentOverrideValue11);
+        }
+    }
 
     public void Refresh()
     {
@@ -479,6 +431,22 @@ public sealed class CombatToastStackView
     }
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;
+        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
@@ -490,8 +458,8 @@ public sealed class CombatToastStackView
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
@@ -499,6 +467,7 @@ public sealed class CombatToastStackView
     private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
     private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
     private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}

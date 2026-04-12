@@ -1,0 +1,34 @@
+{
+  "Scopes": {
+    "PartyStatusStrip": [
+      "IPartyStatusStripViewModel.g.cs",
+      "ISyntheticContainerAF9ECAF6ViewModel.g.cs",
+      "ISyntheticContainerB978BB0BViewModel.g.cs",
+      "PartyStatusStrip.synthetic-components.json",
+      "PartyStatusStrip.visual-ir.json",
+      "PartyStatusStripView.ugui.cs",
+      "SyntheticContainerAF9ECAF6View.ugui.cs",
+      "SyntheticContainerB978BB0BView.ugui.cs"
+    ],
+    "QuestSidebar": [
+      "IQuestSidebarViewModel.g.cs",
+      "ISyntheticContainer9463CA59ViewModel.g.cs",
+      "ISyntheticContainerC520AC99ViewModel.g.cs",
+      "QuestSidebar.synthetic-components.json",
+      "QuestSidebar.visual-ir.json",
+      "QuestSidebarView.ugui.cs",
+      "SyntheticContainer9463CA59View.ugui.cs",
+      "SyntheticContainerC520AC99View.ugui.cs"
+    ],
+    "CombatToastStack": [
+      "CombatToastStack.synthetic-components.json",
+      "CombatToastStack.visual-ir.json",
+      "CombatToastStackView.ugui.cs",
+      "ICombatToastStackViewModel.g.cs",
+      "ISyntheticContainer61D6E26DViewModel.g.cs",
+      "ISyntheticContainerFC1FF3CBViewModel.g.cs",
+      "SyntheticContainer61D6E26DView.ugui.cs",
+      "SyntheticContainerFC1FF3CBView.ugui.cs"
+    ]
+  }
+}

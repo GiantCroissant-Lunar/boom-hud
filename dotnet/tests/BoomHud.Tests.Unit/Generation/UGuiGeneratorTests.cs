@@ -1,7 +1,9 @@
+using System;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.UGui;
+using BoomHud.Generators;
 using FluentAssertions;
 using Xunit;
 
@@ -37,6 +39,88 @@ public sealed class UGuiGeneratorTests
         viewFile.Content.Should().Contain("public sealed class TestComponentView");
         viewFile.Content.Should().Contain("public RectTransform Root { get; }");
         viewFile.Content.Should().Contain("Root = CreateRect(\"TestComponentRoot\", parent);");
+    }
+
+    [Fact]
+    public void Generate_DefaultMode_DoesNotEmitVisualIrArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        result.Files.Should().NotContain(file => file.Path == "VisualHud.visual-ir.json");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsVisualIrArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Style = new StyleSpec
+                {
+                    FontFamily = "Press Start 2P",
+                    FontSize = 12
+                }
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with { EmitVisualIrArtifact = true });
+        var visualIr = result.Files.Single(file => file.Path == "VisualHud.visual-ir.json").Content;
+
+        visualIr.Should().Contain("\"DocumentName\": \"VisualHud\"");
+        visualIr.Should().Contain("\"BackendFamily\": \"ugui\"");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsVisualPlanningArtifacts()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title-a",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "title-b",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "BONUS"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with
+        {
+            EmitVisualSynthesisArtifact = true,
+            EmitVisualRefinementArtifact = true
+        });
+
+        result.Files.Should().Contain(file => file.Path == "VisualHud.visual-synthesis.json");
+        result.Files.Should().Contain(file => file.Path == "VisualHud.visual-refinement.json");
     }
 
     [Fact]
@@ -136,8 +220,106 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
 
         var viewFile = result.Files.First(f => f.Path == "StatusHudView.ugui.cs");
-        viewFile.Content.Should().Contain("var readyBadgeView = new BadgeView(Root);");
+        viewFile.Content.Should().Contain("var readyBadgeView = new BadgeView(Root, null, null);");
         viewFile.Content.Should().Contain("ReadyBadge = readyBadgeView.Root;");
+    }
+
+    [Fact]
+    public void Generate_ComponentRefWithInstanceOverrides_PassesOverrideBagIntoChildView()
+    {
+        var badge = new HudComponentDefinition
+        {
+            Id = "badge",
+            Name = "Badge",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "READY"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "StatusHud",
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                ["badge"] = badge
+            },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "readyBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge",
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = new Dictionary<string, object?>
+                            {
+                                [ComponentInstanceOverrideSupport.ChildPath(ComponentInstanceOverrideSupport.RootPath, 0)] = new Dictionary<string, object?>
+                                {
+                                    ["text"] = "GO"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "StatusHudView.ugui.cs");
+        var badgeFile = result.Files.First(f => f.Path == "BadgeView.ugui.cs");
+
+        viewFile.Content.Should().Contain("new BadgeView(Root, null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)");
+        badgeFile.Content.Should().Contain("private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;");
+        badgeFile.Content.Should().Contain("private void ApplyInstanceOverrides()");
+        badgeFile.Content.Should().Contain("TryGetComponentOverrideValue(\"$/0\", \"text\", out var componentOverrideValue0)");
+    }
+
+    [Fact]
+    public void Generate_WithSyntheticExactReuse_EmitsSyntheticComponentArtifactsForUGui()
+    {
+        var doc = new HudDocument
+        {
+            Name = "QuestHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    CreateSyntheticCandidateCard("card-alpha", 12, 32),
+                    CreateSyntheticCandidateCard("card-bravo", 312, 64)
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+
+        result.Files.Should().Contain(file => file.Path == "QuestHud.synthetic-components.json");
+        result.Files.Should().Contain(file => file.Path.StartsWith("Synthetic", StringComparison.Ordinal) && file.Path.EndsWith("View.ugui.cs", StringComparison.Ordinal));
+        result.Files.Should().Contain(file => file.Path.StartsWith("ISynthetic", StringComparison.Ordinal) && file.Path.EndsWith("ViewModel.g.cs", StringComparison.Ordinal));
+
+        var viewFile = result.Files.First(f => f.Path == "QuestHudView.ugui.cs");
+        viewFile.Content.Should().Contain("new Synthetic");
+        viewFile.Content.Should().NotContain("ApplyHorizontalLayout(RectOf(CardAlpha)");
+        viewFile.Content.Should().NotContain("ApplyHorizontalLayout(RectOf(CardBravo)");
+        viewFile.Content.Should().NotContain("ApplyContentSizeFit(RectOf(CardAlpha)");
+        viewFile.Content.Should().NotContain("ApplyContentSizeFit(RectOf(CardBravo)");
     }
 
     [Fact]
@@ -328,6 +510,62 @@ public sealed class UGuiGeneratorTests
         var viewFile = result.Files.First(f => f.Path == "AutoHeightHudView.ugui.cs");
 
         viewFile.Content.Should().Contain("ApplyContentSizeFit(Root, horizontal: false, vertical: true);");
+    }
+
+    [Fact]
+    public void Generate_AbsoluteOverlayText_WithAutoSize_UsesContentHugWithoutRejoiningLayoutFlow()
+    {
+        var doc = new HudDocument
+        {
+            Name = "OverlayTextHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "progress",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Width = Dimension.Pixels(540),
+                            Height = Dimension.Pixels(22)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "progressText",
+                                Type = ComponentType.Label,
+                                Layout = new LayoutSpec
+                                {
+                                    Left = Dimension.Pixels(12),
+                                    Top = Dimension.Pixels(4)
+                                },
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Press Start 2P",
+                                    FontSize = 9
+                                },
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["text"] = "RESPONSE WINDOW 58%"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "OverlayTextHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(ProgressText), width: null, height: null, left: 12f, top: 4f, absolute: true);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(ProgressText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(ProgressText), horizontal: true, vertical: true);");
     }
 
     [Fact]
@@ -524,8 +762,8 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
         var viewFile = result.Files.First(f => f.Path == "PrefabHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("public static PrefabHudView Bind(RectTransform root, IPrefabHudViewModel? viewModel = null) => new(root, viewModel);");
-        viewFile.Content.Should().Contain("private PrefabHudView(RectTransform root, IPrefabHudViewModel? viewModel)");
+        viewFile.Content.Should().Contain("public static PrefabHudView Bind(RectTransform root, IPrefabHudViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);");
+        viewFile.Content.Should().Contain("private PrefabHudView(RectTransform root, IPrefabHudViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)");
         viewFile.Content.Should().Contain("Title = RequireComponent<Text>(Root, \"Title\");");
         viewFile.Content.Should().Contain("private static RectTransform RequireRect(Transform root,string path)");
         viewFile.Content.Should().Contain("private static T RequireComponent<T>(Transform root,string path) where T : Component");
@@ -1203,5 +1441,64 @@ public sealed class UGuiGeneratorTests
         var viewFile = result.Files.First(f => f.Path == "PreferredSizeHudView.ugui.cs");
 
         viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(Card), ignoreLayout: false, preferredWidth: 100f, preferredHeight: 95f, flexibleWidth: null, flexibleHeight: null);");
+    }
+
+    private static ComponentNode CreateSyntheticCandidateCard(string cardId, double left, double top)
+    {
+        return new ComponentNode
+        {
+            Id = cardId,
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Horizontal,
+                Gap = new Spacing(8),
+                Padding = new Spacing(6),
+                Width = Dimension.Pixels(220),
+                Height = Dimension.Pixels(60)
+            },
+            Style = new StyleSpec
+            {
+                Background = Color.Parse("#101820"),
+                Border = new BorderSpec { Style = BorderStyle.Solid, Color = Color.Parse("#F5E6A8"), Width = 1 }
+            },
+            InstanceOverrides = new Dictionary<string, object?>
+            {
+                [BoomHudMetadataKeys.OriginalPencilId] = cardId,
+                [BoomHudMetadataKeys.PencilLeft] = left,
+                [BoomHudMetadataKeys.PencilTop] = top
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = cardId + "-title",
+                    Type = ComponentType.Label,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "QUEST"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Press Start 2P",
+                        FontSize = 12
+                    }
+                },
+                new ComponentNode
+                {
+                    Id = cardId + "-icon",
+                    Type = ComponentType.Icon,
+                    Properties = new Dictionary<string, BindableValue<object?>>
+                    {
+                        ["Text"] = "shield"
+                    },
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Lucide",
+                        FontSize = 18
+                    }
+                }
+            ]
+        };
     }
 }

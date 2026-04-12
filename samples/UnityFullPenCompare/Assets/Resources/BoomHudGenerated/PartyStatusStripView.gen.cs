@@ -18,6 +18,7 @@ namespace Generated.Hud
 public sealed class PartyStatusStripView
 {
     private readonly IPartyStatusStripViewModel? _initialViewModel = null;
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IPartyStatusStripViewModel? _viewModel;
 
     public VisualElement Root { get; }
@@ -27,11 +28,6 @@ public sealed class PartyStatusStripView
     public VisualElement MemberRow { get; }
     public VisualElement MemberA { get; }
     public VisualElement HeroRow { get; }
-    public VisualElement Portrait { get; }
-    public Label RoleIcon { get; }
-    public VisualElement Identity { get; }
-    public Label MemberName { get; }
-    public Label MemberRole { get; }
     public VisualElement HpBar { get; }
     public VisualElement HpFill { get; }
     public Label HpText { get; }
@@ -40,20 +36,11 @@ public sealed class PartyStatusStripView
     public Label MpText { get; }
     public VisualElement StatusRow { get; }
     public VisualElement StatusBuff1 { get; }
-    public Label BuffIcon1 { get; }
     public VisualElement StatusBuff2 { get; }
-    public Label BuffIcon2 { get; }
     public VisualElement StatusBuff3 { get; }
-    public Label BuffIcon3 { get; }
     public VisualElement StatusBuff4 { get; }
-    public Label BuffIcon4 { get; }
     public VisualElement MemberB { get; }
     public VisualElement HeroRow2 { get; }
-    public VisualElement Portrait2 { get; }
-    public Label RoleIcon2 { get; }
-    public VisualElement Identity2 { get; }
-    public Label MemberName2 { get; }
-    public Label MemberRole2 { get; }
     public VisualElement HpBar2 { get; }
     public VisualElement HpFill2 { get; }
     public Label HpText2 { get; }
@@ -62,20 +49,11 @@ public sealed class PartyStatusStripView
     public Label MpText2 { get; }
     public VisualElement StatusRow2 { get; }
     public VisualElement StatusBuff12 { get; }
-    public Label BuffIcon12 { get; }
     public VisualElement StatusBuff22 { get; }
-    public Label BuffIcon22 { get; }
     public VisualElement StatusBuff32 { get; }
-    public Label BuffIcon32 { get; }
     public VisualElement StatusBuff42 { get; }
-    public Label BuffIcon42 { get; }
     public VisualElement MemberC { get; }
     public VisualElement HeroRow3 { get; }
-    public VisualElement Portrait3 { get; }
-    public Label RoleIcon3 { get; }
-    public VisualElement Identity3 { get; }
-    public Label MemberName3 { get; }
-    public Label MemberRole3 { get; }
     public VisualElement HpBar3 { get; }
     public VisualElement HpFill3 { get; }
     public Label HpText3 { get; }
@@ -84,13 +62,24 @@ public sealed class PartyStatusStripView
     public Label MpText3 { get; }
     public VisualElement StatusRow3 { get; }
     public VisualElement StatusBuff13 { get; }
-    public Label BuffIcon13 { get; }
     public VisualElement StatusBuff23 { get; }
-    public Label BuffIcon23 { get; }
     public VisualElement StatusBuff33 { get; }
-    public Label BuffIcon33 { get; }
     public VisualElement StatusBuff43 { get; }
-    public Label BuffIcon43 { get; }
+    private readonly SyntheticContainerAF9ECAF6View? _heroRowComponent;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff1Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff2Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff3Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff4Component;
+    private readonly SyntheticContainerAF9ECAF6View? _heroRow2Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff12Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff22Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff32Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff42Component;
+    private readonly SyntheticContainerAF9ECAF6View? _heroRow3Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff13Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff23Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff33Component;
+    private readonly SyntheticContainerB978BB0BView? _statusBuff43Component;
 
     public IPartyStatusStripViewModel? ViewModel
     {
@@ -103,6 +92,7 @@ public sealed class PartyStatusStripView
             }
 
             _viewModel = value;
+            ApplyComponentViewModels();
 
             if (_viewModel != null)
             {
@@ -113,20 +103,18 @@ public sealed class PartyStatusStripView
         }
     }
 
-    public PartyStatusStripView(VisualElement root)
+    public PartyStatusStripView(VisualElement root, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
         Root = root as VisualElement ?? throw new ArgumentException("Expected root element type VisualElement.", nameof(root));
+        _componentOverrides = componentOverrides;
         Header = Root.Q<VisualElement>("Header") ?? throw new InvalidOperationException("Could not find generated element 'Header'.");
         AreaName = Root.Q<Label>("AreaName") ?? throw new InvalidOperationException("Could not find generated element 'AreaName'.");
         EncounterState = Root.Q<Label>("EncounterState") ?? throw new InvalidOperationException("Could not find generated element 'EncounterState'.");
         MemberRow = Root.Q<VisualElement>("MemberRow") ?? throw new InvalidOperationException("Could not find generated element 'MemberRow'.");
         MemberA = Root.Q<VisualElement>("MemberA") ?? throw new InvalidOperationException("Could not find generated element 'MemberA'.");
-        HeroRow = Root.Q<VisualElement>("HeroRow") ?? throw new InvalidOperationException("Could not find generated element 'HeroRow'.");
-        Portrait = Root.Q<VisualElement>("Portrait") ?? throw new InvalidOperationException("Could not find generated element 'Portrait'.");
-        RoleIcon = Root.Q<Label>("RoleIcon") ?? throw new InvalidOperationException("Could not find generated element 'RoleIcon'.");
-        Identity = Root.Q<VisualElement>("Identity") ?? throw new InvalidOperationException("Could not find generated element 'Identity'.");
-        MemberName = Root.Q<Label>("MemberName") ?? throw new InvalidOperationException("Could not find generated element 'MemberName'.");
-        MemberRole = Root.Q<Label>("MemberRole") ?? throw new InvalidOperationException("Could not find generated element 'MemberRole'.");
+        var heroRowPlaceholder = Root.Q<VisualElement>("HeroRow") ?? throw new InvalidOperationException("Could not find generated component placeholder 'HeroRow'.");
+        _heroRowComponent = SyntheticContainerAF9ECAF6View.Attach(heroRowPlaceholder, null);
+        HeroRow = _heroRowComponent.Root;
         HpBar = Root.Q<VisualElement>("HpBar") ?? throw new InvalidOperationException("Could not find generated element 'HpBar'.");
         HpFill = Root.Q<VisualElement>("HpFill") ?? throw new InvalidOperationException("Could not find generated element 'HpFill'.");
         HpText = Root.Q<Label>("HpText") ?? throw new InvalidOperationException("Could not find generated element 'HpText'.");
@@ -134,21 +122,54 @@ public sealed class PartyStatusStripView
         MpFill = Root.Q<VisualElement>("MpFill") ?? throw new InvalidOperationException("Could not find generated element 'MpFill'.");
         MpText = Root.Q<Label>("MpText") ?? throw new InvalidOperationException("Could not find generated element 'MpText'.");
         StatusRow = Root.Q<VisualElement>("StatusRow") ?? throw new InvalidOperationException("Could not find generated element 'StatusRow'.");
-        StatusBuff1 = Root.Q<VisualElement>("StatusBuff1") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff1'.");
-        BuffIcon1 = Root.Q<Label>("BuffIcon1") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon1'.");
-        StatusBuff2 = Root.Q<VisualElement>("StatusBuff2") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff2'.");
-        BuffIcon2 = Root.Q<Label>("BuffIcon2") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon2'.");
-        StatusBuff3 = Root.Q<VisualElement>("StatusBuff3") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff3'.");
-        BuffIcon3 = Root.Q<Label>("BuffIcon3") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon3'.");
-        StatusBuff4 = Root.Q<VisualElement>("StatusBuff4") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff4'.");
-        BuffIcon4 = Root.Q<Label>("BuffIcon4") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon4'.");
+        var statusBuff1Placeholder = Root.Q<VisualElement>("StatusBuff1") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff1'.");
+        _statusBuff1Component = SyntheticContainerB978BB0BView.Attach(statusBuff1Placeholder, null);
+        StatusBuff1 = _statusBuff1Component.Root;
+        var statusBuff2Placeholder = Root.Q<VisualElement>("StatusBuff2") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff2'.");
+        _statusBuff2Component = SyntheticContainerB978BB0BView.Attach(statusBuff2Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            }
+        });
+        StatusBuff2 = _statusBuff2Component.Root;
+        var statusBuff3Placeholder = Root.Q<VisualElement>("StatusBuff3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff3'.");
+        _statusBuff3Component = SyntheticContainerB978BB0BView.Attach(statusBuff3Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "cross"
+            }
+        });
+        StatusBuff3 = _statusBuff3Component.Root;
+        var statusBuff4Placeholder = Root.Q<VisualElement>("StatusBuff4") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff4'.");
+        _statusBuff4Component = SyntheticContainerB978BB0BView.Attach(statusBuff4Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff4 = _statusBuff4Component.Root;
         MemberB = Root.Q<VisualElement>("MemberB") ?? throw new InvalidOperationException("Could not find generated element 'MemberB'.");
-        HeroRow2 = Root.Q<VisualElement>("HeroRow2") ?? throw new InvalidOperationException("Could not find generated element 'HeroRow2'.");
-        Portrait2 = Root.Q<VisualElement>("Portrait2") ?? throw new InvalidOperationException("Could not find generated element 'Portrait2'.");
-        RoleIcon2 = Root.Q<Label>("RoleIcon2") ?? throw new InvalidOperationException("Could not find generated element 'RoleIcon2'.");
-        Identity2 = Root.Q<VisualElement>("Identity2") ?? throw new InvalidOperationException("Could not find generated element 'Identity2'.");
-        MemberName2 = Root.Q<Label>("MemberName2") ?? throw new InvalidOperationException("Could not find generated element 'MemberName2'.");
-        MemberRole2 = Root.Q<Label>("MemberRole2") ?? throw new InvalidOperationException("Could not find generated element 'MemberRole2'.");
+        var heroRow2Placeholder = Root.Q<VisualElement>("HeroRow2") ?? throw new InvalidOperationException("Could not find generated component placeholder 'HeroRow2'.");
+        _heroRow2Component = SyntheticContainerAF9ECAF6View.Attach(heroRow2Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "sparkles"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Lyra"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Arcane Control"
+            }
+        });
+        HeroRow2 = _heroRow2Component.Root;
         HpBar2 = Root.Q<VisualElement>("HpBar2") ?? throw new InvalidOperationException("Could not find generated element 'HpBar2'.");
         HpFill2 = Root.Q<VisualElement>("HpFill2") ?? throw new InvalidOperationException("Could not find generated element 'HpFill2'.");
         HpText2 = Root.Q<Label>("HpText2") ?? throw new InvalidOperationException("Could not find generated element 'HpText2'.");
@@ -156,21 +177,54 @@ public sealed class PartyStatusStripView
         MpFill2 = Root.Q<VisualElement>("MpFill2") ?? throw new InvalidOperationException("Could not find generated element 'MpFill2'.");
         MpText2 = Root.Q<Label>("MpText2") ?? throw new InvalidOperationException("Could not find generated element 'MpText2'.");
         StatusRow2 = Root.Q<VisualElement>("StatusRow2") ?? throw new InvalidOperationException("Could not find generated element 'StatusRow2'.");
-        StatusBuff12 = Root.Q<VisualElement>("StatusBuff12") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff12'.");
-        BuffIcon12 = Root.Q<Label>("BuffIcon12") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon12'.");
-        StatusBuff22 = Root.Q<VisualElement>("StatusBuff22") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff22'.");
-        BuffIcon22 = Root.Q<Label>("BuffIcon22") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon22'.");
-        StatusBuff32 = Root.Q<VisualElement>("StatusBuff32") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff32'.");
-        BuffIcon32 = Root.Q<Label>("BuffIcon32") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon32'.");
-        StatusBuff42 = Root.Q<VisualElement>("StatusBuff42") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff42'.");
-        BuffIcon42 = Root.Q<Label>("BuffIcon42") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon42'.");
+        var statusBuff12Placeholder = Root.Q<VisualElement>("StatusBuff12") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff12'.");
+        _statusBuff12Component = SyntheticContainerB978BB0BView.Attach(statusBuff12Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "wand-sparkles"
+            }
+        });
+        StatusBuff12 = _statusBuff12Component.Root;
+        var statusBuff22Placeholder = Root.Q<VisualElement>("StatusBuff22") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff22'.");
+        _statusBuff22Component = SyntheticContainerB978BB0BView.Attach(statusBuff22Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flask-conical"
+            }
+        });
+        StatusBuff22 = _statusBuff22Component.Root;
+        var statusBuff32Placeholder = Root.Q<VisualElement>("StatusBuff32") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff32'.");
+        _statusBuff32Component = SyntheticContainerB978BB0BView.Attach(statusBuff32Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff32 = _statusBuff32Component.Root;
+        var statusBuff42Placeholder = Root.Q<VisualElement>("StatusBuff42") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff42'.");
+        _statusBuff42Component = SyntheticContainerB978BB0BView.Attach(statusBuff42Placeholder, null);
+        StatusBuff42 = _statusBuff42Component.Root;
         MemberC = Root.Q<VisualElement>("MemberC") ?? throw new InvalidOperationException("Could not find generated element 'MemberC'.");
-        HeroRow3 = Root.Q<VisualElement>("HeroRow3") ?? throw new InvalidOperationException("Could not find generated element 'HeroRow3'.");
-        Portrait3 = Root.Q<VisualElement>("Portrait3") ?? throw new InvalidOperationException("Could not find generated element 'Portrait3'.");
-        RoleIcon3 = Root.Q<Label>("RoleIcon3") ?? throw new InvalidOperationException("Could not find generated element 'RoleIcon3'.");
-        Identity3 = Root.Q<VisualElement>("Identity3") ?? throw new InvalidOperationException("Could not find generated element 'Identity3'.");
-        MemberName3 = Root.Q<Label>("MemberName3") ?? throw new InvalidOperationException("Could not find generated element 'MemberName3'.");
-        MemberRole3 = Root.Q<Label>("MemberRole3") ?? throw new InvalidOperationException("Could not find generated element 'MemberRole3'.");
+        var heroRow3Placeholder = Root.Q<VisualElement>("HeroRow3") ?? throw new InvalidOperationException("Could not find generated component placeholder 'HeroRow3'.");
+        _heroRow3Component = SyntheticContainerAF9ECAF6View.Attach(heroRow3Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            },
+            ["$/1/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Serin"
+            },
+            ["$/1/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "Guardian Support"
+            }
+        });
+        HeroRow3 = _heroRow3Component.Root;
         HpBar3 = Root.Q<VisualElement>("HpBar3") ?? throw new InvalidOperationException("Could not find generated element 'HpBar3'.");
         HpFill3 = Root.Q<VisualElement>("HpFill3") ?? throw new InvalidOperationException("Could not find generated element 'HpFill3'.");
         HpText3 = Root.Q<Label>("HpText3") ?? throw new InvalidOperationException("Could not find generated element 'HpText3'.");
@@ -178,16 +232,39 @@ public sealed class PartyStatusStripView
         MpFill3 = Root.Q<VisualElement>("MpFill3") ?? throw new InvalidOperationException("Could not find generated element 'MpFill3'.");
         MpText3 = Root.Q<Label>("MpText3") ?? throw new InvalidOperationException("Could not find generated element 'MpText3'.");
         StatusRow3 = Root.Q<VisualElement>("StatusRow3") ?? throw new InvalidOperationException("Could not find generated element 'StatusRow3'.");
-        StatusBuff13 = Root.Q<VisualElement>("StatusBuff13") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff13'.");
-        BuffIcon13 = Root.Q<Label>("BuffIcon13") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon13'.");
-        StatusBuff23 = Root.Q<VisualElement>("StatusBuff23") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff23'.");
-        BuffIcon23 = Root.Q<Label>("BuffIcon23") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon23'.");
-        StatusBuff33 = Root.Q<VisualElement>("StatusBuff33") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff33'.");
-        BuffIcon33 = Root.Q<Label>("BuffIcon33") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon33'.");
-        StatusBuff43 = Root.Q<VisualElement>("StatusBuff43") ?? throw new InvalidOperationException("Could not find generated element 'StatusBuff43'.");
-        BuffIcon43 = Root.Q<Label>("BuffIcon43") ?? throw new InvalidOperationException("Could not find generated element 'BuffIcon43'.");
+        var statusBuff13Placeholder = Root.Q<VisualElement>("StatusBuff13") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff13'.");
+        _statusBuff13Component = SyntheticContainerB978BB0BView.Attach(statusBuff13Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "cross"
+            }
+        });
+        StatusBuff13 = _statusBuff13Component.Root;
+        var statusBuff23Placeholder = Root.Q<VisualElement>("StatusBuff23") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff23'.");
+        _statusBuff23Component = SyntheticContainerB978BB0BView.Attach(statusBuff23Placeholder, null);
+        StatusBuff23 = _statusBuff23Component.Root;
+        var statusBuff33Placeholder = Root.Q<VisualElement>("StatusBuff33") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff33'.");
+        _statusBuff33Component = SyntheticContainerB978BB0BView.Attach(statusBuff33Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        StatusBuff33 = _statusBuff33Component.Root;
+        var statusBuff43Placeholder = Root.Q<VisualElement>("StatusBuff43") ?? throw new InvalidOperationException("Could not find generated component placeholder 'StatusBuff43'.");
+        _statusBuff43Component = SyntheticContainerB978BB0BView.Attach(statusBuff43Placeholder, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            }
+        });
+        StatusBuff43 = _statusBuff43Component.Root;
 
         ApplyStaticValues();
+        ApplyInstanceOverrides();
         ViewModel = _initialViewModel;
     }
 
@@ -198,6 +275,55 @@ public sealed class PartyStatusStripView
             return;
         }
 
+    }
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null)
+        {
+            return;
+        }
+
+        if (TryGetComponentOverrideValue("$/0/0", "Text", out var componentOverrideValue0))
+        {
+            AreaName.text = AsString(componentOverrideValue0);
+            ApplyTextLabelStyle(AreaName, false);
+        }
+        if (TryGetComponentOverrideValue("$/0/1", "Text", out var componentOverrideValue1))
+        {
+            EncounterState.text = AsString(componentOverrideValue1);
+            ApplyTextLabelStyle(EncounterState, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/0/1/1", "Text", out var componentOverrideValue2))
+        {
+            HpText.text = AsString(componentOverrideValue2);
+            ApplyTextLabelStyle(HpText, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/0/2/1", "Text", out var componentOverrideValue3))
+        {
+            MpText.text = AsString(componentOverrideValue3);
+            ApplyTextLabelStyle(MpText, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/1/1", "Text", out var componentOverrideValue4))
+        {
+            HpText2.text = AsString(componentOverrideValue4);
+            ApplyTextLabelStyle(HpText2, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/1/2/1", "Text", out var componentOverrideValue5))
+        {
+            MpText2.text = AsString(componentOverrideValue5);
+            ApplyTextLabelStyle(MpText2, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/2/1/1", "Text", out var componentOverrideValue6))
+        {
+            HpText3.text = AsString(componentOverrideValue6);
+            ApplyTextLabelStyle(HpText3, false);
+        }
+        if (TryGetComponentOverrideValue("$/1/2/2/1", "Text", out var componentOverrideValue7))
+        {
+            MpText3.text = AsString(componentOverrideValue7);
+            ApplyTextLabelStyle(MpText3, false);
+        }
     }
 
     private void ApplyStaticValues()
@@ -316,126 +442,8 @@ public sealed class PartyStatusStripView
         MemberA.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         MemberA.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         MemberA.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        HeroRow.style.flexDirection = ParseFlexDirection("row");
-        HeroRow.style.alignSelf = ParseAlign("stretch");
-        HeroRow.style.height = ParseStyleLength("76px");
-        HeroRow.style.marginTop = ParseStyleFloat("0px");
-        HeroRow.style.marginRight = ParseStyleFloat("0px");
-        HeroRow.style.marginBottom = ParseStyleFloat("0px");
-        HeroRow.style.marginLeft = ParseStyleFloat("0px");
-        HeroRow.style.paddingTop = ParseStyleFloat("0px");
-        HeroRow.style.paddingRight = ParseStyleFloat("0px");
-        HeroRow.style.paddingBottom = ParseStyleFloat("0px");
-        HeroRow.style.paddingLeft = ParseStyleFloat("0px");
-        HeroRow.style.alignItems = ParseAlign("flex-start");
-        HeroRow.style.justifyContent = ParseJustify("flex-start");
         HeroRow.style.display = DisplayStyle.Flex;
         HeroRow.SetEnabled(true);
-        HeroRow.style.color = ParseStyleColor("#101010", null);
-        HeroRow.style.backgroundColor = ParseStyleColor("#101010", null);
-        Portrait.style.flexDirection = ParseFlexDirection("column");
-        Portrait.style.width = ParseStyleLength("76px");
-        Portrait.style.height = ParseStyleLength("76px");
-        Portrait.style.marginTop = ParseStyleFloat("0px");
-        Portrait.style.marginRight = ParseStyleFloat("0px");
-        Portrait.style.marginBottom = ParseStyleFloat("0px");
-        Portrait.style.marginLeft = ParseStyleFloat("0px");
-        Portrait.style.paddingTop = ParseStyleFloat("0px");
-        Portrait.style.paddingRight = ParseStyleFloat("0px");
-        Portrait.style.paddingBottom = ParseStyleFloat("0px");
-        Portrait.style.paddingLeft = ParseStyleFloat("0px");
-        Portrait.style.alignItems = ParseAlign("flex-start");
-        Portrait.style.justifyContent = ParseJustify("flex-start");
-        Portrait.style.display = DisplayStyle.Flex;
-        Portrait.SetEnabled(true);
-        Portrait.style.color = ParseStyleColor("#000000", null);
-        Portrait.style.backgroundColor = ParseStyleColor("#000000", null);
-        Portrait.style.borderLeftWidth = 4f;
-        Portrait.style.borderRightWidth = 4f;
-        Portrait.style.borderTopWidth = 4f;
-        Portrait.style.borderBottomWidth = 4f;
-        Portrait.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        Portrait.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        Portrait.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        Portrait.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        RoleIcon.style.flexDirection = ParseFlexDirection("column");
-        RoleIcon.style.position = ParsePosition("absolute");
-        RoleIcon.style.left = ParseStyleLength("18px");
-        RoleIcon.style.top = ParseStyleLength("18px");
-        RoleIcon.style.width = ParseStyleLength("40px");
-        RoleIcon.style.height = ParseStyleLength("40px");
-        RoleIcon.style.marginTop = ParseStyleFloat("0px");
-        RoleIcon.style.marginRight = ParseStyleFloat("0px");
-        RoleIcon.style.marginBottom = ParseStyleFloat("0px");
-        RoleIcon.style.marginLeft = ParseStyleFloat("0px");
-        RoleIcon.style.paddingTop = ParseStyleFloat("0px");
-        RoleIcon.style.paddingRight = ParseStyleFloat("0px");
-        RoleIcon.style.paddingBottom = ParseStyleFloat("0px");
-        RoleIcon.style.paddingLeft = ParseStyleFloat("0px");
-        RoleIcon.style.alignItems = ParseAlign("flex-start");
-        RoleIcon.style.justifyContent = ParseJustify("flex-start");
-        RoleIcon.text = ResolveIconText("sword", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon, 40f, 40f, 0f, true, "fit-box", 0f);
-        RoleIcon.style.display = DisplayStyle.Flex;
-        RoleIcon.SetEnabled(true);
-        ApplyFontFamily(RoleIcon, "lucide", 40f);
-        RoleIcon.style.color = ParseStyleColor("#FFFFFF", null);
-        RoleIcon.style.fontSize = 40f;
-        Identity.style.flexDirection = ParseFlexDirection("column");
-        Identity.style.flexGrow = ParseStyleFloat("1");
-        Identity.style.alignSelf = ParseAlign("stretch");
-        Identity.style.marginTop = ParseStyleFloat("0px");
-        Identity.style.marginRight = ParseStyleFloat("0px");
-        Identity.style.marginBottom = ParseStyleFloat("0px");
-        Identity.style.marginLeft = ParseStyleFloat("12px");
-        Identity.style.paddingTop = ParseStyleFloat("0px");
-        Identity.style.paddingRight = ParseStyleFloat("0px");
-        Identity.style.paddingBottom = ParseStyleFloat("0px");
-        Identity.style.paddingLeft = ParseStyleFloat("0px");
-        Identity.style.alignItems = ParseAlign("flex-start");
-        Identity.style.justifyContent = ParseJustify("flex-start");
-        Identity.style.display = DisplayStyle.Flex;
-        Identity.SetEnabled(true);
-        Identity.style.color = ParseStyleColor("#101010", null);
-        Identity.style.backgroundColor = ParseStyleColor("#101010", null);
-        MemberName.style.flexDirection = ParseFlexDirection("column");
-        MemberName.style.marginTop = ParseStyleFloat("0px");
-        MemberName.style.marginRight = ParseStyleFloat("0px");
-        MemberName.style.marginBottom = ParseStyleFloat("0px");
-        MemberName.style.marginLeft = ParseStyleFloat("0px");
-        MemberName.style.paddingTop = ParseStyleFloat("0px");
-        MemberName.style.paddingRight = ParseStyleFloat("0px");
-        MemberName.style.paddingBottom = ParseStyleFloat("0px");
-        MemberName.style.paddingLeft = ParseStyleFloat("0px");
-        MemberName.style.alignItems = ParseAlign("flex-start");
-        MemberName.style.justifyContent = ParseJustify("flex-start");
-        MemberName.text = "Aelric";
-        ApplyTextLabelStyle(MemberName, false);
-        MemberName.style.display = DisplayStyle.Flex;
-        MemberName.SetEnabled(true);
-        ApplyFontFamily(MemberName, "Press Start 2P", 14f);
-        MemberName.style.color = ParseStyleColor("#FFFFFF", null);
-        MemberName.style.fontSize = 14f;
-        MemberName.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        MemberRole.style.flexDirection = ParseFlexDirection("column");
-        MemberRole.style.marginTop = ParseStyleFloat("8px");
-        MemberRole.style.marginRight = ParseStyleFloat("0px");
-        MemberRole.style.marginBottom = ParseStyleFloat("0px");
-        MemberRole.style.marginLeft = ParseStyleFloat("0px");
-        MemberRole.style.paddingTop = ParseStyleFloat("0px");
-        MemberRole.style.paddingRight = ParseStyleFloat("0px");
-        MemberRole.style.paddingBottom = ParseStyleFloat("0px");
-        MemberRole.style.paddingLeft = ParseStyleFloat("0px");
-        MemberRole.style.alignItems = ParseAlign("flex-start");
-        MemberRole.style.justifyContent = ParseJustify("flex-start");
-        MemberRole.text = "Frontline Vanguard";
-        ApplyTextLabelStyle(MemberRole, false);
-        MemberRole.style.display = DisplayStyle.Flex;
-        MemberRole.SetEnabled(true);
-        ApplyFontFamily(MemberRole, "Press Start 2P", 9f);
-        MemberRole.style.color = ParseStyleColor("#AAAAAA", null);
-        MemberRole.style.fontSize = 9f;
-        MemberRole.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
         HpBar.style.flexDirection = ParseFlexDirection("column");
         HpBar.style.alignSelf = ParseAlign("stretch");
         HpBar.style.height = ParseStyleLength("22px");
@@ -461,8 +469,8 @@ public sealed class PartyStatusStripView
         HpBar.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         HpBar.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         HpBar.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        HpFill.style.flexDirection = ParseFlexDirection("column");
         HpFill.style.position = ParsePosition("absolute");
+        HpFill.style.flexDirection = ParseFlexDirection("column");
         HpFill.style.width = ParseStyleLength("282px");
         HpFill.style.height = ParseStyleLength("18px");
         HpFill.style.marginTop = ParseStyleFloat("0px");
@@ -479,10 +487,10 @@ public sealed class PartyStatusStripView
         HpFill.SetEnabled(true);
         HpFill.style.color = ParseStyleColor("#D44A4A", null);
         HpFill.style.backgroundColor = ParseStyleColor("#D44A4A", null);
-        HpText.style.flexDirection = ParseFlexDirection("column");
         HpText.style.position = ParsePosition("absolute");
         HpText.style.left = ParseStyleLength("12px");
         HpText.style.top = ParseStyleLength("4px");
+        HpText.style.flexDirection = ParseFlexDirection("column");
         HpText.style.marginTop = ParseStyleFloat("0px");
         HpText.style.marginRight = ParseStyleFloat("0px");
         HpText.style.marginBottom = ParseStyleFloat("0px");
@@ -526,8 +534,8 @@ public sealed class PartyStatusStripView
         MpBar.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         MpBar.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         MpBar.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        MpFill.style.flexDirection = ParseFlexDirection("column");
         MpFill.style.position = ParsePosition("absolute");
+        MpFill.style.flexDirection = ParseFlexDirection("column");
         MpFill.style.width = ParseStyleLength("198px");
         MpFill.style.height = ParseStyleLength("18px");
         MpFill.style.marginTop = ParseStyleFloat("0px");
@@ -544,10 +552,10 @@ public sealed class PartyStatusStripView
         MpFill.SetEnabled(true);
         MpFill.style.color = ParseStyleColor("#4A78D4", null);
         MpFill.style.backgroundColor = ParseStyleColor("#4A78D4", null);
-        MpText.style.flexDirection = ParseFlexDirection("column");
         MpText.style.position = ParsePosition("absolute");
         MpText.style.left = ParseStyleLength("12px");
         MpText.style.top = ParseStyleLength("4px");
+        MpText.style.flexDirection = ParseFlexDirection("column");
         MpText.style.marginTop = ParseStyleFloat("0px");
         MpText.style.marginRight = ParseStyleFloat("0px");
         MpText.style.marginBottom = ParseStyleFloat("0px");
@@ -583,186 +591,14 @@ public sealed class PartyStatusStripView
         StatusRow.SetEnabled(true);
         StatusRow.style.color = ParseStyleColor("#101010", null);
         StatusRow.style.backgroundColor = ParseStyleColor("#101010", null);
-        StatusBuff1.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff1.style.width = ParseStyleLength("56px");
-        StatusBuff1.style.height = ParseStyleLength("56px");
-        StatusBuff1.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff1.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff1.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff1.style.marginLeft = ParseStyleFloat("0px");
-        StatusBuff1.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff1.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff1.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff1.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff1.style.alignItems = ParseAlign("center");
-        StatusBuff1.style.justifyContent = ParseJustify("center");
         StatusBuff1.style.display = DisplayStyle.Flex;
         StatusBuff1.SetEnabled(true);
-        StatusBuff1.style.color = ParseStyleColor("#000000", null);
-        StatusBuff1.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff1.style.borderLeftWidth = 2f;
-        StatusBuff1.style.borderRightWidth = 2f;
-        StatusBuff1.style.borderTopWidth = 2f;
-        StatusBuff1.style.borderBottomWidth = 2f;
-        StatusBuff1.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff1.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff1.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff1.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon1.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon1.style.width = ParseStyleLength("24px");
-        BuffIcon1.style.height = ParseStyleLength("24px");
-        BuffIcon1.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon1.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon1.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon1.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon1.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon1.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon1.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon1.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon1.style.alignItems = ParseAlign("flex-start");
-        BuffIcon1.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon1.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon1, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon1.style.display = DisplayStyle.Flex;
-        BuffIcon1.SetEnabled(true);
-        ApplyFontFamily(BuffIcon1, "lucide", 24f);
-        BuffIcon1.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon1.style.fontSize = 24f;
-        StatusBuff2.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff2.style.width = ParseStyleLength("56px");
-        StatusBuff2.style.height = ParseStyleLength("56px");
-        StatusBuff2.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff2.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff2.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff2.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff2.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff2.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff2.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff2.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff2.style.alignItems = ParseAlign("center");
-        StatusBuff2.style.justifyContent = ParseJustify("center");
         StatusBuff2.style.display = DisplayStyle.Flex;
         StatusBuff2.SetEnabled(true);
-        StatusBuff2.style.color = ParseStyleColor("#000000", null);
-        StatusBuff2.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff2.style.borderLeftWidth = 2f;
-        StatusBuff2.style.borderRightWidth = 2f;
-        StatusBuff2.style.borderTopWidth = 2f;
-        StatusBuff2.style.borderBottomWidth = 2f;
-        StatusBuff2.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff2.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff2.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff2.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon2.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon2.style.width = ParseStyleLength("24px");
-        BuffIcon2.style.height = ParseStyleLength("24px");
-        BuffIcon2.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon2.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon2.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon2.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon2.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon2.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon2.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon2.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon2.style.alignItems = ParseAlign("flex-start");
-        BuffIcon2.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon2.text = ResolveIconText("flame", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon2, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon2.style.display = DisplayStyle.Flex;
-        BuffIcon2.SetEnabled(true);
-        ApplyFontFamily(BuffIcon2, "lucide", 24f);
-        BuffIcon2.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon2.style.fontSize = 24f;
-        StatusBuff3.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff3.style.width = ParseStyleLength("56px");
-        StatusBuff3.style.height = ParseStyleLength("56px");
-        StatusBuff3.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff3.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff3.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff3.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff3.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff3.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff3.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff3.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff3.style.alignItems = ParseAlign("center");
-        StatusBuff3.style.justifyContent = ParseJustify("center");
         StatusBuff3.style.display = DisplayStyle.Flex;
         StatusBuff3.SetEnabled(true);
-        StatusBuff3.style.color = ParseStyleColor("#000000", null);
-        StatusBuff3.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff3.style.borderLeftWidth = 2f;
-        StatusBuff3.style.borderRightWidth = 2f;
-        StatusBuff3.style.borderTopWidth = 2f;
-        StatusBuff3.style.borderBottomWidth = 2f;
-        StatusBuff3.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff3.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff3.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff3.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon3.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon3.style.width = ParseStyleLength("24px");
-        BuffIcon3.style.height = ParseStyleLength("24px");
-        BuffIcon3.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon3.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon3.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon3.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon3.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon3.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon3.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon3.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon3.style.alignItems = ParseAlign("flex-start");
-        BuffIcon3.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon3.text = ResolveIconText("cross", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon3, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon3.style.display = DisplayStyle.Flex;
-        BuffIcon3.SetEnabled(true);
-        ApplyFontFamily(BuffIcon3, "lucide", 24f);
-        BuffIcon3.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon3.style.fontSize = 24f;
-        StatusBuff4.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff4.style.width = ParseStyleLength("56px");
-        StatusBuff4.style.height = ParseStyleLength("56px");
-        StatusBuff4.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff4.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff4.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff4.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff4.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff4.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff4.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff4.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff4.style.alignItems = ParseAlign("center");
-        StatusBuff4.style.justifyContent = ParseJustify("center");
         StatusBuff4.style.display = DisplayStyle.Flex;
         StatusBuff4.SetEnabled(true);
-        StatusBuff4.style.color = ParseStyleColor("#000000", null);
-        StatusBuff4.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff4.style.borderLeftWidth = 2f;
-        StatusBuff4.style.borderRightWidth = 2f;
-        StatusBuff4.style.borderTopWidth = 2f;
-        StatusBuff4.style.borderBottomWidth = 2f;
-        StatusBuff4.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff4.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff4.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff4.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon4.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon4.style.width = ParseStyleLength("24px");
-        BuffIcon4.style.height = ParseStyleLength("24px");
-        BuffIcon4.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon4.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon4.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon4.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon4.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon4.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon4.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon4.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon4.style.alignItems = ParseAlign("flex-start");
-        BuffIcon4.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon4.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon4, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon4.style.display = DisplayStyle.Flex;
-        BuffIcon4.SetEnabled(true);
-        ApplyFontFamily(BuffIcon4, "lucide", 24f);
-        BuffIcon4.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon4.style.fontSize = 24f;
         MemberB.style.flexDirection = ParseFlexDirection("column");
         MemberB.style.width = ParseStyleLength("400px");
         MemberB.style.alignSelf = ParseAlign("stretch");
@@ -788,126 +624,8 @@ public sealed class PartyStatusStripView
         MemberB.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         MemberB.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         MemberB.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        HeroRow2.style.flexDirection = ParseFlexDirection("row");
-        HeroRow2.style.alignSelf = ParseAlign("stretch");
-        HeroRow2.style.height = ParseStyleLength("76px");
-        HeroRow2.style.marginTop = ParseStyleFloat("0px");
-        HeroRow2.style.marginRight = ParseStyleFloat("0px");
-        HeroRow2.style.marginBottom = ParseStyleFloat("0px");
-        HeroRow2.style.marginLeft = ParseStyleFloat("0px");
-        HeroRow2.style.paddingTop = ParseStyleFloat("0px");
-        HeroRow2.style.paddingRight = ParseStyleFloat("0px");
-        HeroRow2.style.paddingBottom = ParseStyleFloat("0px");
-        HeroRow2.style.paddingLeft = ParseStyleFloat("0px");
-        HeroRow2.style.alignItems = ParseAlign("flex-start");
-        HeroRow2.style.justifyContent = ParseJustify("flex-start");
         HeroRow2.style.display = DisplayStyle.Flex;
         HeroRow2.SetEnabled(true);
-        HeroRow2.style.color = ParseStyleColor("#101010", null);
-        HeroRow2.style.backgroundColor = ParseStyleColor("#101010", null);
-        Portrait2.style.flexDirection = ParseFlexDirection("column");
-        Portrait2.style.width = ParseStyleLength("76px");
-        Portrait2.style.height = ParseStyleLength("76px");
-        Portrait2.style.marginTop = ParseStyleFloat("0px");
-        Portrait2.style.marginRight = ParseStyleFloat("0px");
-        Portrait2.style.marginBottom = ParseStyleFloat("0px");
-        Portrait2.style.marginLeft = ParseStyleFloat("0px");
-        Portrait2.style.paddingTop = ParseStyleFloat("0px");
-        Portrait2.style.paddingRight = ParseStyleFloat("0px");
-        Portrait2.style.paddingBottom = ParseStyleFloat("0px");
-        Portrait2.style.paddingLeft = ParseStyleFloat("0px");
-        Portrait2.style.alignItems = ParseAlign("flex-start");
-        Portrait2.style.justifyContent = ParseJustify("flex-start");
-        Portrait2.style.display = DisplayStyle.Flex;
-        Portrait2.SetEnabled(true);
-        Portrait2.style.color = ParseStyleColor("#000000", null);
-        Portrait2.style.backgroundColor = ParseStyleColor("#000000", null);
-        Portrait2.style.borderLeftWidth = 4f;
-        Portrait2.style.borderRightWidth = 4f;
-        Portrait2.style.borderTopWidth = 4f;
-        Portrait2.style.borderBottomWidth = 4f;
-        Portrait2.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        Portrait2.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        Portrait2.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        Portrait2.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        RoleIcon2.style.flexDirection = ParseFlexDirection("column");
-        RoleIcon2.style.position = ParsePosition("absolute");
-        RoleIcon2.style.left = ParseStyleLength("18px");
-        RoleIcon2.style.top = ParseStyleLength("18px");
-        RoleIcon2.style.width = ParseStyleLength("40px");
-        RoleIcon2.style.height = ParseStyleLength("40px");
-        RoleIcon2.style.marginTop = ParseStyleFloat("0px");
-        RoleIcon2.style.marginRight = ParseStyleFloat("0px");
-        RoleIcon2.style.marginBottom = ParseStyleFloat("0px");
-        RoleIcon2.style.marginLeft = ParseStyleFloat("0px");
-        RoleIcon2.style.paddingTop = ParseStyleFloat("0px");
-        RoleIcon2.style.paddingRight = ParseStyleFloat("0px");
-        RoleIcon2.style.paddingBottom = ParseStyleFloat("0px");
-        RoleIcon2.style.paddingLeft = ParseStyleFloat("0px");
-        RoleIcon2.style.alignItems = ParseAlign("flex-start");
-        RoleIcon2.style.justifyContent = ParseJustify("flex-start");
-        RoleIcon2.text = ResolveIconText("sparkles", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon2, 40f, 40f, 0f, true, "fit-box", 0f);
-        RoleIcon2.style.display = DisplayStyle.Flex;
-        RoleIcon2.SetEnabled(true);
-        ApplyFontFamily(RoleIcon2, "lucide", 40f);
-        RoleIcon2.style.color = ParseStyleColor("#FFFFFF", null);
-        RoleIcon2.style.fontSize = 40f;
-        Identity2.style.flexDirection = ParseFlexDirection("column");
-        Identity2.style.flexGrow = ParseStyleFloat("1");
-        Identity2.style.alignSelf = ParseAlign("stretch");
-        Identity2.style.marginTop = ParseStyleFloat("0px");
-        Identity2.style.marginRight = ParseStyleFloat("0px");
-        Identity2.style.marginBottom = ParseStyleFloat("0px");
-        Identity2.style.marginLeft = ParseStyleFloat("12px");
-        Identity2.style.paddingTop = ParseStyleFloat("0px");
-        Identity2.style.paddingRight = ParseStyleFloat("0px");
-        Identity2.style.paddingBottom = ParseStyleFloat("0px");
-        Identity2.style.paddingLeft = ParseStyleFloat("0px");
-        Identity2.style.alignItems = ParseAlign("flex-start");
-        Identity2.style.justifyContent = ParseJustify("flex-start");
-        Identity2.style.display = DisplayStyle.Flex;
-        Identity2.SetEnabled(true);
-        Identity2.style.color = ParseStyleColor("#101010", null);
-        Identity2.style.backgroundColor = ParseStyleColor("#101010", null);
-        MemberName2.style.flexDirection = ParseFlexDirection("column");
-        MemberName2.style.marginTop = ParseStyleFloat("0px");
-        MemberName2.style.marginRight = ParseStyleFloat("0px");
-        MemberName2.style.marginBottom = ParseStyleFloat("0px");
-        MemberName2.style.marginLeft = ParseStyleFloat("0px");
-        MemberName2.style.paddingTop = ParseStyleFloat("0px");
-        MemberName2.style.paddingRight = ParseStyleFloat("0px");
-        MemberName2.style.paddingBottom = ParseStyleFloat("0px");
-        MemberName2.style.paddingLeft = ParseStyleFloat("0px");
-        MemberName2.style.alignItems = ParseAlign("flex-start");
-        MemberName2.style.justifyContent = ParseJustify("flex-start");
-        MemberName2.text = "Lyra";
-        ApplyTextLabelStyle(MemberName2, false);
-        MemberName2.style.display = DisplayStyle.Flex;
-        MemberName2.SetEnabled(true);
-        ApplyFontFamily(MemberName2, "Press Start 2P", 14f);
-        MemberName2.style.color = ParseStyleColor("#FFFFFF", null);
-        MemberName2.style.fontSize = 14f;
-        MemberName2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        MemberRole2.style.flexDirection = ParseFlexDirection("column");
-        MemberRole2.style.marginTop = ParseStyleFloat("8px");
-        MemberRole2.style.marginRight = ParseStyleFloat("0px");
-        MemberRole2.style.marginBottom = ParseStyleFloat("0px");
-        MemberRole2.style.marginLeft = ParseStyleFloat("0px");
-        MemberRole2.style.paddingTop = ParseStyleFloat("0px");
-        MemberRole2.style.paddingRight = ParseStyleFloat("0px");
-        MemberRole2.style.paddingBottom = ParseStyleFloat("0px");
-        MemberRole2.style.paddingLeft = ParseStyleFloat("0px");
-        MemberRole2.style.alignItems = ParseAlign("flex-start");
-        MemberRole2.style.justifyContent = ParseJustify("flex-start");
-        MemberRole2.text = "Arcane Control";
-        ApplyTextLabelStyle(MemberRole2, false);
-        MemberRole2.style.display = DisplayStyle.Flex;
-        MemberRole2.SetEnabled(true);
-        ApplyFontFamily(MemberRole2, "Press Start 2P", 9f);
-        MemberRole2.style.color = ParseStyleColor("#AAAAAA", null);
-        MemberRole2.style.fontSize = 9f;
-        MemberRole2.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
         HpBar2.style.flexDirection = ParseFlexDirection("column");
         HpBar2.style.alignSelf = ParseAlign("stretch");
         HpBar2.style.height = ParseStyleLength("22px");
@@ -933,8 +651,8 @@ public sealed class PartyStatusStripView
         HpBar2.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         HpBar2.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         HpBar2.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        HpFill2.style.flexDirection = ParseFlexDirection("column");
         HpFill2.style.position = ParsePosition("absolute");
+        HpFill2.style.flexDirection = ParseFlexDirection("column");
         HpFill2.style.width = ParseStyleLength("234px");
         HpFill2.style.height = ParseStyleLength("18px");
         HpFill2.style.marginTop = ParseStyleFloat("0px");
@@ -951,10 +669,10 @@ public sealed class PartyStatusStripView
         HpFill2.SetEnabled(true);
         HpFill2.style.color = ParseStyleColor("#D44A4A", null);
         HpFill2.style.backgroundColor = ParseStyleColor("#D44A4A", null);
-        HpText2.style.flexDirection = ParseFlexDirection("column");
         HpText2.style.position = ParsePosition("absolute");
         HpText2.style.left = ParseStyleLength("12px");
         HpText2.style.top = ParseStyleLength("4px");
+        HpText2.style.flexDirection = ParseFlexDirection("column");
         HpText2.style.marginTop = ParseStyleFloat("0px");
         HpText2.style.marginRight = ParseStyleFloat("0px");
         HpText2.style.marginBottom = ParseStyleFloat("0px");
@@ -998,8 +716,8 @@ public sealed class PartyStatusStripView
         MpBar2.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         MpBar2.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         MpBar2.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        MpFill2.style.flexDirection = ParseFlexDirection("column");
         MpFill2.style.position = ParsePosition("absolute");
+        MpFill2.style.flexDirection = ParseFlexDirection("column");
         MpFill2.style.width = ParseStyleLength("296px");
         MpFill2.style.height = ParseStyleLength("18px");
         MpFill2.style.marginTop = ParseStyleFloat("0px");
@@ -1016,10 +734,10 @@ public sealed class PartyStatusStripView
         MpFill2.SetEnabled(true);
         MpFill2.style.color = ParseStyleColor("#4A78D4", null);
         MpFill2.style.backgroundColor = ParseStyleColor("#4A78D4", null);
-        MpText2.style.flexDirection = ParseFlexDirection("column");
         MpText2.style.position = ParsePosition("absolute");
         MpText2.style.left = ParseStyleLength("12px");
         MpText2.style.top = ParseStyleLength("4px");
+        MpText2.style.flexDirection = ParseFlexDirection("column");
         MpText2.style.marginTop = ParseStyleFloat("0px");
         MpText2.style.marginRight = ParseStyleFloat("0px");
         MpText2.style.marginBottom = ParseStyleFloat("0px");
@@ -1055,186 +773,14 @@ public sealed class PartyStatusStripView
         StatusRow2.SetEnabled(true);
         StatusRow2.style.color = ParseStyleColor("#101010", null);
         StatusRow2.style.backgroundColor = ParseStyleColor("#101010", null);
-        StatusBuff12.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff12.style.width = ParseStyleLength("56px");
-        StatusBuff12.style.height = ParseStyleLength("56px");
-        StatusBuff12.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff12.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff12.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff12.style.marginLeft = ParseStyleFloat("0px");
-        StatusBuff12.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff12.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff12.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff12.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff12.style.alignItems = ParseAlign("center");
-        StatusBuff12.style.justifyContent = ParseJustify("center");
         StatusBuff12.style.display = DisplayStyle.Flex;
         StatusBuff12.SetEnabled(true);
-        StatusBuff12.style.color = ParseStyleColor("#000000", null);
-        StatusBuff12.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff12.style.borderLeftWidth = 2f;
-        StatusBuff12.style.borderRightWidth = 2f;
-        StatusBuff12.style.borderTopWidth = 2f;
-        StatusBuff12.style.borderBottomWidth = 2f;
-        StatusBuff12.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff12.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff12.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff12.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon12.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon12.style.width = ParseStyleLength("24px");
-        BuffIcon12.style.height = ParseStyleLength("24px");
-        BuffIcon12.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon12.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon12.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon12.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon12.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon12.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon12.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon12.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon12.style.alignItems = ParseAlign("flex-start");
-        BuffIcon12.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon12.text = ResolveIconText("wand-sparkles", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon12, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon12.style.display = DisplayStyle.Flex;
-        BuffIcon12.SetEnabled(true);
-        ApplyFontFamily(BuffIcon12, "lucide", 24f);
-        BuffIcon12.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon12.style.fontSize = 24f;
-        StatusBuff22.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff22.style.width = ParseStyleLength("56px");
-        StatusBuff22.style.height = ParseStyleLength("56px");
-        StatusBuff22.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff22.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff22.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff22.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff22.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff22.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff22.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff22.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff22.style.alignItems = ParseAlign("center");
-        StatusBuff22.style.justifyContent = ParseJustify("center");
         StatusBuff22.style.display = DisplayStyle.Flex;
         StatusBuff22.SetEnabled(true);
-        StatusBuff22.style.color = ParseStyleColor("#000000", null);
-        StatusBuff22.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff22.style.borderLeftWidth = 2f;
-        StatusBuff22.style.borderRightWidth = 2f;
-        StatusBuff22.style.borderTopWidth = 2f;
-        StatusBuff22.style.borderBottomWidth = 2f;
-        StatusBuff22.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff22.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff22.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff22.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon22.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon22.style.width = ParseStyleLength("24px");
-        BuffIcon22.style.height = ParseStyleLength("24px");
-        BuffIcon22.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon22.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon22.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon22.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon22.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon22.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon22.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon22.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon22.style.alignItems = ParseAlign("flex-start");
-        BuffIcon22.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon22.text = ResolveIconText("flask-conical", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon22, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon22.style.display = DisplayStyle.Flex;
-        BuffIcon22.SetEnabled(true);
-        ApplyFontFamily(BuffIcon22, "lucide", 24f);
-        BuffIcon22.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon22.style.fontSize = 24f;
-        StatusBuff32.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff32.style.width = ParseStyleLength("56px");
-        StatusBuff32.style.height = ParseStyleLength("56px");
-        StatusBuff32.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff32.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff32.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff32.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff32.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff32.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff32.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff32.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff32.style.alignItems = ParseAlign("center");
-        StatusBuff32.style.justifyContent = ParseJustify("center");
         StatusBuff32.style.display = DisplayStyle.Flex;
         StatusBuff32.SetEnabled(true);
-        StatusBuff32.style.color = ParseStyleColor("#000000", null);
-        StatusBuff32.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff32.style.borderLeftWidth = 2f;
-        StatusBuff32.style.borderRightWidth = 2f;
-        StatusBuff32.style.borderTopWidth = 2f;
-        StatusBuff32.style.borderBottomWidth = 2f;
-        StatusBuff32.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff32.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff32.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff32.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon32.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon32.style.width = ParseStyleLength("24px");
-        BuffIcon32.style.height = ParseStyleLength("24px");
-        BuffIcon32.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon32.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon32.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon32.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon32.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon32.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon32.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon32.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon32.style.alignItems = ParseAlign("flex-start");
-        BuffIcon32.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon32.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon32, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon32.style.display = DisplayStyle.Flex;
-        BuffIcon32.SetEnabled(true);
-        ApplyFontFamily(BuffIcon32, "lucide", 24f);
-        BuffIcon32.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon32.style.fontSize = 24f;
-        StatusBuff42.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff42.style.width = ParseStyleLength("56px");
-        StatusBuff42.style.height = ParseStyleLength("56px");
-        StatusBuff42.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff42.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff42.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff42.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff42.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff42.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff42.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff42.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff42.style.alignItems = ParseAlign("center");
-        StatusBuff42.style.justifyContent = ParseJustify("center");
         StatusBuff42.style.display = DisplayStyle.Flex;
         StatusBuff42.SetEnabled(true);
-        StatusBuff42.style.color = ParseStyleColor("#000000", null);
-        StatusBuff42.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff42.style.borderLeftWidth = 2f;
-        StatusBuff42.style.borderRightWidth = 2f;
-        StatusBuff42.style.borderTopWidth = 2f;
-        StatusBuff42.style.borderBottomWidth = 2f;
-        StatusBuff42.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff42.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff42.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff42.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon42.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon42.style.width = ParseStyleLength("24px");
-        BuffIcon42.style.height = ParseStyleLength("24px");
-        BuffIcon42.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon42.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon42.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon42.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon42.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon42.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon42.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon42.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon42.style.alignItems = ParseAlign("flex-start");
-        BuffIcon42.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon42.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon42, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon42.style.display = DisplayStyle.Flex;
-        BuffIcon42.SetEnabled(true);
-        ApplyFontFamily(BuffIcon42, "lucide", 24f);
-        BuffIcon42.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon42.style.fontSize = 24f;
         MemberC.style.flexDirection = ParseFlexDirection("column");
         MemberC.style.width = ParseStyleLength("400px");
         MemberC.style.alignSelf = ParseAlign("stretch");
@@ -1260,126 +806,8 @@ public sealed class PartyStatusStripView
         MemberC.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         MemberC.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         MemberC.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        HeroRow3.style.flexDirection = ParseFlexDirection("row");
-        HeroRow3.style.alignSelf = ParseAlign("stretch");
-        HeroRow3.style.height = ParseStyleLength("76px");
-        HeroRow3.style.marginTop = ParseStyleFloat("0px");
-        HeroRow3.style.marginRight = ParseStyleFloat("0px");
-        HeroRow3.style.marginBottom = ParseStyleFloat("0px");
-        HeroRow3.style.marginLeft = ParseStyleFloat("0px");
-        HeroRow3.style.paddingTop = ParseStyleFloat("0px");
-        HeroRow3.style.paddingRight = ParseStyleFloat("0px");
-        HeroRow3.style.paddingBottom = ParseStyleFloat("0px");
-        HeroRow3.style.paddingLeft = ParseStyleFloat("0px");
-        HeroRow3.style.alignItems = ParseAlign("flex-start");
-        HeroRow3.style.justifyContent = ParseJustify("flex-start");
         HeroRow3.style.display = DisplayStyle.Flex;
         HeroRow3.SetEnabled(true);
-        HeroRow3.style.color = ParseStyleColor("#101010", null);
-        HeroRow3.style.backgroundColor = ParseStyleColor("#101010", null);
-        Portrait3.style.flexDirection = ParseFlexDirection("column");
-        Portrait3.style.width = ParseStyleLength("76px");
-        Portrait3.style.height = ParseStyleLength("76px");
-        Portrait3.style.marginTop = ParseStyleFloat("0px");
-        Portrait3.style.marginRight = ParseStyleFloat("0px");
-        Portrait3.style.marginBottom = ParseStyleFloat("0px");
-        Portrait3.style.marginLeft = ParseStyleFloat("0px");
-        Portrait3.style.paddingTop = ParseStyleFloat("0px");
-        Portrait3.style.paddingRight = ParseStyleFloat("0px");
-        Portrait3.style.paddingBottom = ParseStyleFloat("0px");
-        Portrait3.style.paddingLeft = ParseStyleFloat("0px");
-        Portrait3.style.alignItems = ParseAlign("flex-start");
-        Portrait3.style.justifyContent = ParseJustify("flex-start");
-        Portrait3.style.display = DisplayStyle.Flex;
-        Portrait3.SetEnabled(true);
-        Portrait3.style.color = ParseStyleColor("#000000", null);
-        Portrait3.style.backgroundColor = ParseStyleColor("#000000", null);
-        Portrait3.style.borderLeftWidth = 4f;
-        Portrait3.style.borderRightWidth = 4f;
-        Portrait3.style.borderTopWidth = 4f;
-        Portrait3.style.borderBottomWidth = 4f;
-        Portrait3.style.borderLeftColor = ParseStyleColor("#EAEAEA", null);
-        Portrait3.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
-        Portrait3.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
-        Portrait3.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        RoleIcon3.style.flexDirection = ParseFlexDirection("column");
-        RoleIcon3.style.position = ParsePosition("absolute");
-        RoleIcon3.style.left = ParseStyleLength("18px");
-        RoleIcon3.style.top = ParseStyleLength("18px");
-        RoleIcon3.style.width = ParseStyleLength("40px");
-        RoleIcon3.style.height = ParseStyleLength("40px");
-        RoleIcon3.style.marginTop = ParseStyleFloat("0px");
-        RoleIcon3.style.marginRight = ParseStyleFloat("0px");
-        RoleIcon3.style.marginBottom = ParseStyleFloat("0px");
-        RoleIcon3.style.marginLeft = ParseStyleFloat("0px");
-        RoleIcon3.style.paddingTop = ParseStyleFloat("0px");
-        RoleIcon3.style.paddingRight = ParseStyleFloat("0px");
-        RoleIcon3.style.paddingBottom = ParseStyleFloat("0px");
-        RoleIcon3.style.paddingLeft = ParseStyleFloat("0px");
-        RoleIcon3.style.alignItems = ParseAlign("flex-start");
-        RoleIcon3.style.justifyContent = ParseJustify("flex-start");
-        RoleIcon3.text = ResolveIconText("shield", "lucide", 40f);
-        ApplyIconLabelStyle(RoleIcon3, 40f, 40f, 0f, true, "fit-box", 0f);
-        RoleIcon3.style.display = DisplayStyle.Flex;
-        RoleIcon3.SetEnabled(true);
-        ApplyFontFamily(RoleIcon3, "lucide", 40f);
-        RoleIcon3.style.color = ParseStyleColor("#FFFFFF", null);
-        RoleIcon3.style.fontSize = 40f;
-        Identity3.style.flexDirection = ParseFlexDirection("column");
-        Identity3.style.flexGrow = ParseStyleFloat("1");
-        Identity3.style.alignSelf = ParseAlign("stretch");
-        Identity3.style.marginTop = ParseStyleFloat("0px");
-        Identity3.style.marginRight = ParseStyleFloat("0px");
-        Identity3.style.marginBottom = ParseStyleFloat("0px");
-        Identity3.style.marginLeft = ParseStyleFloat("12px");
-        Identity3.style.paddingTop = ParseStyleFloat("0px");
-        Identity3.style.paddingRight = ParseStyleFloat("0px");
-        Identity3.style.paddingBottom = ParseStyleFloat("0px");
-        Identity3.style.paddingLeft = ParseStyleFloat("0px");
-        Identity3.style.alignItems = ParseAlign("flex-start");
-        Identity3.style.justifyContent = ParseJustify("flex-start");
-        Identity3.style.display = DisplayStyle.Flex;
-        Identity3.SetEnabled(true);
-        Identity3.style.color = ParseStyleColor("#101010", null);
-        Identity3.style.backgroundColor = ParseStyleColor("#101010", null);
-        MemberName3.style.flexDirection = ParseFlexDirection("column");
-        MemberName3.style.marginTop = ParseStyleFloat("0px");
-        MemberName3.style.marginRight = ParseStyleFloat("0px");
-        MemberName3.style.marginBottom = ParseStyleFloat("0px");
-        MemberName3.style.marginLeft = ParseStyleFloat("0px");
-        MemberName3.style.paddingTop = ParseStyleFloat("0px");
-        MemberName3.style.paddingRight = ParseStyleFloat("0px");
-        MemberName3.style.paddingBottom = ParseStyleFloat("0px");
-        MemberName3.style.paddingLeft = ParseStyleFloat("0px");
-        MemberName3.style.alignItems = ParseAlign("flex-start");
-        MemberName3.style.justifyContent = ParseJustify("flex-start");
-        MemberName3.text = "Serin";
-        ApplyTextLabelStyle(MemberName3, false);
-        MemberName3.style.display = DisplayStyle.Flex;
-        MemberName3.SetEnabled(true);
-        ApplyFontFamily(MemberName3, "Press Start 2P", 14f);
-        MemberName3.style.color = ParseStyleColor("#FFFFFF", null);
-        MemberName3.style.fontSize = 14f;
-        MemberName3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        MemberRole3.style.flexDirection = ParseFlexDirection("column");
-        MemberRole3.style.marginTop = ParseStyleFloat("8px");
-        MemberRole3.style.marginRight = ParseStyleFloat("0px");
-        MemberRole3.style.marginBottom = ParseStyleFloat("0px");
-        MemberRole3.style.marginLeft = ParseStyleFloat("0px");
-        MemberRole3.style.paddingTop = ParseStyleFloat("0px");
-        MemberRole3.style.paddingRight = ParseStyleFloat("0px");
-        MemberRole3.style.paddingBottom = ParseStyleFloat("0px");
-        MemberRole3.style.paddingLeft = ParseStyleFloat("0px");
-        MemberRole3.style.alignItems = ParseAlign("flex-start");
-        MemberRole3.style.justifyContent = ParseJustify("flex-start");
-        MemberRole3.text = "Guardian Support";
-        ApplyTextLabelStyle(MemberRole3, false);
-        MemberRole3.style.display = DisplayStyle.Flex;
-        MemberRole3.SetEnabled(true);
-        ApplyFontFamily(MemberRole3, "Press Start 2P", 9f);
-        MemberRole3.style.color = ParseStyleColor("#AAAAAA", null);
-        MemberRole3.style.fontSize = 9f;
-        MemberRole3.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
         HpBar3.style.flexDirection = ParseFlexDirection("column");
         HpBar3.style.alignSelf = ParseAlign("stretch");
         HpBar3.style.height = ParseStyleLength("22px");
@@ -1405,8 +833,8 @@ public sealed class PartyStatusStripView
         HpBar3.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         HpBar3.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         HpBar3.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        HpFill3.style.flexDirection = ParseFlexDirection("column");
         HpFill3.style.position = ParsePosition("absolute");
+        HpFill3.style.flexDirection = ParseFlexDirection("column");
         HpFill3.style.width = ParseStyleLength("318px");
         HpFill3.style.height = ParseStyleLength("18px");
         HpFill3.style.marginTop = ParseStyleFloat("0px");
@@ -1423,10 +851,10 @@ public sealed class PartyStatusStripView
         HpFill3.SetEnabled(true);
         HpFill3.style.color = ParseStyleColor("#D44A4A", null);
         HpFill3.style.backgroundColor = ParseStyleColor("#D44A4A", null);
-        HpText3.style.flexDirection = ParseFlexDirection("column");
         HpText3.style.position = ParsePosition("absolute");
         HpText3.style.left = ParseStyleLength("12px");
         HpText3.style.top = ParseStyleLength("4px");
+        HpText3.style.flexDirection = ParseFlexDirection("column");
         HpText3.style.marginTop = ParseStyleFloat("0px");
         HpText3.style.marginRight = ParseStyleFloat("0px");
         HpText3.style.marginBottom = ParseStyleFloat("0px");
@@ -1470,8 +898,8 @@ public sealed class PartyStatusStripView
         MpBar3.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         MpBar3.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         MpBar3.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        MpFill3.style.flexDirection = ParseFlexDirection("column");
         MpFill3.style.position = ParsePosition("absolute");
+        MpFill3.style.flexDirection = ParseFlexDirection("column");
         MpFill3.style.width = ParseStyleLength("154px");
         MpFill3.style.height = ParseStyleLength("18px");
         MpFill3.style.marginTop = ParseStyleFloat("0px");
@@ -1488,10 +916,10 @@ public sealed class PartyStatusStripView
         MpFill3.SetEnabled(true);
         MpFill3.style.color = ParseStyleColor("#4A78D4", null);
         MpFill3.style.backgroundColor = ParseStyleColor("#4A78D4", null);
-        MpText3.style.flexDirection = ParseFlexDirection("column");
         MpText3.style.position = ParsePosition("absolute");
         MpText3.style.left = ParseStyleLength("12px");
         MpText3.style.top = ParseStyleLength("4px");
+        MpText3.style.flexDirection = ParseFlexDirection("column");
         MpText3.style.marginTop = ParseStyleFloat("0px");
         MpText3.style.marginRight = ParseStyleFloat("0px");
         MpText3.style.marginBottom = ParseStyleFloat("0px");
@@ -1527,191 +955,137 @@ public sealed class PartyStatusStripView
         StatusRow3.SetEnabled(true);
         StatusRow3.style.color = ParseStyleColor("#101010", null);
         StatusRow3.style.backgroundColor = ParseStyleColor("#101010", null);
-        StatusBuff13.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff13.style.width = ParseStyleLength("56px");
-        StatusBuff13.style.height = ParseStyleLength("56px");
-        StatusBuff13.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff13.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff13.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff13.style.marginLeft = ParseStyleFloat("0px");
-        StatusBuff13.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff13.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff13.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff13.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff13.style.alignItems = ParseAlign("center");
-        StatusBuff13.style.justifyContent = ParseJustify("center");
         StatusBuff13.style.display = DisplayStyle.Flex;
         StatusBuff13.SetEnabled(true);
-        StatusBuff13.style.color = ParseStyleColor("#000000", null);
-        StatusBuff13.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff13.style.borderLeftWidth = 2f;
-        StatusBuff13.style.borderRightWidth = 2f;
-        StatusBuff13.style.borderTopWidth = 2f;
-        StatusBuff13.style.borderBottomWidth = 2f;
-        StatusBuff13.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff13.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff13.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff13.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon13.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon13.style.width = ParseStyleLength("24px");
-        BuffIcon13.style.height = ParseStyleLength("24px");
-        BuffIcon13.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon13.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon13.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon13.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon13.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon13.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon13.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon13.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon13.style.alignItems = ParseAlign("flex-start");
-        BuffIcon13.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon13.text = ResolveIconText("cross", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon13, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon13.style.display = DisplayStyle.Flex;
-        BuffIcon13.SetEnabled(true);
-        ApplyFontFamily(BuffIcon13, "lucide", 24f);
-        BuffIcon13.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon13.style.fontSize = 24f;
-        StatusBuff23.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff23.style.width = ParseStyleLength("56px");
-        StatusBuff23.style.height = ParseStyleLength("56px");
-        StatusBuff23.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff23.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff23.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff23.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff23.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff23.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff23.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff23.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff23.style.alignItems = ParseAlign("center");
-        StatusBuff23.style.justifyContent = ParseJustify("center");
         StatusBuff23.style.display = DisplayStyle.Flex;
         StatusBuff23.SetEnabled(true);
-        StatusBuff23.style.color = ParseStyleColor("#000000", null);
-        StatusBuff23.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff23.style.borderLeftWidth = 2f;
-        StatusBuff23.style.borderRightWidth = 2f;
-        StatusBuff23.style.borderTopWidth = 2f;
-        StatusBuff23.style.borderBottomWidth = 2f;
-        StatusBuff23.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff23.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff23.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff23.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon23.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon23.style.width = ParseStyleLength("24px");
-        BuffIcon23.style.height = ParseStyleLength("24px");
-        BuffIcon23.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon23.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon23.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon23.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon23.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon23.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon23.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon23.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon23.style.alignItems = ParseAlign("flex-start");
-        BuffIcon23.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon23.text = ResolveIconText("shield", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon23, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon23.style.display = DisplayStyle.Flex;
-        BuffIcon23.SetEnabled(true);
-        ApplyFontFamily(BuffIcon23, "lucide", 24f);
-        BuffIcon23.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon23.style.fontSize = 24f;
-        StatusBuff33.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff33.style.width = ParseStyleLength("56px");
-        StatusBuff33.style.height = ParseStyleLength("56px");
-        StatusBuff33.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff33.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff33.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff33.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff33.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff33.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff33.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff33.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff33.style.alignItems = ParseAlign("center");
-        StatusBuff33.style.justifyContent = ParseJustify("center");
         StatusBuff33.style.display = DisplayStyle.Flex;
         StatusBuff33.SetEnabled(true);
-        StatusBuff33.style.color = ParseStyleColor("#000000", null);
-        StatusBuff33.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff33.style.borderLeftWidth = 2f;
-        StatusBuff33.style.borderRightWidth = 2f;
-        StatusBuff33.style.borderTopWidth = 2f;
-        StatusBuff33.style.borderBottomWidth = 2f;
-        StatusBuff33.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff33.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff33.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff33.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon33.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon33.style.width = ParseStyleLength("24px");
-        BuffIcon33.style.height = ParseStyleLength("24px");
-        BuffIcon33.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon33.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon33.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon33.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon33.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon33.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon33.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon33.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon33.style.alignItems = ParseAlign("flex-start");
-        BuffIcon33.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon33.text = ResolveIconText("moon", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon33, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon33.style.display = DisplayStyle.Flex;
-        BuffIcon33.SetEnabled(true);
-        ApplyFontFamily(BuffIcon33, "lucide", 24f);
-        BuffIcon33.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon33.style.fontSize = 24f;
-        StatusBuff43.style.flexDirection = ParseFlexDirection("column");
-        StatusBuff43.style.width = ParseStyleLength("56px");
-        StatusBuff43.style.height = ParseStyleLength("56px");
-        StatusBuff43.style.marginTop = ParseStyleFloat("0px");
-        StatusBuff43.style.marginRight = ParseStyleFloat("0px");
-        StatusBuff43.style.marginBottom = ParseStyleFloat("0px");
-        StatusBuff43.style.marginLeft = ParseStyleFloat("8px");
-        StatusBuff43.style.paddingTop = ParseStyleFloat("0px");
-        StatusBuff43.style.paddingRight = ParseStyleFloat("0px");
-        StatusBuff43.style.paddingBottom = ParseStyleFloat("0px");
-        StatusBuff43.style.paddingLeft = ParseStyleFloat("0px");
-        StatusBuff43.style.alignItems = ParseAlign("center");
-        StatusBuff43.style.justifyContent = ParseJustify("center");
         StatusBuff43.style.display = DisplayStyle.Flex;
         StatusBuff43.SetEnabled(true);
-        StatusBuff43.style.color = ParseStyleColor("#000000", null);
-        StatusBuff43.style.backgroundColor = ParseStyleColor("#000000", null);
-        StatusBuff43.style.borderLeftWidth = 2f;
-        StatusBuff43.style.borderRightWidth = 2f;
-        StatusBuff43.style.borderTopWidth = 2f;
-        StatusBuff43.style.borderBottomWidth = 2f;
-        StatusBuff43.style.borderLeftColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff43.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff43.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
-        StatusBuff43.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon43.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon43.style.width = ParseStyleLength("24px");
-        BuffIcon43.style.height = ParseStyleLength("24px");
-        BuffIcon43.style.marginTop = ParseStyleFloat("0px");
-        BuffIcon43.style.marginRight = ParseStyleFloat("0px");
-        BuffIcon43.style.marginBottom = ParseStyleFloat("0px");
-        BuffIcon43.style.marginLeft = ParseStyleFloat("0px");
-        BuffIcon43.style.paddingTop = ParseStyleFloat("0px");
-        BuffIcon43.style.paddingRight = ParseStyleFloat("0px");
-        BuffIcon43.style.paddingBottom = ParseStyleFloat("0px");
-        BuffIcon43.style.paddingLeft = ParseStyleFloat("0px");
-        BuffIcon43.style.alignItems = ParseAlign("flex-start");
-        BuffIcon43.style.justifyContent = ParseJustify("flex-start");
-        BuffIcon43.text = ResolveIconText("flame", "lucide", 24f);
-        ApplyIconLabelStyle(BuffIcon43, 24f, 24f, 0f, true, "fit-box", 0f);
-        BuffIcon43.style.display = DisplayStyle.Flex;
-        BuffIcon43.SetEnabled(true);
-        ApplyFontFamily(BuffIcon43, "lucide", 24f);
-        BuffIcon43.style.color = ParseStyleColor("#FFFFFF", null);
-        BuffIcon43.style.fontSize = 24f;
+    }
+
+    private void ApplyComponentViewModels()
+    {
+        if (_heroRowComponent != null)
+        {
+            _heroRowComponent.ViewModel = _viewModel is ISyntheticContainerAF9ECAF6ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff1Component != null)
+        {
+            _statusBuff1Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff2Component != null)
+        {
+            _statusBuff2Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff3Component != null)
+        {
+            _statusBuff3Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff4Component != null)
+        {
+            _statusBuff4Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_heroRow2Component != null)
+        {
+            _heroRow2Component.ViewModel = _viewModel is ISyntheticContainerAF9ECAF6ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff12Component != null)
+        {
+            _statusBuff12Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff22Component != null)
+        {
+            _statusBuff22Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff32Component != null)
+        {
+            _statusBuff32Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff42Component != null)
+        {
+            _statusBuff42Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_heroRow3Component != null)
+        {
+            _heroRow3Component.ViewModel = _viewModel is ISyntheticContainerAF9ECAF6ViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff13Component != null)
+        {
+            _statusBuff13Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff23Component != null)
+        {
+            _statusBuff23Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff33Component != null)
+        {
+            _statusBuff33Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
+        if (_statusBuff43Component != null)
+        {
+            _statusBuff43Component.ViewModel = _viewModel is ISyntheticContainerB978BB0BViewModel componentViewModel ? componentViewModel : null;
+        }
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         Refresh();
+    }
+
+    private const string VisualTreeResourcePath = "BoomHudGenerated/PartyStatusStripView";
+    private const string StyleSheetResourcePath = "BoomHudGenerated/PartyStatusStripView";
+    private const string GeneratedRootName = "PartyStatusStrip";
+    private static VisualTreeAsset? s_visualTreeAsset;
+    private static StyleSheet? s_generatedStyleSheet;
+
+    public static PartyStatusStripView Create(VisualElement parent, string? instanceName = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (parent == null)
+        {
+            throw new ArgumentNullException(nameof(parent));
+        }
+
+        var root = CreateGeneratedRoot(instanceName);
+        parent.Add(root);
+        return new PartyStatusStripView(root, componentOverrides);
+    }
+
+    public static PartyStatusStripView Attach(VisualElement placeholder, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
+    {
+        if (placeholder == null)
+        {
+            throw new ArgumentNullException(nameof(placeholder));
+        }
+
+        var parent = placeholder.parent ?? throw new InvalidOperationException("Cannot attach a generated component without a parent element.");
+        var placeholderIndex = parent.IndexOf(placeholder);
+        var root = CreateGeneratedRoot(string.IsNullOrWhiteSpace(placeholder.name) ? null : placeholder.name);
+        parent.Insert(placeholderIndex, root);
+        placeholder.RemoveFromHierarchy();
+        return new PartyStatusStripView(root, componentOverrides);
+    }
+
+    private static VisualElement CreateGeneratedRoot(string? instanceName)
+    {
+        s_visualTreeAsset ??= Resources.Load<VisualTreeAsset>(VisualTreeResourcePath)
+            ?? throw new InvalidOperationException($"Could not load VisualTreeAsset from Resources/{VisualTreeResourcePath}.uxml");
+        s_generatedStyleSheet ??= Resources.Load<StyleSheet>(StyleSheetResourcePath);
+
+        var staging = new VisualElement();
+        s_visualTreeAsset.CloneTree(staging);
+        var root = staging.Q<VisualElement>(GeneratedRootName)
+            ?? throw new InvalidOperationException($"Could not find generated root element '{GeneratedRootName}' after cloning the tree.");
+        root.RemoveFromHierarchy();
+        root.name = string.IsNullOrWhiteSpace(instanceName) ? GeneratedRootName : instanceName!;
+
+        if (s_generatedStyleSheet != null && !root.styleSheets.Contains(s_generatedStyleSheet))
+        {
+            root.styleSheets.Add(s_generatedStyleSheet);
+        }
+
+        return root;
     }
 
     private static readonly Dictionary<string, FontDefinition> s_fontDefinitions = new(StringComparer.OrdinalIgnoreCase);
@@ -1763,6 +1137,31 @@ public sealed class PartyStatusStripView
             long longValue => longValue != 0,
             _ => false
         };
+    }
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides))
+        {
+            return false;
+        }
+
+        if (propertyOverrides.TryGetValue(propertyName, out value))
+        {
+            return true;
+        }
+
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static StyleLength ParseStyleLength(string value)
@@ -1880,6 +1279,24 @@ public sealed class PartyStatusStripView
         }
 
         return default;
+    }
+
+    private static void SetImageSource(Image image, string resourcePath)
+    {
+        if (string.IsNullOrWhiteSpace(resourcePath))
+        {
+            image.image = null;
+            return;
+        }
+
+        var normalized = resourcePath.Replace("\\", "/", StringComparison.Ordinal).TrimStart('/');
+        var extensionIndex = normalized.LastIndexOf('.');
+        if (extensionIndex > 0)
+        {
+            normalized = normalized[..extensionIndex];
+        }
+
+        image.image = Resources.Load<Texture2D>(normalized);
     }
 
     private static void ApplyTextLabelStyle(Label label, bool wrapText)

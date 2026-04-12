@@ -12,4 +12,6 @@ public static class BoomHudMetadataKeys
     public const string PencilClip = "boomhud:pencilClip";
     public const string PencilTextGrowth = "boomhud:pencilTextGrowth";
     public const string PencilComponentRef = "boomhud:pencilComponentRef";
+    public const string SyntheticComponentInstance = "boomhud:syntheticComponentInstance";
+    public const string ComponentPropertyOverrides = "boomhud:componentPropertyOverrides";
 }

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="Row0" class="boomhud-row0">
+        <ui:VisualElement name="Cell00" class="boomhud-cell00" />
+        <ui:VisualElement name="Cell01" class="boomhud-cell01" />
+        <ui:VisualElement name="Cell02" class="boomhud-cell02" />
+        <ui:VisualElement name="Cell03" class="boomhud-cell03" />
+        <ui:VisualElement name="Cell04" class="boomhud-cell04" />
+        <ui:VisualElement name="Cell05" class="boomhud-cell05" />
+    </ui:VisualElement>
+</ui:UXML>

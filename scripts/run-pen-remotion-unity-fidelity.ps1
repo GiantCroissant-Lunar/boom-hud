@@ -36,9 +36,11 @@ function Invoke-ExternalCommand([string]$WorkingDirectory, [string]$FilePath, [s
     try
     {
         & $FilePath @Arguments
-        if ($LASTEXITCODE -ne 0)
+        $exitCodeVariable = Get-Variable -Name LASTEXITCODE -ErrorAction SilentlyContinue
+        $exitCode = if ($null -ne $exitCodeVariable) { [int]$exitCodeVariable.Value } else { 0 }
+        if ($exitCode -ne 0)
         {
-            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $LASTEXITCODE."
+            throw "Command '$FilePath $($Arguments -join ' ')' failed with exit code $exitCode."
         }
     }
     finally
@@ -47,9 +49,90 @@ function Invoke-ExternalCommand([string]$WorkingDirectory, [string]$FilePath, [s
     }
 }
 
+function Wait-ForUnityProjectAvailability(
+    [string]$ProjectPath,
+    [int]$TimeoutSeconds = 60)
+{
+    if ([string]::IsNullOrWhiteSpace($ProjectPath))
+    {
+        return
+    }
+
+    $projectPath = [System.IO.Path]::GetFullPath($ProjectPath)
+    $projectPathPattern = [regex]::Escape($projectPath)
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+
+    while ((Get-Date) -lt $deadline)
+    {
+        $unityProcesses = @(
+            Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+                Where-Object {
+                    $_.Name -eq "Unity.exe" -and
+                    -not [string]::IsNullOrWhiteSpace($_.CommandLine) -and
+                    $_.CommandLine -match $projectPathPattern
+                }
+        )
+
+        if ($unityProcesses.Count -eq 0)
+        {
+            return
+        }
+
+        Start-Sleep -Milliseconds 500
+    }
+
+    throw "Timed out waiting for Unity project '$projectPath' to become available."
+}
+
 function Invoke-DotNetCli([string[]]$Arguments)
 {
     Invoke-ExternalCommand -WorkingDirectory $RepoRoot -FilePath "dotnet" -Arguments $Arguments
+}
+
+function Normalize-ArtifactStem([string]$Value)
+{
+    if ([string]::IsNullOrWhiteSpace($Value))
+    {
+        return ""
+    }
+
+    $trimmed = $Value -replace '\.visual-ir$', ''
+    $trimmed = $trimmed -replace '-(ugui|uitk|unity|react|remotion)$', ''
+    return ([regex]::Replace($trimmed, '[^a-zA-Z0-9]', '')).ToLowerInvariant()
+}
+
+function Get-VisualIrArtifact([string]$ArtifactsDirectory, [string]$Hint)
+{
+    if ([string]::IsNullOrWhiteSpace($ArtifactsDirectory) -or -not (Test-Path $ArtifactsDirectory))
+    {
+        return $null
+    }
+
+    $artifacts = @(
+        Get-ChildItem -Path $ArtifactsDirectory -Filter *.visual-ir.json -File -ErrorAction SilentlyContinue |
+            Sort-Object Name
+    )
+
+    if ($artifacts.Count -eq 0)
+    {
+        return $null
+    }
+
+    $normalizedHint = Normalize-ArtifactStem $Hint
+    if (-not [string]::IsNullOrWhiteSpace($normalizedHint))
+    {
+        $matched = $artifacts |
+            Where-Object {
+                (Normalize-ArtifactStem ([System.IO.Path]::GetFileNameWithoutExtension($_.Name))) -eq $normalizedHint
+            } |
+            Select-Object -First 1
+        if ($null -ne $matched)
+        {
+            return $matched.FullName
+        }
+    }
+
+    return $artifacts[0].FullName
 }
 
 function Invoke-RemotionCommand([string[]]$Arguments)
@@ -253,7 +336,11 @@ function Invoke-ScoreImagePair(
     [double]$Threshold,
     [int]$Tolerance,
     [string]$ReportPath,
-    [string]$DiffPath)
+    [string]$DiffPath,
+    [string]$VisualIrPath = "",
+    [string]$VisualRefinementPath = "",
+    [string]$ActualLayoutPath = "",
+    [string]$MeasuredLayoutPath = "")
 {
     if (-not (Test-Path $ReferencePath) -or -not (Test-Path $CandidatePath))
     {
@@ -272,7 +359,7 @@ function Invoke-ScoreImagePair(
         New-Item -ItemType Directory -Force -Path $diffDirectory | Out-Null
     }
 
-    Invoke-DotNetCli @(
+    $arguments = @(
         "run",
         "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
         "--",
@@ -283,7 +370,25 @@ function Invoke-ScoreImagePair(
         "--tolerance", $Tolerance,
         "--out", $ReportPath,
         "--diff", $DiffPath
-    ) | Out-Host
+    )
+    if (-not [string]::IsNullOrWhiteSpace($VisualIrPath) -and (Test-Path $VisualIrPath))
+    {
+        $arguments += @("--visual-ir", $VisualIrPath)
+        if (-not [string]::IsNullOrWhiteSpace($VisualRefinementPath))
+        {
+            $arguments += @("--visual-refinement-out", $VisualRefinementPath)
+        }
+        if (-not [string]::IsNullOrWhiteSpace($ActualLayoutPath) -and (Test-Path $ActualLayoutPath))
+        {
+            $arguments += @("--actual-layout", $ActualLayoutPath)
+            if (-not [string]::IsNullOrWhiteSpace($MeasuredLayoutPath))
+            {
+                $arguments += @("--measured-layout-out", $MeasuredLayoutPath)
+            }
+        }
+    }
+
+    Invoke-DotNetCli $arguments | Out-Host
 
     return Get-Content $ReportPath -Raw | ConvertFrom-Json -Depth 10
 }
@@ -334,6 +439,8 @@ else
 {
     "samples/pencil/full.pen"
 }
+$unityOutputPath = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
+$uguiOutputPath = Join-Path $UnityProjectPath "Assets/BoomHudGeneratedUGui"
 New-Item -ItemType Directory -Force -Path $artifactsRoot | Out-Null
 
 if (-not $SkipDotNet)
@@ -347,8 +454,6 @@ if (-not $SkipDotNet)
     )
 
     Write-Section "Regenerating Unity and React artifacts from $sourcePen"
-    $unityOutputPath = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
-    $uguiOutputPath = Join-Path $UnityProjectPath "Assets/BoomHudGeneratedUGui"
     $unityGenerateArgs = @(
         "run",
         "--project", "dotnet/src/BoomHud.Cli/BoomHud.Cli.csproj",
@@ -356,7 +461,8 @@ if (-not $SkipDotNet)
         "generate", $sourcePen,
         "--target", "unity",
         "--output", $unityOutputPath,
-        "--namespace", "Generated.Hud"
+        "--namespace", "Generated.Hud",
+        "--emit-visual-ir"
     )
     if (-not [string]::IsNullOrWhiteSpace($RulesPath))
     {
@@ -370,7 +476,8 @@ if (-not $SkipDotNet)
         "--",
         "generate", $sourcePen,
         "--target", "react",
-        "--output", "remotion/src/generated"
+        "--output", "remotion/src/generated",
+        "--emit-visual-ir"
     )
     $uguiGenerateArgs = @(
         "run",
@@ -379,7 +486,8 @@ if (-not $SkipDotNet)
         "generate", $sourcePen,
         "--target", "ugui",
         "--output", $uguiOutputPath,
-        "--namespace", "Generated.Hud.UGui"
+        "--namespace", "Generated.Hud.UGui",
+        "--emit-visual-ir"
     )
     if (-not [string]::IsNullOrWhiteSpace($RulesPath))
     {
@@ -449,6 +557,7 @@ if (-not $SkipUnityCapture)
     else
     {
         Write-Section "Capturing Unity fidelity artifacts"
+        Wait-ForUnityProjectAvailability -ProjectPath $UnityProjectPath
         Invoke-ExternalCommand -WorkingDirectory $RepoRoot -FilePath $UnityExe -Arguments @(
             "-batchmode",
             "-quit",
@@ -456,12 +565,15 @@ if (-not $SkipUnityCapture)
             "-executeMethod", "BoomHud.Compare.Editor.BoomHudFidelityCapture.CaptureFromCommandLine",
             "--manifest", $manifestAbsolutePath
         )
+        Wait-ForUnityProjectAvailability -ProjectPath $UnityProjectPath
     }
 }
 
 if (-not $SkipScoring)
 {
     Write-Section "Scoring fidelity artifacts"
+    $unityVisualIrDirectory = $unityOutputPath
+    $reactVisualIrDirectory = Join-Path $RepoRoot "remotion/src/generated"
     $scoreSummaries = @()
     foreach ($surface in @($manifest.surfaces))
     {
@@ -478,13 +590,25 @@ if (-not $SkipScoring)
 
         foreach ($pair in $pairs)
         {
+            $visualIrPath = if ($pair.candidate -eq $unityPath) {
+                Get-VisualIrArtifact -ArtifactsDirectory $unityVisualIrDirectory -Hint $surfaceId
+            } elseif ($pair.candidate -eq $remotionPath) {
+                Get-VisualIrArtifact -ArtifactsDirectory $reactVisualIrDirectory -Hint $surfaceId
+            } else {
+                $null
+            }
+            $actualLayoutPath = Resolve-AbsolutePath (Join-Path (Split-Path -Parent $pair.candidate) (([System.IO.Path]::GetFileNameWithoutExtension($pair.candidate)) + ".layout.actual.json"))
             $report = Invoke-ScoreImagePair `
                 -ReferencePath $pair.reference `
                 -CandidatePath $pair.candidate `
                 -Threshold ([double]$manifest.staticThreshold) `
                 -Tolerance ([int]$manifest.tolerance) `
                 -ReportPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.json" -f $surfaceId, $pair.name))) `
-                -DiffPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("diffs/{0}-{1}.png" -f $surfaceId, $pair.name)))
+                -DiffPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("diffs/{0}-{1}.png" -f $surfaceId, $pair.name))) `
+                -VisualIrPath $visualIrPath `
+                -VisualRefinementPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.visual-refinement.json" -f $surfaceId, $pair.name))) `
+                -ActualLayoutPath $actualLayoutPath `
+                -MeasuredLayoutPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.measured-layout.json" -f $surfaceId, $pair.name)))
 
             if ($null -ne $report)
             {
@@ -508,13 +632,18 @@ if (-not $SkipScoring)
             $frameName = "frame-{0}" -f ([int]$frame).ToString("0000")
             $remotionPath = Resolve-AbsolutePath (Join-Path $artifactsRoot (Join-Path $timeline.remotion.outputDir ($frameName + ".png")))
             $unityPath = Resolve-AbsolutePath (Join-Path $artifactsRoot (Join-Path $timeline.unity.outputDir ($frameName + ".png")))
+            $actualLayoutPath = Resolve-AbsolutePath (Join-Path (Split-Path -Parent $unityPath) (([System.IO.Path]::GetFileNameWithoutExtension($unityPath)) + ".layout.actual.json"))
             $report = Invoke-ScoreImagePair `
                 -ReferencePath $remotionPath `
                 -CandidatePath $unityPath `
                 -Threshold ([double]$manifest.timelineThreshold) `
                 -Tolerance ([int]$manifest.tolerance) `
                 -ReportPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.json" -f $timeline.id, $frameName))) `
-                -DiffPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("diffs/{0}-{1}.png" -f $timeline.id, $frameName)))
+                -DiffPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("diffs/{0}-{1}.png" -f $timeline.id, $frameName))) `
+                -VisualIrPath (Get-VisualIrArtifact -ArtifactsDirectory $unityVisualIrDirectory -Hint $timeline.id) `
+                -VisualRefinementPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.visual-refinement.json" -f $timeline.id, $frameName))) `
+                -ActualLayoutPath $actualLayoutPath `
+                -MeasuredLayoutPath (Resolve-AbsolutePath (Join-Path $artifactsRoot ("reports/{0}-{1}.measured-layout.json" -f $timeline.id, $frameName)))
 
             if ($null -ne $report)
             {

@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Generators;
+using BoomHud.Generators.VisualIR;
 
 namespace BoomHud.Gen.UGui;
 
@@ -16,9 +18,13 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     {
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, options, "ugui");
+        document = prepared.Document;
+        diagnostics.AddRange(prepared.Diagnostics);
 
         try
         {
+            var visualPlan = VisualToUGuiPlan.Build(prepared.VisualDocument);
             foreach (var component in document.Components.Values)
             {
                 Emit(new HudDocument
@@ -28,10 +34,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                     Root = component.Root,
                     Styles = document.Styles,
                     Components = document.Components
-                }, options, diagnostics, files);
+                }, options, diagnostics, files, visualPlan);
             }
 
-            var plan = Emit(document, options, diagnostics, files);
+            var plan = Emit(document, options, diagnostics, files, visualPlan);
             if (options.Motion != null)
             {
                 EmitMotion(document, plan, options, diagnostics, files);
@@ -42,12 +48,35 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             diagnostics.Add(Diagnostic.Error($"Generation failed: {ex.Message}"));
         }
 
+        if (GenerationDocumentPreprocessor.CreateSummaryArtifact(document.Name, prepared.SyntheticComponentization) is { } artifact)
+        {
+            files.Add(artifact);
+        }
+
+        if (options.EmitVisualIrArtifact
+            && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
+        {
+            files.Add(visualIrArtifact);
+        }
+
+        if (options.EmitVisualSynthesisArtifact
+            && GenerationDocumentPreprocessor.CreateVisualSynthesisArtifact(document.Name, prepared.VisualSynthesis) is { } visualSynthesisArtifact)
+        {
+            files.Add(visualSynthesisArtifact);
+        }
+
+        if (options.EmitVisualRefinementArtifact
+            && GenerationDocumentPreprocessor.CreateVisualRefinementArtifact(document.Name, prepared.VisualRefinement) is { } visualRefinementArtifact)
+        {
+            files.Add(visualRefinementArtifact);
+        }
+
         return new GenerationResult { Files = files, Diagnostics = diagnostics };
     }
 
-    private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files)
+    private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files, VisualToUGuiPlan? visualPlan)
     {
-        var plan = Planner.Create(document, diagnostics, options.RuleSet);
+        var plan = Planner.Create(document, diagnostics, options.RuleSet, visualPlan);
         files.Add(new GeneratedFile { Path = $"{document.Name}View.ugui.cs", Content = GenerateView(document, plan, options, diagnostics), Type = GeneratedFileType.SourceCode });
         if (options.EmitViewModelInterfaces)
         {
@@ -75,6 +104,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         }
 
         builder.AppendLine("using System;");
+        builder.AppendLine("using System.Collections.Generic;");
         builder.AppendLine("using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;");
         builder.AppendLine("using System.Globalization;");
         builder.AppendLine("using UnityEngine;");
@@ -84,6 +114,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine("{");
         builder.AppendLine($"public sealed class {document.Name}View");
         builder.AppendLine("{");
+        builder.AppendLine("    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;");
         builder.AppendLine($"    private I{document.Name}ViewModel? _viewModel;");
         builder.AppendLine("    public RectTransform Root { get; }");
         foreach (var node in plan.Nodes)
@@ -105,25 +136,36 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine("        }");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public {document.Name}View(Transform? parent = null, I{document.Name}ViewModel? viewModel = null)");
+        builder.AppendLine($"    public {document.Name}View(Transform? parent = null, I{document.Name}ViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)");
         builder.AppendLine("    {");
+        builder.AppendLine("        _componentOverrides = componentOverrides;");
         builder.AppendLine($"        Root = CreateRect(\"{plan.Root.Name}\", parent);");
         AppendSetup(builder, plan.Root, "Root", parentLayout: null, document.Components, diagnostics, 2);
         foreach (var child in plan.Root.Children)
         {
             AppendCreate(builder, child, "Root", plan.Root.Source.Layout?.Type, document.Components, diagnostics, 2);
         }
+        builder.AppendLine("        ApplyInstanceOverrides();");
         builder.AppendLine("        ViewModel = viewModel;");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    private {document.Name}View(RectTransform root, I{document.Name}ViewModel? viewModel)");
+        builder.AppendLine($"    private {document.Name}View(RectTransform root, I{document.Name}ViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)");
         builder.AppendLine("    {");
+        builder.AppendLine("        _componentOverrides = componentOverrides;");
         builder.AppendLine("        Root = root;");
         AppendBindExisting(builder, plan.Root, parentPath: null, indentLevel: 2);
+        builder.AppendLine("        ApplyInstanceOverrides();");
         builder.AppendLine("        ViewModel = viewModel;");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public static {document.Name}View Bind(RectTransform root, I{document.Name}ViewModel? viewModel = null) => new(root, viewModel);");
+        builder.AppendLine($"    public static {document.Name}View Bind(RectTransform root, I{document.Name}ViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);");
+        builder.AppendLine();
+        builder.AppendLine("    private void ApplyInstanceOverrides()");
+        builder.AppendLine("    {");
+        builder.AppendLine("        if (_componentOverrides == null) return;");
+        var componentOverrideIndex = 0;
+        AppendComponentOverrideAssignmentsRecursive(builder, plan.Root, 2, ref componentOverrideIndex);
+        builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    public void Refresh()");
         builder.AppendLine("    {");
@@ -132,6 +174,22 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine("    }");
         builder.AppendLine();
         builder.AppendLine("    private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();");
+        builder.AppendLine();
+        builder.AppendLine("    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)");
+        builder.AppendLine("    {");
+        builder.AppendLine("        value = null;");
+        builder.AppendLine("        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;");
+        builder.AppendLine("        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;");
+        builder.AppendLine("        foreach (var candidate in propertyOverrides)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))");
+        builder.AppendLine("            {");
+        builder.AppendLine("                value = candidate.Value;");
+        builder.AppendLine("                return true;");
+        builder.AppendLine("            }");
+        builder.AppendLine("        }");
+        builder.AppendLine("        return false;");
+        builder.AppendLine("    }");
         builder.AppendLine();
         builder.Append(HelperCode);
         builder.AppendLine("}");
@@ -177,10 +235,13 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         if (node.ComponentView != null)
         {
             var local = ToCamel(node.FieldName) + "View";
-            builder.AppendLine($"{indent}var {local} = new {node.ComponentView}View({parentAccessor});");
+            builder.AppendLine($"{indent}var {local} = new {node.ComponentView}View({parentAccessor}, null, {BuildComponentOverrideLiteral(node.Source) ?? "null"});");
             builder.AppendLine($"{indent}{node.FieldName} = {local}.Root;");
             builder.AppendLine($"{indent}{node.FieldName}.name = \"{node.Name}\";");
-            AppendSetup(builder, node, node.FieldName, parentLayout, components, diagnostics, indentLevel);
+            if (!IsSyntheticComponentInstance(node.Source))
+            {
+                AppendSetup(builder, node, node.FieldName, parentLayout, components, diagnostics, indentLevel);
+            }
             return;
         }
 
@@ -198,7 +259,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var rect = accessor == "Root" ? "Root" : $"RectOf({accessor})";
         var layout = node.Source.Layout;
         var style = node.Source.Style;
-        var absolute = parentLayout == LayoutType.Absolute || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
+        var edgeContract = node.VisualNode?.EdgeContract;
+        var textMetric = node.MetricProfile?.Text;
+        var iconMetric = node.MetricProfile?.Icon;
+        var absolute = parentLayout == LayoutType.Absolute
+                       || edgeContract?.Participation == LayoutParticipation.Overlay
+                       || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
         var widthDimension = layout?.Width ?? style?.Width;
         var heightDimension = layout?.Height ?? style?.Height;
         var anchorPreset = LayoutPolicyService.ResolveAnchorPreset(node.Policy);
@@ -228,8 +294,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {ToStringLiteral(edgeInsetPolicy)});");
         }
 
-        var contentFitHorizontal = !absolute && ShouldContentFit(node, "width", parentLayout);
-        var contentFitVertical = !absolute && ShouldContentFit(node, "height", parentLayout);
+        var contentFitHorizontal = absolute
+            ? ShouldAbsoluteContentFit(node, widthDimension, "width")
+            : ShouldContentFit(node, "width", parentLayout);
+        var contentFitVertical = absolute
+            ? ShouldAbsoluteContentFit(node, heightDimension, "height")
+            : ShouldContentFit(node, "height", parentLayout);
         builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, widthDimension, "width") : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, heightDimension, "height") : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, widthDimension, "width", parentLayout, contentFitHorizontal) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, heightDimension, "height", parentLayout, contentFitVertical) : null)});");
         builder.AppendLine($"{indent}ApplyContentSizeFit({rect}, horizontal: {Bool(contentFitHorizontal)}, vertical: {Bool(contentFitVertical)});");
 
@@ -264,8 +334,8 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 $"{indent}ApplyStyle({accessor}, " +
                 $"fg: {ToNullableStringLiteral(style?.Foreground?.ToHex())}, " +
                 $"bg: {ToNullableStringLiteral(style?.Background?.ToHex())}, " +
-                $"fontFamily: {ToNullableStringLiteral(TextPolicyService.ResolveFontFamily(node.Source, node.Policy))}, " +
-                $"fontSize: {ToNullableIntLiteral(TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy))}, " +
+                $"fontFamily: {ToNullableStringLiteral(iconMetric?.ResolvedFontFamily ?? textMetric?.ResolvedFontFamily ?? TextPolicyService.ResolveFontFamily(node.Source, node.Policy))}, " +
+                $"fontSize: {ToNullableIntLiteral(iconMetric?.ResolvedFontSize ?? textMetric?.ResolvedFontSize ?? TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy))}, " +
                 $"borderColor: {ToNullableStringLiteral(style?.Border?.Color?.ToHex())}, " +
                 $"borderWidth: {ToNullableFloatLiteral(style?.Border is { Width: > 0 } border ? border.Width : null)}, " +
                 $"treatAsIcon: {Bool(IsIconTextNode(node))});");
@@ -276,12 +346,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             var width = Pixels(widthDimension) ?? 16d;
             var height = Pixels(heightDimension) ?? 16d;
             builder.AppendLine(
-                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(IconPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy) ?? 0d)});");
+                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(iconMetric?.BaselineOffset ?? IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(iconMetric?.OpticalCentering ?? IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(iconMetric?.SizeMode ?? IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(iconMetric?.ResolvedFontSize ?? IconPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy) ?? 0d)});");
         }
 
         if (ShouldApplyTextMetrics(node))
         {
-            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(TextPolicyService.ResolveLineSpacing(node.Source, widthDimension, heightDimension, node.Policy))}, wrapText: {Bool(TextPolicyService.ShouldWrapText(node.Source, node.Policy))});");
+            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(TextPolicyService.ResolveLineSpacing(node.Source, widthDimension, heightDimension, node.Policy))}, wrapText: {Bool(textMetric?.WrapText ?? TextPolicyService.ShouldWrapText(node.Source, node.Policy))});");
         }
 
         foreach (var pair in Bindings(node.Source).Where(static pair => pair.StaticValue != null))
@@ -305,6 +375,42 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         if (node.Source.ComponentRefId != null && node.ComponentView == null && !components.ContainsKey(node.Source.ComponentRefId))
         {
             diagnostics.Add(Diagnostic.Warning($"Component reference '{node.Source.ComponentRefId}' was not found for uGUI generation.", node.Source.Id, "BHUG1004"));
+        }
+    }
+
+    private static bool IsSyntheticComponentInstance(ComponentNode node)
+        => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.SyntheticComponentInstance, out var value)
+           && value is bool isSynthetic
+           && isSynthetic;
+
+    private static void AppendComponentOverrideAssignmentsRecursive(StringBuilder builder, PlannedNode node, int indentLevel, ref int overrideIndex)
+    {
+        var indent = new string(' ', indentLevel * 4);
+        foreach (var property in node.Source.Properties.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
+        {
+            if (!ComponentInstanceOverrideSupport.IsSupportedProperty(node.Source, property.Key))
+            {
+                continue;
+            }
+
+            var overrideVariableName = FormattableString.Invariant($"componentOverrideValue{overrideIndex++}");
+            if (!TryBuildInstanceOverrideAssignment(node, property.Key, overrideVariableName, out var assignment))
+            {
+                continue;
+            }
+
+            builder.AppendLine($"{indent}if (TryGetComponentOverrideValue({ToStringLiteral(node.RelativePath)}, {ToStringLiteral(property.Key)}, out var {overrideVariableName}))");
+            builder.AppendLine($"{indent}{{");
+            foreach (var line in assignment.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries))
+            {
+                builder.AppendLine($"{indent}    {line}");
+            }
+            builder.AppendLine($"{indent}}}");
+        }
+
+        foreach (var child in node.Children)
+        {
+            AppendComponentOverrideAssignmentsRecursive(builder, child, indentLevel, ref overrideIndex);
         }
     }
 
@@ -380,6 +486,44 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 break;
             case "Image":
                 if (normalized is "source" or "src" or "value") { assignment = $"SetImage({accessor}, {textValue});"; return true; }
+                break;
+        }
+
+        return false;
+    }
+
+    private static bool TryBuildInstanceOverrideAssignment(PlannedNode node, string property, string valueExpression, out string assignment)
+    {
+        assignment = string.Empty;
+        var accessor = node.FieldName == "Root" ? "Root" : node.FieldName;
+        var normalized = Normalize(property);
+
+        if (IsIconTextNode(node) && normalized is "text" or "content" or "value")
+        {
+            assignment = $"{accessor}.text = ResolveIconText(AsString({valueExpression}));";
+            return true;
+        }
+
+        switch (node.FieldType)
+        {
+            case "Text":
+                if (normalized is "text" or "content" or "value") { assignment = $"{accessor}.text = AsString({valueExpression});"; return true; }
+                break;
+            case "Button":
+                if (normalized is "text" or "content" or "value") { assignment = $"SetButtonText({accessor}, AsString({valueExpression}));"; return true; }
+                break;
+            case "InputField":
+                if (normalized is "text" or "content" or "value") { assignment = $"{accessor}.text = AsString({valueExpression});"; return true; }
+                break;
+            case "Toggle":
+                if (normalized is "checked" or "value") { assignment = $"{accessor}.isOn = AsBool({valueExpression}, false);"; return true; }
+                if (normalized is "text" or "content") { assignment = $"SetToggleText({accessor}, AsString({valueExpression}));"; return true; }
+                break;
+            case "Slider":
+                if (normalized == "value") { assignment = $"{accessor}.value = AsFloat({valueExpression});"; return true; }
+                break;
+            case "Image":
+                if (normalized is "source" or "src" or "value") { assignment = $"SetImage({accessor}, AsString({valueExpression}));"; return true; }
                 break;
         }
 
@@ -477,6 +621,27 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return axis == "height" && ShouldPropagateVerticalContentHug(node);
     }
 
+    private static bool ShouldAbsoluteContentFit(PlannedNode node, Dimension? dimension, string axis)
+    {
+        if (!SupportsAbsoluteContentFit(node) || HasPinnedSize(dimension))
+        {
+            return false;
+        }
+
+        var explicitPreference = axis == "width"
+            ? node.Policy.Layout.PreferContentWidth
+            : node.Policy.Layout.PreferContentHeight;
+        if (explicitPreference is { } preferContent)
+        {
+            return preferContent;
+        }
+
+        return dimension is null or { Unit: DimensionUnit.Auto };
+    }
+
+    private static bool SupportsAbsoluteContentFit(PlannedNode node)
+        => node.FieldType == "Text";
+
     private static bool ShouldPropagateVerticalContentHug(PlannedNode node)
     {
         if (node.ComponentView != null
@@ -517,6 +682,9 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     }
 
     private static bool HasPinnedHeight(Dimension? dimension)
+        => dimension is { Unit: DimensionUnit.Pixels or DimensionUnit.Percent or DimensionUnit.Cells };
+
+    private static bool HasPinnedSize(Dimension? dimension)
         => dimension is { Unit: DimensionUnit.Pixels or DimensionUnit.Percent or DimensionUnit.Cells };
 
     private static bool ShouldApplyTextMetrics(PlannedNode node)
@@ -583,6 +751,22 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static string ToNullableFloatLiteral(double? value) => value == null ? "null" : ToFloatLiteral(value.Value);
     private static string ToNullableIntLiteral(double? value) => value == null ? "null" : Convert.ToInt32(Math.Round(value.Value, MidpointRounding.AwayFromZero), CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture);
     private static string ToNullableStringLiteral(string? value) => value == null ? "null" : ToStringLiteral(value);
+    private static string? BuildComponentOverrideLiteral(ComponentNode node)
+    {
+        var overrides = ComponentInstanceOverrideSupport.GetPropertyOverrides(node);
+        if (overrides.Count == 0)
+        {
+            return null;
+        }
+
+        return "new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)\n        {\n" +
+            string.Join(",\n",
+                overrides.Select(pathEntry =>
+                    $"            [{ToStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
+                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{ToStringLiteral(propertyEntry.Key)}] = {Literal(propertyEntry.Value) ?? "null"}")) +
+                    "\n            }")) +
+            "\n        }";
+    }
     private static string ToCamel(string value) => string.IsNullOrEmpty(value) ? "value" : char.ToLowerInvariant(value[0]) + value[1..];
     private static string ToPropertyIdentifier(string path) => SanitizeIdentifier(Pascalize(path), "Value");
     private static string Pascalize(string value) => string.Concat(value.Split(['.', ':', '-', '/', ' ', '_'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(static part => char.ToUpperInvariant(part[0]) + part[1..]));
@@ -644,12 +828,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private sealed class Planner
     {
-        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics, GeneratorRuleSet? ruleSet)
+        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics, GeneratorRuleSet? ruleSet, VisualToUGuiPlan? visualPlan)
         {
             var names = new HashSet<string>(StringComparer.Ordinal);
             var props = new Dictionary<string, ViewModelProperty>(StringComparer.Ordinal);
             var ruleResolver = new RuleResolver(ruleSet, "ugui");
-            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, ruleResolver, document.Name, parent: null, grandparent: null, siblingIndex: 0, forceRoot: true);
+            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, ruleResolver, document.Name, ComponentInstanceOverrideSupport.RootPath, parent: null, grandparent: null, siblingIndex: 0, visualPlan, forceRoot: true);
             return new PlanDocument
             {
                 Root = root,
@@ -658,17 +842,18 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             };
         }
 
-        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, RuleResolver ruleResolver, string documentName, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex, bool forceRoot = false)
+        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, RuleResolver ruleResolver, string documentName, string relativePath, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex, VisualToUGuiPlan? visualPlan, bool forceRoot = false)
         {
             Track(source, props);
             var baseName = forceRoot ? document.Name + "Root" : Pascal(source.Id ?? fallbackName);
             var fieldName = forceRoot ? "Root" : Unique(baseName, names);
             var policy = ruleResolver.Resolve(documentName, source, new RuleSelectionContext(parent, grandparent, siblingIndex));
+            var visualResolved = visualPlan?.Resolve(source.Id);
             var fieldType = ResolveFieldType(source, document, diagnostics, policy, out var componentView);
             var children = componentView == null
-                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props, ruleResolver, documentName, source, parent, index)).ToList()
+                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props, ruleResolver, documentName, ComponentInstanceOverrideSupport.ChildPath(relativePath, index), source, parent, index, visualPlan)).ToList()
                 : [];
-            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, Source = source, Policy = policy, Children = children };
+            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, RelativePath = relativePath, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, Source = source, Policy = policy, VisualNode = visualResolved?.Node, MetricProfile = visualResolved?.MetricProfile, Children = children };
         }
 
         private static void Track(ComponentNode node, Dictionary<string, ViewModelProperty> props)
@@ -775,11 +960,14 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private sealed record PlannedNode
     {
         public required string Name { get; init; }
+        public required string RelativePath { get; init; }
         public required string FieldName { get; init; }
         public required string FieldType { get; init; }
         public string? ComponentView { get; init; }
         public required ComponentNode Source { get; init; }
         public required ResolvedGeneratorPolicy Policy { get; init; }
+        public VisualNode? VisualNode { get; init; }
+        public MetricProfileDefinition? MetricProfile { get; init; }
         public required IReadOnlyList<PlannedNode> Children { get; init; }
     }
 

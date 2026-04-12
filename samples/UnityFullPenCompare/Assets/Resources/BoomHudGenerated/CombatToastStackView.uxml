@@ -1,9 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="CombatToastStack" class="boomhud-combat-toast-stack">
         <ui:VisualElement name="ToastOne" class="boomhud-toast-one">
-            <ui:VisualElement name="IconPanel" class="boomhud-icon-panel">
-                <ui:Label name="EventIcon" class="boomhud-event-icon" />
-            </ui:VisualElement>
+            <ui:VisualElement name="IconPanel" class="boomhud-icon-panel" />
             <ui:VisualElement name="Content" class="boomhud-content">
                 <ui:Label name="Title" class="boomhud-title" />
                 <ui:Label name="Body" class="boomhud-body" />
@@ -12,19 +10,13 @@
                     <ui:Label name="ProgressText" class="boomhud-progress-text" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="RewardColumn" class="boomhud-reward-column">
-                <ui:Label name="Tag" class="boomhud-tag" />
-                <ui:Label name="Value" class="boomhud-value" />
-                <ui:Label name="Time" class="boomhud-time" />
-            </ui:VisualElement>
+            <ui:VisualElement name="RewardColumn" class="boomhud-reward-column" />
             <ui:VisualElement name="Badge" class="boomhud-badge">
                 <ui:Label name="BadgeText" class="boomhud-badge-text" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="ToastTwo" class="boomhud-toast-two">
-            <ui:VisualElement name="IconPanel2" class="boomhud-icon-panel2">
-                <ui:Label name="EventIcon2" class="boomhud-event-icon2" />
-            </ui:VisualElement>
+            <ui:VisualElement name="IconPanel2" class="boomhud-icon-panel2" />
             <ui:VisualElement name="Content2" class="boomhud-content2">
                 <ui:Label name="Title2" class="boomhud-title2" />
                 <ui:Label name="Body2" class="boomhud-body2" />
@@ -33,19 +25,13 @@
                     <ui:Label name="ProgressText2" class="boomhud-progress-text2" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="RewardColumn2" class="boomhud-reward-column2">
-                <ui:Label name="Tag2" class="boomhud-tag2" />
-                <ui:Label name="Value2" class="boomhud-value2" />
-                <ui:Label name="Time2" class="boomhud-time2" />
-            </ui:VisualElement>
+            <ui:VisualElement name="RewardColumn2" class="boomhud-reward-column2" />
             <ui:VisualElement name="Badge2" class="boomhud-badge2">
                 <ui:Label name="BadgeText2" class="boomhud-badge-text2" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="ToastThree" class="boomhud-toast-three">
-            <ui:VisualElement name="IconPanel3" class="boomhud-icon-panel3">
-                <ui:Label name="EventIcon3" class="boomhud-event-icon3" />
-            </ui:VisualElement>
+            <ui:VisualElement name="IconPanel3" class="boomhud-icon-panel3" />
             <ui:VisualElement name="Content3" class="boomhud-content3">
                 <ui:Label name="Title3" class="boomhud-title3" />
                 <ui:Label name="Body3" class="boomhud-body3" />
@@ -54,11 +40,7 @@
                     <ui:Label name="ProgressText3" class="boomhud-progress-text3" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="RewardColumn3" class="boomhud-reward-column3">
-                <ui:Label name="Tag3" class="boomhud-tag3" />
-                <ui:Label name="Value3" class="boomhud-value3" />
-                <ui:Label name="Time3" class="boomhud-time3" />
-            </ui:VisualElement>
+            <ui:VisualElement name="RewardColumn3" class="boomhud-reward-column3" />
             <ui:VisualElement name="Badge3" class="boomhud-badge3">
                 <ui:Label name="BadgeText3" class="boomhud-badge-text3" />
             </ui:VisualElement>
