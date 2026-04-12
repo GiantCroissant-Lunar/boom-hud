@@ -155,6 +155,89 @@ public sealed class VisualPlanningTests
         summary.Actions.Should().BeEmpty();
     }
 
+    [Fact]
+    public void RefinementPlan_WithMeasuredShellIssues_PrioritizesShellActionsBeforeMetricAdjustments()
+    {
+        var document = new VisualDocument
+        {
+            DocumentName = "QuestHud",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox { SourceType = ComponentType.Container },
+                EdgeContract = new EdgeContract
+                {
+                    Participation = LayoutParticipation.NormalFlow,
+                    WidthSizing = AxisSizing.Fill,
+                    HeightSizing = AxisSizing.Fill,
+                    HorizontalPin = EdgePin.Start,
+                    VerticalPin = EdgePin.Start,
+                    OverflowX = OverflowBehavior.Visible,
+                    OverflowY = OverflowBehavior.Visible,
+                    WrapPressure = WrapPressurePolicy.Allow
+                },
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/1/0",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox { SourceType = ComponentType.Container },
+                        EdgeContract = new EdgeContract
+                        {
+                            Participation = LayoutParticipation.NormalFlow,
+                            WidthSizing = AxisSizing.Fill,
+                            HeightSizing = AxisSizing.Fill,
+                            HorizontalPin = EdgePin.Start,
+                            VerticalPin = EdgePin.Start,
+                            OverflowX = OverflowBehavior.Visible,
+                            OverflowY = OverflowBehavior.Visible,
+                            WrapPressure = WrapPressurePolicy.Allow
+                        }
+                    }
+                ]
+            }
+        };
+
+        var scoreTree = new RecursiveFidelityScoreNode
+        {
+            Level = "panel",
+            RegionId = "root",
+            OverallSimilarityPercent = 70,
+            Phases =
+            [
+                new RecursiveFidelityPhaseScore { Phase = "text-icon-metrics", SimilarityPercent = 45 }
+            ]
+        };
+
+        var summary = VisualRefinementPlanner.Plan(
+            document,
+            scoreTree,
+            iterationBudget: 2,
+            measuredIssues:
+            [
+                new VisualMeasuredIssue
+                {
+                    Category = "shell-padding-or-child-stack-mismatch",
+                    Severity = "warning",
+                    LocalPath = "root/1/0",
+                    Summary = "Shell overflow",
+                    SuggestedAction = "Tighten shell padding."
+                }
+            ]);
+
+        summary.IterationCount.Should().Be(2);
+        summary.Actions[0].ActionType.Should().Be("tighten-shell-padding");
+        summary.Actions[0].TriggerIssueCategory.Should().Be("shell-padding-or-child-stack-mismatch");
+        summary.Actions[0].TriggerIssueLocalPath.Should().Be("root/1/0");
+        summary.Actions[1].ActionType.Should().Be("metric-profile-adjustment");
+    }
+
     private static ComponentNode CreateQuestCard(string id, string text, string icon, int value, int gap = 8)
     {
         return new ComponentNode

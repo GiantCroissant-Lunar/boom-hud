@@ -120,6 +120,10 @@ public sealed record ActualLayoutNode
 
     public required double Height { get; init; }
 
+    public double ScaleX { get; init; } = 1;
+
+    public double ScaleY { get; init; } = 1;
+
     public double PreferredWidth { get; init; } = -1;
 
     public double PreferredHeight { get; init; } = -1;
@@ -204,6 +208,10 @@ public sealed record MeasuredLayoutComparison
     public double ActualWidth { get; init; }
 
     public double ActualHeight { get; init; }
+
+    public double ActualScaleX { get; init; }
+
+    public double ActualScaleY { get; init; }
 
     public double? ExpectedStartInsetX { get; init; }
 
@@ -497,14 +505,20 @@ public static class ImageSimilarityHandler
 
                 File.WriteAllText(outputPath, report.ToJson());
 
+                MeasuredLayoutReport? measuredLayout = null;
                 if (options.VisualIrFile != null)
                 {
-                    EmitVisualRefinementArtifact(options.VisualIrFile, options.VisualRefinementOutFile, report, options.VisualRefinementIterationBudget);
-
                     if (options.ActualLayoutFile != null)
                     {
-                        EmitMeasuredLayoutArtifact(options.VisualIrFile, options.ActualLayoutFile, options.MeasuredLayoutOutFile);
+                        measuredLayout = EmitMeasuredLayoutArtifact(options.VisualIrFile, options.ActualLayoutFile, options.MeasuredLayoutOutFile);
                     }
+
+                    EmitVisualRefinementArtifact(
+                        options.VisualIrFile,
+                        options.VisualRefinementOutFile,
+                        report,
+                        options.VisualRefinementIterationBudget,
+                        measuredLayout);
                 }
 
                 if (options.PrintSummary || options.Verbose)
@@ -1038,7 +1052,8 @@ public static class ImageSimilarityHandler
         FileInfo visualIrFile,
         FileInfo? requestedOutput,
         ImageSimilarityReport report,
-        int iterationBudget)
+        int iterationBudget,
+        MeasuredLayoutReport? measuredLayout)
     {
         var visualDocument = JsonSerializer.Deserialize<VisualDocument>(File.ReadAllText(visualIrFile.FullName));
         if (visualDocument == null)
@@ -1049,7 +1064,15 @@ public static class ImageSimilarityHandler
         var summary = VisualRefinementPlanner.Plan(
             visualDocument,
             ConvertRecursiveAnalysis(report.RecursiveAnalysis),
-            iterationBudget);
+            iterationBudget,
+            measuredLayout?.Issues.Select(static issue => new VisualMeasuredIssue
+            {
+                Category = issue.Category,
+                Severity = issue.Severity,
+                LocalPath = issue.LocalPath,
+                Summary = issue.Summary,
+                SuggestedAction = issue.SuggestedAction
+            }).ToList());
 
         var outputPath = requestedOutput?.FullName ?? ResolveDefaultVisualRefinementPath(visualIrFile, visualDocument);
         var outputDirectory = Path.GetDirectoryName(outputPath);
@@ -1061,7 +1084,7 @@ public static class ImageSimilarityHandler
         File.WriteAllText(outputPath, VisualRefinementPlanner.ToJson(summary));
     }
 
-    private static void EmitMeasuredLayoutArtifact(
+    private static MeasuredLayoutReport EmitMeasuredLayoutArtifact(
         FileInfo visualIrFile,
         FileInfo actualLayoutFile,
         FileInfo? requestedOutput)
@@ -1087,6 +1110,7 @@ public static class ImageSimilarityHandler
         }
 
         File.WriteAllText(outputPath, report.ToJson());
+        return report;
     }
 
     private static string ResolveDefaultVisualRefinementPath(FileInfo visualIrFile, VisualDocument visualDocument)
@@ -1318,6 +1342,8 @@ public static class ImageSimilarityHandler
             ActualY = actual.Y,
             ActualWidth = actual.Width,
             ActualHeight = actual.Height,
+            ActualScaleX = actual.ScaleX,
+            ActualScaleY = actual.ScaleY,
             ExpectedStartInsetX = expectedStartInsetX,
             ExpectedStartInsetY = expectedStartInsetY,
             ExpectedAvailableWidth = expectedAvailableWidth,
@@ -1367,7 +1393,24 @@ public static class ImageSimilarityHandler
     {
         const double insetTolerance = 6;
         const double widthTolerance = 8;
+        const double heightTolerance = 8;
         const double fontSizeTolerance = 1;
+        const double scaleTolerance = 0.05;
+        var shellCandidate = IsShellContainerCandidate(comparison);
+
+        if (shellCandidate
+            && (Math.Abs(comparison.ActualScaleX - 1d) > scaleTolerance
+                || Math.Abs(comparison.ActualScaleY - 1d) > scaleTolerance))
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "realization-scale-mismatch",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = $"Node is realized with local scale ({comparison.ActualScaleX:F2}, {comparison.ActualScaleY:F2}) instead of the expected neutral scale.",
+                SuggestedAction = "Inspect fixture host scaling or parent transform adjustments before retuning shell layout or metrics."
+            };
+        }
 
         if (comparison.ExpectedStartInsetX.HasValue && comparison.ActualX + insetTolerance < comparison.ExpectedStartInsetX.Value)
         {
@@ -1393,6 +1436,38 @@ public static class ImageSimilarityHandler
             };
         }
 
+        if (comparison.ExpectedStartInsetY.HasValue && comparison.ActualY + insetTolerance < comparison.ExpectedStartInsetY.Value)
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "start-edge-underflow",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = $"Top inset realized at {comparison.ActualY:F1}px but the Visual IR contract expects about {comparison.ExpectedStartInsetY.Value:F1}px.",
+                SuggestedAction = "Inspect parent padding, child margin, and start-edge participation before changing gap or text metrics."
+            };
+        }
+
+        if (comparison.ExpectedStartInsetY.HasValue && comparison.ActualY > comparison.ExpectedStartInsetY.Value + insetTolerance)
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "start-edge-overshift",
+                Severity = "info",
+                LocalPath = comparison.LocalPath,
+                Summary = $"Top inset realized at {comparison.ActualY:F1}px, overshooting the expected start inset of {comparison.ExpectedStartInsetY.Value:F1}px.",
+                SuggestedAction = "Inspect absolute offset retention and parent padding accumulation for this node."
+            };
+        }
+
+        var widthStretchRelevant = shellCandidate
+            && comparison.ExpectedWidthSizing != AxisSizing.Fill
+            && comparison.ActualPreferredWidth > 0
+            && comparison.ActualWidth > comparison.ActualPreferredWidth + widthTolerance;
+        var heightCollapseRelevant = shellCandidate
+            && comparison.ActualPreferredHeight > 0
+            && comparison.ActualHeight + heightTolerance < comparison.ActualPreferredHeight;
+
         if (comparison.ExpectedWidthSizing == AxisSizing.Fill
             && comparison.ExpectedAvailableWidth.HasValue
             && comparison.ExpectedAvailableWidth.Value > 0
@@ -1405,6 +1480,69 @@ public static class ImageSimilarityHandler
                 LocalPath = comparison.LocalPath,
                 Summary = $"Node is expected to fill about {comparison.ExpectedAvailableWidth.Value:F1}px but only realized {comparison.ActualWidth:F1}px.",
                 SuggestedAction = "Inspect fill/stretch realization, layout-group child control flags, and content-hug conflicts on the parent."
+            };
+        }
+
+        if (heightCollapseRelevant)
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "height-collapsed-vs-preferred",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = $"Shell height realized at {comparison.ActualHeight:F1}px but the subtree prefers about {comparison.ActualPreferredHeight:F1}px.",
+                SuggestedAction = "Preserve preferred shell height before tuning text or icon metrics."
+            };
+        }
+
+        if (widthStretchRelevant)
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "width-stretched-vs-preferred",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = $"Shell width realized at {comparison.ActualWidth:F1}px but the subtree prefers about {comparison.ActualPreferredWidth:F1}px.",
+                SuggestedAction = "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+            };
+        }
+
+        if (widthStretchRelevant || heightCollapseRelevant)
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "cross-axis-stretch-mismatch",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+                SuggestedAction = "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+            };
+        }
+
+        if (heightCollapseRelevant
+            || (widthStretchRelevant && comparison.ExpectedWidthSizing == AxisSizing.Hug))
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "shell-padding-or-child-stack-mismatch",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = "The shell child stack is larger than the realized box, so padding, gap, or child stack realization is likely compressing this subtree.",
+                SuggestedAction = "Tighten shell padding or main-axis gap before retuning text, icon, or edge metrics."
+            };
+        }
+
+        if (LooksLikePortraitOrStatusShell(comparison)
+            && (heightCollapseRelevant
+                || (comparison.ExpectedStartInsetY.HasValue && Math.Abs(comparison.ActualY - comparison.ExpectedStartInsetY.Value) > insetTolerance)))
+        {
+            yield return new MeasuredLayoutIssue
+            {
+                Category = "portrait-or-status-row-shell-drift",
+                Severity = "warning",
+                LocalPath = comparison.LocalPath,
+                Summary = $"The portrait or status-row shell '{comparison.ActualName}' is drifting away from its preferred box.",
+                SuggestedAction = "Preserve shell bounds for portrait and status-row motifs before adjusting fonts or icon alignment."
             };
         }
 
@@ -1466,6 +1604,29 @@ public static class ImageSimilarityHandler
             };
         }
     }
+
+    private static bool IsShellContainerCandidate(MeasuredLayoutComparison comparison)
+    {
+        if (string.Equals(comparison.ActualNodeType, "Text", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (comparison.ExpectedChildCount > 0 || comparison.ActualChildCount > 0)
+        {
+            return true;
+        }
+
+        return LooksLikePortraitOrStatusShell(comparison)
+            || comparison.ActualName.StartsWith("Member", StringComparison.Ordinal)
+            || comparison.ActualName.StartsWith("HeroRow", StringComparison.Ordinal);
+    }
+
+    private static bool LooksLikePortraitOrStatusShell(MeasuredLayoutComparison comparison)
+        => comparison.ActualName.StartsWith("Portrait", StringComparison.Ordinal)
+            || comparison.ActualName.StartsWith("HeroRow", StringComparison.Ordinal)
+            || comparison.ActualName.StartsWith("StatusRow", StringComparison.Ordinal)
+            || comparison.ActualName.StartsWith("StatusBuff", StringComparison.Ordinal);
 
     private static double? ResolveExpectedStartInsetX(VisualNode node, VisualNode? parent, ActualLayoutNode? actualParent, int? childIndex)
     {

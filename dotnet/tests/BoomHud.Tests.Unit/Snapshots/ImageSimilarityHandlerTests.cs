@@ -989,6 +989,238 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
     }
 
     [Fact]
+    public void BuildMeasuredLayoutReport_PromotesShellOverflowIntoMeasuredIssues()
+    {
+        var visual = new VisualDocument
+        {
+            DocumentName = "PartyStrip",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                SourceId = "PartyStrip",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container
+                },
+                EdgeContract = new EdgeContract
+                {
+                    Participation = LayoutParticipation.NormalFlow,
+                    WidthSizing = AxisSizing.Fill,
+                    HeightSizing = AxisSizing.Fixed,
+                    HorizontalPin = EdgePin.Start,
+                    VerticalPin = EdgePin.Start,
+                    OverflowX = OverflowBehavior.Visible,
+                    OverflowY = OverflowBehavior.Visible,
+                    WrapPressure = WrapPressurePolicy.Allow
+                },
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/0",
+                        SourceId = "MemberA",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container
+                        },
+                        EdgeContract = new EdgeContract
+                        {
+                            Participation = LayoutParticipation.NormalFlow,
+                            WidthSizing = AxisSizing.Fixed,
+                            HeightSizing = AxisSizing.Fill,
+                            HorizontalPin = EdgePin.Start,
+                            VerticalPin = EdgePin.Start,
+                            OverflowX = OverflowBehavior.Visible,
+                            OverflowY = OverflowBehavior.Visible,
+                            WrapPressure = WrapPressurePolicy.Allow
+                        },
+                        Children =
+                        [
+                            new VisualNode
+                            {
+                                StableId = "root/0/0",
+                                SourceId = "HeroRow",
+                                Kind = VisualNodeKind.Container,
+                                SourceType = ComponentType.Container,
+                                Box = new VisualBox
+                                {
+                                    SourceType = ComponentType.Container
+                                },
+                                EdgeContract = new EdgeContract
+                                {
+                                    Participation = LayoutParticipation.NormalFlow,
+                                    WidthSizing = AxisSizing.Fill,
+                                    HeightSizing = AxisSizing.Fixed,
+                                    HorizontalPin = EdgePin.Start,
+                                    VerticalPin = EdgePin.Start,
+                                    OverflowX = OverflowBehavior.Visible,
+                                    OverflowY = OverflowBehavior.Visible,
+                                    WrapPressure = WrapPressurePolicy.Allow
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var actualLayout = new ActualLayoutSnapshot
+        {
+            Version = "1.0",
+            BackendFamily = "ugui",
+            Root = new ActualLayoutNode
+            {
+                LocalPath = "root",
+                Name = "PartyStrip",
+                NodeType = "Image",
+                X = 0,
+                Y = 0,
+                Width = 1280,
+                Height = 320,
+                Children =
+                [
+                    new ActualLayoutNode
+                    {
+                        LocalPath = "root/0",
+                        Name = "MemberA",
+                        NodeType = "Image",
+                        X = 0,
+                        Y = 0,
+                        Width = 400,
+                        Height = 216,
+                        PreferredWidth = 400,
+                        PreferredHeight = 236,
+                        Children =
+                        [
+                            new ActualLayoutNode
+                            {
+                                LocalPath = "root/0/0",
+                                Name = "HeroRow",
+                                NodeType = "Image",
+                                X = 12,
+                                Y = 12,
+                                Width = 376,
+                                Height = 68,
+                                PreferredWidth = 250,
+                                PreferredHeight = 76
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var report = ImageSimilarityHandler.BuildMeasuredLayoutReport(visual, actualLayout);
+
+        report.Issues.Should().Contain(issue => issue.Category == "height-collapsed-vs-preferred" && issue.LocalPath == "root/0");
+        report.Issues.Should().Contain(issue => issue.Category == "portrait-or-status-row-shell-drift" && issue.LocalPath == "root/0/0");
+        report.Issues.Should().Contain(issue => issue.Category == "start-edge-overshift" && issue.LocalPath == "root/0/0");
+        report.Issues.Should().NotContain(issue => issue.Category == "width-stretched-vs-preferred" && issue.LocalPath == "root/0/0");
+        report.Issues.Should().NotContain(issue => issue.Category == "shell-padding-or-child-stack-mismatch" && issue.LocalPath == "root/0/0");
+    }
+
+    [Fact]
+    public void BuildMeasuredLayoutReport_FlagsScaledShellRealization()
+    {
+        var visual = new VisualDocument
+        {
+            DocumentName = "PartyStrip",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                SourceId = "PartyStrip",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container
+                },
+                EdgeContract = new EdgeContract
+                {
+                    Participation = LayoutParticipation.NormalFlow,
+                    WidthSizing = AxisSizing.Fill,
+                    HeightSizing = AxisSizing.Fixed,
+                    HorizontalPin = EdgePin.Start,
+                    VerticalPin = EdgePin.Start,
+                    OverflowX = OverflowBehavior.Visible,
+                    OverflowY = OverflowBehavior.Visible,
+                    WrapPressure = WrapPressurePolicy.Allow
+                },
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/0",
+                        SourceId = "MemberA",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container
+                        },
+                        EdgeContract = new EdgeContract
+                        {
+                            Participation = LayoutParticipation.NormalFlow,
+                            WidthSizing = AxisSizing.Fixed,
+                            HeightSizing = AxisSizing.Fixed,
+                            HorizontalPin = EdgePin.Start,
+                            VerticalPin = EdgePin.Start,
+                            OverflowX = OverflowBehavior.Visible,
+                            OverflowY = OverflowBehavior.Visible,
+                            WrapPressure = WrapPressurePolicy.Allow
+                        }
+                    }
+                ]
+            }
+        };
+
+        var actualLayout = new ActualLayoutSnapshot
+        {
+            Version = "1.0",
+            BackendFamily = "ugui",
+            Root = new ActualLayoutNode
+            {
+                LocalPath = "root",
+                Name = "PartyStripRoot",
+                NodeType = "Image",
+                X = 0,
+                Y = 0,
+                Width = 1280,
+                Height = 320,
+                ScaleX = 0.66,
+                ScaleY = 0.66,
+                Children =
+                [
+                    new ActualLayoutNode
+                    {
+                        LocalPath = "root/0",
+                        Name = "MemberA",
+                        NodeType = "Image",
+                        X = 0,
+                        Y = 0,
+                        Width = 400,
+                        Height = 236
+                    }
+                ]
+            }
+        };
+
+        var report = ImageSimilarityHandler.BuildMeasuredLayoutReport(visual, actualLayout);
+
+        report.Issues.Should().Contain(issue => issue.Category == "realization-scale-mismatch" && issue.LocalPath == "root");
+        report.Comparisons.Single(comparison => comparison.LocalPath == "root").ActualScaleX.Should().Be(0.66);
+        report.Comparisons.Single(comparison => comparison.LocalPath == "root").ActualScaleY.Should().Be(0.66);
+    }
+
+    [Fact]
     public void ConvertRecursiveAnalysis_MapsBoundsIntoDeterministicRegionIds()
     {
         var converted = ImageSimilarityHandler.ConvertRecursiveAnalysis(new ImageSimilarityRecursiveScoreNode

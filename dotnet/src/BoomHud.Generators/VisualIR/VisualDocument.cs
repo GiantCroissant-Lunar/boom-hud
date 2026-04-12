@@ -313,6 +313,8 @@ public sealed record VisualRefinementSummary
 
     public RecursiveFidelityScoreNode? ScoreTree { get; init; }
 
+    public IReadOnlyList<VisualMeasuredIssue> MeasuredIssues { get; init; } = [];
+
     public IReadOnlyList<VisualRefinementAction> Actions { get; init; } = [];
 }
 
@@ -327,4 +329,21 @@ public sealed record VisualRefinementAction
     public required string ActionType { get; init; }
 
     public required string Description { get; init; }
+
+    public string? TriggerIssueCategory { get; init; }
+
+    public string? TriggerIssueLocalPath { get; init; }
+}
+
+public sealed record VisualMeasuredIssue
+{
+    public required string Category { get; init; }
+
+    public required string Severity { get; init; }
+
+    public required string LocalPath { get; init; }
+
+    public required string Summary { get; init; }
+
+    public string? SuggestedAction { get; init; }
 }
