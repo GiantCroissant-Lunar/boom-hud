@@ -372,6 +372,11 @@ public static class BaselineCompareHandler
     {
         using var baseline = Image.Load<Rgba32>(baselinePath);
         using var current = Image.Load<Rgba32>(currentPath);
+        return ComputeDiffMetrics(baseline, current, tolerance);
+    }
+
+    internal static DiffMetrics ComputeDiffMetrics(Image<Rgba32> baseline, Image<Rgba32> current, int tolerance)
+    {
 
         var width = Math.Max(baseline.Width, current.Width);
         var height = Math.Max(baseline.Height, current.Height);

@@ -4,6 +4,7 @@ using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
 using BoomHud.Gen.UGui;
 using BoomHud.Generators;
+using BoomHud.Generators.VisualIR;
 using FluentAssertions;
 using Xunit;
 
@@ -121,6 +122,331 @@ public sealed class UGuiGeneratorTests
 
         result.Files.Should().Contain(file => file.Path == "VisualHud.visual-synthesis.json");
         result.Files.Should().Contain(file => file.Path == "VisualHud.visual-refinement.json");
+    }
+
+    [Fact]
+    public void Generate_WhenRequested_EmitsUGuiBuildProgramArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Properties = new Dictionary<string, BindableValue<object?>>
+                {
+                    ["Text"] = "QUEST"
+                }
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with { EmitUGuiBuildProgramArtifact = true });
+
+        result.Files.Should().Contain(file => file.Path == "VisualHud.ugui-build-program.json");
+        result.Files.Single(file => file.Path == "VisualHud.ugui-build-program.json").Content
+            .Should().Contain("\"RootStableId\": \"root\"");
+    }
+
+    [Fact]
+    public void Generate_WithAcceptedUGuiBuildProgramCandidate_AppliesPolicyOverrideByStableId()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var prepared = GenerationDocumentPreprocessor.Prepare(doc, _options, "ugui");
+        var titleStableId = prepared.VisualDocument.Root.Children.Single().StableId;
+        var buildProgram = new UGuiBuildProgram
+        {
+            DocumentName = prepared.VisualDocument.DocumentName,
+            BackendFamily = prepared.VisualDocument.BackendFamily,
+            SourceGenerationMode = prepared.VisualDocument.SourceGenerationMode,
+            RootStableId = prepared.VisualDocument.Root.StableId,
+            CandidateCatalogs =
+            [
+                new UGuiBuildCandidateCatalog
+                {
+                    StableId = titleStableId,
+                    SolveStage = "atom",
+                    Candidates =
+                    [
+                        new UGuiBuildCandidate
+                        {
+                            CandidateId = "container-control",
+                            Label = "Container control override",
+                            Action = new GeneratorRuleAction
+                            {
+                                ControlType = "Container"
+                            }
+                        }
+                    ]
+                }
+            ],
+            AcceptedCandidates =
+            [
+                new UGuiBuildSelection
+                {
+                    StableId = titleStableId,
+                    CandidateId = "container-control"
+                }
+            ]
+        };
+
+        var buildProgramPath = Path.GetTempFileName();
+        try
+        {
+            File.WriteAllText(buildProgramPath, GenerationDocumentPreprocessor.ToJson(buildProgram));
+
+            var result = _generator.Generate(doc, _options with
+            {
+                UGuiBuildProgramPath = buildProgramPath
+            });
+
+            var viewFile = result.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
+            viewFile.Content.Should().Contain("public RectTransform Title { get; }");
+            viewFile.Content.Should().NotContain("public Text Title { get; }");
+        }
+        finally
+        {
+            if (File.Exists(buildProgramPath))
+            {
+                File.Delete(buildProgramPath);
+            }
+        }
+    }
+
+    [Fact]
+    public void Generate_WithAcceptedUGuiBuildProgramTextDelta_AppliesDeltaOnTopOfMetricProfileFontSize()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var prepared = GenerationDocumentPreprocessor.Prepare(doc, _options, "ugui");
+        var titleNode = prepared.VisualDocument.Root.Children.Single();
+        titleNode.MetricProfileId.Should().NotBeNullOrWhiteSpace();
+
+        var buildProgram = new UGuiBuildProgram
+        {
+            DocumentName = prepared.VisualDocument.DocumentName,
+            BackendFamily = prepared.VisualDocument.BackendFamily,
+            SourceGenerationMode = prepared.VisualDocument.SourceGenerationMode,
+            RootStableId = prepared.VisualDocument.Root.StableId,
+            CandidateCatalogs =
+            [
+                new UGuiBuildCandidateCatalog
+                {
+                    StableId = titleNode.StableId,
+                    SolveStage = "atom",
+                    Candidates =
+                    [
+                        new UGuiBuildCandidate
+                        {
+                            CandidateId = "font-bump",
+                            Label = "Increase font size",
+                            Action = new GeneratorRuleAction
+                            {
+                                Text = new GeneratorTextRuleAction
+                                {
+                                    FontSizeDelta = 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            AcceptedCandidates =
+            [
+                new UGuiBuildSelection
+                {
+                    StableId = titleNode.StableId,
+                    CandidateId = "font-bump"
+                }
+            ]
+        };
+
+        var buildProgramPath = Path.GetTempFileName();
+        try
+        {
+            File.WriteAllText(buildProgramPath, GenerationDocumentPreprocessor.ToJson(buildProgram));
+
+            var result = _generator.Generate(doc, _options with
+            {
+                UGuiBuildProgramPath = buildProgramPath
+            });
+
+            var viewFile = result.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
+            viewFile.Content.Should().Contain("ApplyStyle(Title, fg: null, bg: null, fontFamily: \"Press Start 2P\", fontSize: 10,");
+        }
+        finally
+        {
+            if (File.Exists(buildProgramPath))
+            {
+                File.Delete(buildProgramPath);
+            }
+        }
+    }
+
+    [Fact]
+    public void Generate_WithRepeatedSourceIds_AppliesBuildProgramOverrideToMatchingStructuralPath()
+    {
+        var doc = new HudDocument
+        {
+            Name = "RepeatHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "hpBar",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "FIRST"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "hpBar",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "SECOND"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var prepared = GenerationDocumentPreprocessor.Prepare(doc, _options, "ugui");
+        var hpBarStableIds = Flatten(prepared.VisualDocument.Root)
+            .Where(node => string.Equals(node.SourceId, "hpBar", StringComparison.Ordinal))
+            .Select(node => node.StableId)
+            .OrderBy(static id => id, StringComparer.Ordinal)
+            .ToList();
+        hpBarStableIds.Should().HaveCount(2);
+        var firstHpBarStableId = hpBarStableIds[0];
+        var secondHpBarStableId = hpBarStableIds[1];
+
+        var buildProgram = new UGuiBuildProgram
+        {
+            DocumentName = prepared.VisualDocument.DocumentName,
+            BackendFamily = prepared.VisualDocument.BackendFamily,
+            SourceGenerationMode = prepared.VisualDocument.SourceGenerationMode,
+            RootStableId = prepared.VisualDocument.Root.StableId,
+            CandidateCatalogs =
+            [
+                new UGuiBuildCandidateCatalog
+                {
+                    StableId = firstHpBarStableId,
+                    SolveStage = "motif",
+                    Candidates =
+                    [
+                        new UGuiBuildCandidate
+                        {
+                            CandidateId = "force-scrollrect",
+                            Action = new GeneratorRuleAction
+                            {
+                                ControlType = "ScrollRect"
+                            }
+                        }
+                    ]
+                }
+            ],
+            AcceptedCandidates =
+            [
+                new UGuiBuildSelection
+                {
+                    StableId = firstHpBarStableId,
+                    CandidateId = "force-scrollrect"
+                }
+            ]
+        };
+
+        secondHpBarStableId.Should().NotBe(firstHpBarStableId);
+
+        var buildProgramPath = Path.GetTempFileName();
+        try
+        {
+            File.WriteAllText(buildProgramPath, GenerationDocumentPreprocessor.ToJson(buildProgram));
+
+            var result = _generator.Generate(doc, _options with
+            {
+                UGuiBuildProgramPath = buildProgramPath
+            });
+
+            var viewFile = result.Files.Single(file => file.Path == "RepeatHudView.ugui.cs");
+            viewFile.Content.Should().Contain("public ScrollRect HpBar { get; }");
+            viewFile.Content.Should().Contain("public Text HpBar2 { get; }");
+        }
+        finally
+        {
+            if (File.Exists(buildProgramPath))
+            {
+                File.Delete(buildProgramPath);
+            }
+        }
+    }
+
+    private static IEnumerable<VisualNode> Flatten(VisualNode node)
+    {
+        yield return node;
+        foreach (var child in node.Children)
+        {
+            foreach (var descendant in Flatten(child))
+            {
+                yield return descendant;
+            }
+        }
     }
 
     [Fact]
@@ -772,12 +1098,133 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
         var viewFile = result.Files.First(f => f.Path == "PartyStripHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
-        viewFile.Content.Should().Contain("ConfigureRect(Root, width: null, height: 236f, left: null, top: null, absolute: false);");
-        viewFile.Content.Should().Contain("ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: null, preferredHeight: 236f, flexibleWidth: null, flexibleHeight: null);");
-        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 236f, flexibleWidth: null, flexibleHeight: null);");
-        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12, null, childControlWidth: true, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: true);");
+        viewFile.Content.Should().Contain("ConfigureRect(Root, width: null, height: 216f, left: null, top: null, absolute: false);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: null, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(MemberA), width: 400f, height: null, left: null, top: null, absolute: false);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: null, flexibleWidth: null, flexibleHeight: 1f);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);");
         viewFile.Content.Should().Contain("ApplyHorizontalLayout(RectOf(StatusRow), 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
+    }
+
+    [Fact]
+    public void Generate_ComponentRefChild_ContributesIntrinsicSizeToOverflowCompaction()
+    {
+        var heroRowComponent = new HudComponentDefinition
+        {
+            Id = "hero-row",
+            Name = "HeroRow",
+            Root = new ComponentNode
+            {
+                Id = "heroRowRoot",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Height = Dimension.Pixels(76)
+                }
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "PartyStripHud",
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                ["hero-row"] = heroRowComponent
+            },
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Height = Dimension.Pixels(216)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "memberA",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Vertical,
+                            Width = Dimension.Pixels(400),
+                            Gap = Spacing.Uniform(12),
+                            Padding = Spacing.Uniform(12)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "heroRow",
+                                Type = ComponentType.Container,
+                                ComponentRefId = "hero-row"
+                            },
+                            new ComponentNode
+                            {
+                                Id = "hpBar",
+                                Type = ComponentType.ProgressBar,
+                                Layout = new LayoutSpec
+                                {
+                                    Height = Dimension.Pixels(22)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "mpBar",
+                                Type = ComponentType.ProgressBar,
+                                Layout = new LayoutSpec
+                                {
+                                    Height = Dimension.Pixels(22)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "statusRow",
+                                Type = ComponentType.Container,
+                                Layout = new LayoutSpec
+                                {
+                                    Type = LayoutType.Horizontal,
+                                    Height = Dimension.Pixels(56)
+                                },
+                                Children =
+                                [
+                                    new ComponentNode
+                                    {
+                                        Id = "statusBuff1",
+                                        Type = ComponentType.Container,
+                                        Layout = new LayoutSpec
+                                        {
+                                            Width = Dimension.Pixels(56),
+                                            Height = Dimension.Pixels(56)
+                                        }
+                                    },
+                                    new ComponentNode
+                                    {
+                                        Id = "statusBuff2",
+                                        Type = ComponentType.Container,
+                                        Layout = new LayoutSpec
+                                        {
+                                            Width = Dimension.Pixels(56),
+                                            Height = Dimension.Pixels(56)
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "PartyStripHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("var heroRowView = new HeroRowView(RectOf(MemberA), null, null);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);");
     }
 
     [Fact]

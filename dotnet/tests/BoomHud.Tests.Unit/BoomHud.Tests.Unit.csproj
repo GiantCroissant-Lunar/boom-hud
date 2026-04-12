@@ -35,6 +35,7 @@
     <Compile Include="Generation\GodotGeneratorTests.cs" />
     <Compile Include="Generation\SyntheticComponentizationTests.cs" />
     <Compile Include="Generation\VisualDocumentBuilderTests.cs" />
+    <Compile Include="Generation\VisualPlanningTests.cs" />
     <Compile Include="Generation\ReactGeneratorTests.cs" />
     <Compile Include="Generation\RemotionGeneratorTests.cs" />
     <Compile Include="Generation\TerminalGuiGeneratorTests.cs" />

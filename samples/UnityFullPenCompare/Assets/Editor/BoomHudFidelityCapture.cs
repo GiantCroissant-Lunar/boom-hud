@@ -609,6 +609,11 @@ namespace BoomHud.Compare.Editor
         private static Texture2D CropToRectTransform(Texture2D fullTexture, RectTransform target)
         {
             var canvas = target.GetComponentInParent<Canvas>();
+            if (canvas != null && TryCropScreenSpaceCameraRect(fullTexture, target, canvas, out var pixelAdjustedCrop))
+            {
+                return pixelAdjustedCrop;
+            }
+
             var camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
                 ? canvas.worldCamera ?? Camera.main
                 : null;
@@ -628,6 +633,41 @@ namespace BoomHud.Compare.Editor
             croppedTexture.SetPixels(pixels);
             croppedTexture.Apply();
             return croppedTexture;
+        }
+
+        private static bool TryCropScreenSpaceCameraRect(Texture2D fullTexture, RectTransform target, Canvas canvas, out Texture2D croppedTexture)
+        {
+            croppedTexture = null!;
+            if (canvas.renderMode != RenderMode.ScreenSpaceCamera)
+            {
+                return false;
+            }
+
+            var pixelRect = RectTransformUtility.PixelAdjustRect(target, canvas);
+            if (pixelRect.width <= 0f || pixelRect.height <= 0f)
+            {
+                return false;
+            }
+
+            var x = Mathf.RoundToInt((fullTexture.width * 0.5f) + pixelRect.xMin);
+            var y = Mathf.RoundToInt((fullTexture.height * 0.5f) + pixelRect.yMin);
+            var width = Mathf.RoundToInt(pixelRect.width);
+            var height = Mathf.RoundToInt(pixelRect.height);
+
+            x = Mathf.Clamp(x, 0, fullTexture.width - 1);
+            y = Mathf.Clamp(y, 0, fullTexture.height - 1);
+            width = Mathf.Clamp(width, 1, fullTexture.width - x);
+            height = Mathf.Clamp(height, 1, fullTexture.height - y);
+            if (width <= 1 || height <= 1)
+            {
+                return false;
+            }
+
+            var pixels = fullTexture.GetPixels(x, y, width, height);
+            croppedTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            croppedTexture.SetPixels(pixels);
+            croppedTexture.Apply();
+            return true;
         }
 
         private static Texture2D NormalizeCapturedTextureSize(Texture2D texture, int requestedWidth, int requestedHeight)
@@ -1036,8 +1076,8 @@ namespace BoomHud.Compare.Editor
                 EditorApplication.QueuePlayerLoopUpdate();
                 Thread.Sleep(100);
 
-                var target = GameObject.Find(targetObjectName);
-                if (target != null && target.TryGetComponent<RectTransform>(out var rectTransform))
+                var rectTransform = FindTargetRectTransformUnderActiveUGuiHosts(targetObjectName);
+                if (rectTransform != null)
                 {
                     lastResolved = rectTransform;
                     ForceRebuildLayoutChain(rectTransform);
@@ -1054,6 +1094,42 @@ namespace BoomHud.Compare.Editor
             }
 
             throw new InvalidOperationException($"Could not resolve target object '{targetObjectName}'.");
+        }
+
+        private static RectTransform? FindTargetRectTransformUnderActiveUGuiHosts(string targetObjectName)
+        {
+            var hosts = UnityEngine.Object.FindObjectsByType<BoomHudUGuiHost>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var host in hosts)
+            {
+                if (host == null || !host.isActiveAndEnabled)
+                {
+                    continue;
+                }
+
+                var matches = host.GetComponentsInChildren<RectTransform>(true)
+                    .Where(rect => rect != null && string.Equals(rect.name, targetObjectName, StringComparison.Ordinal))
+                    .ToArray();
+
+                if (matches.Length == 0)
+                {
+                    continue;
+                }
+
+                var exactRootChild = matches.FirstOrDefault(match =>
+                    match.parent != null &&
+                    string.Equals(match.parent.name, "BoomHudUGuiFixtureRoot", StringComparison.Ordinal));
+                if (exactRootChild != null)
+                {
+                    return exactRootChild;
+                }
+
+                return matches[0];
+            }
+
+            var target = GameObject.Find(targetObjectName);
+            return target != null && target.TryGetComponent<RectTransform>(out var rectTransform)
+                ? rectTransform
+                : null;
         }
 
         private static Rect ResolveElementRect(VisualElement element, int fallbackWidth, int fallbackHeight)

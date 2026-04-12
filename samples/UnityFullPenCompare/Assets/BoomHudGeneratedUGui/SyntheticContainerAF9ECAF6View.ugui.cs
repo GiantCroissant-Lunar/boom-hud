@@ -63,8 +63,8 @@ public sealed class SyntheticContainerAF9ECAF6View
         RoleIcon.text = ResolveIconText("sword");
         RoleIcon.gameObject.SetActive(true);
         Identity = CreateRect("Identity", Root);
-        ConfigureRect(RectOf(Identity), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Identity), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(Identity), width: null, height: 76f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(Identity), ignoreLayout: false, preferredWidth: null, preferredHeight: 76f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Identity), horizontal: false, vertical: true);
         ApplyVerticalLayout(RectOf(Identity), 8f, 0, 0, 0, 0);
         ApplyStyle(Identity, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);

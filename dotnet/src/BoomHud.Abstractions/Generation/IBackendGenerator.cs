@@ -97,6 +97,17 @@ public sealed record GenerationOptions
     public bool EmitVisualRefinementArtifact { get; init; }
 
     /// <summary>
+    /// Emit a compiler-only replayable uGUI build program artifact.
+    /// </summary>
+    public bool EmitUGuiBuildProgramArtifact { get; init; }
+
+    /// <summary>
+    /// Optional replayable uGUI build-program artifact whose accepted subtree choices
+    /// should be consumed during experimental uGUI emission.
+    /// </summary>
+    public string? UGuiBuildProgramPath { get; init; }
+
+    /// <summary>
     /// Maximum number of refinement actions to plan in one bounded Visual refinement pass.
     /// </summary>
     public int VisualRefinementIterationBudget { get; init; } = 4;

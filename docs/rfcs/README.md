@@ -25,6 +25,7 @@ This directory contains Request for Comments (RFC) documents for the BoomHud pro
 | [RFC-0019](./RFC-0019-remotion-motion-ir-authoring.md) | Remotion as Motion IR Authoring Surface | Draft |
 | [RFC-0020](./RFC-0020-ui-motion-ir-contract-hardening.md) | UI and Motion IR Contract Hardening | Draft |
 | [RFC-0021](./RFC-0021-visual-fidelity-architecture.md) | Visual Fidelity Architecture | Draft |
+| [RFC-0022](./RFC-0022-replayable-ugui-synthesis.md) | Replayable uGUI Synthesis | Draft |
 
 ## RFC Process
 

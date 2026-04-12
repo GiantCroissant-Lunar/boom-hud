@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
@@ -19,6 +20,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var diagnostics = new List<Diagnostic>();
         var files = new List<GeneratedFile>();
         var prepared = GenerationDocumentPreprocessor.Prepare(document, options, "ugui");
+        var buildProgramOverride = LoadBuildProgramOverride(options, diagnostics);
         document = prepared.Document;
         diagnostics.AddRange(prepared.Diagnostics);
 
@@ -34,10 +36,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                     Root = component.Root,
                     Styles = document.Styles,
                     Components = document.Components
-                }, options, diagnostics, files, visualPlan);
+                }, options, diagnostics, files, visualPlan, buildProgramOverride);
             }
 
-            var plan = Emit(document, options, diagnostics, files, visualPlan);
+            var plan = Emit(document, options, diagnostics, files, visualPlan, buildProgramOverride);
             if (options.Motion != null)
             {
                 EmitMotion(document, plan, options, diagnostics, files);
@@ -71,12 +73,39 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             files.Add(visualRefinementArtifact);
         }
 
+        if (options.EmitUGuiBuildProgramArtifact
+            && GenerationDocumentPreprocessor.CreateUGuiBuildProgramArtifact(document.Name, prepared.UGuiBuildProgram) is { } uguiBuildProgramArtifact)
+        {
+            files.Add(uguiBuildProgramArtifact);
+        }
+
         return new GenerationResult { Files = files, Diagnostics = diagnostics };
     }
 
-    private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files, VisualToUGuiPlan? visualPlan)
+    private static UGuiBuildProgram? LoadBuildProgramOverride(GenerationOptions options, List<Diagnostic> diagnostics)
     {
-        var plan = Planner.Create(document, diagnostics, options.RuleSet, visualPlan);
+        if (string.IsNullOrWhiteSpace(options.UGuiBuildProgramPath))
+        {
+            return null;
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<UGuiBuildProgram>(File.ReadAllText(options.UGuiBuildProgramPath))
+                ?? throw new InvalidOperationException("The file did not deserialize into a uGUI build program.");
+        }
+        catch (Exception exception)
+        {
+            diagnostics.Add(Diagnostic.Warning(
+                $"Failed to load experimental uGUI build program '{options.UGuiBuildProgramPath}': {exception.Message}",
+                code: "BHUG1004"));
+            return null;
+        }
+    }
+
+    private static PlanDocument Emit(HudDocument document, GenerationOptions options, List<Diagnostic> diagnostics, List<GeneratedFile> files, VisualToUGuiPlan? visualPlan, UGuiBuildProgram? buildProgramOverride)
+    {
+        var plan = Planner.Create(document, diagnostics, options.RuleSet, visualPlan, buildProgramOverride);
         files.Add(new GeneratedFile { Path = $"{document.Name}View.ugui.cs", Content = GenerateView(document, plan, options, diagnostics), Type = GeneratedFileType.SourceCode });
         if (options.EmitViewModelInterfaces)
         {
@@ -275,10 +304,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var flexAlignmentPreset = LayoutPolicyService.ResolveFlexAlignmentPreset(node.Policy);
 
         var configuredWidth = absolute
-            ? Pixels(widthDimension)
+            ? ConfigureAbsoluteSize(node, widthDimension, "width")
             : ConfigureSize(node, parentNode, widthDimension, "width");
         var configuredHeight = absolute
-            ? Pixels(heightDimension)
+            ? ConfigureAbsoluteSize(node, heightDimension, "height")
             : ConfigureSize(node, parentNode, heightDimension, "height");
 
         builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(configuredWidth)}, height: {ToNullableFloatLiteral(configuredHeight)}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
@@ -333,14 +362,17 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             }
         }
 
+        var resolvedFontFamily = ResolveFontFamily(node, textMetric, iconMetric, widthDimension, heightDimension);
+        var resolvedFontSize = ResolveFontSize(node, textMetric, iconMetric, widthDimension, heightDimension);
+
         if (style != null || node.Source.Type == ComponentType.Icon)
         {
             builder.AppendLine(
                 $"{indent}ApplyStyle({accessor}, " +
                 $"fg: {ToNullableStringLiteral(style?.Foreground?.ToHex())}, " +
                 $"bg: {ToNullableStringLiteral(style?.Background?.ToHex())}, " +
-                $"fontFamily: {ToNullableStringLiteral(iconMetric?.ResolvedFontFamily ?? textMetric?.ResolvedFontFamily ?? TextPolicyService.ResolveFontFamily(node.Source, node.Policy))}, " +
-                $"fontSize: {ToNullableIntLiteral(iconMetric?.ResolvedFontSize ?? textMetric?.ResolvedFontSize ?? TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy))}, " +
+                $"fontFamily: {ToNullableStringLiteral(resolvedFontFamily)}, " +
+                $"fontSize: {ToNullableIntLiteral(resolvedFontSize)}, " +
                 $"borderColor: {ToNullableStringLiteral(style?.Border?.Color?.ToHex())}, " +
                 $"borderWidth: {ToNullableFloatLiteral(style?.Border is { Width: > 0 } border ? border.Width : null)}, " +
                 $"treatAsIcon: {Bool(IsIconTextNode(node))});");
@@ -351,7 +383,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             var width = Pixels(widthDimension) ?? 16d;
             var height = Pixels(heightDimension) ?? 16d;
             builder.AppendLine(
-                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(iconMetric?.BaselineOffset ?? IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(iconMetric?.OpticalCentering ?? IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(iconMetric?.SizeMode ?? IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(iconMetric?.ResolvedFontSize ?? IconPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy) ?? 0d)});");
+                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(iconMetric?.BaselineOffset ?? IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(iconMetric?.OpticalCentering ?? IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(iconMetric?.SizeMode ?? IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(resolvedFontSize ?? 0d)});");
         }
 
         if (ShouldApplyTextMetrics(node))
@@ -598,6 +630,71 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             _ => null
         };
 
+    private static string? ResolveFontFamily(
+        PlannedNode node,
+        TextMetricProfile? textMetric,
+        IconMetricProfile? iconMetric,
+        Dimension? widthDimension,
+        Dimension? heightDimension)
+    {
+        if (IsIconTextNode(node))
+        {
+            return iconMetric?.ResolvedFontFamily
+                   ?? textMetric?.ResolvedFontFamily
+                   ?? TextPolicyService.ResolveFontFamily(node.Source, node.Policy);
+        }
+
+        return node.Policy.Text.FontFamily
+               ?? textMetric?.ResolvedFontFamily
+               ?? iconMetric?.ResolvedFontFamily
+               ?? TextPolicyService.ResolveFontFamily(node.Source, node.Policy);
+    }
+
+    private static double? ResolveFontSize(
+        PlannedNode node,
+        TextMetricProfile? textMetric,
+        IconMetricProfile? iconMetric,
+        Dimension? widthDimension,
+        Dimension? heightDimension)
+    {
+        if (IsIconTextNode(node))
+        {
+            var baseFontSize = iconMetric?.ResolvedFontSize ?? textMetric?.ResolvedFontSize;
+            if (node.Policy.Icon.FontSize is double explicitIconFontSize && explicitIconFontSize > 0d)
+            {
+                baseFontSize = explicitIconFontSize;
+            }
+            else if (baseFontSize is null || baseFontSize <= 0d)
+            {
+                baseFontSize = IconPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy);
+            }
+
+            if (node.Policy.Icon.FontSizeDelta is { } iconFontSizeDelta)
+            {
+                baseFontSize = (baseFontSize ?? 0d) + iconFontSizeDelta;
+            }
+
+            return baseFontSize is > 0d ? baseFontSize : null;
+        }
+
+        var resolvedTextFontSize = textMetric?.ResolvedFontSize ?? iconMetric?.ResolvedFontSize;
+        if (node.Policy.Text.FontSize is double explicitTextFontSize && explicitTextFontSize > 0d)
+        {
+            resolvedTextFontSize = explicitTextFontSize;
+        }
+        else if (resolvedTextFontSize is null || resolvedTextFontSize <= 0d)
+        {
+            resolvedTextFontSize = TextPolicyService.ResolveFontSize(node.Source, widthDimension, heightDimension, node.Policy);
+        }
+
+        if (node.Policy.Text.FontSizeDelta is { } textFontSizeDelta)
+        {
+            resolvedTextFontSize = (resolvedTextFontSize ?? 0d) + textFontSizeDelta;
+        }
+
+        return resolvedTextFontSize is > 0d ? resolvedTextFontSize : null;
+    }
+
     private static double? FlexibleSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis, LayoutType? parentLayout, bool preferContentSize)
         => preferContentSize || ShouldPreservePreferredSizeInParent(node, parentNode, axis)
             ? null
@@ -610,16 +707,29 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             return PromoteIntrinsicShellSize(node, axis, explicitPixels);
         }
 
+        if (ResolveCrossAxisFillSize(node, parentNode, axis) is { } crossAxisFill)
+        {
+            return crossAxisFill;
+        }
+
         return ShouldPreservePreferredSizeInParent(node, parentNode, axis)
             ? PreferredSize(node, parentNode, dimension, axis)
             : null;
     }
+
+    private static double? ConfigureAbsoluteSize(PlannedNode node, Dimension? dimension, string axis)
+        => LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy);
 
     private static double? PreferredSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis)
     {
         if (LayoutPolicyService.ResolvePreferredSize(dimension, axis, node.Policy) is { } explicitPreferred)
         {
             return PromoteIntrinsicShellSize(node, axis, explicitPreferred);
+        }
+
+        if (ResolveCrossAxisFillSize(node, parentNode, axis) is { } crossAxisFill)
+        {
+            return crossAxisFill;
         }
 
         return ShouldPreservePreferredSizeInParent(node, parentNode, axis)
@@ -664,7 +774,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var dimension = axis == "width"
             ? node.Source.Layout?.Width ?? node.Source.Style?.Width
             : node.Source.Layout?.Height ?? node.Source.Style?.Height;
-        return HasPinnedSize(dimension);
+        return HasPinnedSize(dimension) && HasExplicitContentPreference(node, axis);
     }
 
     private static double? EstimateChildStackAxisSize(PlannedNode node, string axis)
@@ -860,7 +970,9 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return settings with
         {
             Gap = adjustedGap,
-            Padding = adjustedPadding
+            Padding = adjustedPadding,
+            ChildControlWidth = mainAxis == "width" ? false : settings.ChildControlWidth,
+            ChildControlHeight = mainAxis == "height" ? false : settings.ChildControlHeight
         };
     }
 
@@ -898,6 +1010,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             return false;
         }
 
+        if (!HasExplicitContentPreference(node, axis))
+        {
+            return false;
+        }
+
         var available = ResolveAvailableMainAxis(node, parentNode, axis);
         var preferred = EstimateIntrinsicAxisSize(node, axis);
         return available.HasValue
@@ -909,6 +1026,35 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static bool IsCrossAxisOfParent(PlannedNode parentNode, string axis)
         => (axis == "height" && parentNode.Source.Layout?.Type == LayoutType.Horizontal)
            || (axis == "width" && parentNode.Source.Layout?.Type is LayoutType.Vertical or LayoutType.Stack);
+
+    private static bool HasExplicitContentPreference(PlannedNode node, string axis)
+        => axis == "width"
+            ? node.Policy.Layout.PreferContentWidth == true
+            : node.Policy.Layout.PreferContentHeight == true;
+
+    private static double? ResolveCrossAxisFillSize(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (parentNode == null || !IsCrossAxisOfParent(parentNode, axis))
+        {
+            return null;
+        }
+
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (HasPinnedSize(dimension) || HasExplicitContentPreference(node, axis))
+        {
+            return null;
+        }
+
+        var edgeContract = node.VisualNode?.EdgeContract;
+        var fillAxis = axis == "width"
+            ? edgeContract?.WidthSizing == AxisSizing.Fill
+            : edgeContract?.HeightSizing == AxisSizing.Fill;
+        return fillAxis
+            ? ResolveAvailableMainAxis(node, parentNode, axis)
+            : null;
+    }
 
     private static double? EstimateIntrinsicAxisSize(PlannedNode node, string axis)
     {
@@ -924,6 +1070,16 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         if (policyPreferred.HasValue)
         {
             return policyPreferred.Value;
+        }
+
+        if (node.ReferencedRoot != null && EstimateIntrinsicAxisSize(node.ReferencedRoot, axis) is { } plannedComponentIntrinsic)
+        {
+            return plannedComponentIntrinsic;
+        }
+
+        if (node.ReferencedComponent != null && EstimateIntrinsicAxisSize(node.ReferencedComponent.Root, axis) is { } componentIntrinsic)
+        {
+            return componentIntrinsic;
         }
 
         if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
@@ -1023,6 +1179,16 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             return policyPreferred.Value;
         }
 
+        if (node.ReferencedRoot != null && ResolveNominalAxisSize(node.ReferencedRoot, axis) is { } plannedComponentNominal)
+        {
+            return plannedComponentNominal;
+        }
+
+        if (node.ReferencedComponent != null && ResolveNominalAxisSize(node.ReferencedComponent.Root, axis) is { } componentNominal)
+        {
+            return componentNominal;
+        }
+
         if (EstimateIntrinsicAxisSize(node, axis) is { } intrinsic)
         {
             return intrinsic;
@@ -1062,6 +1228,60 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         }
 
         return false;
+    }
+
+    private static double? EstimateIntrinsicAxisSize(ComponentNode node, string axis)
+    {
+        var dimension = axis == "width"
+            ? node.Layout?.Width ?? node.Style?.Width
+            : node.Layout?.Height ?? node.Style?.Height;
+        if (Pixels(dimension) is { } explicitPixels)
+        {
+            return explicitPixels;
+        }
+
+        if (node.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
+        {
+            return null;
+        }
+
+        var isHorizontal = node.Layout.Type == LayoutType.Horizontal;
+        var mainAxis = isHorizontal ? "width" : "height";
+        var resolvedPadding = node.Layout.Padding ?? Spacing.Zero;
+        var gap = Gap(node.Layout.Gap, isHorizontal);
+        var childSizes = node.Children
+            .Select(child => EstimateIntrinsicAxisSize(child, axis))
+            .Where(static value => value.HasValue)
+            .Select(static value => value!.Value)
+            .ToList();
+        if (childSizes.Count == 0)
+        {
+            return null;
+        }
+
+        var paddingTotal = axis == "width"
+            ? resolvedPadding.Left + resolvedPadding.Right
+            : resolvedPadding.Top + resolvedPadding.Bottom;
+        var gapTotal = axis == mainAxis
+            ? gap * Math.Max(0, node.Children.Count - 1)
+            : 0d;
+        var content = axis == mainAxis
+            ? childSizes.Sum()
+            : childSizes.Max();
+        return content + gapTotal + paddingTotal;
+    }
+
+    private static double? ResolveNominalAxisSize(ComponentNode node, string axis)
+    {
+        var dimension = axis == "width"
+            ? node.Layout?.Width ?? node.Style?.Width
+            : node.Layout?.Height ?? node.Style?.Height;
+        if (Pixels(dimension) is { } explicitPixels)
+        {
+            return explicitPixels;
+        }
+
+        return EstimateIntrinsicAxisSize(node, axis);
     }
 
     private static string BuildHorizontalLayoutCall(string rect, ShellLayoutSettings settings, string? alignmentPreset)
@@ -1236,12 +1456,13 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private sealed class Planner
     {
-        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics, GeneratorRuleSet? ruleSet, VisualToUGuiPlan? visualPlan)
+        public static PlanDocument Create(HudDocument document, List<Diagnostic> diagnostics, GeneratorRuleSet? ruleSet, VisualToUGuiPlan? visualPlan, UGuiBuildProgram? buildProgramOverride)
         {
             var names = new HashSet<string>(StringComparer.Ordinal);
             var props = new Dictionary<string, ViewModelProperty>(StringComparer.Ordinal);
             var ruleResolver = new RuleResolver(ruleSet, "ugui");
-            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, ruleResolver, document.Name, ComponentInstanceOverrideSupport.RootPath, parent: null, grandparent: null, siblingIndex: 0, visualPlan, forceRoot: true);
+            var buildProgramResolver = UGuiBuildProgramOverrideResolver.Create(buildProgramOverride);
+            var root = CreateNode(document.Root, document.Name + "Root", document, diagnostics, names, props, ruleResolver, buildProgramResolver, document.Name, ComponentInstanceOverrideSupport.RootPath, parent: null, grandparent: null, siblingIndex: 0, visualPlan, forceRoot: true);
             return new PlanDocument
             {
                 Root = root,
@@ -1250,18 +1471,48 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             };
         }
 
-        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, RuleResolver ruleResolver, string documentName, string relativePath, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex, VisualToUGuiPlan? visualPlan, bool forceRoot = false)
+        private static PlannedNode CreateNode(ComponentNode source, string fallbackName, HudDocument document, List<Diagnostic> diagnostics, HashSet<string> names, Dictionary<string, ViewModelProperty> props, RuleResolver ruleResolver, UGuiBuildProgramOverrideResolver buildProgramResolver, string documentName, string relativePath, ComponentNode? parent, ComponentNode? grandparent, int siblingIndex, VisualToUGuiPlan? visualPlan, bool forceRoot = false)
         {
             Track(source, props);
             var baseName = forceRoot ? document.Name + "Root" : Pascal(source.Id ?? fallbackName);
             var fieldName = forceRoot ? "Root" : Unique(baseName, names);
-            var policy = ruleResolver.Resolve(documentName, source, new RuleSelectionContext(parent, grandparent, siblingIndex));
-            var visualResolved = visualPlan?.Resolve(source.Id);
+            var visualResolved = visualPlan?.Resolve(source.Id, documentName, relativePath);
+            var policy = buildProgramResolver.Apply(
+                ruleResolver.Resolve(documentName, source, new RuleSelectionContext(parent, grandparent, siblingIndex)),
+                visualResolved?.Node?.StableId);
             var fieldType = ResolveFieldType(source, document, diagnostics, policy, out var componentView);
+            var referencedComponent = source.ComponentRefId != null && document.Components.TryGetValue(source.ComponentRefId, out var componentDefinition)
+                ? componentDefinition
+                : null;
+            var referencedRoot = componentView != null && referencedComponent != null
+                ? CreateReferencedComponentNode(referencedComponent, document, diagnostics, ruleResolver, buildProgramResolver, visualPlan)
+                : null;
             var children = componentView == null
-                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props, ruleResolver, documentName, ComponentInstanceOverrideSupport.ChildPath(relativePath, index), source, parent, index, visualPlan)).ToList()
+                ? source.Children.Select((child, index) => CreateNode(child, child.Id ?? child.Type + (index + 1).ToString(CultureInfo.InvariantCulture), document, diagnostics, names, props, ruleResolver, buildProgramResolver, documentName, ComponentInstanceOverrideSupport.ChildPath(relativePath, index), source, parent, index, visualPlan)).ToList()
                 : [];
-            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, RelativePath = relativePath, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, Source = source, Policy = policy, VisualNode = visualResolved?.Node, MetricProfile = visualResolved?.MetricProfile, Children = children };
+            return new PlannedNode { Name = forceRoot ? document.Name + "Root" : fieldName, RelativePath = relativePath, FieldName = fieldName, FieldType = fieldType, ComponentView = componentView, ReferencedComponent = referencedComponent, ReferencedRoot = referencedRoot, Source = source, Policy = policy, VisualNode = visualResolved?.Node, MetricProfile = visualResolved?.MetricProfile, Children = children };
+        }
+
+        private static PlannedNode CreateReferencedComponentNode(HudComponentDefinition component, HudDocument document, List<Diagnostic> diagnostics, RuleResolver ruleResolver, UGuiBuildProgramOverrideResolver buildProgramResolver, VisualToUGuiPlan? visualPlan)
+        {
+            var names = new HashSet<string>(StringComparer.Ordinal);
+            var props = new Dictionary<string, ViewModelProperty>(StringComparer.Ordinal);
+            return CreateNode(
+                component.Root,
+                component.Name + "Root",
+                document,
+                diagnostics,
+                names,
+                props,
+                ruleResolver,
+                buildProgramResolver,
+                component.Name,
+                ComponentInstanceOverrideSupport.RootPath,
+                parent: null,
+                grandparent: null,
+                siblingIndex: 0,
+                visualPlan,
+                forceRoot: true);
         }
 
         private static void Track(ComponentNode node, Dictionary<string, ViewModelProperty> props)
@@ -1372,6 +1623,8 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         public required string FieldName { get; init; }
         public required string FieldType { get; init; }
         public string? ComponentView { get; init; }
+        public HudComponentDefinition? ReferencedComponent { get; init; }
+        public PlannedNode? ReferencedRoot { get; init; }
         public required ComponentNode Source { get; init; }
         public required ResolvedGeneratorPolicy Policy { get; init; }
         public VisualNode? VisualNode { get; init; }
@@ -1383,5 +1636,62 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     {
         public required string Path { get; init; }
         public required string Identifier { get; init; }
+    }
+
+    private sealed class UGuiBuildProgramOverrideResolver
+    {
+        private readonly IReadOnlyDictionary<string, GeneratorRuleAction> _actionsByStableId;
+
+        private UGuiBuildProgramOverrideResolver(IReadOnlyDictionary<string, GeneratorRuleAction> actionsByStableId)
+        {
+            _actionsByStableId = actionsByStableId;
+        }
+
+        public static UGuiBuildProgramOverrideResolver Create(UGuiBuildProgram? buildProgram)
+        {
+            if (buildProgram == null)
+            {
+                return new UGuiBuildProgramOverrideResolver(new Dictionary<string, GeneratorRuleAction>(StringComparer.Ordinal));
+            }
+
+            var catalogs = buildProgram.CandidateCatalogs.ToDictionary(static catalog => catalog.StableId, StringComparer.Ordinal);
+            var actions = new Dictionary<string, GeneratorRuleAction>(StringComparer.Ordinal);
+            foreach (var selection in buildProgram.AcceptedCandidates)
+            {
+                if (!catalogs.TryGetValue(selection.StableId, out var catalog))
+                {
+                    continue;
+                }
+
+                var candidate = catalog.Candidates.FirstOrDefault(entry => string.Equals(entry.CandidateId, selection.CandidateId, StringComparison.Ordinal));
+                if (candidate == null)
+                {
+                    continue;
+                }
+
+                actions[selection.StableId] = candidate.Action;
+                foreach (var descendant in candidate.DescendantActions)
+                {
+                    if (string.IsNullOrWhiteSpace(descendant.StableId))
+                    {
+                        continue;
+                    }
+
+                    actions[descendant.StableId] = descendant.Action;
+                }
+            }
+
+            return new UGuiBuildProgramOverrideResolver(actions);
+        }
+
+        public ResolvedGeneratorPolicy Apply(ResolvedGeneratorPolicy policy, string? stableId)
+        {
+            if (string.IsNullOrWhiteSpace(stableId) || !_actionsByStableId.TryGetValue(stableId, out var action))
+            {
+                return policy;
+            }
+
+            return policy.Apply(action);
+        }
     }
 }

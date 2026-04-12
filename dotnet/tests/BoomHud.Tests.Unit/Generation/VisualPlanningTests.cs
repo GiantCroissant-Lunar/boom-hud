@@ -1,5 +1,6 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators;
 using BoomHud.Generators.VisualIR;
 using FluentAssertions;
 using Xunit;
@@ -9,7 +10,7 @@ namespace BoomHud.Tests.Unit.Generation;
 public sealed class VisualPlanningTests
 {
     [Fact]
-    public void Synthesize_RepeatedSameShapeCardsWithDifferentTextIconAndValue_LiftsOneVisualComponentFamily()
+    public void Synthesize_RepeatedSameShapeCardsWithDifferentTextIconAndValue_DoesNotYetLiftParametricFamily()
     {
         var document = new HudDocument
         {
@@ -26,25 +27,13 @@ public sealed class VisualPlanningTests
             }
         };
 
-        var visual = VisualDocumentBuilder.Build(
-            GenerationDocumentPreprocessor.Prepare(document, new GenerationOptions(), "react").Document,
-            new GenerationOptions(),
-            "react");
+        var visual = VisualDocumentBuilder.Build(document, new GenerationOptions(), "react");
 
         var synthesized = VisualSynthesisPlanner.Synthesize(visual);
 
-        synthesized.Summary.ChosenFamilyCount.Should().Be(1);
-        synthesized.Summary.RewrittenOccurrenceCount.Should().Be(2);
-        synthesized.Document.Components.Should().ContainSingle();
-        synthesized.Document.Root.Children.Should().OnlyContain(static child => child.ComponentRefId != null);
-
-        var secondOverrides = synthesized.Document.Root.Children[1].PropertyOverrides;
-        secondOverrides.Should().ContainKey("$/0");
-        secondOverrides.Should().ContainKey("$/1");
-        secondOverrides.Should().ContainKey("$/2");
-        secondOverrides["$/0"].Should().Contain(new KeyValuePair<string, object?>("Text", "BONUS"));
-        secondOverrides["$/1"].Should().Contain(new KeyValuePair<string, object?>("Text", "sparkles"));
-        secondOverrides["$/2"].Should().Contain(new KeyValuePair<string, object?>("Value", 72));
+        synthesized.Summary.ChosenFamilyCount.Should().Be(0);
+        synthesized.Summary.RewrittenOccurrenceCount.Should().Be(0);
+        synthesized.Document.Components.Should().BeEmpty();
     }
 
     [Fact]
@@ -237,6 +226,149 @@ public sealed class VisualPlanningTests
         summary.Actions[0].TriggerIssueLocalPath.Should().Be("root/1/0");
         summary.Actions[1].ActionType.Should().Be("metric-profile-adjustment");
     }
+
+    [Fact]
+    public void UGuiBuildProgramPlanner_ProducesReplayableDeterministicStepsAndCheckpoints()
+    {
+        var document = new VisualDocument
+        {
+            DocumentName = "PartyStatusStrip",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container,
+                    LayoutType = LayoutType.Vertical
+                },
+                EdgeContract = CreateEdgeContract(),
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/header",
+                        Kind = VisualNodeKind.Text,
+                        SourceType = ComponentType.Label,
+                        MetricProfileId = "metric:header",
+                        Box = new VisualBox { SourceType = ComponentType.Label },
+                        EdgeContract = CreateEdgeContract()
+                    },
+                    new VisualNode
+                    {
+                        StableId = "root/card",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container,
+                            LayoutType = LayoutType.Horizontal
+                        },
+                        EdgeContract = CreateEdgeContract(),
+                        Children =
+                        [
+                            new VisualNode
+                            {
+                                StableId = "root/card/icon",
+                                Kind = VisualNodeKind.Icon,
+                                SourceType = ComponentType.Icon,
+                                MetricProfileId = "metric:icon",
+                                Box = new VisualBox { SourceType = ComponentType.Icon },
+                                EdgeContract = CreateEdgeContract()
+                            }
+                        ]
+                    }
+                ]
+            },
+            MetricProfiles =
+            [
+                new MetricProfileDefinition
+                {
+                    Id = "metric:header",
+                    BackendFamily = "ugui",
+                    SemanticClass = "header",
+                    Text = new TextMetricProfile
+                    {
+                        WrapText = false
+                    }
+                },
+                new MetricProfileDefinition
+                {
+                    Id = "metric:icon",
+                    BackendFamily = "ugui",
+                    SemanticClass = "icon",
+                    Icon = new IconMetricProfile
+                    {
+                        BaselineOffset = 0,
+                        OpticalCentering = true,
+                        SizeMode = "fit-box"
+                    }
+                }
+            ]
+        };
+
+        var program = UGuiBuildProgramPlanner.Plan(document);
+
+        program.DocumentName.Should().Be("PartyStatusStrip");
+        program.BackendFamily.Should().Be("ugui");
+        program.RootStableId.Should().Be("root");
+        program.Steps.Should().NotBeEmpty();
+        program.Steps.Select(static step => step.Order).Should().ContainInOrder(Enumerable.Range(1, program.Steps.Count));
+        program.Steps.Should().Contain(step => step.StableId == "root" && step.ActionType == "create-node");
+        program.Steps.Should().Contain(step => step.StableId == "root/header" && step.ActionType == "bind-metric-profile");
+        program.Steps.Should().Contain(step => step.StableId == "root/card/icon" && step.ActionType == "seal-subtree");
+        program.Checkpoints.Should().Contain(checkpoint => checkpoint.StableId == "root/card/icon" && checkpoint.SolveStage == "atom");
+        program.Checkpoints.Should().Contain(checkpoint => checkpoint.StableId == "root/card" && checkpoint.SolveStage == "motif");
+        program.Checkpoints.Should().Contain(checkpoint => checkpoint.StableId == "root" && checkpoint.SolveStage == "motif");
+    }
+
+    [Fact]
+    public void Prepare_ForUGui_CreatesUGuiBuildProgram()
+    {
+        var document = new HudDocument
+        {
+            Name = "PartyStatusStrip",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "header",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "Header"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var prepared = GenerationDocumentPreprocessor.Prepare(document, new GenerationOptions(), "ugui");
+
+        prepared.UGuiBuildProgram.Should().NotBeNull();
+        prepared.UGuiBuildProgram!.DocumentName.Should().Be("PartyStatusStrip");
+        prepared.UGuiBuildProgram.BackendFamily.Should().Be("ugui");
+    }
+
+    private static EdgeContract CreateEdgeContract()
+        => new()
+        {
+            Participation = LayoutParticipation.NormalFlow,
+            WidthSizing = AxisSizing.Fill,
+            HeightSizing = AxisSizing.Hug,
+            HorizontalPin = EdgePin.Start,
+            VerticalPin = EdgePin.Start,
+            OverflowX = OverflowBehavior.Visible,
+            OverflowY = OverflowBehavior.Visible,
+            WrapPressure = WrapPressurePolicy.Allow
+        };
 
     private static ComponentNode CreateQuestCard(string id, string text, string icon, int value, int gap = 8)
     {

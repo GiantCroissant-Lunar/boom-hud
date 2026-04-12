@@ -21,6 +21,8 @@ public sealed record PreparedGenerationDocument
 
     public required VisualRefinementSummary VisualRefinement { get; init; }
 
+    public UGuiBuildProgram? UGuiBuildProgram { get; init; }
+
     public IReadOnlyList<Diagnostic> Diagnostics { get; init; } = [];
 }
 
@@ -86,6 +88,9 @@ public static class GenerationDocumentPreprocessor
         var visualRefinement = VisualRefinementPlanner.Plan(
             visualSynthesis.Document,
             iterationBudget: options.VisualRefinementIterationBudget);
+        var uguiBuildProgram = string.Equals(backendId, "ugui", StringComparison.OrdinalIgnoreCase)
+            ? UGuiBuildProgramPlanner.Plan(visualSynthesis.Document)
+            : null;
 
         return new PreparedGenerationDocument
         {
@@ -94,6 +99,7 @@ public static class GenerationDocumentPreprocessor
             VisualDocument = visualSynthesis.Document,
             VisualSynthesis = visualSynthesis.Summary,
             VisualRefinement = visualRefinement,
+            UGuiBuildProgram = uguiBuildProgram,
             Diagnostics = diagnostics
         };
     }
@@ -123,6 +129,12 @@ public static class GenerationDocumentPreprocessor
     {
         ArgumentNullException.ThrowIfNull(summary);
         return JsonSerializer.Serialize(summary, JsonOptions);
+    }
+
+    public static string ToJson(UGuiBuildProgram buildProgram)
+    {
+        ArgumentNullException.ThrowIfNull(buildProgram);
+        return JsonSerializer.Serialize(buildProgram, JsonOptions);
     }
 
     public static GeneratedFile? CreateSummaryArtifact(string documentName, SyntheticComponentizationSummary? summary)
@@ -181,6 +193,21 @@ public static class GenerationDocumentPreprocessor
         {
             Path = $"{documentName}.visual-refinement.json",
             Content = ToJson(summary),
+            Type = GeneratedFileType.Other
+        };
+    }
+
+    public static GeneratedFile? CreateUGuiBuildProgramArtifact(string documentName, UGuiBuildProgram? buildProgram)
+    {
+        if (buildProgram == null)
+        {
+            return null;
+        }
+
+        return new GeneratedFile
+        {
+            Path = $"{documentName}.ugui-build-program.json",
+            Content = ToJson(buildProgram),
             Type = GeneratedFileType.Other
         };
     }

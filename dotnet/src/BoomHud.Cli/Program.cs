@@ -63,6 +63,8 @@ public static class Program
             var emitVisualIrOption = new Option<bool>("--emit-visual-ir", "Emit a compiler-only Visual IR artifact alongside generated files");
             var emitVisualSynthesisOption = new Option<bool>("--emit-visual-synthesis", "Emit a compiler-only Visual synthesis artifact alongside generated files");
             var emitVisualRefinementOption = new Option<bool>("--emit-visual-refinement", "Emit a compiler-only Visual refinement artifact alongside generated files");
+            var emitUGuiBuildProgramOption = new Option<bool>("--emit-ugui-build-program", "Emit a compiler-only replayable uGUI build-program artifact alongside generated files");
+            var uguiBuildProgramOption = new Option<FileInfo?>("--ugui-build-program", "Optional replayable uGUI build-program artifact whose accepted subtree choices should drive experimental uGUI emission");
             var themeNameOption = new Option<string?>("--theme-name", "Optional theme name (defaults to variables filename)");
             var themeCollectionOption = new Option<string?>("--theme-collection", "Optional Figma variables collection name");
             var themeModeOption = new Option<string?>("--theme-mode", "Optional Figma variables mode id or name (e.g. \"Light\")");
@@ -94,6 +96,8 @@ public static class Program
             generateCommand.AddOption(emitVisualIrOption);
             generateCommand.AddOption(emitVisualSynthesisOption);
             generateCommand.AddOption(emitVisualRefinementOption);
+            generateCommand.AddOption(emitUGuiBuildProgramOption);
+            generateCommand.AddOption(uguiBuildProgramOption);
             generateCommand.AddOption(themeNameOption);
             generateCommand.AddOption(themeCollectionOption);
             generateCommand.AddOption(themeModeOption);
@@ -124,6 +128,8 @@ public static class Program
                 var emitVisualIr = context.ParseResult.GetValueForOption(emitVisualIrOption);
                 var emitVisualSynthesis = context.ParseResult.GetValueForOption(emitVisualSynthesisOption);
                 var emitVisualRefinement = context.ParseResult.GetValueForOption(emitVisualRefinementOption);
+                var emitUGuiBuildProgram = context.ParseResult.GetValueForOption(emitUGuiBuildProgramOption);
+                var uguiBuildProgram = context.ParseResult.GetValueForOption(uguiBuildProgramOption);
                 var themeName = context.ParseResult.GetValueForOption(themeNameOption);
                 var themeCollection = context.ParseResult.GetValueForOption(themeCollectionOption);
                 var themeMode = context.ParseResult.GetValueForOption(themeModeOption);
@@ -238,6 +244,8 @@ public static class Program
                     emitVisualIr,
                     emitVisualSynthesis,
                     emitVisualRefinement,
+                    emitUGuiBuildProgram,
+                    uguiBuildProgram,
                     themeName,
                     themeCollection,
                     themeMode,
@@ -455,6 +463,9 @@ public static class Program
 
             var rulesCommand = new Command("rules", "Rule planning and sweep commands");
             rulesCommand.AddCommand(RulesPlanCommand.Build());
+            rulesCommand.AddCommand(RulesProofSubtreeCommand.Build());
+            rulesCommand.AddCommand(RulesScaffoldSubtreeCandidatesCommand.Build());
+            rulesCommand.AddCommand(RulesSelectSubtreeCandidateCommand.Build());
             rulesCommand.AddCommand(RulesSweepCommand.Build());
             rulesCommand.AddCommand(RulesSweepRemotionCommand.Build());
 
@@ -498,6 +509,8 @@ public static class Program
         bool emitVisualIr,
         bool emitVisualSynthesis,
         bool emitVisualRefinement,
+        bool emitUGuiBuildProgram,
+        FileInfo? uguiBuildProgram,
         string? themeName,
         string? themeCollection,
         string? themeMode,
@@ -661,6 +674,11 @@ public static class Program
             ruleSet = GeneratorRuleSet.LoadFromFile(rules.FullName);
         }
 
+        if (uguiBuildProgram != null && !uguiBuildProgram.Exists)
+        {
+            throw new FileNotFoundException($"uGUI build program not found: {uguiBuildProgram.FullName}");
+        }
+
         var options = new GenerationOptions
         {
             Namespace = @namespace,
@@ -677,6 +695,8 @@ public static class Program
             EmitVisualIrArtifact = emitVisualIr,
             EmitVisualSynthesisArtifact = emitVisualSynthesis,
             EmitVisualRefinementArtifact = emitVisualRefinement,
+            EmitUGuiBuildProgramArtifact = emitUGuiBuildProgram,
+            UGuiBuildProgramPath = uguiBuildProgram?.FullName,
             MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
             IncludeComments = true,
             UseNullableAnnotations = true,
