@@ -21,6 +21,9 @@ ref-projects/
 # Build artifacts
 [Bb][Ii][Nn]/
 [Oo][Bb][Jj]/
+build/
+samples/build/
+remotion/build/
 build/_artifacts/
 *.log
 
@@ -34,5 +37,3 @@ _test_output/
 .godot/
 
 node_modules/
-
-remotion\build
