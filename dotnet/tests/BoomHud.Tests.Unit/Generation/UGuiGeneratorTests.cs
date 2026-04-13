@@ -36,6 +36,7 @@ public sealed class UGuiGeneratorTests
         result.Files.Should().Contain(f => f.Path == "ITestComponentViewModel.g.cs");
 
         var viewFile = result.Files.First(f => f.Path == "TestComponentView.ugui.cs");
+        viewFile.Content.Should().Contain("using TMPro;");
         viewFile.Content.Should().Contain("using UnityEngine.UI;");
         viewFile.Content.Should().Contain("public sealed class TestComponentView");
         viewFile.Content.Should().Contain("public RectTransform Root { get; }");
@@ -223,7 +224,7 @@ public sealed class UGuiGeneratorTests
 
             var viewFile = result.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
             viewFile.Content.Should().Contain("public RectTransform Title { get; }");
-            viewFile.Content.Should().NotContain("public Text Title { get; }");
+            viewFile.Content.Should().NotContain("public TextMeshProUGUI Title { get; }");
         }
         finally
         {
@@ -426,7 +427,7 @@ public sealed class UGuiGeneratorTests
 
             var viewFile = result.Files.Single(file => file.Path == "RepeatHudView.ugui.cs");
             viewFile.Content.Should().Contain("public ScrollRect HpBar { get; }");
-            viewFile.Content.Should().Contain("public Text HpBar2 { get; }");
+            viewFile.Content.Should().Contain("public TextMeshProUGUI HpBar2 { get; }");
         }
         finally
         {
@@ -482,7 +483,7 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
 
         var viewFile = result.Files.First(f => f.Path == "StatusHudView.ugui.cs");
-        viewFile.Content.Should().Contain("public Text StatusLabel { get; }");
+        viewFile.Content.Should().Contain("public TextMeshProUGUI StatusLabel { get; }");
         viewFile.Content.Should().Contain("public Button ActionButton { get; }");
         viewFile.Content.Should().Contain("StatusLabel.text = AsString(_viewModel.PlayerHealthText);");
         viewFile.Content.Should().Contain("StatusLabel.gameObject.SetActive(AsBool(_viewModel.PlayerIsVisible, true));");
@@ -1513,7 +1514,7 @@ public sealed class UGuiGeneratorTests
 
         viewFile.Content.Should().Contain("public static PrefabHudView Bind(RectTransform root, IPrefabHudViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);");
         viewFile.Content.Should().Contain("private PrefabHudView(RectTransform root, IPrefabHudViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)");
-        viewFile.Content.Should().Contain("Title = RequireComponent<Text>(Root, \"Title\");");
+        viewFile.Content.Should().Contain("Title = RequireComponent<TextMeshProUGUI>(Root, \"Title\");");
         viewFile.Content.Should().Contain("private static RectTransform RequireRect(Transform root,string path)");
         viewFile.Content.Should().Contain("private static T RequireComponent<T>(Transform root,string path) where T : Component");
     }

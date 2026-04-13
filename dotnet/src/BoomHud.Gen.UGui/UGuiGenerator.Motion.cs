@@ -77,6 +77,7 @@ public sealed partial class UGuiGenerator
 
         builder.AppendLine("using System;");
         builder.AppendLine("using BoomHud.Unity.Runtime;");
+        builder.AppendLine("using TMPro;");
         builder.AppendLine("using UnityEngine;");
         builder.AppendLine("using UnityEngine.UI;");
         builder.AppendLine();
@@ -555,6 +556,7 @@ public sealed partial class UGuiGenerator
 
     private static bool SupportsMotionTextMutation(string fieldType)
         => string.Equals(fieldType, "Text", StringComparison.Ordinal)
+            || string.Equals(fieldType, "TextMeshProUGUI", StringComparison.Ordinal)
             || string.Equals(fieldType, "Button", StringComparison.Ordinal)
             || string.Equals(fieldType, "Toggle", StringComparison.Ordinal)
             || string.Equals(fieldType, "InputField", StringComparison.Ordinal);
@@ -759,6 +761,9 @@ public sealed partial class UGuiGenerator
         builder.AppendLine("    {");
         builder.AppendLine("        switch (target)");
         builder.AppendLine("        {");
+        builder.AppendLine("            case TMP_Text tmp:");
+        builder.AppendLine("                tmp.text = value;");
+        builder.AppendLine("                return;");
         builder.AppendLine("            case Text text:");
         builder.AppendLine("                text.text = value;");
         builder.AppendLine("                return;");
@@ -780,6 +785,12 @@ public sealed partial class UGuiGenerator
         builder.AppendLine();
         builder.AppendLine("    private static void SetNestedLabelText(GameObject gameObject, string value)");
         builder.AppendLine("    {");
+        builder.AppendLine("        var tmp = gameObject.GetComponentInChildren<TMP_Text>(true);");
+        builder.AppendLine("        if (tmp != null)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            tmp.text = value;");
+        builder.AppendLine("            return;");
+        builder.AppendLine("        }");
         builder.AppendLine("        var text = gameObject.GetComponentInChildren<Text>(true);");
         builder.AppendLine("        if (text != null)");
         builder.AppendLine("        {");
