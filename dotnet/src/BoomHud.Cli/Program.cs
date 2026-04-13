@@ -463,6 +463,7 @@ public static class Program
 
             var rulesCommand = new Command("rules", "Rule planning and sweep commands");
             rulesCommand.AddCommand(RulesPlanCommand.Build());
+            rulesCommand.AddCommand(RulesFrontierOptimizeCommand.Build());
             rulesCommand.AddCommand(RulesProofSubtreeCommand.Build());
             rulesCommand.AddCommand(RulesScaffoldSubtreeCandidatesCommand.Build());
             rulesCommand.AddCommand(RulesSelectSubtreeCandidateCommand.Build());

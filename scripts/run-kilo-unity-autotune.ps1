@@ -13,6 +13,11 @@ param(
     [string]$Variant = "",
     [int]$KiloTimeoutSeconds = 600,
     [int]$UnityPid = 0,
+    [ValidateSet("strict", "frontier")]
+    [string]$OptimizerMode = "strict",
+    [int]$BeamWidth = 5,
+    [int]$SearchDepth = 3,
+    [int]$ExpansionBudget = 6,
     [switch]$KeepRejectedChanges,
     [switch]$SkipKilo
 )
@@ -369,6 +374,87 @@ function Invoke-ScoreStage([string]$StageDir, [int]$ProcessId)
     }
 }
 
+function Write-AutotuneOptimizerSummary(
+    [string]$Path,
+    [string]$Label,
+    [string]$SurfaceId,
+    [object]$Score)
+{
+    $summary = [ordered]@{
+        label = $Label
+        averageOverallSimilarityPercent = [double]$Score.OverallSimilarityPercent
+        surfaces = @(
+            [ordered]@{
+                id = $SurfaceId
+                reportPath = $Score.ReportPath
+                measuredLayoutPath = $null
+            }
+        )
+    }
+
+    $summary | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $Path
+}
+
+function Invoke-FrontierAcceptance(
+    [string]$AttemptDirectory,
+    [object]$BaselineScore,
+    [object]$CandidateScore)
+{
+    $surfaceId = "autotune-$RegionPreset-ugui"
+    $baselineSummaryPath = Join-Path $AttemptDirectory "optimizer-baseline.summary.json"
+    $candidateSummaryPath = Join-Path $AttemptDirectory "optimizer-candidate.summary.json"
+    $statePath = Join-Path $AttemptDirectory "optimizer.state.json"
+    $summaryPath = Join-Path $AttemptDirectory "optimizer-summary.json"
+
+    Write-AutotuneOptimizerSummary -Path $baselineSummaryPath -Label "baseline" -SurfaceId $surfaceId -Score $BaselineScore
+    Write-AutotuneOptimizerSummary -Path $candidateSummaryPath -Label "candidate" -SurfaceId $surfaceId -Score $CandidateScore
+
+    $state = [ordered]@{
+        optimizerMode = "frontier"
+        beamWidth = $BeamWidth
+        searchDepth = $SearchDepth
+        expansionBudget = $ExpansionBudget
+        primarySurfaceId = $surfaceId
+        baselineCandidateId = "baseline"
+        candidates = @(
+            [ordered]@{
+                candidateId = "baseline"
+                label = "baseline"
+                summaryPath = $baselineSummaryPath
+                parentCandidateId = $null
+                depth = 0
+                appliedActions = @()
+            },
+            [ordered]@{
+                candidateId = "candidate"
+                label = "candidate"
+                summaryPath = $candidateSummaryPath
+                parentCandidateId = "baseline"
+                depth = 1
+                appliedActions = @("kilo-patch")
+            }
+        )
+    }
+    $state | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $statePath
+
+    Invoke-DotNet -Arguments @(
+        "run",
+        "--project", $cliProject,
+        "--",
+        "rules", "frontier-optimize",
+        "--input", $statePath,
+        "--out", $summaryPath,
+        "--summary", "false"
+    ) -WorkingDirectory $RepoRoot
+
+    $optimizerSummary = Get-Content $summaryPath -Raw | ConvertFrom-Json
+    return [pscustomobject]@{
+        Accepted = ([string]$optimizerSummary.selectedCandidateId) -eq "candidate"
+        SummaryPath = $summaryPath
+        SelectedCandidateId = [string]$optimizerSummary.selectedCandidateId
+    }
+}
+
 function Invoke-KiloAttempt([string]$PromptPath, [string]$LogPath)
 {
     $kiloCommand = Get-Command kilo -ErrorAction Stop
@@ -460,6 +546,7 @@ $accepted = $false
 $violation = $null
 $kiloWarning = $null
 $recoveredTimedOutPatch = $false
+$optimizerResult = $null
 
 try
 {
@@ -496,7 +583,15 @@ try
     Write-Section "Capturing candidate score"
     $afterScore = Invoke-ScoreStage -StageDir $afterDir -ProcessId $resolvedUnityPid
 
-    $accepted = $afterScore.OverallSimilarityPercent -gt $beforeScore.OverallSimilarityPercent
+    if ($OptimizerMode -eq "frontier")
+    {
+        $optimizerResult = Invoke-FrontierAcceptance -AttemptDirectory $attemptDir -BaselineScore $beforeScore -CandidateScore $afterScore
+        $accepted = [bool]$optimizerResult.Accepted
+    }
+    else
+    {
+        $accepted = $afterScore.OverallSimilarityPercent -gt $beforeScore.OverallSimilarityPercent
+    }
     if (-not $accepted -and -not $KeepRejectedChanges)
     {
         Write-Section "Restoring rejected attempt"
@@ -537,6 +632,8 @@ $summary = [pscustomobject]@{
     KiloRan = $kiloRan
     KiloWarning = $kiloWarning
     RecoveredTimedOutPatch = $recoveredTimedOutPatch
+    OptimizerMode = $OptimizerMode
+    OptimizerResult = $optimizerResult
     TestPassed = $testPassed
     Accepted = $accepted
     Restored = $restored
@@ -559,6 +656,11 @@ if ($afterScore)
 if ($kiloWarning)
 {
     Write-Host "Kilo warning: $kiloWarning"
+}
+if ($optimizerResult)
+{
+    Write-Host "Optimizer summary: $($optimizerResult.SummaryPath)"
+    Write-Host "Optimizer selected: $($optimizerResult.SelectedCandidateId)"
 }
 if ($accepted)
 {

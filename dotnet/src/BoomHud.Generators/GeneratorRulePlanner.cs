@@ -78,6 +78,9 @@ public static class GeneratorRulePlanner
         return new GeneratorRulePlan
         {
             Name = name,
+            MetricProfiles = ruleSet.MetricProfiles
+                .Select(GeneratorRuleExecutionCompiler.Compile)
+                .ToList(),
             InitialFacts = initialFactList,
             FinalFacts = facts
                 .OrderBy(pair => pair.Key, StringComparer.OrdinalIgnoreCase)
@@ -100,6 +103,9 @@ public static class GeneratorRulePlanner
         return new GeneratorRuleSet
         {
             Version = plan.Version,
+            MetricProfiles = plan.MetricProfiles
+                .Select(GeneratorRuleExecutionCompiler.Compile)
+                .ToList(),
             Rules = plan.AppliedRules
                 .OrderBy(rule => GetPhaseOrder(rule.Phase))
                 .ThenByDescending(rule => rule.Specificity)

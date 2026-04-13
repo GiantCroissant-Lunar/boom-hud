@@ -312,4 +312,37 @@ public sealed class GeneratorRulePlannerTests
 
         GeneratorRulePlanner.GetSpecificity(selector).Should().Be(6);
     }
+
+    [Fact]
+    public void BuildExecutableRuleSet_PreservesCompiledMetricProfiles()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            MetricProfiles =
+            [
+                new GeneratorMetricProfile
+                {
+                    Name = "pixel-small-bump",
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "pixel-text",
+                        SizeBand = "small"
+                    },
+                    Template = new GeneratorActionTemplate
+                    {
+                        Kind = "fontSizeDelta",
+                        NumberValue = 1
+                    }
+                }
+            ]
+        };
+
+        var plan = GeneratorRulePlanner.CreatePlan(ruleSet);
+        var executable = GeneratorRulePlanner.BuildExecutableRuleSet(plan);
+
+        var profile = executable.MetricProfiles.Should().ContainSingle().Subject;
+        profile.Template.Should().NotBeNull();
+        profile.Action.Text!.FontSizeDelta.Should().Be(1);
+    }
 }

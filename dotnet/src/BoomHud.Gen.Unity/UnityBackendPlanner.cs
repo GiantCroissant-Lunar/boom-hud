@@ -68,10 +68,15 @@ internal sealed class UnityBackendPlanner
         RegisterBindingPaths(node);
 
         var plannedName = ReserveNodeName(baseName);
-        var policy = _ruleResolver?.Resolve(_documentName, node, new RuleSelectionContext(parent, grandparent, siblingIndex)) ?? new ResolvedGeneratorPolicy();
         var componentView = ResolveComponentView(node, document);
         var referencedComponentRoot = ResolveReferencedComponentRoot(node, document);
         var visualResolved = visualPlan?.Resolve(node.Id);
+        var policy = _ruleResolver?.Resolve(
+                         _documentName,
+                         node,
+                         new RuleSelectionContext(parent, grandparent, siblingIndex),
+                         includeMetricProfiles: visualResolved?.MetricProfile == null)
+                     ?? new ResolvedGeneratorPolicy();
         var mapping = MapElement(node, policy, componentView != null);
         var children = componentView == null
             ? node.Children

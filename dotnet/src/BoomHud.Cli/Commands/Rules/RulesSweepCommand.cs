@@ -17,6 +17,16 @@ public static class RulesSweepCommand
         var outOption = new Option<DirectoryInfo?>("--out", "Output directory for sweep artifacts");
         var toleranceOption = new Option<int>("--tolerance", () => 8, "Per-channel score tolerance");
         var normalizeOption = new Option<string>("--normalize", () => "stretch", "Score normalization mode");
+        var optimizerModeOption = new Option<string>("--optimizer-mode", () => "strict", "Optimizer mode: strict, frontier, or cem");
+        var beamWidthOption = new Option<int>("--beam-width", () => 5, "Maximum retained frontier candidates per depth");
+        var searchDepthOption = new Option<int>("--search-depth", () => 3, "Number of frontier search depths to evaluate");
+        var expansionBudgetOption = new Option<int>("--expansion-budget", () => 6, "Maximum action expansions per retained candidate at each depth");
+        var cemIterationsOption = new Option<int>("--cem-iterations", () => 3, "Number of CEM sampling iterations to evaluate");
+        var cemSampleCountOption = new Option<int>("--cem-sample-count", () => 8, "Number of candidates to sample per CEM iteration");
+        var cemEliteCountOption = new Option<int>("--cem-elite-count", () => 3, "Number of top guard-passing candidates used to update the CEM distribution");
+        var maxActionsPerSampleOption = new Option<int>("--max-actions-per-sample", () => 6, "Maximum sampled actions retained in any CEM candidate");
+        var cemFocusOption = new Option<string>("--cem-focus", () => "all", "CEM metric group focus: all, ugui, or unity");
+        var randomSeedOption = new Option<int?>("--random-seed", "Optional random seed for deterministic sampled optimizer runs");
         var factOption = new Option<string[]>("--fact", () => new[]
         {
             "finding.text-or-icon-metrics-mismatch=present",
@@ -38,6 +48,16 @@ public static class RulesSweepCommand
         command.AddOption(outOption);
         command.AddOption(toleranceOption);
         command.AddOption(normalizeOption);
+        command.AddOption(optimizerModeOption);
+        command.AddOption(beamWidthOption);
+        command.AddOption(searchDepthOption);
+        command.AddOption(expansionBudgetOption);
+        command.AddOption(cemIterationsOption);
+        command.AddOption(cemSampleCountOption);
+        command.AddOption(cemEliteCountOption);
+        command.AddOption(maxActionsPerSampleOption);
+        command.AddOption(cemFocusOption);
+        command.AddOption(randomSeedOption);
         command.AddOption(factOption);
         command.AddOption(skipBaselineOption);
         command.AddOption(noRestoreOption);
@@ -52,11 +72,21 @@ public static class RulesSweepCommand
             var outDir = context.ParseResult.GetValueForOption(outOption);
             var tolerance = context.ParseResult.GetValueForOption(toleranceOption);
             var normalize = context.ParseResult.GetValueForOption(normalizeOption) ?? "stretch";
+            var optimizerMode = context.ParseResult.GetValueForOption(optimizerModeOption) ?? "strict";
+            var beamWidth = context.ParseResult.GetValueForOption(beamWidthOption);
+            var searchDepth = context.ParseResult.GetValueForOption(searchDepthOption);
+            var expansionBudget = context.ParseResult.GetValueForOption(expansionBudgetOption);
+            var cemIterations = context.ParseResult.GetValueForOption(cemIterationsOption);
+            var cemSampleCount = context.ParseResult.GetValueForOption(cemSampleCountOption);
+            var cemEliteCount = context.ParseResult.GetValueForOption(cemEliteCountOption);
+            var maxActionsPerSample = context.ParseResult.GetValueForOption(maxActionsPerSampleOption);
+            var cemFocus = context.ParseResult.GetValueForOption(cemFocusOption) ?? "all";
+            var randomSeed = context.ParseResult.GetValueForOption(randomSeedOption);
             var facts = context.ParseResult.GetValueForOption(factOption) ?? [];
             var skipBaseline = context.ParseResult.GetValueForOption(skipBaselineOption);
             var noRestore = context.ParseResult.GetValueForOption(noRestoreOption);
 
-            context.ExitCode = Execute(rulesGlob, compareManifest, motionManifest, unityProject, unityExe, outDir, tolerance, normalize, facts, skipBaseline, noRestore);
+            context.ExitCode = Execute(rulesGlob, compareManifest, motionManifest, unityProject, unityExe, outDir, tolerance, normalize, optimizerMode, beamWidth, searchDepth, expansionBudget, cemIterations, cemSampleCount, cemEliteCount, maxActionsPerSample, cemFocus, randomSeed, facts, skipBaseline, noRestore);
         });
 
         return command;
@@ -71,6 +101,16 @@ public static class RulesSweepCommand
         DirectoryInfo? outDir,
         int tolerance,
         string normalize,
+        string optimizerMode,
+        int beamWidth,
+        int searchDepth,
+        int expansionBudget,
+        int cemIterations,
+        int cemSampleCount,
+        int cemEliteCount,
+        int maxActionsPerSample,
+        string cemFocus,
+        int? randomSeed,
         string[] facts,
         bool skipBaseline,
         bool noRestoreDefault)
@@ -103,6 +143,30 @@ public static class RulesSweepCommand
         psi.ArgumentList.Add(tolerance.ToString(System.Globalization.CultureInfo.InvariantCulture));
         psi.ArgumentList.Add("-Normalization");
         psi.ArgumentList.Add(normalize);
+        psi.ArgumentList.Add("-OptimizerMode");
+        psi.ArgumentList.Add(optimizerMode);
+        psi.ArgumentList.Add("-BeamWidth");
+        psi.ArgumentList.Add(beamWidth.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-SearchDepth");
+        psi.ArgumentList.Add(searchDepth.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-ExpansionBudget");
+        psi.ArgumentList.Add(expansionBudget.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-CemIterations");
+        psi.ArgumentList.Add(cemIterations.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-CemSampleCount");
+        psi.ArgumentList.Add(cemSampleCount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-CemEliteCount");
+        psi.ArgumentList.Add(cemEliteCount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-MaxActionsPerSample");
+        psi.ArgumentList.Add(maxActionsPerSample.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add("-CemFocus");
+        psi.ArgumentList.Add(cemFocus);
+
+        if (randomSeed.HasValue)
+        {
+            psi.ArgumentList.Add("-RandomSeed");
+            psi.ArgumentList.Add(randomSeed.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
 
         if (facts.Length > 0)
         {

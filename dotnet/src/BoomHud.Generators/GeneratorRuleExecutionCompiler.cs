@@ -5,6 +5,22 @@ namespace BoomHud.Generators;
 
 public static class GeneratorRuleExecutionCompiler
 {
+    public static GeneratorMetricProfile Compile(GeneratorMetricProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        if (profile.Template == null || string.IsNullOrWhiteSpace(profile.Template.Kind))
+        {
+            return profile;
+        }
+
+        var compiledAction = Merge(profile.Action, CompileTemplate(profile.Template));
+        return profile with
+        {
+            Action = compiledAction
+        };
+    }
+
     public static GeneratorRule Compile(GeneratorRule rule)
     {
         ArgumentNullException.ThrowIfNull(rule);

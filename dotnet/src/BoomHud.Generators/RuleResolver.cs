@@ -17,11 +17,15 @@ public readonly record struct RuleSelectionContext(
 public sealed class RuleResolver
 {
     private readonly string _backend;
+    private readonly IReadOnlyList<OrderedMetricProfile> _metricProfiles;
     private readonly IReadOnlyList<OrderedRule> _rules;
 
     public RuleResolver(GeneratorRuleSet? ruleSet, string backend)
     {
         _backend = backend ?? string.Empty;
+        _metricProfiles = (ruleSet?.MetricProfiles ?? [])
+            .Select((profile, index) => new OrderedMetricProfile(GeneratorRuleExecutionCompiler.Compile(profile), index))
+            .ToList();
         _rules = (ruleSet?.Rules ?? [])
             .Select((rule, index) => new OrderedRule(GeneratorRuleExecutionCompiler.Compile(rule), index))
             .ToList();
@@ -31,8 +35,22 @@ public sealed class RuleResolver
         => Resolve(documentName, node, RuleSelectionContext.Root);
 
     public ResolvedGeneratorPolicy Resolve(string documentName, ComponentNode node, RuleSelectionContext context)
+        => Resolve(documentName, node, context, includeMetricProfiles: true);
+
+    public ResolvedGeneratorPolicy Resolve(string documentName, ComponentNode node, RuleSelectionContext context, bool includeMetricProfiles)
     {
         var resolved = new ResolvedGeneratorPolicy();
+        IEnumerable<OrderedMetricProfile> metricProfiles = includeMetricProfiles
+            ? _metricProfiles
+                .Where(candidate => Matches(candidate.Profile.Selector, documentName, node, context))
+                .OrderBy(candidate => GeneratorRulePlanner.GetSpecificity(candidate.Profile.Selector))
+                .ThenBy(candidate => candidate.Index)
+            : Array.Empty<OrderedMetricProfile>();
+        foreach (var match in metricProfiles)
+        {
+            resolved = resolved.Apply(match.Profile.Action);
+        }
+
         foreach (var match in _rules
                      .Where(candidate => Matches(candidate.Rule.Selector, documentName, node, context))
                      .OrderBy(candidate => GeneratorRulePlanner.GetPhaseOrder(candidate.Rule.Phase))
@@ -200,6 +218,8 @@ public sealed class RuleResolver
     }
 
     private sealed record OrderedRule(GeneratorRule Rule, int Index);
+
+    private sealed record OrderedMetricProfile(GeneratorMetricProfile Profile, int Index);
 }
 
 internal static class RuleSelectorClassifier

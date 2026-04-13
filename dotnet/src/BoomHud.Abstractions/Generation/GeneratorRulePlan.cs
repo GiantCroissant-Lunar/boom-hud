@@ -13,6 +13,8 @@ public sealed record GeneratorRulePlan
 
     public string? Name { get; init; }
 
+    public IReadOnlyList<GeneratorMetricProfile> MetricProfiles { get; init; } = [];
+
     public IReadOnlyList<GeneratorRuleFact> InitialFacts { get; init; } = [];
 
     public IReadOnlyList<GeneratorRuleFact> FinalFacts { get; init; } = [];

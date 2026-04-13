@@ -331,6 +331,74 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_WithSharedMetricProfile_AppliesTopLevelProfileToMatchedLabel()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        },
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.PencilTextGrowth] = "fixed-width"
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var baseline = _generator.Generate(doc, _options);
+        var baselineViewFile = baseline.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
+
+        var result = _generator.Generate(doc, _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                MetricProfiles =
+                [
+                    new GeneratorMetricProfile
+                    {
+                        Name = "shared-pixel-small-font-bump",
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            ComponentType = ComponentType.Label,
+                            SemanticClass = "pixel-text",
+                            SizeBand = "small"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "fontSizeDelta",
+                            NumberValue = 1
+                        }
+                    }
+                ]
+            }
+        });
+
+        var viewFile = result.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
+        baselineViewFile.Content.Should().Contain("ApplyStyle(Title, fg: null, bg: null, fontFamily: \"Press Start 2P\", fontSize: 9,");
+        viewFile.Content.Should().Contain("ApplyStyle(Title, fg: null, bg: null, fontFamily: \"Press Start 2P\", fontSize: 10,");
+    }
+
+    [Fact]
     public void Generate_WithRepeatedSourceIds_AppliesBuildProgramOverrideToMatchingStructuralPath()
     {
         var doc = new HudDocument

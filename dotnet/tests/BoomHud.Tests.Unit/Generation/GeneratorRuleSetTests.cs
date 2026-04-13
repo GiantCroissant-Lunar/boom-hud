@@ -749,4 +749,117 @@ public sealed class GeneratorRuleSetTests
         policy.DurationQuantizationFrames.Should().Be(12);
         policy.EasingRemapTo.Should().Be(MotionEasing.Linear);
     }
+
+    [Fact]
+    public void LoadFromJson_RoundTripsMetricProfiles()
+    {
+        var json = """
+        {
+          "version": "1.0",
+          "metricProfiles": [
+            {
+              "name": "ugui pixel small font bump",
+              "selector": {
+                "backend": "ugui",
+                "componentType": "label",
+                "semanticClass": "pixel-text",
+                "sizeBand": "small"
+              },
+              "template": {
+                "kind": "fontSizeDelta",
+                "numberValue": 1
+              },
+              "action": {
+                "text": {
+                  "letterSpacingDelta": 0.5
+                }
+              }
+            }
+          ]
+        }
+        """;
+
+        var ruleSet = GeneratorRuleSet.LoadFromJson(json);
+        var roundTrip = GeneratorRuleSet.LoadFromJson(ruleSet.ToJson());
+        var profile = roundTrip.MetricProfiles.Should().ContainSingle().Subject;
+
+        profile.Name.Should().Be("ugui pixel small font bump");
+        profile.Selector.Backend.Should().Be("ugui");
+        profile.Selector.ComponentType.Should().Be(ComponentType.Label);
+        profile.Selector.SemanticClass.Should().Be("pixel-text");
+        profile.Selector.SizeBand.Should().Be("small");
+        profile.Template.Should().NotBeNull();
+        profile.Template!.Kind.Should().Be("fontSizeDelta");
+        profile.Template.NumberValue.Should().Be(1);
+        profile.Action.Text!.LetterSpacingDelta.Should().Be(0.5);
+    }
+
+    [Fact]
+    public void Resolve_AppliesMetricProfilesBeforeRules()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            MetricProfiles =
+            [
+                new GeneratorMetricProfile
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        ComponentType = ComponentType.Label,
+                        SemanticClass = "pixel-text",
+                        SizeBand = "small"
+                    },
+                    Template = new GeneratorActionTemplate
+                    {
+                        Kind = "fontSizeDelta",
+                        NumberValue = 1
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            LetterSpacingDelta = 0.5
+                        }
+                    }
+                }
+            ],
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        NodeId = "body"
+                    },
+                    Template = new GeneratorActionTemplate
+                    {
+                        Kind = "fontSizeDelta",
+                        NumberValue = 2
+                    }
+                }
+            ]
+        };
+
+        var node = new ComponentNode
+        {
+            Id = "body",
+            Type = ComponentType.Label,
+            Style = new StyleSpec
+            {
+                FontSize = 9
+            },
+            InstanceOverrides = new Dictionary<string, object?>
+            {
+                [BoomHudMetadataKeys.PencilTextGrowth] = "fixed-width"
+            }
+        };
+
+        var resolver = new RuleResolver(ruleSet, "ugui");
+        var policy = resolver.Resolve("QuestSidebar", node);
+
+        policy.Text.FontSizeDelta.Should().Be(3);
+        policy.Text.LetterSpacingDelta.Should().Be(0.5);
+    }
 }

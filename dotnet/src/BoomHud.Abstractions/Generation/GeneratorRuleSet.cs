@@ -10,6 +10,8 @@ public sealed record GeneratorRuleSet
 {
     public string Version { get; init; } = "1.0";
 
+    public IReadOnlyList<GeneratorMetricProfile> MetricProfiles { get; init; } = [];
+
     public IReadOnlyList<GeneratorRule> Rules { get; init; } = [];
 
     public static GeneratorRuleSet LoadFromFile(string filePath)
@@ -41,6 +43,17 @@ public sealed record GeneratorRuleSet
     {
         WriteIndented = true
     };
+}
+
+public sealed record GeneratorMetricProfile
+{
+    public string? Name { get; init; }
+
+    public GeneratorRuleSelector Selector { get; init; } = new();
+
+    public GeneratorActionTemplate? Template { get; init; }
+
+    public GeneratorRuleAction Action { get; init; } = new();
 }
 
 public sealed record GeneratorRule

@@ -1748,7 +1748,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             var fieldName = forceRoot ? "Root" : Unique(baseName, names);
             var visualResolved = visualPlan?.Resolve(source.Id, documentName, relativePath);
             var policy = buildProgramResolver.Apply(
-                ruleResolver.Resolve(documentName, source, new RuleSelectionContext(parent, grandparent, siblingIndex)),
+                ruleResolver.Resolve(
+                    documentName,
+                    source,
+                    new RuleSelectionContext(parent, grandparent, siblingIndex),
+                    includeMetricProfiles: visualResolved?.MetricProfile == null),
                 visualResolved?.Node?.StableId);
             var fieldType = ResolveFieldType(source, document, diagnostics, policy, out var componentView);
             var referencedComponent = source.ComponentRefId != null && document.Components.TryGetValue(source.ComponentRefId, out var componentDefinition)
