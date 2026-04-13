@@ -1,0 +1,172 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "CPC01",
+      "x": 0,
+      "y": 0,
+      "name": "CyberpunkCrafting",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#090B10",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "CPC02", "name": "BackdropWash", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#090B10" },
+        { "type": "rectangle", "id": "CPC03", "name": "BackdropTint", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#2B0B1099" },
+        {
+          "type": "frame",
+          "id": "CPC04",
+          "x": 40,
+          "y": 16,
+          "name": "TopStatusBar",
+          "width": 1840,
+          "height": 60,
+          "fill": "#090B10",
+          "gap": 28,
+          "children": [
+            { "type": "text", "id": "CPC05", "name": "LevelText", "fill": "#39E1F2", "content": "4 LEVEL", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC06", "name": "StreetCredText", "fill": "#78E36F", "content": "3 STREET CRED", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC07", "name": "CharacterTab", "fill": "#FF6B57", "content": "CHARACTER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC08", "name": "JournalTab", "fill": "#FF6B57", "content": "JOURNAL", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC09", "name": "CraftingTab", "fill": "#37E5F7", "content": "CRAFTING", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC10", "name": "InventoryTab", "fill": "#FF6B57", "content": "INVENTORY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC11", "name": "MapTab", "fill": "#FF6B57", "content": "MAP", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC12", "name": "CarryWeightText", "fill": "#FF5B45", "content": "64/200", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC13", "name": "MoneyText", "fill": "#FF9A3B", "content": "$ 7265", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+          ]
+        },
+        { "type": "rectangle", "id": "CPC14", "name": "TopDivider", "x": 32, "y": 84, "width": 1848, "height": 2, "fill": "#B61A22" },
+        {
+          "type": "frame",
+          "id": "CPC15",
+          "x": 60,
+          "y": 106,
+          "name": "CraftingHeader",
+          "width": 1160,
+          "height": 66,
+          "fill": "#090B10",
+          "gap": 20,
+          "children": [
+            { "type": "frame", "id": "CPC16", "name": "CraftingBadge", "width": 72, "height": 48, "fill": "#2DDFF3", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC17", "name": "CraftingBadgeText", "fill": "#10131C", "content": "1", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] },
+            { "type": "text", "id": "CPC18", "name": "CraftingLabel", "fill": "#33E0F3", "content": "CRAFTING", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" },
+            { "type": "frame", "id": "CPC19", "name": "CraftingModeTab", "width": 280, "height": 52, "fill": "#151821", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC20", "name": "CraftingModeTabText", "fill": "#35E6F8", "content": "CRAFTING", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC21", "name": "UpgradeModeTab", "width": 280, "height": 52, "fill": "#151821", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC22", "name": "UpgradeModeTabText", "fill": "#FF6B57", "content": "UPGRADES", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CPC23",
+          "x": 60,
+          "y": 182,
+          "name": "IconTabs",
+          "width": 708,
+          "height": 46,
+          "fill": "#090B10",
+          "gap": 10,
+          "children": [
+            { "type": "frame", "id": "CPC24", "name": "IconTabOne", "width": 46, "height": 46, "fill": "#2DDFF3", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC25", "name": "IconTabOneText", "fill": "#10131C", "content": "[]", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC26", "name": "IconTabTwo", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC27", "name": "IconTabTwoText", "fill": "#FF6B57", "content": "P", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC28", "name": "IconTabThree", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC29", "name": "IconTabThreeText", "fill": "#FF6B57", "content": "K", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC30", "name": "IconTabFour", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC31", "name": "IconTabFourText", "fill": "#FF6B57", "content": "A", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC32", "name": "IconTabFive", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC33", "name": "IconTabFiveText", "fill": "#FF6B57", "content": "C", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC34", "name": "IconTabSix", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC35", "name": "IconTabSixText", "fill": "#FF6B57", "content": "R", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC36", "name": "IconTabSeven", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC37", "name": "IconTabSevenText", "fill": "#FF6B57", "content": "M", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "CPC38", "name": "IconTabEight", "width": 46, "height": 46, "fill": "#2A1115", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC39", "name": "IconTabEightText", "fill": "#FF6B57", "content": "X", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CPC40",
+          "x": 60,
+          "y": 246,
+          "name": "ItemGrid",
+          "width": 708,
+          "height": 754,
+          "fill": "#11151F66",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            { "type": "frame", "id": "CPC41", "name": "GridRowOne", "width": "fill_container", "height": 118, "fill": "#11151F00", "gap": 10, "children": [ { "type": "frame", "id": "CPC42", "name": "Card11", "width": 338, "height": 118, "fill": "#4A151B", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC43", "name": "WeaponSilhouette11", "width": 210, "height": 20, "fill": "#4FD58C" }, { "type": "text", "id": "CPC44", "name": "WeaponLabel11", "fill": "#FFFFFF", "content": "M-10AF", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC45", "name": "Card12", "width": 338, "height": 118, "fill": "#4A151B", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC46", "name": "WeaponSilhouette12", "width": 188, "height": 18, "fill": "#6BC28C" }, { "type": "text", "id": "CPC47", "name": "WeaponLabel12", "fill": "#FFFFFF", "content": "SHOTGUN", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CPC48", "name": "GridRowTwo", "width": "fill_container", "height": 118, "fill": "#11151F00", "gap": 10, "children": [ { "type": "frame", "id": "CPC49", "name": "Card21", "width": 220, "height": 118, "fill": "#3A1016", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC50", "name": "WeaponSilhouette21", "width": 160, "height": 18, "fill": "#B9BAC0" }, { "type": "text", "id": "CPC51", "name": "WeaponLabel21", "fill": "#FFFFFF", "content": "RIFLE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC52", "name": "Card22", "width": 220, "height": 118, "fill": "#3A1016", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC53", "name": "WeaponSilhouette22", "width": 150, "height": 18, "fill": "#A5ABB2" }, { "type": "text", "id": "CPC54", "name": "WeaponLabel22", "fill": "#FFFFFF", "content": "SMG", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC55", "name": "Card23", "width": 248, "height": 118, "fill": "#172026", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC56", "name": "Card23Text", "fill": "#5E636C", "content": "ARMOR SLOT", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CPC57", "name": "GridRowThree", "width": "fill_container", "height": 118, "fill": "#11151F00", "gap": 10, "children": [ { "type": "frame", "id": "CPC58", "name": "Card31", "width": 338, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC59", "name": "WeaponSilhouette31", "width": 210, "height": 16, "fill": "#7E858E" }, { "type": "text", "id": "CPC60", "name": "WeaponLabel31", "fill": "#FFFFFF", "content": "PRECISION", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC61", "name": "Card32", "width": 338, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC62", "name": "WeaponSilhouette32", "width": 198, "height": 16, "fill": "#818894" }, { "type": "text", "id": "CPC63", "name": "WeaponLabel32", "fill": "#FFFFFF", "content": "ASSAULT", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CPC64", "name": "GridRowFour", "width": "fill_container", "height": 118, "fill": "#11151F00", "gap": 10, "children": [ { "type": "frame", "id": "CPC65", "name": "Card41", "width": 338, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC66", "name": "WeaponSilhouette41", "width": 162, "height": 20, "fill": "#949AA2" }, { "type": "text", "id": "CPC67", "name": "WeaponLabel41", "fill": "#FFFFFF", "content": "PISTOL", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC68", "name": "Card42", "width": 338, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC69", "name": "WeaponSilhouette42", "width": 160, "height": 20, "fill": "#8E949C" }, { "type": "text", "id": "CPC70", "name": "WeaponLabel42", "fill": "#FFFFFF", "content": "SIDEARM", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "CPC71", "name": "GridRowFive", "width": "fill_container", "height": 118, "fill": "#11151F00", "gap": 10, "children": [ { "type": "frame", "id": "CPC72", "name": "Card51", "width": 220, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC73", "name": "ModBox51", "width": 132, "height": 48, "fill": "#525760" }, { "type": "text", "id": "CPC74", "name": "ModLabel51", "fill": "#FFFFFF", "content": "MOD A", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC75", "name": "Card52", "width": 220, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC76", "name": "ModBox52", "width": 132, "height": 48, "fill": "#525760" }, { "type": "text", "id": "CPC77", "name": "ModLabel52", "fill": "#FFFFFF", "content": "MOD B", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }, { "type": "frame", "id": "CPC78", "name": "Card53", "width": 248, "height": 118, "fill": "#181D25", "stroke": { "thickness": 2, "fill": "#B61A22" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "CPC79", "name": "ModBox53", "width": 132, "height": 48, "fill": "#525760" }, { "type": "text", "id": "CPC80", "name": "ModLabel53", "fill": "#FFFFFF", "content": "MOD C", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] } ] }
+          ]
+        },
+        { "type": "rectangle", "id": "CPC81", "name": "GridDivider", "x": 800, "y": 246, "width": 4, "height": 754, "fill": "#D5262D" },
+        {
+          "type": "frame",
+          "id": "CPC82",
+          "x": 876,
+          "y": 188,
+          "name": "WeaponPreviewPanel",
+          "width": 660,
+          "height": 676,
+          "fill": "#090B10",
+          "layout": "vertical",
+          "gap": 18,
+          "children": [
+            { "type": "text", "id": "CPC83", "name": "WeaponName", "fill": "#F4F5F7", "content": "M-10AF LEXINGTON", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC84", "name": "WeaponClass", "fill": "#9FADB6", "content": "COMMON", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "CPC85", "name": "WeaponLine", "width": 622, "height": 2, "fill": "#B61A22" },
+            { "type": "rectangle", "id": "CPC86", "name": "WeaponBody", "x": 120, "y": 114, "width": 360, "height": 122, "fill": "#9098A3" },
+            { "type": "rectangle", "id": "CPC87", "name": "WeaponGrip", "x": 254, "y": 210, "width": 80, "height": 124, "fill": "#7D8792" },
+            { "type": "rectangle", "id": "CPC88", "name": "WeaponMagazine", "x": 334, "y": 236, "width": 44, "height": 74, "fill": "#58161D" },
+            { "type": "frame", "id": "CPC89", "x": 0, "y": 364, "name": "AmmoCard", "width": 112, "height": 102, "fill": "#18A757", "stroke": { "thickness": 2, "fill": "#C7FFC4" }, "layout": "vertical", "justifyContent": "end", "padding": 10, "children": [ { "type": "text", "id": "CPC90", "name": "AmmoCardText", "fill": "#FFFFFF", "content": "37/30", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "rectangle", "id": "CPC91", "name": "PreviewFooterLine", "width": 596, "height": 2, "fill": "#B61A22" },
+            { "type": "frame", "id": "CPC92", "name": "CraftButton", "width": 340, "height": 54, "fill": "#1D8E96", "stroke": { "thickness": 2, "fill": "#7FF8FF" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "CPC93", "name": "CraftButtonText", "fill": "#E7FBFF", "content": "CRAFT", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CPC94",
+          "x": 1504,
+          "y": 188,
+          "name": "StatsColumn",
+          "width": 352,
+          "height": 678,
+          "fill": "#090B10",
+          "layout": "vertical",
+          "gap": 14,
+          "children": [
+            { "type": "text", "id": "CPC95", "name": "PowerTypeLabel", "fill": "#FF6B57", "content": "POWER PISTOL", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC96", "name": "DamageText", "fill": "#38E6F8", "content": "715 DPS", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC97", "name": "DamageMeta", "fill": "#C3CCD2", "content": "12-14 DAMAGE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC98", "name": "RateMeta", "fill": "#C3CCD2", "content": "5.3 ATTACKS / SEC", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "CPC99", "name": "StatsDividerOne", "width": "fill_container", "height": 2, "fill": "#B61A22" },
+            { "type": "text", "id": "CPC100", "name": "PowerHeader", "fill": "#34E9FB", "content": "POWER", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC101", "name": "PowerBody", "fill": "#8FD6E2", "textGrowth": "fixed-width", "width": 320, "content": "BULLETS CAN RICOCHET OFF SURFACES.", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC102", "name": "StatsListTitle", "fill": "#E7EDF1", "content": "CRAFTED ITEM WILL GAIN:", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC103", "name": "StatList01", "fill": "#8FE0D8", "content": "+10 THERMAL DAMAGE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC104", "name": "StatList02", "fill": "#8FE0D8", "content": "+8 ELECTRIC DAMAGE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC105", "name": "StatList03", "fill": "#8FE0D8", "content": "+8 POISON DAMAGE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC106", "name": "StatList04", "fill": "#8FE0D8", "content": "+8 BURN CHANCE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC107", "name": "EmptySlot01", "fill": "#727B86", "content": "EMPTY SCOPE SLOT", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "text", "id": "CPC108", "name": "EmptySlot02", "fill": "#727B86", "content": "EMPTY MUZZLE SLOT", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "CPC109", "name": "StatsDividerTwo", "width": "fill_container", "height": 2, "fill": "#B61A22" },
+            { "type": "text", "id": "CPC110", "name": "FlavorText", "fill": "#E6594B", "textGrowth": "fixed-width", "width": 320, "content": "BAD IS GIFT TO THE INEFFECTIVE FIGHT OR SELF DEFENSE.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "frame", "id": "CPC111", "name": "CostRow", "width": "fill_container", "height": 26, "fill": "#090B10", "gap": 14, "children": [ { "type": "text", "id": "CPC112", "name": "CostWeight", "fill": "#FF5B45", "content": "4.3", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "CPC113", "name": "CostMoney", "fill": "#FF9A3B", "content": "$ 23", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CPC114",
+          "x": 1730,
+          "y": 1008,
+          "name": "CloseButton",
+          "width": 128,
+          "height": 42,
+          "fill": "#10131C",
+          "stroke": { "thickness": 2, "fill": "#2ED8E8" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            { "type": "text", "id": "CPC115", "name": "CloseButtonText", "fill": "#DFFBFF", "content": "CLOSE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+          ]
+        }
+      ]
+    }
+  ]
+}

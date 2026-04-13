@@ -1,0 +1,176 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "GQS01",
+      "x": 0,
+      "y": 0,
+      "name": "GenshinQuests",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#9AA89A",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "GQS02", "name": "BackdropWash", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#8696A7" },
+        { "type": "rectangle", "id": "GQS03", "name": "BackdropTint", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#DDE4CC99" },
+        {
+          "type": "frame",
+          "id": "GQS04",
+          "x": 22,
+          "y": 18,
+          "name": "CategoryRail",
+          "width": 126,
+          "height": 1044,
+          "fill": "#4A5564CC",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 18,
+          "children": [
+            { "type": "frame", "id": "GQS05", "name": "TabOne", "width": 86, "height": 86, "fill": "#C9B58B", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS06", "name": "TabOneText", "fill": "#FFFFFF", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 24, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS07", "name": "TabTwo", "width": 86, "height": 86, "fill": "#334355", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS08", "name": "TabTwoText", "fill": "#F3E7C8", "content": "[]", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS09", "name": "TabThree", "width": 86, "height": 86, "fill": "#334355", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS10", "name": "TabThreeText", "fill": "#F3E7C8", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 22, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS11", "name": "TabFour", "width": 86, "height": 86, "fill": "#334355", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS12", "name": "TabFourText", "fill": "#F3E7C8", "content": "<>", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS13", "name": "TabFive", "width": 86, "height": 86, "fill": "#334355", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS14", "name": "TabFiveText", "fill": "#F3E7C8", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 22, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS15", "name": "TabFooter", "width": 86, "height": 86, "fill": "#F1E8D8", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS16", "name": "TabFooterText", "fill": "#334355", "content": "OK", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GQS17",
+          "x": 178,
+          "y": 30,
+          "name": "QuestListPanel",
+          "width": 676,
+          "height": 934,
+          "fill": "#DEE6D0CC",
+          "stroke": { "thickness": 4, "fill": "#EDE4CE" },
+          "layout": "vertical",
+          "gap": 18,
+          "padding": 18,
+          "children": [
+            { "type": "text", "id": "GQS18", "name": "ListHeader", "fill": "#E9D3A2", "content": "IN PROGRESS", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+            { "type": "text", "id": "GQS19", "name": "CategoryHeader", "fill": "#F3E9CC", "content": "ARCHON QUESTS", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "GQS20",
+              "name": "SelectedQuestCard",
+              "width": "fill_container",
+              "height": 124,
+              "fill": "#334255",
+              "stroke": { "thickness": 6, "fill": "#EEE4CF" },
+              "layout": "vertical",
+              "gap": 10,
+              "padding": 16,
+              "children": [
+                { "type": "text", "id": "GQS21", "name": "SelectedQuestTitle", "fill": "#E7C98A", "textGrowth": "fixed-width", "width": 548, "content": "THE OUTLANDER WHO CAUGHT THE WIND", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" },
+                { "type": "text", "id": "GQS22", "name": "SelectedQuestAct", "fill": "#A8A49A", "content": "PROLOGUE: ACT I", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GQS23",
+              "name": "FocusQuest",
+              "width": "fill_container",
+              "height": 126,
+              "fill": "#F3ECDD",
+              "stroke": { "thickness": 4, "fill": "#EAD9B8" },
+              "gap": 18,
+              "padding": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "GQS24",
+                  "name": "FocusQuestText",
+                  "width": 470,
+                  "height": 88,
+                  "fill": "#F3ECDD",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    { "type": "text", "id": "GQS25", "name": "FocusQuestTitle", "fill": "#42556B", "content": "WINDS OF THE PAST", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" },
+                    { "type": "text", "id": "GQS26", "name": "FocusQuestDistance", "fill": "#B3B3B3", "content": "395m", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }
+                  ]
+                },
+                { "type": "frame", "id": "GQS27", "name": "FocusQuestBadge", "width": 96, "height": 88, "fill": "#E4BE50", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS28", "name": "FocusQuestBadgeText", "fill": "#FFFFFF", "content": "!!", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" } ] }
+              ]
+            },
+            { "type": "frame", "id": "GQS29", "name": "ListQuestTwo", "width": "fill_container", "height": 96, "fill": "#5A6573D8", "layout": "vertical", "gap": 10, "padding": 16, "children": [ { "type": "text", "id": "GQS30", "name": "ListQuestTwoTitle", "fill": "#F0EBE2", "content": "CRASH COURSE", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" }, { "type": "text", "id": "GQS31", "name": "ListQuestTwoDistance", "fill": "#C4C1B9", "content": "212m", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS32", "name": "ListQuestThree", "width": "fill_container", "height": 96, "fill": "#5A6573D8", "layout": "vertical", "gap": 10, "padding": 16, "children": [ { "type": "text", "id": "GQS33", "name": "ListQuestThreeTitle", "fill": "#F0EBE2", "content": "SPARKS AMONGST THE PAGES", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" }, { "type": "text", "id": "GQS34", "name": "ListQuestThreeDistance", "fill": "#C4C1B9", "content": "329m", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "text", "id": "GQS35", "name": "WorldQuestsLabel", "fill": "#F2E5CB", "content": "WORLD QUESTS", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+            { "type": "frame", "id": "GQS36", "name": "WorldQuestOne", "width": "fill_container", "height": 100, "fill": "#5A6573D8", "layout": "vertical", "gap": 10, "padding": 16, "children": [ { "type": "text", "id": "GQS37", "name": "WorldQuestOneTitle", "fill": "#F0EBE2", "content": "THE ART OF COOKING", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" }, { "type": "text", "id": "GQS38", "name": "WorldQuestOneDistance", "fill": "#C4C1B9", "content": "483m", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS39", "name": "WorldQuestTwo", "width": "fill_container", "height": 100, "fill": "#5A6573D8", "layout": "vertical", "gap": 10, "padding": 16, "children": [ { "type": "text", "id": "GQS40", "name": "WorldQuestTwoTitle", "fill": "#F0EBE2", "textGrowth": "fixed-width", "width": 590, "content": "SHARPENING THE AXE WON'T HINDER THE WORK", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }, { "type": "text", "id": "GQS41", "name": "WorldQuestTwoDistance", "fill": "#C4C1B9", "content": "655m", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] }
+          ]
+        },
+        { "type": "rectangle", "id": "GQS42", "name": "ScrollTrack", "x": 846, "y": 116, "width": 10, "height": 792, "fill": "#D4CDB8" },
+        { "type": "rectangle", "id": "GQS43", "name": "ScrollThumb", "x": 844, "y": 132, "width": 14, "height": 112, "fill": "#A5976F" },
+        {
+          "type": "frame",
+          "id": "GQS44",
+          "x": 918,
+          "y": 92,
+          "name": "DetailPanel",
+          "width": 894,
+          "height": 842,
+          "fill": "#D8E0CC66",
+          "layout": "vertical",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "GQS45",
+              "name": "DetailHeader",
+              "width": "fill_container",
+              "height": 122,
+              "fill": "#D8E0CC00",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                { "type": "text", "id": "GQS46", "name": "DetailTitle", "fill": "#F0E5D0", "content": "WINDS OF THE PAST", "fontFamily": "Press Start 2P", "fontSize": 22, "fontWeight": "normal" },
+                { "type": "text", "id": "GQS47", "name": "DetailLocation", "fill": "#E2C98B", "content": "STARFELL VALLEY, MONDSTADT", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+                { "type": "rectangle", "id": "GQS48", "name": "HeaderLine", "width": "fill_container", "height": 2, "fill": "#E1DABF" }
+              ]
+            },
+            { "type": "frame", "id": "GQS49", "name": "ObjectiveBanner", "width": 862, "height": 74, "fill": "#526675E0", "layout": "vertical", "justifyContent": "center", "padding": 18, "children": [ { "type": "text", "id": "GQS50", "name": "ObjectiveBannerText", "fill": "#F8F2E5", "content": "ENTER THE TEMPLE", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" } ] },
+            { "type": "text", "id": "GQS51", "name": "DetailBody", "fill": "#F3EBDD", "textGrowth": "fixed-width", "width": 864, "content": "TO STOP STORMTERROR'S SIEGE, YOU MUST VENTURE OUT AND ELIMINATE THE ELEMENTAL FLOWS LEFT WITHIN THE RUINED TEMPLES OF THE FOUR WINDS. AMBER IS WAITING FOR YOU AT THE TEMPLE OF THE FALCON.", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "GQS52", "name": "RewardsLine", "width": "fill_container", "height": 2, "fill": "#E1DABF" },
+            { "type": "text", "id": "GQS53", "name": "RewardsLabel", "fill": "#F0E5D0", "content": "QUEST CHAIN REWARDS:", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "GQS54",
+              "name": "RewardsRow",
+              "width": 780,
+              "height": 138,
+              "fill": "#D8E0CC00",
+              "gap": 20,
+              "children": [
+                { "type": "frame", "id": "GQS55", "name": "RewardOne", "width": 128, "height": 128, "fill": "#718D76", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS56", "name": "RewardOneText", "fill": "#FFFFFF", "content": "275", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "GQS57", "name": "RewardTwo", "width": 128, "height": 128, "fill": "#C79043", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS58", "name": "RewardTwoText", "fill": "#FFFFFF", "content": "20", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "GQS59", "name": "RewardThree", "width": 128, "height": 128, "fill": "#C29E4A", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS60", "name": "RewardThreeText", "fill": "#FFFFFF", "content": "3000", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "GQS61", "name": "RewardFour", "width": 128, "height": 128, "fill": "#4D8FB4", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS62", "name": "RewardFourText", "fill": "#FFFFFF", "content": "1550", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "GQS63", "name": "RewardFive", "width": 128, "height": 128, "fill": "#7FBB96", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS64", "name": "RewardFiveText", "fill": "#FFFFFF", "content": "3", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GQS65",
+          "x": 1496,
+          "y": 952,
+          "name": "CancelNavigationButton",
+          "width": 324,
+          "height": 102,
+          "fill": "#F2E8D8",
+          "stroke": { "thickness": 2, "fill": "#E1D1B2" },
+          "gap": 18,
+          "padding": 18,
+          "children": [
+            { "type": "frame", "id": "GQS66", "name": "CancelNavigationGlyph", "width": 68, "height": 68, "fill": "#E0B84E", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "GQS67", "name": "CancelNavigationGlyphText", "fill": "#FFFFFF", "content": "!!", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "GQS68", "name": "CancelNavigationTextColumn", "width": 180, "height": 68, "fill": "#F2E8D8", "layout": "vertical", "justifyContent": "center", "gap": 6, "children": [ { "type": "text", "id": "GQS69", "name": "CancelNavigationTextOne", "fill": "#42556B", "content": "CANCEL", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" }, { "type": "text", "id": "GQS70", "name": "CancelNavigationTextTwo", "fill": "#42556B", "content": "NAVIGATION", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" } ] }
+          ]
+        }
+      ]
+    }
+  ]
+}

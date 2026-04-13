@@ -1,0 +1,159 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "SDJ01",
+      "x": 0,
+      "y": 0,
+      "name": "StardewJournal",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#203624",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "SDJ02", "name": "BackdropShade", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#132116CC" },
+        {
+          "type": "frame",
+          "id": "SDJ03",
+          "x": 666,
+          "y": 194,
+          "name": "JournalCard",
+          "width": 588,
+          "height": 482,
+          "fill": "#F0BD6B",
+          "stroke": { "thickness": 8, "fill": "#7D3E14" },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "SDJ04",
+              "name": "RowNewAdvancement",
+              "width": "fill_container",
+              "height": 66,
+              "fill": "#F8D89A",
+              "stroke": { "thickness": 4, "fill": "#7D3E14" },
+              "gap": 14,
+              "padding": 12,
+              "children": [
+                { "type": "frame", "id": "SDJ05", "name": "NewBadgeOne", "width": 94, "height": 40, "fill": "#F8B325", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "SDJ06", "name": "NewBadgeOneText", "fill": "#FFFFFF", "content": "NEW!", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+                { "type": "text", "id": "SDJ07", "name": "RowNewAdvancementText", "fill": "#5A2A10", "content": "ADVANCEMENT", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SDJ08",
+              "name": "RowNewAnimals",
+              "width": "fill_container",
+              "height": 66,
+              "fill": "#F8D89A",
+              "stroke": { "thickness": 4, "fill": "#7D3E14" },
+              "gap": 14,
+              "padding": 12,
+              "children": [
+                { "type": "frame", "id": "SDJ09", "name": "NewBadgeTwo", "width": 94, "height": 40, "fill": "#F8B325", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "SDJ10", "name": "NewBadgeTwoText", "fill": "#FFFFFF", "content": "NEW!", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+                { "type": "text", "id": "SDJ11", "name": "RowNewAnimalsText", "fill": "#5A2A10", "content": "RAISING ANIMALS", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SDJ12",
+              "name": "RowGathering",
+              "width": "fill_container",
+              "height": 66,
+              "fill": "#F8D89A",
+              "stroke": { "thickness": 4, "fill": "#7D3E14" },
+              "gap": 14,
+              "padding": 12,
+              "children": [
+                { "type": "frame", "id": "SDJ13", "name": "QuestCoin", "width": 40, "height": 40, "fill": "#E0B041", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "SDJ14", "name": "QuestCoinText", "fill": "#7D3E14", "content": "$", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] },
+                { "type": "text", "id": "SDJ15", "name": "RowGatheringText", "fill": "#5A2A10", "content": "GATHERING", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SDJ16",
+              "name": "RowDoneStarter",
+              "width": "fill_container",
+              "height": 66,
+              "fill": "#F8D89A",
+              "stroke": { "thickness": 4, "fill": "#7D3E14" },
+              "gap": 14,
+              "padding": 12,
+              "children": [
+                { "type": "frame", "id": "SDJ17", "name": "DoneBadge", "width": 110, "height": 40, "fill": "#1BB841", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "SDJ18", "name": "DoneBadgeText", "fill": "#FFFFFF", "content": "DONE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+                { "type": "text", "id": "SDJ19", "name": "RowDoneStarterText", "fill": "#5A2A10", "content": "GETTING STARTED", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SDJ20",
+              "name": "RowIntroductions",
+              "width": "fill_container",
+              "height": 66,
+              "fill": "#F8D89A",
+              "stroke": { "thickness": 4, "fill": "#7D3E14" },
+              "gap": 14,
+              "padding": 12,
+              "children": [
+                { "type": "frame", "id": "SDJ21", "name": "SimpleGlyph", "width": 34, "height": 40, "fill": "#F8D89A", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "SDJ22", "name": "SimpleGlyphText", "fill": "#E9A426", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" } ] },
+                { "type": "text", "id": "SDJ23", "name": "RowIntroductionsText", "fill": "#5A2A10", "content": "INTRODUCTIONS", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SDJ24",
+          "x": 816,
+          "y": 154,
+          "name": "JournalTab",
+          "width": 290,
+          "height": 54,
+          "fill": "#F8D89A",
+          "stroke": { "thickness": 4, "fill": "#7D3E14" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            { "type": "text", "id": "SDJ25", "name": "JournalTabText", "fill": "#7D3E14", "content": "JOURNAL", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SDJ26",
+          "x": 1224,
+          "y": 210,
+          "name": "CloseButton",
+          "width": 30,
+          "height": 30,
+          "fill": "#D84A28",
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            { "type": "text", "id": "SDJ27", "name": "CloseButtonText", "fill": "#FFFFFF", "content": "X", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SDJ28",
+          "x": 612,
+          "y": 336,
+          "name": "SelectionPointer",
+          "width": 34,
+          "height": 52,
+          "fill": "#F4F1E6",
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            { "type": "text", "id": "SDJ29", "name": "SelectionPointerText", "fill": "#D5C9B0", "content": ">", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" }
+          ]
+        }
+      ]
+    }
+  ]
+}

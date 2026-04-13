@@ -1,0 +1,55 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "RSM01",
+      "x": 0,
+      "y": 0,
+      "name": "RuinerSkillMenu",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#09070A",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "RSM02", "name": "BackdropTint", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#09070AE0" },
+        { "type": "ellipse", "id": "RSM03", "name": "OuterRing", "x": 730, "y": 262, "width": 520, "height": 520, "fill": "#2A030A44", "stroke": { "thickness": 4, "fill": "#A30D23" } },
+        { "type": "ellipse", "id": "RSM04", "name": "InnerRing", "x": 850, "y": 382, "width": 280, "height": 280, "fill": "#32060D66", "stroke": { "thickness": 2, "fill": "#7F0D1D" } },
+        { "type": "text", "id": "RSM05", "x": 908, "y": 500, "name": "SkillNameLineOne", "fill": "#FF253E", "content": "ENERGY", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+        { "type": "text", "id": "RSM06", "x": 874, "y": 536, "name": "SkillNameLineTwo", "fill": "#FF253E", "content": "SHIELD", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+        { "type": "frame", "id": "RSM07", "x": 931, "y": 174, "name": "TopPrompt", "width": 58, "height": 32, "fill": "#FF2040", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "RSM08", "name": "TopPromptText", "fill": "#09070A", "content": "A", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+        { "type": "frame", "id": "RSM09", "x": 602, "y": 716, "name": "LeftPrompt", "width": 98, "height": 34, "fill": "#FF2040", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "RSM10", "name": "LeftPromptText", "fill": "#09070A", "content": "SPACE", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+        { "type": "frame", "id": "RSM11", "x": 1236, "y": 704, "name": "RightPrompt", "width": 122, "height": 54, "fill": "#FF2040", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "gap": 4, "children": [ { "type": "text", "id": "RSM12", "name": "RightPromptLineOne", "fill": "#09070A", "content": "LEFT", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "RSM13", "name": "RightPromptLineTwo", "fill": "#09070A", "content": "SHIFT", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+        {
+          "type": "frame",
+          "id": "RSM14",
+          "x": 36,
+          "y": 24,
+          "name": "HealthHud",
+          "width": 108,
+          "height": 118,
+          "fill": "#09070A00",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            { "type": "text", "id": "RSM15", "name": "HeartRow", "fill": "#FF2546", "content": "OOOOO", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" },
+            { "type": "text", "id": "RSM16", "name": "CellRow", "fill": "#FF2546", "content": "[][][][][]", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+          ]
+        },
+        { "type": "icon_font", "id": "RSM17", "x": 916, "y": 320, "name": "TopIcon", "width": 28, "height": 28, "iconFontName": "crosshair", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM18", "x": 1082, "y": 334, "name": "UpperRightIcon", "width": 28, "height": 28, "iconFontName": "flame", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM19", "x": 1164, "y": 488, "name": "RightIcon", "width": 28, "height": 28, "iconFontName": "sparkles", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM20", "x": 1114, "y": 646, "name": "LowerRightIcon", "width": 28, "height": 28, "iconFontName": "brain", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM21", "x": 960, "y": 710, "name": "BottomIcon", "width": 28, "height": 28, "iconFontName": "shield", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM22", "x": 820, "y": 698, "name": "LowerLeftIcon", "width": 28, "height": 28, "iconFontName": "bug", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "icon_font", "id": "RSM23", "x": 706, "y": 590, "name": "SelectedIcon", "width": 38, "height": 38, "iconFontName": "person-standing", "iconFontFamily": "lucide", "fill": "#09070A" },
+        { "type": "ellipse", "id": "RSM24", "name": "SelectedIconPlate", "x": 690, "y": 574, "width": 72, "height": 72, "fill": "#F4EDF0", "stroke": { "thickness": 2, "fill": "#E1C7CE" } },
+        { "type": "icon_font", "id": "RSM25", "x": 676, "y": 478, "name": "LeftIcon", "width": 28, "height": 28, "iconFontName": "gamepad-2", "iconFontFamily": "lucide", "fill": "#8D1120" },
+        { "type": "frame", "id": "RSM26", "x": 752, "y": 642, "name": "MicroPrompt", "width": 26, "height": 10, "fill": "#FF2040" },
+        { "type": "frame", "id": "RSM27", "x": 1538, "y": 868, "name": "MiniHudOne", "width": 44, "height": 18, "fill": "#FF2040" },
+        { "type": "frame", "id": "RSM28", "x": 1608, "y": 922, "name": "MiniHudTwo", "width": 58, "height": 18, "fill": "#FF2040" },
+        { "type": "icon_font", "id": "RSM29", "x": 1658, "y": 846, "name": "MiniHudIcon", "width": 34, "height": 34, "iconFontName": "swords", "iconFontFamily": "lucide", "fill": "#8D1120" }
+      ]
+    }
+  ]
+}

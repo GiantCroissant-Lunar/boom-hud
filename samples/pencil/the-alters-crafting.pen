@@ -1,0 +1,208 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "TAC01",
+      "x": 0,
+      "y": 0,
+      "name": "TheAltersCrafting",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#15161A",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "TAC02", "name": "Backdrop", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#15161A" },
+        { "type": "rectangle", "id": "TAC03", "name": "DimWash", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#05060899" },
+        {
+          "type": "frame",
+          "id": "TAC04",
+          "x": 44,
+          "y": 28,
+          "name": "TopBar",
+          "width": 1832,
+          "height": 88,
+          "fill": "#15161A",
+          "gap": 22,
+          "children": [
+            { "type": "text", "id": "TAC05", "name": "SectionLabel", "fill": "#EEE7D8", "content": "MODULE FABRICATION", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC06", "name": "TabOne", "fill": "#F5BE58", "content": "ASSEMBLY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC07", "name": "TabTwo", "fill": "#7D828D", "content": "RESEARCH", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC08", "name": "TabThree", "fill": "#7D828D", "content": "STORAGE", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC09", "name": "CrewCount", "fill": "#D6D7DB", "content": "CREW 11/16", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC10", "name": "EnergyText", "fill": "#C7F37A", "content": "ENERGY +35", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC11", "name": "TimeText", "fill": "#7FD7F7", "content": "06:20", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+          ]
+        },
+        { "type": "rectangle", "id": "TAC12", "name": "TopDivider", "x": 44, "y": 126, "width": 1832, "height": 2, "fill": "#8A7149" },
+        {
+          "type": "frame",
+          "id": "TAC13",
+          "x": 44,
+          "y": 156,
+          "name": "RecipeColumn",
+          "width": 482,
+          "height": 860,
+          "fill": "#1C1E23",
+          "stroke": { "thickness": 2, "fill": "#746245" },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 18,
+          "children": [
+            { "type": "text", "id": "TAC14", "name": "RecipeColumnLabel", "fill": "#F0E5D2", "content": "AVAILABLE PROJECTS", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "TAC15",
+              "name": "RecipeFilterRow",
+              "width": "fill_container",
+              "height": 42,
+              "fill": "#1C1E23",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "TAC16", "name": "FilterAll", "width": 138, "height": 42, "fill": "#F5BE58", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC17", "name": "FilterAllText", "fill": "#1A1711", "content": "ALL", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC18", "name": "FilterHab", "width": 138, "height": 42, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC19", "name": "FilterHabText", "fill": "#C4C8D0", "content": "HAB", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC20", "name": "FilterOps", "width": 138, "height": 42, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC21", "name": "FilterOpsText", "fill": "#C4C8D0", "content": "OPS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TAC22",
+              "name": "RecipeCards",
+              "width": "fill_container",
+              "height": 736,
+              "fill": "#1C1E23",
+              "layout": "vertical",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "TAC23", "name": "RecipeCard01", "width": "fill_container", "height": 110, "fill": "#F5BE58", "stroke": { "thickness": 2, "fill": "#F7D493" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC24", "name": "RecipeCard01Title", "fill": "#16130C", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC25", "name": "RecipeCard01Body", "fill": "#2A2419", "textGrowth": "fixed-width", "width": 420, "content": "UPGRADE THE CENTRAL AIR UNIT TO EXTEND EXTERNAL EXPEDITION WINDOWS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC26", "name": "RecipeCard02", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC27", "name": "RecipeCard02Title", "fill": "#F0E5D2", "content": "GREENHOUSE POD", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC28", "name": "RecipeCard02Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "PROVIDES FRESH FOOD AND A SMALL MORALE BONUS FOR THE WHOLE BASE.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC29", "name": "RecipeCard03", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC30", "name": "RecipeCard03Title", "fill": "#F0E5D2", "content": "WORKSHOP EXTENSION", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC31", "name": "RecipeCard03Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "ADDS AN EXTRA FABRICATION BAY FOR TOOLING AND SUIT MAINTENANCE.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC32", "name": "RecipeCard04", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC33", "name": "RecipeCard04Title", "fill": "#F0E5D2", "content": "RAPID REFINER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC34", "name": "RecipeCard04Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "SHORTENS ORGANIC MATTER PROCESSING BUT INCREASES POWER DRAW.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC35", "name": "RecipeCard05", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC36", "name": "RecipeCard05Title", "fill": "#F0E5D2", "content": "MEDBAY CABIN", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC37", "name": "RecipeCard05Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "INCREASES RECOVERY SPEED FOR EXHAUSTED ALTERS DURING STORM DAYS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC38", "name": "RecipeCard06", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC39", "name": "RecipeCard06Title", "fill": "#F0E5D2", "content": "SCOUT VEHICLE BAY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC40", "name": "RecipeCard06Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "ENABLES LONG RANGE GATHERING RUNS DURING LOW RADIATION PERIODS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TAC41",
+          "x": 558,
+          "y": 156,
+          "name": "AssemblyStage",
+          "width": 836,
+          "height": 860,
+          "fill": "#191B20",
+          "stroke": { "thickness": 2, "fill": "#746245" },
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 18,
+          "children": [
+            {
+              "type": "frame",
+              "id": "TAC42",
+              "name": "AssemblyHeader",
+              "width": "fill_container",
+              "height": 56,
+              "fill": "#191B20",
+              "gap": 16,
+              "children": [
+                { "type": "text", "id": "TAC43", "name": "AssemblyHeaderText", "fill": "#EEE7D8", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+                { "type": "text", "id": "TAC44", "name": "AssemblyEta", "fill": "#93D8F8", "content": "ETA 08H 40M", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+                { "type": "text", "id": "TAC45", "name": "AssemblyCrew", "fill": "#C7F37A", "content": "2 ALTERS REQUIRED", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TAC46",
+              "name": "BlueprintView",
+              "width": "fill_container",
+              "height": 372,
+              "fill": "#121419",
+              "stroke": { "thickness": 2, "fill": "#4E5563" },
+              "layout": "none",
+              "children": [
+                { "type": "rectangle", "id": "TAC47", "name": "BlueprintGrid", "x": 24, "y": 24, "width": 760, "height": 324, "fill": "#181B21" },
+                { "type": "rectangle", "id": "TAC48", "name": "ModuleBody", "x": 230, "y": 90, "width": 320, "height": 148, "fill": "#C9C1AF" },
+                { "type": "rectangle", "id": "TAC49", "name": "ModuleTop", "x": 272, "y": 58, "width": 236, "height": 38, "fill": "#A29A88" },
+                { "type": "rectangle", "id": "TAC50", "name": "ModuleFoot", "x": 250, "y": 246, "width": 280, "height": 32, "fill": "#7A7367" },
+                { "type": "rectangle", "id": "TAC51", "name": "ModulePipeLeft", "x": 168, "y": 124, "width": 80, "height": 24, "fill": "#7E7F84" },
+                { "type": "rectangle", "id": "TAC52", "name": "ModulePipeRight", "x": 550, "y": 124, "width": 80, "height": 24, "fill": "#7E7F84" },
+                { "type": "rectangle", "id": "TAC53", "name": "SpecLineOne", "x": 80, "y": 94, "width": 110, "height": 2, "fill": "#7A7F8B" },
+                { "type": "rectangle", "id": "TAC54", "name": "SpecLineTwo", "x": 614, "y": 190, "width": 120, "height": 2, "fill": "#7A7F8B" },
+                { "type": "rectangle", "id": "TAC55", "name": "SpecLineThree", "x": 120, "y": 274, "width": 140, "height": 2, "fill": "#7A7F8B" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TAC56",
+              "name": "ResourceRequirements",
+              "width": "fill_container",
+              "height": 176,
+              "fill": "#191B20",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "TAC57", "name": "Requirement01", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC58", "name": "Requirement01Icon", "width": 56, "height": 56, "fill": "#B0B7C4" }, { "type": "text", "id": "TAC59", "name": "Requirement01Label", "fill": "#EEE7D8", "content": "METAL", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC60", "name": "Requirement01Amount", "fill": "#F5BE58", "content": "24 / 40", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC61", "name": "Requirement02", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC62", "name": "Requirement02Icon", "width": 56, "height": 56, "fill": "#8B9277" }, { "type": "text", "id": "TAC63", "name": "Requirement02Label", "fill": "#EEE7D8", "content": "ORGANICS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC64", "name": "Requirement02Amount", "fill": "#F5BE58", "content": "52 / 60", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC65", "name": "Requirement03", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC66", "name": "Requirement03Icon", "width": 56, "height": 56, "fill": "#D9B88F" }, { "type": "text", "id": "TAC67", "name": "Requirement03Label", "fill": "#EEE7D8", "content": "MINERALS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC68", "name": "Requirement03Amount", "fill": "#F5BE58", "content": "16 / 16", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC69", "name": "Requirement04", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC70", "name": "Requirement04Icon", "width": 56, "height": 56, "fill": "#7FC7D8" }, { "type": "text", "id": "TAC71", "name": "Requirement04Label", "fill": "#EEE7D8", "content": "ALLOYS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC72", "name": "Requirement04Amount", "fill": "#F5BE58", "content": "08 / 18", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TAC73",
+              "name": "BottomActionStrip",
+              "width": "fill_container",
+              "height": 200,
+              "fill": "#191B20",
+              "gap": 18,
+              "children": [
+                { "type": "frame", "id": "TAC74", "name": "QueueInfo", "width": 524, "height": 200, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 14, "children": [ { "type": "text", "id": "TAC75", "name": "QueueInfoTitle", "fill": "#EEE7D8", "content": "CURRENT QUEUE", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC76", "name": "QueueInfoItemOne", "fill": "#C4C8D0", "content": "SOLAR SAIL PATCH", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC77", "name": "QueueInfoItemTwo", "fill": "#C4C8D0", "content": "OUTER HULL INSULATION", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC78", "name": "QueueInfoItemThree", "fill": "#C4C8D0", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC79", "name": "QueueInfoNote", "fill": "#94D5F5", "textGrowth": "fixed-width", "width": 490, "content": "AN AVAILABLE TECHNICIAN WILL START THE NEW JOB AS SOON AS MATERIALS ARE READY.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC80", "name": "PrimaryAction", "width": 240, "height": 200, "fill": "#F5BE58", "stroke": { "thickness": 2, "fill": "#F7D493" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC81", "name": "PrimaryActionText", "fill": "#18140C", "content": "QUEUE JOB", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TAC82",
+          "x": 1426,
+          "y": 156,
+          "name": "LogisticsColumn",
+          "width": 450,
+          "height": 860,
+          "fill": "#1C1E23",
+          "stroke": { "thickness": 2, "fill": "#746245" },
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 18,
+          "children": [
+            { "type": "text", "id": "TAC83", "name": "LogisticsTitle", "fill": "#F0E5D2", "content": "RESOURCE BALANCE", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC84", "name": "LogisticsBody", "fill": "#C4C8D0", "textGrowth": "fixed-width", "width": 410, "content": "THIS PROJECT PULLS INPUTS FROM BOTH MINING BAY A AND THE GREENHOUSE. EXPECT A SHORT DROP IN FOOD DURING THE BUILD WINDOW.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "TAC85", "name": "LogisticsDividerOne", "width": "fill_container", "height": 2, "fill": "#746245" },
+            { "type": "text", "id": "TAC86", "name": "WorkerAllocationTitle", "fill": "#EEE7D8", "content": "ALTER ASSIGNMENTS", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "frame", "id": "TAC87", "name": "WorkerRowOne", "width": "fill_container", "height": 86, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "gap": 12, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC88", "name": "WorkerPortraitOne", "width": 56, "height": 56, "fill": "#8A8F98" }, { "type": "frame", "id": "TAC89", "name": "WorkerInfoOne", "width": 320, "height": 56, "fill": "#24272E", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "TAC90", "name": "WorkerInfoOneName", "fill": "#F0E5D2", "content": "TECHNICIAN JAN", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC91", "name": "WorkerInfoOneMeta", "fill": "#94D5F5", "content": "EFFICIENCY 112%", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
+            { "type": "frame", "id": "TAC92", "name": "WorkerRowTwo", "width": "fill_container", "height": 86, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "gap": 12, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC93", "name": "WorkerPortraitTwo", "width": 56, "height": 56, "fill": "#A3A9B0" }, { "type": "frame", "id": "TAC94", "name": "WorkerInfoTwo", "width": 320, "height": 56, "fill": "#24272E", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "TAC95", "name": "WorkerInfoTwoName", "fill": "#F0E5D2", "content": "ENGINEER LENA", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC96", "name": "WorkerInfoTwoMeta", "fill": "#94D5F5", "content": "EFFICIENCY 108%", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
+            { "type": "rectangle", "id": "TAC97", "name": "LogisticsDividerTwo", "width": "fill_container", "height": 2, "fill": "#746245" },
+            { "type": "text", "id": "TAC98", "name": "QueuePanelTitle", "fill": "#EEE7D8", "content": "PRODUCTION OUTLOOK", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "TAC99", "name": "QueuePanelBody", "fill": "#C4C8D0", "textGrowth": "fixed-width", "width": 410, "content": "TOTAL EXPECTED OUTPUT THIS DAY: 2 FABRICATION JOBS, 1 RESEARCH STEP, 3 GATHERING RUNS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "TAC100",
+              "name": "BottomStatsRow",
+              "width": "fill_container",
+              "height": 180,
+              "fill": "#1C1E23",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "TAC101", "name": "BottomStatOne", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC102", "name": "BottomStatOneLabel", "fill": "#C4C8D0", "content": "FOOD", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC103", "name": "BottomStatOneValue", "fill": "#F5BE58", "content": "32", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC104", "name": "BottomStatTwo", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC105", "name": "BottomStatTwoLabel", "fill": "#C4C8D0", "content": "POWER", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC106", "name": "BottomStatTwoValue", "fill": "#C7F37A", "content": "+35", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "TAC107", "name": "BottomStatThree", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC108", "name": "BottomStatThreeLabel", "fill": "#C4C8D0", "content": "MORALE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC109", "name": "BottomStatThreeValue", "fill": "#94D5F5", "content": "+04", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

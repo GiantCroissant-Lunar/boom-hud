@@ -218,6 +218,18 @@ function Get-ReferencePathForSurface([string]$SurfaceId)
         "quest-sidebar-ugui" { return Resolve-AbsolutePath "build/fixture-refs/quest-sidebar/QSB01.png" }
         "combat-toast-stack-uitk" { return Resolve-AbsolutePath "build/fixture-refs/combat-toast-stack/CTS01.png" }
         "combat-toast-stack-ugui" { return Resolve-AbsolutePath "build/fixture-refs/combat-toast-stack/CTS01.png" }
+        "ruiner-skill-menu-uitk" { return Resolve-AbsolutePath "build/fixture-refs/ruiner-skill-menu/RSM01.png" }
+        "ruiner-skill-menu-ugui" { return Resolve-AbsolutePath "build/fixture-refs/ruiner-skill-menu/RSM01.png" }
+        "genshin-quests-uitk" { return Resolve-AbsolutePath "build/fixture-refs/genshin-quests/GQS01.png" }
+        "genshin-quests-ugui" { return Resolve-AbsolutePath "build/fixture-refs/genshin-quests/GQS01.png" }
+        "stardew-journal-uitk" { return Resolve-AbsolutePath "build/fixture-refs/stardew-journal/SDJ01.png" }
+        "stardew-journal-ugui" { return Resolve-AbsolutePath "build/fixture-refs/stardew-journal/SDJ01.png" }
+        "cyberpunk-crafting-uitk" { return Resolve-AbsolutePath "build/fixture-refs/cyberpunk-crafting/CPC01.png" }
+        "cyberpunk-crafting-ugui" { return Resolve-AbsolutePath "build/fixture-refs/cyberpunk-crafting/CPC01.png" }
+        "the-alters-crafting-uitk" { return Resolve-AbsolutePath "build/fixture-refs/the-alters-crafting/TAC01.png" }
+        "the-alters-crafting-ugui" { return Resolve-AbsolutePath "build/fixture-refs/the-alters-crafting/TAC01.png" }
+        "fortnite-inventory-uitk" { return Resolve-AbsolutePath "build/fixture-refs/fortnite-inventory/FTI01.png" }
+        "fortnite-inventory-ugui" { return Resolve-AbsolutePath "build/fixture-refs/fortnite-inventory/FTI01.png" }
         default { throw "No reference image is configured for surface '$SurfaceId'." }
     }
 }
@@ -244,7 +256,7 @@ function New-RunCompareManifest(
     [string]$RunRoot,
     [string]$Label)
 {
-    $manifest = Get-Content $BaseManifestPath -Raw | ConvertFrom-Json -Depth 20
+    $manifest = Get-Content $BaseManifestPath -Raw | ConvertFrom-Json
     $manifest.artifactsRoot = $RunRoot
 
     foreach ($surface in @($manifest.surfaces))
@@ -288,7 +300,7 @@ function New-RunMotionManifest(
     [string]$RunRoot,
     [string]$Label)
 {
-    $manifest = Get-Content $BaseManifestPath -Raw | ConvertFrom-Json -Depth 20
+    $manifest = Get-Content $BaseManifestPath -Raw | ConvertFrom-Json
     $manifest.artifactsRoot = (Join-Path $RunRoot "motion")
 
     $manifestsRoot = Join-Path $RunRoot "manifests"
@@ -337,7 +349,7 @@ function New-PlannedRuleArtifact(
 
     Invoke-DotNetCli -Arguments $planArgs | Out-Host
 
-    $plan = Get-Content $planPath -Raw | ConvertFrom-Json -Depth 20
+    $plan = Get-Content $planPath -Raw | ConvertFrom-Json
     $selectedActions = @($plan.appliedRules | ForEach-Object {
         if (-not [string]::IsNullOrWhiteSpace([string]$_.name))
         {
@@ -356,20 +368,55 @@ function Invoke-GenerateFixtureSet([string]$RulesPath)
 {
     $unityOutputPath = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
     $uguiOutputPath = Join-Path $UnityProjectPath "Assets/BoomHudGeneratedUGui"
-    $fixtures = @(
-        [pscustomobject]@{
-            Source = Resolve-AbsolutePath "samples/pencil/party-status-strip.pen"
-            Root = "PartyStatusStrip"
-        },
-        [pscustomobject]@{
-            Source = Resolve-AbsolutePath "samples/pencil/quest-sidebar.pen"
-            Root = "QuestSidebar"
-        },
-        [pscustomobject]@{
-            Source = Resolve-AbsolutePath "samples/pencil/combat-toast-stack.pen"
-            Root = "CombatToastStack"
+    $fixtures = @()
+ $compareManifest = Get-Content $CompareManifestPath -Raw | ConvertFrom-Json
+    $fixtureKeys = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+
+    foreach ($surface in @($compareManifest.surfaces))
+    {
+        $unitySpec = Get-OptionalPropertyValue -Source $surface -PropertyName "unity"
+        if ($null -eq $unitySpec)
+        {
+            continue
         }
-    )
+
+        $sourcePen = [string](Get-OptionalPropertyValue -Source $unitySpec -PropertyName "sourcePen")
+        if ([string]::IsNullOrWhiteSpace($sourcePen))
+        {
+            continue
+        }
+
+        $resolvedSourcePen = Resolve-AbsolutePath $sourcePen
+        $fixtureRoot = [string](Get-OptionalPropertyValue -Source $unitySpec -PropertyName "generatedRootName")
+        $fixtureKey = "$resolvedSourcePen|$fixtureRoot"
+        if (-not $fixtureKeys.Add($fixtureKey))
+        {
+            continue
+        }
+
+        $fixtures += [pscustomobject]@{
+            Source = $resolvedSourcePen
+            Root = $fixtureRoot
+        }
+    }
+
+    if ($fixtures.Count -eq 0)
+    {
+        $fixtures = @(
+            [pscustomobject]@{
+                Source = Resolve-AbsolutePath "samples/pencil/party-status-strip.pen"
+                Root = "PartyStatusStrip"
+            },
+            [pscustomobject]@{
+                Source = Resolve-AbsolutePath "samples/pencil/quest-sidebar.pen"
+                Root = "QuestSidebar"
+            },
+            [pscustomobject]@{
+                Source = Resolve-AbsolutePath "samples/pencil/combat-toast-stack.pen"
+                Root = "CombatToastStack"
+            }
+        )
+    }
 
     foreach ($fixture in $fixtures)
     {
@@ -383,6 +430,10 @@ function Invoke-GenerateFixtureSet([string]$RulesPath)
             "--namespace", "Generated.Hud",
             "--emit-visual-ir"
         )
+        if (-not [string]::IsNullOrWhiteSpace([string]$fixture.Root))
+        {
+            $unityArgs += @("--root", $fixture.Root)
+        }
 
         $uguiArgs = @(
             "run",
@@ -394,6 +445,10 @@ function Invoke-GenerateFixtureSet([string]$RulesPath)
             "--namespace", "Generated.Hud.UGui",
             "--emit-visual-ir"
         )
+        if (-not [string]::IsNullOrWhiteSpace([string]$fixture.Root))
+        {
+            $uguiArgs += @("--root", $fixture.Root)
+        }
 
         if (-not [string]::IsNullOrWhiteSpace($RulesPath))
         {
@@ -433,7 +488,7 @@ function Invoke-ScoreRun(
     [string]$PlanSummaryPath,
     [object[]]$SelectedActions)
 {
-    $manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json -Depth 20
+    $manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
     $scoresRoot = Join-Path $RunRoot "scores"
     New-Item -ItemType Directory -Force -Path $scoresRoot | Out-Null
     $unityVisualIrDirectory = Join-Path $UnityProjectPath "Assets/Resources/BoomHudGenerated"
@@ -483,7 +538,7 @@ function Invoke-ScoreRun(
 
         Invoke-DotNetCli -Arguments $scoreArgs | Out-Host
 
-        $report = Get-Content $reportPath -Raw | ConvertFrom-Json -Depth 20
+        $report = Get-Content $reportPath -Raw | ConvertFrom-Json
         $surfaceResults += [pscustomobject]@{
             id = $surfaceId
             referencePath = $referencePath
@@ -575,10 +630,16 @@ function Invoke-MotionSweep(
         return $null
     }
 
-    $motionEntries = @(Get-Content $motionSummaryPath -Raw | ConvertFrom-Json -Depth 20)
-    $average = if ($motionEntries.Count -gt 0)
+    $motionEntries = @(Get-Content $motionSummaryPath -Raw | ConvertFrom-Json)
+    $motionScorableEntries = @($motionEntries | Where-Object {
+        $_ -and
+        $_.PSObject -and
+        ($_.PSObject.Properties.Name -contains "overallSimilarityPercent") -and
+        $null -ne $_.overallSimilarityPercent
+    })
+    $average = if ($motionScorableEntries.Count -gt 0)
     {
-        [Math]::Round((($motionEntries | Measure-Object -Property overallSimilarityPercent -Average).Average), 4)
+        [Math]::Round((($motionScorableEntries | Measure-Object -Property overallSimilarityPercent -Average).Average), 4)
     }
     else
     {

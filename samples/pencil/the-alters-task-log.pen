@@ -1,0 +1,135 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "TAT01",
+      "x": 0,
+      "y": 0,
+      "name": "TheAltersTaskLog",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#232020",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "TAT02",
+          "x": 688,
+          "y": 18,
+          "name": "TopTabs",
+          "width": 544,
+          "height": 44,
+          "gap": 18,
+          "children": [
+            { "type": "frame", "id": "TAT03", "name": "SearchTab", "width": 44, "height": 44, "fill": "#F1F1F1", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT04", "name": "SearchGlyph", "fill": "#171717", "content": "Q", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "TAT05", "name": "BaseOverviewTab", "width": 144, "height": 44, "fill": "#232020", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT06", "name": "BaseOverviewText", "fill": "#A8A3A0", "content": "BASE OVERVIEW", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "TAT07", "name": "StorageTab", "width": 114, "height": 44, "fill": "#232020", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT08", "name": "StorageText", "fill": "#A8A3A0", "content": "STORAGE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "TAT09", "name": "TasksTab", "width": 96, "height": 44, "fill": "#060606", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT10", "name": "TasksText", "fill": "#FFFFFF", "content": "TASKS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "TAT11", "name": "ManualTab", "width": 110, "height": 44, "fill": "#232020", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT12", "name": "ManualText", "fill": "#A8A3A0", "content": "MANUAL", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "TAT13", "name": "KeyTab", "width": 44, "height": 44, "fill": "#F1F1F1", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT14", "name": "KeyGlyph", "fill": "#171717", "content": "E", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TAT15",
+          "x": 240,
+          "y": 126,
+          "name": "LeftColumn",
+          "width": 568,
+          "height": 700,
+          "fill": "#232020",
+          "layout": "vertical",
+          "gap": 18,
+          "children": [
+            { "type": "text", "id": "TAT16", "name": "TaskLogTitle", "fill": "#FFFFFF", "content": "TASK LOG", "fontFamily": "Press Start 2P", "fontSize": 24, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "TAT17", "name": "TaskLogAccent", "width": 110, "height": 8, "fill": "#E2E2E2" },
+            {
+              "type": "frame",
+              "id": "TAT18",
+              "name": "MainGoalCard",
+              "width": "fill_container",
+              "height": 242,
+              "fill": "#2B2828",
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 18,
+              "children": [
+                { "type": "text", "id": "TAT19", "name": "MainGoalsLabel", "fill": "#C7C4C0", "content": "MAIN GOALS", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+                { "type": "rectangle", "id": "TAT20", "name": "DividerOne", "width": "fill_container", "height": 2, "fill": "#686363" },
+                { "type": "text", "id": "TAT21", "name": "MainGoalTitle", "fill": "#FFFFFF", "content": "ESCAPE THE SUN", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
+                { "type": "text", "id": "TAT22", "name": "MainGoalBullet", "fill": "#D5D1CE", "textGrowth": "fixed-width", "width": 470, "content": "o  FOLLOW THE INSTRUCTIONS TO PREPARE FOR THE JOURNEY", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TAT23",
+              "name": "FundamentalsCard",
+              "width": "fill_container",
+              "height": 170,
+              "fill": "#2B2828",
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 18,
+              "children": [
+                { "type": "rectangle", "id": "TAT24", "name": "DividerTwo", "width": "fill_container", "height": 2, "fill": "#686363" },
+                { "type": "text", "id": "TAT25", "name": "FundamentalsTitle", "fill": "#F0ECE8", "content": "THE FUNDAMENTALS", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" },
+                { "type": "text", "id": "TAT26", "name": "FundamentalsBullet", "fill": "#ABA5A2", "textGrowth": "fixed-width", "width": 474, "content": "o  GATHER 60 METALS OUTSIDE", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+                { "type": "rectangle", "id": "TAT27", "name": "DividerThree", "width": "fill_container", "height": 2, "fill": "#686363" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TAT28",
+          "x": 1008,
+          "y": 162,
+          "name": "RightColumn",
+          "width": 760,
+          "height": 728,
+          "fill": "#2B2828AA",
+          "layout": "vertical",
+          "gap": 22,
+          "padding": 22,
+          "children": [
+            { "type": "text", "id": "TAT29", "name": "RightTitle", "fill": "#FFFFFF", "content": "ESCAPE THE SUN", "fontFamily": "Press Start 2P", "fontSize": 22, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "TAT30",
+              "name": "BulletList",
+              "width": "fill_container",
+              "height": 154,
+              "fill": "#2B2828",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                { "type": "text", "id": "TAT31", "name": "DisabledBullet", "fill": "#8F8986", "textGrowth": "fixed-width", "width": 650, "content": "o  FOLLOW THE EVACUATION INSTRUCTIONS IN THE MANUAL", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+                { "type": "rectangle", "id": "TAT32", "name": "StrikeLine", "width": 620, "height": 2, "fill": "#7F7774" },
+                { "type": "text", "id": "TAT33", "name": "ActiveBullet", "fill": "#F0ECE8", "textGrowth": "fixed-width", "width": 650, "content": "o  FOLLOW THE INSTRUCTIONS TO PREPARE FOR THE JOURNEY", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }
+              ]
+            },
+            { "type": "text", "id": "TAT34", "name": "BodyCopy", "fill": "#DAD6D2", "textGrowth": "fixed-width", "width": 660, "content": "I HAVE TO FIND THE EVACUATION PROCEDURE AND GET THE HELL OUT OF THIS PLACE. IF I DO NOT GET THE BASE MOVING IN TIME, I WILL BURN TO DEATH.", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TAT35",
+          "x": 1710,
+          "y": 995,
+          "name": "CloseButton",
+          "width": 134,
+          "height": 44,
+          "fill": "#232020",
+          "stroke": { "thickness": 2, "fill": "#8C8885" },
+          "gap": 10,
+          "padding": 10,
+          "children": [
+            { "type": "frame", "id": "TAT36", "name": "CloseKey", "width": 42, "height": 24, "fill": "#F2F2F2", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAT37", "name": "CloseKeyText", "fill": "#121212", "content": "ESC", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+            { "type": "text", "id": "TAT38", "name": "CloseLabel", "fill": "#E5E2DE", "content": "CLOSE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "FTI01",
+      "x": 0,
+      "y": 0,
+      "name": "FortniteInventory",
+      "width": 1920,
+      "height": 1080,
+      "fill": "#78B7E5",
+      "layout": "none",
+      "children": [
+        { "type": "rectangle", "id": "FTI02", "name": "SkyBackdrop", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#79B7E6" },
+        { "type": "rectangle", "id": "FTI03", "name": "SeaBand", "x": 0, "y": 748, "width": 1920, "height": 332, "fill": "#3B6FA4" },
+        {
+          "type": "frame",
+          "id": "FTI04",
+          "x": 60,
+          "y": 34,
+          "name": "TopTabs",
+          "width": 1800,
+          "height": 62,
+          "fill": "#79B7E600",
+          "gap": 16,
+          "children": [
+            { "type": "frame", "id": "FTI05", "name": "TabPlay", "width": 180, "height": 62, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#214B6F" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI06", "name": "TabPlayText", "fill": "#1D3956", "content": "PLAY", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "FTI07", "name": "TabLocker", "width": 180, "height": 62, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#214B6F" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI08", "name": "TabLockerText", "fill": "#1D3956", "content": "LOCKER", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "frame", "id": "FTI09", "name": "TabInventory", "width": 220, "height": 62, "fill": "#FFED63", "stroke": { "thickness": 3, "fill": "#214B6F" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI10", "name": "TabInventoryText", "fill": "#16314A", "content": "INVENTORY", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] },
+            { "type": "text", "id": "FTI11", "name": "PartyIndicator", "fill": "#FFFFFF", "content": "SQUAD 04", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            { "type": "text", "id": "FTI12", "name": "CurrencyText", "fill": "#FFFFFF", "content": "V-BUCKS 950", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FTI13",
+          "x": 56,
+          "y": 132,
+          "name": "PlayerStatsPanel",
+          "width": 432,
+          "height": 812,
+          "fill": "#1D8DDF",
+          "stroke": { "thickness": 4, "fill": "#16314A" },
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 18,
+          "children": [
+            { "type": "text", "id": "FTI14", "name": "PlayerStatsTitle", "fill": "#FFFFFF", "content": "PLAYER STATS", "fontFamily": "Press Start 2P", "fontSize": 13, "fontWeight": "normal" },
+            { "type": "rectangle", "id": "FTI15", "name": "PortraitBlock", "width": 390, "height": 220, "fill": "#88D5F7" },
+            {
+              "type": "frame",
+              "id": "FTI16",
+              "name": "StatTiles",
+              "width": "fill_container",
+              "height": 160,
+              "fill": "#1D8DDF",
+              "gap": 12,
+              "children": [
+                { "type": "frame", "id": "FTI17", "name": "TileWins", "width": 122, "height": 160, "fill": "#40C2F6", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "FTI18", "name": "TileWinsLabel", "fill": "#12304B", "content": "WINS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "FTI19", "name": "TileWinsValue", "fill": "#FFFFFF", "content": "18", "fontFamily": "Press Start 2P", "fontSize": 20, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI20", "name": "TileMatches", "width": 122, "height": 160, "fill": "#40C2F6", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "FTI21", "name": "TileMatchesLabel", "fill": "#12304B", "content": "MATCHES", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "FTI22", "name": "TileMatchesValue", "fill": "#FFFFFF", "content": "142", "fontFamily": "Press Start 2P", "fontSize": 20, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI23", "name": "TileKDR", "width": 122, "height": 160, "fill": "#40C2F6", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "FTI24", "name": "TileKdrLabel", "fill": "#12304B", "content": "K/D", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "FTI25", "name": "TileKdrValue", "fill": "#FFFFFF", "content": "2.4", "fontFamily": "Press Start 2P", "fontSize": 20, "fontWeight": "normal" } ] }
+              ]
+            },
+            { "type": "text", "id": "FTI26", "name": "LoadoutLabel", "fill": "#FFFFFF", "content": "CURRENT LOADOUT", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+            {
+              "type": "frame",
+              "id": "FTI27",
+              "name": "LoadoutCards",
+              "width": "fill_container",
+              "height": 184,
+              "fill": "#1D8DDF",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "FTI28", "name": "LoadoutCardOne", "width": 118, "height": 184, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 12, "padding": 10, "children": [ { "type": "rectangle", "id": "FTI29", "name": "LoadoutCardOneImage", "width": 94, "height": 68, "fill": "#8A6BFF" }, { "type": "text", "id": "FTI30", "name": "LoadoutCardOneText", "fill": "#15304A", "content": "RIFLE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI31", "name": "LoadoutCardTwo", "width": 118, "height": 184, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 12, "padding": 10, "children": [ { "type": "rectangle", "id": "FTI32", "name": "LoadoutCardTwoImage", "width": 94, "height": 68, "fill": "#F1646B" }, { "type": "text", "id": "FTI33", "name": "LoadoutCardTwoText", "fill": "#15304A", "content": "SHOTGUN", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI34", "name": "LoadoutCardThree", "width": 118, "height": 184, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" }, "layout": "vertical", "gap": 12, "padding": 10, "children": [ { "type": "rectangle", "id": "FTI35", "name": "LoadoutCardThreeImage", "width": 94, "height": 68, "fill": "#76D86C" }, { "type": "text", "id": "FTI36", "name": "LoadoutCardThreeText", "fill": "#15304A", "content": "HEALS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
+              ]
+            },
+            { "type": "text", "id": "FTI37", "name": "PlayerStatsFooter", "fill": "#E5F8FF", "textGrowth": "fixed-width", "width": 390, "content": "TRACK INVENTORY ITEMS TO BUILD A FLEXIBLE BR ENDGAME LOADOUT.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FTI38",
+          "x": 530,
+          "y": 132,
+          "name": "InventoryPanel",
+          "width": 1334,
+          "height": 812,
+          "fill": "#FFFFFF",
+          "stroke": { "thickness": 4, "fill": "#16314A" },
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 18,
+          "children": [
+            {
+              "type": "frame",
+              "id": "FTI39",
+              "name": "InventoryHeader",
+              "width": "fill_container",
+              "height": 58,
+              "fill": "#FFFFFF",
+              "gap": 18,
+              "children": [
+                { "type": "text", "id": "FTI40", "name": "InventoryHeaderText", "fill": "#15304A", "content": "BACKPACK", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
+                { "type": "text", "id": "FTI41", "name": "InventoryCapacity", "fill": "#1D8DDF", "content": "62 / 72 SLOTS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
+                { "type": "text", "id": "FTI42", "name": "InventorySort", "fill": "#15304A", "content": "SORT: RARITY", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FTI43",
+              "name": "ItemGrid",
+              "width": "fill_container",
+              "height": 560,
+              "fill": "#FFFFFF",
+              "layout": "vertical",
+              "gap": 10,
+              "children": [
+                { "type": "frame", "id": "FTI44", "name": "GridRow01", "width": "fill_container", "height": 128, "fill": "#FFFFFF", "gap": 10, "children": [ { "type": "frame", "id": "FTI45", "name": "Cell011", "width": 152, "height": 128, "fill": "#8A6BFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI46", "name": "Cell012", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI47", "name": "Cell013", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI48", "name": "Cell014", "width": 152, "height": 128, "fill": "#76D86C", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI49", "name": "Cell015", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI50", "name": "Cell016", "width": 152, "height": 128, "fill": "#F1646B", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI51", "name": "Cell017", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI52", "name": "Cell018", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } } ] },
+                { "type": "frame", "id": "FTI53", "name": "GridRow02", "width": "fill_container", "height": 128, "fill": "#FFFFFF", "gap": 10, "children": [ { "type": "frame", "id": "FTI54", "name": "Cell021", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI55", "name": "Cell022", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI56", "name": "Cell023", "width": 152, "height": 128, "fill": "#FFD86A", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI57", "name": "Cell024", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI58", "name": "Cell025", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI59", "name": "Cell026", "width": 152, "height": 128, "fill": "#76D86C", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI60", "name": "Cell027", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI61", "name": "Cell028", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } } ] },
+                { "type": "frame", "id": "FTI62", "name": "GridRow03", "width": "fill_container", "height": 128, "fill": "#FFFFFF", "gap": 10, "children": [ { "type": "frame", "id": "FTI63", "name": "Cell031", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI64", "name": "Cell032", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI65", "name": "Cell033", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI66", "name": "Cell034", "width": 152, "height": 128, "fill": "#8A6BFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI67", "name": "Cell035", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI68", "name": "Cell036", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI69", "name": "Cell037", "width": 152, "height": 128, "fill": "#F1646B", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI70", "name": "Cell038", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } } ] },
+                { "type": "frame", "id": "FTI71", "name": "GridRow04", "width": "fill_container", "height": 128, "fill": "#FFFFFF", "gap": 10, "children": [ { "type": "frame", "id": "FTI72", "name": "Cell041", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI73", "name": "Cell042", "width": 152, "height": 128, "fill": "#76D86C", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI74", "name": "Cell043", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI75", "name": "Cell044", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI76", "name": "Cell045", "width": 152, "height": 128, "fill": "#FFD86A", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI77", "name": "Cell046", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI78", "name": "Cell047", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } }, { "type": "frame", "id": "FTI79", "name": "Cell048", "width": 152, "height": 128, "fill": "#FFFFFF", "stroke": { "thickness": 3, "fill": "#16314A" } } ] }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FTI80",
+              "name": "BottomMetaRow",
+              "width": "fill_container",
+              "height": 134,
+              "fill": "#FFFFFF",
+              "gap": 14,
+              "children": [
+                { "type": "frame", "id": "FTI81", "name": "SelectedItemCard", "width": 760, "height": 134, "fill": "#1D8DDF", "stroke": { "thickness": 4, "fill": "#16314A" }, "layout": "vertical", "gap": 10, "padding": 14, "children": [ { "type": "text", "id": "FTI82", "name": "SelectedItemName", "fill": "#FFFFFF", "content": "EPIC ASSAULT RIFLE", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }, { "type": "text", "id": "FTI83", "name": "SelectedItemBody", "fill": "#E5F8FF", "textGrowth": "fixed-width", "width": 720, "content": "LONG RANGE BURST DAMAGE WITH TIGHT BLOOM. IDEAL FOR MID-RANGE TEAM FIGHTS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI84", "name": "ActionButtonDrop", "width": 166, "height": 134, "fill": "#FFD94C", "stroke": { "thickness": 4, "fill": "#16314A" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI85", "name": "ActionButtonDropText", "fill": "#16314A", "content": "DROP", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI86", "name": "ActionButtonEquip", "width": 166, "height": 134, "fill": "#76D86C", "stroke": { "thickness": 4, "fill": "#16314A" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI87", "name": "ActionButtonEquipText", "fill": "#16314A", "content": "EQUIP", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
+                { "type": "frame", "id": "FTI88", "name": "ActionButtonSort", "width": 166, "height": 134, "fill": "#F1646B", "stroke": { "thickness": 4, "fill": "#16314A" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "FTI89", "name": "ActionButtonSortText", "fill": "#FFFFFF", "content": "SORT", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FTI90",
+          "x": 676,
+          "y": 970,
+          "name": "ControllerHints",
+          "width": 1038,
+          "height": 64,
+          "fill": "#0E2A42CC",
+          "stroke": { "thickness": 3, "fill": "#16314A" },
+          "gap": 18,
+          "padding": 14,
+          "children": [
+            { "type": "text", "id": "FTI91", "name": "HintOne", "fill": "#FFFFFF", "content": "A SELECT", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "text", "id": "FTI92", "name": "HintTwo", "fill": "#FFFFFF", "content": "X DROP", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "text", "id": "FTI93", "name": "HintThree", "fill": "#FFFFFF", "content": "Y SORT", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+            { "type": "text", "id": "FTI94", "name": "HintFour", "fill": "#FFFFFF", "content": "RB NEXT TAB", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+          ]
+        }
+      ]
+    }
+  ]
+}
