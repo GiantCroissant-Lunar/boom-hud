@@ -1,15 +1,15 @@
 .boomhud-reward-column {
-    flex-direction: column;
-    width: 164px;
-    height: 132px;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
-    padding-top: 12px;
-    padding-right: 12px;
-    padding-bottom: 12px;
-    padding-left: 12px;
+    flex-direction: column;
+    width: 164px;
+    height: 132px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
     align-items: flex-start;
     justify-content: flex-start;
     color: #0C0C0C;
@@ -25,11 +25,12 @@
 }
 
 .boomhud-tag {
-    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -42,11 +43,12 @@
 }
 
 .boomhud-value {
-    flex-direction: column;
     margin-top: 10px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -59,11 +61,12 @@
 }
 
 .boomhud-time {
-    flex-direction: column;
     margin-top: 10px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;

@@ -388,6 +388,9 @@ public sealed class SyntheticComponentizationTests
                     "componentRefId": "component-1",
                     "propertyKeys": [],
                     "instanceOverrideKeys": [
+                      "boomhud:originalPencilId",
+                      "boomhud:pencilLeft",
+                      "boomhud:pencilTop",
                       "boomhud:syntheticComponentInstance"
                     ],
                     "children": []
@@ -398,6 +401,9 @@ public sealed class SyntheticComponentizationTests
                     "componentRefId": "component-1",
                     "propertyKeys": [],
                     "instanceOverrideKeys": [
+                      "boomhud:originalPencilId",
+                      "boomhud:pencilLeft",
+                      "boomhud:pencilTop",
                       "boomhud:syntheticComponentInstance"
                     ],
                     "children": []

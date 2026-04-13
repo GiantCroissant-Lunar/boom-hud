@@ -84,14 +84,14 @@ public sealed class QuestSidebarView
         ConfigureRect(Root, width: 420f, height: 960f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 420f, preferredHeight: 960f, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(Root, horizontal: false, vertical: false);
-        ApplyVerticalLayout(Root, 16f, 16, 16, 16, 16, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(Root, 16f, 16, 16, 16, 16, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(Root, fg: "#070707", bg: "#070707", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Root.gameObject.SetActive(true);
         Header = CreateRect("Header", Root);
-        ConfigureRect(RectOf(Header), width: null, height: 64f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Header), ignoreLayout: false, preferredWidth: null, preferredHeight: 64f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(Header), width: 388f, height: 64f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(Header), ignoreLayout: false, preferredWidth: 388f, preferredHeight: 64f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Header), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Header), 6f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(Header), 6f, 12, 12, 12, 12, "middle-left");
         ApplyStyle(Header, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         Header.gameObject.SetActive(true);
         Title = CreateText("Title", RectOf(Header));
@@ -111,10 +111,10 @@ public sealed class QuestSidebarView
         Zone.text = "DARKSTONE DISTRICT";
         Zone.gameObject.SetActive(true);
         MinimapCard = CreateRect("MinimapCard", Root);
-        ConfigureRect(RectOf(MinimapCard), width: null, height: 272f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(MinimapCard), ignoreLayout: false, preferredWidth: null, preferredHeight: 272f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(MinimapCard), width: 388f, height: 272f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(MinimapCard), ignoreLayout: false, preferredWidth: 388f, preferredHeight: 272f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(MinimapCard), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MinimapCard), 8f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(MinimapCard), 8f, 12, 12, 12, 12, "top-left");
         ApplyStyle(MinimapCard, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         MinimapCard.gameObject.SetActive(true);
         MinimapLabel = CreateText("MinimapLabel", RectOf(MinimapCard));
@@ -129,7 +129,7 @@ public sealed class QuestSidebarView
         ConfigureRect(RectOf(MapGrid), width: null, height: 220f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MapGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: 220f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(MapGrid), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MapGrid), 4f, 8, 8, 8, 8);
+        ApplyVerticalLayout(RectOf(MapGrid), 4f, 8, 8, 8, 8, "top-left");
         ApplyStyle(MapGrid, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         MapGrid.gameObject.SetActive(true);
         var row0View = new SyntheticContainer9463CA59View(RectOf(MapGrid), null, null);
@@ -139,7 +139,7 @@ public sealed class QuestSidebarView
         ConfigureRect(RectOf(Row1), width: null, height: 32f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row1), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Row1), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row1), 4f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);
+        ApplyHorizontalLayout(RectOf(Row1), 4f, 0, 0, 0, 0, "top-left", childControlWidth: false, childControlHeight: false);
         ApplyStyle(Row1, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row1.gameObject.SetActive(true);
         Cell10 = CreateRect("Cell10", RectOf(Row1));
@@ -182,7 +182,7 @@ public sealed class QuestSidebarView
         ConfigureRect(RectOf(Row2), width: null, height: 32f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row2), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Row2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row2), 4f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);
+        ApplyHorizontalLayout(RectOf(Row2), 4f, 0, 0, 0, 0, "top-left", childControlWidth: false, childControlHeight: false);
         ApplyStyle(Row2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row2.gameObject.SetActive(true);
         Cell20 = CreateRect("Cell20", RectOf(Row2));
@@ -228,7 +228,7 @@ public sealed class QuestSidebarView
         ConfigureRect(RectOf(Row4), width: null, height: 32f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row4), ignoreLayout: false, preferredWidth: null, preferredHeight: 32f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Row4), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row4), 4f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);
+        ApplyHorizontalLayout(RectOf(Row4), 4f, 0, 0, 0, 0, "top-left", childControlWidth: false, childControlHeight: false);
         ApplyStyle(Row4, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row4.gameObject.SetActive(true);
         Cell40 = CreateRect("Cell40", RectOf(Row4));
@@ -268,10 +268,10 @@ public sealed class QuestSidebarView
         ApplyStyle(Cell45, fg: "#232323", bg: "#232323", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Cell45.gameObject.SetActive(true);
         ObjectiveCard = CreateRect("ObjectiveCard", Root);
-        ConfigureRect(RectOf(ObjectiveCard), width: null, height: 268f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ObjectiveCard), ignoreLayout: false, preferredWidth: null, preferredHeight: 268f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(ObjectiveCard), width: 388f, height: 268f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(ObjectiveCard), ignoreLayout: false, preferredWidth: 388f, preferredHeight: 268f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ObjectiveCard), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ObjectiveCard), 10f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(ObjectiveCard), 10f, 12, 12, 12, 12, "top-left");
         ApplyStyle(ObjectiveCard, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         ObjectiveCard.gameObject.SetActive(true);
         ObjectivesLabel = CreateText("ObjectivesLabel", RectOf(ObjectiveCard));
@@ -320,10 +320,10 @@ public sealed class QuestSidebarView
         Objective3 = objective3View.Root;
         Objective3.name = "Objective3";
         ResourceCard = CreateRect("ResourceCard", Root);
-        ConfigureRect(RectOf(ResourceCard), width: null, height: 164f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ResourceCard), ignoreLayout: false, preferredWidth: null, preferredHeight: 164f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(ResourceCard), width: 388f, height: 164f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(ResourceCard), ignoreLayout: false, preferredWidth: 388f, preferredHeight: 164f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ResourceCard), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ResourceCard), 10f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(ResourceCard), 10f, 12, 12, 12, 12, "top-left");
         ApplyStyle(ResourceCard, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         ResourceCard.gameObject.SetActive(true);
         ResourcesLabel = CreateText("ResourcesLabel", RectOf(ResourceCard));
@@ -544,7 +544,9 @@ public sealed class QuestSidebarView
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

@@ -304,7 +304,7 @@ namespace BoomHud.Compare
             }
 
             CenterAbsoluteChild(generated.ClassIcon.rectTransform, 32f, 32f);
-            SetBorderWidth(generated.Face.gameObject, 5f);
+            ApplyExplicitBorder(generated.Face.gameObject, Color.white, 5f);
             ConfigureAbsoluteRect(generated.Face, 37f, 0f, 56f, 56f);
             ConfigureAbsoluteRect(generated.Name.rectTransform, 0f, 62f, PartyMemberWidth, 12f);
             ConfigureAbsoluteRect(generated.Hp, 0f, 84f, PartyMemberWidth, 10f);
@@ -341,7 +341,7 @@ namespace BoomHud.Compare
             ConfigureIcon(icon, iconToken, 16, TextAnchor.MiddleCenter);
             CenterChild(icon.rectTransform, slot);
             icon.rectTransform.anchoredPosition = new Vector2(0f, -0.5f);
-            SetBorderWidth(slot.gameObject, 2f);
+            ApplyExplicitBorder(slot.gameObject, Color.white, 2f);
         }
 
         private static void ConfigureBarPresentation(StatBarView view, float fillWidth, float height, Color fillColor)
@@ -503,16 +503,64 @@ namespace BoomHud.Compare
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         }
 
-        private static void SetBorderWidth(GameObject gameObject, float width)
+        public static void ApplyExplicitBorder(GameObject gameObject, Color color, float width)
         {
-            var outline = gameObject.GetComponent<Outline>();
-            if (outline == null)
+            if (width <= 0f)
             {
                 return;
             }
 
-            outline.effectDistance = new Vector2(width, -width);
-            outline.useGraphicAlpha = false;
+            var outline = gameObject.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.enabled = false;
+            }
+
+            if (!gameObject.TryGetComponent<RectTransform>(out var rectTransform))
+            {
+                return;
+            }
+
+            var borderRoot = gameObject.transform.Find("__Border") as RectTransform ?? CreateRect("__Border", rectTransform);
+            borderRoot.SetParent(rectTransform, false);
+            StretchToParent(borderRoot);
+            ApplyIgnoreLayout(borderRoot);
+            borderRoot.SetAsLastSibling();
+
+            ConfigureBorderSegment(EnsureBorderSegment(borderRoot, "Top", color), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, 0f), new Vector2(0f, width));
+            ConfigureBorderSegment(EnsureBorderSegment(borderRoot, "Bottom", color), new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 0f), new Vector2(0f, width));
+            ConfigureBorderSegment(EnsureBorderSegment(borderRoot, "Left", color), new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(width, 0f));
+            ConfigureBorderSegment(EnsureBorderSegment(borderRoot, "Right", color), new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(0f, 0f), new Vector2(width, 0f));
+        }
+
+        private static RectTransform EnsureBorderSegment(RectTransform parent, string name, Color color)
+        {
+            var existing = parent.Find(name);
+            if (existing != null && existing.TryGetComponent<Image>(out var image))
+            {
+                image.color = color;
+                image.raycastTarget = false;
+                return image.rectTransform;
+            }
+
+            var created = CreateImage(name, parent, color);
+            created.raycastTarget = false;
+            return created.rectTransform;
+        }
+
+        private static void ConfigureBorderSegment(
+            RectTransform rectTransform,
+            Vector2 anchorMin,
+            Vector2 anchorMax,
+            Vector2 pivot,
+            Vector2 anchoredPosition,
+            Vector2 sizeDelta)
+        {
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
+            rectTransform.pivot = pivot;
+            rectTransform.anchoredPosition = anchoredPosition;
+            rectTransform.sizeDelta = sizeDelta;
         }
 
         private static string ResolveLucideGlyph(string iconToken)

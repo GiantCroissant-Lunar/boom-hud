@@ -42,7 +42,7 @@ public sealed class SyntheticContainerFC1FF3CBView
         ConfigureRect(Root, width: 164f, height: 132f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 164f, preferredHeight: 132f, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(Root, horizontal: false, vertical: false);
-        ApplyVerticalLayout(Root, 10f, 12, 12, 12, 12);
+        ApplyVerticalLayout(Root, 10f, 12, 12, 12, 12, "top-left");
         ApplyStyle(Root, fg: "#0C0C0C", bg: "#0C0C0C", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 4f, treatAsIcon: false);
         Root.gameObject.SetActive(true);
         Tag = CreateText("Tag", Root);
@@ -157,7 +157,9 @@ public sealed class SyntheticContainerFC1FF3CBView
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

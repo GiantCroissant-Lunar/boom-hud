@@ -1126,25 +1126,45 @@ public static class ImageSimilarityHandler
     internal static MeasuredLayoutReport BuildMeasuredLayoutReport(VisualDocument visualDocument, ActualLayoutSnapshot actualLayout)
     {
         var componentMap = visualDocument.Components.ToDictionary(component => component.Id, StringComparer.Ordinal);
-        var expectedRoot = ExpandEffectiveVisualNode(ResolveExpectedLayoutRoot(visualDocument, actualLayout), componentMap);
+        var normalizedActualLayout = actualLayout with
+        {
+            Root = NormalizeActualLayoutTree(actualLayout.Root)
+        };
+        var expectedRoot = ExpandEffectiveVisualNode(ResolveExpectedLayoutRoot(visualDocument, normalizedActualLayout), componentMap);
         var comparisons = new List<MeasuredLayoutComparison>();
         var issues = new List<MeasuredLayoutIssue>();
 
-        CompareLayoutNode(expectedRoot, actualLayout.Root, null, null, "root", comparisons, issues, childIndex: null);
+        CompareLayoutNode(expectedRoot, normalizedActualLayout.Root, null, null, "root", comparisons, issues, childIndex: null);
 
         return new MeasuredLayoutReport
         {
             Version = "1.0",
             DocumentName = visualDocument.DocumentName,
-            BackendFamily = actualLayout.BackendFamily,
-            CaptureId = actualLayout.CaptureId,
-            TargetName = actualLayout.TargetName,
+            BackendFamily = normalizedActualLayout.BackendFamily,
+            CaptureId = normalizedActualLayout.CaptureId,
+            TargetName = normalizedActualLayout.TargetName,
             ExpectedRootStableId = expectedRoot.StableId,
-            ActualRootName = actualLayout.Root.Name,
+            ActualRootName = normalizedActualLayout.Root.Name,
             Comparisons = comparisons,
             Issues = issues
         };
     }
+
+    private static ActualLayoutNode NormalizeActualLayoutTree(ActualLayoutNode node)
+    {
+        var normalizedChildren = node.Children
+            .Where(static child => !IsSyntheticOverlayChrome(child))
+            .Select(NormalizeActualLayoutTree)
+            .ToList();
+
+        return node with
+        {
+            Children = normalizedChildren
+        };
+    }
+
+    private static bool IsSyntheticOverlayChrome(ActualLayoutNode node)
+        => string.Equals(node.Name, "__Border", StringComparison.Ordinal);
 
     private static VisualNode ResolveExpectedLayoutRoot(VisualDocument visualDocument, ActualLayoutSnapshot actualLayout)
     {

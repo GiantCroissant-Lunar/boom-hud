@@ -82,14 +82,14 @@ public sealed class PartyStatusStripView
         ConfigureRect(Root, width: 1280f, height: 320f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 1280f, preferredHeight: 320f, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(Root, horizontal: false, vertical: false);
-        ApplyVerticalLayout(Root, 16f, 24, 24, 24, 24, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(Root, 16f, 24, 24, 24, 24, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(Root, fg: "#050505", bg: "#050505", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Root.gameObject.SetActive(true);
         Header = CreateRect("Header", Root);
         ConfigureRect(RectOf(Header), width: 1232f, height: 40f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Header), ignoreLayout: false, preferredWidth: 1232f, preferredHeight: 40f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Header), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Header), 0f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(Header), 0f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Header, fg: "#050505", bg: "#050505", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Header.gameObject.SetActive(true);
         AreaName = CreateText("AreaName", RectOf(Header));
@@ -112,14 +112,14 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(MemberRow), width: 1232f, height: 216f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberRow), ignoreLayout: false, preferredWidth: 1232f, preferredHeight: 216f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(MemberRow), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(MemberRow), 16f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: true);
+        ApplyHorizontalLayout(RectOf(MemberRow), 16f, 0, 0, 0, 0, "top-left", childControlWidth: false, childControlHeight: false);
         ApplyStyle(MemberRow, fg: "#050505", bg: "#050505", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         MemberRow.gameObject.SetActive(true);
         MemberA = CreateRect("MemberA", RectOf(MemberRow));
         ConfigureRect(RectOf(MemberA), width: 400f, height: 216f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(MemberA), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MemberA), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(MemberA, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberA.gameObject.SetActive(true);
         var heroRowView = new SyntheticContainerAF9ECAF6View(RectOf(MemberA), null, null);
@@ -169,7 +169,7 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(StatusRow), width: 376f, height: 56f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(StatusRow), ignoreLayout: false, preferredWidth: 376f, preferredHeight: 56f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(StatusRow), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(StatusRow), 8f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(StatusRow), 8f, 0, 0, 0, 0, "top-left");
         ApplyStyle(StatusRow, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow.gameObject.SetActive(true);
         var statusBuff1View = new SyntheticContainerB978BB0BView(RectOf(StatusRow), null, null);
@@ -206,7 +206,7 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(MemberB), width: 400f, height: 216f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberB), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(MemberB), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MemberB), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(RectOf(MemberB), 12f, 12, 12, 12, 12, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(MemberB, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberB.gameObject.SetActive(true);
         var heroRow2View = new SyntheticContainerAF9ECAF6View(RectOf(MemberB), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
@@ -270,7 +270,7 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(StatusRow2), width: 376f, height: 56f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(StatusRow2), ignoreLayout: false, preferredWidth: 376f, preferredHeight: 56f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(StatusRow2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(StatusRow2), 8f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(StatusRow2), 8f, 0, 0, 0, 0, "top-left");
         ApplyStyle(StatusRow2, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow2.gameObject.SetActive(true);
         var statusBuff12View = new SyntheticContainerB978BB0BView(RectOf(StatusRow2), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
@@ -307,7 +307,7 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(MemberC), width: 400f, height: 216f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MemberC), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(MemberC), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MemberC), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(RectOf(MemberC), 12f, 12, 12, 12, 12, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(MemberC, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         MemberC.gameObject.SetActive(true);
         var heroRow3View = new SyntheticContainerAF9ECAF6View(RectOf(MemberC), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
@@ -371,7 +371,7 @@ public sealed class PartyStatusStripView
         ConfigureRect(RectOf(StatusRow3), width: 376f, height: 56f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(StatusRow3), ignoreLayout: false, preferredWidth: 376f, preferredHeight: 56f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(StatusRow3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(StatusRow3), 8f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(StatusRow3), 8f, 0, 0, 0, 0, "top-left");
         ApplyStyle(StatusRow3, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         StatusRow3.gameObject.SetActive(true);
         var statusBuff13View = new SyntheticContainerB978BB0BView(RectOf(StatusRow3), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
@@ -552,7 +552,9 @@ public sealed class PartyStatusStripView
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

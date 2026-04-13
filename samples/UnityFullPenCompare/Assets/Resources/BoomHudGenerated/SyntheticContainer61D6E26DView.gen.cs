@@ -82,13 +82,13 @@ public sealed class SyntheticContainer61D6E26DView
 
     private void ApplyStaticValues()
     {
-        Root.style.flexDirection = ParseFlexDirection("column");
-        Root.style.width = ParseStyleLength("132px");
-        Root.style.height = ParseStyleLength("132px");
         Root.style.marginTop = ParseStyleFloat("0px");
         Root.style.marginRight = ParseStyleFloat("0px");
         Root.style.marginBottom = ParseStyleFloat("0px");
         Root.style.marginLeft = ParseStyleFloat("0px");
+        Root.style.flexDirection = ParseFlexDirection("column");
+        Root.style.width = ParseStyleLength("132px");
+        Root.style.height = ParseStyleLength("132px");
         Root.style.paddingTop = ParseStyleFloat("0px");
         Root.style.paddingRight = ParseStyleFloat("0px");
         Root.style.paddingBottom = ParseStyleFloat("0px");
@@ -107,13 +107,13 @@ public sealed class SyntheticContainer61D6E26DView
         Root.style.borderRightColor = ParseStyleColor("#EAEAEA", null);
         Root.style.borderTopColor = ParseStyleColor("#EAEAEA", null);
         Root.style.borderBottomColor = ParseStyleColor("#EAEAEA", null);
-        EventIcon.style.flexDirection = ParseFlexDirection("column");
-        EventIcon.style.width = ParseStyleLength("56px");
-        EventIcon.style.height = ParseStyleLength("56px");
         EventIcon.style.marginTop = ParseStyleFloat("0px");
         EventIcon.style.marginRight = ParseStyleFloat("0px");
         EventIcon.style.marginBottom = ParseStyleFloat("0px");
         EventIcon.style.marginLeft = ParseStyleFloat("0px");
+        EventIcon.style.flexDirection = ParseFlexDirection("column");
+        EventIcon.style.width = ParseStyleLength("56px");
+        EventIcon.style.height = ParseStyleLength("56px");
         EventIcon.style.paddingTop = ParseStyleFloat("0px");
         EventIcon.style.paddingRight = ParseStyleFloat("0px");
         EventIcon.style.paddingBottom = ParseStyleFloat("0px");
@@ -438,9 +438,17 @@ public sealed class SyntheticContainer61D6E26DView
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
+        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
+            return true;
+        }
+
+        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        {
+            fontDefinition = FontDefinition.FromFont(font);
+            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -451,7 +459,7 @@ public sealed class SyntheticContainer61D6E26DView
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
         {
             return false;
         }

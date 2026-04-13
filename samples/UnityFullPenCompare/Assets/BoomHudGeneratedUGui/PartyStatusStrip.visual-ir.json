@@ -428,7 +428,7 @@
               {
                 "StableId": "root/1/0/0",
                 "SourceId": "HeroRow",
-                "SourceNodeId": null,
+                "SourceNodeId": "PSS11",
                 "Kind": 0,
                 "SourceType": 15,
                 "ComponentRefId": "synthetic:af9ecaf62550",
@@ -968,7 +968,7 @@
                   {
                     "StableId": "root/1/0/3/0",
                     "SourceId": "StatusBuff1",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS24",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1017,7 +1017,7 @@
                   {
                     "StableId": "root/1/0/3/1",
                     "SourceId": "StatusBuff2",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS26",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1070,7 +1070,7 @@
                   {
                     "StableId": "root/1/0/3/2",
                     "SourceId": "StatusBuff3",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS28",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1123,7 +1123,7 @@
                   {
                     "StableId": "root/1/0/3/3",
                     "SourceId": "StatusBuff4",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS30",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1253,7 +1253,7 @@
               {
                 "StableId": "root/1/1/0",
                 "SourceId": "HeroRow",
-                "SourceNodeId": null,
+                "SourceNodeId": "PSS41",
                 "Kind": 0,
                 "SourceType": 15,
                 "ComponentRefId": "synthetic:af9ecaf62550",
@@ -1803,7 +1803,7 @@
                   {
                     "StableId": "root/1/1/3/0",
                     "SourceId": "StatusBuff1",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS54",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1856,7 +1856,7 @@
                   {
                     "StableId": "root/1/1/3/1",
                     "SourceId": "StatusBuff2",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS56",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1909,7 +1909,7 @@
                   {
                     "StableId": "root/1/1/3/2",
                     "SourceId": "StatusBuff3",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS58",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -1962,7 +1962,7 @@
                   {
                     "StableId": "root/1/1/3/3",
                     "SourceId": "StatusBuff4",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS60",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -2088,7 +2088,7 @@
               {
                 "StableId": "root/1/2/0",
                 "SourceId": "HeroRow",
-                "SourceNodeId": null,
+                "SourceNodeId": "PSS71",
                 "Kind": 0,
                 "SourceType": 15,
                 "ComponentRefId": "synthetic:af9ecaf62550",
@@ -2638,7 +2638,7 @@
                   {
                     "StableId": "root/1/2/3/0",
                     "SourceId": "StatusBuff1",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS84",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -2691,7 +2691,7 @@
                   {
                     "StableId": "root/1/2/3/1",
                     "SourceId": "StatusBuff2",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS86",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -2740,7 +2740,7 @@
                   {
                     "StableId": "root/1/2/3/2",
                     "SourceId": "StatusBuff3",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS88",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",
@@ -2793,7 +2793,7 @@
                   {
                     "StableId": "root/1/2/3/3",
                     "SourceId": "StatusBuff4",
-                    "SourceNodeId": null,
+                    "SourceNodeId": "PSS90",
                     "Kind": 0,
                     "SourceType": 15,
                     "ComponentRefId": "synthetic:b978bb0b27c4",

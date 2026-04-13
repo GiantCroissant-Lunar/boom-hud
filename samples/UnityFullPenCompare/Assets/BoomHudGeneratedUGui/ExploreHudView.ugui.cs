@@ -5,6 +5,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Generated.Hud.UGui
 {
 public sealed class ExploreHudView
 {
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IExploreHudViewModel? _viewModel;
     public RectTransform Root { get; }
     public RectTransform HUD { get; }
@@ -122,33 +124,12 @@ public sealed class ExploreHudView
     public RectTransform Node78 { get; }
     public RectTransform Node79 { get; }
     public RectTransform R8 { get; }
-    public RectTransform Node80 { get; }
-    public RectTransform Node81 { get; }
-    public RectTransform Node82 { get; }
-    public RectTransform Node83 { get; }
-    public RectTransform Node84 { get; }
-    public RectTransform Node85 { get; }
-    public RectTransform Node86 { get; }
-    public RectTransform Node87 { get; }
-    public RectTransform Node88 { get; }
-    public RectTransform Node89 { get; }
     public RectTransform R9 { get; }
-    public RectTransform Node90 { get; }
-    public RectTransform Node91 { get; }
-    public RectTransform Node92 { get; }
-    public RectTransform Node93 { get; }
-    public RectTransform Node94 { get; }
-    public RectTransform Node95 { get; }
-    public RectTransform Node96 { get; }
-    public RectTransform Node97 { get; }
-    public RectTransform Node98 { get; }
-    public RectTransform Node99 { get; }
     public RectTransform Sep { get; }
     public RectTransform PartyList { get; }
     public RectTransform Row1 { get; }
     public RectTransform Char1 { get; }
     public RectTransform Char1Face { get; }
-    public Text Char1FaceClassIcon { get; }
     public Text Char1C1name { get; }
     public RectTransform Char1Hp { get; }
     public RectTransform Char1HpHpFill { get; }
@@ -158,116 +139,53 @@ public sealed class ExploreHudView
     public Text Char1StatsStat1 { get; }
     public Text Char1StatsStat2 { get; }
     public RectTransform Char1ActionGrid { get; }
-    public RectTransform Char1ActionGridAtk { get; }
-    public Text Char1ActionGridAtkQEpO3 { get; }
-    public RectTransform Char1ActionGridMag { get; }
-    public Text Char1ActionGridMagAIphN { get; }
-    public RectTransform Char1ActionGridDef { get; }
-    public Text Char1ActionGridDefE4QKZ { get; }
-    public RectTransform Char1ActionGridItem { get; }
-    public Text Char1ActionGridItemDVzX7 { get; }
     public RectTransform Char2 { get; }
     public RectTransform Char2Face { get; }
-    public Text Char2FaceClassIcon { get; }
     public Text Char2C2name { get; }
     public RectTransform Char2Hp { get; }
     public RectTransform Char2HpHpFill { get; }
     public RectTransform Char2Mp { get; }
     public RectTransform Char2MpMpFill { get; }
     public RectTransform Char2Stats { get; }
-    public Text Char2StatsStat1 { get; }
-    public Text Char2StatsStat2 { get; }
     public RectTransform Char2ActionGrid { get; }
-    public RectTransform Char2ActionGridAtk { get; }
-    public Text Char2ActionGridAtkQEpO3 { get; }
-    public RectTransform Char2ActionGridMag { get; }
-    public Text Char2ActionGridMagAIphN { get; }
-    public RectTransform Char2ActionGridDef { get; }
-    public Text Char2ActionGridDefE4QKZ { get; }
-    public RectTransform Char2ActionGridItem { get; }
-    public Text Char2ActionGridItemDVzX7 { get; }
     public RectTransform Row2 { get; }
     public RectTransform Char3 { get; }
     public RectTransform Char3Face { get; }
-    public Text Char3FaceClassIcon { get; }
     public Text Char3C3name { get; }
     public RectTransform Char3Hp { get; }
     public RectTransform Char3HpHpFill { get; }
     public RectTransform Char3Mp { get; }
     public RectTransform Char3MpMpFill { get; }
     public RectTransform Char3Stats { get; }
-    public Text Char3StatsStat1 { get; }
-    public Text Char3StatsStat2 { get; }
     public RectTransform Char3ActionGrid { get; }
-    public RectTransform Char3ActionGridAtk { get; }
-    public Text Char3ActionGridAtkQEpO3 { get; }
-    public RectTransform Char3ActionGridMag { get; }
-    public Text Char3ActionGridMagAIphN { get; }
-    public RectTransform Char3ActionGridDef { get; }
-    public Text Char3ActionGridDefE4QKZ { get; }
-    public RectTransform Char3ActionGridItem { get; }
-    public Text Char3ActionGridItemDVzX7 { get; }
     public RectTransform Char4 { get; }
     public RectTransform Char4Face { get; }
-    public Text Char4FaceClassIcon { get; }
     public Text Char4C4name { get; }
     public RectTransform Char4Hp { get; }
     public RectTransform Char4HpHpFill { get; }
     public RectTransform Char4Mp { get; }
     public RectTransform Char4MpMpFill { get; }
     public RectTransform Char4Stats { get; }
-    public Text Char4StatsStat1 { get; }
-    public Text Char4StatsStat2 { get; }
     public RectTransform Char4ActionGrid { get; }
-    public RectTransform Char4ActionGridAtk { get; }
-    public Text Char4ActionGridAtkQEpO3 { get; }
-    public RectTransform Char4ActionGridMag { get; }
-    public Text Char4ActionGridMagAIphN { get; }
-    public RectTransform Char4ActionGridDef { get; }
-    public Text Char4ActionGridDefE4QKZ { get; }
-    public RectTransform Char4ActionGridItem { get; }
-    public Text Char4ActionGridItemDVzX7 { get; }
     public RectTransform Row3 { get; }
     public RectTransform Char5 { get; }
     public RectTransform Char5Face { get; }
-    public Text Char5FaceClassIcon { get; }
     public Text Char5C5name { get; }
     public RectTransform Char5Hp { get; }
     public RectTransform Char5HpHpFill { get; }
     public RectTransform Char5Mp { get; }
     public RectTransform Char5MpMpFill { get; }
     public RectTransform Char5Stats { get; }
-    public Text Char5StatsStat1 { get; }
-    public Text Char5StatsStat2 { get; }
     public RectTransform Char5ActionGrid { get; }
-    public RectTransform Char5ActionGridAtk { get; }
-    public Text Char5ActionGridAtkQEpO3 { get; }
-    public RectTransform Char5ActionGridMag { get; }
-    public Text Char5ActionGridMagAIphN { get; }
-    public RectTransform Char5ActionGridDef { get; }
-    public Text Char5ActionGridDefE4QKZ { get; }
-    public RectTransform Char5ActionGridItem { get; }
-    public Text Char5ActionGridItemDVzX7 { get; }
     public RectTransform Char6 { get; }
     public RectTransform Char6Face { get; }
-    public Text Char6FaceClassIcon { get; }
     public Text Char6C6name { get; }
     public RectTransform Char6Hp { get; }
     public RectTransform Char6HpHpFill { get; }
     public RectTransform Char6Mp { get; }
     public RectTransform Char6MpMpFill { get; }
     public RectTransform Char6Stats { get; }
-    public Text Char6StatsStat1 { get; }
-    public Text Char6StatsStat2 { get; }
     public RectTransform Char6ActionGrid { get; }
-    public RectTransform Char6ActionGridAtk { get; }
-    public Text Char6ActionGridAtkQEpO3 { get; }
-    public RectTransform Char6ActionGridMag { get; }
-    public Text Char6ActionGridMagAIphN { get; }
-    public RectTransform Char6ActionGridDef { get; }
-    public Text Char6ActionGridDefE4QKZ { get; }
-    public RectTransform Char6ActionGridItem { get; }
-    public Text Char6ActionGridItemDVzX7 { get; }
 
     public IExploreHudViewModel? ViewModel
     {
@@ -282,8 +200,9 @@ public sealed class ExploreHudView
         }
     }
 
-    public ExploreHudView(Transform? parent = null, IExploreHudViewModel? viewModel = null)
+    public ExploreHudView(Transform? parent = null, IExploreHudViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
+        _componentOverrides = componentOverrides;
         Root = CreateRect("ExploreHudRoot", parent);
         ConfigureRect(Root, width: 1280f, height: 960f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 1280f, preferredHeight: 960f, flexibleWidth: null, flexibleHeight: null);
@@ -294,21 +213,21 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(HUD), width: 1280f, height: 960f, left: 0f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(HUD), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(HUD), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(HUD), 0f, 12, 12, 12, 12);
+        ApplyHorizontalLayout(RectOf(HUD), 0f, 12, 12, 12, 12, "top-left");
         ApplyStyle(HUD, fg: "#888888", bg: "#888888", fontFamily: null, fontSize: null, borderColor: "#888888", borderWidth: null, treatAsIcon: false);
         HUD.gameObject.SetActive(true);
         Content = CreateRect("Content", RectOf(HUD));
-        ConfigureRect(RectOf(Content), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Content), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(Content), width: null, height: 936f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(Content), ignoreLayout: false, preferredWidth: null, preferredHeight: 936f, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Content), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Content), 0f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(Content), 0f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Content, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Content.gameObject.SetActive(true);
         MainArea = CreateRect("MainArea", RectOf(Content));
         ConfigureRect(RectOf(MainArea), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(MainArea), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(MainArea), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(MainArea), 0f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(MainArea), 0f, 0, 0, 0, 0, "top-left");
         ApplyStyle(MainArea, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         MainArea.gameObject.SetActive(true);
         Viewport = CreateRect("Viewport", RectOf(MainArea));
@@ -321,7 +240,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(Compass), width: 72f, height: 72f, left: 444f, top: 12f, absolute: true);
         ApplyLayoutSizing(RectOf(Compass), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Compass), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Compass), 0f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Compass), 0f, 0, 0, 0, 0, "center");
         ApplyStyle(Compass, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#888888", borderWidth: 12f, treatAsIcon: false);
         Compass.gameObject.SetActive(true);
         CompassN = CreateText("CompassN", RectOf(Compass));
@@ -329,27 +248,29 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(CompassN), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(CompassN), horizontal: false, vertical: false);
         ApplyStyle(CompassN, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 24, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(CompassN, lineSpacing: null, wrapText: false);
         CompassN.text = "N";
         CompassN.gameObject.SetActive(true);
         Zone = CreateText("Zone", RectOf(Viewport));
         ConfigureRect(RectOf(Zone), width: null, height: null, left: 16f, top: 620f, absolute: true);
         ApplyLayoutSizing(RectOf(Zone), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Zone), horizontal: false, vertical: false);
+        ApplyContentSizeFit(RectOf(Zone), horizontal: true, vertical: true);
         ApplyStyle(Zone, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Zone, lineSpacing: null, wrapText: false);
         Zone.text = "Darkstone Crypt B1";
         Zone.gameObject.SetActive(true);
         ActivityLog = CreateRect("ActivityLog", RectOf(MainArea));
         ConfigureRect(RectOf(ActivityLog), width: null, height: 160f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(ActivityLog), ignoreLayout: false, preferredWidth: null, preferredHeight: 160f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ActivityLog), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ActivityLog), 8f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(ActivityLog), 8f, 12, 12, 12, 12, "bottom-left");
         ApplyStyle(ActivityLog, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#888888", borderWidth: 12f, treatAsIcon: false);
         ActivityLog.gameObject.SetActive(true);
         ActivityLogInner = CreateRect("ActivityLogInner", RectOf(ActivityLog));
         ConfigureRect(RectOf(ActivityLogInner), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ActivityLogInner), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(ActivityLogInner), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(ActivityLogInner), 8f, 8, 8, 8, 8);
+        ApplyLayoutSizing(RectOf(ActivityLogInner), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
+        ApplyContentSizeFit(RectOf(ActivityLogInner), horizontal: false, vertical: true);
+        ApplyVerticalLayout(RectOf(ActivityLogInner), 8f, 8, 8, 8, 8, "bottom-left");
         ApplyStyle(ActivityLogInner, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#00000000", borderWidth: null, treatAsIcon: false);
         ActivityLogInner.gameObject.SetActive(true);
         Log3 = CreateText("Log3", RectOf(ActivityLogInner));
@@ -357,6 +278,7 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Log3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Log3), horizontal: false, vertical: false);
         ApplyStyle(Log3, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Log3, lineSpacing: null, wrapText: true);
         Log3.text = "You see a locked door.";
         Log3.gameObject.SetActive(true);
         Log4 = CreateText("Log4", RectOf(ActivityLogInner));
@@ -364,6 +286,7 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Log4), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Log4), horizontal: false, vertical: false);
         ApplyStyle(Log4, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Log4, lineSpacing: null, wrapText: true);
         Log4.text = "Aelric attacks Slime!";
         Log4.gameObject.SetActive(true);
         Log5 = CreateText("Log5", RectOf(ActivityLogInner));
@@ -371,6 +294,7 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Log5), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Log5), horizontal: false, vertical: false);
         ApplyStyle(Log5, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Log5, lineSpacing: null, wrapText: true);
         Log5.text = "12 damage dealt.";
         Log5.gameObject.SetActive(true);
         Log6 = CreateText("Log6", RectOf(ActivityLogInner));
@@ -378,6 +302,7 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Log6), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Log6), horizontal: false, vertical: false);
         ApplyStyle(Log6, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Log6, lineSpacing: null, wrapText: true);
         Log6.text = "Lyra casts Fireball!";
         Log6.gameObject.SetActive(true);
         P83Vj = CreateText("P83Vj", RectOf(ActivityLogInner));
@@ -385,34 +310,35 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(P83Vj), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(P83Vj), horizontal: false, vertical: false);
         ApplyStyle(P83Vj, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(P83Vj, lineSpacing: null, wrapText: true);
         P83Vj.text = "28 damage dealt!";
         P83Vj.gameObject.SetActive(true);
         RightPanel = CreateRect("RightPanel", RectOf(Content));
         ConfigureRect(RectOf(RightPanel), width: 300f, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(RightPanel), ignoreLayout: false, preferredWidth: 300f, preferredHeight: null, flexibleWidth: null, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(RightPanel), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(RightPanel), 8f, 12, 12, 12, 12);
+        ApplyVerticalLayout(RectOf(RightPanel), 8f, 12, 12, 12, 12, "top-left");
         ApplyStyle(RightPanel, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#888888", borderWidth: 12f, treatAsIcon: false);
         RightPanel.gameObject.SetActive(true);
         RightPanelInner = CreateRect("RightPanelInner", RectOf(RightPanel));
-        ConfigureRect(RectOf(RightPanelInner), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(RightPanelInner), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(RightPanelInner), width: 276f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(RightPanelInner), ignoreLayout: false, preferredWidth: 276f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(RightPanelInner), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(RightPanelInner), 8f, 8, 8, 8, 8);
+        ApplyVerticalLayout(RectOf(RightPanelInner), 8f, 8, 8, 8, 8, "top-left");
         ApplyStyle(RightPanelInner, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#00000000", borderWidth: null, treatAsIcon: false);
         RightPanelInner.gameObject.SetActive(true);
         Minimap = CreateRect("Minimap", RectOf(RightPanelInner));
         ConfigureRect(RectOf(Minimap), width: null, height: 268f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Minimap), ignoreLayout: false, preferredWidth: null, preferredHeight: 268f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Minimap), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Minimap), 2f, 16, 16, 16, 16);
+        ApplyVerticalLayout(RectOf(Minimap), 2f, 16, 16, 16, 16, "top-left");
         ApplyStyle(Minimap, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#888888", borderWidth: 12f, treatAsIcon: false);
         Minimap.gameObject.SetActive(true);
         R0 = CreateRect("R0", RectOf(Minimap));
         ConfigureRect(RectOf(R0), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R0), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R0), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R0), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R0), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R0, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R0.gameObject.SetActive(true);
         Node00 = CreateRect("Node00", RectOf(R0));
@@ -479,7 +405,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R1), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R1), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R1), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R1), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R1, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R1.gameObject.SetActive(true);
         Node10 = CreateRect("Node10", RectOf(R1));
@@ -546,7 +472,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R2), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R2), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R2), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R2, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R2.gameObject.SetActive(true);
         Node20 = CreateRect("Node20", RectOf(R2));
@@ -613,7 +539,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R3), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R3), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R3), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R3, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R3.gameObject.SetActive(true);
         Node30 = CreateRect("Node30", RectOf(R3));
@@ -680,7 +606,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R4), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R4), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R4), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R4), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R4), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R4, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R4.gameObject.SetActive(true);
         Node40 = CreateRect("Node40", RectOf(R4));
@@ -747,7 +673,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R5), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R5), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R5), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R5), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R5), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R5, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R5.gameObject.SetActive(true);
         Node50 = CreateRect("Node50", RectOf(R5));
@@ -814,7 +740,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(Bmfhw), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Bmfhw), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Bmfhw), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Bmfhw), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(Bmfhw), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Bmfhw, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Bmfhw.gameObject.SetActive(true);
         Node60 = CreateRect("Node60", RectOf(Bmfhw));
@@ -881,7 +807,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(R7), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(R7), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R7), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R7), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R7), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R7, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R7.gameObject.SetActive(true);
         Node70 = CreateRect("Node70", RectOf(R7));
@@ -944,140 +870,12 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Node79), horizontal: false, vertical: false);
         ApplyStyle(Node79, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Node79.gameObject.SetActive(true);
-        R8 = CreateRect("R8", RectOf(Minimap));
-        ConfigureRect(RectOf(R8), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R8), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(R8), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R8), 2f, 0, 0, 0, 0);
-        ApplyStyle(R8, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        R8.gameObject.SetActive(true);
-        Node80 = CreateRect("Node80", RectOf(R8));
-        ConfigureRect(RectOf(Node80), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node80), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node80), horizontal: false, vertical: false);
-        ApplyStyle(Node80, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node80.gameObject.SetActive(true);
-        Node81 = CreateRect("Node81", RectOf(R8));
-        ConfigureRect(RectOf(Node81), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node81), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node81), horizontal: false, vertical: false);
-        ApplyStyle(Node81, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node81.gameObject.SetActive(true);
-        Node82 = CreateRect("Node82", RectOf(R8));
-        ConfigureRect(RectOf(Node82), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node82), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node82), horizontal: false, vertical: false);
-        ApplyStyle(Node82, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node82.gameObject.SetActive(true);
-        Node83 = CreateRect("Node83", RectOf(R8));
-        ConfigureRect(RectOf(Node83), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node83), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node83), horizontal: false, vertical: false);
-        ApplyStyle(Node83, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node83.gameObject.SetActive(true);
-        Node84 = CreateRect("Node84", RectOf(R8));
-        ConfigureRect(RectOf(Node84), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node84), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node84), horizontal: false, vertical: false);
-        ApplyStyle(Node84, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node84.gameObject.SetActive(true);
-        Node85 = CreateRect("Node85", RectOf(R8));
-        ConfigureRect(RectOf(Node85), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node85), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node85), horizontal: false, vertical: false);
-        ApplyStyle(Node85, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node85.gameObject.SetActive(true);
-        Node86 = CreateRect("Node86", RectOf(R8));
-        ConfigureRect(RectOf(Node86), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node86), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node86), horizontal: false, vertical: false);
-        ApplyStyle(Node86, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node86.gameObject.SetActive(true);
-        Node87 = CreateRect("Node87", RectOf(R8));
-        ConfigureRect(RectOf(Node87), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node87), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node87), horizontal: false, vertical: false);
-        ApplyStyle(Node87, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node87.gameObject.SetActive(true);
-        Node88 = CreateRect("Node88", RectOf(R8));
-        ConfigureRect(RectOf(Node88), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node88), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node88), horizontal: false, vertical: false);
-        ApplyStyle(Node88, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node88.gameObject.SetActive(true);
-        Node89 = CreateRect("Node89", RectOf(R8));
-        ConfigureRect(RectOf(Node89), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node89), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node89), horizontal: false, vertical: false);
-        ApplyStyle(Node89, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node89.gameObject.SetActive(true);
-        R9 = CreateRect("R9", RectOf(Minimap));
-        ConfigureRect(RectOf(R9), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R9), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(R9), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R9), 2f, 0, 0, 0, 0);
-        ApplyStyle(R9, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        R9.gameObject.SetActive(true);
-        Node90 = CreateRect("Node90", RectOf(R9));
-        ConfigureRect(RectOf(Node90), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node90), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node90), horizontal: false, vertical: false);
-        ApplyStyle(Node90, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node90.gameObject.SetActive(true);
-        Node91 = CreateRect("Node91", RectOf(R9));
-        ConfigureRect(RectOf(Node91), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node91), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node91), horizontal: false, vertical: false);
-        ApplyStyle(Node91, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node91.gameObject.SetActive(true);
-        Node92 = CreateRect("Node92", RectOf(R9));
-        ConfigureRect(RectOf(Node92), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node92), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node92), horizontal: false, vertical: false);
-        ApplyStyle(Node92, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node92.gameObject.SetActive(true);
-        Node93 = CreateRect("Node93", RectOf(R9));
-        ConfigureRect(RectOf(Node93), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node93), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node93), horizontal: false, vertical: false);
-        ApplyStyle(Node93, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node93.gameObject.SetActive(true);
-        Node94 = CreateRect("Node94", RectOf(R9));
-        ConfigureRect(RectOf(Node94), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node94), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node94), horizontal: false, vertical: false);
-        ApplyStyle(Node94, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node94.gameObject.SetActive(true);
-        Node95 = CreateRect("Node95", RectOf(R9));
-        ConfigureRect(RectOf(Node95), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node95), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node95), horizontal: false, vertical: false);
-        ApplyStyle(Node95, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node95.gameObject.SetActive(true);
-        Node96 = CreateRect("Node96", RectOf(R9));
-        ConfigureRect(RectOf(Node96), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node96), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node96), horizontal: false, vertical: false);
-        ApplyStyle(Node96, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node96.gameObject.SetActive(true);
-        Node97 = CreateRect("Node97", RectOf(R9));
-        ConfigureRect(RectOf(Node97), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node97), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node97), horizontal: false, vertical: false);
-        ApplyStyle(Node97, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node97.gameObject.SetActive(true);
-        Node98 = CreateRect("Node98", RectOf(R9));
-        ConfigureRect(RectOf(Node98), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node98), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node98), horizontal: false, vertical: false);
-        ApplyStyle(Node98, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node98.gameObject.SetActive(true);
-        Node99 = CreateRect("Node99", RectOf(R9));
-        ConfigureRect(RectOf(Node99), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Node99), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Node99), horizontal: false, vertical: false);
-        ApplyStyle(Node99, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Node99.gameObject.SetActive(true);
+        var r8View = new SyntheticContainerC701B3C7View(RectOf(Minimap), null, null);
+        R8 = r8View.Root;
+        R8.name = "R8";
+        var r9View = new SyntheticContainerC701B3C7View(RectOf(Minimap), null, null);
+        R9 = r9View.Root;
+        R9.name = "R9";
         Sep = CreateRect("Sep", RectOf(RightPanelInner));
         ConfigureRect(RectOf(Sep), width: null, height: 4f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Sep), ignoreLayout: false, preferredWidth: null, preferredHeight: 4f, flexibleWidth: 1f, flexibleHeight: null);
@@ -1088,41 +886,32 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(PartyList), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(PartyList), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(PartyList), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(PartyList), 6f, 6, 6, 8, 8);
+        ApplyVerticalLayout(RectOf(PartyList), 6f, 6, 6, 8, 8, "top-center");
         ApplyStyle(PartyList, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         PartyList.gameObject.SetActive(true);
         Row1 = CreateRect("Row1", RectOf(PartyList));
         ConfigureRect(RectOf(Row1), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Row1), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row1), 8f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(Row1), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Row1, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row1.gameObject.SetActive(true);
         Char1 = CreateRect("Char1", RectOf(Row1));
         ConfigureRect(RectOf(Char1), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char1), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char1), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char1), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char1, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char1.gameObject.SetActive(true);
-        Char1Face = CreateRect("Char1Face", RectOf(Char1));
-        ConfigureRect(RectOf(Char1Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1Face), horizontal: false, vertical: false);
-        ApplyStyle(Char1Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char1Face.gameObject.SetActive(true);
-        Char1FaceClassIcon = CreateText("Char1FaceClassIcon", RectOf(Char1Face));
-        ConfigureRect(RectOf(Char1FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char1FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char1FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char1FaceClassIcon.text = ResolveIconText("sword");
-        Char1FaceClassIcon.gameObject.SetActive(true);
+        var char1FaceView = new SyntheticContainer6397E5DCView(RectOf(Char1), null, null);
+        Char1Face = char1FaceView.Root;
+        Char1Face.name = "Char1Face";
         Char1C1name = CreateText("Char1C1name", RectOf(Char1));
         ConfigureRect(RectOf(Char1C1name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char1C1name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char1C1name), horizontal: false, vertical: false);
         ApplyStyle(Char1C1name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char1C1name, lineSpacing: null, wrapText: false);
         Char1C1name.text = "Aelric";
         Char1C1name.gameObject.SetActive(true);
         Char1Hp = CreateRect("Char1Hp", RectOf(Char1));
@@ -1153,7 +942,7 @@ public sealed class ExploreHudView
         ConfigureRect(RectOf(Char1Stats), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char1Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char1Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char1Stats), 8f, 6, 6, 0, 0);
+        ApplyHorizontalLayout(RectOf(Char1Stats), 8f, 6, 6, 0, 0, "top-center");
         ApplyStyle(Char1Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char1Stats.gameObject.SetActive(true);
         Char1StatsStat1 = CreateText("Char1StatsStat1", RectOf(Char1Stats));
@@ -1161,6 +950,7 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Char1StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char1StatsStat1), horizontal: false, vertical: false);
         ApplyStyle(Char1StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char1StatsStat1, lineSpacing: null, wrapText: false);
         Char1StatsStat1.text = "ATK 12";
         Char1StatsStat1.gameObject.SetActive(true);
         Char1StatsStat2 = CreateText("Char1StatsStat2", RectOf(Char1Stats));
@@ -1168,96 +958,34 @@ public sealed class ExploreHudView
         ApplyLayoutSizing(RectOf(Char1StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char1StatsStat2), horizontal: false, vertical: false);
         ApplyStyle(Char1StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char1StatsStat2, lineSpacing: null, wrapText: false);
         Char1StatsStat2.text = "DEF 8";
         Char1StatsStat2.gameObject.SetActive(true);
-        Char1ActionGrid = CreateRect("Char1ActionGrid", RectOf(Char1));
-        ConfigureRect(RectOf(Char1ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char1ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char1ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char1ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char1ActionGrid.gameObject.SetActive(true);
-        Char1ActionGridAtk = CreateRect("Char1ActionGridAtk", RectOf(Char1ActionGrid));
-        ConfigureRect(RectOf(Char1ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char1ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char1ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char1ActionGridAtk.gameObject.SetActive(true);
-        Char1ActionGridAtkQEpO3 = CreateText("Char1ActionGridAtkQEpO3", RectOf(Char1ActionGridAtk));
-        ConfigureRect(RectOf(Char1ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char1ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char1ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char1ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char1ActionGridMag = CreateRect("Char1ActionGridMag", RectOf(Char1ActionGrid));
-        ConfigureRect(RectOf(Char1ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char1ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char1ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char1ActionGridMag.gameObject.SetActive(true);
-        Char1ActionGridMagAIphN = CreateText("Char1ActionGridMagAIphN", RectOf(Char1ActionGridMag));
-        ConfigureRect(RectOf(Char1ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char1ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char1ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char1ActionGridMagAIphN.gameObject.SetActive(true);
-        Char1ActionGridDef = CreateRect("Char1ActionGridDef", RectOf(Char1ActionGrid));
-        ConfigureRect(RectOf(Char1ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char1ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char1ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char1ActionGridDef.gameObject.SetActive(true);
-        Char1ActionGridDefE4QKZ = CreateText("Char1ActionGridDefE4QKZ", RectOf(Char1ActionGridDef));
-        ConfigureRect(RectOf(Char1ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char1ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char1ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char1ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char1ActionGridItem = CreateRect("Char1ActionGridItem", RectOf(Char1ActionGrid));
-        ConfigureRect(RectOf(Char1ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char1ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char1ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char1ActionGridItem.gameObject.SetActive(true);
-        Char1ActionGridItemDVzX7 = CreateText("Char1ActionGridItemDVzX7", RectOf(Char1ActionGridItem));
-        ConfigureRect(RectOf(Char1ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char1ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char1ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char1ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char1ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char1ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char1ActionGridView = new SyntheticContainer100280A5View(RectOf(Char1), null, null);
+        Char1ActionGrid = char1ActionGridView.Root;
+        Char1ActionGrid.name = "Char1ActionGrid";
         Char2 = CreateRect("Char2", RectOf(Row1));
         ConfigureRect(RectOf(Char2), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char2), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char2), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char2, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char2.gameObject.SetActive(true);
-        Char2Face = CreateRect("Char2Face", RectOf(Char2));
-        ConfigureRect(RectOf(Char2Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2Face), horizontal: false, vertical: false);
-        ApplyStyle(Char2Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char2Face.gameObject.SetActive(true);
-        Char2FaceClassIcon = CreateText("Char2FaceClassIcon", RectOf(Char2Face));
-        ConfigureRect(RectOf(Char2FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char2FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char2FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char2FaceClassIcon.text = ResolveIconText("sparkles");
-        Char2FaceClassIcon.gameObject.SetActive(true);
+        var char2FaceView = new SyntheticContainer6397E5DCView(RectOf(Char2), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "sparkles"
+            }
+        });
+        Char2Face = char2FaceView.Root;
+        Char2Face.name = "Char2Face";
         Char2C2name = CreateText("Char2C2name", RectOf(Char2));
         ConfigureRect(RectOf(Char2C2name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char2C2name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char2C2name), horizontal: false, vertical: false);
         ApplyStyle(Char2C2name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char2C2name, lineSpacing: null, wrapText: false);
         Char2C2name.text = "Lyra";
         Char2C2name.gameObject.SetActive(true);
         Char2Hp = CreateRect("Char2Hp", RectOf(Char2));
@@ -1284,122 +1012,41 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Char2MpMpFill), horizontal: false, vertical: false);
         ApplyStyle(Char2MpMpFill, fg: "#777777", bg: "#777777", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char2MpMpFill.gameObject.SetActive(true);
-        Char2Stats = CreateRect("Char2Stats", RectOf(Char2));
-        ConfigureRect(RectOf(Char2Stats), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char2Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char2Stats), 8f, 6, 6, 0, 0);
-        ApplyStyle(Char2Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char2Stats.gameObject.SetActive(true);
-        Char2StatsStat1 = CreateText("Char2StatsStat1", RectOf(Char2Stats));
-        ConfigureRect(RectOf(Char2StatsStat1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2StatsStat1), horizontal: false, vertical: false);
-        ApplyStyle(Char2StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char2StatsStat1.text = "ATK 6";
-        Char2StatsStat1.gameObject.SetActive(true);
-        Char2StatsStat2 = CreateText("Char2StatsStat2", RectOf(Char2Stats));
-        ConfigureRect(RectOf(Char2StatsStat2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2StatsStat2), horizontal: false, vertical: false);
-        ApplyStyle(Char2StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char2StatsStat2.text = "MAG 14";
-        Char2StatsStat2.gameObject.SetActive(true);
-        Char2ActionGrid = CreateRect("Char2ActionGrid", RectOf(Char2));
-        ConfigureRect(RectOf(Char2ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char2ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char2ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char2ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char2ActionGrid.gameObject.SetActive(true);
-        Char2ActionGridAtk = CreateRect("Char2ActionGridAtk", RectOf(Char2ActionGrid));
-        ConfigureRect(RectOf(Char2ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char2ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char2ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char2ActionGridAtk.gameObject.SetActive(true);
-        Char2ActionGridAtkQEpO3 = CreateText("Char2ActionGridAtkQEpO3", RectOf(Char2ActionGridAtk));
-        ConfigureRect(RectOf(Char2ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char2ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char2ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char2ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char2ActionGridMag = CreateRect("Char2ActionGridMag", RectOf(Char2ActionGrid));
-        ConfigureRect(RectOf(Char2ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char2ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char2ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char2ActionGridMag.gameObject.SetActive(true);
-        Char2ActionGridMagAIphN = CreateText("Char2ActionGridMagAIphN", RectOf(Char2ActionGridMag));
-        ConfigureRect(RectOf(Char2ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char2ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char2ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char2ActionGridMagAIphN.gameObject.SetActive(true);
-        Char2ActionGridDef = CreateRect("Char2ActionGridDef", RectOf(Char2ActionGrid));
-        ConfigureRect(RectOf(Char2ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char2ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char2ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char2ActionGridDef.gameObject.SetActive(true);
-        Char2ActionGridDefE4QKZ = CreateText("Char2ActionGridDefE4QKZ", RectOf(Char2ActionGridDef));
-        ConfigureRect(RectOf(Char2ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char2ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char2ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char2ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char2ActionGridItem = CreateRect("Char2ActionGridItem", RectOf(Char2ActionGrid));
-        ConfigureRect(RectOf(Char2ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char2ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char2ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char2ActionGridItem.gameObject.SetActive(true);
-        Char2ActionGridItemDVzX7 = CreateText("Char2ActionGridItemDVzX7", RectOf(Char2ActionGridItem));
-        ConfigureRect(RectOf(Char2ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char2ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char2ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char2ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char2ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char2ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char2StatsView = new SyntheticContainer640002D6View(RectOf(Char2), null, null);
+        Char2Stats = char2StatsView.Root;
+        Char2Stats.name = "Char2Stats";
+        var char2ActionGridView = new SyntheticContainer100280A5View(RectOf(Char2), null, null);
+        Char2ActionGrid = char2ActionGridView.Root;
+        Char2ActionGrid.name = "Char2ActionGrid";
         Row2 = CreateRect("Row2", RectOf(PartyList));
         ConfigureRect(RectOf(Row2), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Row2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row2), 8f, 0, 0, 12, 0);
+        ApplyHorizontalLayout(RectOf(Row2), 8f, 0, 0, 12, 0, "top-center");
         ApplyStyle(Row2, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row2.gameObject.SetActive(true);
         Char3 = CreateRect("Char3", RectOf(Row2));
         ConfigureRect(RectOf(Char3), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char3), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char3), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char3, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char3.gameObject.SetActive(true);
-        Char3Face = CreateRect("Char3Face", RectOf(Char3));
-        ConfigureRect(RectOf(Char3Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3Face), horizontal: false, vertical: false);
-        ApplyStyle(Char3Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char3Face.gameObject.SetActive(true);
-        Char3FaceClassIcon = CreateText("Char3FaceClassIcon", RectOf(Char3Face));
-        ConfigureRect(RectOf(Char3FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char3FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char3FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char3FaceClassIcon.text = ResolveIconText("shield");
-        Char3FaceClassIcon.gameObject.SetActive(true);
+        var char3FaceView = new SyntheticContainer6397E5DCView(RectOf(Char3), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "shield"
+            }
+        });
+        Char3Face = char3FaceView.Root;
+        Char3Face.name = "Char3Face";
         Char3C3name = CreateText("Char3C3name", RectOf(Char3));
         ConfigureRect(RectOf(Char3C3name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char3C3name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char3C3name), horizontal: false, vertical: false);
         ApplyStyle(Char3C3name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char3C3name, lineSpacing: null, wrapText: false);
         Char3C3name.text = "Theron";
         Char3C3name.gameObject.SetActive(true);
         Char3Hp = CreateRect("Char3Hp", RectOf(Char3));
@@ -1426,115 +1073,34 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Char3MpMpFill), horizontal: false, vertical: false);
         ApplyStyle(Char3MpMpFill, fg: "#777777", bg: "#777777", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char3MpMpFill.gameObject.SetActive(true);
-        Char3Stats = CreateRect("Char3Stats", RectOf(Char3));
-        ConfigureRect(RectOf(Char3Stats), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char3Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char3Stats), 8f, 6, 6, 0, 0);
-        ApplyStyle(Char3Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char3Stats.gameObject.SetActive(true);
-        Char3StatsStat1 = CreateText("Char3StatsStat1", RectOf(Char3Stats));
-        ConfigureRect(RectOf(Char3StatsStat1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3StatsStat1), horizontal: false, vertical: false);
-        ApplyStyle(Char3StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char3StatsStat1.text = "ATK 14";
-        Char3StatsStat1.gameObject.SetActive(true);
-        Char3StatsStat2 = CreateText("Char3StatsStat2", RectOf(Char3Stats));
-        ConfigureRect(RectOf(Char3StatsStat2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3StatsStat2), horizontal: false, vertical: false);
-        ApplyStyle(Char3StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char3StatsStat2.text = "DEF 12";
-        Char3StatsStat2.gameObject.SetActive(true);
-        Char3ActionGrid = CreateRect("Char3ActionGrid", RectOf(Char3));
-        ConfigureRect(RectOf(Char3ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char3ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char3ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char3ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char3ActionGrid.gameObject.SetActive(true);
-        Char3ActionGridAtk = CreateRect("Char3ActionGridAtk", RectOf(Char3ActionGrid));
-        ConfigureRect(RectOf(Char3ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char3ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char3ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char3ActionGridAtk.gameObject.SetActive(true);
-        Char3ActionGridAtkQEpO3 = CreateText("Char3ActionGridAtkQEpO3", RectOf(Char3ActionGridAtk));
-        ConfigureRect(RectOf(Char3ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char3ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char3ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char3ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char3ActionGridMag = CreateRect("Char3ActionGridMag", RectOf(Char3ActionGrid));
-        ConfigureRect(RectOf(Char3ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char3ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char3ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char3ActionGridMag.gameObject.SetActive(true);
-        Char3ActionGridMagAIphN = CreateText("Char3ActionGridMagAIphN", RectOf(Char3ActionGridMag));
-        ConfigureRect(RectOf(Char3ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char3ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char3ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char3ActionGridMagAIphN.gameObject.SetActive(true);
-        Char3ActionGridDef = CreateRect("Char3ActionGridDef", RectOf(Char3ActionGrid));
-        ConfigureRect(RectOf(Char3ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char3ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char3ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char3ActionGridDef.gameObject.SetActive(true);
-        Char3ActionGridDefE4QKZ = CreateText("Char3ActionGridDefE4QKZ", RectOf(Char3ActionGridDef));
-        ConfigureRect(RectOf(Char3ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char3ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char3ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char3ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char3ActionGridItem = CreateRect("Char3ActionGridItem", RectOf(Char3ActionGrid));
-        ConfigureRect(RectOf(Char3ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char3ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char3ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char3ActionGridItem.gameObject.SetActive(true);
-        Char3ActionGridItemDVzX7 = CreateText("Char3ActionGridItemDVzX7", RectOf(Char3ActionGridItem));
-        ConfigureRect(RectOf(Char3ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char3ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char3ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char3ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char3ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char3ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char3StatsView = new SyntheticContainerFA4632C6View(RectOf(Char3), null, null);
+        Char3Stats = char3StatsView.Root;
+        Char3Stats.name = "Char3Stats";
+        var char3ActionGridView = new SyntheticContainer100280A5View(RectOf(Char3), null, null);
+        Char3ActionGrid = char3ActionGridView.Root;
+        Char3ActionGrid.name = "Char3ActionGrid";
         Char4 = CreateRect("Char4", RectOf(Row2));
         ConfigureRect(RectOf(Char4), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char4), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char4), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char4), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char4), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char4, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char4.gameObject.SetActive(true);
-        Char4Face = CreateRect("Char4Face", RectOf(Char4));
-        ConfigureRect(RectOf(Char4Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4Face), horizontal: false, vertical: false);
-        ApplyStyle(Char4Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char4Face.gameObject.SetActive(true);
-        Char4FaceClassIcon = CreateText("Char4FaceClassIcon", RectOf(Char4Face));
-        ConfigureRect(RectOf(Char4FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char4FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char4FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char4FaceClassIcon.text = ResolveIconText("moon");
-        Char4FaceClassIcon.gameObject.SetActive(true);
+        var char4FaceView = new SyntheticContainer6397E5DCView(RectOf(Char4), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "moon"
+            }
+        });
+        Char4Face = char4FaceView.Root;
+        Char4Face.name = "Char4Face";
         Char4C4name = CreateText("Char4C4name", RectOf(Char4));
         ConfigureRect(RectOf(Char4C4name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char4C4name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char4C4name), horizontal: false, vertical: false);
         ApplyStyle(Char4C4name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char4C4name, lineSpacing: null, wrapText: false);
         Char4C4name.text = "Selene";
         Char4C4name.gameObject.SetActive(true);
         Char4Hp = CreateRect("Char4Hp", RectOf(Char4));
@@ -1561,122 +1127,51 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Char4MpMpFill), horizontal: false, vertical: false);
         ApplyStyle(Char4MpMpFill, fg: "#777777", bg: "#777777", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char4MpMpFill.gameObject.SetActive(true);
-        Char4Stats = CreateRect("Char4Stats", RectOf(Char4));
-        ConfigureRect(RectOf(Char4Stats), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char4Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char4Stats), 8f, 6, 6, 0, 0);
-        ApplyStyle(Char4Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char4Stats.gameObject.SetActive(true);
-        Char4StatsStat1 = CreateText("Char4StatsStat1", RectOf(Char4Stats));
-        ConfigureRect(RectOf(Char4StatsStat1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4StatsStat1), horizontal: false, vertical: false);
-        ApplyStyle(Char4StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char4StatsStat1.text = "ATK 5";
-        Char4StatsStat1.gameObject.SetActive(true);
-        Char4StatsStat2 = CreateText("Char4StatsStat2", RectOf(Char4Stats));
-        ConfigureRect(RectOf(Char4StatsStat2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4StatsStat2), horizontal: false, vertical: false);
-        ApplyStyle(Char4StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char4StatsStat2.text = "MAG 16";
-        Char4StatsStat2.gameObject.SetActive(true);
-        Char4ActionGrid = CreateRect("Char4ActionGrid", RectOf(Char4));
-        ConfigureRect(RectOf(Char4ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char4ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char4ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char4ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char4ActionGrid.gameObject.SetActive(true);
-        Char4ActionGridAtk = CreateRect("Char4ActionGridAtk", RectOf(Char4ActionGrid));
-        ConfigureRect(RectOf(Char4ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char4ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char4ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char4ActionGridAtk.gameObject.SetActive(true);
-        Char4ActionGridAtkQEpO3 = CreateText("Char4ActionGridAtkQEpO3", RectOf(Char4ActionGridAtk));
-        ConfigureRect(RectOf(Char4ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char4ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char4ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char4ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char4ActionGridMag = CreateRect("Char4ActionGridMag", RectOf(Char4ActionGrid));
-        ConfigureRect(RectOf(Char4ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char4ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char4ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char4ActionGridMag.gameObject.SetActive(true);
-        Char4ActionGridMagAIphN = CreateText("Char4ActionGridMagAIphN", RectOf(Char4ActionGridMag));
-        ConfigureRect(RectOf(Char4ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char4ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char4ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char4ActionGridMagAIphN.gameObject.SetActive(true);
-        Char4ActionGridDef = CreateRect("Char4ActionGridDef", RectOf(Char4ActionGrid));
-        ConfigureRect(RectOf(Char4ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char4ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char4ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char4ActionGridDef.gameObject.SetActive(true);
-        Char4ActionGridDefE4QKZ = CreateText("Char4ActionGridDefE4QKZ", RectOf(Char4ActionGridDef));
-        ConfigureRect(RectOf(Char4ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char4ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char4ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char4ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char4ActionGridItem = CreateRect("Char4ActionGridItem", RectOf(Char4ActionGrid));
-        ConfigureRect(RectOf(Char4ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char4ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char4ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char4ActionGridItem.gameObject.SetActive(true);
-        Char4ActionGridItemDVzX7 = CreateText("Char4ActionGridItemDVzX7", RectOf(Char4ActionGridItem));
-        ConfigureRect(RectOf(Char4ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char4ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char4ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char4ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char4ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char4ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char4StatsView = new SyntheticContainer640002D6View(RectOf(Char4), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "ATK 5"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "MAG 16"
+            }
+        });
+        Char4Stats = char4StatsView.Root;
+        Char4Stats.name = "Char4Stats";
+        var char4ActionGridView = new SyntheticContainer100280A5View(RectOf(Char4), null, null);
+        Char4ActionGrid = char4ActionGridView.Root;
+        Char4ActionGrid.name = "Char4ActionGrid";
         Row3 = CreateRect("Row3", RectOf(PartyList));
         ConfigureRect(RectOf(Row3), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Row3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Row3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Row3), 8f, 0, 0, 12, 0);
+        ApplyHorizontalLayout(RectOf(Row3), 8f, 0, 0, 12, 0, "top-center");
         ApplyStyle(Row3, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Row3.gameObject.SetActive(true);
         Char5 = CreateRect("Char5", RectOf(Row3));
         ConfigureRect(RectOf(Char5), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char5), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char5), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char5), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char5), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char5, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char5.gameObject.SetActive(true);
-        Char5Face = CreateRect("Char5Face", RectOf(Char5));
-        ConfigureRect(RectOf(Char5Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5Face), horizontal: false, vertical: false);
-        ApplyStyle(Char5Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char5Face.gameObject.SetActive(true);
-        Char5FaceClassIcon = CreateText("Char5FaceClassIcon", RectOf(Char5Face));
-        ConfigureRect(RectOf(Char5FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char5FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char5FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char5FaceClassIcon.text = ResolveIconText("cross");
-        Char5FaceClassIcon.gameObject.SetActive(true);
+        var char5FaceView = new SyntheticContainer6397E5DCView(RectOf(Char5), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "cross"
+            }
+        });
+        Char5Face = char5FaceView.Root;
+        Char5Face.name = "Char5Face";
         Char5C5name = CreateText("Char5C5name", RectOf(Char5));
         ConfigureRect(RectOf(Char5C5name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char5C5name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char5C5name), horizontal: false, vertical: false);
         ApplyStyle(Char5C5name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char5C5name, lineSpacing: null, wrapText: false);
         Char5C5name.text = "Elara";
         Char5C5name.gameObject.SetActive(true);
         Char5Hp = CreateRect("Char5Hp", RectOf(Char5));
@@ -1703,115 +1198,44 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Char5MpMpFill), horizontal: false, vertical: false);
         ApplyStyle(Char5MpMpFill, fg: "#777777", bg: "#777777", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char5MpMpFill.gameObject.SetActive(true);
-        Char5Stats = CreateRect("Char5Stats", RectOf(Char5));
-        ConfigureRect(RectOf(Char5Stats), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char5Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char5Stats), 8f, 6, 6, 0, 0);
-        ApplyStyle(Char5Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char5Stats.gameObject.SetActive(true);
-        Char5StatsStat1 = CreateText("Char5StatsStat1", RectOf(Char5Stats));
-        ConfigureRect(RectOf(Char5StatsStat1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5StatsStat1), horizontal: false, vertical: false);
-        ApplyStyle(Char5StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char5StatsStat1.text = "ATK 4";
-        Char5StatsStat1.gameObject.SetActive(true);
-        Char5StatsStat2 = CreateText("Char5StatsStat2", RectOf(Char5Stats));
-        ConfigureRect(RectOf(Char5StatsStat2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5StatsStat2), horizontal: false, vertical: false);
-        ApplyStyle(Char5StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char5StatsStat2.text = "MAG 11";
-        Char5StatsStat2.gameObject.SetActive(true);
-        Char5ActionGrid = CreateRect("Char5ActionGrid", RectOf(Char5));
-        ConfigureRect(RectOf(Char5ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char5ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char5ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char5ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char5ActionGrid.gameObject.SetActive(true);
-        Char5ActionGridAtk = CreateRect("Char5ActionGridAtk", RectOf(Char5ActionGrid));
-        ConfigureRect(RectOf(Char5ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char5ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char5ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char5ActionGridAtk.gameObject.SetActive(true);
-        Char5ActionGridAtkQEpO3 = CreateText("Char5ActionGridAtkQEpO3", RectOf(Char5ActionGridAtk));
-        ConfigureRect(RectOf(Char5ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char5ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char5ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char5ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char5ActionGridMag = CreateRect("Char5ActionGridMag", RectOf(Char5ActionGrid));
-        ConfigureRect(RectOf(Char5ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char5ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char5ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char5ActionGridMag.gameObject.SetActive(true);
-        Char5ActionGridMagAIphN = CreateText("Char5ActionGridMagAIphN", RectOf(Char5ActionGridMag));
-        ConfigureRect(RectOf(Char5ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char5ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char5ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char5ActionGridMagAIphN.gameObject.SetActive(true);
-        Char5ActionGridDef = CreateRect("Char5ActionGridDef", RectOf(Char5ActionGrid));
-        ConfigureRect(RectOf(Char5ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char5ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char5ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char5ActionGridDef.gameObject.SetActive(true);
-        Char5ActionGridDefE4QKZ = CreateText("Char5ActionGridDefE4QKZ", RectOf(Char5ActionGridDef));
-        ConfigureRect(RectOf(Char5ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char5ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char5ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char5ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char5ActionGridItem = CreateRect("Char5ActionGridItem", RectOf(Char5ActionGrid));
-        ConfigureRect(RectOf(Char5ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char5ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char5ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char5ActionGridItem.gameObject.SetActive(true);
-        Char5ActionGridItemDVzX7 = CreateText("Char5ActionGridItemDVzX7", RectOf(Char5ActionGridItem));
-        ConfigureRect(RectOf(Char5ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char5ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char5ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char5ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char5ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char5ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char5StatsView = new SyntheticContainer640002D6View(RectOf(Char5), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "ATK 4"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "MAG 11"
+            }
+        });
+        Char5Stats = char5StatsView.Root;
+        Char5Stats.name = "Char5Stats";
+        var char5ActionGridView = new SyntheticContainer100280A5View(RectOf(Char5), null, null);
+        Char5ActionGrid = char5ActionGridView.Root;
+        Char5ActionGrid.name = "Char5ActionGrid";
         Char6 = CreateRect("Char6", RectOf(Row3));
         ConfigureRect(RectOf(Char6), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char6), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(Char6), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char6), 8f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Char6), 8f, 0, 0, 0, 0, "top-center");
         ApplyStyle(Char6, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char6.gameObject.SetActive(true);
-        Char6Face = CreateRect("Char6Face", RectOf(Char6));
-        ConfigureRect(RectOf(Char6Face), width: 56f, height: 56f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6Face), ignoreLayout: false, preferredWidth: 56f, preferredHeight: 56f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6Face), horizontal: false, vertical: false);
-        ApplyStyle(Char6Face, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 6f, treatAsIcon: false);
-        Char6Face.gameObject.SetActive(true);
-        Char6FaceClassIcon = CreateText("Char6FaceClassIcon", RectOf(Char6Face));
-        ConfigureRect(RectOf(Char6FaceClassIcon), width: 32f, height: 32f, left: 12f, top: 12f, absolute: true);
-        ApplyLayoutSizing(RectOf(Char6FaceClassIcon), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6FaceClassIcon), horizontal: false, vertical: false);
-        ApplyStyle(Char6FaceClassIcon, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 32, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char6FaceClassIcon.text = ResolveIconText("flame");
-        Char6FaceClassIcon.gameObject.SetActive(true);
+        var char6FaceView = new SyntheticContainer6397E5DCView(RectOf(Char6), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "flame"
+            }
+        });
+        Char6Face = char6FaceView.Root;
+        Char6Face.name = "Char6Face";
         Char6C6name = CreateText("Char6C6name", RectOf(Char6));
         ConfigureRect(RectOf(Char6C6name), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(Char6C6name), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Char6C6name), horizontal: false, vertical: false);
         ApplyStyle(Char6C6name, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyTextMetrics(Char6C6name, lineSpacing: null, wrapText: false);
         Char6C6name.text = "Darius";
         Char6C6name.gameObject.SetActive(true);
         Char6Hp = CreateRect("Char6Hp", RectOf(Char6));
@@ -1838,95 +1262,29 @@ public sealed class ExploreHudView
         ApplyContentSizeFit(RectOf(Char6MpMpFill), horizontal: false, vertical: false);
         ApplyStyle(Char6MpMpFill, fg: "#777777", bg: "#777777", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Char6MpMpFill.gameObject.SetActive(true);
-        Char6Stats = CreateRect("Char6Stats", RectOf(Char6));
-        ConfigureRect(RectOf(Char6Stats), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6Stats), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char6Stats), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char6Stats), 8f, 6, 6, 0, 0);
-        ApplyStyle(Char6Stats, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char6Stats.gameObject.SetActive(true);
-        Char6StatsStat1 = CreateText("Char6StatsStat1", RectOf(Char6Stats));
-        ConfigureRect(RectOf(Char6StatsStat1), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6StatsStat1), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6StatsStat1), horizontal: false, vertical: false);
-        ApplyStyle(Char6StatsStat1, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char6StatsStat1.text = "ATK 16";
-        Char6StatsStat1.gameObject.SetActive(true);
-        Char6StatsStat2 = CreateText("Char6StatsStat2", RectOf(Char6Stats));
-        ConfigureRect(RectOf(Char6StatsStat2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6StatsStat2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6StatsStat2), horizontal: false, vertical: false);
-        ApplyStyle(Char6StatsStat2, fg: "#AAAAAA", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char6StatsStat2.text = "DEF 10";
-        Char6StatsStat2.gameObject.SetActive(true);
-        Char6ActionGrid = CreateRect("Char6ActionGrid", RectOf(Char6));
-        ConfigureRect(RectOf(Char6ActionGrid), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGrid), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
-        ApplyContentSizeFit(RectOf(Char6ActionGrid), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(Char6ActionGrid), 2f, 0, 0, 0, 0);
-        ApplyStyle(Char6ActionGrid, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
-        Char6ActionGrid.gameObject.SetActive(true);
-        Char6ActionGridAtk = CreateRect("Char6ActionGridAtk", RectOf(Char6ActionGrid));
-        ConfigureRect(RectOf(Char6ActionGridAtk), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridAtk), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridAtk), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char6ActionGridAtk), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char6ActionGridAtk, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char6ActionGridAtk.gameObject.SetActive(true);
-        Char6ActionGridAtkQEpO3 = CreateText("Char6ActionGridAtkQEpO3", RectOf(Char6ActionGridAtk));
-        ConfigureRect(RectOf(Char6ActionGridAtkQEpO3), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridAtkQEpO3), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridAtkQEpO3), horizontal: false, vertical: false);
-        ApplyStyle(Char6ActionGridAtkQEpO3, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char6ActionGridAtkQEpO3.text = ResolveIconText("swords");
-        Char6ActionGridAtkQEpO3.gameObject.SetActive(true);
-        Char6ActionGridMag = CreateRect("Char6ActionGridMag", RectOf(Char6ActionGrid));
-        ConfigureRect(RectOf(Char6ActionGridMag), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridMag), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridMag), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char6ActionGridMag), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char6ActionGridMag, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char6ActionGridMag.gameObject.SetActive(true);
-        Char6ActionGridMagAIphN = CreateText("Char6ActionGridMagAIphN", RectOf(Char6ActionGridMag));
-        ConfigureRect(RectOf(Char6ActionGridMagAIphN), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridMagAIphN), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridMagAIphN), horizontal: false, vertical: false);
-        ApplyStyle(Char6ActionGridMagAIphN, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char6ActionGridMagAIphN.text = ResolveIconText("wand-sparkles");
-        Char6ActionGridMagAIphN.gameObject.SetActive(true);
-        Char6ActionGridDef = CreateRect("Char6ActionGridDef", RectOf(Char6ActionGrid));
-        ConfigureRect(RectOf(Char6ActionGridDef), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridDef), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridDef), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char6ActionGridDef), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char6ActionGridDef, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char6ActionGridDef.gameObject.SetActive(true);
-        Char6ActionGridDefE4QKZ = CreateText("Char6ActionGridDefE4QKZ", RectOf(Char6ActionGridDef));
-        ConfigureRect(RectOf(Char6ActionGridDefE4QKZ), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridDefE4QKZ), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridDefE4QKZ), horizontal: false, vertical: false);
-        ApplyStyle(Char6ActionGridDefE4QKZ, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char6ActionGridDefE4QKZ.text = ResolveIconText("shield");
-        Char6ActionGridDefE4QKZ.gameObject.SetActive(true);
-        Char6ActionGridItem = CreateRect("Char6ActionGridItem", RectOf(Char6ActionGrid));
-        ConfigureRect(RectOf(Char6ActionGridItem), width: null, height: 28f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridItem), ignoreLayout: false, preferredWidth: null, preferredHeight: 28f, flexibleWidth: 1f, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridItem), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Char6ActionGridItem), 0f, 0, 0, 0, 0);
-        ApplyStyle(Char6ActionGridItem, fg: "#000000", bg: "#000000", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
-        Char6ActionGridItem.gameObject.SetActive(true);
-        Char6ActionGridItemDVzX7 = CreateText("Char6ActionGridItemDVzX7", RectOf(Char6ActionGridItem));
-        ConfigureRect(RectOf(Char6ActionGridItemDVzX7), width: 16f, height: 16f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(Char6ActionGridItemDVzX7), ignoreLayout: false, preferredWidth: 16f, preferredHeight: 16f, flexibleWidth: null, flexibleHeight: null);
-        ApplyContentSizeFit(RectOf(Char6ActionGridItemDVzX7), horizontal: false, vertical: false);
-        ApplyStyle(Char6ActionGridItemDVzX7, fg: "#FFFFFF", bg: null, fontFamily: "lucide", fontSize: 16, borderColor: null, borderWidth: null, treatAsIcon: true);
-        Char6ActionGridItemDVzX7.text = ResolveIconText("flask-conical");
-        Char6ActionGridItemDVzX7.gameObject.SetActive(true);
+        var char6StatsView = new SyntheticContainerFA4632C6View(RectOf(Char6), null, new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "ATK 16"
+            },
+            ["$/1"] = new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "DEF 10"
+            }
+        });
+        Char6Stats = char6StatsView.Root;
+        Char6Stats.name = "Char6Stats";
+        var char6ActionGridView = new SyntheticContainer100280A5View(RectOf(Char6), null, null);
+        Char6ActionGrid = char6ActionGridView.Root;
+        Char6ActionGrid.name = "Char6ActionGrid";
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    private ExploreHudView(RectTransform root, IExploreHudViewModel? viewModel)
+    private ExploreHudView(RectTransform root, IExploreHudViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)
     {
+        _componentOverrides = componentOverrides;
         Root = root;
         HUD = RequireRect(Root, "HUD");
         Content = RequireRect(Root, "HUD/Content");
@@ -2034,33 +1392,12 @@ public sealed class ExploreHudView
         Node78 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R7/Node78");
         Node79 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R7/Node79");
         R8 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8");
-        Node80 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node80");
-        Node81 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node81");
-        Node82 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node82");
-        Node83 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node83");
-        Node84 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node84");
-        Node85 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node85");
-        Node86 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node86");
-        Node87 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node87");
-        Node88 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node88");
-        Node89 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R8/Node89");
         R9 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9");
-        Node90 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node90");
-        Node91 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node91");
-        Node92 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node92");
-        Node93 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node93");
-        Node94 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node94");
-        Node95 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node95");
-        Node96 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node96");
-        Node97 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node97");
-        Node98 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node98");
-        Node99 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Minimap/R9/Node99");
         Sep = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/Sep");
         PartyList = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList");
         Row1 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1");
         Char1 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1");
         Char1Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Face");
-        Char1FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Face/Char1FaceClassIcon");
         Char1C1name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1C1name");
         Char1Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Hp");
         Char1HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Hp/Char1HpHpFill");
@@ -2070,120 +1407,123 @@ public sealed class ExploreHudView
         Char1StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Stats/Char1StatsStat1");
         Char1StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1Stats/Char1StatsStat2");
         Char1ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid");
-        Char1ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridAtk");
-        Char1ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridAtk/Char1ActionGridAtkQEpO3");
-        Char1ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridMag");
-        Char1ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridMag/Char1ActionGridMagAIphN");
-        Char1ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridDef");
-        Char1ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridDef/Char1ActionGridDefE4QKZ");
-        Char1ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridItem");
-        Char1ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char1/Char1ActionGrid/Char1ActionGridItem/Char1ActionGridItemDVzX7");
         Char2 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2");
         Char2Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Face");
-        Char2FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Face/Char2FaceClassIcon");
         Char2C2name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2C2name");
         Char2Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Hp");
         Char2HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Hp/Char2HpHpFill");
         Char2Mp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Mp");
         Char2MpMpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Mp/Char2MpMpFill");
         Char2Stats = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Stats");
-        Char2StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Stats/Char2StatsStat1");
-        Char2StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2Stats/Char2StatsStat2");
         Char2ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid");
-        Char2ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridAtk");
-        Char2ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridAtk/Char2ActionGridAtkQEpO3");
-        Char2ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridMag");
-        Char2ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridMag/Char2ActionGridMagAIphN");
-        Char2ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridDef");
-        Char2ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridDef/Char2ActionGridDefE4QKZ");
-        Char2ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridItem");
-        Char2ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row1/Char2/Char2ActionGrid/Char2ActionGridItem/Char2ActionGridItemDVzX7");
         Row2 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2");
         Char3 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3");
         Char3Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Face");
-        Char3FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Face/Char3FaceClassIcon");
         Char3C3name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3C3name");
         Char3Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Hp");
         Char3HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Hp/Char3HpHpFill");
         Char3Mp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Mp");
         Char3MpMpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Mp/Char3MpMpFill");
         Char3Stats = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Stats");
-        Char3StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Stats/Char3StatsStat1");
-        Char3StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3Stats/Char3StatsStat2");
         Char3ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid");
-        Char3ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridAtk");
-        Char3ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridAtk/Char3ActionGridAtkQEpO3");
-        Char3ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridMag");
-        Char3ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridMag/Char3ActionGridMagAIphN");
-        Char3ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridDef");
-        Char3ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridDef/Char3ActionGridDefE4QKZ");
-        Char3ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridItem");
-        Char3ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char3/Char3ActionGrid/Char3ActionGridItem/Char3ActionGridItemDVzX7");
         Char4 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4");
         Char4Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Face");
-        Char4FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Face/Char4FaceClassIcon");
         Char4C4name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4C4name");
         Char4Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Hp");
         Char4HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Hp/Char4HpHpFill");
         Char4Mp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Mp");
         Char4MpMpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Mp/Char4MpMpFill");
         Char4Stats = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Stats");
-        Char4StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Stats/Char4StatsStat1");
-        Char4StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4Stats/Char4StatsStat2");
         Char4ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid");
-        Char4ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridAtk");
-        Char4ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridAtk/Char4ActionGridAtkQEpO3");
-        Char4ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridMag");
-        Char4ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridMag/Char4ActionGridMagAIphN");
-        Char4ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridDef");
-        Char4ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridDef/Char4ActionGridDefE4QKZ");
-        Char4ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridItem");
-        Char4ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row2/Char4/Char4ActionGrid/Char4ActionGridItem/Char4ActionGridItemDVzX7");
         Row3 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3");
         Char5 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5");
         Char5Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Face");
-        Char5FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Face/Char5FaceClassIcon");
         Char5C5name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5C5name");
         Char5Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Hp");
         Char5HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Hp/Char5HpHpFill");
         Char5Mp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Mp");
         Char5MpMpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Mp/Char5MpMpFill");
         Char5Stats = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Stats");
-        Char5StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Stats/Char5StatsStat1");
-        Char5StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5Stats/Char5StatsStat2");
         Char5ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid");
-        Char5ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridAtk");
-        Char5ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridAtk/Char5ActionGridAtkQEpO3");
-        Char5ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridMag");
-        Char5ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridMag/Char5ActionGridMagAIphN");
-        Char5ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridDef");
-        Char5ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridDef/Char5ActionGridDefE4QKZ");
-        Char5ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridItem");
-        Char5ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char5/Char5ActionGrid/Char5ActionGridItem/Char5ActionGridItemDVzX7");
         Char6 = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6");
         Char6Face = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Face");
-        Char6FaceClassIcon = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Face/Char6FaceClassIcon");
         Char6C6name = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6C6name");
         Char6Hp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Hp");
         Char6HpHpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Hp/Char6HpHpFill");
         Char6Mp = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Mp");
         Char6MpMpFill = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Mp/Char6MpMpFill");
         Char6Stats = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Stats");
-        Char6StatsStat1 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Stats/Char6StatsStat1");
-        Char6StatsStat2 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6Stats/Char6StatsStat2");
         Char6ActionGrid = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid");
-        Char6ActionGridAtk = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridAtk");
-        Char6ActionGridAtkQEpO3 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridAtk/Char6ActionGridAtkQEpO3");
-        Char6ActionGridMag = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridMag");
-        Char6ActionGridMagAIphN = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridMag/Char6ActionGridMagAIphN");
-        Char6ActionGridDef = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridDef");
-        Char6ActionGridDefE4QKZ = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridDef/Char6ActionGridDefE4QKZ");
-        Char6ActionGridItem = RequireRect(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridItem");
-        Char6ActionGridItemDVzX7 = RequireComponent<Text>(Root, "HUD/Content/RightPanel/RightPanelInner/PartyList/Row3/Char6/Char6ActionGrid/Char6ActionGridItem/Char6ActionGridItemDVzX7");
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    public static ExploreHudView Bind(RectTransform root, IExploreHudViewModel? viewModel = null) => new(root, viewModel);
+    public static ExploreHudView Bind(RectTransform root, IExploreHudViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null) return;
+        if (TryGetComponentOverrideValue("$/0/0/0/0/0/0", "Text", out var componentOverrideValue0))
+        {
+            CompassN.text = AsString(componentOverrideValue0);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/0/1", "Text", out var componentOverrideValue1))
+        {
+            Zone.text = AsString(componentOverrideValue1);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/1/0/0", "Text", out var componentOverrideValue2))
+        {
+            Log3.text = AsString(componentOverrideValue2);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/1/0/1", "Text", out var componentOverrideValue3))
+        {
+            Log4.text = AsString(componentOverrideValue3);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/1/0/2", "Text", out var componentOverrideValue4))
+        {
+            Log5.text = AsString(componentOverrideValue4);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/1/0/3", "Text", out var componentOverrideValue5))
+        {
+            Log6.text = AsString(componentOverrideValue5);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/0/1/0/4", "Text", out var componentOverrideValue6))
+        {
+            P83Vj.text = AsString(componentOverrideValue6);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/0/0/1", "Text", out var componentOverrideValue7))
+        {
+            Char1C1name.text = AsString(componentOverrideValue7);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/0/0/4/0", "Text", out var componentOverrideValue8))
+        {
+            Char1StatsStat1.text = AsString(componentOverrideValue8);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/0/0/4/1", "Text", out var componentOverrideValue9))
+        {
+            Char1StatsStat2.text = AsString(componentOverrideValue9);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/0/1/1", "Text", out var componentOverrideValue10))
+        {
+            Char2C2name.text = AsString(componentOverrideValue10);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/1/0/1", "Text", out var componentOverrideValue11))
+        {
+            Char3C3name.text = AsString(componentOverrideValue11);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/1/1/1", "Text", out var componentOverrideValue12))
+        {
+            Char4C4name.text = AsString(componentOverrideValue12);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/2/0/1", "Text", out var componentOverrideValue13))
+        {
+            Char5C5name.text = AsString(componentOverrideValue13);
+        }
+        if (TryGetComponentOverrideValue("$/0/0/1/0/2/2/1/1", "Text", out var componentOverrideValue14))
+        {
+            Char6C6name.text = AsString(componentOverrideValue14);
+        }
+    }
 
     public void Refresh()
     {
@@ -2191,6 +1531,22 @@ public sealed class ExploreHudView
     }
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;
+        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
@@ -2202,20 +1558,30 @@ public sealed class ExploreHudView
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
+    private static void ApplyRectAnchorPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);break;case "top-center":rect.anchorMin=new Vector2(0.5f,1f);rect.anchorMax=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.anchorMin=new Vector2(1f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "center":case "middle-center":rect.anchorMin=new Vector2(0.5f,0.5f);rect.anchorMax=new Vector2(0.5f,0.5f);break;case "stretch":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-horizontal":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-vertical":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(0f,1f);break;}}
+    private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
+    private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
+    private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
+    private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
+    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
+    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetToggleText(Toggle toggle,string? value){if(TryLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

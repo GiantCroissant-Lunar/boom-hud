@@ -843,6 +843,124 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
     }
 
     [Fact]
+    public void BuildMeasuredLayoutReport_IgnoresSyntheticBorderChromeChildren()
+    {
+        var visual = new VisualDocument
+        {
+            DocumentName = "QuestSidebar",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                SourceId = "QuestSidebar",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container
+                },
+                EdgeContract = new EdgeContract
+                {
+                    Participation = LayoutParticipation.NormalFlow,
+                    WidthSizing = AxisSizing.Fixed,
+                    HeightSizing = AxisSizing.Fixed,
+                    HorizontalPin = EdgePin.Start,
+                    VerticalPin = EdgePin.Start,
+                    OverflowX = OverflowBehavior.Visible,
+                    OverflowY = OverflowBehavior.Visible,
+                    WrapPressure = WrapPressurePolicy.Allow
+                },
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/0",
+                        SourceId = "Body",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container
+                        },
+                        EdgeContract = new EdgeContract
+                        {
+                            Participation = LayoutParticipation.NormalFlow,
+                            WidthSizing = AxisSizing.Fill,
+                            HeightSizing = AxisSizing.Fixed,
+                            HorizontalPin = EdgePin.Start,
+                            VerticalPin = EdgePin.Start,
+                            OverflowX = OverflowBehavior.Visible,
+                            OverflowY = OverflowBehavior.Visible,
+                            WrapPressure = WrapPressurePolicy.Allow
+                        }
+                    }
+                ]
+            }
+        };
+
+        var actualLayout = new ActualLayoutSnapshot
+        {
+            Version = "1.0",
+            BackendFamily = "ugui",
+            CaptureId = "quest-sidebar-ugui",
+            TargetName = "QuestSidebarRoot",
+            Root = new ActualLayoutNode
+            {
+                LocalPath = "root",
+                Name = "QuestSidebarRoot",
+                NodeType = "Image",
+                X = 0,
+                Y = 0,
+                Width = 220,
+                Height = 100,
+                Children =
+                [
+                    new ActualLayoutNode
+                    {
+                        LocalPath = "root/0",
+                        Name = "__Border",
+                        NodeType = "RectTransform",
+                        X = 0,
+                        Y = 0,
+                        Width = 220,
+                        Height = 100,
+                        Children =
+                        [
+                            new ActualLayoutNode
+                            {
+                                LocalPath = "root/0/0",
+                                Name = "Top",
+                                NodeType = "Image",
+                                X = 0,
+                                Y = 0,
+                                Width = 220,
+                                Height = 2
+                            }
+                        ]
+                    },
+                    new ActualLayoutNode
+                    {
+                        LocalPath = "root/1",
+                        Name = "Body",
+                        NodeType = "Image",
+                        X = 8,
+                        Y = 8,
+                        Width = 204,
+                        Height = 24
+                    }
+                ]
+            }
+        };
+
+        var report = ImageSimilarityHandler.BuildMeasuredLayoutReport(visual, actualLayout);
+
+        report.Comparisons.Should().ContainSingle(comparison => comparison.LocalPath == "root/0" && comparison.ActualName == "Body");
+        report.Issues.Should().NotContain(issue => issue.Category == "child-structure-mismatch" && issue.LocalPath == "root");
+        report.Comparisons.Should().NotContain(comparison => comparison.ActualName == "__Border" || comparison.ActualName == "Top");
+    }
+
+    [Fact]
     public void BuildMeasuredLayoutReport_DoesNotFlagOvershiftWhenVisualIrCarriesAbsoluteOffsets()
     {
         var visual = new VisualDocument

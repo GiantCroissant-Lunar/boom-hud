@@ -112,9 +112,7 @@ namespace BoomHud.Compare
             var card = CreateImage("Card_" + title, parent, new Color(0.11f, 0.11f, 0.11f, 1f)).rectTransform;
             ConfigureAbsoluteRect(card, left, top, width, height);
 
-            var outline = card.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(0.28f, 0.28f, 0.28f, 1f);
-            outline.effectDistance = new Vector2(1f, -1f);
+            UGuiHudPreviewComposer.ApplyExplicitBorder(card.gameObject, new Color(0.28f, 0.28f, 0.28f, 1f), 1f);
 
             var titleText = CreateText("Title", card, title, 14, new Color(0.94f, 0.94f, 0.94f, 1f), TextAnchor.MiddleLeft, FontStyle.Bold);
             ConfigureAbsoluteRect(titleText.rectTransform, 14f, 14f, width - 28f, 20f);

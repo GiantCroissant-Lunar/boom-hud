@@ -148,7 +148,7 @@
           {
             "StableId": "root/0/0",
             "SourceId": "IconPanel",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS03",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:61d6e26dda96",
@@ -168,8 +168,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 16,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,
@@ -628,7 +634,7 @@
           {
             "StableId": "root/0/2",
             "SourceId": "RewardColumn",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS11",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:fc1ff3cb1952",
@@ -648,8 +654,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 764,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,
@@ -889,7 +901,7 @@
           {
             "StableId": "root/1/0",
             "SourceId": "IconPanel",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS21",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:61d6e26dda96",
@@ -913,8 +925,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 16,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,
@@ -1373,7 +1391,7 @@
           {
             "StableId": "root/1/2",
             "SourceId": "RewardColumn",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS29",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:fc1ff3cb1952",
@@ -1403,8 +1421,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 764,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,
@@ -1644,7 +1668,7 @@
           {
             "StableId": "root/2/0",
             "SourceId": "IconPanel",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS41",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:61d6e26dda96",
@@ -1668,8 +1692,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 16,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,
@@ -2128,7 +2158,7 @@
           {
             "StableId": "root/2/2",
             "SourceId": "RewardColumn",
-            "SourceNodeId": null,
+            "SourceNodeId": "CTS49",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:fc1ff3cb1952",
@@ -2158,8 +2188,14 @@
               "Gap": null,
               "Padding": null,
               "Margin": null,
-              "Left": null,
-              "Top": null,
+              "Left": {
+                "Value": 764,
+                "Unit": 0
+              },
+              "Top": {
+                "Value": 16,
+                "Unit": 0
+              },
               "IsAbsolutePositioned": true,
               "ClipContent": false,
               "Align": null,

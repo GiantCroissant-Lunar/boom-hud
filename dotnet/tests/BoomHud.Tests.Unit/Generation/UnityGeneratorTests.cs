@@ -730,6 +730,151 @@ public class UnityGeneratorTests
     }
 
     [Fact]
+    public void Generate_WithParentGap_AppliesSpacingToComponentReferencesWithoutOwnLayout()
+    {
+        var badge = new HudComponentDefinition
+        {
+            Id = "badge",
+            Name = "Badge",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Width = Dimension.Pixels(40),
+                    Height = Dimension.Pixels(20)
+                }
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "ComponentGapHud",
+            Components = new Dictionary<string, HudComponentDefinition>
+            {
+                ["badge"] = badge
+            },
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = new Spacing(10)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "firstBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge"
+                    },
+                    new ComponentNode
+                    {
+                        Id = "secondBadge",
+                        Type = ComponentType.Container,
+                        ComponentRefId = "badge"
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var controllerFile = result.Files.First(f => f.Path == "ComponentGapHudView.gen.cs");
+
+        controllerFile.Content.Should().Contain("SecondBadge.style.marginTop = ParseStyleFloat(\"10px\");");
+    }
+
+    [Fact]
+    public void Generate_WithOverflowingBorderedVerticalShell_DisablesFlexShrinkOnDirectChildren()
+    {
+        var doc = new HudDocument
+        {
+            Name = "OverflowShellHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(400),
+                    Height = Dimension.Pixels(216),
+                    Gap = new Spacing(12),
+                    Padding = new Spacing(12)
+                },
+                Style = new StyleSpec
+                {
+                    Border = new BorderSpec
+                    {
+                        Width = 6,
+                        Style = BorderStyle.Solid,
+                        Color = Color.Parse("#7E7E7E")
+                    }
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "heroRow",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Horizontal,
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(76)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "hpBar",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(22)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "mpBar",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(22)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "statusRow",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Horizontal,
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(56)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var controllerFile = result.Files.First(f => f.Path == "OverflowShellHudView.gen.cs");
+
+        controllerFile.Content.Should().Contain("HeroRow.style.flexShrink = ParseStyleFloat(\"0\");");
+        controllerFile.Content.Should().Contain("HpBar.style.flexShrink = ParseStyleFloat(\"0\");");
+        controllerFile.Content.Should().Contain("MpBar.style.flexShrink = ParseStyleFloat(\"0\");");
+        controllerFile.Content.Should().Contain("StatusRow.style.flexShrink = ParseStyleFloat(\"0\");");
+    }
+
+    [Fact]
     public void Generate_AbsoluteLayoutWithoutCoordinates_DoesNotRemoveNodeFromFlow()
     {
         var doc = new HudDocument
@@ -787,6 +932,110 @@ public class UnityGeneratorTests
         ussFile.Content.Should().Contain("position: absolute;");
         ussFile.Content.Should().Contain("left: 12px;");
         ussFile.Content.Should().Contain("top: 16px;");
+    }
+
+    [Fact]
+    public void Generate_AbsoluteLayoutChildInsideBorderedContainer_CompensatesForParentBorderInset()
+    {
+        var doc = new HudDocument
+        {
+            Name = "BorderInsetAbsoluteHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Absolute,
+                    Width = Dimension.Pixels(200),
+                    Height = Dimension.Pixels(120)
+                },
+                Style = new StyleSpec
+                {
+                    Border = new BorderSpec
+                    {
+                        Width = 6,
+                        Style = BorderStyle.Solid,
+                        Color = Color.Parse("#EAEAEA")
+                    }
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "marker",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Absolute,
+                            Left = Dimension.Pixels(16),
+                            Top = Dimension.Pixels(18),
+                            Width = Dimension.Pixels(20),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var ussFile = result.Files.First(f => f.Path == "BorderInsetAbsoluteHudView.uss");
+
+        ussFile.Content.Should().Contain(".boomhud-marker {");
+        ussFile.Content.Should().Contain("left: 10px;");
+        ussFile.Content.Should().Contain("top: 12px;");
+    }
+
+    [Fact]
+    public void Generate_BorderedContainerPadding_CompensatesForBorderInset()
+    {
+        var doc = new HudDocument
+        {
+            Name = "BorderInsetPaddingHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(200),
+                    Height = Dimension.Pixels(120),
+                    Padding = new Spacing(12)
+                },
+                Style = new StyleSpec
+                {
+                    Border = new BorderSpec
+                    {
+                        Width = 6,
+                        Style = BorderStyle.Solid,
+                        Color = Color.Parse("#EAEAEA")
+                    }
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "child",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(20),
+                            Height = Dimension.Pixels(20)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var ussFile = result.Files.First(f => f.Path == "BorderInsetPaddingHudView.uss");
+
+        ussFile.Content.Should().Contain(".boomhud-root {");
+        ussFile.Content.Should().Contain("padding-top: 6px;");
+        ussFile.Content.Should().Contain("padding-right: 6px;");
+        ussFile.Content.Should().Contain("padding-bottom: 6px;");
+        ussFile.Content.Should().Contain("padding-left: 6px;");
     }
 
     [Fact]

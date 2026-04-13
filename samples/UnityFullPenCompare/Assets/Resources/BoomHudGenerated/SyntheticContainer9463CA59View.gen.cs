@@ -87,13 +87,13 @@ public sealed class SyntheticContainer9463CA59View
 
     private void ApplyStaticValues()
     {
-        Root.style.flexDirection = ParseFlexDirection("row");
-        Root.style.width = ParseStyleLength("100%");
-        Root.style.height = ParseStyleLength("32px");
         Root.style.marginTop = ParseStyleFloat("0px");
         Root.style.marginRight = ParseStyleFloat("0px");
         Root.style.marginBottom = ParseStyleFloat("0px");
         Root.style.marginLeft = ParseStyleFloat("0px");
+        Root.style.flexDirection = ParseFlexDirection("row");
+        Root.style.width = ParseStyleLength("100%");
+        Root.style.height = ParseStyleLength("32px");
         Root.style.paddingTop = ParseStyleFloat("0px");
         Root.style.paddingRight = ParseStyleFloat("0px");
         Root.style.paddingBottom = ParseStyleFloat("0px");
@@ -104,13 +104,13 @@ public sealed class SyntheticContainer9463CA59View
         Root.SetEnabled(true);
         Root.style.color = ParseStyleColor("#000000", null);
         Root.style.backgroundColor = ParseStyleColor("#000000", null);
-        Cell00.style.flexDirection = ParseFlexDirection("column");
-        Cell00.style.width = ParseStyleLength("32px");
-        Cell00.style.height = ParseStyleLength("32px");
         Cell00.style.marginTop = ParseStyleFloat("0px");
         Cell00.style.marginRight = ParseStyleFloat("0px");
         Cell00.style.marginBottom = ParseStyleFloat("0px");
         Cell00.style.marginLeft = ParseStyleFloat("0px");
+        Cell00.style.flexDirection = ParseFlexDirection("column");
+        Cell00.style.width = ParseStyleLength("32px");
+        Cell00.style.height = ParseStyleLength("32px");
         Cell00.style.paddingTop = ParseStyleFloat("0px");
         Cell00.style.paddingRight = ParseStyleFloat("0px");
         Cell00.style.paddingBottom = ParseStyleFloat("0px");
@@ -121,13 +121,13 @@ public sealed class SyntheticContainer9463CA59View
         Cell00.SetEnabled(true);
         Cell00.style.color = ParseStyleColor("#232323", null);
         Cell00.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell01.style.flexDirection = ParseFlexDirection("column");
-        Cell01.style.width = ParseStyleLength("32px");
-        Cell01.style.height = ParseStyleLength("32px");
         Cell01.style.marginTop = ParseStyleFloat("0px");
         Cell01.style.marginRight = ParseStyleFloat("0px");
         Cell01.style.marginBottom = ParseStyleFloat("0px");
         Cell01.style.marginLeft = ParseStyleFloat("4px");
+        Cell01.style.flexDirection = ParseFlexDirection("column");
+        Cell01.style.width = ParseStyleLength("32px");
+        Cell01.style.height = ParseStyleLength("32px");
         Cell01.style.paddingTop = ParseStyleFloat("0px");
         Cell01.style.paddingRight = ParseStyleFloat("0px");
         Cell01.style.paddingBottom = ParseStyleFloat("0px");
@@ -138,13 +138,13 @@ public sealed class SyntheticContainer9463CA59View
         Cell01.SetEnabled(true);
         Cell01.style.color = ParseStyleColor("#232323", null);
         Cell01.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell02.style.flexDirection = ParseFlexDirection("column");
-        Cell02.style.width = ParseStyleLength("32px");
-        Cell02.style.height = ParseStyleLength("32px");
         Cell02.style.marginTop = ParseStyleFloat("0px");
         Cell02.style.marginRight = ParseStyleFloat("0px");
         Cell02.style.marginBottom = ParseStyleFloat("0px");
         Cell02.style.marginLeft = ParseStyleFloat("4px");
+        Cell02.style.flexDirection = ParseFlexDirection("column");
+        Cell02.style.width = ParseStyleLength("32px");
+        Cell02.style.height = ParseStyleLength("32px");
         Cell02.style.paddingTop = ParseStyleFloat("0px");
         Cell02.style.paddingRight = ParseStyleFloat("0px");
         Cell02.style.paddingBottom = ParseStyleFloat("0px");
@@ -155,13 +155,13 @@ public sealed class SyntheticContainer9463CA59View
         Cell02.SetEnabled(true);
         Cell02.style.color = ParseStyleColor("#3D6A3D", null);
         Cell02.style.backgroundColor = ParseStyleColor("#3D6A3D", null);
-        Cell03.style.flexDirection = ParseFlexDirection("column");
-        Cell03.style.width = ParseStyleLength("32px");
-        Cell03.style.height = ParseStyleLength("32px");
         Cell03.style.marginTop = ParseStyleFloat("0px");
         Cell03.style.marginRight = ParseStyleFloat("0px");
         Cell03.style.marginBottom = ParseStyleFloat("0px");
         Cell03.style.marginLeft = ParseStyleFloat("4px");
+        Cell03.style.flexDirection = ParseFlexDirection("column");
+        Cell03.style.width = ParseStyleLength("32px");
+        Cell03.style.height = ParseStyleLength("32px");
         Cell03.style.paddingTop = ParseStyleFloat("0px");
         Cell03.style.paddingRight = ParseStyleFloat("0px");
         Cell03.style.paddingBottom = ParseStyleFloat("0px");
@@ -172,13 +172,13 @@ public sealed class SyntheticContainer9463CA59View
         Cell03.SetEnabled(true);
         Cell03.style.color = ParseStyleColor("#232323", null);
         Cell03.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell04.style.flexDirection = ParseFlexDirection("column");
-        Cell04.style.width = ParseStyleLength("32px");
-        Cell04.style.height = ParseStyleLength("32px");
         Cell04.style.marginTop = ParseStyleFloat("0px");
         Cell04.style.marginRight = ParseStyleFloat("0px");
         Cell04.style.marginBottom = ParseStyleFloat("0px");
         Cell04.style.marginLeft = ParseStyleFloat("4px");
+        Cell04.style.flexDirection = ParseFlexDirection("column");
+        Cell04.style.width = ParseStyleLength("32px");
+        Cell04.style.height = ParseStyleLength("32px");
         Cell04.style.paddingTop = ParseStyleFloat("0px");
         Cell04.style.paddingRight = ParseStyleFloat("0px");
         Cell04.style.paddingBottom = ParseStyleFloat("0px");
@@ -189,13 +189,13 @@ public sealed class SyntheticContainer9463CA59View
         Cell04.SetEnabled(true);
         Cell04.style.color = ParseStyleColor("#232323", null);
         Cell04.style.backgroundColor = ParseStyleColor("#232323", null);
-        Cell05.style.flexDirection = ParseFlexDirection("column");
-        Cell05.style.width = ParseStyleLength("32px");
-        Cell05.style.height = ParseStyleLength("32px");
         Cell05.style.marginTop = ParseStyleFloat("0px");
         Cell05.style.marginRight = ParseStyleFloat("0px");
         Cell05.style.marginBottom = ParseStyleFloat("0px");
         Cell05.style.marginLeft = ParseStyleFloat("4px");
+        Cell05.style.flexDirection = ParseFlexDirection("column");
+        Cell05.style.width = ParseStyleLength("32px");
+        Cell05.style.height = ParseStyleLength("32px");
         Cell05.style.paddingTop = ParseStyleFloat("0px");
         Cell05.style.paddingRight = ParseStyleFloat("0px");
         Cell05.style.paddingBottom = ParseStyleFloat("0px");
@@ -517,9 +517,17 @@ public sealed class SyntheticContainer9463CA59View
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
+        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
+            return true;
+        }
+
+        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        {
+            fontDefinition = FontDefinition.FromFont(font);
+            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -530,7 +538,7 @@ public sealed class SyntheticContainer9463CA59View
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
         {
             return false;
         }

@@ -163,7 +163,7 @@ namespace BoomHud.Compare
         private void EnsureCanvasSetup()
         {
             var canvas = GetComponent<Canvas>();
-            var mainCamera = Camera.main;
+            var mainCamera = Camera.main ?? FindFirstObjectByType<Camera>();
             ConfigureCanvas(canvas, mainCamera);
             canvas.pixelPerfect = false;
             canvas.sortingOrder = 0;

@@ -652,10 +652,10 @@ public class PencilEndToEndTests
         rootUxml.Content.Should().Contain("name=\"Char1AttackButton\"");
 
         var rootUss = result.Files.First(f => f.Path == "ExploreHudView.uss");
-        rootUss.Content.Should().Contain("left: 444px;");
-        rootUss.Content.Should().Contain("top: 12px;");
-        rootUss.Content.Should().Contain("left: 16px;");
-        rootUss.Content.Should().Contain("top: 620px;");
+        rootUss.Content.Should().Contain("left: 432px;");
+        rootUss.Content.Should().Contain("top: 0px;");
+        rootUss.Content.Should().Contain("left: 4px;");
+        rootUss.Content.Should().Contain("top: 608px;");
 
         var componentUxml = result.Files.First(f => f.Path == "CharPortraitView.uxml");
         componentUxml.Content.Should().Contain("name=\"AttackButton\"");

@@ -1,11 +1,11 @@
 .boomhud-objective1 {
-    flex-direction: row;
-    width: 100%;
-    height: 44px;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-direction: row;
+    width: 100%;
+    height: 44px;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -17,13 +17,13 @@
 }
 
 .boomhud-icon-shell1 {
-    flex-direction: column;
-    width: 44px;
-    height: 44px;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-direction: column;
+    width: 44px;
+    height: 44px;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -43,13 +43,13 @@
 }
 
 .boomhud-objective-icon1 {
-    flex-direction: column;
-    width: 20px;
-    height: 20px;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-direction: column;
+    width: 20px;
+    height: 20px;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -61,13 +61,13 @@
 }
 
 .boomhud-objective-text1 {
-    flex-direction: column;
-    flex-grow: 1;
-    align-self: stretch;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 10px;
+    flex-direction: column;
+    flex-grow: 1;
+    align-self: stretch;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -79,11 +79,11 @@
 }
 
 .boomhud-objective-title1 {
-    flex-direction: column;
     margin-top: 0px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-direction: column;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -96,11 +96,11 @@
 }
 
 .boomhud-objective-hint1 {
-    flex-direction: column;
     margin-top: 6px;
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    flex-direction: column;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;

@@ -258,7 +258,7 @@ namespace BoomHud.Compare.Editor
             {
                 var target = WaitForTargetRectTransform(capture.targetObjectName);
                 WaitForRectTransformToSettle(target);
-                fullTexture = CaptureCameraTexture(requestedWidth, requestedHeight);
+                fullTexture = CaptureUGuiTexture(requestedWidth, requestedHeight);
                 target = WaitForTargetRectTransform(capture.targetObjectName);
                 croppedTexture = CropToRectTransform(fullTexture, target);
                 croppedTexture = NormalizeCapturedTextureSize(croppedTexture, requestedWidth, requestedHeight);
@@ -545,6 +545,63 @@ namespace BoomHud.Compare.Editor
                     UnityEngine.Object.DestroyImmediate(renderTexture);
                 }
             }
+        }
+
+        private static Texture2D CaptureUGuiTexture(int width, int height)
+        {
+            Texture2D? cameraTexture = null;
+            Exception? gameViewException = null;
+
+            try
+            {
+                cameraTexture = CaptureCameraTexture(width, height);
+                if (HasMeaningfulContent(cameraTexture))
+                {
+                    return cameraTexture;
+                }
+            }
+            catch
+            {
+                cameraTexture = null;
+            }
+
+            try
+            {
+                var gameViewTexture = CaptureGameViewTexture(width, height);
+                if (HasMeaningfulContent(gameViewTexture))
+                {
+                    if (cameraTexture != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(cameraTexture);
+                    }
+
+                    return gameViewTexture;
+                }
+
+                Debug.LogWarning("Falling back to the Unity Game View capture for uGUI despite a low-content heuristic result.");
+                if (cameraTexture != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(cameraTexture);
+                }
+
+                return gameViewTexture;
+            }
+            catch (Exception exception)
+            {
+                gameViewException = exception;
+            }
+
+            if (cameraTexture != null)
+            {
+                Debug.LogWarning(
+                    "Falling back to the camera capture for uGUI despite a low-content heuristic result."
+                    + FormatCaptureFailureSuffix(gameViewException));
+                return cameraTexture;
+            }
+
+            throw new InvalidOperationException(
+                "Unity uGUI capture did not produce meaningful content.",
+                gameViewException);
         }
 
         private static Texture2D CaptureTextureFromHostView(object hostView, MethodInfo grabPixels, Rect viewportRectPixels, int width, int height)
@@ -1573,7 +1630,7 @@ namespace BoomHud.Compare.Editor
                     nonBlackPixels++;
                 }
 
-                if ((differingPixels >= 256 && visiblePixels >= 64) || (visiblePixels >= 256 && nonBlackPixels >= 64))
+                if (differingPixels >= 256 && visiblePixels >= 64 && nonBlackPixels >= 64)
                 {
                     return true;
                 }

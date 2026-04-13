@@ -100,13 +100,13 @@ public sealed class SyntheticContainerC520AC99View
 
     private void ApplyStaticValues()
     {
-        Root.style.flexDirection = ParseFlexDirection("row");
-        Root.style.width = ParseStyleLength("100%");
-        Root.style.height = ParseStyleLength("44px");
         Root.style.marginTop = ParseStyleFloat("0px");
         Root.style.marginRight = ParseStyleFloat("0px");
         Root.style.marginBottom = ParseStyleFloat("0px");
         Root.style.marginLeft = ParseStyleFloat("0px");
+        Root.style.flexDirection = ParseFlexDirection("row");
+        Root.style.width = ParseStyleLength("100%");
+        Root.style.height = ParseStyleLength("44px");
         Root.style.paddingTop = ParseStyleFloat("0px");
         Root.style.paddingRight = ParseStyleFloat("0px");
         Root.style.paddingBottom = ParseStyleFloat("0px");
@@ -117,13 +117,13 @@ public sealed class SyntheticContainerC520AC99View
         Root.SetEnabled(true);
         Root.style.color = ParseStyleColor("#111111", null);
         Root.style.backgroundColor = ParseStyleColor("#111111", null);
-        IconShell1.style.flexDirection = ParseFlexDirection("column");
-        IconShell1.style.width = ParseStyleLength("44px");
-        IconShell1.style.height = ParseStyleLength("44px");
         IconShell1.style.marginTop = ParseStyleFloat("0px");
         IconShell1.style.marginRight = ParseStyleFloat("0px");
         IconShell1.style.marginBottom = ParseStyleFloat("0px");
         IconShell1.style.marginLeft = ParseStyleFloat("0px");
+        IconShell1.style.flexDirection = ParseFlexDirection("column");
+        IconShell1.style.width = ParseStyleLength("44px");
+        IconShell1.style.height = ParseStyleLength("44px");
         IconShell1.style.paddingTop = ParseStyleFloat("0px");
         IconShell1.style.paddingRight = ParseStyleFloat("0px");
         IconShell1.style.paddingBottom = ParseStyleFloat("0px");
@@ -142,13 +142,13 @@ public sealed class SyntheticContainerC520AC99View
         IconShell1.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         IconShell1.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         IconShell1.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        ObjectiveIcon1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveIcon1.style.width = ParseStyleLength("20px");
-        ObjectiveIcon1.style.height = ParseStyleLength("20px");
         ObjectiveIcon1.style.marginTop = ParseStyleFloat("0px");
         ObjectiveIcon1.style.marginRight = ParseStyleFloat("0px");
         ObjectiveIcon1.style.marginBottom = ParseStyleFloat("0px");
         ObjectiveIcon1.style.marginLeft = ParseStyleFloat("0px");
+        ObjectiveIcon1.style.flexDirection = ParseFlexDirection("column");
+        ObjectiveIcon1.style.width = ParseStyleLength("20px");
+        ObjectiveIcon1.style.height = ParseStyleLength("20px");
         ObjectiveIcon1.style.paddingTop = ParseStyleFloat("0px");
         ObjectiveIcon1.style.paddingRight = ParseStyleFloat("0px");
         ObjectiveIcon1.style.paddingBottom = ParseStyleFloat("0px");
@@ -162,13 +162,13 @@ public sealed class SyntheticContainerC520AC99View
         ApplyFontFamily(ObjectiveIcon1, "lucide", 20f);
         ObjectiveIcon1.style.color = ParseStyleColor("#FFFFFF", null);
         ObjectiveIcon1.style.fontSize = 20f;
-        ObjectiveText1.style.flexDirection = ParseFlexDirection("column");
-        ObjectiveText1.style.flexGrow = ParseStyleFloat("1");
-        ObjectiveText1.style.alignSelf = ParseAlign("stretch");
         ObjectiveText1.style.marginTop = ParseStyleFloat("0px");
         ObjectiveText1.style.marginRight = ParseStyleFloat("0px");
         ObjectiveText1.style.marginBottom = ParseStyleFloat("0px");
         ObjectiveText1.style.marginLeft = ParseStyleFloat("10px");
+        ObjectiveText1.style.flexDirection = ParseFlexDirection("column");
+        ObjectiveText1.style.flexGrow = ParseStyleFloat("1");
+        ObjectiveText1.style.alignSelf = ParseAlign("stretch");
         ObjectiveText1.style.paddingTop = ParseStyleFloat("0px");
         ObjectiveText1.style.paddingRight = ParseStyleFloat("0px");
         ObjectiveText1.style.paddingBottom = ParseStyleFloat("0px");
@@ -179,11 +179,11 @@ public sealed class SyntheticContainerC520AC99View
         ObjectiveText1.SetEnabled(true);
         ObjectiveText1.style.color = ParseStyleColor("#111111", null);
         ObjectiveText1.style.backgroundColor = ParseStyleColor("#111111", null);
-        ObjectiveTitle1.style.flexDirection = ParseFlexDirection("column");
         ObjectiveTitle1.style.marginTop = ParseStyleFloat("0px");
         ObjectiveTitle1.style.marginRight = ParseStyleFloat("0px");
         ObjectiveTitle1.style.marginBottom = ParseStyleFloat("0px");
         ObjectiveTitle1.style.marginLeft = ParseStyleFloat("0px");
+        ObjectiveTitle1.style.flexDirection = ParseFlexDirection("column");
         ObjectiveTitle1.style.paddingTop = ParseStyleFloat("0px");
         ObjectiveTitle1.style.paddingRight = ParseStyleFloat("0px");
         ObjectiveTitle1.style.paddingBottom = ParseStyleFloat("0px");
@@ -198,11 +198,11 @@ public sealed class SyntheticContainerC520AC99View
         ObjectiveTitle1.style.color = ParseStyleColor("#FFFFFF", null);
         ObjectiveTitle1.style.fontSize = 9f;
         ObjectiveTitle1.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        ObjectiveHint1.style.flexDirection = ParseFlexDirection("column");
         ObjectiveHint1.style.marginTop = ParseStyleFloat("6px");
         ObjectiveHint1.style.marginRight = ParseStyleFloat("0px");
         ObjectiveHint1.style.marginBottom = ParseStyleFloat("0px");
         ObjectiveHint1.style.marginLeft = ParseStyleFloat("0px");
+        ObjectiveHint1.style.flexDirection = ParseFlexDirection("column");
         ObjectiveHint1.style.paddingTop = ParseStyleFloat("0px");
         ObjectiveHint1.style.paddingRight = ParseStyleFloat("0px");
         ObjectiveHint1.style.paddingBottom = ParseStyleFloat("0px");
@@ -528,9 +528,17 @@ public sealed class SyntheticContainerC520AC99View
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
+        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
+            return true;
+        }
+
+        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        {
+            fontDefinition = FontDefinition.FromFont(font);
+            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -541,7 +549,7 @@ public sealed class SyntheticContainerC520AC99View
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
         {
             return false;
         }

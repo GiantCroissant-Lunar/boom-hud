@@ -29,6 +29,33 @@
       "ISyntheticContainerFC1FF3CBViewModel.g.cs",
       "SyntheticContainer61D6E26DView.ugui.cs",
       "SyntheticContainerFC1FF3CBView.ugui.cs"
+    ],
+    "ExploreHud": [
+      "ActionButtonView.ugui.cs",
+      "CharPortraitView.ugui.cs",
+      "ExploreHud.synthetic-components.json",
+      "ExploreHudView.ugui.cs",
+      "IActionButtonViewModel.g.cs",
+      "ICharPortraitViewModel.g.cs",
+      "IExploreHudViewModel.g.cs",
+      "IMessageLogViewModel.g.cs",
+      "IMinimapViewModel.g.cs",
+      "IStatBarViewModel.g.cs",
+      "IStatusIconViewModel.g.cs",
+      "ISyntheticContainer100280A5ViewModel.g.cs",
+      "ISyntheticContainer6397E5DCViewModel.g.cs",
+      "ISyntheticContainer640002D6ViewModel.g.cs",
+      "ISyntheticContainerC701B3C7ViewModel.g.cs",
+      "ISyntheticContainerFA4632C6ViewModel.g.cs",
+      "MessageLogView.ugui.cs",
+      "MinimapView.ugui.cs",
+      "StatBarView.ugui.cs",
+      "StatusIconView.ugui.cs",
+      "SyntheticContainer100280A5View.ugui.cs",
+      "SyntheticContainer6397E5DCView.ugui.cs",
+      "SyntheticContainer640002D6View.ugui.cs",
+      "SyntheticContainerC701B3C7View.ugui.cs",
+      "SyntheticContainerFA4632C6View.ugui.cs"
     ]
   }
 }

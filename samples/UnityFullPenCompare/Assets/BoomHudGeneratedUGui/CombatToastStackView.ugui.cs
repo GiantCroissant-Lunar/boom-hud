@@ -72,23 +72,25 @@ public sealed class CombatToastStackView
         ConfigureRect(Root, width: 960f, height: 720f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 960f, preferredHeight: 720f, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(Root, horizontal: false, vertical: false);
-        ApplyVerticalLayout(Root, 18f, 24, 24, 24, 24, null, childControlWidth: true, childControlHeight: false);
+        ApplyVerticalLayout(Root, 18f, 24, 24, 24, 24, "top-left", childControlWidth: true, childControlHeight: false);
         ApplyStyle(Root, fg: "#050505", bg: "#050505", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Root.gameObject.SetActive(true);
         ToastOne = CreateRect("ToastOne", Root);
-        ConfigureRect(RectOf(ToastOne), width: null, height: 180f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ToastOne), ignoreLayout: false, preferredWidth: null, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(ToastOne), width: 912f, height: 180f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(ToastOne), ignoreLayout: false, preferredWidth: 912f, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ToastOne), horizontal: false, vertical: false);
         ApplyStyle(ToastOne, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastOne.gameObject.SetActive(true);
         var iconPanelView = new SyntheticContainer61D6E26DView(RectOf(ToastOne), null, null);
         IconPanel = iconPanelView.Root;
         IconPanel.name = "IconPanel";
+        ConfigureRect(RectOf(IconPanel), width: null, height: null, left: 16f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(IconPanel), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Content = CreateRect("Content", RectOf(ToastOne));
         ConfigureRect(RectOf(Content), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Content), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Content), 10f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Content), 10f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Content, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Content.gameObject.SetActive(true);
         Title = CreateText("Title", RectOf(Content));
@@ -130,11 +132,13 @@ public sealed class CombatToastStackView
         var rewardColumnView = new SyntheticContainerFC1FF3CBView(RectOf(ToastOne), null, null);
         RewardColumn = rewardColumnView.Root;
         RewardColumn.name = "RewardColumn";
+        ConfigureRect(RectOf(RewardColumn), width: null, height: null, left: 764f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(RewardColumn), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Badge = CreateRect("Badge", RectOf(ToastOne));
         ConfigureRect(RectOf(Badge), width: 120f, height: 28f, left: 784f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Badge), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Badge), 0f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Badge), 0f, 0, 0, 0, 0, "center");
         ApplyStyle(Badge, fg: "#D44A4A", bg: "#D44A4A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Badge.gameObject.SetActive(true);
         BadgeText = CreateText("BadgeText", RectOf(Badge));
@@ -146,8 +150,8 @@ public sealed class CombatToastStackView
         BadgeText.text = "PRIORITY";
         BadgeText.gameObject.SetActive(true);
         ToastTwo = CreateRect("ToastTwo", Root);
-        ConfigureRect(RectOf(ToastTwo), width: null, height: 180f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ToastTwo), ignoreLayout: false, preferredWidth: null, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(ToastTwo), width: 912f, height: 180f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(ToastTwo), ignoreLayout: false, preferredWidth: 912f, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ToastTwo), horizontal: false, vertical: false);
         ApplyStyle(ToastTwo, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastTwo.gameObject.SetActive(true);
@@ -160,11 +164,13 @@ public sealed class CombatToastStackView
         });
         IconPanel2 = iconPanel2View.Root;
         IconPanel2.name = "IconPanel2";
+        ConfigureRect(RectOf(IconPanel2), width: null, height: null, left: 16f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(IconPanel2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Content2 = CreateRect("Content2", RectOf(ToastTwo));
         ConfigureRect(RectOf(Content2), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Content2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Content2), 10f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Content2), 10f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Content2, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Content2.gameObject.SetActive(true);
         Title2 = CreateText("Title2", RectOf(Content2));
@@ -220,11 +226,13 @@ public sealed class CombatToastStackView
         });
         RewardColumn2 = rewardColumn2View.Root;
         RewardColumn2.name = "RewardColumn2";
+        ConfigureRect(RectOf(RewardColumn2), width: null, height: null, left: 764f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(RewardColumn2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Badge2 = CreateRect("Badge2", RectOf(ToastTwo));
         ConfigureRect(RectOf(Badge2), width: 104f, height: 28f, left: 792f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge2), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Badge2), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Badge2), 0f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Badge2), 0f, 0, 0, 0, 0, "center");
         ApplyStyle(Badge2, fg: "#4A78D4", bg: "#4A78D4", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Badge2.gameObject.SetActive(true);
         BadgeText2 = CreateText("BadgeText2", RectOf(Badge2));
@@ -236,8 +244,8 @@ public sealed class CombatToastStackView
         BadgeText2.text = "STABLE";
         BadgeText2.gameObject.SetActive(true);
         ToastThree = CreateRect("ToastThree", Root);
-        ConfigureRect(RectOf(ToastThree), width: null, height: 180f, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(ToastThree), ignoreLayout: false, preferredWidth: null, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
+        ConfigureRect(RectOf(ToastThree), width: 912f, height: 180f, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(ToastThree), ignoreLayout: false, preferredWidth: 912f, preferredHeight: 180f, flexibleWidth: 1f, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(ToastThree), horizontal: false, vertical: false);
         ApplyStyle(ToastThree, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: "#7E7E7E", borderWidth: 6f, treatAsIcon: false);
         ToastThree.gameObject.SetActive(true);
@@ -250,11 +258,13 @@ public sealed class CombatToastStackView
         });
         IconPanel3 = iconPanel3View.Root;
         IconPanel3.name = "IconPanel3";
+        ConfigureRect(RectOf(IconPanel3), width: null, height: null, left: 16f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(IconPanel3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Content3 = CreateRect("Content3", RectOf(ToastThree));
         ConfigureRect(RectOf(Content3), width: 560f, height: 144f, left: 168f, top: 18f, absolute: true);
         ApplyLayoutSizing(RectOf(Content3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Content3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Content3), 10f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Content3), 10f, 0, 0, 0, 0, "top-left");
         ApplyStyle(Content3, fg: "#101010", bg: "#101010", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Content3.gameObject.SetActive(true);
         Title3 = CreateText("Title3", RectOf(Content3));
@@ -310,11 +320,13 @@ public sealed class CombatToastStackView
         });
         RewardColumn3 = rewardColumn3View.Root;
         RewardColumn3.name = "RewardColumn3";
+        ConfigureRect(RectOf(RewardColumn3), width: null, height: null, left: 764f, top: 16f, absolute: true);
+        ApplyLayoutSizing(RectOf(RewardColumn3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         Badge3 = CreateRect("Badge3", RectOf(ToastThree));
         ConfigureRect(RectOf(Badge3), width: 128f, height: 28f, left: 780f, top: 0f, absolute: true);
         ApplyLayoutSizing(RectOf(Badge3), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(Badge3), horizontal: false, vertical: false);
-        ApplyVerticalLayout(RectOf(Badge3), 0f, 0, 0, 0, 0);
+        ApplyVerticalLayout(RectOf(Badge3), 0f, 0, 0, 0, 0, "center");
         ApplyStyle(Badge3, fg: "#7A5FD4", bg: "#7A5FD4", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Badge3.gameObject.SetActive(true);
         BadgeText3 = CreateText("BadgeText3", RectOf(Badge3));
@@ -479,7 +491,9 @@ public sealed class CombatToastStackView
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

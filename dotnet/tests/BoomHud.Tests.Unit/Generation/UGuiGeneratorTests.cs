@@ -642,6 +642,9 @@ public sealed class UGuiGeneratorTests
 
         var viewFile = result.Files.First(f => f.Path == "QuestHudView.ugui.cs");
         viewFile.Content.Should().Contain("new Synthetic");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(CardAlpha), width: null, height: null, left: 12f, top: 32f, absolute: true);");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(CardBravo), width: null, height: null, left: 312f, top: 64f, absolute: true);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(CardAlpha), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);");
         viewFile.Content.Should().NotContain("ApplyHorizontalLayout(RectOf(CardAlpha)");
         viewFile.Content.Should().NotContain("ApplyHorizontalLayout(RectOf(CardBravo)");
         viewFile.Content.Should().NotContain("ApplyContentSizeFit(RectOf(CardAlpha)");
@@ -999,7 +1002,7 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
-    public void Generate_OverflowingCardShell_PreservesIntrinsicCardHeightInHorizontalShell()
+    public void Generate_OverflowingCrossAxisCardShell_PreservesSourceSpacing()
     {
         var doc = new HudDocument
         {
@@ -1023,6 +1026,7 @@ public sealed class UGuiGeneratorTests
                         {
                             Type = LayoutType.Vertical,
                             Width = Dimension.Pixels(400),
+                            Height = Dimension.Fill,
                             Gap = Spacing.Uniform(12),
                             Padding = Spacing.Uniform(12)
                         },
@@ -1098,17 +1102,17 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
         var viewFile = result.Files.First(f => f.Path == "PartyStripHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: true);");
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
         viewFile.Content.Should().Contain("ConfigureRect(Root, width: null, height: 216f, left: null, top: null, absolute: false);");
         viewFile.Content.Should().Contain("ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: null, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: null);");
-        viewFile.Content.Should().Contain("ConfigureRect(RectOf(MemberA), width: 400f, height: null, left: null, top: null, absolute: false);");
-        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: null, flexibleWidth: null, flexibleHeight: 1f);");
-        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ConfigureRect(RectOf(MemberA), width: 400f, height: 216f, left: null, top: null, absolute: false);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(MemberA), ignoreLayout: false, preferredWidth: 400f, preferredHeight: 216f, flexibleWidth: null, flexibleHeight: 1f);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12, null, childControlWidth: true, childControlHeight: false);");
         viewFile.Content.Should().Contain("ApplyHorizontalLayout(RectOf(StatusRow), 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
     }
 
     [Fact]
-    public void Generate_ComponentRefChild_ContributesIntrinsicSizeToOverflowCompaction()
+    public void Generate_ComponentRefChild_PreservesSourceSpacingInOverflowingCrossAxisShell()
     {
         var heroRowComponent = new HudComponentDefinition
         {
@@ -1152,6 +1156,7 @@ public sealed class UGuiGeneratorTests
                         {
                             Type = LayoutType.Vertical,
                             Width = Dimension.Pixels(400),
+                            Height = Dimension.Fill,
                             Gap = Spacing.Uniform(12),
                             Padding = Spacing.Uniform(12)
                         },
@@ -1224,7 +1229,116 @@ public sealed class UGuiGeneratorTests
         var viewFile = result.Files.First(f => f.Path == "PartyStripHudView.ugui.cs");
 
         viewFile.Content.Should().Contain("var heroRowView = new HeroRowView(RectOf(MemberA), null, null);");
-        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 8f, 12, 12, 8, 8, null, childControlWidth: true, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 0f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: false);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(RectOf(MemberA), 12f, 12, 12, 12, 12, null, childControlWidth: true, childControlHeight: false);");
+    }
+
+    [Fact]
+    public void Generate_NonOverflowingCrossAxisHeaderShell_KeepsMainAxisChildControl()
+    {
+        var doc = new HudDocument
+        {
+            Name = "PartyHeaderHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(1280),
+                    Padding = Spacing.Uniform(24)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "header",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Horizontal,
+                            Width = Dimension.Fill,
+                            Height = Dimension.Pixels(40)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "areaName",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["Text"] = "PartyStatusStrip"
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "encounterState",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["Text"] = "ENCOUNTER READY"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "PartyHeaderHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(RectOf(Header), 0f, 0, 0, 0, 0);");
+    }
+
+    [Fact]
+    public void Generate_ExplicitMainAxisShell_StillCompactsOverflow()
+    {
+        var doc = new HudDocument
+        {
+            Name = "PinnedShellHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Height = Dimension.Pixels(100),
+                    Gap = Spacing.Uniform(12),
+                    Padding = Spacing.Uniform(12)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "top",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Height = Dimension.Pixels(44)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "bottom",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Height = Dimension.Pixels(44)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "PinnedShellHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ConfigureRect(Root, width: null, height: 100f, left: null, top: null, absolute: false);");
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 4f, 12, 12, 4, 4, null, childControlWidth: true, childControlHeight: false);");
     }
 
     [Fact]
@@ -1288,6 +1402,86 @@ public sealed class UGuiGeneratorTests
 
         viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 6f, 4, 4, 4, 4, \"center\", childControlWidth: false, childControlHeight: false);");
         viewFile.Content.Should().Contain("ApplyLayoutAlignment(group,alignmentPreset);");
+    }
+
+    [Fact]
+    public void Generate_LayoutAlignmentFromLayoutSpec_EmitsUguiLayoutGroupAlignment()
+    {
+        var doc = new HudDocument
+        {
+            Name = "StatusBuffHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(56),
+                    Height = Dimension.Pixels(56),
+                    Align = Alignment.Center,
+                    Justify = Justification.Center
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "icon",
+                        Type = ComponentType.Icon,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(24),
+                            Height = Dimension.Pixels(24)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "StatusBuffHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 0f, 0, 0, 0, 0, \"center\", childControlWidth: false, childControlHeight: false);");
+    }
+
+    [Fact]
+    public void Generate_VerticalTopCenterAlignment_EmitsUguiTopCenterPreset()
+    {
+        var doc = new HudDocument
+        {
+            Name = "CharPortraitAlignmentHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(130),
+                    Gap = Spacing.Uniform(8),
+                    Align = Alignment.Center,
+                    Justify = Justification.Start
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "face",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(56),
+                            Height = Dimension.Pixels(56)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "CharPortraitAlignmentHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 8f, 0, 0, 0, 0, \"top-center\", childControlWidth: false, childControlHeight: false);");
     }
 
     [Fact]
@@ -2022,7 +2216,8 @@ public sealed class UGuiGeneratorTests
             {
                 [BoomHudMetadataKeys.OriginalPencilId] = cardId,
                 [BoomHudMetadataKeys.PencilLeft] = left,
-                [BoomHudMetadataKeys.PencilTop] = top
+                [BoomHudMetadataKeys.PencilTop] = top,
+                [BoomHudMetadataKeys.PencilPosition] = "absolute"
             },
             Children =
             [

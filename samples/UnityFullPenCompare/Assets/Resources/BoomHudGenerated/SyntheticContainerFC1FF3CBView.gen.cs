@@ -96,17 +96,17 @@ public sealed class SyntheticContainerFC1FF3CBView
 
     private void ApplyStaticValues()
     {
-        Root.style.flexDirection = ParseFlexDirection("column");
-        Root.style.width = ParseStyleLength("164px");
-        Root.style.height = ParseStyleLength("132px");
         Root.style.marginTop = ParseStyleFloat("0px");
         Root.style.marginRight = ParseStyleFloat("0px");
         Root.style.marginBottom = ParseStyleFloat("0px");
         Root.style.marginLeft = ParseStyleFloat("0px");
-        Root.style.paddingTop = ParseStyleFloat("12px");
-        Root.style.paddingRight = ParseStyleFloat("12px");
-        Root.style.paddingBottom = ParseStyleFloat("12px");
-        Root.style.paddingLeft = ParseStyleFloat("12px");
+        Root.style.flexDirection = ParseFlexDirection("column");
+        Root.style.width = ParseStyleLength("164px");
+        Root.style.height = ParseStyleLength("132px");
+        Root.style.paddingTop = ParseStyleFloat("8px");
+        Root.style.paddingRight = ParseStyleFloat("8px");
+        Root.style.paddingBottom = ParseStyleFloat("8px");
+        Root.style.paddingLeft = ParseStyleFloat("8px");
         Root.style.alignItems = ParseAlign("flex-start");
         Root.style.justifyContent = ParseJustify("flex-start");
         Root.style.display = DisplayStyle.Flex;
@@ -121,11 +121,12 @@ public sealed class SyntheticContainerFC1FF3CBView
         Root.style.borderRightColor = ParseStyleColor("#7E7E7E", null);
         Root.style.borderTopColor = ParseStyleColor("#7E7E7E", null);
         Root.style.borderBottomColor = ParseStyleColor("#7E7E7E", null);
-        Tag.style.flexDirection = ParseFlexDirection("column");
         Tag.style.marginTop = ParseStyleFloat("0px");
         Tag.style.marginRight = ParseStyleFloat("0px");
         Tag.style.marginBottom = ParseStyleFloat("0px");
         Tag.style.marginLeft = ParseStyleFloat("0px");
+        Tag.style.flexShrink = ParseStyleFloat("0");
+        Tag.style.flexDirection = ParseFlexDirection("column");
         Tag.style.paddingTop = ParseStyleFloat("0px");
         Tag.style.paddingRight = ParseStyleFloat("0px");
         Tag.style.paddingBottom = ParseStyleFloat("0px");
@@ -140,11 +141,12 @@ public sealed class SyntheticContainerFC1FF3CBView
         Tag.style.color = ParseStyleColor("#FFFFFF", null);
         Tag.style.fontSize = 10f;
         Tag.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Value.style.flexDirection = ParseFlexDirection("column");
         Value.style.marginTop = ParseStyleFloat("10px");
         Value.style.marginRight = ParseStyleFloat("0px");
         Value.style.marginBottom = ParseStyleFloat("0px");
         Value.style.marginLeft = ParseStyleFloat("0px");
+        Value.style.flexShrink = ParseStyleFloat("0");
+        Value.style.flexDirection = ParseFlexDirection("column");
         Value.style.paddingTop = ParseStyleFloat("0px");
         Value.style.paddingRight = ParseStyleFloat("0px");
         Value.style.paddingBottom = ParseStyleFloat("0px");
@@ -159,11 +161,12 @@ public sealed class SyntheticContainerFC1FF3CBView
         Value.style.color = ParseStyleColor("#AAAAAA", null);
         Value.style.fontSize = 9f;
         Value.style.unityFontStyleAndWeight = UnityEngine.FontStyle.Normal;
-        Time.style.flexDirection = ParseFlexDirection("column");
         Time.style.marginTop = ParseStyleFloat("10px");
         Time.style.marginRight = ParseStyleFloat("0px");
         Time.style.marginBottom = ParseStyleFloat("0px");
         Time.style.marginLeft = ParseStyleFloat("0px");
+        Time.style.flexShrink = ParseStyleFloat("0");
+        Time.style.flexDirection = ParseFlexDirection("column");
         Time.style.paddingTop = ParseStyleFloat("0px");
         Time.style.paddingRight = ParseStyleFloat("0px");
         Time.style.paddingBottom = ParseStyleFloat("0px");
@@ -489,9 +492,17 @@ public sealed class SyntheticContainerFC1FF3CBView
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
+        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
+            return true;
+        }
+
+        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        {
+            fontDefinition = FontDefinition.FromFont(font);
+            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -502,7 +513,7 @@ public sealed class SyntheticContainerFC1FF3CBView
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
         {
             return false;
         }

@@ -5,6 +5,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Generated.Hud.UGui
 {
 public sealed class MinimapView
 {
+    private readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? _componentOverrides;
     private IMinimapViewModel? _viewModel;
     public RectTransform Root { get; }
     public RectTransform R0 { get; }
@@ -140,20 +142,21 @@ public sealed class MinimapView
         }
     }
 
-    public MinimapView(Transform? parent = null, IMinimapViewModel? viewModel = null)
+    public MinimapView(Transform? parent = null, IMinimapViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null)
     {
+        _componentOverrides = componentOverrides;
         Root = CreateRect("MinimapRoot", parent);
         ConfigureRect(Root, width: 280f, height: 268f, left: null, top: null, absolute: false);
         ApplyLayoutSizing(Root, ignoreLayout: false, preferredWidth: 280f, preferredHeight: 268f, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(Root, horizontal: false, vertical: false);
-        ApplyVerticalLayout(Root, 2f, 16, 16, 16, 16);
+        ApplyVerticalLayout(Root, 2f, 16, 16, 16, 16, "top-left");
         ApplyStyle(Root, fg: "#111111", bg: "#111111", fontFamily: null, fontSize: null, borderColor: "#FFFFFF", borderWidth: 2f, treatAsIcon: false);
         Root.gameObject.SetActive(true);
         R0 = CreateRect("R0", Root);
-        ConfigureRect(RectOf(R0), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R0), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R0), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R0), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R0), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R0), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R0), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R0, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R0.gameObject.SetActive(true);
         Node6x8c6 = CreateRect("Node6x8c6", RectOf(R0));
@@ -217,10 +220,10 @@ public sealed class MinimapView
         ApplyStyle(Node6Hi4d, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Node6Hi4d.gameObject.SetActive(true);
         UWSWW = CreateRect("UWSWW", Root);
-        ConfigureRect(RectOf(UWSWW), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(UWSWW), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(UWSWW), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(UWSWW), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(UWSWW), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(UWSWW), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(UWSWW), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(UWSWW, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         UWSWW.gameObject.SetActive(true);
         CuaBP = CreateRect("CuaBP", RectOf(UWSWW));
@@ -284,10 +287,10 @@ public sealed class MinimapView
         ApplyStyle(FMYJi, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         FMYJi.gameObject.SetActive(true);
         R2 = CreateRect("R2", Root);
-        ConfigureRect(RectOf(R2), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R2), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R2), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R2), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R2), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R2), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R2, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R2.gameObject.SetActive(true);
         YdHfh = CreateRect("YdHfh", RectOf(R2));
@@ -351,10 +354,10 @@ public sealed class MinimapView
         ApplyStyle(LFvQh, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         LFvQh.gameObject.SetActive(true);
         R3 = CreateRect("R3", Root);
-        ConfigureRect(RectOf(R3), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R3), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R3), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R3), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R3), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R3), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R3, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R3.gameObject.SetActive(true);
         EFlKk = CreateRect("EFlKk", RectOf(R3));
@@ -418,10 +421,10 @@ public sealed class MinimapView
         ApplyStyle(YHSZ9, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         YHSZ9.gameObject.SetActive(true);
         R4 = CreateRect("R4", Root);
-        ConfigureRect(RectOf(R4), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R4), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R4), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R4), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R4), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R4), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R4), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R4, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R4.gameObject.SetActive(true);
         Q3F6h = CreateRect("Q3F6h", RectOf(R4));
@@ -485,10 +488,10 @@ public sealed class MinimapView
         ApplyStyle(Rudsi, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         Rudsi.gameObject.SetActive(true);
         R5 = CreateRect("R5", Root);
-        ConfigureRect(RectOf(R5), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R5), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R5), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R5), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R5), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R5), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R5), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R5, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R5.gameObject.SetActive(true);
         K4A32 = CreateRect("K4A32", RectOf(R5));
@@ -552,10 +555,10 @@ public sealed class MinimapView
         ApplyStyle(KUo3i, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         KUo3i.gameObject.SetActive(true);
         R6 = CreateRect("R6", Root);
-        ConfigureRect(RectOf(R6), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R6), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R6), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R6), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R6), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R6), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R6), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R6, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R6.gameObject.SetActive(true);
         CzyWO = CreateRect("CzyWO", RectOf(R6));
@@ -619,10 +622,10 @@ public sealed class MinimapView
         ApplyStyle(GtA3K, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         GtA3K.gameObject.SetActive(true);
         R7 = CreateRect("R7", Root);
-        ConfigureRect(RectOf(R7), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R7), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R7), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R7), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R7), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R7), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R7), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R7, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R7.gameObject.SetActive(true);
         WcPEQ = CreateRect("WcPEQ", RectOf(R7));
@@ -686,10 +689,10 @@ public sealed class MinimapView
         ApplyStyle(E10m7, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         E10m7.gameObject.SetActive(true);
         R8 = CreateRect("R8", Root);
-        ConfigureRect(RectOf(R8), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R8), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R8), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R8), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R8), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R8), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R8), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R8, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R8.gameObject.SetActive(true);
         Node0khbK = CreateRect("Node0khbK", RectOf(R8));
@@ -753,10 +756,10 @@ public sealed class MinimapView
         ApplyStyle(VZata, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         VZata.gameObject.SetActive(true);
         R9 = CreateRect("R9", Root);
-        ConfigureRect(RectOf(R9), width: null, height: null, left: null, top: null, absolute: false);
-        ApplyLayoutSizing(RectOf(R9), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
+        ConfigureRect(RectOf(R9), width: 248f, height: null, left: null, top: null, absolute: false);
+        ApplyLayoutSizing(RectOf(R9), ignoreLayout: false, preferredWidth: 248f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: 1f);
         ApplyContentSizeFit(RectOf(R9), horizontal: false, vertical: false);
-        ApplyHorizontalLayout(RectOf(R9), 2f, 0, 0, 0, 0);
+        ApplyHorizontalLayout(RectOf(R9), 2f, 0, 0, 0, 0, "top-left");
         ApplyStyle(R9, fg: null, bg: null, fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         R9.gameObject.SetActive(true);
         PHSWw = CreateRect("PHSWw", RectOf(R9));
@@ -819,11 +822,13 @@ public sealed class MinimapView
         ApplyContentSizeFit(RectOf(QZs7g), horizontal: false, vertical: false);
         ApplyStyle(QZs7g, fg: "#0A0A0A", bg: "#0A0A0A", fontFamily: null, fontSize: null, borderColor: null, borderWidth: null, treatAsIcon: false);
         QZs7g.gameObject.SetActive(true);
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    private MinimapView(RectTransform root, IMinimapViewModel? viewModel)
+    private MinimapView(RectTransform root, IMinimapViewModel? viewModel, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides)
     {
+        _componentOverrides = componentOverrides;
         Root = root;
         R0 = RequireRect(Root, "R0");
         Node6x8c6 = RequireRect(Root, "R0/Node6x8c6");
@@ -935,10 +940,16 @@ public sealed class MinimapView
         SumhN = RequireRect(Root, "R9/SumhN");
         Node8JgdD = RequireRect(Root, "R9/Node8JgdD");
         QZs7g = RequireRect(Root, "R9/QZs7g");
+        ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
 
-    public static MinimapView Bind(RectTransform root, IMinimapViewModel? viewModel = null) => new(root, viewModel);
+    public static MinimapView Bind(RectTransform root, IMinimapViewModel? viewModel = null, IReadOnlyDictionary<string, IReadOnlyDictionary<string, object?>>? componentOverrides = null) => new(root, viewModel, componentOverrides);
+
+    private void ApplyInstanceOverrides()
+    {
+        if (_componentOverrides == null) return;
+    }
 
     public void Refresh()
     {
@@ -946,6 +957,22 @@ public sealed class MinimapView
     }
 
     private void OnChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+    private bool TryGetComponentOverrideValue(string nodePath, string propertyName, out object? value)
+    {
+        value = null;
+        if (_componentOverrides == null || !_componentOverrides.TryGetValue(nodePath, out var propertyOverrides)) return false;
+        if (propertyOverrides.TryGetValue(propertyName, out value)) return true;
+        foreach (var candidate in propertyOverrides)
+        {
+            if (string.Equals(candidate.Key, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = candidate.Value;
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
@@ -957,20 +984,30 @@ public sealed class MinimapView
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
     private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
-    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
-    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=true;group.childControlHeight=true;group.childForceExpandWidth=false;group.childForceExpandHeight=false;}
+    private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
+    private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyLayoutSizing(RectTransform rect,bool ignoreLayout,float? preferredWidth,float? preferredHeight,float? flexibleWidth,float? flexibleHeight){var element=rect.gameObject.GetComponent<LayoutElement>()??rect.gameObject.AddComponent<LayoutElement>();element.ignoreLayout=ignoreLayout;element.preferredWidth=preferredWidth??-1f;element.preferredHeight=preferredHeight??-1f;element.flexibleWidth=flexibleWidth??-1f;element.flexibleHeight=flexibleHeight??-1f;}
     private static void ApplyContentSizeFit(RectTransform rect,bool horizontal,bool vertical){var fitter=rect.gameObject.GetComponent<ContentSizeFitter>()??rect.gameObject.AddComponent<ContentSizeFitter>();fitter.horizontalFit=horizontal?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;fitter.verticalFit=vertical?ContentSizeFitter.FitMode.PreferredSize:ContentSizeFitter.FitMode.Unconstrained;}
     private static void ConfigureRect(RectTransform rect,float? width,float? height,float? left,float? top,bool absolute){if(absolute){rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);rect.anchoredPosition=new Vector2(left??0f,-(top??0f));}if(width.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,width.Value);if(height.HasValue)rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height.Value);}
+    private static void ApplyRectAnchorPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);break;case "top-center":rect.anchorMin=new Vector2(0.5f,1f);rect.anchorMax=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.anchorMin=new Vector2(1f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "center":case "middle-center":rect.anchorMin=new Vector2(0.5f,0.5f);rect.anchorMax=new Vector2(0.5f,0.5f);break;case "stretch":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-horizontal":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(1f,1f);break;case "stretch-vertical":rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(0f,1f);break;}}
+    private static void ApplyRectPivotPreset(RectTransform rect,string preset){switch(NormalizeRectPreset(preset)){case "top-left":case "start":rect.pivot=new Vector2(0f,1f);break;case "top-center":rect.pivot=new Vector2(0.5f,1f);break;case "top-right":case "end":rect.pivot=new Vector2(1f,1f);break;case "center":case "middle-center":rect.pivot=new Vector2(0.5f,0.5f);break;case "bottom-left":rect.pivot=new Vector2(0f,0f);break;case "bottom-center":rect.pivot=new Vector2(0.5f,0f);break;case "bottom-right":rect.pivot=new Vector2(1f,0f);break;}}
+    private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
+    private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
+    private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
+    private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
+    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
+    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetToggleText(Toggle toggle,string? value){if(TryLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

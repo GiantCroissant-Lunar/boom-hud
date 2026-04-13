@@ -70,6 +70,7 @@ internal sealed class UnityBackendPlanner
         var plannedName = ReserveNodeName(baseName);
         var policy = _ruleResolver?.Resolve(_documentName, node, new RuleSelectionContext(parent, grandparent, siblingIndex)) ?? new ResolvedGeneratorPolicy();
         var componentView = ResolveComponentView(node, document);
+        var referencedComponentRoot = ResolveReferencedComponentRoot(node, document);
         var visualResolved = visualPlan?.Resolve(node.Id);
         var mapping = MapElement(node, policy, componentView != null);
         var children = componentView == null
@@ -88,6 +89,7 @@ internal sealed class UnityBackendPlanner
             RelativePath = relativePath,
             Name = plannedName,
             ComponentView = componentView,
+            ReferencedComponentRoot = referencedComponentRoot,
             ElementType = mapping.ElementType,
             UxmlTag = mapping.UxmlTag,
             CssClass = "boomhud-" + ToKebabCase(plannedName),
@@ -124,6 +126,18 @@ internal sealed class UnityBackendPlanner
         }
 
         return component.Name;
+    }
+
+    private static ComponentNode? ResolveReferencedComponentRoot(ComponentNode node, HudDocument document)
+    {
+        if (node.ComponentRefId == null || node.Children.Count > 0)
+        {
+            return null;
+        }
+
+        return document.Components.TryGetValue(node.ComponentRefId, out var component)
+            ? component.Root
+            : null;
     }
 
     private void RegisterBindingPaths(ComponentNode node)

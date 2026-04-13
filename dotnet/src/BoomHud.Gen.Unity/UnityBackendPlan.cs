@@ -25,6 +25,8 @@ internal sealed record UnityPlannedNode
 
     public string? ComponentView { get; init; }
 
+    public ComponentNode? ReferencedComponentRoot { get; init; }
+
     public required string ElementType { get; init; }
 
     public required string UxmlTag { get; init; }

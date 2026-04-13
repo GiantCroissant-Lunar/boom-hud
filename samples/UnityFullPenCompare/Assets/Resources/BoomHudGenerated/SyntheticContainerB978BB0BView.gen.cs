@@ -82,13 +82,13 @@ public sealed class SyntheticContainerB978BB0BView
 
     private void ApplyStaticValues()
     {
-        Root.style.flexDirection = ParseFlexDirection("column");
-        Root.style.width = ParseStyleLength("56px");
-        Root.style.height = ParseStyleLength("56px");
         Root.style.marginTop = ParseStyleFloat("0px");
         Root.style.marginRight = ParseStyleFloat("0px");
         Root.style.marginBottom = ParseStyleFloat("0px");
         Root.style.marginLeft = ParseStyleFloat("0px");
+        Root.style.flexDirection = ParseFlexDirection("column");
+        Root.style.width = ParseStyleLength("56px");
+        Root.style.height = ParseStyleLength("56px");
         Root.style.paddingTop = ParseStyleFloat("0px");
         Root.style.paddingRight = ParseStyleFloat("0px");
         Root.style.paddingBottom = ParseStyleFloat("0px");
@@ -107,13 +107,13 @@ public sealed class SyntheticContainerB978BB0BView
         Root.style.borderRightColor = ParseStyleColor("#8C8C8C", null);
         Root.style.borderTopColor = ParseStyleColor("#8C8C8C", null);
         Root.style.borderBottomColor = ParseStyleColor("#8C8C8C", null);
-        BuffIcon1.style.flexDirection = ParseFlexDirection("column");
-        BuffIcon1.style.width = ParseStyleLength("24px");
-        BuffIcon1.style.height = ParseStyleLength("24px");
         BuffIcon1.style.marginTop = ParseStyleFloat("0px");
         BuffIcon1.style.marginRight = ParseStyleFloat("0px");
         BuffIcon1.style.marginBottom = ParseStyleFloat("0px");
         BuffIcon1.style.marginLeft = ParseStyleFloat("0px");
+        BuffIcon1.style.flexDirection = ParseFlexDirection("column");
+        BuffIcon1.style.width = ParseStyleLength("24px");
+        BuffIcon1.style.height = ParseStyleLength("24px");
         BuffIcon1.style.paddingTop = ParseStyleFloat("0px");
         BuffIcon1.style.paddingRight = ParseStyleFloat("0px");
         BuffIcon1.style.paddingBottom = ParseStyleFloat("0px");
@@ -438,9 +438,17 @@ public sealed class SyntheticContainerB978BB0BView
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
+        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
+            return true;
+        }
+
+        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        {
+            fontDefinition = FontDefinition.FromFont(font);
+            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -451,7 +459,7 @@ public sealed class SyntheticContainerB978BB0BView
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
         {
             return false;
         }

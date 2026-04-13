@@ -511,7 +511,7 @@
               {
                 "StableId": "root/1/1/0",
                 "SourceId": "Row0",
-                "SourceNodeId": null,
+                "SourceNodeId": "QSB08",
                 "Kind": 0,
                 "SourceType": 15,
                 "ComponentRefId": "synthetic:9463ca59ee2c",
@@ -1482,7 +1482,7 @@
               {
                 "StableId": "root/1/1/3",
                 "SourceId": "Row3",
-                "SourceNodeId": null,
+                "SourceNodeId": "QSB29",
                 "Kind": 0,
                 "SourceType": 15,
                 "ComponentRefId": "synthetic:9463ca59ee2c",
@@ -2139,7 +2139,7 @@
           {
             "StableId": "root/2/1",
             "SourceId": "Objective1",
-            "SourceNodeId": null,
+            "SourceNodeId": "QSB45",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:c520ac99e304",
@@ -2188,7 +2188,7 @@
           {
             "StableId": "root/2/2",
             "SourceId": "Objective2",
-            "SourceNodeId": null,
+            "SourceNodeId": "QSB51",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:c520ac99e304",
@@ -2247,7 +2247,7 @@
           {
             "StableId": "root/2/3",
             "SourceId": "Objective3",
-            "SourceNodeId": null,
+            "SourceNodeId": "QSB57",
             "Kind": 0,
             "SourceType": 15,
             "ComponentRefId": "synthetic:c520ac99e304",

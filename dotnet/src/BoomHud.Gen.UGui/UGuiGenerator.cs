@@ -267,7 +267,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             builder.AppendLine($"{indent}var {local} = new {node.ComponentView}View({parentAccessor}, null, {BuildComponentOverrideLiteral(node.Source) ?? "null"});");
             builder.AppendLine($"{indent}{node.FieldName} = {local}.Root;");
             builder.AppendLine($"{indent}{node.FieldName}.name = \"{node.Name}\";");
-            if (!IsSyntheticComponentInstance(node.Source))
+            if (IsSyntheticComponentInstance(node.Source))
+            {
+                AppendSyntheticInstancePlacement(builder, node, node.FieldName, parentNode, indentLevel);
+            }
+            else
             {
                 AppendSetup(builder, node, node.FieldName, parentNode, components, diagnostics, indentLevel);
             }
@@ -301,7 +305,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var pivotPreset = LayoutPolicyService.ResolvePivotPreset(node.Policy);
         var rectTransformMode = LayoutPolicyService.ResolveRectTransformMode(node.Policy);
         var edgeInsetPolicy = LayoutPolicyService.ResolveEdgeInsetPolicy(node.Policy);
-        var flexAlignmentPreset = LayoutPolicyService.ResolveFlexAlignmentPreset(node.Policy);
+        var flexAlignmentPreset = ResolveLayoutAlignmentPreset(node);
 
         var configuredWidth = absolute
             ? ConfigureAbsoluteSize(node, widthDimension, "width")
@@ -419,6 +423,61 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         => node.InstanceOverrides.TryGetValue(BoomHudMetadataKeys.SyntheticComponentInstance, out var value)
            && value is bool isSynthetic
            && isSynthetic;
+
+    private static void AppendSyntheticInstancePlacement(
+        StringBuilder builder,
+        PlannedNode node,
+        string accessor,
+        PlannedNode? parentNode,
+        int indentLevel)
+    {
+        var indent = new string(' ', indentLevel * 4);
+        var rect = accessor == "Root" ? "Root" : $"RectOf({accessor})";
+        var parentLayout = parentNode?.Source.Layout?.Type;
+        var edgeContract = node.VisualNode?.EdgeContract;
+        var absolute = parentLayout == LayoutType.Absolute
+                       || edgeContract?.Participation == LayoutParticipation.Overlay
+                       || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
+        var anchorPreset = LayoutPolicyService.ResolveAnchorPreset(node.Policy);
+        var pivotPreset = LayoutPolicyService.ResolvePivotPreset(node.Policy);
+        var rectTransformMode = LayoutPolicyService.ResolveRectTransformMode(node.Policy);
+        var edgeInsetPolicy = LayoutPolicyService.ResolveEdgeInsetPolicy(node.Policy);
+
+        if (!absolute
+            && string.IsNullOrWhiteSpace(anchorPreset)
+            && string.IsNullOrWhiteSpace(pivotPreset)
+            && string.IsNullOrWhiteSpace(rectTransformMode)
+            && string.IsNullOrWhiteSpace(edgeInsetPolicy))
+        {
+            return;
+        }
+
+        builder.AppendLine($"{indent}ConfigureRect({rect}, width: null, height: null, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
+        if (!string.IsNullOrWhiteSpace(anchorPreset))
+        {
+            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {ToStringLiteral(anchorPreset)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(pivotPreset))
+        {
+            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {ToStringLiteral(pivotPreset)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(rectTransformMode))
+        {
+            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {ToStringLiteral(rectTransformMode)});");
+        }
+
+        if (!string.IsNullOrWhiteSpace(edgeInsetPolicy))
+        {
+            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {ToStringLiteral(edgeInsetPolicy)});");
+        }
+
+        if (absolute)
+        {
+            builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);");
+        }
+    }
 
     private static void AppendComponentOverrideAssignmentsRecursive(StringBuilder builder, PlannedNode node, int indentLevel, ref int overrideIndex)
     {
@@ -906,6 +965,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     {
         var resolvedPadding = padding ?? Spacing.Zero;
         var horizontal = node.Source.Layout?.Type == LayoutType.Horizontal;
+        var mainAxis = horizontal ? "width" : "height";
         var settings = new ShellLayoutSettings
         {
             Gap = Gap(gap, horizontal),
@@ -913,6 +973,30 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             ChildControlWidth = ShouldControlChildAxis(node, "width"),
             ChildControlHeight = ShouldControlChildAxis(node, "height")
         };
+
+        if (ShouldDisableMainAxisChildControlForCrossAxisFillShell(node, parentNode, mainAxis))
+        {
+            settings = settings with
+            {
+                ChildControlWidth = horizontal ? false : settings.ChildControlWidth,
+                ChildControlHeight = horizontal ? settings.ChildControlHeight : false
+            };
+        }
+
+        var crossAxis = horizontal ? "height" : "width";
+        if (ShouldDisableCrossAxisChildControlForOverflowingChildShells(node, crossAxis))
+        {
+            settings = settings with
+            {
+                ChildControlWidth = horizontal ? settings.ChildControlWidth : false,
+                ChildControlHeight = horizontal ? false : settings.ChildControlHeight
+            };
+        }
+
+        if (ShouldPreserveSourceShellSpacing(node, parentNode, mainAxis))
+        {
+            return settings;
+        }
 
         return TryAdjustShellOverflow(node, parentNode, settings) is { } adjusted
             ? adjusted
@@ -975,6 +1059,91 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             ChildControlHeight = mainAxis == "height" ? false : settings.ChildControlHeight
         };
     }
+
+    private static bool ShouldPreserveSourceShellSpacing(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (parentNode == null)
+        {
+            return false;
+        }
+
+        if (!IsCrossAxisOfParent(parentNode, axis))
+        {
+            return false;
+        }
+
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (HasPinnedSize(dimension))
+        {
+            return false;
+        }
+
+        var edgeContract = node.VisualNode?.EdgeContract;
+        if (edgeContract == null)
+        {
+            return true;
+        }
+
+        var overflowBehavior = axis == "width"
+            ? edgeContract.OverflowX
+            : edgeContract.OverflowY;
+        return overflowBehavior != OverflowBehavior.Clip;
+    }
+
+    private static bool ShouldDisableMainAxisChildControlForCrossAxisFillShell(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (parentNode == null || !IsCrossAxisOfParent(parentNode, axis))
+        {
+            return false;
+        }
+
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (dimension?.Unit is not (DimensionUnit.Fill or DimensionUnit.Star))
+        {
+            return false;
+        }
+
+        if (node.Source.Layout?.ClipContent == true)
+        {
+            return false;
+        }
+
+        var edgeContract = node.VisualNode?.EdgeContract;
+        var overflowBehavior = axis == "width"
+            ? edgeContract?.OverflowX
+            : edgeContract?.OverflowY;
+        if (overflowBehavior == OverflowBehavior.Clip)
+        {
+            return false;
+        }
+
+        var horizontal = node.Source.Layout?.Type == LayoutType.Horizontal;
+        var mainAxis = horizontal ? "width" : "height";
+        if (!string.Equals(axis, mainAxis, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var settings = new ShellLayoutSettings
+        {
+            Gap = Gap(LayoutPolicyService.ResolveGap(node.Source.Layout?.Gap, node.Policy), horizontal),
+            Padding = LayoutPolicyService.ResolvePadding(node.Source.Layout?.Padding, node.Policy) ?? Spacing.Zero,
+            ChildControlWidth = ShouldControlChildAxis(node, "width"),
+            ChildControlHeight = ShouldControlChildAxis(node, "height")
+        };
+        var available = ResolveAvailableMainAxis(node, parentNode, mainAxis);
+        var preferred = EstimatePreferredMainAxis(node, settings, mainAxis);
+        var overflow = preferred - available.GetValueOrDefault();
+        return available.HasValue
+            && overflow is > 6d and <= 64d;
+    }
+
+    private static bool ShouldDisableCrossAxisChildControlForOverflowingChildShells(PlannedNode node, string axis)
+        => node.Children.Any(child => ShouldDisableMainAxisChildControlForCrossAxisFillShell(child, node, axis));
 
     private static double EstimatePreferredMainAxis(PlannedNode node, ShellLayoutSettings settings, string axis)
     {
@@ -1310,6 +1479,94 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return $"ApplyVerticalLayout({baseArgs}, {ToNullableStringLiteral(alignmentPreset)}, childControlWidth: {Bool(settings.ChildControlWidth)}, childControlHeight: {Bool(settings.ChildControlHeight)});";
     }
 
+    private static string? ResolveLayoutAlignmentPreset(PlannedNode node)
+    {
+        if (LayoutPolicyService.ResolveFlexAlignmentPreset(node.Policy) is { } policyPreset)
+        {
+            return policyPreset;
+        }
+
+        return ResolveLayoutAlignmentPreset(node.Source.Layout);
+    }
+
+    private static string? ResolveLayoutAlignmentPreset(LayoutSpec? layout)
+    {
+        if (layout?.Type is not (LayoutType.Horizontal or LayoutType.Vertical or LayoutType.Stack))
+        {
+            return null;
+        }
+
+        if (layout.Align is null && layout.Justify is null)
+        {
+            return null;
+        }
+
+        var isHorizontal = layout.Type == LayoutType.Horizontal;
+        var horizontalPosition = isHorizontal
+            ? ResolveHorizontalAlignment(layout.Justify)
+            : ResolveHorizontalAlignment(layout.Align);
+        var verticalPosition = isHorizontal
+            ? ResolveVerticalAlignment(layout.Align)
+            : ResolveVerticalAlignment(layout.Justify);
+
+        if (horizontalPosition == "stretch" || verticalPosition == "stretch")
+        {
+            return "stretch";
+        }
+
+        return (verticalPosition ?? "top", horizontalPosition ?? "left") switch
+        {
+            ("top", "left") => "top-left",
+            ("top", "center") => "top-center",
+            ("top", "right") => "top-right",
+            ("middle", "left") => "middle-left",
+            ("middle", "center") => "center",
+            ("middle", "right") => "middle-right",
+            ("bottom", "left") => "bottom-left",
+            ("bottom", "center") => "bottom-center",
+            ("bottom", "right") => "bottom-right",
+            _ => null
+        };
+    }
+
+    private static string? ResolveHorizontalAlignment(Alignment? align)
+        => align switch
+        {
+            null or Alignment.Start => "left",
+            Alignment.Center => "center",
+            Alignment.End => "right",
+            Alignment.Stretch => "stretch",
+            _ => null
+        };
+
+    private static string? ResolveHorizontalAlignment(Justification? justify)
+        => justify switch
+        {
+            null or Justification.Start => "left",
+            Justification.Center => "center",
+            Justification.End => "right",
+            _ => null
+        };
+
+    private static string? ResolveVerticalAlignment(Alignment? align)
+        => align switch
+        {
+            null or Alignment.Start => "top",
+            Alignment.Center => "middle",
+            Alignment.End => "bottom",
+            Alignment.Stretch => "stretch",
+            _ => null
+        };
+
+    private static string? ResolveVerticalAlignment(Justification? justify)
+        => justify switch
+        {
+            null or Justification.Start => "top",
+            Justification.Center => "middle",
+            Justification.End => "bottom",
+            _ => null
+        };
+
     private static string ToRectOffsetArgs(Spacing? spacing)
     {
         var top = ToRectOffsetLiteral(spacing?.Top);
@@ -1443,7 +1700,9 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
     private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
-    private static void ApplyBorder(GameObject go,Color color,float width){var outline=go.GetComponent<Outline>()??go.AddComponent<Outline>();outline.effectColor=color;outline.effectDistance=new Vector2(width,-width);outline.useGraphicAlpha=false;}
+    private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
+    private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}
+    private static void ConfigureBorderSegment(RectTransform rect,Vector2 anchorMin,Vector2 anchorMax,Vector2 pivot,Vector2 anchoredPosition,Vector2 sizeDelta){rect.anchorMin=anchorMin;rect.anchorMax=anchorMax;rect.pivot=pivot;rect.anchoredPosition=anchoredPosition;rect.sizeDelta=sizeDelta;}
     private static Image EnsureImage(GameObject go){var image=go.GetComponent<Image>();if(image==null){if(go.GetComponent<CanvasRenderer>()==null)go.AddComponent<CanvasRenderer>();image=go.AddComponent<Image>();}return image;}
     private static RectTransform RectOf(Component component)=>component.GetComponent<RectTransform>();
     private static RectTransform RectOf(RectTransform rect)=>rect;

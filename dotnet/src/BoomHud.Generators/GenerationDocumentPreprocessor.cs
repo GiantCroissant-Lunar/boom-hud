@@ -437,7 +437,7 @@ public static class GenerationDocumentPreprocessor
                     SlotKey = replacement.SlotKey,
                     Type = replacement.Type,
                     ComponentRefId = replacement.ComponentId,
-                    InstanceOverrides = BuildReplacementOverrides(replacement.PropertyOverrides)
+                    InstanceOverrides = BuildReplacementOverrides(node, replacement.PropertyOverrides)
                 };
             }
 
@@ -457,12 +457,21 @@ public static class GenerationDocumentPreprocessor
         }
 
         private static Dictionary<string, object?> BuildReplacementOverrides(
+            ComponentNode occurrence,
             SortedDictionary<string, SortedDictionary<string, object?>> propertyOverrides)
         {
             var overrides = new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 [BoomHudMetadataKeys.SyntheticComponentInstance] = true
             };
+
+            foreach (var metadataKey in SyntheticInstanceMetadataKeys)
+            {
+                if (occurrence.InstanceOverrides.TryGetValue(metadataKey, out var metadataValue))
+                {
+                    overrides[metadataKey] = metadataValue;
+                }
+            }
 
             if (propertyOverrides.Count > 0)
             {
@@ -826,8 +835,17 @@ public static class GenerationDocumentPreprocessor
                 BoomHudMetadataKeys.OriginalPencilId => true,
                 BoomHudMetadataKeys.PencilLeft => true,
                 BoomHudMetadataKeys.PencilTop => true,
+                BoomHudMetadataKeys.PencilPosition => true,
                 _ => false
             };
+
+        private static readonly string[] SyntheticInstanceMetadataKeys =
+        [
+            BoomHudMetadataKeys.OriginalPencilId,
+            BoomHudMetadataKeys.PencilLeft,
+            BoomHudMetadataKeys.PencilTop,
+            BoomHudMetadataKeys.PencilPosition
+        ];
 
         private static string SerializeDimensions(IReadOnlyList<Dimension>? dimensions)
             => dimensions == null ? string.Empty : string.Join(",", dimensions.Select(static dimension => SerializeDimension(dimension)));
