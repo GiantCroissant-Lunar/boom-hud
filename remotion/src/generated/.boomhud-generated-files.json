@@ -1,0 +1,25 @@
+{
+  "Scopes": {
+    "ExploreHud": [
+      "ActionButtonView.tsx",
+      "CharPortraitView.tsx",
+      "ExploreHud.synthetic-components.json",
+      "ExploreHudView.tsx",
+      "IActionButtonViewModel.g.ts",
+      "ICharPortraitViewModel.g.ts",
+      "IExploreHudViewModel.g.ts",
+      "IMessageLogViewModel.g.ts",
+      "IMinimapViewModel.g.ts",
+      "IStatBarViewModel.g.ts",
+      "IStatusIconViewModel.g.ts",
+      "ISyntheticContainer0C2C0750ViewModel.g.ts",
+      "ISyntheticContainerC701B3C7ViewModel.g.ts",
+      "MessageLogView.tsx",
+      "MinimapView.tsx",
+      "StatBarView.tsx",
+      "StatusIconView.tsx",
+      "SyntheticContainer0C2C0750View.tsx",
+      "SyntheticContainerC701B3C7View.tsx"
+    ]
+  }
+}

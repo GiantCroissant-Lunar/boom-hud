@@ -1,0 +1,54 @@
+.boomhud-worker-info-one {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 320px;
+    height: 56px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #24272E;
+    background-color: #24272E;
+}
+
+.boomhud-worker-info-one-name {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F0E5D2;
+    font-size: 8px;
+    line-height: 12px;
+    -unity-font-style: normal;
+}
+
+.boomhud-worker-info-one-meta {
+    margin-top: 6px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #94D5F5;
+    font-size: 8px;
+    line-height: 12px;
+    -unity-font-style: normal;
+}
+

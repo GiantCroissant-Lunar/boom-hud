@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="TileWins" class="boomhud-tile-wins">
+        <ui:Label name="TileWinsLabel" class="boomhud-tile-wins-label" />
+        <ui:Label name="TileWinsValue" class="boomhud-tile-wins-value" />
+    </ui:VisualElement>
+</ui:UXML>

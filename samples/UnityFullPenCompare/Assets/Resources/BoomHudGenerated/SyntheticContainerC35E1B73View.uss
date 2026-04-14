@@ -1,0 +1,63 @@
+.boomhud-card51 {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 220px;
+    height: 118px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #181D25;
+    background-color: #181D25;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #B61A22;
+    border-right-color: #B61A22;
+    border-top-color: #B61A22;
+    border-bottom-color: #B61A22;
+}
+
+.boomhud-mod-box51 {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 132px;
+    height: 48px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #525760;
+    background-color: #525760;
+}
+
+.boomhud-mod-label51 {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 9px;
+    -unity-font-style: normal;
+}
+

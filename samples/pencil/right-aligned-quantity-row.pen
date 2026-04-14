@@ -1,0 +1,41 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "RAQ01",
+      "name": "RightAlignedQuantityRow",
+      "width": 272,
+      "height": 60,
+      "fill": "#111111",
+      "stroke": { "thickness": 2, "fill": "#686868" },
+      "layout": "horizontal",
+      "alignItems": "center",
+      "justifyContent": "space_between",
+      "gap": 10,
+      "padding": 12,
+      "children": [
+        {
+          "type": "text",
+          "id": "RAQ02",
+          "name": "MaterialLabel",
+          "fill": "#E8E8E8",
+          "content": "COPPER",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "RAQ03",
+          "name": "MaterialQty",
+          "fill": "#FFFFFF",
+          "content": "12 pcs",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

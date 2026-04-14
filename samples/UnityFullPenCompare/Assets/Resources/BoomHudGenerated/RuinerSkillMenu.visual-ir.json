@@ -1,0 +1,2320 @@
+{
+  "DocumentName": "RuinerSkillMenu",
+  "BackendFamily": "unity",
+  "SourceGenerationMode": "post-v1-prepared-hud-document",
+  "Root": {
+    "StableId": "root",
+    "SourceId": "RuinerSkillMenu",
+    "SourceNodeId": "RSM01",
+    "Kind": 0,
+    "SourceType": 15,
+    "ComponentRefId": null,
+    "SemanticClass": "container",
+    "MetricProfileId": null,
+    "StaticProperties": {},
+    "PropertyOverrides": {},
+    "Box": {
+      "SourceType": 15,
+      "LayoutType": 5,
+      "Width": {
+        "Value": 1920,
+        "Unit": 0
+      },
+      "Height": {
+        "Value": 1080,
+        "Unit": 0
+      },
+      "MinWidth": null,
+      "MinHeight": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "Gap": null,
+      "Padding": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Margin": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Left": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "Top": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "IsAbsolutePositioned": false,
+      "ClipContent": false,
+      "Align": 0,
+      "Justify": 0,
+      "Weight": null,
+      "Background": "#09070A",
+      "Border": null,
+      "BorderRadius": null,
+      "Opacity": null
+    },
+    "EdgeContract": {
+      "Participation": 0,
+      "WidthSizing": 0,
+      "HeightSizing": 0,
+      "HorizontalPin": 0,
+      "VerticalPin": 0,
+      "OverflowX": 0,
+      "OverflowY": 0,
+      "WrapPressure": 0
+    },
+    "Typography": null,
+    "Icon": null,
+    "Children": [
+      {
+        "StableId": "root/0",
+        "SourceId": "BackdropTint",
+        "SourceNodeId": "RSM02",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 1920,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 1080,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#09070AE0",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/1",
+        "SourceId": "OuterRing",
+        "SourceNodeId": "RSM03",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 520,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 520,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 730,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 262,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#2A030A44",
+          "Border": {
+            "Style": 5,
+            "Color": "#A30D23",
+            "Width": 4
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/2",
+        "SourceId": "InnerRing",
+        "SourceNodeId": "RSM04",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 280,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 280,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 850,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 382,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#32060D66",
+          "Border": {
+            "Style": 5,
+            "Color": "#7F0D1D",
+            "Width": 2
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/3",
+        "SourceId": "SkillNameLineOne",
+        "SourceNodeId": "RSM05",
+        "Kind": 1,
+        "SourceType": 0,
+        "ComponentRefId": null,
+        "SemanticClass": "pixel-text",
+        "MetricProfileId": "metric-1",
+        "StaticProperties": {
+          "text": "ENERGY"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 0,
+          "LayoutType": 1,
+          "Width": null,
+          "Height": null,
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 908,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 500,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 2,
+          "HeightSizing": 2,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": {
+          "SemanticClass": "pixel-text",
+          "ResolvedFontFamily": "Press Start 2P",
+          "ResolvedFontSize": 18,
+          "ResolvedLineHeight": null,
+          "ResolvedLetterSpacing": null,
+          "WrapText": false,
+          "TextGrowth": null,
+          "SizeBand": "large"
+        },
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/4",
+        "SourceId": "SkillNameLineTwo",
+        "SourceNodeId": "RSM06",
+        "Kind": 1,
+        "SourceType": 0,
+        "ComponentRefId": null,
+        "SemanticClass": "pixel-text",
+        "MetricProfileId": "metric-1",
+        "StaticProperties": {
+          "text": "SHIELD"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 0,
+          "LayoutType": 1,
+          "Width": null,
+          "Height": null,
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 874,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 536,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 2,
+          "HeightSizing": 2,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": {
+          "SemanticClass": "pixel-text",
+          "ResolvedFontFamily": "Press Start 2P",
+          "ResolvedFontSize": 18,
+          "ResolvedLineHeight": null,
+          "ResolvedLetterSpacing": null,
+          "WrapText": false,
+          "TextGrowth": null,
+          "SizeBand": "large"
+        },
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/5",
+        "SourceId": "TopPrompt",
+        "SourceNodeId": "RSM07",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 58,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 32,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 931,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 174,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/5/0",
+            "SourceId": "TopPromptText",
+            "SourceNodeId": "RSM08",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-2",
+            "StaticProperties": {
+              "text": "A"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 10,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "small"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/6",
+        "SourceId": "LeftPrompt",
+        "SourceNodeId": "RSM09",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 98,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 34,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 602,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 716,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/6/0",
+            "SourceId": "LeftPromptText",
+            "SourceNodeId": "RSM10",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-3",
+            "StaticProperties": {
+              "text": "SPACE"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 9,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "small"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/7",
+        "SourceId": "RightPrompt",
+        "SourceNodeId": "RSM11",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 122,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 54,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 4,
+            "Right": 4,
+            "Bottom": 4,
+            "Left": 4
+          },
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1236,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 704,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/7/0",
+            "SourceId": "RightPromptLineOne",
+            "SourceNodeId": "RSM12",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-4",
+            "StaticProperties": {
+              "text": "LEFT"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 8,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "xsmall"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/7/1",
+            "SourceId": "RightPromptLineTwo",
+            "SourceNodeId": "RSM13",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-4",
+            "StaticProperties": {
+              "text": "SHIFT"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 8,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "xsmall"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/8",
+        "SourceId": "HealthHud",
+        "SourceNodeId": "RSM14",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 108,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 118,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 10,
+            "Right": 10,
+            "Bottom": 10,
+            "Left": 10
+          },
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 36,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 24,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#09070A00",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/8/0",
+            "SourceId": "HeartRow",
+            "SourceNodeId": "RSM15",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-5",
+            "StaticProperties": {
+              "text": "OOOOO"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 16,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "large"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/8/1",
+            "SourceId": "CellRow",
+            "SourceNodeId": "RSM16",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-6",
+            "StaticProperties": {
+              "text": "[][][][][]"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 12,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/9",
+        "SourceId": "TopIcon",
+        "SourceNodeId": "RSM17",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "crosshair"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 916,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 320,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/10",
+        "SourceId": "UpperRightIcon",
+        "SourceNodeId": "RSM18",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "flame"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1082,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 334,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/11",
+        "SourceId": "RightIcon",
+        "SourceNodeId": "RSM19",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "sparkles"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1164,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 488,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/12",
+        "SourceId": "LowerRightIcon",
+        "SourceNodeId": "RSM20",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "brain"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1114,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 646,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/13",
+        "SourceId": "BottomIcon",
+        "SourceNodeId": "RSM21",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "shield"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 960,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 710,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/14",
+        "SourceId": "LowerLeftIcon",
+        "SourceNodeId": "RSM22",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "bug"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 820,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 698,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/15",
+        "SourceId": "SelectedIcon",
+        "SourceNodeId": "RSM23",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-8",
+        "StaticProperties": {
+          "text": "person-standing"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 38,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 38,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 706,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 590,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 38,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/16",
+        "SourceId": "SelectedIconPlate",
+        "SourceNodeId": "RSM24",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 72,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 72,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 690,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 574,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#F4EDF0",
+          "Border": {
+            "Style": 5,
+            "Color": "#E1C7CE",
+            "Width": 2
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/17",
+        "SourceId": "LeftIcon",
+        "SourceNodeId": "RSM25",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-7",
+        "StaticProperties": {
+          "text": "gamepad-2"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 28,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 676,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 478,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 28,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      },
+      {
+        "StableId": "root/18",
+        "SourceId": "MicroPrompt",
+        "SourceNodeId": "RSM26",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 0,
+          "Width": {
+            "Value": 26,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 10,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 752,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 642,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/19",
+        "SourceId": "MiniHudOne",
+        "SourceNodeId": "RSM27",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 0,
+          "Width": {
+            "Value": 44,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 18,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1538,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 868,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/20",
+        "SourceId": "MiniHudTwo",
+        "SourceNodeId": "RSM28",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 0,
+          "Width": {
+            "Value": 58,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 18,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1608,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 922,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#FF2040",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/21",
+        "SourceId": "MiniHudIcon",
+        "SourceNodeId": "RSM29",
+        "Kind": 2,
+        "SourceType": 9,
+        "ComponentRefId": null,
+        "SemanticClass": "icon-glyph",
+        "MetricProfileId": "metric-9",
+        "StaticProperties": {
+          "text": "swords"
+        },
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 9,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 34,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 34,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1658,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 846,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": null,
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": {
+          "SemanticClass": "icon-glyph",
+          "ResolvedFontFamily": "lucide",
+          "ResolvedFontSize": 34,
+          "BaselineOffset": 0,
+          "OpticalCentering": true,
+          "SizeMode": "fit-box",
+          "SizeBand": "xlarge"
+        },
+        "Children": []
+      }
+    ]
+  },
+  "Components": [],
+  "MetricProfiles": [
+    {
+      "Id": "metric-1",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 18,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-2",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 10,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "small"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-3",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 9,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "small"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-4",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 8,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "xsmall"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-5",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 16,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-6",
+      "BackendFamily": "unity",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 12,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-7",
+      "BackendFamily": "unity",
+      "SemanticClass": "icon-glyph",
+      "Text": null,
+      "Icon": {
+        "ResolvedFontFamily": "lucide",
+        "ResolvedFontSize": 28,
+        "BaselineOffset": 0,
+        "OpticalCentering": true,
+        "SizeMode": "fit-box",
+        "SizeBand": "xlarge"
+      }
+    },
+    {
+      "Id": "metric-8",
+      "BackendFamily": "unity",
+      "SemanticClass": "icon-glyph",
+      "Text": null,
+      "Icon": {
+        "ResolvedFontFamily": "lucide",
+        "ResolvedFontSize": 38,
+        "BaselineOffset": 0,
+        "OpticalCentering": true,
+        "SizeMode": "fit-box",
+        "SizeBand": "xlarge"
+      }
+    },
+    {
+      "Id": "metric-9",
+      "BackendFamily": "unity",
+      "SemanticClass": "icon-glyph",
+      "Text": null,
+      "Icon": {
+        "ResolvedFontFamily": "lucide",
+        "ResolvedFontSize": 34,
+        "BaselineOffset": 0,
+        "OpticalCentering": true,
+        "SizeMode": "fit-box",
+        "SizeBand": "xlarge"
+      }
+    }
+  ]
+}

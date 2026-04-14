@@ -1,0 +1,52 @@
+{
+  "CandidateGroupCount": 9,
+  "ChosenGroupCount": 5,
+  "RewrittenOccurrenceCount": 19,
+  "Components": [
+    {
+      "ComponentId": "synthetic:100280a57d56",
+      "ComponentName": "SyntheticContainer100280A5",
+      "RootType": "Container",
+      "OccurrenceCount": 6,
+      "NodeCount": 9,
+      "Depth": 3,
+      "SignatureHash": "100280a57d56d001a71169eedb3e5f3108b62e24f3d224a42dff2363ff14dab8"
+    },
+    {
+      "ComponentId": "synthetic:6397e5dc0774",
+      "ComponentName": "SyntheticContainer6397E5DC",
+      "RootType": "Container",
+      "OccurrenceCount": 6,
+      "NodeCount": 2,
+      "Depth": 2,
+      "SignatureHash": "6397e5dc0774746fffb327ecedd88bb4c7e25fbc5216e05670312d88704f39a0"
+    },
+    {
+      "ComponentId": "synthetic:640002d62cb0",
+      "ComponentName": "SyntheticContainer640002D6",
+      "RootType": "Container",
+      "OccurrenceCount": 3,
+      "NodeCount": 3,
+      "Depth": 2,
+      "SignatureHash": "640002d62cb0740f91645bf5151c3468b18dbf8c20743d7b1ad8b62b1613ce43"
+    },
+    {
+      "ComponentId": "synthetic:c701b3c77ed5",
+      "ComponentName": "SyntheticContainerC701B3C7",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 11,
+      "Depth": 2,
+      "SignatureHash": "c701b3c77ed5112a41fa9b8e03c936af7a5e440125b35c9db2ad79a5567f3d49"
+    },
+    {
+      "ComponentId": "synthetic:fa4632c61084",
+      "ComponentName": "SyntheticContainerFA4632C6",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 3,
+      "Depth": 2,
+      "SignatureHash": "fa4632c61084bec43fa2bb19fc2b53034eddbc3dca30020da4a71b025b147816"
+    }
+  ]
+}

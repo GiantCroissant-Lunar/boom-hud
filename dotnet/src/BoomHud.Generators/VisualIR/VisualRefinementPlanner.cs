@@ -61,6 +61,7 @@ public static class VisualRefinementPlanner
         {
             var target = scoreTargets[index];
             var targetStableId = ResolveTargetStableId(document, target.Node.RegionId);
+            var targetNode = FindNode(document.Root, targetStableId);
             var actionType = ResolvePhaseActionType(target.Phase.Phase);
             if (!reservedTargets.Add(targetStableId + "|" + actionType))
             {
@@ -71,9 +72,12 @@ public static class VisualRefinementPlanner
             {
                 Iteration = actions.Count + 1,
                 TargetStableId = targetStableId,
+                TargetSemanticClass = targetNode?.SemanticClass,
+                TargetSourceSemanticRole = targetNode?.SourceSemanticRole,
+                TargetSourceAssetRealization = targetNode?.SourceAssetRealization,
                 ReasonPhase = target.Phase.Phase,
                 ActionType = actionType,
-                Description = BuildDescription(target)
+                Description = BuildDescription(target, targetNode)
             });
         }
 
@@ -141,6 +145,25 @@ public static class VisualRefinementPlanner
         return null;
     }
 
+    private static VisualNode? FindNode(VisualNode node, string stableId)
+    {
+        if (string.Equals(node.StableId, stableId, StringComparison.Ordinal))
+        {
+            return node;
+        }
+
+        foreach (var child in node.Children)
+        {
+            var match = FindNode(child, stableId);
+            if (match != null)
+            {
+                return match;
+            }
+        }
+
+        return null;
+    }
+
     private static List<VisualMeasuredIssue> NormalizeMeasuredIssues(IReadOnlyList<VisualMeasuredIssue>? measuredIssues)
         => measuredIssues?
             .OrderByDescending(static issue => SeverityRank(issue.Severity))
@@ -167,6 +190,7 @@ public static class VisualRefinementPlanner
             }
 
             var targetStableId = ResolveTargetStableId(document, issue.LocalPath);
+            var targetNode = FindNode(document.Root, targetStableId);
             if (!seenTargets.Add(targetStableId + "|" + actionType))
             {
                 continue;
@@ -176,9 +200,12 @@ public static class VisualRefinementPlanner
             {
                 Iteration = actions.Count + 1,
                 TargetStableId = targetStableId,
+                TargetSemanticClass = targetNode?.SemanticClass,
+                TargetSourceSemanticRole = targetNode?.SourceSemanticRole,
+                TargetSourceAssetRealization = targetNode?.SourceAssetRealization,
                 ReasonPhase = ResolveIssuePhase(issue.Category),
                 ActionType = actionType,
-                Description = BuildIssueDescription(issue, targetStableId),
+                Description = BuildIssueDescription(issue, targetStableId, targetNode),
                 TriggerIssueCategory = issue.Category,
                 TriggerIssueLocalPath = issue.LocalPath
             });
@@ -225,18 +252,22 @@ public static class VisualRefinementPlanner
             _ => "outer-frame-match"
         };
 
-    private static string BuildDescription(ScoreTarget target)
+    private static string BuildDescription(ScoreTarget target, VisualNode? targetNode)
         => target.Phase.Phase switch
         {
             "structural-match" => $"Split or regroup the {target.Node.Level} region '{target.Node.RegionId}' before applying smaller layout corrections.",
             "outer-frame-match" => $"Adjust outer edge participation, inset, or clipping around '{target.Node.RegionId}' to recover shell fidelity.",
             "inner-layout-match" => $"Adjust fill/hug sizing or edge pressure inside '{target.Node.RegionId}' before tweaking typography.",
+            "text-icon-metrics" when IsRightAlignedQuantityTarget(targetNode)
+                => $"Preserve nowrap and content-hug behavior for the row-end value '{target.Node.RegionId}', then tune font size or spacing if drift remains.",
+            "text-icon-metrics" when IsIconMetricTarget(targetNode)
+                => $"Tune icon font size, baseline, and optical centering for '{target.Node.RegionId}' before revisiting broader layout rules.",
             "text-icon-metrics" => $"Tune font size, line height, letter spacing, icon baseline, or optical centering for '{target.Node.RegionId}'.",
             "polish-offsets" => $"Apply bounded inset or per-edge offset corrections around '{target.Node.RegionId}' after structure and metrics stabilize.",
             _ => $"Review region '{target.Node.RegionId}' for local fidelity drift."
         };
 
-    private static string BuildIssueDescription(VisualMeasuredIssue issue, string targetStableId)
+    private static string BuildIssueDescription(VisualMeasuredIssue issue, string targetStableId, VisualNode? targetNode)
         => issue.Category switch
         {
             "height-collapsed-vs-preferred" => $"Preserve preferred shell height for '{targetStableId}' because the realized subtree is collapsing below its measured preferred height.",
@@ -245,8 +276,26 @@ public static class VisualRefinementPlanner
             "shell-padding-or-child-stack-mismatch" => $"Tighten shell padding or gap on '{targetStableId}' so the measured child stack fits the intended shell bounds.",
             "portrait-or-status-row-shell-drift" => $"Preserve the portrait or status-row shell bounds for '{targetStableId}' before tuning icons or typography.",
             "start-edge-underflow" or "start-edge-overshift" => $"Preserve the start-edge shell contract for '{targetStableId}' before changing gaps or text metrics.",
+            "wrap-pressure-risk" when IsRightAlignedQuantityTarget(targetNode)
+                => $"Preserve the row-end content-hug contract for '{targetStableId}' before changing font size, because this quantity is compressing against the available width.",
+            "font-size-drift" when IsIconMetricTarget(targetNode)
+                => $"Inspect icon-specific metric calibration for '{targetStableId}' before changing local layout heuristics.",
+            "clip-mismatch" when IsImageAssetTarget(targetNode)
+                => $"Inspect image shell overflow or mask emission for '{targetStableId}' before changing local content metrics.",
             _ => issue.SuggestedAction ?? issue.Summary
         };
+
+    private static bool IsRightAlignedQuantityTarget(VisualNode? node)
+        => string.Equals(node?.SemanticClass, "right-aligned-quantity", StringComparison.Ordinal)
+           || string.Equals(node?.SourceSemanticRole, "right-aligned-quantity", StringComparison.Ordinal);
+
+    private static bool IsIconMetricTarget(VisualNode? node)
+        => node?.Kind == VisualNodeKind.Icon
+           || string.Equals(node?.SourceAssetRealization, "IconGlyph", StringComparison.Ordinal);
+
+    private static bool IsImageAssetTarget(VisualNode? node)
+        => node?.Kind == VisualNodeKind.Image
+           || string.Equals(node?.SourceAssetRealization, "ImageAsset", StringComparison.Ordinal);
 
     private static List<RecursiveFidelityScoreNode> Flatten(RecursiveFidelityScoreNode root)
     {

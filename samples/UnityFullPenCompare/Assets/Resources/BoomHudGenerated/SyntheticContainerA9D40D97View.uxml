@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="TabPlay" class="boomhud-tab-play">
+        <ui:Label name="TabPlayText" class="boomhud-tab-play-text" />
+    </ui:VisualElement>
+</ui:UXML>

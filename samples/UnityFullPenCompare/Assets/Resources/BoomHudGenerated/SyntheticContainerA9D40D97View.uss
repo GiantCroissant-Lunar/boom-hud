@@ -1,0 +1,43 @@
+.boomhud-tab-play {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 180px;
+    height: 62px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background-color: #FFFFFF;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: #214B6F;
+    border-right-color: #214B6F;
+    border-top-color: #214B6F;
+    border-bottom-color: #214B6F;
+}
+
+.boomhud-tab-play-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #1D3956;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+

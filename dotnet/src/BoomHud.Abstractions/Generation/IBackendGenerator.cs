@@ -82,6 +82,11 @@ public sealed record GenerationOptions
     public GeneratorRuleSet? RuleSet { get; init; }
 
     /// <summary>
+    /// Emit a compiler-only source-semantic artifact derived before Visual IR normalization.
+    /// </summary>
+    public bool EmitSourceSemanticArtifact { get; init; }
+
+    /// <summary>
     /// Emit a compiler-only Visual IR artifact for diagnostics and future planning work.
     /// </summary>
     public bool EmitVisualIrArtifact { get; init; }

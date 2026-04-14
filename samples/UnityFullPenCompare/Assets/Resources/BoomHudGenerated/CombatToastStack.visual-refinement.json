@@ -1,0 +1,2782 @@
+{
+  "IterationBudget": 4,
+  "IterationCount": 4,
+  "Converged": false,
+  "ScoreTree": {
+    "Level": "screen/frame",
+    "RegionId": "root",
+    "OverallSimilarityPercent": 98.44,
+    "Phases": [
+      {
+        "Phase": "structural-match",
+        "SimilarityPercent": 97.95
+      },
+      {
+        "Phase": "outer-frame-match",
+        "SimilarityPercent": 98.55
+      },
+      {
+        "Phase": "inner-layout-match",
+        "SimilarityPercent": 96.23
+      },
+      {
+        "Phase": "text-icon-metrics",
+        "SimilarityPercent": 98.36
+      },
+      {
+        "Phase": "polish-offsets",
+        "SimilarityPercent": 98.94
+      }
+    ],
+    "Children": [
+      {
+        "Level": "panel",
+        "RegionId": "panel@0,0,960x720",
+        "OverallSimilarityPercent": 97.03,
+        "Phases": [
+          {
+            "Phase": "structural-match",
+            "SimilarityPercent": 96.09
+          },
+          {
+            "Phase": "outer-frame-match",
+            "SimilarityPercent": 96.91
+          },
+          {
+            "Phase": "inner-layout-match",
+            "SimilarityPercent": 100
+          },
+          {
+            "Phase": "text-icon-metrics",
+            "SimilarityPercent": 98.41
+          },
+          {
+            "Phase": "polish-offsets",
+            "SimilarityPercent": 97.96
+          }
+        ],
+        "Children": [
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@0,0,480x360",
+            "OverallSimilarityPercent": 98.47,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 97.99
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 97.82
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 97.27
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 99.12
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 98.94
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,0,240x180",
+                "OverallSimilarityPercent": 99.84,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.8
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 99.68
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.86
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.89
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,0,240x180",
+                "OverallSimilarityPercent": 96.71,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 95.68
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 95.44
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 97.84
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.92
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 97.75
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,180,240x180",
+                "OverallSimilarityPercent": 98.45,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.45
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.8
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.91
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,180,240x180",
+                "OverallSimilarityPercent": 98.86,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.5
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.65
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.98
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.22
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@480,0,480x360",
+            "OverallSimilarityPercent": 95.48,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 94.05
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 96.41
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 90.18
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 95.58
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 96.91
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,0,240x180",
+                "OverallSimilarityPercent": 92.38,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 89.99
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 89.61
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 95.1
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.49
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 94.77
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,0,240x180",
+                "OverallSimilarityPercent": 92.81,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 90.56
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 90.96
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 92.48
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.15
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 95.07
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,180,240x180",
+                "OverallSimilarityPercent": 97.26,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.36
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 94.31
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.59
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.16
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,180,240x180",
+                "OverallSimilarityPercent": 99.47,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.29
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.9
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.53
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.64
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@0,360,480x360",
+            "OverallSimilarityPercent": 98.49,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 98.02
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 97.67
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 98.45
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 99.68
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 98.95
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,360,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,360,240x180",
+                "OverallSimilarityPercent": 97.92,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.31
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.02
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.52
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.52
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,540,240x180",
+                "OverallSimilarityPercent": 98.7,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.32
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.26
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.11
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.07
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,540,240x180",
+                "OverallSimilarityPercent": 97.33,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.46
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 95.19
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.9
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.2
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@480,360,480x360",
+            "OverallSimilarityPercent": 95.67,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 94.29
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 96.51
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 88.88
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 94.94
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 97.05
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,360,240x180",
+                "OverallSimilarityPercent": 95.83,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 94.58
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 94.79
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.37
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 97.08
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,360,240x180",
+                "OverallSimilarityPercent": 95.65,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 94.36
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 94.32
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.15
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 96.95
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,540,240x180",
+                "OverallSimilarityPercent": 94.37,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 92.49
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 91.21
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 95.95
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.15
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 96.26
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,540,240x180",
+                "OverallSimilarityPercent": 96.82,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 95.73
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 93.33
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.25
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 97.9
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Level": "panel",
+        "RegionId": "panel@960,0,960x720",
+        "OverallSimilarityPercent": 98.81,
+        "Phases": [
+          {
+            "Phase": "structural-match",
+            "SimilarityPercent": 98.43
+          },
+          {
+            "Phase": "outer-frame-match",
+            "SimilarityPercent": 98.66
+          },
+          {
+            "Phase": "inner-layout-match",
+            "SimilarityPercent": 100
+          },
+          {
+            "Phase": "text-icon-metrics",
+            "SimilarityPercent": 99.33
+          },
+          {
+            "Phase": "polish-offsets",
+            "SimilarityPercent": 99.18
+          }
+        ],
+        "Children": [
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@960,0,480x360",
+            "OverallSimilarityPercent": 98.73,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 98.35
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 99.05
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 96.66
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 98.42
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 99.11
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,0,240x180",
+                "OverallSimilarityPercent": 97.24,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.35
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.39
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.3
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.13
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,0,240x180",
+                "OverallSimilarityPercent": 97.68,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.04
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.81
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.7
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.32
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,180,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,180,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@1440,0,480x360",
+            "OverallSimilarityPercent": 99.14,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 98.87
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 94.72
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 97.21
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 99.41
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,0,240x180",
+                "OverallSimilarityPercent": 98.18,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.64
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.19
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.66
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.73
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,0,240x180",
+                "OverallSimilarityPercent": 99.37,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.16
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.69
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.44
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.57
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,180,240x180",
+                "OverallSimilarityPercent": 99.14,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.85
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.2
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.25
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.42
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,180,240x180",
+                "OverallSimilarityPercent": 99.88,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.84
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 99.75
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.89
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.92
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@960,360,480x360",
+            "OverallSimilarityPercent": 98.48,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 97.97
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 98.6
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 96.87
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 98.71
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 98.99
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,360,240x180",
+                "OverallSimilarityPercent": 98.56,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.08
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.01
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.73
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.03
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,360,240x180",
+                "OverallSimilarityPercent": 98.48,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.98
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.85
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.67
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.98
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,540,240x180",
+                "OverallSimilarityPercent": 97.64,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.83
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 95.05
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.95
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.44
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,540,240x180",
+                "OverallSimilarityPercent": 99.24,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.96
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.38
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.35
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.51
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@1440,360,480x360",
+            "OverallSimilarityPercent": 98.87,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 98.53
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 91.03
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 95.31
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 99.22
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,360,240x180",
+                "OverallSimilarityPercent": 99.07,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.82
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.31
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.17
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.31
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,360,240x180",
+                "OverallSimilarityPercent": 99.15,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.93
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 98.41
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.24
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.38
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,540,240x180",
+                "OverallSimilarityPercent": 98.38,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.84
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.57
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.92
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.92
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,540,240x180",
+                "OverallSimilarityPercent": 98.88,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.51
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.67
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.02
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.26
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Level": "panel",
+        "RegionId": "panel@0,720,960x720",
+        "OverallSimilarityPercent": 98.59,
+        "Phases": [
+          {
+            "Phase": "structural-match",
+            "SimilarityPercent": 98.14
+          },
+          {
+            "Phase": "outer-frame-match",
+            "SimilarityPercent": 99.27
+          },
+          {
+            "Phase": "inner-layout-match",
+            "SimilarityPercent": 98.7
+          },
+          {
+            "Phase": "text-icon-metrics",
+            "SimilarityPercent": 99.37
+          },
+          {
+            "Phase": "polish-offsets",
+            "SimilarityPercent": 99.04
+          }
+        ],
+        "Children": [
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@0,720,480x360",
+            "OverallSimilarityPercent": 98.45,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 97.98
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 97.32
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 99.87
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 98.85
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 98.93
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,720,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,720,240x180",
+                "OverallSimilarityPercent": 98.83,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.52
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.69
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.9
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.14
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,900,240x180",
+                "OverallSimilarityPercent": 98.37,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.9
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.99
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.95
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.84
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,900,240x180",
+                "OverallSimilarityPercent": 96.62,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 95.49
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 95.23
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.84
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 97.75
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@480,720,480x360",
+            "OverallSimilarityPercent": 95.9,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 94.58
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 96.75
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 90.42
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 95.67
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 97.21
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,720,240x180",
+                "OverallSimilarityPercent": 97.99,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.45
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.02
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.12
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.53
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,720,240x180",
+                "OverallSimilarityPercent": 98.16,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 97.66
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.34
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.29
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.66
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,900,240x180",
+                "OverallSimilarityPercent": 92.47,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 89.95
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 90.82
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 92.33
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.3
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 94.99
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,900,240x180",
+                "OverallSimilarityPercent": 94.96,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 93.27
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 93.03
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 96.85
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 96.65
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@0,1080,480x360",
+            "OverallSimilarityPercent": 100,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 100
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@0,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@240,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@480,1080,480x360",
+            "OverallSimilarityPercent": 100,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 100
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@480,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@720,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Level": "panel",
+        "RegionId": "panel@960,720,960x720",
+        "OverallSimilarityPercent": 99.35,
+        "Phases": [
+          {
+            "Phase": "structural-match",
+            "SimilarityPercent": 99.13
+          },
+          {
+            "Phase": "outer-frame-match",
+            "SimilarityPercent": 99.55
+          },
+          {
+            "Phase": "inner-layout-match",
+            "SimilarityPercent": 100
+          },
+          {
+            "Phase": "text-icon-metrics",
+            "SimilarityPercent": 99.74
+          },
+          {
+            "Phase": "polish-offsets",
+            "SimilarityPercent": 99.56
+          }
+        ],
+        "Children": [
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@960,720,480x360",
+            "OverallSimilarityPercent": 98.47,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 97.95
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 98.51
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 96.55
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 98.58
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 98.98
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,720,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,720,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,900,240x180",
+                "OverallSimilarityPercent": 96.36,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 95.14
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 95.12
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 97.78
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 97.58
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,900,240x180",
+                "OverallSimilarityPercent": 97.52,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.68
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.02
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.26
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.35
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@1440,720,480x360",
+            "OverallSimilarityPercent": 98.91,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 98.57
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 99.97
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 93.5
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 96.57
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 99.26
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,720,240x180",
+                "OverallSimilarityPercent": 99.81,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.76
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 99.62
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.83
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.87
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,720,240x180",
+                "OverallSimilarityPercent": 99.83,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 99.78
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 99.65
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99.85
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.88
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,900,240x180",
+                "OverallSimilarityPercent": 97.29,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 96.43
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 96.22
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 98.22
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 98.15
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,900,240x180",
+                "OverallSimilarityPercent": 98.73,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 98.32
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 97.76
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 99
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 99.13
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@960,1080,480x360",
+            "OverallSimilarityPercent": 100,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 100
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@960,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1200,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          },
+          {
+            "Level": "card/cluster",
+            "RegionId": "card/cluster@1440,1080,480x360",
+            "OverallSimilarityPercent": 100,
+            "Phases": [
+              {
+                "Phase": "structural-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "outer-frame-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "inner-layout-match",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "text-icon-metrics",
+                "SimilarityPercent": 100
+              },
+              {
+                "Phase": "polish-offsets",
+                "SimilarityPercent": 100
+              }
+            ],
+            "Children": [
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,1080,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1440,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              },
+              {
+                "Level": "atomic-motif",
+                "RegionId": "atomic-motif@1680,1260,240x180",
+                "OverallSimilarityPercent": 100,
+                "Phases": [
+                  {
+                    "Phase": "structural-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "outer-frame-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "inner-layout-match",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "text-icon-metrics",
+                    "SimilarityPercent": 100
+                  },
+                  {
+                    "Phase": "polish-offsets",
+                    "SimilarityPercent": 100
+                  }
+                ],
+                "Children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "MeasuredIssues": [
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/0",
+      "Summary": "Left inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/0",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/0/0",
+      "Summary": "Left inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/0/0",
+      "Summary": "Top inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/2",
+      "Summary": "Left inset realized at 764.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/2",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/3/0",
+      "Summary": "Left inset realized at 28.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/0/3/0",
+      "Summary": "Top inset realized at 10.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/0",
+      "Summary": "Left inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/0",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/0/0",
+      "Summary": "Left inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/0/0",
+      "Summary": "Top inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/2",
+      "Summary": "Left inset realized at 764.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/2",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/3/0",
+      "Summary": "Left inset realized at 28.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/1/3/0",
+      "Summary": "Top inset realized at 10.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/0",
+      "Summary": "Left inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/0",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/0/0",
+      "Summary": "Left inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/0/0",
+      "Summary": "Top inset realized at 38.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/2",
+      "Summary": "Left inset realized at 764.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/2",
+      "Summary": "Top inset realized at 16.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/3/0",
+      "Summary": "Left inset realized at 28.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "start-edge-overshift",
+      "Severity": "info",
+      "LocalPath": "root/2/3/0",
+      "Summary": "Top inset realized at 10.0px, overshooting the expected start inset of 0.0px.",
+      "SuggestedAction": "Inspect absolute offset retention and parent padding accumulation for this node."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/0/0",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/0/1",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/0/2",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/0/3",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/1/0",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/1/1",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/1/2",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/1/3",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/2/0",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/2/1",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/2/2",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "cross-axis-stretch-mismatch",
+      "Severity": "warning",
+      "LocalPath": "root/2/3",
+      "Summary": "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+      "SuggestedAction": "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/0/0",
+      "Summary": "Shell width realized at 132.0px but the subtree prefers about 56.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/0/1",
+      "Summary": "Shell width realized at 560.0px but the subtree prefers about 540.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/0/2",
+      "Summary": "Shell width realized at 164.0px but the subtree prefers about 87.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/0/3",
+      "Summary": "Shell width realized at 120.0px but the subtree prefers about 64.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/1/0",
+      "Summary": "Shell width realized at 132.0px but the subtree prefers about 56.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/1/1",
+      "Summary": "Shell width realized at 560.0px but the subtree prefers about 540.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/1/2",
+      "Summary": "Shell width realized at 164.0px but the subtree prefers about 114.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/1/3",
+      "Summary": "Shell width realized at 104.0px but the subtree prefers about 48.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/2/0",
+      "Summary": "Shell width realized at 132.0px but the subtree prefers about 56.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/2/1",
+      "Summary": "Shell width realized at 560.0px but the subtree prefers about 540.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/2/2",
+      "Summary": "Shell width realized at 164.0px but the subtree prefers about 96.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    },
+    {
+      "Category": "width-stretched-vs-preferred",
+      "Severity": "warning",
+      "LocalPath": "root/2/3",
+      "Summary": "Shell width realized at 128.0px but the subtree prefers about 72.0px.",
+      "SuggestedAction": "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
+    }
+  ],
+  "Actions": [
+    {
+      "Iteration": 1,
+      "TargetStableId": "root/0/0",
+      "ReasonPhase": "outer-frame-match",
+      "ActionType": "preserve-start-edge-shell-contract",
+      "Description": "Preserve the start-edge shell contract for \u0027root/0/0\u0027 before changing gaps or text metrics.",
+      "TriggerIssueCategory": "start-edge-overshift",
+      "TriggerIssueLocalPath": "root/0/0"
+    },
+    {
+      "Iteration": 2,
+      "TargetStableId": "root/0/2",
+      "ReasonPhase": "outer-frame-match",
+      "ActionType": "preserve-start-edge-shell-contract",
+      "Description": "Preserve the start-edge shell contract for \u0027root/0/2\u0027 before changing gaps or text metrics.",
+      "TriggerIssueCategory": "start-edge-overshift",
+      "TriggerIssueLocalPath": "root/0/2"
+    },
+    {
+      "Iteration": 3,
+      "TargetStableId": "root/0/3/0",
+      "ReasonPhase": "outer-frame-match",
+      "ActionType": "preserve-start-edge-shell-contract",
+      "Description": "Preserve the start-edge shell contract for \u0027root/0/3/0\u0027 before changing gaps or text metrics.",
+      "TriggerIssueCategory": "start-edge-overshift",
+      "TriggerIssueLocalPath": "root/0/3/0"
+    },
+    {
+      "Iteration": 4,
+      "TargetStableId": "root/1/0",
+      "ReasonPhase": "outer-frame-match",
+      "ActionType": "preserve-start-edge-shell-contract",
+      "Description": "Preserve the start-edge shell contract for \u0027root/1/0\u0027 before changing gaps or text metrics.",
+      "TriggerIssueCategory": "start-edge-overshift",
+      "TriggerIssueLocalPath": "root/1/0"
+    }
+  ]
+}

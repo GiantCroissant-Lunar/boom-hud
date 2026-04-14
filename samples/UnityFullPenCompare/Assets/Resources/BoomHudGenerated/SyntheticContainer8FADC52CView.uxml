@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="RowNewAdvancement" class="boomhud-row-new-advancement">
+        <ui:VisualElement name="NewBadgeOne" class="boomhud-new-badge-one">
+            <ui:Label name="NewBadgeOneText" class="boomhud-new-badge-one-text" />
+        </ui:VisualElement>
+        <ui:Label name="RowNewAdvancementText" class="boomhud-row-new-advancement-text" />
+    </ui:VisualElement>
+</ui:UXML>

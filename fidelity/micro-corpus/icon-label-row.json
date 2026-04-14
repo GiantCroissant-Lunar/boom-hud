@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "sourcePen": "samples/pencil/icon-label-row.pen",
+  "artifactsRoot": "build/fidelity/micro-corpus/icon-label-row",
+  "tolerance": 8,
+  "staticThreshold": 70,
+  "timelineThreshold": 95,
+  "surfaces": [
+    {
+      "id": "icon-label-row-uitk",
+      "pen": { "nodeId": "ILR01", "output": "pen/static/icon-label-row-uitk.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/icon-label-row-uitk.png",
+        "props": { "fixtureId": "IconLabelRow", "isolated": true, "canvasWidth": 232, "canvasHeight": 60, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "icon-label-row-uitk",
+        "scene": "FixtureCompare",
+        "resourceBasePath": "BoomHudGenerated/IconLabelRowView",
+        "generatedViewTypeName": "Generated.Hud.IconLabelRowView",
+        "generatedRootName": "IconLabelRow",
+        "targetElementName": "IconLabelRow",
+        "output": "unity/static/icon-label-row-uitk.png"
+      }
+    },
+    {
+      "id": "icon-label-row-ugui",
+      "pen": { "nodeId": "ILR01", "output": "pen/static/icon-label-row-ugui.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/icon-label-row-ugui.png",
+        "props": { "fixtureId": "IconLabelRow", "isolated": true, "canvasWidth": 232, "canvasHeight": 60, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "icon-label-row-ugui",
+        "scene": "FixtureCompareUGui",
+        "generatedViewTypeName": "Generated.Hud.UGui.IconLabelRowView",
+        "targetObjectName": "IconLabelRowRoot",
+        "output": "unity/static/icon-label-row-ugui.png"
+      }
+    }
+  ],
+  "timelines": []
+}

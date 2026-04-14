@@ -1,0 +1,43 @@
+.boomhud-filter-hab {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 138px;
+    height: 42px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #2A2D34;
+    background-color: #2A2D34;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #746245;
+    border-right-color: #746245;
+    border-top-color: #746245;
+    border-bottom-color: #746245;
+}
+
+.boomhud-filter-hab-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #C4C8D0;
+    font-size: 9px;
+    -unity-font-style: normal;
+}
+

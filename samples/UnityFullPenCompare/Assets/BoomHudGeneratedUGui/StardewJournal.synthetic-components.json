@@ -1,0 +1,16 @@
+{
+  "CandidateGroupCount": 2,
+  "ChosenGroupCount": 1,
+  "RewrittenOccurrenceCount": 2,
+  "Components": [
+    {
+      "ComponentId": "synthetic:8fadc52c4ac2",
+      "ComponentName": "SyntheticContainer8FADC52C",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 4,
+      "Depth": 3,
+      "SignatureHash": "8fadc52c4ac2c6b32bbe990c99777b298650df4ce3caffa56976708135d6b19e"
+    }
+  ]
+}

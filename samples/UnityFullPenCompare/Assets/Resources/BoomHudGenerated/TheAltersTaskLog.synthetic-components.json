@@ -1,0 +1,16 @@
+{
+  "CandidateGroupCount": 1,
+  "ChosenGroupCount": 1,
+  "RewrittenOccurrenceCount": 2,
+  "Components": [
+    {
+      "ComponentId": "synthetic:a04d0699f8a8",
+      "ComponentName": "SyntheticContainerA04D0699",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 2,
+      "Depth": 2,
+      "SignatureHash": "a04d0699f8a8696e37e819a2a94246c364bccb2bcfc5da728ac446b9e137b5db"
+    }
+  ]
+}

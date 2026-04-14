@@ -1,0 +1,1968 @@
+{
+  "DocumentName": "StardewJournal",
+  "BackendFamily": "ugui",
+  "SourceGenerationMode": "post-v1-prepared-hud-document",
+  "Root": {
+    "StableId": "root",
+    "SourceId": "StardewJournal",
+    "SourceNodeId": "SDJ01",
+    "Kind": 0,
+    "SourceType": 15,
+    "ComponentRefId": null,
+    "SemanticClass": "container",
+    "MetricProfileId": null,
+    "StaticProperties": {},
+    "PropertyOverrides": {},
+    "Box": {
+      "SourceType": 15,
+      "LayoutType": 5,
+      "Width": {
+        "Value": 1920,
+        "Unit": 0
+      },
+      "Height": {
+        "Value": 1080,
+        "Unit": 0
+      },
+      "MinWidth": null,
+      "MinHeight": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "Gap": null,
+      "Padding": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Margin": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Left": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "Top": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "IsAbsolutePositioned": false,
+      "ClipContent": false,
+      "Align": 0,
+      "Justify": 0,
+      "Weight": null,
+      "Background": "#203624",
+      "Border": null,
+      "BorderRadius": null,
+      "Opacity": null
+    },
+    "EdgeContract": {
+      "Participation": 0,
+      "WidthSizing": 0,
+      "HeightSizing": 0,
+      "HorizontalPin": 0,
+      "VerticalPin": 0,
+      "OverflowX": 0,
+      "OverflowY": 0,
+      "WrapPressure": 0
+    },
+    "Typography": null,
+    "Icon": null,
+    "Children": [
+      {
+        "StableId": "root/0",
+        "SourceId": "BackdropShade",
+        "SourceNodeId": "SDJ02",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 1920,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 1080,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#132116CC",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/1",
+        "SourceId": "JournalCard",
+        "SourceNodeId": "SDJ03",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 588,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 482,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 8,
+            "Right": 8,
+            "Bottom": 8,
+            "Left": 8
+          },
+          "Padding": {
+            "Top": 14,
+            "Right": 14,
+            "Bottom": 14,
+            "Left": 14
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 666,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 194,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#F0BD6B",
+          "Border": {
+            "Style": 5,
+            "Color": "#7D3E14",
+            "Width": 8
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/1/0",
+            "SourceId": "RowNewAdvancement",
+            "SourceNodeId": "SDJ04",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:8fadc52c4ac2",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/1/1",
+            "SourceId": "RowNewAnimals",
+            "SourceNodeId": "SDJ08",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:8fadc52c4ac2",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {
+              "$/1": {
+                "Text": "RAISING ANIMALS"
+              }
+            },
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/1/2",
+            "SourceId": "RowGathering",
+            "SourceNodeId": "SDJ12",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 0,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 66,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 14,
+                "Right": 14,
+                "Bottom": 14,
+                "Left": 14
+              },
+              "Padding": {
+                "Top": 12,
+                "Right": 12,
+                "Bottom": 12,
+                "Left": 12
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#F8D89A",
+              "Border": {
+                "Style": 5,
+                "Color": "#7D3E14",
+                "Width": 4
+              },
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/1/2/0",
+                "SourceId": "QuestCoin",
+                "SourceNodeId": "SDJ13",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 40,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 40,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#E0B041",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/1/2/0/0",
+                    "SourceId": "QuestCoinText",
+                    "SourceNodeId": "SDJ14",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-1",
+                    "StaticProperties": {
+                      "text": "$"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 12,
+                      "ResolvedLineHeight": 11.399999999999999,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "medium"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/1/2/1",
+                "SourceId": "RowGatheringText",
+                "SourceNodeId": "SDJ15",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-1",
+                "StaticProperties": {
+                  "text": "GATHERING"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 12,
+                  "ResolvedLineHeight": 11.399999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/1/3",
+            "SourceId": "RowDoneStarter",
+            "SourceNodeId": "SDJ16",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 0,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 66,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 14,
+                "Right": 14,
+                "Bottom": 14,
+                "Left": 14
+              },
+              "Padding": {
+                "Top": 12,
+                "Right": 12,
+                "Bottom": 12,
+                "Left": 12
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#F8D89A",
+              "Border": {
+                "Style": 5,
+                "Color": "#7D3E14",
+                "Width": 4
+              },
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/1/3/0",
+                "SourceId": "DoneBadge",
+                "SourceNodeId": "SDJ17",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 110,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 40,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#1BB841",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/1/3/0/0",
+                    "SourceId": "DoneBadgeText",
+                    "SourceNodeId": "SDJ18",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-2",
+                    "StaticProperties": {
+                      "text": "DONE"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 9,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "small"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/1/3/1",
+                "SourceId": "RowDoneStarterText",
+                "SourceNodeId": "SDJ19",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-1",
+                "StaticProperties": {
+                  "text": "GETTING STARTED"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 12,
+                  "ResolvedLineHeight": 11.399999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/1/4",
+            "SourceId": "RowIntroductions",
+            "SourceNodeId": "SDJ20",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 0,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 66,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 14,
+                "Right": 14,
+                "Bottom": 14,
+                "Left": 14
+              },
+              "Padding": {
+                "Top": 12,
+                "Right": 12,
+                "Bottom": 12,
+                "Left": 12
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#F8D89A",
+              "Border": {
+                "Style": 5,
+                "Color": "#7D3E14",
+                "Width": 4
+              },
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/1/4/0",
+                "SourceId": "SimpleGlyph",
+                "SourceNodeId": "SDJ21",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 34,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 40,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#F8D89A",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/1/4/0/0",
+                    "SourceId": "SimpleGlyphText",
+                    "SourceNodeId": "SDJ22",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-1",
+                    "StaticProperties": {
+                      "text": "!"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 12,
+                      "ResolvedLineHeight": 11.399999999999999,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "medium"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/1/4/1",
+                "SourceId": "RowIntroductionsText",
+                "SourceNodeId": "SDJ23",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-1",
+                "StaticProperties": {
+                  "text": "INTRODUCTIONS"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 12,
+                  "ResolvedLineHeight": 11.399999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "StableId": "root/2",
+        "SourceId": "JournalTab",
+        "SourceNodeId": "SDJ24",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 290,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 54,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 816,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 154,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#F8D89A",
+          "Border": {
+            "Style": 5,
+            "Color": "#7D3E14",
+            "Width": 4
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/2/0",
+            "SourceId": "JournalTabText",
+            "SourceNodeId": "SDJ25",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-3",
+            "StaticProperties": {
+              "text": "JOURNAL"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 14,
+              "ResolvedLineHeight": 13.299999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/3",
+        "SourceId": "CloseButton",
+        "SourceNodeId": "SDJ26",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 30,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 30,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1224,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 210,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#D84A28",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/3/0",
+            "SourceId": "CloseButtonText",
+            "SourceNodeId": "SDJ27",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-4",
+            "StaticProperties": {
+              "text": "X"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 10,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "small"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      },
+      {
+        "StableId": "root/4",
+        "SourceId": "SelectionPointer",
+        "SourceNodeId": "SDJ28",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 34,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 52,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 612,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 336,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#F4F1E6",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/4/0",
+            "SourceId": "SelectionPointerText",
+            "SourceNodeId": "SDJ29",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-5",
+            "StaticProperties": {
+              "text": "\u003E"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 18,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "large"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      }
+    ]
+  },
+  "Components": [
+    {
+      "Id": "synthetic:8fadc52c4ac2",
+      "Name": "SyntheticContainer8FADC52C",
+      "Root": {
+        "StableId": "component:synthetic:8fadc52c4ac2",
+        "SourceId": "RowNewAdvancement",
+        "SourceNodeId": "SDJ04",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 0,
+          "Width": {
+            "Value": 0,
+            "Unit": 5
+          },
+          "Height": {
+            "Value": 66,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 14,
+            "Right": 14,
+            "Bottom": 14,
+            "Left": 14
+          },
+          "Padding": {
+            "Top": 12,
+            "Right": 12,
+            "Bottom": 12,
+            "Left": 12
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": null,
+          "Top": null,
+          "IsAbsolutePositioned": false,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#F8D89A",
+          "Border": {
+            "Style": 5,
+            "Color": "#7D3E14",
+            "Width": 4
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 0,
+          "WidthSizing": 1,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "component:synthetic:8fadc52c4ac2/0",
+            "SourceId": "NewBadgeOne",
+            "SourceNodeId": "SDJ05",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 94,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 40,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 1,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#F8B325",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "component:synthetic:8fadc52c4ac2/0/0",
+                "SourceId": "NewBadgeOneText",
+                "SourceNodeId": "SDJ06",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-2",
+                "StaticProperties": {
+                  "text": "NEW!"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 9,
+                  "ResolvedLineHeight": null,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "small"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "component:synthetic:8fadc52c4ac2/1",
+            "SourceId": "RowNewAdvancementText",
+            "SourceNodeId": "SDJ07",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-1",
+            "StaticProperties": {
+              "text": "ADVANCEMENT"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 12,
+              "ResolvedLineHeight": 11.399999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      }
+    }
+  ],
+  "MetricProfiles": [
+    {
+      "Id": "metric-1",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 12,
+        "ResolvedLineHeight": 11.399999999999999,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-2",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 9,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "small"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-3",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 14,
+        "ResolvedLineHeight": 13.299999999999999,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-4",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 10,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "small"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-5",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 18,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    }
+  ]
+}

@@ -43,6 +43,10 @@ public sealed record VisualNode
 
     public string? SemanticClass { get; init; }
 
+    public string? SourceSemanticRole { get; init; }
+
+    public string? SourceAssetRealization { get; init; }
+
     public string? MetricProfileId { get; init; }
 
     public IReadOnlyDictionary<string, object?> StaticProperties { get; init; } = new Dictionary<string, object?>(StringComparer.Ordinal);
@@ -324,6 +328,12 @@ public sealed record VisualRefinementAction
 
     public required string TargetStableId { get; init; }
 
+    public string? TargetSemanticClass { get; init; }
+
+    public string? TargetSourceSemanticRole { get; init; }
+
+    public string? TargetSourceAssetRealization { get; init; }
+
     public required string ReasonPhase { get; init; }
 
     public required string ActionType { get; init; }
@@ -342,6 +352,12 @@ public sealed record VisualMeasuredIssue
     public required string Severity { get; init; }
 
     public required string LocalPath { get; init; }
+
+    public string? ExpectedSemanticClass { get; init; }
+
+    public string? ExpectedSourceSemanticRole { get; init; }
+
+    public string? ExpectedSourceAssetRealization { get; init; }
 
     public required string Summary { get; init; }
 

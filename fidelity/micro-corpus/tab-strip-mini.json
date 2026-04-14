@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "sourcePen": "samples/pencil/tab-strip-mini.pen",
+  "artifactsRoot": "build/fidelity/micro-corpus/tab-strip-mini",
+  "tolerance": 8,
+  "staticThreshold": 70,
+  "timelineThreshold": 95,
+  "surfaces": [
+    {
+      "id": "tab-strip-mini-uitk",
+      "pen": { "nodeId": "TSM01", "output": "pen/static/tab-strip-mini-uitk.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/tab-strip-mini-uitk.png",
+        "props": { "fixtureId": "TabStripMini", "isolated": true, "canvasWidth": 320, "canvasHeight": 76, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "tab-strip-mini-uitk",
+        "scene": "FixtureCompare",
+        "resourceBasePath": "BoomHudGenerated/TabStripMiniView",
+        "generatedViewTypeName": "Generated.Hud.TabStripMiniView",
+        "generatedRootName": "TabStripMini",
+        "targetElementName": "TabStripMini",
+        "output": "unity/static/tab-strip-mini-uitk.png"
+      }
+    },
+    {
+      "id": "tab-strip-mini-ugui",
+      "pen": { "nodeId": "TSM01", "output": "pen/static/tab-strip-mini-ugui.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/tab-strip-mini-ugui.png",
+        "props": { "fixtureId": "TabStripMini", "isolated": true, "canvasWidth": 320, "canvasHeight": 76, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "tab-strip-mini-ugui",
+        "scene": "FixtureCompareUGui",
+        "generatedViewTypeName": "Generated.Hud.UGui.TabStripMiniView",
+        "targetObjectName": "TabStripMiniRoot",
+        "output": "unity/static/tab-strip-mini-ugui.png"
+      }
+    }
+  ],
+  "timelines": []
+}

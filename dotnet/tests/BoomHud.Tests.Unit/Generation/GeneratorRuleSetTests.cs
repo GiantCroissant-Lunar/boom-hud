@@ -608,6 +608,394 @@ public sealed class GeneratorRuleSetTests
     }
 
     [Fact]
+    public void Resolve_NewSemanticClassesMatchCompactRowsTabsAndIcons()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            Rules =
+            [
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "compact-label"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            LetterSpacingDelta = 0.5
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "compact-numeric-readout"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            FontSizeDelta = 1
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "tab-label"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            WrapText = false
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "right-aligned-quantity"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            PreferContentWidth = true
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "leading-icon"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Icon = new GeneratorIconRuleAction
+                        {
+                            BaselineOffset = 1.5
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "badge-icon"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Icon = new GeneratorIconRuleAction
+                        {
+                            OpticalCentering = false
+                        }
+                    }
+                },
+                new GeneratorRule
+                {
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        SemanticClass = "value-row"
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Layout = new GeneratorLayoutRuleAction
+                        {
+                            GapDelta = -2
+                        }
+                    }
+                }
+            ]
+        };
+
+        var compactLabel = new ComponentNode
+        {
+            Id = "MaterialLabel",
+            Type = ComponentType.Label,
+            Properties = new Dictionary<string, BindableValue<object?>>
+            {
+                ["Text"] = "MATERIAL"
+            },
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 9
+            }
+        };
+
+        var compactNumeric = new ComponentNode
+        {
+            Id = "CounterValue",
+            Type = ComponentType.Label,
+            Properties = new Dictionary<string, BindableValue<object?>>
+            {
+                ["Text"] = "03/07"
+            },
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 9
+            }
+        };
+
+        var quantityLabel = new ComponentNode
+        {
+            Id = "materialQty",
+            Type = ComponentType.Label,
+            Layout = new LayoutSpec
+            {
+                Align = Alignment.End
+            },
+            Properties = new Dictionary<string, BindableValue<object?>>
+            {
+                ["Text"] = "12 pcs"
+            },
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 9
+            }
+        };
+
+        var leadingIcon = new ComponentNode
+        {
+            Id = "rowIcon",
+            Type = ComponentType.Icon,
+            Style = new StyleSpec
+            {
+                FontFamily = "Lucide",
+                FontSize = 18
+            },
+            Layout = new LayoutSpec
+            {
+                Width = Dimension.Pixels(18),
+                Height = Dimension.Pixels(18)
+            }
+        };
+
+        var iconRow = new ComponentNode
+        {
+            Id = "IngredientRow",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Horizontal,
+                Gap = Spacing.Uniform(8)
+            },
+            Children =
+            [
+                leadingIcon,
+                compactLabel,
+                quantityLabel
+            ]
+        };
+
+        var badgeShell = new ComponentNode
+        {
+            Id = "BadgeShell",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Width = Dimension.Pixels(36),
+                Height = Dimension.Pixels(36)
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = "BadgeIcon",
+                    Type = ComponentType.Icon,
+                    Style = new StyleSpec
+                    {
+                        FontFamily = "Lucide",
+                        FontSize = 16
+                    },
+                    Layout = new LayoutSpec
+                    {
+                        Width = Dimension.Pixels(16),
+                        Height = Dimension.Pixels(16)
+                    }
+                }
+            ]
+        };
+
+        var tabRow = new ComponentNode
+        {
+            Id = "TabRow",
+            Type = ComponentType.Container,
+            Layout = new LayoutSpec
+            {
+                Type = LayoutType.Horizontal,
+                Gap = Spacing.Uniform(6)
+            },
+            Children =
+            [
+                new ComponentNode
+                {
+                    Id = "TabOne",
+                    Type = ComponentType.Button,
+                    Layout = new LayoutSpec
+                    {
+                        Width = Dimension.Pixels(96),
+                        Height = Dimension.Pixels(28)
+                    },
+                    Children =
+                    [
+                        new ComponentNode
+                        {
+                            Id = "TabOneLabel",
+                            Type = ComponentType.Label,
+                            Properties = new Dictionary<string, BindableValue<object?>>
+                            {
+                                ["Text"] = "BUILD"
+                            },
+                            Style = new StyleSpec
+                            {
+                                FontFamily = "Press Start 2P",
+                                FontSize = 9
+                            }
+                        }
+                    ]
+                },
+                new ComponentNode
+                {
+                    Id = "TabTwo",
+                    Type = ComponentType.Button,
+                    Layout = new LayoutSpec
+                    {
+                        Width = Dimension.Pixels(96),
+                        Height = Dimension.Pixels(28)
+                    },
+                    Children =
+                    [
+                        new ComponentNode
+                        {
+                            Id = "TabTwoLabel",
+                            Type = ComponentType.Label,
+                            Properties = new Dictionary<string, BindableValue<object?>>
+                            {
+                                ["Text"] = "QUEUE"
+                            },
+                            Style = new StyleSpec
+                            {
+                                FontFamily = "Press Start 2P",
+                                FontSize = 9
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        var resolver = new RuleResolver(ruleSet, "ugui");
+
+        resolver.Resolve("CraftingHud", compactLabel).Text.LetterSpacingDelta.Should().Be(0.5);
+        resolver.Resolve("CraftingHud", compactNumeric).Text.FontSizeDelta.Should().Be(1);
+        resolver.Resolve("CraftingHud", iconRow).Layout.GapDelta.Should().Be(-2);
+        resolver.Resolve("CraftingHud", quantityLabel, new RuleSelectionContext(iconRow, null, 2)).Layout.PreferContentWidth.Should().BeTrue();
+        resolver.Resolve("CraftingHud", leadingIcon, new RuleSelectionContext(iconRow, null, 0)).Icon.BaselineOffset.Should().Be(1.5);
+        resolver.Resolve("CraftingHud", badgeShell.Children[0], new RuleSelectionContext(badgeShell, null, 0)).Icon.OpticalCentering.Should().BeFalse();
+        resolver.Resolve("CraftingHud", tabRow.Children[0].Children[0], new RuleSelectionContext(tabRow.Children[0], tabRow, 0)).Text.WrapText.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Resolve_MetricProfilesDifferentiateSharedSemanticClassesByBackend()
+    {
+        var ruleSet = new GeneratorRuleSet
+        {
+            MetricProfiles =
+            [
+                new GeneratorMetricProfile
+                {
+                    Name = "unity compact label default",
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "unity",
+                        ComponentType = ComponentType.Label,
+                        SemanticClass = "compact-label",
+                        SizeBand = "small"
+                    },
+                    Template = new GeneratorActionTemplate
+                    {
+                        Kind = "fontSizeDelta",
+                        NumberValue = 0
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            LetterSpacingDelta = 0
+                        }
+                    }
+                },
+                new GeneratorMetricProfile
+                {
+                    Name = "ugui compact label tighten",
+                    Selector = new GeneratorRuleSelector
+                    {
+                        Backend = "ugui",
+                        ComponentType = ComponentType.Label,
+                        SemanticClass = "compact-label",
+                        SizeBand = "small"
+                    },
+                    Template = new GeneratorActionTemplate
+                    {
+                        Kind = "fontSizeDelta",
+                        NumberValue = 1
+                    },
+                    Action = new GeneratorRuleAction
+                    {
+                        Text = new GeneratorTextRuleAction
+                        {
+                            LetterSpacingDelta = -0.25
+                        }
+                    }
+                }
+            ]
+        };
+
+        var node = new ComponentNode
+        {
+            Id = "TabLabel",
+            Type = ComponentType.Label,
+            Properties = new Dictionary<string, BindableValue<object?>>
+            {
+                ["Text"] = "MAP"
+            },
+            Style = new StyleSpec
+            {
+                FontFamily = "Press Start 2P",
+                FontSize = 9
+            }
+        };
+
+        var unityResolver = new RuleResolver(ruleSet, "unity");
+        var uguiResolver = new RuleResolver(ruleSet, "ugui");
+
+        var unityPolicy = unityResolver.Resolve("QuestHud", node);
+        var uguiPolicy = uguiResolver.Resolve("QuestHud", node);
+
+        unityPolicy.Text.FontSizeDelta.Should().Be(0);
+        unityPolicy.Text.LetterSpacingDelta.Should().Be(0);
+        uguiPolicy.Text.FontSizeDelta.Should().Be(1);
+        uguiPolicy.Text.LetterSpacingDelta.Should().Be(-0.25);
+    }
+
+    [Fact]
     public void ResolveFlexibleSize_PreferContentHeightSuppressesDefaultFlexGrowth()
     {
         var baseline = LayoutPolicyService.ResolveFlexibleSize(

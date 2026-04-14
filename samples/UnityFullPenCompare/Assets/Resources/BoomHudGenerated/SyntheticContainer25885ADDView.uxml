@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="FilterHab" class="boomhud-filter-hab">
+        <ui:Label name="FilterHabText" class="boomhud-filter-hab-text" />
+    </ui:VisualElement>
+</ui:UXML>

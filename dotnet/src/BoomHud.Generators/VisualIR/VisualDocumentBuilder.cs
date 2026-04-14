@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
+using BoomHud.Generators.SourceSemantics;
 
 namespace BoomHud.Generators.VisualIR;
 
@@ -10,26 +11,39 @@ internal static class VisualDocumentBuilder
     private const string SourceGenerationMode = "post-v1-prepared-hud-document";
     private static readonly string[] TextSemanticClasses =
     [
-        "pixel-text",
+        "compact-numeric-readout",
+        "right-aligned-quantity",
+        "tab-label",
+        "button-label",
+        "compact-label",
         "heading-label",
         "stacked-text-line",
-        "stacked-text-group"
+        "stacked-text-group",
+        "pixel-text"
     ];
 
     private static readonly string[] IconSemanticClasses =
     [
+        "badge-icon",
+        "leading-icon",
+        "inline-icon",
         "icon-glyph",
         "icon-shell"
     ];
 
-    public static VisualDocument Build(HudDocument document, GenerationOptions options, string? backendId)
+    private static readonly string[] ContainerSemanticClasses =
+    [
+        "value-row"
+    ];
+
+    public static VisualDocument Build(HudDocument document, GenerationOptions options, string? backendId, SourceSemanticDocument? sourceSemanticDocument = null)
     {
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(options);
 
         var backendFamily = string.IsNullOrWhiteSpace(backendId) ? "neutral" : backendId.Trim();
         var resolver = new RuleResolver(options.RuleSet, backendFamily);
-        var state = new BuilderState(document.Name, backendFamily, resolver);
+        var state = new BuilderState(document.Name, backendFamily, resolver, sourceSemanticDocument);
 
         var root = BuildNode(document.Root, RuleSelectionContext.Root, "root", state, parentLayoutType: null);
         var components = document.Components
@@ -64,7 +78,8 @@ internal static class VisualDocumentBuilder
         var kind = Classify(node.Type);
         var widthDimension = node.Layout?.Width ?? node.Style?.Width;
         var heightDimension = node.Layout?.Height ?? node.Style?.Height;
-        var semanticClass = ResolveSemanticClass(node, context, kind);
+        var sourceSemanticNode = state.ResolveSourceSemanticNode(stableId);
+        var semanticClass = ResolveSemanticClass(node, context, kind, sourceSemanticNode);
         var sizeBand = RuleSelectorClassifier.ResolveSizeBand(node);
         var typography = BuildTypographyContract(node, policy, kind, semanticClass, sizeBand, widthDimension, heightDimension);
         var icon = BuildIconContract(node, policy, kind, semanticClass, sizeBand, widthDimension, heightDimension);
@@ -88,6 +103,8 @@ internal static class VisualDocumentBuilder
             SourceType = node.Type,
             ComponentRefId = node.ComponentRefId,
             SemanticClass = semanticClass,
+            SourceSemanticRole = sourceSemanticNode?.SemanticRole,
+            SourceAssetRealization = sourceSemanticNode?.AssetRealization.ToString(),
             MetricProfileId = metricProfileId,
             StaticProperties = ExtractStaticProperties(node),
             PropertyOverrides = ExtractPropertyOverrides(node),
@@ -232,14 +249,21 @@ internal static class VisualDocumentBuilder
         };
     }
 
-    private static string ResolveSemanticClass(ComponentNode node, RuleSelectionContext context, VisualNodeKind kind)
+    private static string ResolveSemanticClass(ComponentNode node, RuleSelectionContext context, VisualNodeKind kind, SourceSemanticNode? sourceSemanticNode)
     {
         var semanticClasses = kind switch
         {
             VisualNodeKind.Text => TextSemanticClasses,
             VisualNodeKind.Icon => IconSemanticClasses,
+            VisualNodeKind.Container => ContainerSemanticClasses,
             _ => []
         };
+
+        if (sourceSemanticNode != null
+            && semanticClasses.Contains(sourceSemanticNode.SemanticRole, StringComparer.Ordinal))
+        {
+            return sourceSemanticNode.SemanticRole;
+        }
 
         foreach (var semanticClass in semanticClasses)
         {
@@ -365,14 +389,24 @@ internal static class VisualDocumentBuilder
 
     private sealed class BuilderState
     {
+        private readonly Dictionary<string, SourceSemanticNode> _sourceSemanticNodesByStableId = new(StringComparer.Ordinal);
         private readonly Dictionary<string, string> _metricProfileIds = new(StringComparer.Ordinal);
         private readonly List<MetricProfileDefinition> _metricProfiles = [];
 
-        public BuilderState(string documentName, string backendFamily, RuleResolver resolver)
+        public BuilderState(string documentName, string backendFamily, RuleResolver resolver, SourceSemanticDocument? sourceSemanticDocument)
         {
             DocumentName = documentName;
             BackendFamily = backendFamily;
             Resolver = resolver;
+
+            if (sourceSemanticDocument != null)
+            {
+                IndexSourceSemanticNode(sourceSemanticDocument.Root);
+                foreach (var component in sourceSemanticDocument.Components)
+                {
+                    IndexSourceSemanticNode(component.Root);
+                }
+            }
         }
 
         public string DocumentName { get; }
@@ -382,6 +416,9 @@ internal static class VisualDocumentBuilder
         public RuleResolver Resolver { get; }
 
         public IReadOnlyList<MetricProfileDefinition> MetricProfiles => _metricProfiles;
+
+        public SourceSemanticNode? ResolveSourceSemanticNode(string stableId)
+            => _sourceSemanticNodesByStableId.TryGetValue(stableId, out var sourceSemanticNode) ? sourceSemanticNode : null;
 
         public string? ResolveMetricProfileId(string semanticClass, TypographyContract? typography, IconContract? icon)
         {
@@ -467,5 +504,14 @@ internal static class VisualDocumentBuilder
 
         private static string FormatDouble(double? value)
             => value?.ToString("0.####", CultureInfo.InvariantCulture) ?? string.Empty;
+
+        private void IndexSourceSemanticNode(SourceSemanticNode node)
+        {
+            _sourceSemanticNodesByStableId[node.StableId] = node;
+            foreach (var child in node.Children)
+            {
+                IndexSourceSemanticNode(child);
+            }
+        }
     }
 }

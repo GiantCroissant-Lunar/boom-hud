@@ -1,0 +1,40 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "CNC01",
+      "name": "CompactNumericCounter",
+      "width": 220,
+      "height": 108,
+      "fill": "#0B0B0B",
+      "stroke": { "thickness": 3, "fill": "#575757" },
+      "layout": "vertical",
+      "justifyContent": "center",
+      "gap": 10,
+      "padding": 14,
+      "children": [
+        {
+          "type": "text",
+          "id": "CNC02",
+          "name": "CounterLabel",
+          "fill": "#B7B7B7",
+          "content": "STOCK",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 8,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "CNC03",
+          "name": "CounterValue",
+          "fill": "#FFFFFF",
+          "content": "03/07",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

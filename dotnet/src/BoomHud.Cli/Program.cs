@@ -60,6 +60,7 @@ public static class Program
             var variablesOption = new Option<FileInfo?>("--variables", "Optional Figma variables JSON file for theme tokens");
             var motionOption = new Option<FileInfo?>("--motion", "Optional Motion JSON file to emit animation artifacts for supported backends");
             var rulesOption = new Option<FileInfo?>("--rules", "Optional generator rule set JSON file");
+            var emitSourceSemanticOption = new Option<bool>("--emit-source-semantics", "Emit a compiler-only source-semantic artifact alongside generated files");
             var emitVisualIrOption = new Option<bool>("--emit-visual-ir", "Emit a compiler-only Visual IR artifact alongside generated files");
             var emitVisualSynthesisOption = new Option<bool>("--emit-visual-synthesis", "Emit a compiler-only Visual synthesis artifact alongside generated files");
             var emitVisualRefinementOption = new Option<bool>("--emit-visual-refinement", "Emit a compiler-only Visual refinement artifact alongside generated files");
@@ -93,6 +94,7 @@ public static class Program
             generateCommand.AddOption(variablesOption);
             generateCommand.AddOption(motionOption);
             generateCommand.AddOption(rulesOption);
+            generateCommand.AddOption(emitSourceSemanticOption);
             generateCommand.AddOption(emitVisualIrOption);
             generateCommand.AddOption(emitVisualSynthesisOption);
             generateCommand.AddOption(emitVisualRefinementOption);
@@ -125,6 +127,7 @@ public static class Program
                 var variables = context.ParseResult.GetValueForOption(variablesOption);
                 var motion = context.ParseResult.GetValueForOption(motionOption);
                 var rules = context.ParseResult.GetValueForOption(rulesOption);
+                var emitSourceSemantics = context.ParseResult.GetValueForOption(emitSourceSemanticOption);
                 var emitVisualIr = context.ParseResult.GetValueForOption(emitVisualIrOption);
                 var emitVisualSynthesis = context.ParseResult.GetValueForOption(emitVisualSynthesisOption);
                 var emitVisualRefinement = context.ParseResult.GetValueForOption(emitVisualRefinementOption);
@@ -241,6 +244,7 @@ public static class Program
                     variables,
                     motion,
                     effectiveRules,
+                    emitSourceSemantics,
                     emitVisualIr,
                     emitVisualSynthesis,
                     emitVisualRefinement,
@@ -507,6 +511,7 @@ public static class Program
         FileInfo? variables,
         FileInfo? motion,
         FileInfo? rules,
+        bool emitSourceSemantics,
         bool emitVisualIr,
         bool emitVisualSynthesis,
         bool emitVisualRefinement,
@@ -693,6 +698,7 @@ public static class Program
             Theme = theme,
             Motion = motionDocument,
             RuleSet = ruleSet,
+            EmitSourceSemanticArtifact = emitSourceSemantics,
             EmitVisualIrArtifact = emitVisualIr,
             EmitVisualSynthesisArtifact = emitVisualSynthesis,
             EmitVisualRefinementArtifact = emitVisualRefinement,

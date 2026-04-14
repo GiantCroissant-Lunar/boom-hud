@@ -1382,17 +1382,9 @@ public sealed class PartyStatusStripView
         var normalizedFamily = familyName.Trim();
         var normalizedSize = Mathf.Max(1, Mathf.RoundToInt(pointSize));
         var cacheKey = $"{normalizedFamily}|{normalizedSize}";
-        var preferSdf = string.Equals(normalizedFamily, "lucide", StringComparison.OrdinalIgnoreCase);
 
         if (s_fontDefinitions.TryGetValue(cacheKey, out fontDefinition))
         {
-            return true;
-        }
-
-        if (!preferSdf && TryLoadFont(normalizedFamily, normalizedSize, out var font))
-        {
-            fontDefinition = FontDefinition.FromFont(font);
-            s_fontDefinitions[cacheKey] = fontDefinition;
             return true;
         }
 
@@ -1403,7 +1395,7 @@ public sealed class PartyStatusStripView
             return true;
         }
 
-        if (!TryLoadFont(normalizedFamily, normalizedSize, out font))
+        if (!TryLoadFont(normalizedFamily, normalizedSize, out var font))
         {
             return false;
         }

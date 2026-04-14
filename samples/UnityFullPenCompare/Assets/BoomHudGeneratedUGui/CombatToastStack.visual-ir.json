@@ -336,7 +336,7 @@
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
                   "ResolvedFontSize": 14,
-                  "ResolvedLineHeight": null,
+                  "ResolvedLineHeight": 13.299999999999999,
                   "ResolvedLetterSpacing": null,
                   "WrapText": false,
                   "TextGrowth": null,
@@ -816,9 +816,9 @@
                 "Typography": {
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
-                  "ResolvedFontSize": 8,
+                  "ResolvedFontSize": 9,
                   "ResolvedLineHeight": null,
-                  "ResolvedLetterSpacing": null,
+                  "ResolvedLetterSpacing": 0.5,
                   "WrapText": false,
                   "TextGrowth": null,
                   "SizeBand": "xsmall"
@@ -1093,7 +1093,7 @@
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
                   "ResolvedFontSize": 14,
-                  "ResolvedLineHeight": null,
+                  "ResolvedLineHeight": 13.299999999999999,
                   "ResolvedLetterSpacing": null,
                   "WrapText": false,
                   "TextGrowth": null,
@@ -1583,9 +1583,9 @@
                 "Typography": {
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
-                  "ResolvedFontSize": 8,
+                  "ResolvedFontSize": 9,
                   "ResolvedLineHeight": null,
-                  "ResolvedLetterSpacing": null,
+                  "ResolvedLetterSpacing": 0.5,
                   "WrapText": false,
                   "TextGrowth": null,
                   "SizeBand": "xsmall"
@@ -1860,7 +1860,7 @@
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
                   "ResolvedFontSize": 14,
-                  "ResolvedLineHeight": null,
+                  "ResolvedLineHeight": 13.299999999999999,
                   "ResolvedLetterSpacing": null,
                   "WrapText": false,
                   "TextGrowth": null,
@@ -2350,9 +2350,9 @@
                 "Typography": {
                   "SemanticClass": "pixel-text",
                   "ResolvedFontFamily": "Press Start 2P",
-                  "ResolvedFontSize": 8,
+                  "ResolvedFontSize": 9,
                   "ResolvedLineHeight": null,
-                  "ResolvedLetterSpacing": null,
+                  "ResolvedLetterSpacing": 0.5,
                   "WrapText": false,
                   "TextGrowth": null,
                   "SizeBand": "xsmall"
@@ -2826,7 +2826,7 @@
       "Text": {
         "ResolvedFontFamily": "Press Start 2P",
         "ResolvedFontSize": 14,
-        "ResolvedLineHeight": null,
+        "ResolvedLineHeight": 13.299999999999999,
         "ResolvedLetterSpacing": null,
         "WrapText": false,
         "TextGrowth": null,
@@ -2870,9 +2870,9 @@
       "SemanticClass": "pixel-text",
       "Text": {
         "ResolvedFontFamily": "Press Start 2P",
-        "ResolvedFontSize": 8,
+        "ResolvedFontSize": 9,
         "ResolvedLineHeight": null,
-        "ResolvedLetterSpacing": null,
+        "ResolvedLetterSpacing": 0.5,
         "WrapText": false,
         "TextGrowth": null,
         "SizeBand": "xsmall"

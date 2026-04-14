@@ -83,6 +83,31 @@ public sealed class UGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_WhenRequested_EmitsSourceSemanticArtifact()
+    {
+        var doc = new HudDocument
+        {
+            Name = "VisualHud",
+            Root = new ComponentNode
+            {
+                Id = "title",
+                Type = ComponentType.Label,
+                Style = new StyleSpec
+                {
+                    FontFamily = "Press Start 2P",
+                    FontSize = 12
+                }
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with { EmitSourceSemanticArtifact = true });
+        var sourceSemantics = result.Files.Single(file => file.Path == "VisualHud.source-semantics.json").Content;
+
+        sourceSemantics.Should().Contain("\"DocumentName\": \"VisualHud\"");
+        sourceSemantics.Should().Contain("\"SemanticRole\": \"pixel-text\"");
+    }
+
+    [Fact]
     public void Generate_WhenRequested_EmitsVisualPlanningArtifacts()
     {
         var doc = new HudDocument
@@ -396,6 +421,783 @@ public sealed class UGuiGeneratorTests
         var viewFile = result.Files.Single(file => file.Path == "VisualHudView.ugui.cs");
         baselineViewFile.Content.Should().Contain("ApplyStyle(Title, fg: null, bg: null, fontFamily: \"Press Start 2P\", fontSize: 9,");
         viewFile.Content.Should().Contain("ApplyStyle(Title, fg: null, bg: null, fontFamily: \"Press Start 2P\", fontSize: 10,");
+    }
+
+    [Fact]
+    public void Generate_RightAlignedQuantity_UsesContentHugWithoutFlexGrowth()
+    {
+        var doc = new HudDocument
+        {
+            Name = "CompactRowHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8),
+                    Width = Dimension.Pixels(220)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "ingredientLabel",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "COPPER"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "ingredientQty",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "12 pcs"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "CompactRowHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(IngredientQty), horizontal: true, vertical: false);");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(IngredientQty), ignoreLayout: false, preferredWidth:");
+        viewFile.Content.Should().NotContain("ApplyLayoutSizing(RectOf(IngredientQty), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f");
+    }
+
+    [Fact]
+    public void Generate_ValueRowShell_DisablesMainAxisChildControlToPreserveCompactWidths()
+    {
+        var doc = new HudDocument
+        {
+            Name = "ValueRowHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8),
+                    Width = Dimension.Pixels(220)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "ingredientLabel",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "COPPER"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "ingredientQty",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "12 pcs"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "ValueRowHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 8f, 0, 0, 0, 0, null, childControlWidth: false, childControlHeight: true);");
+    }
+
+    [Fact]
+    public void Generate_SourceImageAsset_AppliesAuthoredImageBehavior()
+    {
+        var doc = new HudDocument
+        {
+            Name = "ImageAssetHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "heroPortrait",
+                        Type = ComponentType.Image,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(96),
+                            Height = Dimension.Pixels(64)
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["source"] = "portraits/hero"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "ImageAssetHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyImageAssetBehavior(HeroPortrait, preserveAspect: true);");
+        viewFile.Content.Should().Contain("SetImage(HeroPortrait, \"portraits/hero\");");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(HeroPortrait), horizontal: false, vertical: false);");
+    }
+
+    [Fact]
+    public void Generate_OverflowingValueRow_PreservesSourceGapAndPadding()
+    {
+        var doc = new HudDocument
+        {
+            Name = "OverflowValueRowHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Width = Dimension.Pixels(80),
+                    Gap = Spacing.Uniform(8),
+                    Padding = Spacing.Uniform(4)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "ingredientLabel",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(40)
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "COPPER"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "ingredientQty",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(32),
+                            Align = Alignment.End
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "12 pcs"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "OverflowValueRowHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyHorizontalLayout(Root, 8f, 4, 4, 4, 4, null, childControlWidth: false, childControlHeight: true);");
+        viewFile.Content.Should().NotContain("ApplyHorizontalLayout(Root, 4f, 2, 2, 4, 4");
+    }
+
+    [Fact]
+    public void Generate_UnpinnedInlineIcon_PrefersIntrinsicContentHug()
+    {
+        var doc = new HudDocument
+        {
+            Name = "InlineIconHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "statusIcon",
+                        Type = ComponentType.Icon,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Lucide",
+                            FontSize = 16
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "statusLabel",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "READY"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "InlineIconHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(StatusIcon), horizontal: true, vertical: true);");
+        viewFile.Content.Should().NotContain("ApplyLayoutSizing(RectOf(StatusIcon), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f");
+    }
+
+    [Fact]
+    public void Generate_IconShellChild_CentersGlyphWithinShell()
+    {
+        var doc = new HudDocument
+        {
+            Name = "IconShellHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "badgeShell",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(36),
+                            Height = Dimension.Pixels(36)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "badgeIcon",
+                                Type = ComponentType.Icon,
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Lucide",
+                                    FontSize = 16
+                                },
+                                Layout = new LayoutSpec
+                                {
+                                    Width = Dimension.Pixels(16),
+                                    Height = Dimension.Pixels(16)
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "IconShellHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyRectAnchorPreset(RectOf(BadgeIcon), \"center\");");
+        viewFile.Content.Should().Contain("ApplyRectPivotPreset(RectOf(BadgeIcon), \"center\");");
+    }
+
+    [Fact]
+    public void Generate_CompactRowLabel_ForcesNoWrapFromSourceSemantics()
+    {
+        var doc = new HudDocument
+        {
+            Name = "CompactLabelHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "ingredientLabel",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "COPPER"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "ingredientQty",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "12 pcs"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "CompactLabelHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyTextMetrics(IngredientLabel, lineSpacing:");
+        viewFile.Content.Should().Contain("wrapText: false);");
+    }
+
+    [Fact]
+    public void Generate_CompactRowLabel_PrefersIntrinsicWidthWithoutFlexGrowth()
+    {
+        var doc = new HudDocument
+        {
+            Name = "CompactLabelWidthHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8),
+                    Width = Dimension.Pixels(220)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "ingredientLabel",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "COPPER"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "ingredientQty",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "12 pcs"
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 9
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "CompactLabelWidthHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(IngredientLabel), ignoreLayout: false, preferredWidth:");
+        viewFile.Content.Should().NotContain("ApplyLayoutSizing(RectOf(IngredientLabel), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f");
+    }
+
+    [Fact]
+    public void Generate_TabButtons_PreferIntrinsicWidthAndNoWrap()
+    {
+        var doc = new HudDocument
+        {
+            Name = "TabStripHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8),
+                    Width = Dimension.Pixels(280)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "inventoryTab",
+                        Type = ComponentType.Button,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "INVENTORY"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "craftingTab",
+                        Type = ComponentType.Button,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "CRAFTING"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "TabStripHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyTextMetrics(InventoryTab, lineSpacing:");
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(InventoryTab), ignoreLayout: false, preferredWidth:");
+        viewFile.Content.Should().NotContain("ApplyLayoutSizing(RectOf(InventoryTab), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f");
+        viewFile.Content.Should().Contain("wrapText: false);");
+    }
+
+    [Fact]
+    public void Generate_SingleTextChipShell_StretchesAndCentersTextWithoutShellLayoutGroup()
+    {
+        var doc = new HudDocument
+        {
+            Name = "ChipShellHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Gap = Spacing.Uniform(8)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "filterAll",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(138),
+                            Height = Dimension.Pixels(42)
+                        },
+                        Style = new StyleSpec
+                        {
+                            Background = Color.Parse("#F5BE58")
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "filterAllText",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["Text"] = "ALL"
+                                },
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Press Start 2P",
+                                    FontSize = 10
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "ChipShellHudView.ugui.cs");
+
+        viewFile.Content.Should().NotContain("ApplyVerticalLayout(RectOf(FilterAll)");
+        viewFile.Content.Should().Contain("ApplyRectTransformMode(RectOf(FilterAllText), \"center\");");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(FilterAllText), horizontal: true, vertical: true);");
+        viewFile.Content.Should().Contain("ApplyTextAlignment(FilterAllText, \"center\");");
+    }
+
+    [Fact]
+    public void Generate_FixedPanelStack_PreservesAuthoredVerticalSpacingWithoutOverflowCompaction()
+    {
+        var doc = new HudDocument
+        {
+            Name = "FixedPanelStackHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Width = Dimension.Pixels(836),
+                    Height = Dimension.Pixels(860),
+                    Gap = Spacing.Uniform(16),
+                    Padding = new Spacing(18, 18, 18, 18)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "header",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(800),
+                            Height = Dimension.Pixels(56)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "blueprintView",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(800),
+                            Height = Dimension.Pixels(372)
+                        },
+                        Style = new StyleSpec
+                        {
+                            Background = Color.Parse("#121419")
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "resourceRequirements",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(800),
+                            Height = Dimension.Pixels(176)
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "bottomActionStrip",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(800),
+                            Height = Dimension.Pixels(200)
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.Single(file => file.Path == "FixedPanelStackHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 16f, 18, 18, 18, 18");
+        viewFile.Content.Should().NotContain("ApplyVerticalLayout(Root, 10.667f, 18, 18, 12, 12");
+    }
+
+    [Fact]
+    public void Generate_WithSemanticIconMetricProfiles_AppliesLeadingAndBadgeIconCalibration()
+    {
+        var doc = new HudDocument
+        {
+            Name = "IconMetricHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Vertical,
+                    Gap = Spacing.Uniform(8)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "row",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Type = LayoutType.Horizontal,
+                            Gap = Spacing.Uniform(8)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "rowIcon",
+                                Type = ComponentType.Icon,
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Lucide",
+                                    FontSize = 18
+                                },
+                                Layout = new LayoutSpec
+                                {
+                                    Width = Dimension.Pixels(18),
+                                    Height = Dimension.Pixels(18)
+                                }
+                            },
+                            new ComponentNode
+                            {
+                                Id = "rowLabel",
+                                Type = ComponentType.Label,
+                                Properties = new Dictionary<string, BindableValue<object?>>
+                                {
+                                    ["Text"] = "MATERIAL"
+                                },
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Press Start 2P",
+                                    FontSize = 9
+                                }
+                            }
+                        ]
+                    },
+                    new ComponentNode
+                    {
+                        Id = "badgeShell",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Width = Dimension.Pixels(36),
+                            Height = Dimension.Pixels(36)
+                        },
+                        Children =
+                        [
+                            new ComponentNode
+                            {
+                                Id = "badgeIcon",
+                                Type = ComponentType.Icon,
+                                Style = new StyleSpec
+                                {
+                                    FontFamily = "Lucide",
+                                    FontSize = 16
+                                },
+                                Layout = new LayoutSpec
+                                {
+                                    Width = Dimension.Pixels(16),
+                                    Height = Dimension.Pixels(16)
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options with
+        {
+            RuleSet = new GeneratorRuleSet
+            {
+                MetricProfiles =
+                [
+                    new GeneratorMetricProfile
+                    {
+                        Name = "ugui-leading-icon-baseline",
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            ComponentType = ComponentType.Icon,
+                            SemanticClass = "leading-icon"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "iconBaselineOffsetDelta",
+                            NumberValue = 1
+                        }
+                    },
+                    new GeneratorMetricProfile
+                    {
+                        Name = "ugui-badge-icon-centering",
+                        Selector = new GeneratorRuleSelector
+                        {
+                            Backend = "ugui",
+                            ComponentType = ComponentType.Icon,
+                            SemanticClass = "badge-icon"
+                        },
+                        Template = new GeneratorActionTemplate
+                        {
+                            Kind = "iconCenteringPolicy",
+                            BoolValue = false
+                        }
+                    }
+                ]
+            }
+        });
+
+        var viewFile = result.Files.Single(file => file.Path == "IconMetricHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyIconMetrics(RowIcon, boxWidth: 18f, boxHeight: 18f, baselineOffset: 1f");
+        viewFile.Content.Should().Contain("ApplyIconMetrics(BadgeIcon, boxWidth: 16f, boxHeight: 16f, baselineOffset: 0f, opticalCentering: false");
     }
 
     [Fact]
@@ -870,9 +1672,50 @@ public sealed class UGuiGeneratorTests
         var result = _generator.Generate(doc, _options);
         var viewFile = result.Files.First(f => f.Path == "WrappedHudView.ugui.cs");
 
-        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.4f, wrapText: true);");
+        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.4f, letterSpacing: null, wrapText: true);");
         viewFile.Content.Should().Contain("text.lineSpacing=lineSpacing.Value;");
         viewFile.Content.Should().Contain("text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;");
+    }
+
+    [Fact]
+    public void Generate_TextWithLetterSpacing_AppliesTmpCharacterSpacing()
+    {
+        var doc = new HudDocument
+        {
+            Name = "LetterSpacingHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "body",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10,
+                            LetterSpacing = 1.5
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "TRACKED"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "LetterSpacingHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: null, letterSpacing: 1.5f, wrapText: false);");
+        viewFile.Content.Should().Contain("text.characterSpacing=letterSpacing.Value/fontSize*100f;");
+        viewFile.Content.Should().Contain("var isPixelFont=fontFamily==\"Press Start 2P\";");
+        viewFile.Content.Should().Contain("text.useMaxVisibleDescender=true;");
+        viewFile.Content.Should().Contain("text.extraPadding=false;");
     }
 
     [Fact]
@@ -964,6 +1807,171 @@ public sealed class UGuiGeneratorTests
         viewFile.Content.Should().Contain("ConfigureRect(RectOf(ProgressText), width: null, height: null, left: 12f, top: 4f, absolute: true);");
         viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(ProgressText), ignoreLayout: true, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);");
         viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(ProgressText), horizontal: true, vertical: true);");
+    }
+
+    [Fact]
+    public void Generate_ValueRowTextChildren_UseHorizontalContentHug()
+    {
+        var doc = new HudDocument
+        {
+            Name = "TopBarValueRowHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Width = Dimension.Pixels(540),
+                    Gap = Spacing.Uniform(12)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "sectionLabel",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 18
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "MODULE FABRICATION"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "tabOne",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "ASSEMBLY"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "crewCount",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "CREW 11/16"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "TopBarValueRowHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(SectionLabel), horizontal: true, vertical: false);");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(TabOne), horizontal: true, vertical: false);");
+        viewFile.Content.Should().Contain("ApplyContentSizeFit(RectOf(CrewCount), horizontal: true, vertical: false);");
+    }
+
+    [Fact]
+    public void Generate_ValueRow_UsesFlexibleTrailingCarrierForRightEdgeCluster()
+    {
+        var doc = new HudDocument
+        {
+            Name = "ValueRowSpacerHud",
+            Root = new ComponentNode
+            {
+                Id = "root",
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec
+                {
+                    Type = LayoutType.Horizontal,
+                    Width = Dimension.Pixels(540),
+                    Gap = Spacing.Uniform(12)
+                },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "sectionLabel",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 18
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "MODULE FABRICATION"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "tabOne",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "ASSEMBLY"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "crewCount",
+                        Type = ComponentType.Label,
+                        Layout = new LayoutSpec
+                        {
+                            Align = Alignment.End
+                        },
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "CREW 11/16"
+                        }
+                    },
+                    new ComponentNode
+                    {
+                        Id = "timeText",
+                        Type = ComponentType.Label,
+                        Style = new StyleSpec
+                        {
+                            FontFamily = "Press Start 2P",
+                            FontSize = 10
+                        },
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "06:20"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var viewFile = result.Files.First(f => f.Path == "ValueRowSpacerHudView.ugui.cs");
+
+        viewFile.Content.Should().Contain("ApplyLayoutSizing(RectOf(CrewCount), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);");
+        viewFile.Content.Should().Contain("ApplyTextAlignment(CrewCount, \"top-right\");");
     }
 
     [Fact]
@@ -2038,7 +3046,7 @@ public sealed class UGuiGeneratorTests
         var viewFile = result.Files.First(f => f.Path == "PolicyHudView.ugui.cs");
 
         viewFile.Content.Should().Contain("ApplyStyle(Body, fg: null, bg: null, fontFamily: null, fontSize: 18");
-        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.6f, wrapText: true);");
+        viewFile.Content.Should().Contain("ApplyTextMetrics(Body, lineSpacing: 1.6f, letterSpacing: null, wrapText: true);");
         viewFile.Content.Should().Contain("ApplyIconMetrics(ClassIcon, boxWidth: 24f, boxHeight: 24f, baselineOffset: 1.5f, opticalCentering: false, sizeMode: \"match-height\", explicitFontSize: 20f);");
         viewFile.Content.Should().Contain("rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);");
         viewFile.Content.Should().Contain("ApplyVerticalLayout(Root, 9f, 7, 7, 7, 7);");

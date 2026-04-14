@@ -1,0 +1,110 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="FortniteInventory" class="boomhud-fortnite-inventory">
+        <ui:VisualElement name="SkyBackdrop" class="boomhud-sky-backdrop" />
+        <ui:VisualElement name="SeaBand" class="boomhud-sea-band" />
+        <ui:VisualElement name="TopTabs" class="boomhud-top-tabs">
+            <ui:VisualElement name="TabPlay" class="boomhud-tab-play" />
+            <ui:VisualElement name="TabLocker" class="boomhud-tab-locker" />
+            <ui:VisualElement name="TabInventory" class="boomhud-tab-inventory">
+                <ui:Label name="TabInventoryText" class="boomhud-tab-inventory-text" />
+            </ui:VisualElement>
+            <ui:Label name="PartyIndicator" class="boomhud-party-indicator" />
+            <ui:Label name="CurrencyText" class="boomhud-currency-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="PlayerStatsPanel" class="boomhud-player-stats-panel">
+            <ui:Label name="PlayerStatsTitle" class="boomhud-player-stats-title" />
+            <ui:VisualElement name="PortraitBlock" class="boomhud-portrait-block" />
+            <ui:VisualElement name="StatTiles" class="boomhud-stat-tiles">
+                <ui:VisualElement name="TileWins" class="boomhud-tile-wins" />
+                <ui:VisualElement name="TileMatches" class="boomhud-tile-matches" />
+                <ui:VisualElement name="TileKDR" class="boomhud-tile-k-d-r" />
+            </ui:VisualElement>
+            <ui:Label name="LoadoutLabel" class="boomhud-loadout-label" />
+            <ui:VisualElement name="LoadoutCards" class="boomhud-loadout-cards">
+                <ui:VisualElement name="LoadoutCardOne" class="boomhud-loadout-card-one">
+                    <ui:VisualElement name="LoadoutCardOneImage" class="boomhud-loadout-card-one-image" />
+                    <ui:Label name="LoadoutCardOneText" class="boomhud-loadout-card-one-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="LoadoutCardTwo" class="boomhud-loadout-card-two">
+                    <ui:VisualElement name="LoadoutCardTwoImage" class="boomhud-loadout-card-two-image" />
+                    <ui:Label name="LoadoutCardTwoText" class="boomhud-loadout-card-two-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="LoadoutCardThree" class="boomhud-loadout-card-three">
+                    <ui:VisualElement name="LoadoutCardThreeImage" class="boomhud-loadout-card-three-image" />
+                    <ui:Label name="LoadoutCardThreeText" class="boomhud-loadout-card-three-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label name="PlayerStatsFooter" class="boomhud-player-stats-footer" />
+        </ui:VisualElement>
+        <ui:VisualElement name="InventoryPanel" class="boomhud-inventory-panel">
+            <ui:VisualElement name="InventoryHeader" class="boomhud-inventory-header">
+                <ui:Label name="InventoryHeaderText" class="boomhud-inventory-header-text" />
+                <ui:Label name="InventoryCapacity" class="boomhud-inventory-capacity" />
+                <ui:Label name="InventorySort" class="boomhud-inventory-sort" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ItemGrid" class="boomhud-item-grid">
+                <ui:VisualElement name="GridRow01" class="boomhud-grid-row01">
+                    <ui:VisualElement name="Cell011" class="boomhud-cell011" />
+                    <ui:VisualElement name="Cell012" class="boomhud-cell012" />
+                    <ui:VisualElement name="Cell013" class="boomhud-cell013" />
+                    <ui:VisualElement name="Cell014" class="boomhud-cell014" />
+                    <ui:VisualElement name="Cell015" class="boomhud-cell015" />
+                    <ui:VisualElement name="Cell016" class="boomhud-cell016" />
+                    <ui:VisualElement name="Cell017" class="boomhud-cell017" />
+                    <ui:VisualElement name="Cell018" class="boomhud-cell018" />
+                </ui:VisualElement>
+                <ui:VisualElement name="GridRow02" class="boomhud-grid-row02">
+                    <ui:VisualElement name="Cell021" class="boomhud-cell021" />
+                    <ui:VisualElement name="Cell022" class="boomhud-cell022" />
+                    <ui:VisualElement name="Cell023" class="boomhud-cell023" />
+                    <ui:VisualElement name="Cell024" class="boomhud-cell024" />
+                    <ui:VisualElement name="Cell025" class="boomhud-cell025" />
+                    <ui:VisualElement name="Cell026" class="boomhud-cell026" />
+                    <ui:VisualElement name="Cell027" class="boomhud-cell027" />
+                    <ui:VisualElement name="Cell028" class="boomhud-cell028" />
+                </ui:VisualElement>
+                <ui:VisualElement name="GridRow03" class="boomhud-grid-row03">
+                    <ui:VisualElement name="Cell031" class="boomhud-cell031" />
+                    <ui:VisualElement name="Cell032" class="boomhud-cell032" />
+                    <ui:VisualElement name="Cell033" class="boomhud-cell033" />
+                    <ui:VisualElement name="Cell034" class="boomhud-cell034" />
+                    <ui:VisualElement name="Cell035" class="boomhud-cell035" />
+                    <ui:VisualElement name="Cell036" class="boomhud-cell036" />
+                    <ui:VisualElement name="Cell037" class="boomhud-cell037" />
+                    <ui:VisualElement name="Cell038" class="boomhud-cell038" />
+                </ui:VisualElement>
+                <ui:VisualElement name="GridRow04" class="boomhud-grid-row04">
+                    <ui:VisualElement name="Cell041" class="boomhud-cell041" />
+                    <ui:VisualElement name="Cell042" class="boomhud-cell042" />
+                    <ui:VisualElement name="Cell043" class="boomhud-cell043" />
+                    <ui:VisualElement name="Cell044" class="boomhud-cell044" />
+                    <ui:VisualElement name="Cell045" class="boomhud-cell045" />
+                    <ui:VisualElement name="Cell046" class="boomhud-cell046" />
+                    <ui:VisualElement name="Cell047" class="boomhud-cell047" />
+                    <ui:VisualElement name="Cell048" class="boomhud-cell048" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="BottomMetaRow" class="boomhud-bottom-meta-row">
+                <ui:VisualElement name="SelectedItemCard" class="boomhud-selected-item-card">
+                    <ui:Label name="SelectedItemName" class="boomhud-selected-item-name" />
+                    <ui:Label name="SelectedItemBody" class="boomhud-selected-item-body" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ActionButtonDrop" class="boomhud-action-button-drop">
+                    <ui:Label name="ActionButtonDropText" class="boomhud-action-button-drop-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ActionButtonEquip" class="boomhud-action-button-equip">
+                    <ui:Label name="ActionButtonEquipText" class="boomhud-action-button-equip-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ActionButtonSort" class="boomhud-action-button-sort">
+                    <ui:Label name="ActionButtonSortText" class="boomhud-action-button-sort-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ControllerHints" class="boomhud-controller-hints">
+            <ui:Label name="HintOne" class="boomhud-hint-one" />
+            <ui:Label name="HintTwo" class="boomhud-hint-two" />
+            <ui:Label name="HintThree" class="boomhud-hint-three" />
+            <ui:Label name="HintFour" class="boomhud-hint-four" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

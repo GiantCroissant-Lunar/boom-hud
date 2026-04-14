@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="TabThree" class="boomhud-tab-three">
+        <ui:Label name="TabThreeText" class="boomhud-tab-three-text" />
+    </ui:VisualElement>
+</ui:UXML>

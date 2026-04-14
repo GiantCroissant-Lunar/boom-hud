@@ -1,0 +1,40 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "WBM01",
+      "name": "WrappedBodyMicro",
+      "width": 264,
+      "height": 132,
+      "fill": "#0F1012",
+      "stroke": { "thickness": 3, "fill": "#5D6772" },
+      "layout": "vertical",
+      "gap": 10,
+      "padding": 14,
+      "children": [
+        {
+          "type": "text",
+          "id": "WBM02",
+          "name": "SectionLabel",
+          "fill": "#FFFFFF",
+          "content": "NOTES",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 8,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "WBM03",
+          "name": "BodyCopy",
+          "width": "fill_container",
+          "fill": "#AEB6C2",
+          "content": "Route coolant through the west manifold before pressure collapses.",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 8,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

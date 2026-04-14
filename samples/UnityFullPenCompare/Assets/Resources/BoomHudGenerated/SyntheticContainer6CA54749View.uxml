@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="RecipeCard02" class="boomhud-recipe-card02">
+        <ui:Label name="RecipeCard02Title" class="boomhud-recipe-card02-title" />
+        <ui:Label name="RecipeCard02Body" class="boomhud-recipe-card02-body" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,40 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "ILR01",
+      "name": "IconLabelRow",
+      "width": 232,
+      "height": 60,
+      "fill": "#111111",
+      "stroke": { "thickness": 2, "fill": "#686868" },
+      "layout": "horizontal",
+      "alignItems": "center",
+      "gap": 10,
+      "padding": 12,
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "ILR02",
+          "name": "LeadIcon",
+          "width": 18,
+          "height": 18,
+          "iconFontName": "wrench",
+          "iconFontFamily": "lucide",
+          "fill": "#FFFFFF"
+        },
+        {
+          "type": "text",
+          "id": "ILR03",
+          "name": "RowLabel",
+          "fill": "#F2F2F2",
+          "content": "ASSEMBLY",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ]
+}

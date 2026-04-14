@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="WorkerInfoOne" class="boomhud-worker-info-one">
+        <ui:Label name="WorkerInfoOneName" class="boomhud-worker-info-one-name" />
+        <ui:Label name="WorkerInfoOneMeta" class="boomhud-worker-info-one-meta" />
+    </ui:VisualElement>
+</ui:UXML>

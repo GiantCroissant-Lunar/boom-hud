@@ -1,0 +1,136 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="CyberpunkCrafting" class="boomhud-cyberpunk-crafting">
+        <ui:VisualElement name="BackdropWash" class="boomhud-backdrop-wash" />
+        <ui:VisualElement name="BackdropTint" class="boomhud-backdrop-tint" />
+        <ui:VisualElement name="TopStatusBar" class="boomhud-top-status-bar">
+            <ui:Label name="LevelText" class="boomhud-level-text" />
+            <ui:Label name="StreetCredText" class="boomhud-street-cred-text" />
+            <ui:Label name="CharacterTab" class="boomhud-character-tab" />
+            <ui:Label name="JournalTab" class="boomhud-journal-tab" />
+            <ui:Label name="CraftingTab" class="boomhud-crafting-tab" />
+            <ui:Label name="InventoryTab" class="boomhud-inventory-tab" />
+            <ui:Label name="MapTab" class="boomhud-map-tab" />
+            <ui:Label name="CarryWeightText" class="boomhud-carry-weight-text" />
+            <ui:Label name="MoneyText" class="boomhud-money-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TopDivider" class="boomhud-top-divider" />
+        <ui:VisualElement name="CraftingHeader" class="boomhud-crafting-header">
+            <ui:VisualElement name="CraftingBadge" class="boomhud-crafting-badge">
+                <ui:Label name="CraftingBadgeText" class="boomhud-crafting-badge-text" />
+            </ui:VisualElement>
+            <ui:Label name="CraftingLabel" class="boomhud-crafting-label" />
+            <ui:VisualElement name="CraftingModeTab" class="boomhud-crafting-mode-tab">
+                <ui:Label name="CraftingModeTabText" class="boomhud-crafting-mode-tab-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="UpgradeModeTab" class="boomhud-upgrade-mode-tab">
+                <ui:Label name="UpgradeModeTabText" class="boomhud-upgrade-mode-tab-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="IconTabs" class="boomhud-icon-tabs">
+            <ui:VisualElement name="IconTabOne" class="boomhud-icon-tab-one">
+                <ui:Label name="IconTabOneText" class="boomhud-icon-tab-one-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="IconTabTwo" class="boomhud-icon-tab-two" />
+            <ui:VisualElement name="IconTabThree" class="boomhud-icon-tab-three" />
+            <ui:VisualElement name="IconTabFour" class="boomhud-icon-tab-four" />
+            <ui:VisualElement name="IconTabFive" class="boomhud-icon-tab-five" />
+            <ui:VisualElement name="IconTabSix" class="boomhud-icon-tab-six" />
+            <ui:VisualElement name="IconTabSeven" class="boomhud-icon-tab-seven" />
+            <ui:VisualElement name="IconTabEight" class="boomhud-icon-tab-eight" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ItemGrid" class="boomhud-item-grid">
+            <ui:VisualElement name="GridRowOne" class="boomhud-grid-row-one">
+                <ui:VisualElement name="Card11" class="boomhud-card11">
+                    <ui:VisualElement name="WeaponSilhouette11" class="boomhud-weapon-silhouette11" />
+                    <ui:Label name="WeaponLabel11" class="boomhud-weapon-label11" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Card12" class="boomhud-card12">
+                    <ui:VisualElement name="WeaponSilhouette12" class="boomhud-weapon-silhouette12" />
+                    <ui:Label name="WeaponLabel12" class="boomhud-weapon-label12" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="GridRowTwo" class="boomhud-grid-row-two">
+                <ui:VisualElement name="Card21" class="boomhud-card21">
+                    <ui:VisualElement name="WeaponSilhouette21" class="boomhud-weapon-silhouette21" />
+                    <ui:Label name="WeaponLabel21" class="boomhud-weapon-label21" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Card22" class="boomhud-card22">
+                    <ui:VisualElement name="WeaponSilhouette22" class="boomhud-weapon-silhouette22" />
+                    <ui:Label name="WeaponLabel22" class="boomhud-weapon-label22" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Card23" class="boomhud-card23">
+                    <ui:Label name="Card23Text" class="boomhud-card23-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="GridRowThree" class="boomhud-grid-row-three">
+                <ui:VisualElement name="Card31" class="boomhud-card31">
+                    <ui:VisualElement name="WeaponSilhouette31" class="boomhud-weapon-silhouette31" />
+                    <ui:Label name="WeaponLabel31" class="boomhud-weapon-label31" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Card32" class="boomhud-card32">
+                    <ui:VisualElement name="WeaponSilhouette32" class="boomhud-weapon-silhouette32" />
+                    <ui:Label name="WeaponLabel32" class="boomhud-weapon-label32" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="GridRowFour" class="boomhud-grid-row-four">
+                <ui:VisualElement name="Card41" class="boomhud-card41">
+                    <ui:VisualElement name="WeaponSilhouette41" class="boomhud-weapon-silhouette41" />
+                    <ui:Label name="WeaponLabel41" class="boomhud-weapon-label41" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Card42" class="boomhud-card42">
+                    <ui:VisualElement name="WeaponSilhouette42" class="boomhud-weapon-silhouette42" />
+                    <ui:Label name="WeaponLabel42" class="boomhud-weapon-label42" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="GridRowFive" class="boomhud-grid-row-five">
+                <ui:VisualElement name="Card51" class="boomhud-card51" />
+                <ui:VisualElement name="Card52" class="boomhud-card52" />
+                <ui:VisualElement name="Card53" class="boomhud-card53">
+                    <ui:VisualElement name="ModBox53" class="boomhud-mod-box53" />
+                    <ui:Label name="ModLabel53" class="boomhud-mod-label53" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="GridDivider" class="boomhud-grid-divider" />
+        <ui:VisualElement name="WeaponPreviewPanel" class="boomhud-weapon-preview-panel">
+            <ui:Label name="WeaponName" class="boomhud-weapon-name" />
+            <ui:Label name="WeaponClass" class="boomhud-weapon-class" />
+            <ui:VisualElement name="WeaponLine" class="boomhud-weapon-line" />
+            <ui:VisualElement name="WeaponBody" class="boomhud-weapon-body" />
+            <ui:VisualElement name="WeaponGrip" class="boomhud-weapon-grip" />
+            <ui:VisualElement name="WeaponMagazine" class="boomhud-weapon-magazine" />
+            <ui:VisualElement name="AmmoCard" class="boomhud-ammo-card">
+                <ui:Label name="AmmoCardText" class="boomhud-ammo-card-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="PreviewFooterLine" class="boomhud-preview-footer-line" />
+            <ui:VisualElement name="CraftButton" class="boomhud-craft-button">
+                <ui:Label name="CraftButtonText" class="boomhud-craft-button-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="StatsColumn" class="boomhud-stats-column">
+            <ui:Label name="PowerTypeLabel" class="boomhud-power-type-label" />
+            <ui:Label name="DamageText" class="boomhud-damage-text" />
+            <ui:Label name="DamageMeta" class="boomhud-damage-meta" />
+            <ui:Label name="RateMeta" class="boomhud-rate-meta" />
+            <ui:VisualElement name="StatsDividerOne" class="boomhud-stats-divider-one" />
+            <ui:Label name="PowerHeader" class="boomhud-power-header" />
+            <ui:Label name="PowerBody" class="boomhud-power-body" />
+            <ui:Label name="StatsListTitle" class="boomhud-stats-list-title" />
+            <ui:Label name="StatList01" class="boomhud-stat-list01" />
+            <ui:Label name="StatList02" class="boomhud-stat-list02" />
+            <ui:Label name="StatList03" class="boomhud-stat-list03" />
+            <ui:Label name="StatList04" class="boomhud-stat-list04" />
+            <ui:Label name="EmptySlot01" class="boomhud-empty-slot01" />
+            <ui:Label name="EmptySlot02" class="boomhud-empty-slot02" />
+            <ui:VisualElement name="StatsDividerTwo" class="boomhud-stats-divider-two" />
+            <ui:Label name="FlavorText" class="boomhud-flavor-text" />
+            <ui:VisualElement name="CostRow" class="boomhud-cost-row">
+                <ui:Label name="CostWeight" class="boomhud-cost-weight" />
+                <ui:Label name="CostMoney" class="boomhud-cost-money" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="CloseButton" class="boomhud-close-button">
+            <ui:Label name="CloseButtonText" class="boomhud-close-button-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

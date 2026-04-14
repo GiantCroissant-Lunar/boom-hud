@@ -1166,6 +1166,9 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
                                 SourceId = "HeroRow",
                                 Kind = VisualNodeKind.Container,
                                 SourceType = ComponentType.Container,
+                                SemanticClass = "value-row",
+                                SourceSemanticRole = "value-row",
+                                SourceAssetRealization = "LayoutContainer",
                                 Box = new VisualBox
                                 {
                                     SourceType = ComponentType.Container
@@ -1241,6 +1244,12 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         report.Issues.Should().Contain(issue => issue.Category == "start-edge-overshift" && issue.LocalPath == "root/0/0");
         report.Issues.Should().NotContain(issue => issue.Category == "width-stretched-vs-preferred" && issue.LocalPath == "root/0/0");
         report.Issues.Should().NotContain(issue => issue.Category == "shell-padding-or-child-stack-mismatch" && issue.LocalPath == "root/0/0");
+        report.Issues.Single(issue => issue.Category == "portrait-or-status-row-shell-drift" && issue.LocalPath == "root/0/0")
+            .ExpectedSourceSemanticRole.Should().Be("value-row");
+        report.SourceSemanticSummaries.Should().Contain(summary =>
+            summary.SourceSemanticRole == "value-row"
+            && summary.SourceAssetRealization == "LayoutContainer"
+            && summary.IssueCount > 0);
     }
 
     [Fact]

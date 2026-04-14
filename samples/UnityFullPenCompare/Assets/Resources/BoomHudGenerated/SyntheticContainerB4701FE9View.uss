@@ -1,0 +1,43 @@
+.boomhud-icon-tab-two {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 46px;
+    height: 46px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #2A1115;
+    background-color: #2A1115;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #B61A22;
+    border-right-color: #B61A22;
+    border-top-color: #B61A22;
+    border-bottom-color: #B61A22;
+}
+
+.boomhud-icon-tab-two-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FF6B57;
+    font-size: 10px;
+    -unity-font-style: normal;
+}
+

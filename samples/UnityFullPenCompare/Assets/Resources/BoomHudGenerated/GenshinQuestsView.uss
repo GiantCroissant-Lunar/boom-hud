@@ -1,0 +1,1097 @@
+.boomhud-genshin-quests {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 1920px;
+    height: 1080px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #9AA89A;
+    background-color: #9AA89A;
+}
+
+.boomhud-backdrop-wash {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 1920px;
+    height: 1080px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #8696A7;
+    background-color: #8696A7;
+}
+
+.boomhud-backdrop-tint {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 1920px;
+    height: 1080px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #DDE4CC99;
+    background-color: #DDE4CC99;
+}
+
+.boomhud-category-rail {
+    position: absolute;
+    left: 22px;
+    top: 18px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 126px;
+    height: 1044px;
+    padding-top: 18px;
+    padding-right: 18px;
+    padding-bottom: 18px;
+    padding-left: 18px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #4A5564CC;
+    background-color: #4A5564CC;
+}
+
+.boomhud-tab-one {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 86px;
+    height: 86px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #C9B58B;
+    background-color: #C9B58B;
+}
+
+.boomhud-tab-one-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 24px;
+    -unity-font-style: normal;
+}
+
+.boomhud-tab-two {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+.boomhud-tab-three {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+.boomhud-tab-four {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+.boomhud-tab-five {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+.boomhud-tab-footer {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 86px;
+    height: 86px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #F1E8D8;
+    background-color: #F1E8D8;
+}
+
+.boomhud-tab-footer-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #334355;
+    font-size: 12px;
+    -unity-font-style: normal;
+}
+
+.boomhud-quest-list-panel {
+    position: absolute;
+    left: 178px;
+    top: 30px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 676px;
+    height: 934px;
+    padding-top: 14px;
+    padding-right: 14px;
+    padding-bottom: 14px;
+    padding-left: 14px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #DEE6D0CC;
+    background-color: #DEE6D0CC;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-left-color: #EDE4CE;
+    border-right-color: #EDE4CE;
+    border-top-color: #EDE4CE;
+    border-bottom-color: #EDE4CE;
+}
+
+.boomhud-list-header {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #E9D3A2;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+.boomhud-category-header {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F3E9CC;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-selected-quest-card {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-self: stretch;
+    height: 124px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #334255;
+    background-color: #334255;
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top-width: 6px;
+    border-bottom-width: 6px;
+    border-left-color: #EEE4CF;
+    border-right-color: #EEE4CF;
+    border-top-color: #EEE4CF;
+    border-bottom-color: #EEE4CF;
+}
+
+.boomhud-selected-quest-title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 548px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #E7C98A;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+
+.boomhud-selected-quest-act {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #A8A49A;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+
+.boomhud-focus-quest {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-self: stretch;
+    height: 126px;
+    padding-top: 14px;
+    padding-right: 14px;
+    padding-bottom: 14px;
+    padding-left: 14px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F3ECDD;
+    background-color: #F3ECDD;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-left-color: #EAD9B8;
+    border-right-color: #EAD9B8;
+    border-top-color: #EAD9B8;
+    border-bottom-color: #EAD9B8;
+}
+
+.boomhud-focus-quest-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 470px;
+    height: 88px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F3ECDD;
+    background-color: #F3ECDD;
+}
+
+.boomhud-focus-quest-title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #42556B;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-focus-quest-distance {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #B3B3B3;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+
+.boomhud-focus-quest-badge {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 18px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 96px;
+    height: 88px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #E4BE50;
+    background-color: #E4BE50;
+}
+
+.boomhud-focus-quest-badge-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 18px;
+    -unity-font-style: normal;
+}
+
+.boomhud-list-quest-two {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+}
+
+.boomhud-list-quest-three {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+}
+
+.boomhud-world-quests-label {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F2E5CB;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+.boomhud-world-quest-one {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-self: stretch;
+    height: 100px;
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #5A6573D8;
+    background-color: #5A6573D8;
+}
+
+.boomhud-world-quest-one-title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F0EBE2;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+
+.boomhud-world-quest-one-distance {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #C4C1B9;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+
+.boomhud-world-quest-two {
+    margin-top: 18px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-self: stretch;
+    height: 100px;
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #5A6573D8;
+    background-color: #5A6573D8;
+}
+
+.boomhud-world-quest-two-title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 590px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F0EBE2;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+
+.boomhud-world-quest-two-distance {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #C4C1B9;
+    font-size: 11px;
+    -unity-font-style: normal;
+}
+
+.boomhud-scroll-track {
+    position: absolute;
+    left: 846px;
+    top: 116px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 10px;
+    height: 792px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #D4CDB8;
+    background-color: #D4CDB8;
+}
+
+.boomhud-scroll-thumb {
+    position: absolute;
+    left: 844px;
+    top: 132px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 14px;
+    height: 112px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #A5976F;
+    background-color: #A5976F;
+}
+
+.boomhud-detail-panel {
+    position: absolute;
+    left: 918px;
+    top: 92px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 894px;
+    height: 842px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #D8E0CC66;
+    background-color: #D8E0CC66;
+}
+
+.boomhud-detail-header {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    align-self: stretch;
+    height: 122px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #D8E0CC00;
+    background-color: #D8E0CC00;
+}
+
+.boomhud-detail-title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F0E5D0;
+    font-size: 22px;
+    -unity-font-style: normal;
+}
+
+.boomhud-detail-location {
+    margin-top: 12px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #E2C98B;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+.boomhud-header-line {
+    margin-top: 12px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    align-self: stretch;
+    height: 2px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #E1DABF;
+    background-color: #E1DABF;
+}
+
+.boomhud-objective-banner {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 862px;
+    height: 74px;
+    padding-top: 18px;
+    padding-right: 18px;
+    padding-bottom: 18px;
+    padding-left: 18px;
+    align-items: flex-start;
+    justify-content: center;
+    color: #526675E0;
+    background-color: #526675E0;
+}
+
+.boomhud-objective-banner-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F8F2E5;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+.boomhud-detail-body {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 864px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F3EBDD;
+    font-size: 12px;
+    -unity-font-style: normal;
+}
+
+.boomhud-rewards-line {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    align-self: stretch;
+    height: 2px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #E1DABF;
+    background-color: #E1DABF;
+}
+
+.boomhud-rewards-label {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F0E5D0;
+    font-size: 14px;
+    -unity-font-style: normal;
+}
+
+.boomhud-rewards-row {
+    margin-top: 24px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: row;
+    width: 780px;
+    height: 138px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #D8E0CC00;
+    background-color: #D8E0CC00;
+}
+
+.boomhud-reward-one {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 128px;
+    height: 128px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #718D76;
+    background-color: #718D76;
+}
+
+.boomhud-reward-one-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-reward-two {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    flex-direction: column;
+    width: 128px;
+    height: 128px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #C79043;
+    background-color: #C79043;
+}
+
+.boomhud-reward-two-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-reward-three {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    flex-direction: column;
+    width: 128px;
+    height: 128px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #C29E4A;
+    background-color: #C29E4A;
+}
+
+.boomhud-reward-three-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+
+.boomhud-reward-four {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    flex-direction: column;
+    width: 128px;
+    height: 128px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #4D8FB4;
+    background-color: #4D8FB4;
+}
+
+.boomhud-reward-four-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+
+.boomhud-reward-five {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    flex-direction: column;
+    width: 128px;
+    height: 128px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #7FBB96;
+    background-color: #7FBB96;
+}
+
+.boomhud-reward-five-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-cancel-navigation-button {
+    position: absolute;
+    left: 1496px;
+    top: 952px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: row;
+    width: 324px;
+    height: 102px;
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #F2E8D8;
+    background-color: #F2E8D8;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #E1D1B2;
+    border-right-color: #E1D1B2;
+    border-top-color: #E1D1B2;
+    border-bottom-color: #E1D1B2;
+}
+
+.boomhud-cancel-navigation-glyph {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 68px;
+    height: 68px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: center;
+    justify-content: center;
+    color: #E0B84E;
+    background-color: #E0B84E;
+}
+
+.boomhud-cancel-navigation-glyph-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #FFFFFF;
+    font-size: 16px;
+    -unity-font-style: normal;
+}
+
+.boomhud-cancel-navigation-text-column {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 18px;
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 180px;
+    height: 68px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: center;
+    color: #F2E8D8;
+    background-color: #F2E8D8;
+}
+
+.boomhud-cancel-navigation-text-one {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #42556B;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+
+.boomhud-cancel-navigation-text-two {
+    margin-top: 6px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    flex-direction: column;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #42556B;
+    font-size: 13px;
+    -unity-font-style: normal;
+}
+

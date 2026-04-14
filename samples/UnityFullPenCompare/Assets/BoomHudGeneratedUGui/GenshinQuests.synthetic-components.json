@@ -1,0 +1,34 @@
+{
+  "CandidateGroupCount": 3,
+  "ChosenGroupCount": 3,
+  "RewrittenOccurrenceCount": 6,
+  "Components": [
+    {
+      "ComponentId": "synthetic:62fd2935fbf5",
+      "ComponentName": "SyntheticContainer62FD2935",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 3,
+      "Depth": 2,
+      "SignatureHash": "62fd2935fbf5a5cc093e83530fff2d45d6a5c9ebf2189b64c940a3d0c01c160e"
+    },
+    {
+      "ComponentId": "synthetic:7c99052f396c",
+      "ComponentName": "SyntheticContainer7C99052F",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 2,
+      "Depth": 2,
+      "SignatureHash": "7c99052f396cdd61b1499152224262a9d7859002b9fae46a56552893cf375a84"
+    },
+    {
+      "ComponentId": "synthetic:f65d929fe277",
+      "ComponentName": "SyntheticContainerF65D929F",
+      "RootType": "Container",
+      "OccurrenceCount": 2,
+      "NodeCount": 2,
+      "Depth": 2,
+      "SignatureHash": "f65d929fe2779871c992b58cb4763633dda28a4d6f8c519ca045aced1d0f43be"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="StardewJournal" class="boomhud-stardew-journal">
+        <ui:VisualElement name="BackdropShade" class="boomhud-backdrop-shade" />
+        <ui:VisualElement name="JournalCard" class="boomhud-journal-card">
+            <ui:VisualElement name="RowNewAdvancement" class="boomhud-row-new-advancement" />
+            <ui:VisualElement name="RowNewAnimals" class="boomhud-row-new-animals" />
+            <ui:VisualElement name="RowGathering" class="boomhud-row-gathering">
+                <ui:VisualElement name="QuestCoin" class="boomhud-quest-coin">
+                    <ui:Label name="QuestCoinText" class="boomhud-quest-coin-text" />
+                </ui:VisualElement>
+                <ui:Label name="RowGatheringText" class="boomhud-row-gathering-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="RowDoneStarter" class="boomhud-row-done-starter">
+                <ui:VisualElement name="DoneBadge" class="boomhud-done-badge">
+                    <ui:Label name="DoneBadgeText" class="boomhud-done-badge-text" />
+                </ui:VisualElement>
+                <ui:Label name="RowDoneStarterText" class="boomhud-row-done-starter-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="RowIntroductions" class="boomhud-row-introductions">
+                <ui:VisualElement name="SimpleGlyph" class="boomhud-simple-glyph">
+                    <ui:Label name="SimpleGlyphText" class="boomhud-simple-glyph-text" />
+                </ui:VisualElement>
+                <ui:Label name="RowIntroductionsText" class="boomhud-row-introductions-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="JournalTab" class="boomhud-journal-tab">
+            <ui:Label name="JournalTabText" class="boomhud-journal-tab-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="CloseButton" class="boomhud-close-button">
+            <ui:Label name="CloseButtonText" class="boomhud-close-button-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SelectionPointer" class="boomhud-selection-pointer">
+            <ui:Label name="SelectionPointerText" class="boomhud-selection-pointer-text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

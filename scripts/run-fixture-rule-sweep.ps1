@@ -571,6 +571,7 @@ function Get-UguiGeneratedArtifactMap()
                 DocumentKey = $documentKey
                 BuildProgramPath = $null
                 VisualIrPath = $null
+                VisualRefinementPath = $null
             }
         }
 
@@ -586,10 +587,27 @@ function Get-UguiGeneratedArtifactMap()
                 DocumentKey = $documentKey
                 BuildProgramPath = $null
                 VisualIrPath = $null
+                VisualRefinementPath = $null
             }
         }
 
         $map[$documentKey]["VisualIrPath"] = $visualIrFile.FullName
+    }
+
+    foreach ($visualRefinementFile in @(Get-ChildItem -Path $uguiOutputPath -Filter *.visual-refinement.json -File -ErrorAction SilentlyContinue))
+    {
+        $documentKey = $visualRefinementFile.BaseName -replace '\.visual-refinement$', ''
+        if (-not $map.ContainsKey($documentKey))
+        {
+            $map[$documentKey] = [ordered]@{
+                DocumentKey = $documentKey
+                BuildProgramPath = $null
+                VisualIrPath = $null
+                VisualRefinementPath = $null
+            }
+        }
+
+        $map[$documentKey]["VisualRefinementPath"] = $visualRefinementFile.FullName
     }
 
     return $map
@@ -607,6 +625,30 @@ function Get-ActionStageFromSolveStage([string]$SolveStage)
     }
 }
 
+function Get-RefinementSeedStableIds([string]$VisualRefinementPath)
+{
+    if ([string]::IsNullOrWhiteSpace($VisualRefinementPath) -or -not (Test-Path $VisualRefinementPath))
+    {
+        return @("root")
+    }
+
+    $summary = Get-Content $VisualRefinementPath -Raw | ConvertFrom-Json
+    $seedStableIds = @(
+        @($summary.actions) |
+            Sort-Object iteration |
+            ForEach-Object { [string]$_.targetStableId } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -Unique -First 5
+    )
+
+    if ($seedStableIds.Count -eq 0)
+    {
+        return @("root")
+    }
+
+    return $seedStableIds
+}
+
 function New-UGuiSubtreeActionLibrary([string]$LibraryRoot)
 {
     $actions = @()
@@ -621,6 +663,7 @@ function New-UGuiSubtreeActionLibrary([string]$LibraryRoot)
     {
         $buildProgramPath = [string]$entry.BuildProgramPath
         $visualIrPath = [string]$entry.VisualIrPath
+        $visualRefinementPath = [string](Get-OptionalPropertyValue -Source $entry -PropertyName "VisualRefinementPath")
         if ([string]::IsNullOrWhiteSpace($buildProgramPath) -or [string]::IsNullOrWhiteSpace($visualIrPath))
         {
             continue
@@ -629,9 +672,10 @@ function New-UGuiSubtreeActionLibrary([string]$LibraryRoot)
         $documentRoot = Join-Path $LibraryRoot $entry.DocumentKey
         New-Item -ItemType Directory -Force -Path $documentRoot | Out-Null
         $currentBuildProgramPath = $buildProgramPath
-        $frontier = @("root")
+        $frontier = @(Get-RefinementSeedStableIds -VisualRefinementPath $visualRefinementPath)
         $maxScaffoldDepth = 2
         $scaffoldIndex = 0
+        $visitedSubtrees = @{}
 
         for ($depth = 0; $depth -lt $maxScaffoldDepth; $depth++)
         {
@@ -643,6 +687,12 @@ function New-UGuiSubtreeActionLibrary([string]$LibraryRoot)
             $nextFrontier = @()
             foreach ($subtreeStableId in @($frontier | Sort-Object -Unique))
             {
+                if ([string]::IsNullOrWhiteSpace($subtreeStableId) -or $visitedSubtrees.ContainsKey($subtreeStableId))
+                {
+                    continue
+                }
+
+                $visitedSubtrees[$subtreeStableId] = $true
                 $scaffoldedBuildProgramPath = Join-Path $documentRoot "$($entry.DocumentKey).scaffold-$scaffoldIndex.ugui-build-program.json"
                 $scaffoldReportPath = Join-Path $documentRoot "$($entry.DocumentKey).scaffold-$scaffoldIndex.report.json"
                 Invoke-DotNetCli -Arguments @(
@@ -659,7 +709,10 @@ function New-UGuiSubtreeActionLibrary([string]$LibraryRoot)
 
                 $currentBuildProgramPath = $scaffoldedBuildProgramPath
                 $scaffoldReport = Get-Content $scaffoldReportPath -Raw | ConvertFrom-Json
-                $nextFrontier += @($scaffoldReport.created | ForEach-Object { [string]$_.stableId })
+                $nextFrontier += @(
+                    @($scaffoldReport.created | ForEach-Object { [string]$_.stableId }) |
+                        Where-Object { -not [string]::Equals($_, $subtreeStableId, [System.StringComparison]::Ordinal) }
+                )
                 $scaffoldIndex += 1
             }
 
@@ -1074,58 +1127,105 @@ function New-TemplateMetricProfile(
 
 function New-MetricVariantActionLibrary()
 {
-    $actions = @()
+    $script:actions = @()
     $backends = @("unity", "ugui")
     $textSizeBands = @("xsmall", "small", "medium", "large", "xlarge")
     $iconSizeBands = @("small", "medium", "large", "xlarge")
     $semanticTextBuckets = @(
-        @{ selector = @{ semanticClass = "heading-label" }; label = "heading"; componentType = "label"; variants = @("font", "line", "letter", "wrap") },
-        @{ selector = @{ semanticClass = "stacked-text-line" }; label = "stacked-line"; componentType = "label"; variants = @("font", "line", "letter", "wrap") },
-        @{ selector = @{ semanticClass = "pixel-text" }; label = "pixel"; componentType = ""; variants = @("font", "line", "letter", "wrap") }
+        @{ selector = @{ semanticClass = "heading-label" }; label = "heading"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @() },
+        @{ selector = @{ semanticClass = "stacked-text-line" }; label = "stacked-line"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @() },
+        @{ selector = @{ semanticClass = "pixel-text" }; label = "pixel"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @("fixed-width") },
+        @{ selector = @{ semanticClass = "compact-numeric-readout" }; label = "compact-numeric"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @("fixed-width") },
+        @{ selector = @{ semanticClass = "compact-label" }; label = "compact-label"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @("fixed-width") },
+        @{ selector = @{ semanticClass = "button-label" }; label = "button-label"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @() },
+        @{ selector = @{ semanticClass = "tab-label" }; label = "tab-label"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @() },
+        @{ selector = @{ semanticClass = "right-aligned-quantity" }; label = "right-quantity"; componentType = "label"; variants = @("font", "line", "letter", "wrap"); textGrowthValues = @("fixed-width") }
     )
-    $focusedPixelBuckets = @(
+    $focusedTextBuckets = @(
         @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "xsmall"; wrapText = $true; textGrowth = "fixed-width" }
-            label = "pixel-xsmall-fixedwrap"
-            componentType = ""
+            selector = @{ semanticClass = "compact-numeric-readout"; sizeBand = "xsmall" }
+            label = "compact-numeric-xsmall"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "compact-label"; sizeBand = "xsmall" }
+            label = "compact-label-xsmall"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "compact-label"; sizeBand = "small" }
+            label = "compact-label-small"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "button-label"; sizeBand = "small" }
+            label = "button-label-small"
+            componentType = "label"
             variants = @("font", "line", "letter", "wrap")
             textGrowthValues = @()
         },
         @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "xsmall"; wrapText = $false }
-            label = "pixel-xsmall-nowrap"
-            componentType = ""
-            variants = @("font", "line", "letter", "wrap")
-            textGrowthValues = @("fixed-width")
-        },
-        @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "small"; wrapText = $false }
-            label = "pixel-small-nowrap"
-            componentType = ""
-            variants = @("font", "line", "letter", "wrap")
-            textGrowthValues = @("fixed-width")
-        },
-        @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "medium"; wrapText = $true; textGrowth = "fixed-width" }
-            label = "pixel-medium-fixedwrap"
-            componentType = ""
+            selector = @{ semanticClass = "tab-label"; sizeBand = "small" }
+            label = "tab-label-small"
+            componentType = "label"
             variants = @("font", "line", "letter", "wrap")
             textGrowthValues = @()
         },
         @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "medium"; wrapText = $false }
-            label = "pixel-medium-nowrap"
-            componentType = ""
+            selector = @{ semanticClass = "right-aligned-quantity"; sizeBand = "small" }
+            label = "right-quantity-small"
+            componentType = "label"
             variants = @("font", "line", "letter", "wrap")
             textGrowthValues = @("fixed-width")
         },
         @{
-            selector = @{ semanticClass = "pixel-text"; sizeBand = "large"; wrapText = $false }
-            label = "pixel-large-nowrap"
-            componentType = ""
+            selector = @{ semanticClass = "pixel-text"; sizeBand = "xsmall" }
+            label = "pixel-xsmall"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "pixel-text"; sizeBand = "small" }
+            label = "pixel-small"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "pixel-text"; sizeBand = "medium" }
+            label = "pixel-medium"
+            componentType = "label"
+            variants = @("font", "line", "letter", "wrap")
+            textGrowthValues = @("fixed-width")
+        },
+        @{
+            selector = @{ semanticClass = "pixel-text"; sizeBand = "large" }
+            label = "pixel-large"
+            componentType = "label"
             variants = @("font", "line", "letter", "wrap")
             textGrowthValues = @("fixed-width")
         }
+    )
+    $semanticIconBuckets = @(
+        @{ selector = @{ semanticClass = "leading-icon" }; label = "leading-icon"; componentType = "icon"; variants = @("font", "baseline", "centering") },
+        @{ selector = @{ semanticClass = "badge-icon" }; label = "badge-icon"; componentType = "icon"; variants = @("font", "baseline", "centering") },
+        @{ selector = @{ semanticClass = "inline-icon" }; label = "inline-icon"; componentType = "icon"; variants = @("font", "baseline", "centering") },
+        @{ selector = @{ semanticClass = "icon-glyph" }; label = "icon"; componentType = "icon"; variants = @("font", "baseline", "centering") }
+    )
+    $focusedIconBuckets = @(
+        @{ selector = @{ semanticClass = "leading-icon"; sizeBand = "small" }; label = "leading-icon-small"; componentType = "icon"; variants = @("font", "baseline", "centering") },
+        @{ selector = @{ semanticClass = "badge-icon"; sizeBand = "small" }; label = "badge-icon-small"; componentType = "icon"; variants = @("font", "baseline", "centering") },
+        @{ selector = @{ semanticClass = "inline-icon"; sizeBand = "small" }; label = "inline-icon-small"; componentType = "icon"; variants = @("font", "baseline", "centering") }
+    )
+    $containerBuckets = @(
+        @{ selector = @{ semanticClass = "value-row" }; label = "value-row"; componentType = "container"; variants = @("gap") }
     )
 
     function New-MetricProfileActionRecord(
@@ -1147,110 +1247,132 @@ function New-MetricVariantActionLibrary()
         }
     }
 
+    function Add-TextActionVariants([string]$Backend, [object]$Bucket)
+    {
+        if ($Bucket.variants -contains "font")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-font-minus-1" -Label "$Backend $($Bucket.label) font -1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-font-plus-1" -Label "$Backend $($Bucket.label) font +1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $Bucket.selector
+        }
+
+        if ($Bucket.variants -contains "line")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-line-tight" -Label "$Backend $($Bucket.label) line 0.95" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 0.95 -BoolValue $null -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-line-loose" -Label "$Backend $($Bucket.label) line 1.05" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 1.05 -BoolValue $null -Selector $Bucket.selector
+        }
+
+        if ($Bucket.variants -contains "letter")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-letter-tight" -Label "$Backend $($Bucket.label) letter -0.5" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue -0.5 -BoolValue $null -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-letter-loose" -Label "$Backend $($Bucket.label) letter +0.5" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue 0.5 -BoolValue $null -Selector $Bucket.selector
+        }
+
+        if ($Bucket.variants -contains "wrap")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-wrap-tight" -Label "$Backend $($Bucket.label) wrap tight" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-wrap-loose" -Label "$Backend $($Bucket.label) wrap loose" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $Bucket.selector
+        }
+
+        foreach ($textGrowthValue in @($Bucket.textGrowthValues))
+        {
+            if ([string]::IsNullOrWhiteSpace([string]$textGrowthValue))
+            {
+                continue
+            }
+
+            $textGrowthActionArgs = @{
+                Id = "metric-$Backend-$($Bucket.label)-textgrowth-$($textGrowthValue -replace '[^a-zA-Z0-9]+', '-')"
+                Label = "$Backend $($Bucket.label) text growth $textGrowthValue"
+                Backend = $Backend
+                ComponentType = $Bucket.componentType
+                TemplateKind = "textGrowthPolicy"
+                NumberValue = [double]::MinValue
+                BoolValue = $null
+                Selector = $Bucket.selector
+                TemplateParameters = @{ textGrowth = $textGrowthValue }
+            }
+            $script:actions += New-MetricProfileActionRecord @textGrowthActionArgs
+        }
+    }
+
+    function Add-IconActionVariants([string]$Backend, [object]$Bucket)
+    {
+        if ($Bucket.variants -contains "font")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-font-minus-1" -Label "$Backend $($Bucket.label) font -1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconFontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-font-plus-1" -Label "$Backend $($Bucket.label) font +1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconFontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $Bucket.selector
+        }
+
+        if ($Bucket.variants -contains "baseline")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-baseline-minus-1" -Label "$Backend $($Bucket.label) baseline -1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconBaselineOffsetDelta" -NumberValue -1.0 -BoolValue $null -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-baseline-plus-1" -Label "$Backend $($Bucket.label) baseline +1" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconBaselineOffsetDelta" -NumberValue 1.0 -BoolValue $null -Selector $Bucket.selector
+        }
+
+        if ($Bucket.variants -contains "centering")
+        {
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-centering-off" -Label "$Backend $($Bucket.label) centering off" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconCenteringPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $Bucket.selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$Backend-$($Bucket.label)-centering-on" -Label "$Backend $($Bucket.label) centering on" -Backend $Backend -ComponentType $Bucket.componentType -TemplateKind "iconCenteringPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $Bucket.selector
+        }
+    }
+
     foreach ($backend in $backends)
     {
         foreach ($sizeBand in $textSizeBands)
         {
             $selector = @{ semanticClass = "pixel-text"; sizeBand = $sizeBand }
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-font-minus-1" -Label "$backend pixel $sizeBand font -1" -Backend $backend -ComponentType "" -TemplateKind "fontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-font-plus-1" -Label "$backend pixel $sizeBand font +1" -Backend $backend -ComponentType "" -TemplateKind "fontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-line-tight" -Label "$backend pixel $sizeBand line 0.95" -Backend $backend -ComponentType "" -TemplateKind "lineHeightMode" -NumberValue 0.95 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-line-loose" -Label "$backend pixel $sizeBand line 1.05" -Backend $backend -ComponentType "" -TemplateKind "lineHeightMode" -NumberValue 1.05 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-letter-tight" -Label "$backend pixel $sizeBand letter -0.5" -Backend $backend -ComponentType "" -TemplateKind "letterSpacingDelta" -NumberValue -0.5 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-letter-loose" -Label "$backend pixel $sizeBand letter +0.5" -Backend $backend -ComponentType "" -TemplateKind "letterSpacingDelta" -NumberValue 0.5 -BoolValue $null -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-wrap-tight" -Label "$backend pixel $sizeBand wrap tight" -Backend $backend -ComponentType "" -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $selector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-wrap-loose" -Label "$backend pixel $sizeBand wrap loose" -Backend $backend -ComponentType "" -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-font-minus-1" -Label "$backend pixel $sizeBand font -1" -Backend $backend -ComponentType "label" -TemplateKind "fontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-font-plus-1" -Label "$backend pixel $sizeBand font +1" -Backend $backend -ComponentType "label" -TemplateKind "fontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-line-tight" -Label "$backend pixel $sizeBand line 0.95" -Backend $backend -ComponentType "label" -TemplateKind "lineHeightMode" -NumberValue 0.95 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-line-loose" -Label "$backend pixel $sizeBand line 1.05" -Backend $backend -ComponentType "label" -TemplateKind "lineHeightMode" -NumberValue 1.05 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-letter-tight" -Label "$backend pixel $sizeBand letter -0.5" -Backend $backend -ComponentType "label" -TemplateKind "letterSpacingDelta" -NumberValue -0.5 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-letter-loose" -Label "$backend pixel $sizeBand letter +0.5" -Backend $backend -ComponentType "label" -TemplateKind "letterSpacingDelta" -NumberValue 0.5 -BoolValue $null -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-wrap-tight" -Label "$backend pixel $sizeBand wrap tight" -Backend $backend -ComponentType "label" -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $selector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-pixel-$sizeBand-wrap-loose" -Label "$backend pixel $sizeBand wrap loose" -Backend $backend -ComponentType "label" -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $selector
         }
 
         foreach ($bucket in $semanticTextBuckets)
         {
-            if ($bucket.variants -contains "font")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-font-minus-1" -Label "$backend $($bucket.label) font -1" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-font-plus-1" -Label "$backend $($bucket.label) font +1" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $bucket.selector
-            }
-
-            if ($bucket.variants -contains "line")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-line-tight" -Label "$backend $($bucket.label) line 0.95" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 0.95 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-line-loose" -Label "$backend $($bucket.label) line 1.05" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 1.05 -BoolValue $null -Selector $bucket.selector
-            }
-
-            if ($bucket.variants -contains "letter")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-letter-tight" -Label "$backend $($bucket.label) letter -0.5" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue -0.5 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-letter-loose" -Label "$backend $($bucket.label) letter +0.5" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue 0.5 -BoolValue $null -Selector $bucket.selector
-            }
-
-            if ($bucket.variants -contains "wrap")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-wrap-tight" -Label "$backend $($bucket.label) wrap tight" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-wrap-loose" -Label "$backend $($bucket.label) wrap loose" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $bucket.selector
-            }
+            Add-TextActionVariants -Backend $backend -Bucket $bucket
         }
 
-        foreach ($bucket in $focusedPixelBuckets)
+        foreach ($bucket in $focusedTextBuckets)
         {
-            if ($bucket.variants -contains "font")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-font-minus-1" -Label "$backend $($bucket.label) font -1" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-font-plus-1" -Label "$backend $($bucket.label) font +1" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "fontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $bucket.selector
-            }
+            Add-TextActionVariants -Backend $backend -Bucket $bucket
+        }
 
-            if ($bucket.variants -contains "line")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-line-tight" -Label "$backend $($bucket.label) line 0.95" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 0.95 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-line-loose" -Label "$backend $($bucket.label) line 1.05" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "lineHeightMode" -NumberValue 1.05 -BoolValue $null -Selector $bucket.selector
-            }
+        foreach ($bucket in $semanticIconBuckets)
+        {
+            Add-IconActionVariants -Backend $backend -Bucket $bucket
+        }
 
-            if ($bucket.variants -contains "letter")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-letter-tight" -Label "$backend $($bucket.label) letter -0.5" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue -0.5 -BoolValue $null -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-letter-loose" -Label "$backend $($bucket.label) letter +0.5" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "letterSpacingDelta" -NumberValue 0.5 -BoolValue $null -Selector $bucket.selector
-            }
-
-            if ($bucket.variants -contains "wrap")
-            {
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-wrap-tight" -Label "$backend $($bucket.label) wrap tight" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $bucket.selector
-                $actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-wrap-loose" -Label "$backend $($bucket.label) wrap loose" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "wrapPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $bucket.selector
-            }
-
-            foreach ($textGrowthValue in @($bucket.textGrowthValues))
-            {
-                if ([string]::IsNullOrWhiteSpace([string]$textGrowthValue))
-                {
-                    continue
-                }
-
-                $textGrowthActionArgs = @{
-                    Id = "metric-$backend-$($bucket.label)-textgrowth-$($textGrowthValue -replace '[^a-zA-Z0-9]+', '-')"
-                    Label = "$backend $($bucket.label) text growth $textGrowthValue"
-                    Backend = $backend
-                    ComponentType = $bucket.componentType
-                    TemplateKind = "textGrowthPolicy"
-                    NumberValue = [double]::MinValue
-                    BoolValue = $null
-                    Selector = $bucket.selector
-                    TemplateParameters = @{ textGrowth = $textGrowthValue }
-                }
-                $actions += New-MetricProfileActionRecord @textGrowthActionArgs
-            }
+        foreach ($bucket in $focusedIconBuckets)
+        {
+            Add-IconActionVariants -Backend $backend -Bucket $bucket
         }
 
         foreach ($sizeBand in $iconSizeBands)
         {
             $iconSelector = @{ semanticClass = "icon-glyph"; sizeBand = $sizeBand }
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-$sizeBand-font-minus-1" -Label "$backend icon $sizeBand font -1" -Backend $backend -ComponentType "icon" -TemplateKind "iconFontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $iconSelector
-            $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-$sizeBand-font-plus-1" -Label "$backend icon $sizeBand font +1" -Backend $backend -ComponentType "icon" -TemplateKind "iconFontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $iconSelector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-$sizeBand-font-minus-1" -Label "$backend icon $sizeBand font -1" -Backend $backend -ComponentType "icon" -TemplateKind "iconFontSizeDelta" -NumberValue -1.0 -BoolValue $null -Selector $iconSelector
+            $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-$sizeBand-font-plus-1" -Label "$backend icon $sizeBand font +1" -Backend $backend -ComponentType "icon" -TemplateKind "iconFontSizeDelta" -NumberValue 1.0 -BoolValue $null -Selector $iconSelector
         }
 
-        $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-baseline-minus-1" -Label "$backend icon baseline -1" -Backend $backend -ComponentType "icon" -TemplateKind "iconBaselineOffsetDelta" -NumberValue -1.0 -BoolValue $null -Selector @{ semanticClass = "icon-glyph" }
-        $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-baseline-plus-1" -Label "$backend icon baseline +1" -Backend $backend -ComponentType "icon" -TemplateKind "iconBaselineOffsetDelta" -NumberValue 1.0 -BoolValue $null -Selector @{ semanticClass = "icon-glyph" }
-        $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-centering-off" -Label "$backend icon centering off" -Backend $backend -ComponentType "icon" -TemplateKind "iconCenteringPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector @{ semanticClass = "icon-glyph" }
-        $actions += New-MetricProfileActionRecord -Id "metric-$backend-icon-centering-on" -Label "$backend icon centering on" -Backend $backend -ComponentType "icon" -TemplateKind "iconCenteringPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector @{ semanticClass = "icon-glyph" }
+        foreach ($bucket in $containerBuckets)
+        {
+            if ($bucket.variants -contains "gap")
+            {
+                $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-gap-tight" -Label "$backend $($bucket.label) gap -2" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "gapDelta" -NumberValue -2.0 -BoolValue $null -Selector $bucket.selector
+                $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-$($bucket.label)-gap-loose" -Label "$backend $($bucket.label) gap +2" -Backend $backend -ComponentType $bucket.componentType -TemplateKind "gapDelta" -NumberValue 2.0 -BoolValue $null -Selector $bucket.selector
+            }
+        }
+
+        $preferWidthSelector = @{ semanticClass = "right-aligned-quantity" }
+        $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-right-quantity-prefer-width-on" -Label "$backend right quantity prefer width on" -Backend $backend -ComponentType "label" -TemplateKind "preferContentPolicy" -NumberValue ([double]::MinValue) -BoolValue $true -Selector $preferWidthSelector -TemplateParameters @{ axis = "width" }
+        $script:actions += New-MetricProfileActionRecord -Id "metric-$backend-right-quantity-prefer-width-off" -Label "$backend right quantity prefer width off" -Backend $backend -ComponentType "label" -TemplateKind "preferContentPolicy" -NumberValue ([double]::MinValue) -BoolValue $false -Selector $preferWidthSelector -TemplateParameters @{ axis = "width" }
     }
 
-    return $actions
+    return $script:actions
 }
 
 function New-FrontierActionLibrary([System.IO.FileInfo[]]$RuleFiles)
@@ -1401,25 +1523,42 @@ function Test-CemGroupMatchesFocus(
 {
     function Test-IsPrimaryIsolatedMetricGroup([string]$Key)
     {
-        if ($Key -notlike "*backend=ugui*" -or $Key -notlike "*semanticClass=pixel-text*")
+        if ($Key -notlike "*backend=ugui*")
         {
             return $false
         }
 
         return (
-            $Key -like "*sizeBand=xsmall;textGrowth=fixed-width;wrapText=True*" -or
-            $Key -like "*sizeBand=xsmall;wrapText=False*" -or
-            $Key -like "*sizeBand=small;wrapText=False*" -or
-            $Key -like "*sizeBand=medium;textGrowth=fixed-width;wrapText=True*" -or
-            $Key -like "*sizeBand=medium;wrapText=False*" -or
-            $Key -like "*sizeBand=large;wrapText=False*"
+            $Key -like "*semanticClass=compact-numeric-readout*" -or
+            $Key -like "*semanticClass=compact-label*" -or
+            $Key -like "*semanticClass=button-label*" -or
+            $Key -like "*semanticClass=tab-label*" -or
+            $Key -like "*semanticClass=right-aligned-quantity*" -or
+            $Key -like "*semanticClass=leading-icon*" -or
+            $Key -like "*semanticClass=badge-icon*" -or
+            $Key -like "*semanticClass=inline-icon*" -or
+            $Key -like "*semanticClass=value-row*" -or
+            (
+                $Key -like "*semanticClass=pixel-text*" -and
+                (
+                    $Key -like "*sizeBand=xsmall*" -or
+                    $Key -like "*sizeBand=small*" -or
+                    $Key -like "*sizeBand=medium*"
+                )
+            )
         )
     }
 
     switch ($Focus)
     {
         "primary-isolated" {
-            return Test-IsPrimaryIsolatedMetricGroup -Key ([string]$Group.Key)
+            return (
+                (Test-IsPrimaryIsolatedMetricGroup -Key ([string]$Group.Key)) -or
+                (
+                    -not [string]::IsNullOrWhiteSpace($PrimaryDocumentKey) -and
+                    ([string]$Group.Key) -like "uguiSubtree|document=$PrimaryDocumentKey;*"
+                )
+            )
         }
         "primary" {
             return (

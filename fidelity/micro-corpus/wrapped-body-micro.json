@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "sourcePen": "samples/pencil/wrapped-body-micro.pen",
+  "artifactsRoot": "build/fidelity/micro-corpus/wrapped-body-micro",
+  "tolerance": 8,
+  "staticThreshold": 70,
+  "timelineThreshold": 95,
+  "surfaces": [
+    {
+      "id": "wrapped-body-micro-uitk",
+      "pen": { "nodeId": "WBM01", "output": "pen/static/wrapped-body-micro-uitk.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/wrapped-body-micro-uitk.png",
+        "props": { "fixtureId": "WrappedBodyMicro", "isolated": true, "canvasWidth": 264, "canvasHeight": 132, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "wrapped-body-micro-uitk",
+        "scene": "FixtureCompare",
+        "resourceBasePath": "BoomHudGenerated/WrappedBodyMicroView",
+        "generatedViewTypeName": "Generated.Hud.WrappedBodyMicroView",
+        "generatedRootName": "WrappedBodyMicro",
+        "targetElementName": "WrappedBodyMicro",
+        "output": "unity/static/wrapped-body-micro-uitk.png"
+      }
+    },
+    {
+      "id": "wrapped-body-micro-ugui",
+      "pen": { "nodeId": "WBM01", "output": "pen/static/wrapped-body-micro-ugui.png" },
+      "remotion": {
+        "compositionId": "GeneratedFixtureDemo",
+        "frame": 0,
+        "output": "remotion/static/wrapped-body-micro-ugui.png",
+        "props": { "fixtureId": "WrappedBodyMicro", "isolated": true, "canvasWidth": 264, "canvasHeight": 132, "renderScale": 1 }
+      },
+      "unity": {
+        "captureId": "wrapped-body-micro-ugui",
+        "scene": "FixtureCompareUGui",
+        "generatedViewTypeName": "Generated.Hud.UGui.WrappedBodyMicroView",
+        "targetObjectName": "WrappedBodyMicroRoot",
+        "output": "unity/static/wrapped-body-micro-ugui.png"
+      }
+    }
+  ],
+  "timelines": []
+}

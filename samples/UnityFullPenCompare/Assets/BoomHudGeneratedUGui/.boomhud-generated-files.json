@@ -56,6 +56,70 @@
       "SyntheticContainer640002D6View.ugui.cs",
       "SyntheticContainerC701B3C7View.ugui.cs",
       "SyntheticContainerFA4632C6View.ugui.cs"
+    ],
+    "TheAltersTaskLog": [
+      "ISyntheticContainerA04D0699ViewModel.g.cs",
+      "ITheAltersTaskLogViewModel.g.cs",
+      "SyntheticContainerA04D0699View.ugui.cs",
+      "TheAltersTaskLog.synthetic-components.json",
+      "TheAltersTaskLogView.ugui.cs"
+    ],
+    "GenshinQuests": [
+      "GenshinQuests.synthetic-components.json",
+      "GenshinQuests.visual-ir.json",
+      "GenshinQuestsView.ugui.cs",
+      "IGenshinQuestsViewModel.g.cs",
+      "ISyntheticContainer62FD2935ViewModel.g.cs",
+      "ISyntheticContainer7C99052FViewModel.g.cs",
+      "ISyntheticContainerF65D929FViewModel.g.cs",
+      "SyntheticContainer62FD2935View.ugui.cs",
+      "SyntheticContainer7C99052FView.ugui.cs",
+      "SyntheticContainerF65D929FView.ugui.cs"
+    ],
+    "StardewJournal": [
+      "IStardewJournalViewModel.g.cs",
+      "ISyntheticContainer8FADC52CViewModel.g.cs",
+      "StardewJournal.synthetic-components.json",
+      "StardewJournal.visual-ir.json",
+      "StardewJournalView.ugui.cs",
+      "SyntheticContainer8FADC52CView.ugui.cs"
+    ],
+    "RuinerSkillMenu": [
+      "IRuinerSkillMenuViewModel.g.cs",
+      "RuinerSkillMenu.visual-ir.json",
+      "RuinerSkillMenuView.ugui.cs"
+    ],
+    "TheAltersCrafting": [
+      "ISyntheticContainer0B5C2A08ViewModel.g.cs",
+      "ISyntheticContainer25885ADDViewModel.g.cs",
+      "ISyntheticContainer6CA54749ViewModel.g.cs",
+      "ITheAltersCraftingViewModel.g.cs",
+      "SyntheticContainer0B5C2A08View.ugui.cs",
+      "SyntheticContainer25885ADDView.ugui.cs",
+      "SyntheticContainer6CA54749View.ugui.cs",
+      "TheAltersCrafting.synthetic-components.json",
+      "TheAltersCrafting.visual-ir.json",
+      "TheAltersCraftingView.ugui.cs"
+    ],
+    "FortniteInventory": [
+      "FortniteInventory.synthetic-components.json",
+      "FortniteInventory.visual-ir.json",
+      "FortniteInventoryView.ugui.cs",
+      "IFortniteInventoryViewModel.g.cs",
+      "ISyntheticContainer33503E91ViewModel.g.cs",
+      "ISyntheticContainerA9D40D97ViewModel.g.cs",
+      "SyntheticContainer33503E91View.ugui.cs",
+      "SyntheticContainerA9D40D97View.ugui.cs"
+    ],
+    "CyberpunkCrafting": [
+      "CyberpunkCrafting.synthetic-components.json",
+      "CyberpunkCrafting.visual-ir.json",
+      "CyberpunkCraftingView.ugui.cs",
+      "ICyberpunkCraftingViewModel.g.cs",
+      "ISyntheticContainerB4701FE9ViewModel.g.cs",
+      "ISyntheticContainerC35E1B73ViewModel.g.cs",
+      "SyntheticContainerB4701FE9View.ugui.cs",
+      "SyntheticContainerC35E1B73View.ugui.cs"
     ]
   }
 }

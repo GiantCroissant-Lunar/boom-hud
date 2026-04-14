@@ -180,7 +180,35 @@ public sealed record MeasuredLayoutReport
 
     public IReadOnlyList<MeasuredLayoutIssue> Issues { get; init; } = Array.Empty<MeasuredLayoutIssue>();
 
+    public IReadOnlyList<MeasuredLayoutSemanticClassSummary> SemanticClassSummaries { get; init; } = Array.Empty<MeasuredLayoutSemanticClassSummary>();
+
+    public IReadOnlyList<MeasuredLayoutSourceSemanticSummary> SourceSemanticSummaries { get; init; } = Array.Empty<MeasuredLayoutSourceSemanticSummary>();
+
     public string ToJson() => JsonSerializer.Serialize(this, JsonOptions);
+}
+
+public sealed record MeasuredLayoutSemanticClassSummary
+{
+    public required string SemanticClass { get; init; }
+
+    public required int ComparisonCount { get; init; }
+
+    public required int IssueCount { get; init; }
+
+    public IReadOnlyList<string> IssueCategories { get; init; } = Array.Empty<string>();
+}
+
+public sealed record MeasuredLayoutSourceSemanticSummary
+{
+    public required string SourceSemanticRole { get; init; }
+
+    public string? SourceAssetRealization { get; init; }
+
+    public required int ComparisonCount { get; init; }
+
+    public required int IssueCount { get; init; }
+
+    public IReadOnlyList<string> IssueCategories { get; init; } = Array.Empty<string>();
 }
 
 public sealed record MeasuredLayoutComparison
@@ -190,6 +218,12 @@ public sealed record MeasuredLayoutComparison
     public required string ExpectedStableId { get; init; }
 
     public string? ExpectedSourceId { get; init; }
+
+    public string? ExpectedSemanticClass { get; init; }
+
+    public string? ExpectedSourceSemanticRole { get; init; }
+
+    public string? ExpectedSourceAssetRealization { get; init; }
 
     public required string ActualName { get; init; }
 
@@ -247,6 +281,12 @@ public sealed record MeasuredLayoutIssue
     public required string Severity { get; init; }
 
     public required string LocalPath { get; init; }
+
+    public string? ExpectedSemanticClass { get; init; }
+
+    public string? ExpectedSourceSemanticRole { get; init; }
+
+    public string? ExpectedSourceAssetRealization { get; init; }
 
     public required string Summary { get; init; }
 
@@ -1070,6 +1110,9 @@ public static class ImageSimilarityHandler
                 Category = issue.Category,
                 Severity = issue.Severity,
                 LocalPath = issue.LocalPath,
+                ExpectedSemanticClass = issue.ExpectedSemanticClass,
+                ExpectedSourceSemanticRole = issue.ExpectedSourceSemanticRole,
+                ExpectedSourceAssetRealization = issue.ExpectedSourceAssetRealization,
                 Summary = issue.Summary,
                 SuggestedAction = issue.SuggestedAction
             }).ToList());
@@ -1146,7 +1189,9 @@ public static class ImageSimilarityHandler
             ExpectedRootStableId = expectedRoot.StableId,
             ActualRootName = normalizedActualLayout.Root.Name,
             Comparisons = comparisons,
-            Issues = issues
+            Issues = issues,
+            SemanticClassSummaries = BuildSemanticClassSummaries(comparisons, issues),
+            SourceSemanticSummaries = BuildSourceSemanticSummaries(comparisons, issues)
         };
     }
 
@@ -1353,6 +1398,9 @@ public static class ImageSimilarityHandler
             LocalPath = localPath,
             ExpectedStableId = expected.StableId,
             ExpectedSourceId = expected.SourceId,
+            ExpectedSemanticClass = expected.SemanticClass,
+            ExpectedSourceSemanticRole = expected.SourceSemanticRole,
+            ExpectedSourceAssetRealization = expected.SourceAssetRealization,
             ActualName = actual.Name,
             ActualNodeType = actual.NodeType,
             ExpectedWidthSizing = expected.EdgeContract.WidthSizing,
@@ -1389,6 +1437,9 @@ public static class ImageSimilarityHandler
                 Category = "child-structure-mismatch",
                 Severity = "warning",
                 LocalPath = localPath,
+                ExpectedSemanticClass = expected.SemanticClass,
+                ExpectedSourceSemanticRole = expected.SourceSemanticRole,
+                ExpectedSourceAssetRealization = expected.SourceAssetRealization,
                 Summary = $"Expected {expected.Children.Count} child nodes but realized {actual.Children.Count}.",
                 SuggestedAction = "Inspect synthesis decomposition or backend child mounting for this subtree before tuning smaller metrics."
             });
@@ -1409,6 +1460,94 @@ public static class ImageSimilarityHandler
         }
     }
 
+    private static MeasuredLayoutSemanticClassSummary[] BuildSemanticClassSummaries(
+        IReadOnlyList<MeasuredLayoutComparison> comparisons,
+        IReadOnlyList<MeasuredLayoutIssue> issues)
+    {
+        var issueLookup = issues
+            .GroupBy(static issue => issue.LocalPath, StringComparer.Ordinal)
+            .ToDictionary(
+                static group => group.Key,
+                static group => group.ToList(),
+                StringComparer.Ordinal);
+
+        return comparisons
+            .GroupBy(
+                static comparison => string.IsNullOrWhiteSpace(comparison.ExpectedSemanticClass) ? "unspecified" : comparison.ExpectedSemanticClass!,
+                StringComparer.Ordinal)
+            .Select(group =>
+            {
+                var groupIssues = new List<MeasuredLayoutIssue>();
+                foreach (var comparison in group)
+                {
+                    if (issueLookup.TryGetValue(comparison.LocalPath, out var matchedIssues))
+                    {
+                        groupIssues.AddRange(matchedIssues);
+                    }
+                }
+
+                return new MeasuredLayoutSemanticClassSummary
+                {
+                    SemanticClass = group.Key,
+                    ComparisonCount = group.Count(),
+                    IssueCount = groupIssues.Count,
+                    IssueCategories = groupIssues
+                        .Select(static issue => issue.Category)
+                        .Distinct(StringComparer.Ordinal)
+                        .OrderBy(static category => category, StringComparer.Ordinal)
+                        .ToArray()
+                };
+            })
+            .OrderBy(static summary => summary.SemanticClass, StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    private static MeasuredLayoutSourceSemanticSummary[] BuildSourceSemanticSummaries(
+        IReadOnlyList<MeasuredLayoutComparison> comparisons,
+        IReadOnlyList<MeasuredLayoutIssue> issues)
+    {
+        var issueLookup = issues
+            .GroupBy(static issue => issue.LocalPath, StringComparer.Ordinal)
+            .ToDictionary(
+                static group => group.Key,
+                static group => group.ToList(),
+                StringComparer.Ordinal);
+
+        return comparisons
+            .GroupBy(
+                static comparison => (
+                    Role: string.IsNullOrWhiteSpace(comparison.ExpectedSourceSemanticRole) ? "unspecified" : comparison.ExpectedSourceSemanticRole!,
+                    Asset: comparison.ExpectedSourceAssetRealization),
+                EqualityComparer<(string Role, string? Asset)>.Default)
+            .Select(group =>
+            {
+                var groupIssues = new List<MeasuredLayoutIssue>();
+                foreach (var comparison in group)
+                {
+                    if (issueLookup.TryGetValue(comparison.LocalPath, out var matchedIssues))
+                    {
+                        groupIssues.AddRange(matchedIssues);
+                    }
+                }
+
+                return new MeasuredLayoutSourceSemanticSummary
+                {
+                    SourceSemanticRole = group.Key.Role,
+                    SourceAssetRealization = group.Key.Asset,
+                    ComparisonCount = group.Count(),
+                    IssueCount = groupIssues.Count,
+                    IssueCategories = groupIssues
+                        .Select(static issue => issue.Category)
+                        .Distinct(StringComparer.Ordinal)
+                        .OrderBy(static category => category, StringComparer.Ordinal)
+                        .ToArray()
+                };
+            })
+            .OrderBy(static summary => summary.SourceSemanticRole, StringComparer.Ordinal)
+            .ThenBy(static summary => summary.SourceAssetRealization ?? string.Empty, StringComparer.Ordinal)
+            .ToArray();
+    }
+
     private static IEnumerable<MeasuredLayoutIssue> BuildMeasuredIssues(MeasuredLayoutComparison comparison)
     {
         const double insetTolerance = 6;
@@ -1418,66 +1557,64 @@ public static class ImageSimilarityHandler
         const double scaleTolerance = 0.05;
         var shellCandidate = IsShellContainerCandidate(comparison);
 
+        MeasuredLayoutIssue CreateIssue(string category, string severity, string summary, string? suggestedAction)
+            => new()
+            {
+                Category = category,
+                Severity = severity,
+                LocalPath = comparison.LocalPath,
+                ExpectedSemanticClass = comparison.ExpectedSemanticClass,
+                ExpectedSourceSemanticRole = comparison.ExpectedSourceSemanticRole,
+                ExpectedSourceAssetRealization = comparison.ExpectedSourceAssetRealization,
+                Summary = summary,
+                SuggestedAction = suggestedAction
+            };
+
         if (shellCandidate
             && (Math.Abs(comparison.ActualScaleX - 1d) > scaleTolerance
                 || Math.Abs(comparison.ActualScaleY - 1d) > scaleTolerance))
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "realization-scale-mismatch",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Node is realized with local scale ({comparison.ActualScaleX:F2}, {comparison.ActualScaleY:F2}) instead of the expected neutral scale.",
-                SuggestedAction = "Inspect fixture host scaling or parent transform adjustments before retuning shell layout or metrics."
-            };
+            yield return CreateIssue(
+                "realization-scale-mismatch",
+                "warning",
+                $"Node is realized with local scale ({comparison.ActualScaleX:F2}, {comparison.ActualScaleY:F2}) instead of the expected neutral scale.",
+                "Inspect fixture host scaling or parent transform adjustments before retuning shell layout or metrics.");
         }
 
         if (comparison.ExpectedStartInsetX.HasValue && comparison.ActualX + insetTolerance < comparison.ExpectedStartInsetX.Value)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "start-edge-underflow",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Left inset realized at {comparison.ActualX:F1}px but the Visual IR contract expects about {comparison.ExpectedStartInsetX.Value:F1}px.",
-                SuggestedAction = "Inspect parent padding, child margin, and start-edge participation before changing gap or text metrics."
-            };
+            yield return CreateIssue(
+                "start-edge-underflow",
+                "warning",
+                $"Left inset realized at {comparison.ActualX:F1}px but the Visual IR contract expects about {comparison.ExpectedStartInsetX.Value:F1}px.",
+                "Inspect parent padding, child margin, and start-edge participation before changing gap or text metrics.");
         }
 
         if (comparison.ExpectedStartInsetX.HasValue && comparison.ActualX > comparison.ExpectedStartInsetX.Value + insetTolerance)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "start-edge-overshift",
-                Severity = "info",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Left inset realized at {comparison.ActualX:F1}px, overshooting the expected start inset of {comparison.ExpectedStartInsetX.Value:F1}px.",
-                SuggestedAction = "Inspect absolute offset retention and parent padding accumulation for this node."
-            };
+            yield return CreateIssue(
+                "start-edge-overshift",
+                "info",
+                $"Left inset realized at {comparison.ActualX:F1}px, overshooting the expected start inset of {comparison.ExpectedStartInsetX.Value:F1}px.",
+                "Inspect absolute offset retention and parent padding accumulation for this node.");
         }
 
         if (comparison.ExpectedStartInsetY.HasValue && comparison.ActualY + insetTolerance < comparison.ExpectedStartInsetY.Value)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "start-edge-underflow",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Top inset realized at {comparison.ActualY:F1}px but the Visual IR contract expects about {comparison.ExpectedStartInsetY.Value:F1}px.",
-                SuggestedAction = "Inspect parent padding, child margin, and start-edge participation before changing gap or text metrics."
-            };
+            yield return CreateIssue(
+                "start-edge-underflow",
+                "warning",
+                $"Top inset realized at {comparison.ActualY:F1}px but the Visual IR contract expects about {comparison.ExpectedStartInsetY.Value:F1}px.",
+                "Inspect parent padding, child margin, and start-edge participation before changing gap or text metrics.");
         }
 
         if (comparison.ExpectedStartInsetY.HasValue && comparison.ActualY > comparison.ExpectedStartInsetY.Value + insetTolerance)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "start-edge-overshift",
-                Severity = "info",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Top inset realized at {comparison.ActualY:F1}px, overshooting the expected start inset of {comparison.ExpectedStartInsetY.Value:F1}px.",
-                SuggestedAction = "Inspect absolute offset retention and parent padding accumulation for this node."
-            };
+            yield return CreateIssue(
+                "start-edge-overshift",
+                "info",
+                $"Top inset realized at {comparison.ActualY:F1}px, overshooting the expected start inset of {comparison.ExpectedStartInsetY.Value:F1}px.",
+                "Inspect absolute offset retention and parent padding accumulation for this node.");
         }
 
         var widthStretchRelevant = shellCandidate
@@ -1493,77 +1630,59 @@ public static class ImageSimilarityHandler
             && comparison.ExpectedAvailableWidth.Value > 0
             && comparison.ActualWidth < comparison.ExpectedAvailableWidth.Value - widthTolerance)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "fill-underflow",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Node is expected to fill about {comparison.ExpectedAvailableWidth.Value:F1}px but only realized {comparison.ActualWidth:F1}px.",
-                SuggestedAction = "Inspect fill/stretch realization, layout-group child control flags, and content-hug conflicts on the parent."
-            };
+            yield return CreateIssue(
+                "fill-underflow",
+                "warning",
+                $"Node is expected to fill about {comparison.ExpectedAvailableWidth.Value:F1}px but only realized {comparison.ActualWidth:F1}px.",
+                "Inspect fill/stretch realization, layout-group child control flags, and content-hug conflicts on the parent.");
         }
 
         if (heightCollapseRelevant)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "height-collapsed-vs-preferred",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Shell height realized at {comparison.ActualHeight:F1}px but the subtree prefers about {comparison.ActualPreferredHeight:F1}px.",
-                SuggestedAction = "Preserve preferred shell height before tuning text or icon metrics."
-            };
+            yield return CreateIssue(
+                "height-collapsed-vs-preferred",
+                "warning",
+                $"Shell height realized at {comparison.ActualHeight:F1}px but the subtree prefers about {comparison.ActualPreferredHeight:F1}px.",
+                "Preserve preferred shell height before tuning text or icon metrics.");
         }
 
         if (widthStretchRelevant)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "width-stretched-vs-preferred",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Shell width realized at {comparison.ActualWidth:F1}px but the subtree prefers about {comparison.ActualPreferredWidth:F1}px.",
-                SuggestedAction = "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics."
-            };
+            yield return CreateIssue(
+                "width-stretched-vs-preferred",
+                "warning",
+                $"Shell width realized at {comparison.ActualWidth:F1}px but the subtree prefers about {comparison.ActualPreferredWidth:F1}px.",
+                "Preserve preferred shell width or reduce inherited fill/stretch before tuning smaller metrics.");
         }
 
         if (widthStretchRelevant || heightCollapseRelevant)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "cross-axis-stretch-mismatch",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = "The realized shell is stretching or collapsing away from its preferred box on one axis.",
-                SuggestedAction = "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics."
-            };
+            yield return CreateIssue(
+                "cross-axis-stretch-mismatch",
+                "warning",
+                "The realized shell is stretching or collapsing away from its preferred box on one axis.",
+                "Inspect layout-group child control flags and cross-axis stretch before changing local content metrics.");
         }
 
         if (heightCollapseRelevant
             || (widthStretchRelevant && comparison.ExpectedWidthSizing == AxisSizing.Hug))
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "shell-padding-or-child-stack-mismatch",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = "The shell child stack is larger than the realized box, so padding, gap, or child stack realization is likely compressing this subtree.",
-                SuggestedAction = "Tighten shell padding or main-axis gap before retuning text, icon, or edge metrics."
-            };
+            yield return CreateIssue(
+                "shell-padding-or-child-stack-mismatch",
+                "warning",
+                "The shell child stack is larger than the realized box, so padding, gap, or child stack realization is likely compressing this subtree.",
+                "Tighten shell padding or main-axis gap before retuning text, icon, or edge metrics.");
         }
 
         if (LooksLikePortraitOrStatusShell(comparison)
             && (heightCollapseRelevant
                 || (comparison.ExpectedStartInsetY.HasValue && Math.Abs(comparison.ActualY - comparison.ExpectedStartInsetY.Value) > insetTolerance)))
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "portrait-or-status-row-shell-drift",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"The portrait or status-row shell '{comparison.ActualName}' is drifting away from its preferred box.",
-                SuggestedAction = "Preserve shell bounds for portrait and status-row motifs before adjusting fonts or icon alignment."
-            };
+            yield return CreateIssue(
+                "portrait-or-status-row-shell-drift",
+                "warning",
+                $"The portrait or status-row shell '{comparison.ActualName}' is drifting away from its preferred box.",
+                "Preserve shell bounds for portrait and status-row motifs before adjusting fonts or icon alignment.");
         }
 
         if (comparison.ExpectedWidthSizing == AxisSizing.Hug
@@ -1572,56 +1691,50 @@ public static class ImageSimilarityHandler
             && comparison.ActualWidth >= comparison.ExpectedAvailableWidth.Value - widthTolerance
             && comparison.ActualWidth > comparison.ActualPreferredWidth + widthTolerance)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "hug-stretched-to-fill",
-                Severity = "warning",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Node is expected to hug content but realized {comparison.ActualWidth:F1}px against an available width of {comparison.ExpectedAvailableWidth.Value:F1}px.",
-                SuggestedAction = "Inspect child-control-width, flexible width, and content-size-fitter interaction for this subtree."
-            };
+            yield return CreateIssue(
+                "hug-stretched-to-fill",
+                "warning",
+                $"Node is expected to hug content but realized {comparison.ActualWidth:F1}px against an available width of {comparison.ExpectedAvailableWidth.Value:F1}px.",
+                "Inspect child-control-width, flexible width, and content-size-fitter interaction for this subtree.");
         }
 
         if (!comparison.ExpectedWrapText
             && comparison.ActualPreferredWidth > 0
             && comparison.ActualWidth + widthTolerance < comparison.ActualPreferredWidth)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "wrap-pressure-risk",
-                Severity = "info",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Preferred text width is {comparison.ActualPreferredWidth:F1}px but realized width is {comparison.ActualWidth:F1}px, so the node is at risk of wrapping or compression.",
-                SuggestedAction = "Treat this as a layout-width issue first, then tune font size or line height only if width realization is already correct."
-            };
+            yield return CreateIssue(
+                "wrap-pressure-risk",
+                "info",
+                $"Preferred text width is {comparison.ActualPreferredWidth:F1}px but realized width is {comparison.ActualWidth:F1}px, so the node is at risk of wrapping or compression.",
+                string.Equals(comparison.ExpectedSourceSemanticRole, "right-aligned-quantity", StringComparison.Ordinal)
+                    ? "Treat this as a row-end width issue first: preserve nowrap and content-hug for the quantity before tuning font size."
+                    : "Treat this as a layout-width issue first, then tune font size or line height only if width realization is already correct.");
         }
 
         if (comparison.ExpectedFontSize.HasValue
             && comparison.ActualFontSize > 0
             && Math.Abs(comparison.ExpectedFontSize.Value - comparison.ActualFontSize) >= fontSizeTolerance)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "font-size-drift",
-                Severity = "info",
-                LocalPath = comparison.LocalPath,
-                Summary = $"Expected font size is {comparison.ExpectedFontSize.Value:F1}px but realized font size is {comparison.ActualFontSize:F1}px.",
-                SuggestedAction = "Inspect metric-profile selection for this semantic class before adjusting local layout heuristics."
-            };
+            yield return CreateIssue(
+                "font-size-drift",
+                "info",
+                $"Expected font size is {comparison.ExpectedFontSize.Value:F1}px but realized font size is {comparison.ActualFontSize:F1}px.",
+                string.Equals(comparison.ExpectedSourceAssetRealization, "IconGlyph", StringComparison.Ordinal)
+                    ? "Inspect icon metric-profile selection, baseline offset, and optical centering before adjusting local layout heuristics."
+                    : "Inspect metric-profile selection for this semantic class before adjusting local layout heuristics.");
         }
 
         if (comparison.ExpectedClipContent != comparison.ActualClipContent)
         {
-            yield return new MeasuredLayoutIssue
-            {
-                Category = "clip-mismatch",
-                Severity = "info",
-                LocalPath = comparison.LocalPath,
-                Summary = comparison.ExpectedClipContent
+            yield return CreateIssue(
+                "clip-mismatch",
+                "info",
+                comparison.ExpectedClipContent
                     ? "The Visual IR expects clipping, but the realized node is not clipping content."
                     : "The realized node is clipping content even though the Visual IR contract is visible overflow.",
-                SuggestedAction = "Inspect overflow or mask emission for this subtree before changing content metrics."
-            };
+                string.Equals(comparison.ExpectedSourceAssetRealization, "ImageAsset", StringComparison.Ordinal)
+                    ? "Inspect image shell overflow or mask emission before changing content metrics."
+                    : "Inspect overflow or mask emission for this subtree before changing content metrics.");
         }
     }
 

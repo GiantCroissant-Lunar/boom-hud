@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="RuinerSkillMenu" class="boomhud-ruiner-skill-menu">
+        <ui:VisualElement name="BackdropTint" class="boomhud-backdrop-tint" />
+        <ui:VisualElement name="OuterRing" class="boomhud-outer-ring" />
+        <ui:VisualElement name="InnerRing" class="boomhud-inner-ring" />
+        <ui:Label name="SkillNameLineOne" class="boomhud-skill-name-line-one" />
+        <ui:Label name="SkillNameLineTwo" class="boomhud-skill-name-line-two" />
+        <ui:VisualElement name="TopPrompt" class="boomhud-top-prompt">
+            <ui:Label name="TopPromptText" class="boomhud-top-prompt-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LeftPrompt" class="boomhud-left-prompt">
+            <ui:Label name="LeftPromptText" class="boomhud-left-prompt-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="RightPrompt" class="boomhud-right-prompt">
+            <ui:Label name="RightPromptLineOne" class="boomhud-right-prompt-line-one" />
+            <ui:Label name="RightPromptLineTwo" class="boomhud-right-prompt-line-two" />
+        </ui:VisualElement>
+        <ui:VisualElement name="HealthHud" class="boomhud-health-hud">
+            <ui:Label name="HeartRow" class="boomhud-heart-row" />
+            <ui:Label name="CellRow" class="boomhud-cell-row" />
+        </ui:VisualElement>
+        <ui:Label name="TopIcon" class="boomhud-top-icon" />
+        <ui:Label name="UpperRightIcon" class="boomhud-upper-right-icon" />
+        <ui:Label name="RightIcon" class="boomhud-right-icon" />
+        <ui:Label name="LowerRightIcon" class="boomhud-lower-right-icon" />
+        <ui:Label name="BottomIcon" class="boomhud-bottom-icon" />
+        <ui:Label name="LowerLeftIcon" class="boomhud-lower-left-icon" />
+        <ui:Label name="SelectedIcon" class="boomhud-selected-icon" />
+        <ui:VisualElement name="SelectedIconPlate" class="boomhud-selected-icon-plate" />
+        <ui:Label name="LeftIcon" class="boomhud-left-icon" />
+        <ui:VisualElement name="MicroPrompt" class="boomhud-micro-prompt" />
+        <ui:VisualElement name="MiniHudOne" class="boomhud-mini-hud-one" />
+        <ui:VisualElement name="MiniHudTwo" class="boomhud-mini-hud-two" />
+        <ui:Label name="MiniHudIcon" class="boomhud-mini-hud-icon" />
+    </ui:VisualElement>
+</ui:UXML>

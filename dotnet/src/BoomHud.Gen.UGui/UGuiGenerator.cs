@@ -55,6 +55,12 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             files.Add(artifact);
         }
 
+        if (options.EmitSourceSemanticArtifact
+            && GenerationDocumentPreprocessor.CreateSourceSemanticArtifact(document.Name, prepared.SourceSemanticDocument) is { } sourceSemanticArtifact)
+        {
+            files.Add(sourceSemanticArtifact);
+        }
+
         if (options.EmitVisualIrArtifact
             && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
         {
@@ -281,9 +287,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
         builder.AppendLine($"{indent}{node.FieldName} = {CreateCall(node, parentAccessor)};");
         AppendSetup(builder, node, node.FieldName, parentNode, components, diagnostics, indentLevel);
+        var childParent = ChildParent(node);
         foreach (var child in node.Children)
         {
-            AppendCreate(builder, child, ChildParent(node), node, components, diagnostics, indentLevel);
+            AppendCreate(builder, child, childParent, node, components, diagnostics, indentLevel);
         }
     }
 
@@ -302,8 +309,10 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                        || LayoutPolicyService.HasAbsolutePlacement(node.Source, node.Policy);
         var widthDimension = layout?.Width ?? style?.Width;
         var heightDimension = layout?.Height ?? style?.Height;
-        var anchorPreset = LayoutPolicyService.ResolveAnchorPreset(node.Policy);
-        var pivotPreset = LayoutPolicyService.ResolvePivotPreset(node.Policy);
+        var anchorPreset = LayoutPolicyService.ResolveAnchorPreset(node.Policy)
+            ?? (ShouldCenterIconWithinSourceShell(node, parentNode) ? "center" : null);
+        var pivotPreset = LayoutPolicyService.ResolvePivotPreset(node.Policy)
+            ?? (ShouldCenterIconWithinSourceShell(node, parentNode) ? "center" : null);
         var rectTransformMode = LayoutPolicyService.ResolveRectTransformMode(node.Policy);
         var edgeInsetPolicy = LayoutPolicyService.ResolveEdgeInsetPolicy(node.Policy);
         var flexAlignmentPreset = ResolveLayoutAlignmentPreset(node);
@@ -338,14 +347,14 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
         var contentFitHorizontal = absolute
             ? ShouldAbsoluteContentFit(node, widthDimension, "width")
-            : ShouldContentFit(node, "width", parentLayout);
+            : ShouldContentFit(node, parentNode, "width", parentLayout);
         var contentFitVertical = absolute
             ? ShouldAbsoluteContentFit(node, heightDimension, "height")
-            : ShouldContentFit(node, "height", parentLayout);
+            : ShouldContentFit(node, parentNode, "height", parentLayout);
         builder.AppendLine($"{indent}ApplyLayoutSizing({rect}, ignoreLayout: {Bool(absolute)}, preferredWidth: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, parentNode, widthDimension, "width") : null)}, preferredHeight: {ToNullableFloatLiteral(!absolute ? PreferredSize(node, parentNode, heightDimension, "height") : null)}, flexibleWidth: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, parentNode, widthDimension, "width", parentLayout, contentFitHorizontal) : null)}, flexibleHeight: {ToNullableFloatLiteral(!absolute ? FlexibleSize(node, parentNode, heightDimension, "height", parentLayout, contentFitVertical) : null)});");
         builder.AppendLine($"{indent}ApplyContentSizeFit({rect}, horizontal: {Bool(contentFitHorizontal)}, vertical: {Bool(contentFitVertical)});");
 
-        if (layout != null && ShouldEmitLayoutGroup(node))
+        if (layout != null && ShouldEmitLayoutGroup(node, parentNode))
         {
             var resolvedGap = LayoutPolicyService.ResolveGap(layout.Gap, node.Policy);
             var resolvedPadding = LayoutPolicyService.ResolvePadding(layout.Padding, node.Policy);
@@ -383,6 +392,11 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 $"treatAsIcon: {Bool(IsIconTextNode(node))});");
         }
 
+        if (ShouldApplySourceImageAssetBehavior(node))
+        {
+            builder.AppendLine($"{indent}ApplyImageAssetBehavior({accessor}, preserveAspect: true);");
+        }
+
         if (IsIconTextNode(node))
         {
             var width = Pixels(widthDimension) ?? 16d;
@@ -393,7 +407,21 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
         if (ShouldApplyTextMetrics(node))
         {
-            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(TextPolicyService.ResolveLineSpacing(node.Source, widthDimension, heightDimension, node.Policy))}, wrapText: {Bool(textMetric?.WrapText ?? TextPolicyService.ShouldWrapText(node.Source, node.Policy))});");
+            var resolvedLetterSpacing = textMetric?.ResolvedLetterSpacing
+                                        ?? TextPolicyService.ResolveLetterSpacing(node.Source, node.Policy);
+            builder.AppendLine($"{indent}ApplyTextMetrics({accessor}, lineSpacing: {ToNullableFloatLiteral(TextPolicyService.ResolveLineSpacing(node.Source, widthDimension, heightDimension, node.Policy))}, letterSpacing: {ToNullableFloatLiteral(resolvedLetterSpacing)}, wrapText: {Bool(ShouldForceCompactRowLabelNoWrap(node) || ShouldForceTabButtonNoWrap(node, parentNode) ? false : textMetric?.WrapText ?? TextPolicyService.ShouldWrapText(node.Source, node.Policy))});");
+        }
+
+        if (ShouldRightAlignSemanticRowCarrierText(node, parentNode))
+        {
+            builder.AppendLine($"{indent}ApplyTextAlignment({accessor}, \"top-right\");");
+        }
+
+        if (ShouldCenterTextWithinChipShell(node, parentNode))
+        {
+            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, \"center\");");
+            builder.AppendLine($"{indent}ApplyContentSizeFit({rect}, horizontal: true, vertical: true);");
+            builder.AppendLine($"{indent}ApplyTextAlignment({accessor}, \"center\");");
         }
 
         foreach (var pair in Bindings(node.Source).Where(static pair => pair.StaticValue != null))
@@ -758,7 +786,9 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     }
 
     private static double? FlexibleSize(PlannedNode node, PlannedNode? parentNode, Dimension? dimension, string axis, LayoutType? parentLayout, bool preferContentSize)
-        => preferContentSize || ShouldPreservePreferredSizeInParent(node, parentNode, axis)
+        => ShouldStretchSemanticRowCarrier(node, parentNode, axis)
+            ? 1d
+            : preferContentSize || ShouldPreservePreferredSizeInParent(node, parentNode, axis) || ShouldPreferCompactRowLabelWidth(node, parentNode, axis) || ShouldPreferTabShellWidth(node, parentNode, axis)
             ? null
             : LayoutPolicyService.ResolveFlexibleSize(dimension, axis, parentLayout, IsFlexibleContainer(node), node.Policy);
 
@@ -792,6 +822,26 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         if (ResolveCrossAxisFillSize(node, parentNode, axis) is { } crossAxisFill)
         {
             return crossAxisFill;
+        }
+
+        if (ShouldPreserveSourceImageAssetSize(node, axis) && EstimateIntrinsicAxisSize(node, axis) is { } imageIntrinsicSize)
+        {
+            return imageIntrinsicSize;
+        }
+
+        if (ShouldPreferCompactRightEdgeWidth(node, axis))
+        {
+            return EstimateIntrinsicAxisSize(node, axis);
+        }
+
+        if (ShouldPreferCompactRowLabelWidth(node, parentNode, axis))
+        {
+            return EstimateIntrinsicAxisSize(node, axis);
+        }
+
+        if (ShouldPreferTabShellWidth(node, parentNode, axis))
+        {
+            return EstimateIntrinsicAxisSize(node, axis);
         }
 
         return ShouldPreservePreferredSizeInParent(node, parentNode, axis)
@@ -839,6 +889,13 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return HasPinnedSize(dimension) && HasExplicitContentPreference(node, axis);
     }
 
+    private static bool IsIconLikeRowChild(PlannedNode child)
+        => child.Source.Type == ComponentType.Icon
+           || string.Equals(child.VisualNode?.SemanticClass, "inline-icon", StringComparison.Ordinal)
+           || string.Equals(child.VisualNode?.SemanticClass, "leading-icon", StringComparison.Ordinal)
+           || string.Equals(child.VisualNode?.SourceSemanticRole, "inline-icon", StringComparison.Ordinal)
+           || string.Equals(child.VisualNode?.SourceSemanticRole, "leading-icon", StringComparison.Ordinal);
+
     private static double? EstimateChildStackAxisSize(PlannedNode node, string axis)
     {
         if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack or LayoutType.Horizontal))
@@ -877,13 +934,39 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             || node.Source.Children.Count > 0
             || node.FieldType is "RectTransform" or "ScrollRect";
 
-    private static bool ShouldEmitLayoutGroup(PlannedNode node)
+    private static bool ShouldEmitLayoutGroup(PlannedNode node, PlannedNode? parentNode)
         => node.Source.Children.Count > 0
             && node.ComponentView == null
-            && node.FieldType is "RectTransform" or "ScrollRect";
+            && node.FieldType is "RectTransform" or "ScrollRect"
+            && !ShouldUseChipShellTextStretch(node, parentNode);
 
-    private static bool ShouldContentFit(PlannedNode node, string axis, LayoutType? parentLayout)
+    private static bool ShouldContentFit(PlannedNode node, PlannedNode? parentNode, string axis, LayoutType? parentLayout)
     {
+        if (ShouldPreserveSourceImageAssetSize(node, axis))
+        {
+            return false;
+        }
+
+        if (ShouldPreferValueRowTextWidthHug(node, parentNode, axis))
+        {
+            return true;
+        }
+
+        if (ShouldStretchSemanticRowCarrier(node, parentNode, axis))
+        {
+            return false;
+        }
+
+        if (ShouldPreferSourceIconGlyphSize(node, axis))
+        {
+            return true;
+        }
+
+        if (ShouldPreferCompactRightEdgeWidth(node, axis))
+        {
+            return true;
+        }
+
         if (LayoutPolicyService.ShouldPreferContentSize(axis, parentLayout != null, node.Source.Layout, IsFlexibleContainer(node), node.Policy))
         {
             return true;
@@ -961,6 +1044,226 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static bool ShouldApplyTextMetrics(PlannedNode node)
         => node.FieldType is "Text" or "TextMeshProUGUI" or "Button" or "Toggle" or "InputField";
 
+    private static bool ShouldPreferCompactRightEdgeWidth(PlannedNode node, string axis)
+        => axis == "width"
+           && (string.Equals(node.VisualNode?.SemanticClass, "right-aligned-quantity", StringComparison.Ordinal)
+               || string.Equals(node.VisualNode?.SourceSemanticRole, "right-aligned-quantity", StringComparison.Ordinal));
+
+    private static bool ShouldPreferCompactRowLabelWidth(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (axis != "width" || parentNode?.Source.Layout?.Type != LayoutType.Horizontal)
+        {
+            return false;
+        }
+
+        if (node.FieldType is not "Text" and not "TextMeshProUGUI")
+        {
+            return false;
+        }
+
+        if (node.Source.Type is not (ComponentType.Label or ComponentType.Badge))
+        {
+            return false;
+        }
+
+        var semanticRole = node.VisualNode?.SourceSemanticRole ?? node.VisualNode?.SemanticClass;
+        return semanticRole is "compact-label" or "tab-label";
+    }
+
+    private static bool ShouldPreferValueRowTextWidthHug(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (axis != "width" || parentNode?.Source.Layout?.Type != LayoutType.Horizontal)
+        {
+            return false;
+        }
+
+        if (node.FieldType is not "Text" and not "TextMeshProUGUI" and not "Button")
+        {
+            return false;
+        }
+
+        var dimension = node.Source.Layout?.Width ?? node.Source.Style?.Width;
+        if (HasPinnedSize(dimension) || !LooksLikeSingleLineLiteralText(node.Source))
+        {
+            return false;
+        }
+
+        return ResolveHorizontalSemanticRowStrategy(parentNode)?.HugSingleLineTextChildren == true;
+    }
+
+    private static bool ShouldStretchSemanticRowCarrier(PlannedNode node, PlannedNode? parentNode, string axis)
+    {
+        if (axis != "width" || parentNode?.Source.Layout?.Type != LayoutType.Horizontal)
+        {
+            return false;
+        }
+
+        if (node.FieldType is not "Text" and not "TextMeshProUGUI" and not "Button")
+        {
+            return false;
+        }
+
+        if (!LooksLikeSingleLineLiteralText(node.Source))
+        {
+            return false;
+        }
+
+        var siblingIndex = parentNode.Children.FindIndex(child => ReferenceEquals(child, node));
+        if (siblingIndex < 1 || siblingIndex >= parentNode.Children.Count - 1)
+        {
+            return false;
+        }
+
+        return node.Source.Layout?.Align == Alignment.End || LooksLikeCompactValueLiteral(node.Source);
+    }
+
+    private static bool ShouldRightAlignSemanticRowCarrierText(PlannedNode node, PlannedNode? parentNode)
+        => ShouldStretchSemanticRowCarrier(node, parentNode, axis: "width")
+           && node.FieldType is "Text" or "TextMeshProUGUI";
+
+    private static bool ShouldPreferTabShellWidth(PlannedNode node, PlannedNode? parentNode, string axis)
+        => axis == "width"
+           && parentNode?.Source.Layout?.Type == LayoutType.Horizontal
+           && node.Source.Type is ComponentType.Button or ComponentType.MenuItem
+           && LooksLikeSingleLineLiteralText(node.Source);
+
+    private static bool ShouldPreserveSourceImageAssetSize(PlannedNode node, string axis)
+        => node.FieldType == "Image"
+           && axis is "width" or "height"
+           && string.Equals(node.VisualNode?.SourceAssetRealization, "ImageAsset", StringComparison.Ordinal);
+
+    private static bool ShouldApplySourceImageAssetBehavior(PlannedNode node)
+        => node.FieldType == "Image"
+           && string.Equals(node.VisualNode?.SourceAssetRealization, "ImageAsset", StringComparison.Ordinal);
+
+    private static bool ShouldForceCompactRowLabelNoWrap(PlannedNode node)
+    {
+        if (node.FieldType is not "Text" and not "TextMeshProUGUI")
+        {
+            return false;
+        }
+
+        if (node.Source.Type is not (ComponentType.Label or ComponentType.Badge))
+        {
+            return false;
+        }
+
+        var semanticRole = node.VisualNode?.SourceSemanticRole ?? node.VisualNode?.SemanticClass;
+        if (semanticRole is not ("compact-label" or "tab-label"))
+        {
+            return false;
+        }
+
+        return node.Source.Layout?.Type != LayoutType.Vertical
+               && node.Source.Layout?.Type != LayoutType.Stack
+               && node.Source.Layout?.Type != LayoutType.Grid
+               && node.Source.Layout?.Type != LayoutType.Dock;
+    }
+
+    private static bool ShouldForceTabButtonNoWrap(PlannedNode node, PlannedNode? parentNode)
+        => node.FieldType == "Button"
+           && node.Source.Type is ComponentType.Button or ComponentType.MenuItem
+           && parentNode?.Source.Layout?.Type == LayoutType.Horizontal
+           && LooksLikeSingleLineLiteralText(node.Source);
+
+    private static bool ShouldCenterTextWithinChipShell(PlannedNode node, PlannedNode? parentNode)
+        => node.FieldType is "Text" or "TextMeshProUGUI"
+           && parentNode != null
+           && ShouldUseChipShellTextStretch(parentNode, null)
+           && parentNode.Source.Children.Count == 1
+           && ReferenceEquals(parentNode.Source.Children[0], node.Source);
+
+    private static bool ShouldUseChipShellTextStretch(PlannedNode node, PlannedNode? parentNode)
+    {
+        if (node.FieldType != "RectTransform" || node.ComponentView != null || node.Source.Children.Count != 1)
+        {
+            return false;
+        }
+
+        if (parentNode != null && parentNode.Source.Layout?.Type != LayoutType.Horizontal)
+        {
+            return false;
+        }
+
+        if (node.Source.Style?.Background == null && node.Source.Style?.Border == null)
+        {
+            return false;
+        }
+
+        var width = node.Source.Layout?.Width ?? node.Source.Style?.Width;
+        var height = node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (!HasPinnedSize(width) || !HasPinnedSize(height))
+        {
+            return false;
+        }
+
+        var child = node.Source.Children[0];
+        if (child.Type is not (ComponentType.Label or ComponentType.Badge))
+        {
+            return false;
+        }
+
+        return LooksLikeSingleLineLiteralText(child);
+    }
+
+    private static bool ShouldCenterIconWithinSourceShell(PlannedNode node, PlannedNode? parentNode)
+        => node.Source.Type == ComponentType.Icon
+           && node.FieldType is "Text" or "TextMeshProUGUI"
+           && parentNode != null
+           && (string.Equals(parentNode.VisualNode?.SourceSemanticRole, "icon-shell", StringComparison.Ordinal)
+               || string.Equals(parentNode.VisualNode?.SemanticClass, "icon-shell", StringComparison.Ordinal));
+
+    private static bool LooksLikeSingleLineLiteralText(ComponentNode node)
+    {
+        return !TryGetLiteralText(node, out var text) || text.IndexOfAny(['\r', '\n']) < 0;
+    }
+
+    private static bool TryGetLiteralText(ComponentNode node, out string text)
+    {
+        foreach (var pair in node.Properties)
+        {
+            if (pair.Value.IsBound || pair.Value.Value is not string literal || !IsTextPropertyName(pair.Key))
+            {
+                continue;
+            }
+
+            text = literal;
+            return true;
+        }
+
+        text = string.Empty;
+        return false;
+    }
+
+    private static bool IsTextPropertyName(string propertyName)
+        => propertyName.Equals("text", StringComparison.OrdinalIgnoreCase)
+           || propertyName.Equals("content", StringComparison.OrdinalIgnoreCase)
+           || propertyName.Equals("value", StringComparison.OrdinalIgnoreCase);
+
+    private static bool ShouldPreferSourceIconGlyphSize(PlannedNode node, string axis)
+    {
+        if (node.FieldType is not "Text" and not "TextMeshProUGUI")
+        {
+            return false;
+        }
+
+        if (node.Source.Type != ComponentType.Icon)
+        {
+            return false;
+        }
+
+        var semanticRole = node.VisualNode?.SourceSemanticRole ?? node.VisualNode?.SemanticClass;
+        if (semanticRole is not ("leading-icon" or "inline-icon" or "badge-icon" or "icon-glyph"))
+        {
+            return false;
+        }
+
+        var dimension = axis == "width"
+            ? node.Source.Layout?.Width ?? node.Source.Style?.Width
+            : node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        return !HasPinnedSize(dimension);
+    }
+
     private static double Gap(Spacing? spacing, bool horizontal)
         => spacing == null ? 0d : horizontal ? Math.Max(spacing.Value.Left, spacing.Value.Right) : Math.Max(spacing.Value.Top, spacing.Value.Bottom);
 
@@ -969,6 +1272,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         var resolvedPadding = padding ?? Spacing.Zero;
         var horizontal = node.Source.Layout?.Type == LayoutType.Horizontal;
         var mainAxis = horizontal ? "width" : "height";
+        var semanticRowStrategy = ResolveHorizontalSemanticRowStrategy(node);
         var settings = new ShellLayoutSettings
         {
             Gap = Gap(gap, horizontal),
@@ -976,6 +1280,14 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             ChildControlWidth = ShouldControlChildAxis(node, "width"),
             ChildControlHeight = ShouldControlChildAxis(node, "height")
         };
+
+        if (semanticRowStrategy?.DisableChildControlWidth == true)
+        {
+            settings = settings with
+            {
+                ChildControlWidth = false
+            };
+        }
 
         if (ShouldDisableMainAxisChildControlForCrossAxisFillShell(node, parentNode, mainAxis))
         {
@@ -996,7 +1308,17 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             };
         }
 
+        if (semanticRowStrategy?.PreserveSourceSpacing == true)
+        {
+            return settings;
+        }
+
         if (ShouldPreserveSourceShellSpacing(node, parentNode, mainAxis))
+        {
+            return settings;
+        }
+
+        if (ShouldPreserveFixedPanelStackSpacing(node))
         {
             return settings;
         }
@@ -1093,6 +1415,186 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             ? edgeContract.OverflowX
             : edgeContract.OverflowY;
         return overflowBehavior != OverflowBehavior.Clip;
+    }
+
+    private static HorizontalSemanticRowStrategy? ResolveHorizontalSemanticRowStrategy(PlannedNode node)
+    {
+        if (node.Source.Layout?.Type != LayoutType.Horizontal)
+        {
+            return null;
+        }
+
+        var rightEdgeClusterStartIndex = ResolveRightEdgeClusterStartIndex(node);
+        var isSemanticValueRow = string.Equals(node.VisualNode?.SemanticClass, "value-row", StringComparison.Ordinal)
+                                 || string.Equals(node.VisualNode?.SourceSemanticRole, "value-row", StringComparison.Ordinal);
+        if (!isSemanticValueRow && !rightEdgeClusterStartIndex.HasValue)
+        {
+            return null;
+        }
+
+        return new HorizontalSemanticRowStrategy
+        {
+            DisableChildControlWidth = true,
+            PreserveSourceSpacing = true,
+            HugSingleLineTextChildren = true,
+            RightEdgeClusterStartIndex = rightEdgeClusterStartIndex
+        };
+    }
+
+    private static int? ResolveRightEdgeClusterStartIndex(PlannedNode node)
+    {
+        for (var index = 1; index < node.Children.Count; index++)
+        {
+            if (!LooksLikeSemanticRowClusterStart(node, index))
+            {
+                continue;
+            }
+
+            if (!node.Children.Take(index).Any(IsSemanticRowLeadingClusterChild))
+            {
+                continue;
+            }
+
+            if (node.Children.Skip(index).All(IsSemanticRowTrailingClusterChild))
+            {
+                return index;
+            }
+        }
+
+        return ResolveSourceRightEdgeClusterStartIndex(node);
+    }
+
+    private static bool LooksLikeSemanticRowClusterStart(PlannedNode node, int index)
+    {
+        var child = node.Children[index];
+        if (!IsSemanticRowTrailingClusterChild(child))
+        {
+            return false;
+        }
+
+        if (IsSemanticRowRightEdgeAnchor(child) || LooksLikeCompactValueLiteral(child.Source))
+        {
+            return true;
+        }
+
+        return index >= 2
+               && node.Children.Count - index >= 2
+               && node.Children.Skip(index).All(IsSemanticRowTrailingClusterChild)
+               && node.Children.Skip(index).Any(candidate => IsSemanticRowRightEdgeAnchor(candidate) || LooksLikeCompactValueLiteral(candidate.Source));
+    }
+
+    private static bool IsSemanticRowRightEdgeAnchor(PlannedNode child)
+        => ShouldPreferCompactRightEdgeWidth(child, "width")
+           || string.Equals(child.VisualNode?.SemanticClass, "compact-numeric-readout", StringComparison.Ordinal)
+           || string.Equals(child.VisualNode?.SourceSemanticRole, "compact-numeric-readout", StringComparison.Ordinal)
+           || child.Source.Layout?.Align == Alignment.End;
+
+    private static bool IsSemanticRowLeadingClusterChild(PlannedNode child)
+        => !LayoutPolicyService.HasAbsolutePlacement(child.Source, child.Policy)
+           && (IsSemanticRowTextualChild(child) || IsIconLikeRowChild(child));
+
+    private static bool IsSemanticRowTrailingClusterChild(PlannedNode child)
+        => !LayoutPolicyService.HasAbsolutePlacement(child.Source, child.Policy)
+           && (IsSemanticRowTextualChild(child) || IsIconLikeRowChild(child));
+
+    private static bool IsSemanticRowTextualChild(PlannedNode child)
+        => child.FieldType is "Text" or "TextMeshProUGUI" or "Button"
+           || child.Source.Type is ComponentType.Label or ComponentType.Badge or ComponentType.Button or ComponentType.MenuItem;
+
+    private static bool LooksLikeCompactValueLiteral(ComponentNode node)
+    {
+        if (!TryGetLiteralText(node, out var text))
+        {
+            return false;
+        }
+
+        var trimmed = text.Trim();
+        return trimmed.Length is > 0 and <= 24
+               && trimmed.IndexOfAny(['\r', '\n']) < 0
+               && (trimmed.Any(char.IsDigit) || trimmed.IndexOfAny([':', '/', '%']) >= 0);
+    }
+
+    private static int? ResolveSourceRightEdgeClusterStartIndex(PlannedNode node)
+    {
+        for (var index = 1; index < node.Source.Children.Count; index++)
+        {
+            if (!LooksLikeSourceSemanticRowClusterStart(node.Source.Children, index))
+            {
+                continue;
+            }
+
+            return index < node.Children.Count ? index : null;
+        }
+
+        return null;
+    }
+
+    private static bool LooksLikeSourceSemanticRowClusterStart(IReadOnlyList<ComponentNode> children, int index)
+    {
+        var child = children[index];
+        if (!IsSourceSemanticRowInlineChild(child))
+        {
+            return false;
+        }
+
+        if (LooksLikeSourceRightEdgeAnchor(child))
+        {
+            return children.Take(index).Any(IsSourceSemanticRowInlineChild)
+                   && children.Skip(index).All(IsSourceSemanticRowInlineChild);
+        }
+
+        return index >= 2
+               && children.Count - index >= 2
+               && children.Skip(index).All(IsSourceSemanticRowInlineChild)
+               && children.Skip(index).Any(LooksLikeSourceRightEdgeAnchor);
+    }
+
+    private static bool LooksLikeSourceRightEdgeAnchor(ComponentNode child)
+        => child.Layout?.Align == Alignment.End || LooksLikeCompactValueLiteral(child);
+
+    private static bool IsSourceSemanticRowInlineChild(ComponentNode child)
+        => child.Layout?.IsAbsolutePositioned != true
+           && child.Type is ComponentType.Label or ComponentType.Badge or ComponentType.Button or ComponentType.MenuItem or ComponentType.Icon;
+
+    private static void AppendSemanticRowSpacer(StringBuilder builder, PlannedNode node, string parentAccessor, int indentLevel)
+    {
+        var indent = new string(' ', indentLevel * 4);
+        var spacerIdentifier = ToCamel(node.FieldName) + "RightEdgeSpacer";
+        var spacerName = string.Equals(node.FieldName, "Root", StringComparison.Ordinal)
+            ? "RootRightEdgeSpacer"
+            : node.Name + "RightEdgeSpacer";
+        builder.AppendLine($"{indent}var {spacerIdentifier} = CreateRect(\"{spacerName}\", {parentAccessor});");
+        builder.AppendLine($"{indent}ConfigureRect(RectOf({spacerIdentifier}), width: null, height: null, left: null, top: null, absolute: false);");
+        builder.AppendLine($"{indent}ApplyLayoutSizing(RectOf({spacerIdentifier}), ignoreLayout: false, preferredWidth: 0f, preferredHeight: null, flexibleWidth: 1f, flexibleHeight: null);");
+        builder.AppendLine($"{indent}ApplyContentSizeFit(RectOf({spacerIdentifier}), horizontal: false, vertical: false);");
+        builder.AppendLine($"{indent}{spacerIdentifier}.gameObject.SetActive(true);");
+    }
+
+    private static bool ShouldPreserveFixedPanelStackSpacing(PlannedNode node)
+    {
+        if (node.Source.Layout?.Type is not (LayoutType.Vertical or LayoutType.Stack))
+        {
+            return false;
+        }
+
+        var width = node.Source.Layout?.Width ?? node.Source.Style?.Width;
+        var height = node.Source.Layout?.Height ?? node.Source.Style?.Height;
+        if (!HasPinnedSize(width) || !HasPinnedSize(height))
+        {
+            return false;
+        }
+
+        if (node.Children.Count < 3)
+        {
+            return false;
+        }
+
+        return node.Children.All(child =>
+        {
+            var childHeight = child.Source.Layout?.Height ?? child.Source.Style?.Height;
+            return HasPinnedSize(childHeight)
+                && child.Source.Layout?.IsAbsolutePositioned != true;
+        });
     }
 
     private static bool ShouldDisableMainAxisChildControlForCrossAxisFillShell(PlannedNode node, PlannedNode? parentNode, string axis)
@@ -1201,7 +1703,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
 
     private static bool HasExplicitContentPreference(PlannedNode node, string axis)
         => axis == "width"
-            ? node.Policy.Layout.PreferContentWidth == true
+            ? node.Policy.Layout.PreferContentWidth == true || ShouldPreferCompactRightEdgeWidth(node, axis)
             : node.Policy.Layout.PreferContentHeight == true;
 
     private static double? ResolveCrossAxisFillSize(PlannedNode node, PlannedNode? parentNode, string axis)
@@ -1593,6 +2095,17 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         public required bool ChildControlHeight { get; init; }
     }
 
+    private sealed record HorizontalSemanticRowStrategy
+    {
+        public required bool DisableChildControlWidth { get; init; }
+
+        public required bool PreserveSourceSpacing { get; init; }
+
+        public required bool HugSingleLineTextChildren { get; init; }
+
+        public int? RightEdgeClusterStartIndex { get; init; }
+    }
+
     private static string ChildParent(PlannedNode node)
         => node.FieldType == "ScrollRect" ? $"{ToCamel(node.FieldName)}Content" : $"RectOf({node.FieldName})";
 
@@ -1694,18 +2207,28 @@ public sealed partial class UGuiGenerator : IBackendGenerator
     private static void ApplyRectTransformMode(RectTransform rect,string mode){switch(NormalizeRectPreset(mode)){case "stretch-parent":case "stretch":Stretch(rect);break;case "absolute-overlay":rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);break;case "top-left":ApplyRectAnchorPreset(rect,"top-left");ApplyRectPivotPreset(rect,"top-left");break;case "center":ApplyRectAnchorPreset(rect,"center");ApplyRectPivotPreset(rect,"center");break;}}
     private static void ApplyEdgeInsetPolicy(RectTransform rect,string policy){switch(NormalizeRectPreset(policy)){case "match-parent":Stretch(rect);break;case "zero-offsets":rect.offsetMin=Vector2.zero;rect.offsetMax=Vector2.zero;break;}}
     private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
+    private static void ApplyTextAlignment(Component component,string preset){var normalized=NormalizeRectPreset(preset);if(component is TMP_Text tmp){tmp.alignment=normalized switch{"center" or "middle-center"=>TextAlignmentOptions.Center,"middle-left"=>TextAlignmentOptions.MidlineLeft,"middle-right"=>TextAlignmentOptions.MidlineRight,"top-center"=>TextAlignmentOptions.Top,"top-right" or "end"=>TextAlignmentOptions.TopRight,"top-left" or "start"=>TextAlignmentOptions.TopLeft,_=>tmp.alignment};return;}if(component is Text text){text.alignment=normalized switch{"center" or "middle-center"=>TextAnchor.MiddleCenter,"middle-left"=>TextAnchor.MiddleLeft,"middle-right"=>TextAnchor.MiddleRight,"top-center"=>TextAnchor.UpperCenter,"top-right" or "end"=>TextAnchor.UpperRight,"top-left" or "start"=>TextAnchor.UpperLeft,_=>text.alignment};}}
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
     private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is TMP_Text tmp){ApplyTmpTextStyle(tmp,fg,fontFamily,fontSize,treatAsIcon);return;}if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}return;}if(component is Button button){if(TryTmpLabel(button.gameObject,out var tmpLabel)){ApplyTmpTextStyle(tmpLabel,fg,fontFamily,fontSize,false);return;}if(TryLegacyLabel(button.gameObject,out var legacyLabel)){if(!string.IsNullOrWhiteSpace(fg))legacyLabel.color=ParseColor(fg,legacyLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var legacyFont))legacyLabel.font=legacyFont;if(fontSize.HasValue)legacyLabel.fontSize=fontSize.Value;}return;}if(component is Toggle toggle){if(TryTmpLabel(toggle.gameObject,out var tmpToggleLabel)){ApplyTmpTextStyle(tmpToggleLabel,fg,fontFamily,fontSize,false);return;}if(TryLegacyLabel(toggle.gameObject,out var legacyToggleLabel)){if(!string.IsNullOrWhiteSpace(fg))legacyToggleLabel.color=ParseColor(fg,legacyToggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var legacyFont))legacyToggleLabel.font=legacyFont;if(fontSize.HasValue)legacyToggleLabel.fontSize=fontSize.Value;}return;}if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
     private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));if(component is TMP_Text tmp){tmp.fontSize=Mathf.RoundToInt(iconSize);tmp.alignment=opticalCentering?TextAlignmentOptions.Center:TextAlignmentOptions.Top;tmp.textWrappingMode=TextWrappingModes.NoWrap;tmp.overflowMode=TextOverflowModes.Overflow;var tmpRect=RectOf(tmp);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}tmpRect.anchoredPosition=new Vector2(tmpRect.anchoredPosition.x,tmpRect.anchoredPosition.y+baselineOffset);return;}if(component is not Text text)return;text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
-    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is TMP_Text tmp){if(lineSpacing.HasValue)tmp.lineSpacing=lineSpacing.Value;tmp.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmp.overflowMode=TextOverflowModes.Overflow;return;}if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button){if(TryTmpLabel(button.gameObject,out var tmpLabel)){if(lineSpacing.HasValue)tmpLabel.lineSpacing=lineSpacing.Value;tmpLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is Toggle toggle){if(TryTmpLabel(toggle.gameObject,out var tmpToggleLabel)){if(lineSpacing.HasValue)tmpToggleLabel.lineSpacing=lineSpacing.Value;tmpToggleLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpToggleLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
+    private static void ApplyTextMetrics(Component component,float? lineSpacing,float? letterSpacing,bool wrapText){if(component is TMP_Text tmp){if(lineSpacing.HasValue)tmp.lineSpacing=lineSpacing.Value;ApplyTmpLetterSpacing(tmp,letterSpacing);tmp.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmp.overflowMode=TextOverflowModes.Overflow;return;}if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button){if(TryTmpLabel(button.gameObject,out var tmpLabel)){if(lineSpacing.HasValue)tmpLabel.lineSpacing=lineSpacing.Value;ApplyTmpLetterSpacing(tmpLabel,letterSpacing);tmpLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is Toggle toggle){if(TryTmpLabel(toggle.gameObject,out var tmpToggleLabel)){if(lineSpacing.HasValue)tmpToggleLabel.lineSpacing=lineSpacing.Value;ApplyTmpLetterSpacing(tmpToggleLabel,letterSpacing);tmpToggleLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpToggleLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
+    private static void ApplyTmpLetterSpacing(TMP_Text text,float? letterSpacing){if(!letterSpacing.HasValue)return;var fontSize=Mathf.Max(1f,text.fontSize);text.characterSpacing=letterSpacing.Value/fontSize*100f;}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
     private static void SetButtonText(Button button,string? value){if(TryTmpLabel(button.gameObject,out var tmpLabel)){tmpLabel.text=value??string.Empty;return;}if(TryLegacyLabel(button.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetToggleText(Toggle toggle,string? value){if(TryTmpLabel(toggle.gameObject,out var tmpLabel)){tmpLabel.text=value??string.Empty;return;}if(TryLegacyLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
+    private static void ApplyImageAssetBehavior(Image image,bool preserveAspect){image.preserveAspect=preserveAspect;image.raycastTarget=false;}
     private static bool TryTmpLabel(GameObject go,out TMP_Text label){label=go.GetComponentInChildren<TMP_Text>(true);return label!=null;}
     private static bool TryLegacyLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
-    private static void ApplyTmpTextStyle(TMP_Text text,string? fg,string? fontFamily,int? fontSize,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryTmpFont(fontFamily,out var fontAsset))text.font=fontAsset;if(fontSize.HasValue)text.fontSize=fontSize.Value;text.textWrappingMode=TextWrappingModes.NoWrap;text.overflowMode=TextOverflowModes.Overflow;text.extraPadding=false;text.margin=Vector4.zero;if(treatAsIcon){text.alignment=TextAlignmentOptions.Center;}}
+    private static void ApplyTmpTextStyle(TMP_Text text,string? fg,string? fontFamily,int? fontSize,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryTmpFont(fontFamily,out var fontAsset))text.font=fontAsset;if(fontSize.HasValue)text.fontSize=fontSize.Value;text.textWrappingMode=TextWrappingModes.NoWrap;text.overflowMode=TextOverflowModes.Overflow;text.margin=Vector4.zero;ApplyTmpTextRenderingHints(text,fontFamily,treatAsIcon);if(treatAsIcon){text.alignment=TextAlignmentOptions.Center;}}
+    private static void ApplyTmpTextRenderingHints(TMP_Text text,string? fontFamily,bool treatAsIcon){var isPixelFont=fontFamily=="Press Start 2P";text.useMaxVisibleDescender=true;text.extraPadding=false;if(treatAsIcon||!isPixelFont)return;
+#if UNITY_6000_0_OR_NEWER
+        text.fontFeatures=new System.Collections.Generic.List<UnityEngine.TextCore.OTL_FeatureTag>{UnityEngine.TextCore.OTL_FeatureTag.kern};
+#elif UNITY_2023_4_OR_NEWER == false
+        text.enableKerning=true;
+#endif
+    }
     private static bool TryTmpFont(string familyName,out TMP_FontAsset fontAsset){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};fontAsset=Resources.Load<TMP_FontAsset>(resourcePath)??Resources.Load<TMP_FontAsset>(familyName)??TryCreateTmpFontAsset(resourcePath)??TryCreateTmpFontAsset(familyName)??LoadFallbackTmpFontAsset();return fontAsset!=null;}
     private static TMP_FontAsset? LoadFallbackTmpFontAsset()=>Resources.Load<TMP_FontAsset>("BoomHudFonts/PressStart2P-Regular")??TryCreateTmpFontAsset("BoomHudFonts/PressStart2P-Regular")??Resources.Load<TMP_FontAsset>("BoomHudFonts/lucide")??TryCreateTmpFontAsset("BoomHudFonts/lucide")??TryGetDefaultTmpFontAsset();
     private static TMP_FontAsset? TryCreateTmpFontAsset(string resourcePath){if(string.IsNullOrWhiteSpace(resourcePath))return null;if(RuntimeTmpFontCache.TryGetValue(resourcePath,out var cached))return cached;var sourceFont=Resources.Load<Font>(resourcePath);if(sourceFont==null)return null;try{var created=TMP_FontAsset.CreateFontAsset(sourceFont);RuntimeTmpFontCache[resourcePath]=created;return created;}catch{return null;}}

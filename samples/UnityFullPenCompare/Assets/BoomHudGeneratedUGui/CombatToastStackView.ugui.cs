@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,36 +22,36 @@ public sealed class CombatToastStackView
     public RectTransform ToastOne { get; }
     public RectTransform IconPanel { get; }
     public RectTransform Content { get; }
-    public Text Title { get; }
-    public Text Body { get; }
+    public TextMeshProUGUI Title { get; }
+    public TextMeshProUGUI Body { get; }
     public RectTransform Progress { get; }
     public RectTransform ProgressFill { get; }
-    public Text ProgressText { get; }
+    public TextMeshProUGUI ProgressText { get; }
     public RectTransform RewardColumn { get; }
     public RectTransform Badge { get; }
-    public Text BadgeText { get; }
+    public TextMeshProUGUI BadgeText { get; }
     public RectTransform ToastTwo { get; }
     public RectTransform IconPanel2 { get; }
     public RectTransform Content2 { get; }
-    public Text Title2 { get; }
-    public Text Body2 { get; }
+    public TextMeshProUGUI Title2 { get; }
+    public TextMeshProUGUI Body2 { get; }
     public RectTransform Progress2 { get; }
     public RectTransform ProgressFill2 { get; }
-    public Text ProgressText2 { get; }
+    public TextMeshProUGUI ProgressText2 { get; }
     public RectTransform RewardColumn2 { get; }
     public RectTransform Badge2 { get; }
-    public Text BadgeText2 { get; }
+    public TextMeshProUGUI BadgeText2 { get; }
     public RectTransform ToastThree { get; }
     public RectTransform IconPanel3 { get; }
     public RectTransform Content3 { get; }
-    public Text Title3 { get; }
-    public Text Body3 { get; }
+    public TextMeshProUGUI Title3 { get; }
+    public TextMeshProUGUI Body3 { get; }
     public RectTransform Progress3 { get; }
     public RectTransform ProgressFill3 { get; }
-    public Text ProgressText3 { get; }
+    public TextMeshProUGUI ProgressText3 { get; }
     public RectTransform RewardColumn3 { get; }
     public RectTransform Badge3 { get; }
-    public Text BadgeText3 { get; }
+    public TextMeshProUGUI BadgeText3 { get; }
 
     public ICombatToastStackViewModel? ViewModel
     {
@@ -145,7 +146,7 @@ public sealed class CombatToastStackView
         ConfigureRect(RectOf(BadgeText), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(BadgeText), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(BadgeText), horizontal: false, vertical: false);
-        ApplyStyle(BadgeText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyStyle(BadgeText, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(BadgeText, lineSpacing: null, wrapText: false);
         BadgeText.text = "PRIORITY";
         BadgeText.gameObject.SetActive(true);
@@ -239,7 +240,7 @@ public sealed class CombatToastStackView
         ConfigureRect(RectOf(BadgeText2), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(BadgeText2), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(BadgeText2), horizontal: false, vertical: false);
-        ApplyStyle(BadgeText2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyStyle(BadgeText2, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(BadgeText2, lineSpacing: null, wrapText: false);
         BadgeText2.text = "STABLE";
         BadgeText2.gameObject.SetActive(true);
@@ -333,7 +334,7 @@ public sealed class CombatToastStackView
         ConfigureRect(RectOf(BadgeText3), width: null, height: null, left: null, top: null, absolute: false);
         ApplyLayoutSizing(RectOf(BadgeText3), ignoreLayout: false, preferredWidth: null, preferredHeight: null, flexibleWidth: null, flexibleHeight: null);
         ApplyContentSizeFit(RectOf(BadgeText3), horizontal: false, vertical: false);
-        ApplyStyle(BadgeText3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 8, borderColor: null, borderWidth: null, treatAsIcon: false);
+        ApplyStyle(BadgeText3, fg: "#FFFFFF", bg: null, fontFamily: "Press Start 2P", fontSize: 9, borderColor: null, borderWidth: null, treatAsIcon: false);
         ApplyTextMetrics(BadgeText3, lineSpacing: null, wrapText: false);
         BadgeText3.text = "CONCEALED";
         BadgeText3.gameObject.SetActive(true);
@@ -348,36 +349,36 @@ public sealed class CombatToastStackView
         ToastOne = RequireRect(Root, "ToastOne");
         IconPanel = RequireRect(Root, "ToastOne/IconPanel");
         Content = RequireRect(Root, "ToastOne/Content");
-        Title = RequireComponent<Text>(Root, "ToastOne/Content/Title");
-        Body = RequireComponent<Text>(Root, "ToastOne/Content/Body");
+        Title = RequireComponent<TextMeshProUGUI>(Root, "ToastOne/Content/Title");
+        Body = RequireComponent<TextMeshProUGUI>(Root, "ToastOne/Content/Body");
         Progress = RequireRect(Root, "ToastOne/Content/Progress");
         ProgressFill = RequireRect(Root, "ToastOne/Content/Progress/ProgressFill");
-        ProgressText = RequireComponent<Text>(Root, "ToastOne/Content/Progress/ProgressText");
+        ProgressText = RequireComponent<TextMeshProUGUI>(Root, "ToastOne/Content/Progress/ProgressText");
         RewardColumn = RequireRect(Root, "ToastOne/RewardColumn");
         Badge = RequireRect(Root, "ToastOne/Badge");
-        BadgeText = RequireComponent<Text>(Root, "ToastOne/Badge/BadgeText");
+        BadgeText = RequireComponent<TextMeshProUGUI>(Root, "ToastOne/Badge/BadgeText");
         ToastTwo = RequireRect(Root, "ToastTwo");
         IconPanel2 = RequireRect(Root, "ToastTwo/IconPanel2");
         Content2 = RequireRect(Root, "ToastTwo/Content2");
-        Title2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Title2");
-        Body2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Body2");
+        Title2 = RequireComponent<TextMeshProUGUI>(Root, "ToastTwo/Content2/Title2");
+        Body2 = RequireComponent<TextMeshProUGUI>(Root, "ToastTwo/Content2/Body2");
         Progress2 = RequireRect(Root, "ToastTwo/Content2/Progress2");
         ProgressFill2 = RequireRect(Root, "ToastTwo/Content2/Progress2/ProgressFill2");
-        ProgressText2 = RequireComponent<Text>(Root, "ToastTwo/Content2/Progress2/ProgressText2");
+        ProgressText2 = RequireComponent<TextMeshProUGUI>(Root, "ToastTwo/Content2/Progress2/ProgressText2");
         RewardColumn2 = RequireRect(Root, "ToastTwo/RewardColumn2");
         Badge2 = RequireRect(Root, "ToastTwo/Badge2");
-        BadgeText2 = RequireComponent<Text>(Root, "ToastTwo/Badge2/BadgeText2");
+        BadgeText2 = RequireComponent<TextMeshProUGUI>(Root, "ToastTwo/Badge2/BadgeText2");
         ToastThree = RequireRect(Root, "ToastThree");
         IconPanel3 = RequireRect(Root, "ToastThree/IconPanel3");
         Content3 = RequireRect(Root, "ToastThree/Content3");
-        Title3 = RequireComponent<Text>(Root, "ToastThree/Content3/Title3");
-        Body3 = RequireComponent<Text>(Root, "ToastThree/Content3/Body3");
+        Title3 = RequireComponent<TextMeshProUGUI>(Root, "ToastThree/Content3/Title3");
+        Body3 = RequireComponent<TextMeshProUGUI>(Root, "ToastThree/Content3/Body3");
         Progress3 = RequireRect(Root, "ToastThree/Content3/Progress3");
         ProgressFill3 = RequireRect(Root, "ToastThree/Content3/Progress3/ProgressFill3");
-        ProgressText3 = RequireComponent<Text>(Root, "ToastThree/Content3/Progress3/ProgressText3");
+        ProgressText3 = RequireComponent<TextMeshProUGUI>(Root, "ToastThree/Content3/Progress3/ProgressText3");
         RewardColumn3 = RequireRect(Root, "ToastThree/RewardColumn3");
         Badge3 = RequireRect(Root, "ToastThree/Badge3");
-        BadgeText3 = RequireComponent<Text>(Root, "ToastThree/Badge3/BadgeText3");
+        BadgeText3 = RequireComponent<TextMeshProUGUI>(Root, "ToastThree/Badge3/BadgeText3");
         ApplyInstanceOverrides();
         ViewModel = viewModel;
     }
@@ -460,15 +461,17 @@ public sealed class CombatToastStackView
         return false;
     }
 
+    private static readonly Dictionary<string, TMP_FontAsset> RuntimeTmpFontCache=new(StringComparer.OrdinalIgnoreCase);
     private static RectTransform CreateRect(string name, Transform? parent){var go=new GameObject(name,typeof(RectTransform));var rect=go.GetComponent<RectTransform>();if(parent!=null)rect.SetParent(parent,false);rect.localScale=Vector3.one;rect.anchorMin=new Vector2(0f,1f);rect.anchorMax=new Vector2(0f,1f);rect.pivot=new Vector2(0f,1f);return rect;}
     private static RectTransform RequireRect(Transform root,string path){var target=root.Find(path);if(target==null||!target.TryGetComponent<RectTransform>(out var rect))throw new InvalidOperationException($"Required RectTransform '{path}' was not found beneath '{root.name}'.");return rect;}
     private static T RequireComponent<T>(Transform root,string path) where T : Component{var target=root.Find(path);if(target==null||!target.TryGetComponent<T>(out var component))throw new InvalidOperationException($"Required component '{typeof(T).Name}' at '{path}' was not found beneath '{root.name}'.");return component;}
-    private static Text CreateText(string name, Transform? parent){var rect=CreateRect(name,parent);rect.gameObject.AddComponent<CanvasRenderer>();var text=rect.gameObject.AddComponent<Text>();text.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;text.supportRichText=true;return text;}
+    private static TextMeshProUGUI CreateText(string name, Transform? parent){var rect=CreateRect(name,parent);var text=rect.gameObject.AddComponent<TextMeshProUGUI>();var fallbackFont=LoadFallbackTmpFontAsset();if(fallbackFont!=null)text.font=fallbackFont;text.textWrappingMode=TextWrappingModes.NoWrap;text.overflowMode=TextOverflowModes.Overflow;text.richText=true;text.raycastTarget=false;text.margin=Vector4.zero;text.extraPadding=false;text.alignment=TextAlignmentOptions.TopLeft;return text;}
+    private static Text CreateLegacyText(string name, Transform? parent){var rect=CreateRect(name,parent);rect.gameObject.AddComponent<CanvasRenderer>();var text=rect.gameObject.AddComponent<Text>();text.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;text.supportRichText=true;return text;}
     private static Image CreateImage(string name, Transform? parent){var rect=CreateRect(name,parent);rect.gameObject.AddComponent<CanvasRenderer>();return rect.gameObject.AddComponent<Image>();}
-    private static Button CreateButton(string name, Transform? parent){var image=CreateImage(name,parent);var button=image.gameObject.AddComponent<Button>();button.targetGraphic=image;var label=CreateText("Label",image.transform);Stretch(RectOf(label));label.alignment=TextAnchor.MiddleCenter;return button;}
-    private static Toggle CreateToggle(string name, Transform? parent){var root=CreateRect(name,parent);var toggle=root.gameObject.AddComponent<Toggle>();var bg=CreateImage("Background",root);ConfigureRect(RectOf(bg),18f,18f,0f,0f,true);var check=CreateImage("Checkmark",RectOf(bg));Stretch(RectOf(check));var label=CreateText("Label",root);ConfigureRect(RectOf(label),null,18f,24f,0f,true);toggle.targetGraphic=bg;toggle.graphic=check;return toggle;}
+    private static Button CreateButton(string name, Transform? parent){var image=CreateImage(name,parent);var button=image.gameObject.AddComponent<Button>();button.targetGraphic=image;var label=CreateText("Label",image.transform);Stretch(RectOf(label));label.alignment=TextAlignmentOptions.Center;return button;}
+    private static Toggle CreateToggle(string name, Transform? parent){var root=CreateRect(name,parent);var toggle=root.gameObject.AddComponent<Toggle>();var bg=CreateImage("Background",root);ConfigureRect(RectOf(bg),18f,18f,0f,0f,true);var check=CreateImage("Checkmark",RectOf(bg));Stretch(RectOf(check));var label=CreateText("Label",root);ConfigureRect(RectOf(label),null,18f,24f,0f,true);label.alignment=TextAlignmentOptions.MidlineLeft;toggle.targetGraphic=bg;toggle.graphic=check;return toggle;}
     private static Slider CreateSlider(string name, Transform? parent,bool interactable){var root=CreateRect(name,parent);var bg=CreateImage("Background",root);Stretch(RectOf(bg));var fillArea=CreateRect("Fill Area",root);Stretch(fillArea);var fill=CreateImage("Fill",fillArea);Stretch(RectOf(fill));var handleArea=CreateRect("Handle Slide Area",root);Stretch(handleArea);var handle=CreateImage("Handle",handleArea);ConfigureRect(RectOf(handle),12f,12f,0f,0f,true);var slider=root.gameObject.AddComponent<Slider>();slider.fillRect=RectOf(fill);slider.handleRect=RectOf(handle);slider.targetGraphic=handle;slider.interactable=interactable;return slider;}
-    private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
+    private static InputField CreateInput(string name, Transform? parent,bool multiline){var bg=CreateImage(name,parent);var text=CreateLegacyText("Text",bg.transform);Stretch(RectOf(text),6f,6f,6f,6f);text.alignment=multiline?TextAnchor.UpperLeft:TextAnchor.MiddleLeft;var input=bg.gameObject.AddComponent<InputField>();input.textComponent=text;input.lineType=multiline?InputField.LineType.MultiLineNewline:InputField.LineType.SingleLine;return input;}
     private static ScrollRect CreateScroll(string name, Transform? parent,out RectTransform content){var root=CreateImage(name,parent);var viewport=CreateImage("Viewport",root.transform);Stretch(RectOf(viewport));viewport.gameObject.AddComponent<Mask>().showMaskGraphic=false;content=CreateRect("Content",RectOf(viewport));Stretch(content);ApplyVerticalLayout(content,0f,0,0,0,0);var scroll=root.gameObject.AddComponent<ScrollRect>();scroll.viewport=RectOf(viewport);scroll.content=content;scroll.horizontal=false;scroll.vertical=true;return scroll;}
     private static void ApplyHorizontalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<HorizontalLayoutGroup>()??rect.gameObject.AddComponent<HorizontalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
     private static void ApplyVerticalLayout(RectTransform rect,float spacing,int paddingLeft,int paddingRight,int paddingTop,int paddingBottom,string? alignmentPreset=null,bool childControlWidth=true,bool childControlHeight=true,bool childForceExpandWidth=false,bool childForceExpandHeight=false){var group=rect.gameObject.GetComponent<VerticalLayoutGroup>()??rect.gameObject.AddComponent<VerticalLayoutGroup>();group.spacing=spacing;group.padding=new RectOffset(paddingLeft,paddingRight,paddingTop,paddingBottom);group.childControlWidth=childControlWidth;group.childControlHeight=childControlHeight;group.childForceExpandWidth=childForceExpandWidth;group.childForceExpandHeight=childForceExpandHeight;ApplyLayoutAlignment(group,alignmentPreset);}
@@ -482,14 +485,20 @@ public sealed class CombatToastStackView
     private static void ApplyLayoutAlignment(HorizontalOrVerticalLayoutGroup group,string? alignmentPreset){switch(NormalizeRectPreset(alignmentPreset)){case "top-left":case "start":group.childAlignment=TextAnchor.UpperLeft;break;case "top-center":group.childAlignment=TextAnchor.UpperCenter;break;case "top-right":group.childAlignment=TextAnchor.UpperRight;break;case "middle-left":group.childAlignment=TextAnchor.MiddleLeft;break;case "center":case "middle-center":group.childAlignment=TextAnchor.MiddleCenter;break;case "middle-right":group.childAlignment=TextAnchor.MiddleRight;break;case "bottom-left":group.childAlignment=TextAnchor.LowerLeft;break;case "bottom-center":group.childAlignment=TextAnchor.LowerCenter;break;case "bottom-right":case "end":group.childAlignment=TextAnchor.LowerRight;break;}}
     private static string NormalizeRectPreset(string? value)=>string.IsNullOrWhiteSpace(value)?string.Empty:value.Trim().ToLowerInvariant();
     private static void Stretch(RectTransform rect,float left=0f,float right=0f,float top=0f,float bottom=0f){rect.anchorMin=new Vector2(0f,0f);rect.anchorMax=new Vector2(1f,1f);rect.pivot=new Vector2(0.5f,0.5f);rect.offsetMin=new Vector2(left,bottom);rect.offsetMax=new Vector2(-right,-top);}
-    private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}}else if(component is Button button&&TryLabel(button.gameObject,out var label)){if(!string.IsNullOrWhiteSpace(fg))label.color=ParseColor(fg,label.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))label.font=font;if(fontSize.HasValue)label.fontSize=fontSize.Value;}else if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(!string.IsNullOrWhiteSpace(fg))toggleLabel.color=ParseColor(fg,toggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))toggleLabel.font=font;if(fontSize.HasValue)toggleLabel.fontSize=fontSize.Value;}else if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
-    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){if(component is not Text text)return;var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
-    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button&&TryLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Toggle toggle&&TryLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
+    private static void ApplyStyle(Component component,string? fg,string? bg,string? fontFamily,int? fontSize,string? borderColor,float? borderWidth,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(bg))EnsureImage(component.gameObject).color=ParseColor(bg,Color.white);if(!string.IsNullOrWhiteSpace(borderColor)&&borderWidth.HasValue&&borderWidth.Value>0f)ApplyBorder(component.gameObject,ParseColor(borderColor,Color.white),borderWidth.Value);if(component is TMP_Text tmp){ApplyTmpTextStyle(tmp,fg,fontFamily,fontSize,treatAsIcon);return;}if(component is Text text){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))text.font=font;if(fontSize.HasValue)text.fontSize=fontSize.Value;if(treatAsIcon){text.alignment=TextAnchor.MiddleCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;}return;}if(component is Button button){if(TryTmpLabel(button.gameObject,out var tmpLabel)){ApplyTmpTextStyle(tmpLabel,fg,fontFamily,fontSize,false);return;}if(TryLegacyLabel(button.gameObject,out var legacyLabel)){if(!string.IsNullOrWhiteSpace(fg))legacyLabel.color=ParseColor(fg,legacyLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var legacyFont))legacyLabel.font=legacyFont;if(fontSize.HasValue)legacyLabel.fontSize=fontSize.Value;}return;}if(component is Toggle toggle){if(TryTmpLabel(toggle.gameObject,out var tmpToggleLabel)){ApplyTmpTextStyle(tmpToggleLabel,fg,fontFamily,fontSize,false);return;}if(TryLegacyLabel(toggle.gameObject,out var legacyToggleLabel)){if(!string.IsNullOrWhiteSpace(fg))legacyToggleLabel.color=ParseColor(fg,legacyToggleLabel.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var legacyFont))legacyToggleLabel.font=legacyFont;if(fontSize.HasValue)legacyToggleLabel.fontSize=fontSize.Value;}return;}if(component is InputField input&&input.textComponent!=null){if(!string.IsNullOrWhiteSpace(fg))input.textComponent.color=ParseColor(fg,input.textComponent.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryFont(fontFamily,out var font))input.textComponent.font=font;if(fontSize.HasValue)input.textComponent.fontSize=fontSize.Value;}}
+    private static void ApplyIconMetrics(Component component,float boxWidth,float boxHeight,float baselineOffset,bool opticalCentering,string sizeMode,float explicitFontSize){var iconSize=explicitFontSize>0f?explicitFontSize:string.Equals(sizeMode,"match-height",StringComparison.OrdinalIgnoreCase)?Mathf.Max(1f,boxHeight):Mathf.Max(1f,Mathf.Min(boxWidth,boxHeight));if(component is TMP_Text tmp){tmp.fontSize=Mathf.RoundToInt(iconSize);tmp.alignment=opticalCentering?TextAlignmentOptions.Center:TextAlignmentOptions.Top;tmp.textWrappingMode=TextWrappingModes.NoWrap;tmp.overflowMode=TextOverflowModes.Overflow;var tmpRect=RectOf(tmp);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}tmpRect.anchoredPosition=new Vector2(tmpRect.anchoredPosition.x,tmpRect.anchoredPosition.y+baselineOffset);return;}if(component is not Text text)return;text.fontSize=Mathf.RoundToInt(iconSize);text.alignment=opticalCentering?TextAnchor.MiddleCenter:TextAnchor.UpperCenter;text.horizontalOverflow=HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;var rect=RectOf(text);if(opticalCentering&&Mathf.Approximately(baselineOffset,0f)&&boxHeight>iconSize){baselineOffset=-1f;}rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,rect.anchoredPosition.y+baselineOffset);}
+    private static void ApplyTextMetrics(Component component,float? lineSpacing,bool wrapText){if(component is TMP_Text tmp){if(lineSpacing.HasValue)tmp.lineSpacing=lineSpacing.Value;tmp.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmp.overflowMode=TextOverflowModes.Overflow;return;}if(component is Text text){if(lineSpacing.HasValue)text.lineSpacing=lineSpacing.Value;text.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;text.verticalOverflow=VerticalWrapMode.Overflow;return;}if(component is Button button){if(TryTmpLabel(button.gameObject,out var tmpLabel)){if(lineSpacing.HasValue)tmpLabel.lineSpacing=lineSpacing.Value;tmpLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(button.gameObject,out var label)){if(lineSpacing.HasValue)label.lineSpacing=lineSpacing.Value;label.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;label.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is Toggle toggle){if(TryTmpLabel(toggle.gameObject,out var tmpToggleLabel)){if(lineSpacing.HasValue)tmpToggleLabel.lineSpacing=lineSpacing.Value;tmpToggleLabel.textWrappingMode=wrapText?TextWrappingModes.Normal:TextWrappingModes.NoWrap;tmpToggleLabel.overflowMode=TextOverflowModes.Overflow;return;}if(TryLegacyLabel(toggle.gameObject,out var toggleLabel)){if(lineSpacing.HasValue)toggleLabel.lineSpacing=lineSpacing.Value;toggleLabel.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;toggleLabel.verticalOverflow=VerticalWrapMode.Overflow;return;}}if(component is InputField input&&input.textComponent!=null){if(lineSpacing.HasValue)input.textComponent.lineSpacing=lineSpacing.Value;input.textComponent.horizontalOverflow=wrapText?HorizontalWrapMode.Wrap:HorizontalWrapMode.Overflow;input.textComponent.verticalOverflow=VerticalWrapMode.Overflow;}}
     private static void ApplyEnabled(Component component,bool enabled){if(component is Selectable selectable){selectable.interactable=enabled;return;}component.gameObject.SetActive(enabled);}
-    private static void SetButtonText(Button button,string? value){if(TryLabel(button.gameObject,out var label))label.text=value??string.Empty;}
-    private static void SetToggleText(Toggle toggle,string? value){if(TryLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}
+    private static void SetButtonText(Button button,string? value){if(TryTmpLabel(button.gameObject,out var tmpLabel)){tmpLabel.text=value??string.Empty;return;}if(TryLegacyLabel(button.gameObject,out var label))label.text=value??string.Empty;}
+    private static void SetToggleText(Toggle toggle,string? value){if(TryTmpLabel(toggle.gameObject,out var tmpLabel)){tmpLabel.text=value??string.Empty;return;}if(TryLegacyLabel(toggle.gameObject,out var label))label.text=value??string.Empty;}
     private static void SetImage(Image image,string? path){image.sprite=string.IsNullOrWhiteSpace(path)?null:Resources.Load<Sprite>(path);}
-    private static bool TryLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
+    private static bool TryTmpLabel(GameObject go,out TMP_Text label){label=go.GetComponentInChildren<TMP_Text>(true);return label!=null;}
+    private static bool TryLegacyLabel(GameObject go,out Text label){label=go.GetComponentInChildren<Text>(true);return label!=null;}
+    private static void ApplyTmpTextStyle(TMP_Text text,string? fg,string? fontFamily,int? fontSize,bool treatAsIcon){if(!string.IsNullOrWhiteSpace(fg))text.color=ParseColor(fg,text.color);if(!string.IsNullOrWhiteSpace(fontFamily)&&TryTmpFont(fontFamily,out var fontAsset))text.font=fontAsset;if(fontSize.HasValue)text.fontSize=fontSize.Value;text.textWrappingMode=TextWrappingModes.NoWrap;text.overflowMode=TextOverflowModes.Overflow;text.extraPadding=false;text.margin=Vector4.zero;if(treatAsIcon){text.alignment=TextAlignmentOptions.Center;}}
+    private static bool TryTmpFont(string familyName,out TMP_FontAsset fontAsset){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};fontAsset=Resources.Load<TMP_FontAsset>(resourcePath)??Resources.Load<TMP_FontAsset>(familyName)??TryCreateTmpFontAsset(resourcePath)??TryCreateTmpFontAsset(familyName)??LoadFallbackTmpFontAsset();return fontAsset!=null;}
+    private static TMP_FontAsset? LoadFallbackTmpFontAsset()=>Resources.Load<TMP_FontAsset>("BoomHudFonts/PressStart2P-Regular")??TryCreateTmpFontAsset("BoomHudFonts/PressStart2P-Regular")??Resources.Load<TMP_FontAsset>("BoomHudFonts/lucide")??TryCreateTmpFontAsset("BoomHudFonts/lucide")??TryGetDefaultTmpFontAsset();
+    private static TMP_FontAsset? TryCreateTmpFontAsset(string resourcePath){if(string.IsNullOrWhiteSpace(resourcePath))return null;if(RuntimeTmpFontCache.TryGetValue(resourcePath,out var cached))return cached;var sourceFont=Resources.Load<Font>(resourcePath);if(sourceFont==null)return null;try{var created=TMP_FontAsset.CreateFontAsset(sourceFont);RuntimeTmpFontCache[resourcePath]=created;return created;}catch{return null;}}
+    private static TMP_FontAsset? TryGetDefaultTmpFontAsset(){try{return TMP_Settings.defaultFontAsset;}catch{return null;}}
     private static bool TryFont(string familyName,out Font font){var resourcePath=familyName switch{"Press Start 2P"=>"BoomHudFonts/PressStart2P-Regular","lucide"=>"BoomHudFonts/lucide",_=>familyName};font=Resources.Load<Font>(resourcePath)??Resources.Load<Font>(familyName);return font!=null;}
     private static void ApplyBorder(GameObject go,Color color,float width){if(width<=0f)return;if(go.TryGetComponent<Outline>(out var outline))outline.enabled=false;if(!go.TryGetComponent<RectTransform>(out var rect))return;var borderRoot=go.transform.Find("__Border") as RectTransform??CreateRect("__Border",go.transform);borderRoot.SetParent(go.transform,false);ApplyLayoutSizing(borderRoot,true,null,null,null,null);Stretch(borderRoot);borderRoot.SetAsLastSibling();ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Top",color),new Vector2(0f,1f),new Vector2(1f,1f),new Vector2(0.5f,1f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Bottom",color),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(0.5f,0f),new Vector2(0f,0f),new Vector2(0f,width));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Left",color),new Vector2(0f,0f),new Vector2(0f,1f),new Vector2(0f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));ConfigureBorderSegment(EnsureBorderSegment(borderRoot,"Right",color),new Vector2(1f,0f),new Vector2(1f,1f),new Vector2(1f,0.5f),new Vector2(0f,0f),new Vector2(width,0f));}
     private static RectTransform EnsureBorderSegment(RectTransform parent,string name,Color color){var existing=parent.Find(name);if(existing!=null&&existing.TryGetComponent<Image>(out var image)){image.color=color;image.raycastTarget=false;return RectOf(image);}var created=CreateImage(name,parent);created.color=color;created.raycastTarget=false;return RectOf(created);}

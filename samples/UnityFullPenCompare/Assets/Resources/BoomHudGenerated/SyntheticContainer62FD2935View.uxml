@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="ListQuestTwo" class="boomhud-list-quest-two">
+        <ui:Label name="ListQuestTwoTitle" class="boomhud-list-quest-two-title" />
+        <ui:Label name="ListQuestTwoDistance" class="boomhud-list-quest-two-distance" />
+    </ui:VisualElement>
+</ui:UXML>

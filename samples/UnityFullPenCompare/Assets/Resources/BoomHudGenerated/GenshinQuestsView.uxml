@@ -1,0 +1,87 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="GenshinQuests" class="boomhud-genshin-quests">
+        <ui:VisualElement name="BackdropWash" class="boomhud-backdrop-wash" />
+        <ui:VisualElement name="BackdropTint" class="boomhud-backdrop-tint" />
+        <ui:VisualElement name="CategoryRail" class="boomhud-category-rail">
+            <ui:VisualElement name="TabOne" class="boomhud-tab-one">
+                <ui:Label name="TabOneText" class="boomhud-tab-one-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="TabTwo" class="boomhud-tab-two" />
+            <ui:VisualElement name="TabThree" class="boomhud-tab-three" />
+            <ui:VisualElement name="TabFour" class="boomhud-tab-four" />
+            <ui:VisualElement name="TabFive" class="boomhud-tab-five" />
+            <ui:VisualElement name="TabFooter" class="boomhud-tab-footer">
+                <ui:Label name="TabFooterText" class="boomhud-tab-footer-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="QuestListPanel" class="boomhud-quest-list-panel">
+            <ui:Label name="ListHeader" class="boomhud-list-header" />
+            <ui:Label name="CategoryHeader" class="boomhud-category-header" />
+            <ui:VisualElement name="SelectedQuestCard" class="boomhud-selected-quest-card">
+                <ui:Label name="SelectedQuestTitle" class="boomhud-selected-quest-title" />
+                <ui:Label name="SelectedQuestAct" class="boomhud-selected-quest-act" />
+            </ui:VisualElement>
+            <ui:VisualElement name="FocusQuest" class="boomhud-focus-quest">
+                <ui:VisualElement name="FocusQuestText" class="boomhud-focus-quest-text">
+                    <ui:Label name="FocusQuestTitle" class="boomhud-focus-quest-title" />
+                    <ui:Label name="FocusQuestDistance" class="boomhud-focus-quest-distance" />
+                </ui:VisualElement>
+                <ui:VisualElement name="FocusQuestBadge" class="boomhud-focus-quest-badge">
+                    <ui:Label name="FocusQuestBadgeText" class="boomhud-focus-quest-badge-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="ListQuestTwo" class="boomhud-list-quest-two" />
+            <ui:VisualElement name="ListQuestThree" class="boomhud-list-quest-three" />
+            <ui:Label name="WorldQuestsLabel" class="boomhud-world-quests-label" />
+            <ui:VisualElement name="WorldQuestOne" class="boomhud-world-quest-one">
+                <ui:Label name="WorldQuestOneTitle" class="boomhud-world-quest-one-title" />
+                <ui:Label name="WorldQuestOneDistance" class="boomhud-world-quest-one-distance" />
+            </ui:VisualElement>
+            <ui:VisualElement name="WorldQuestTwo" class="boomhud-world-quest-two">
+                <ui:Label name="WorldQuestTwoTitle" class="boomhud-world-quest-two-title" />
+                <ui:Label name="WorldQuestTwoDistance" class="boomhud-world-quest-two-distance" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ScrollTrack" class="boomhud-scroll-track" />
+        <ui:VisualElement name="ScrollThumb" class="boomhud-scroll-thumb" />
+        <ui:VisualElement name="DetailPanel" class="boomhud-detail-panel">
+            <ui:VisualElement name="DetailHeader" class="boomhud-detail-header">
+                <ui:Label name="DetailTitle" class="boomhud-detail-title" />
+                <ui:Label name="DetailLocation" class="boomhud-detail-location" />
+                <ui:VisualElement name="HeaderLine" class="boomhud-header-line" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ObjectiveBanner" class="boomhud-objective-banner">
+                <ui:Label name="ObjectiveBannerText" class="boomhud-objective-banner-text" />
+            </ui:VisualElement>
+            <ui:Label name="DetailBody" class="boomhud-detail-body" />
+            <ui:VisualElement name="RewardsLine" class="boomhud-rewards-line" />
+            <ui:Label name="RewardsLabel" class="boomhud-rewards-label" />
+            <ui:VisualElement name="RewardsRow" class="boomhud-rewards-row">
+                <ui:VisualElement name="RewardOne" class="boomhud-reward-one">
+                    <ui:Label name="RewardOneText" class="boomhud-reward-one-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="RewardTwo" class="boomhud-reward-two">
+                    <ui:Label name="RewardTwoText" class="boomhud-reward-two-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="RewardThree" class="boomhud-reward-three">
+                    <ui:Label name="RewardThreeText" class="boomhud-reward-three-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="RewardFour" class="boomhud-reward-four">
+                    <ui:Label name="RewardFourText" class="boomhud-reward-four-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="RewardFive" class="boomhud-reward-five">
+                    <ui:Label name="RewardFiveText" class="boomhud-reward-five-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="CancelNavigationButton" class="boomhud-cancel-navigation-button">
+            <ui:VisualElement name="CancelNavigationGlyph" class="boomhud-cancel-navigation-glyph">
+                <ui:Label name="CancelNavigationGlyphText" class="boomhud-cancel-navigation-glyph-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="CancelNavigationTextColumn" class="boomhud-cancel-navigation-text-column">
+                <ui:Label name="CancelNavigationTextOne" class="boomhud-cancel-navigation-text-one" />
+                <ui:Label name="CancelNavigationTextTwo" class="boomhud-cancel-navigation-text-two" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

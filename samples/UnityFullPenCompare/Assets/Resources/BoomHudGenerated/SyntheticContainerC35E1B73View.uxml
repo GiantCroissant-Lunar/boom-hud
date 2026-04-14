@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="Card51" class="boomhud-card51">
+        <ui:VisualElement name="ModBox51" class="boomhud-mod-box51" />
+        <ui:Label name="ModLabel51" class="boomhud-mod-label51" />
+    </ui:VisualElement>
+</ui:UXML>

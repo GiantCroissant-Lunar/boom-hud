@@ -176,6 +176,9 @@ public sealed class VisualPlanningTests
                         StableId = "root/1/0",
                         Kind = VisualNodeKind.Container,
                         SourceType = ComponentType.Container,
+                        SemanticClass = "value-row",
+                        SourceSemanticRole = "value-row",
+                        SourceAssetRealization = "LayoutContainer",
                         Box = new VisualBox { SourceType = ComponentType.Container },
                         EdgeContract = new EdgeContract
                         {
@@ -224,6 +227,9 @@ public sealed class VisualPlanningTests
         summary.Actions[0].ActionType.Should().Be("tighten-shell-padding");
         summary.Actions[0].TriggerIssueCategory.Should().Be("shell-padding-or-child-stack-mismatch");
         summary.Actions[0].TriggerIssueLocalPath.Should().Be("root/1/0");
+        summary.Actions[0].TargetSemanticClass.Should().Be("value-row");
+        summary.Actions[0].TargetSourceSemanticRole.Should().Be("value-row");
+        summary.Actions[0].TargetSourceAssetRealization.Should().Be("LayoutContainer");
         summary.Actions[1].ActionType.Should().Be("metric-profile-adjustment");
     }
 

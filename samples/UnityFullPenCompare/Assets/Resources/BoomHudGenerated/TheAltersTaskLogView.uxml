@@ -1,0 +1,51 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="TheAltersTaskLog" class="boomhud-the-alters-task-log">
+        <ui:VisualElement name="TopTabs" class="boomhud-top-tabs">
+            <ui:VisualElement name="SearchTab" class="boomhud-search-tab" />
+            <ui:VisualElement name="BaseOverviewTab" class="boomhud-base-overview-tab">
+                <ui:Label name="BaseOverviewText" class="boomhud-base-overview-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="StorageTab" class="boomhud-storage-tab">
+                <ui:Label name="StorageText" class="boomhud-storage-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="TasksTab" class="boomhud-tasks-tab">
+                <ui:Label name="TasksText" class="boomhud-tasks-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ManualTab" class="boomhud-manual-tab">
+                <ui:Label name="ManualText" class="boomhud-manual-text" />
+            </ui:VisualElement>
+            <ui:VisualElement name="KeyTab" class="boomhud-key-tab" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LeftColumn" class="boomhud-left-column">
+            <ui:Label name="TaskLogTitle" class="boomhud-task-log-title" />
+            <ui:VisualElement name="TaskLogAccent" class="boomhud-task-log-accent" />
+            <ui:VisualElement name="MainGoalCard" class="boomhud-main-goal-card">
+                <ui:Label name="MainGoalsLabel" class="boomhud-main-goals-label" />
+                <ui:VisualElement name="DividerOne" class="boomhud-divider-one" />
+                <ui:Label name="MainGoalTitle" class="boomhud-main-goal-title" />
+                <ui:Label name="MainGoalBullet" class="boomhud-main-goal-bullet" />
+            </ui:VisualElement>
+            <ui:VisualElement name="FundamentalsCard" class="boomhud-fundamentals-card">
+                <ui:VisualElement name="DividerTwo" class="boomhud-divider-two" />
+                <ui:Label name="FundamentalsTitle" class="boomhud-fundamentals-title" />
+                <ui:Label name="FundamentalsBullet" class="boomhud-fundamentals-bullet" />
+                <ui:VisualElement name="DividerThree" class="boomhud-divider-three" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="RightColumn" class="boomhud-right-column">
+            <ui:Label name="RightTitle" class="boomhud-right-title" />
+            <ui:VisualElement name="BulletList" class="boomhud-bullet-list">
+                <ui:Label name="DisabledBullet" class="boomhud-disabled-bullet" />
+                <ui:VisualElement name="StrikeLine" class="boomhud-strike-line" />
+                <ui:Label name="ActiveBullet" class="boomhud-active-bullet" />
+            </ui:VisualElement>
+            <ui:Label name="BodyCopy" class="boomhud-body-copy" />
+        </ui:VisualElement>
+        <ui:VisualElement name="CloseButton" class="boomhud-close-button">
+            <ui:VisualElement name="CloseKey" class="boomhud-close-key">
+                <ui:Label name="CloseKeyText" class="boomhud-close-key-text" />
+            </ui:VisualElement>
+            <ui:Label name="CloseLabel" class="boomhud-close-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

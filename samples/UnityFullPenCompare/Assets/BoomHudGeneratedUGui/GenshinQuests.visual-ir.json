@@ -1,0 +1,4911 @@
+{
+  "DocumentName": "GenshinQuests",
+  "BackendFamily": "ugui",
+  "SourceGenerationMode": "post-v1-prepared-hud-document",
+  "Root": {
+    "StableId": "root",
+    "SourceId": "GenshinQuests",
+    "SourceNodeId": "GQS01",
+    "Kind": 0,
+    "SourceType": 15,
+    "ComponentRefId": null,
+    "SemanticClass": "container",
+    "MetricProfileId": null,
+    "StaticProperties": {},
+    "PropertyOverrides": {},
+    "Box": {
+      "SourceType": 15,
+      "LayoutType": 5,
+      "Width": {
+        "Value": 1920,
+        "Unit": 0
+      },
+      "Height": {
+        "Value": 1080,
+        "Unit": 0
+      },
+      "MinWidth": null,
+      "MinHeight": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "Gap": null,
+      "Padding": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Margin": {
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0,
+        "Left": 0
+      },
+      "Left": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "Top": {
+        "Value": 0,
+        "Unit": 0
+      },
+      "IsAbsolutePositioned": false,
+      "ClipContent": false,
+      "Align": 0,
+      "Justify": 0,
+      "Weight": null,
+      "Background": "#9AA89A",
+      "Border": null,
+      "BorderRadius": null,
+      "Opacity": null
+    },
+    "EdgeContract": {
+      "Participation": 0,
+      "WidthSizing": 0,
+      "HeightSizing": 0,
+      "HorizontalPin": 0,
+      "VerticalPin": 0,
+      "OverflowX": 0,
+      "OverflowY": 0,
+      "WrapPressure": 0
+    },
+    "Typography": null,
+    "Icon": null,
+    "Children": [
+      {
+        "StableId": "root/0",
+        "SourceId": "BackdropWash",
+        "SourceNodeId": "GQS02",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 1920,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 1080,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#8696A7",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/1",
+        "SourceId": "BackdropTint",
+        "SourceNodeId": "GQS03",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 1920,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 1080,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 0,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#DDE4CC99",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/2",
+        "SourceId": "CategoryRail",
+        "SourceNodeId": "GQS04",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 126,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 1044,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 24,
+            "Right": 24,
+            "Bottom": 24,
+            "Left": 24
+          },
+          "Padding": {
+            "Top": 18,
+            "Right": 18,
+            "Bottom": 18,
+            "Left": 18
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 22,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 18,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#4A5564CC",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/2/0",
+            "SourceId": "TabOne",
+            "SourceNodeId": "GQS05",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 86,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 86,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 1,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#C9B58B",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/2/0/0",
+                "SourceId": "TabOneText",
+                "SourceNodeId": "GQS06",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-1",
+                "StaticProperties": {
+                  "text": "!"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 24,
+                  "ResolvedLineHeight": null,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "large"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/2/1",
+            "SourceId": "TabTwo",
+            "SourceNodeId": "GQS07",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:7c99052f396c",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/2/2",
+            "SourceId": "TabThree",
+            "SourceNodeId": "GQS09",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:f65d929fe277",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/2/3",
+            "SourceId": "TabFour",
+            "SourceNodeId": "GQS11",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:7c99052f396c",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {
+              "$/0": {
+                "Text": "\u003C\u003E"
+              }
+            },
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/2/4",
+            "SourceId": "TabFive",
+            "SourceNodeId": "GQS13",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:f65d929fe277",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/2/5",
+            "SourceId": "TabFooter",
+            "SourceNodeId": "GQS15",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 86,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 86,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 1,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#F1E8D8",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/2/5/0",
+                "SourceId": "TabFooterText",
+                "SourceNodeId": "GQS16",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-2",
+                "StaticProperties": {
+                  "text": "OK"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 12,
+                  "ResolvedLineHeight": 11.399999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "StableId": "root/3",
+        "SourceId": "QuestListPanel",
+        "SourceNodeId": "GQS17",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 676,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 934,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 18,
+            "Right": 18,
+            "Bottom": 18,
+            "Left": 18
+          },
+          "Padding": {
+            "Top": 18,
+            "Right": 18,
+            "Bottom": 18,
+            "Left": 18
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 178,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 30,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#DEE6D0CC",
+          "Border": {
+            "Style": 5,
+            "Color": "#EDE4CE",
+            "Width": 4
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/3/0",
+            "SourceId": "ListHeader",
+            "SourceNodeId": "GQS18",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-3",
+            "StaticProperties": {
+              "text": "IN PROGRESS"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 14,
+              "ResolvedLineHeight": 13.299999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/3/1",
+            "SourceId": "CategoryHeader",
+            "SourceNodeId": "GQS19",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-4",
+            "StaticProperties": {
+              "text": "ARCHON QUESTS"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 16,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "large"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/3/2",
+            "SourceId": "SelectedQuestCard",
+            "SourceNodeId": "GQS20",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 124,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 10,
+                "Right": 10,
+                "Bottom": 10,
+                "Left": 10
+              },
+              "Padding": {
+                "Top": 16,
+                "Right": 16,
+                "Bottom": 16,
+                "Left": 16
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#334255",
+              "Border": {
+                "Style": 5,
+                "Color": "#EEE4CF",
+                "Width": 6
+              },
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/3/2/0",
+                "SourceId": "SelectedQuestTitle",
+                "SourceNodeId": "GQS21",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-5",
+                "StaticProperties": {
+                  "text": "THE OUTLANDER WHO CAUGHT THE WIND"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 548,
+                    "Unit": 0
+                  },
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 1
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 13,
+                  "ResolvedLineHeight": 12.35,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": true,
+                  "TextGrowth": "fixed-width",
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/3/2/1",
+                "SourceId": "SelectedQuestAct",
+                "SourceNodeId": "GQS22",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-6",
+                "StaticProperties": {
+                  "text": "PROLOGUE: ACT I"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 11,
+                  "ResolvedLineHeight": 10.45,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/3/3",
+            "SourceId": "FocusQuest",
+            "SourceNodeId": "GQS23",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 0,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 126,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 18,
+                "Right": 18,
+                "Bottom": 18,
+                "Left": 18
+              },
+              "Padding": {
+                "Top": 18,
+                "Right": 18,
+                "Bottom": 18,
+                "Left": 18
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#F3ECDD",
+              "Border": {
+                "Style": 5,
+                "Color": "#EAD9B8",
+                "Width": 4
+              },
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/3/3/0",
+                "SourceId": "FocusQuestText",
+                "SourceNodeId": "GQS24",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 470,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 88,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": {
+                    "Top": 10,
+                    "Right": 10,
+                    "Bottom": 10,
+                    "Left": 10
+                  },
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": "#F3ECDD",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/3/3/0/0",
+                    "SourceId": "FocusQuestTitle",
+                    "SourceNodeId": "GQS25",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-4",
+                    "StaticProperties": {
+                      "text": "WINDS OF THE PAST"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 16,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "large"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  },
+                  {
+                    "StableId": "root/3/3/0/1",
+                    "SourceId": "FocusQuestDistance",
+                    "SourceNodeId": "GQS26",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-6",
+                    "StaticProperties": {
+                      "text": "395m"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 11,
+                      "ResolvedLineHeight": 10.45,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "medium"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/3/3/1",
+                "SourceId": "FocusQuestBadge",
+                "SourceNodeId": "GQS27",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 96,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 88,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#E4BE50",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/3/3/1/0",
+                    "SourceId": "FocusQuestBadgeText",
+                    "SourceNodeId": "GQS28",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-7",
+                    "StaticProperties": {
+                      "text": "!!"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 18,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "large"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "StableId": "root/3/4",
+            "SourceId": "ListQuestTwo",
+            "SourceNodeId": "GQS29",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:62fd2935fbf5",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/3/5",
+            "SourceId": "ListQuestThree",
+            "SourceNodeId": "GQS32",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": "synthetic:62fd2935fbf5",
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {
+              "$/0": {
+                "Text": "SPARKS AMONGST THE PAGES"
+              },
+              "$/1": {
+                "Text": "329m"
+              }
+            },
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": null,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": null,
+              "Margin": null,
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": null,
+              "Justify": null,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/3/6",
+            "SourceId": "WorldQuestsLabel",
+            "SourceNodeId": "GQS35",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-3",
+            "StaticProperties": {
+              "text": "WORLD QUESTS"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 14,
+              "ResolvedLineHeight": 13.299999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/3/7",
+            "SourceId": "WorldQuestOne",
+            "SourceNodeId": "GQS36",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 100,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 10,
+                "Right": 10,
+                "Bottom": 10,
+                "Left": 10
+              },
+              "Padding": {
+                "Top": 16,
+                "Right": 16,
+                "Bottom": 16,
+                "Left": 16
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#5A6573D8",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/3/7/0",
+                "SourceId": "WorldQuestOneTitle",
+                "SourceNodeId": "GQS37",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-8",
+                "StaticProperties": {
+                  "text": "THE ART OF COOKING"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 13,
+                  "ResolvedLineHeight": 12.35,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/3/7/1",
+                "SourceId": "WorldQuestOneDistance",
+                "SourceNodeId": "GQS38",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-6",
+                "StaticProperties": {
+                  "text": "483m"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 11,
+                  "ResolvedLineHeight": 10.45,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/3/8",
+            "SourceId": "WorldQuestTwo",
+            "SourceNodeId": "GQS39",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 100,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 10,
+                "Right": 10,
+                "Bottom": 10,
+                "Left": 10
+              },
+              "Padding": {
+                "Top": 16,
+                "Right": 16,
+                "Bottom": 16,
+                "Left": 16
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#5A6573D8",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/3/8/0",
+                "SourceId": "WorldQuestTwoTitle",
+                "SourceNodeId": "GQS40",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-9",
+                "StaticProperties": {
+                  "text": "SHARPENING THE AXE WON\u0027T HINDER THE WORK"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 590,
+                    "Unit": 0
+                  },
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 1
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 11,
+                  "ResolvedLineHeight": 10.45,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": true,
+                  "TextGrowth": "fixed-width",
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/3/8/1",
+                "SourceId": "WorldQuestTwoDistance",
+                "SourceNodeId": "GQS41",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-6",
+                "StaticProperties": {
+                  "text": "655m"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 11,
+                  "ResolvedLineHeight": 10.45,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "StableId": "root/4",
+        "SourceId": "ScrollTrack",
+        "SourceNodeId": "GQS42",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 10,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 792,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 846,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 116,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#D4CDB8",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/5",
+        "SourceId": "ScrollThumb",
+        "SourceNodeId": "GQS43",
+        "Kind": 0,
+        "SourceType": 17,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 17,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 14,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 112,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 844,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 132,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#A5976F",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": []
+      },
+      {
+        "StableId": "root/6",
+        "SourceId": "DetailPanel",
+        "SourceNodeId": "GQS44",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 894,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 842,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 24,
+            "Right": 24,
+            "Bottom": 24,
+            "Left": 24
+          },
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 918,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 92,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#D8E0CC66",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/6/0",
+            "SourceId": "DetailHeader",
+            "SourceNodeId": "GQS45",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 122,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 12,
+                "Right": 12,
+                "Bottom": 12,
+                "Left": 12
+              },
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#D8E0CC00",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/6/0/0",
+                "SourceId": "DetailTitle",
+                "SourceNodeId": "GQS46",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-10",
+                "StaticProperties": {
+                  "text": "WINDS OF THE PAST"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 22,
+                  "ResolvedLineHeight": null,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "large"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/6/0/1",
+                "SourceId": "DetailLocation",
+                "SourceNodeId": "GQS47",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-3",
+                "StaticProperties": {
+                  "text": "STARFELL VALLEY, MONDSTADT"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 14,
+                  "ResolvedLineHeight": 13.299999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/6/0/2",
+                "SourceId": "HeaderLine",
+                "SourceNodeId": "GQS48",
+                "Kind": 0,
+                "SourceType": 17,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 17,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 0,
+                    "Unit": 5
+                  },
+                  "Height": {
+                    "Value": 2,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": "#E1DABF",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 1,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/6/1",
+            "SourceId": "ObjectiveBanner",
+            "SourceNodeId": "GQS49",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 862,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 74,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 18,
+                "Right": 18,
+                "Bottom": 18,
+                "Left": 18
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#526675E0",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/6/1/0",
+                "SourceId": "ObjectiveBannerText",
+                "SourceNodeId": "GQS50",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-3",
+                "StaticProperties": {
+                  "text": "ENTER THE TEMPLE"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 14,
+                  "ResolvedLineHeight": 13.299999999999999,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/6/2",
+            "SourceId": "DetailBody",
+            "SourceNodeId": "GQS51",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-11",
+            "StaticProperties": {
+              "text": "TO STOP STORMTERROR\u0027S SIEGE, YOU MUST VENTURE OUT AND ELIMINATE THE ELEMENTAL FLOWS LEFT WITHIN THE RUINED TEMPLES OF THE FOUR WINDS. AMBER IS WAITING FOR YOU AT THE TEMPLE OF THE FALCON."
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 864,
+                "Unit": 0
+              },
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 1
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 12,
+              "ResolvedLineHeight": 11.399999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": true,
+              "TextGrowth": "fixed-width",
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/6/3",
+            "SourceId": "RewardsLine",
+            "SourceNodeId": "GQS52",
+            "Kind": 0,
+            "SourceType": 17,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 17,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 0,
+                "Unit": 5
+              },
+              "Height": {
+                "Value": 2,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#E1DABF",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 1,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/6/4",
+            "SourceId": "RewardsLabel",
+            "SourceNodeId": "GQS53",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-3",
+            "StaticProperties": {
+              "text": "QUEST CHAIN REWARDS:"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 14,
+              "ResolvedLineHeight": 13.299999999999999,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "root/6/5",
+            "SourceId": "RewardsRow",
+            "SourceNodeId": "GQS54",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 0,
+              "Width": {
+                "Value": 780,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 138,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 20,
+                "Right": 20,
+                "Bottom": 20,
+                "Left": 20
+              },
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": "#D8E0CC00",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/6/5/0",
+                "SourceId": "RewardOne",
+                "SourceNodeId": "GQS55",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#718D76",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/6/5/0/0",
+                    "SourceId": "RewardOneText",
+                    "SourceNodeId": "GQS56",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-4",
+                    "StaticProperties": {
+                      "text": "275"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 16,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "large"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/6/5/1",
+                "SourceId": "RewardTwo",
+                "SourceNodeId": "GQS57",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#C79043",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/6/5/1/0",
+                    "SourceId": "RewardTwoText",
+                    "SourceNodeId": "GQS58",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-4",
+                    "StaticProperties": {
+                      "text": "20"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 16,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "large"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/6/5/2",
+                "SourceId": "RewardThree",
+                "SourceNodeId": "GQS59",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#C29E4A",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/6/5/2/0",
+                    "SourceId": "RewardThreeText",
+                    "SourceNodeId": "GQS60",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-8",
+                    "StaticProperties": {
+                      "text": "3000"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 13,
+                      "ResolvedLineHeight": 12.35,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "medium"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/6/5/3",
+                "SourceId": "RewardFour",
+                "SourceNodeId": "GQS61",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#4D8FB4",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/6/5/3/0",
+                    "SourceId": "RewardFourText",
+                    "SourceNodeId": "GQS62",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-8",
+                    "StaticProperties": {
+                      "text": "1550"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 13,
+                      "ResolvedLineHeight": 12.35,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "medium"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              },
+              {
+                "StableId": "root/6/5/4",
+                "SourceId": "RewardFive",
+                "SourceNodeId": "GQS63",
+                "Kind": 0,
+                "SourceType": 15,
+                "ComponentRefId": null,
+                "SemanticClass": "container",
+                "MetricProfileId": null,
+                "StaticProperties": {},
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 15,
+                  "LayoutType": 1,
+                  "Width": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "Height": {
+                    "Value": 128,
+                    "Unit": 0
+                  },
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 1,
+                  "Justify": 1,
+                  "Weight": null,
+                  "Background": "#7FBB96",
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 0,
+                  "HeightSizing": 0,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": null,
+                "Icon": null,
+                "Children": [
+                  {
+                    "StableId": "root/6/5/4/0",
+                    "SourceId": "RewardFiveText",
+                    "SourceNodeId": "GQS64",
+                    "Kind": 1,
+                    "SourceType": 0,
+                    "ComponentRefId": null,
+                    "SemanticClass": "pixel-text",
+                    "MetricProfileId": "metric-4",
+                    "StaticProperties": {
+                      "text": "3"
+                    },
+                    "PropertyOverrides": {},
+                    "Box": {
+                      "SourceType": 0,
+                      "LayoutType": 1,
+                      "Width": null,
+                      "Height": null,
+                      "MinWidth": null,
+                      "MinHeight": null,
+                      "MaxWidth": null,
+                      "MaxHeight": null,
+                      "Gap": null,
+                      "Padding": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Margin": {
+                        "Top": 0,
+                        "Right": 0,
+                        "Bottom": 0,
+                        "Left": 0
+                      },
+                      "Left": null,
+                      "Top": null,
+                      "IsAbsolutePositioned": false,
+                      "ClipContent": false,
+                      "Align": 0,
+                      "Justify": 0,
+                      "Weight": null,
+                      "Background": null,
+                      "Border": null,
+                      "BorderRadius": null,
+                      "Opacity": null
+                    },
+                    "EdgeContract": {
+                      "Participation": 0,
+                      "WidthSizing": 2,
+                      "HeightSizing": 2,
+                      "HorizontalPin": 0,
+                      "VerticalPin": 0,
+                      "OverflowX": 0,
+                      "OverflowY": 0,
+                      "WrapPressure": 0
+                    },
+                    "Typography": {
+                      "SemanticClass": "pixel-text",
+                      "ResolvedFontFamily": "Press Start 2P",
+                      "ResolvedFontSize": 16,
+                      "ResolvedLineHeight": null,
+                      "ResolvedLetterSpacing": null,
+                      "WrapText": false,
+                      "TextGrowth": null,
+                      "SizeBand": "large"
+                    },
+                    "Icon": null,
+                    "Children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "StableId": "root/7",
+        "SourceId": "CancelNavigationButton",
+        "SourceNodeId": "GQS65",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 0,
+          "Width": {
+            "Value": 324,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 102,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 18,
+            "Right": 18,
+            "Bottom": 18,
+            "Left": 18
+          },
+          "Padding": {
+            "Top": 18,
+            "Right": 18,
+            "Bottom": 18,
+            "Left": 18
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": {
+            "Value": 1496,
+            "Unit": 0
+          },
+          "Top": {
+            "Value": 952,
+            "Unit": 0
+          },
+          "IsAbsolutePositioned": true,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#F2E8D8",
+          "Border": {
+            "Style": 5,
+            "Color": "#E1D1B2",
+            "Width": 2
+          },
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 1,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "root/7/0",
+            "SourceId": "CancelNavigationGlyph",
+            "SourceNodeId": "GQS66",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 68,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 68,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 1,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#E0B84E",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/7/0/0",
+                "SourceId": "CancelNavigationGlyphText",
+                "SourceNodeId": "GQS67",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-4",
+                "StaticProperties": {
+                  "text": "!!"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 16,
+                  "ResolvedLineHeight": null,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "large"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          },
+          {
+            "StableId": "root/7/1",
+            "SourceId": "CancelNavigationTextColumn",
+            "SourceNodeId": "GQS68",
+            "Kind": 0,
+            "SourceType": 15,
+            "ComponentRefId": null,
+            "SemanticClass": "container",
+            "MetricProfileId": null,
+            "StaticProperties": {},
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 15,
+              "LayoutType": 1,
+              "Width": {
+                "Value": 180,
+                "Unit": 0
+              },
+              "Height": {
+                "Value": 68,
+                "Unit": 0
+              },
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": {
+                "Top": 6,
+                "Right": 6,
+                "Bottom": 6,
+                "Left": 6
+              },
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 1,
+              "Weight": null,
+              "Background": "#F2E8D8",
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 0,
+              "HeightSizing": 0,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": null,
+            "Icon": null,
+            "Children": [
+              {
+                "StableId": "root/7/1/0",
+                "SourceId": "CancelNavigationTextOne",
+                "SourceNodeId": "GQS69",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-8",
+                "StaticProperties": {
+                  "text": "CANCEL"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 13,
+                  "ResolvedLineHeight": 12.35,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              },
+              {
+                "StableId": "root/7/1/1",
+                "SourceId": "CancelNavigationTextTwo",
+                "SourceNodeId": "GQS70",
+                "Kind": 1,
+                "SourceType": 0,
+                "ComponentRefId": null,
+                "SemanticClass": "pixel-text",
+                "MetricProfileId": "metric-8",
+                "StaticProperties": {
+                  "text": "NAVIGATION"
+                },
+                "PropertyOverrides": {},
+                "Box": {
+                  "SourceType": 0,
+                  "LayoutType": 1,
+                  "Width": null,
+                  "Height": null,
+                  "MinWidth": null,
+                  "MinHeight": null,
+                  "MaxWidth": null,
+                  "MaxHeight": null,
+                  "Gap": null,
+                  "Padding": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Margin": {
+                    "Top": 0,
+                    "Right": 0,
+                    "Bottom": 0,
+                    "Left": 0
+                  },
+                  "Left": null,
+                  "Top": null,
+                  "IsAbsolutePositioned": false,
+                  "ClipContent": false,
+                  "Align": 0,
+                  "Justify": 0,
+                  "Weight": null,
+                  "Background": null,
+                  "Border": null,
+                  "BorderRadius": null,
+                  "Opacity": null
+                },
+                "EdgeContract": {
+                  "Participation": 0,
+                  "WidthSizing": 2,
+                  "HeightSizing": 2,
+                  "HorizontalPin": 0,
+                  "VerticalPin": 0,
+                  "OverflowX": 0,
+                  "OverflowY": 0,
+                  "WrapPressure": 0
+                },
+                "Typography": {
+                  "SemanticClass": "pixel-text",
+                  "ResolvedFontFamily": "Press Start 2P",
+                  "ResolvedFontSize": 13,
+                  "ResolvedLineHeight": 12.35,
+                  "ResolvedLetterSpacing": null,
+                  "WrapText": false,
+                  "TextGrowth": null,
+                  "SizeBand": "medium"
+                },
+                "Icon": null,
+                "Children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "Components": [
+    {
+      "Id": "synthetic:62fd2935fbf5",
+      "Name": "SyntheticContainer62FD2935",
+      "Root": {
+        "StableId": "component:synthetic:62fd2935fbf5",
+        "SourceId": "ListQuestTwo",
+        "SourceNodeId": "GQS29",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 0,
+            "Unit": 5
+          },
+          "Height": {
+            "Value": 96,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": {
+            "Top": 10,
+            "Right": 10,
+            "Bottom": 10,
+            "Left": 10
+          },
+          "Padding": {
+            "Top": 16,
+            "Right": 16,
+            "Bottom": 16,
+            "Left": 16
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": null,
+          "Top": null,
+          "IsAbsolutePositioned": false,
+          "ClipContent": false,
+          "Align": 0,
+          "Justify": 0,
+          "Weight": null,
+          "Background": "#5A6573D8",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 0,
+          "WidthSizing": 1,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "component:synthetic:62fd2935fbf5/0",
+            "SourceId": "ListQuestTwoTitle",
+            "SourceNodeId": "GQS30",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-8",
+            "StaticProperties": {
+              "text": "CRASH COURSE"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 13,
+              "ResolvedLineHeight": 12.35,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          },
+          {
+            "StableId": "component:synthetic:62fd2935fbf5/1",
+            "SourceId": "ListQuestTwoDistance",
+            "SourceNodeId": "GQS31",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-6",
+            "StaticProperties": {
+              "text": "212m"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 11,
+              "ResolvedLineHeight": 10.45,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "medium"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      }
+    },
+    {
+      "Id": "synthetic:7c99052f396c",
+      "Name": "SyntheticContainer7C99052F",
+      "Root": {
+        "StableId": "component:synthetic:7c99052f396c",
+        "SourceId": "TabTwo",
+        "SourceNodeId": "GQS07",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 86,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 86,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": null,
+          "Top": null,
+          "IsAbsolutePositioned": false,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#334355",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 0,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "component:synthetic:7c99052f396c/0",
+            "SourceId": "TabTwoText",
+            "SourceNodeId": "GQS08",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-7",
+            "StaticProperties": {
+              "text": "[]"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 18,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "large"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      }
+    },
+    {
+      "Id": "synthetic:f65d929fe277",
+      "Name": "SyntheticContainerF65D929F",
+      "Root": {
+        "StableId": "component:synthetic:f65d929fe277",
+        "SourceId": "TabThree",
+        "SourceNodeId": "GQS09",
+        "Kind": 0,
+        "SourceType": 15,
+        "ComponentRefId": null,
+        "SemanticClass": "container",
+        "MetricProfileId": null,
+        "StaticProperties": {},
+        "PropertyOverrides": {},
+        "Box": {
+          "SourceType": 15,
+          "LayoutType": 1,
+          "Width": {
+            "Value": 86,
+            "Unit": 0
+          },
+          "Height": {
+            "Value": 86,
+            "Unit": 0
+          },
+          "MinWidth": null,
+          "MinHeight": null,
+          "MaxWidth": null,
+          "MaxHeight": null,
+          "Gap": null,
+          "Padding": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Margin": {
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "Left": 0
+          },
+          "Left": null,
+          "Top": null,
+          "IsAbsolutePositioned": false,
+          "ClipContent": false,
+          "Align": 1,
+          "Justify": 1,
+          "Weight": null,
+          "Background": "#334355",
+          "Border": null,
+          "BorderRadius": null,
+          "Opacity": null
+        },
+        "EdgeContract": {
+          "Participation": 0,
+          "WidthSizing": 0,
+          "HeightSizing": 0,
+          "HorizontalPin": 0,
+          "VerticalPin": 0,
+          "OverflowX": 0,
+          "OverflowY": 0,
+          "WrapPressure": 0
+        },
+        "Typography": null,
+        "Icon": null,
+        "Children": [
+          {
+            "StableId": "component:synthetic:f65d929fe277/0",
+            "SourceId": "TabThreeText",
+            "SourceNodeId": "GQS10",
+            "Kind": 1,
+            "SourceType": 0,
+            "ComponentRefId": null,
+            "SemanticClass": "pixel-text",
+            "MetricProfileId": "metric-10",
+            "StaticProperties": {
+              "text": "!"
+            },
+            "PropertyOverrides": {},
+            "Box": {
+              "SourceType": 0,
+              "LayoutType": 1,
+              "Width": null,
+              "Height": null,
+              "MinWidth": null,
+              "MinHeight": null,
+              "MaxWidth": null,
+              "MaxHeight": null,
+              "Gap": null,
+              "Padding": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Margin": {
+                "Top": 0,
+                "Right": 0,
+                "Bottom": 0,
+                "Left": 0
+              },
+              "Left": null,
+              "Top": null,
+              "IsAbsolutePositioned": false,
+              "ClipContent": false,
+              "Align": 0,
+              "Justify": 0,
+              "Weight": null,
+              "Background": null,
+              "Border": null,
+              "BorderRadius": null,
+              "Opacity": null
+            },
+            "EdgeContract": {
+              "Participation": 0,
+              "WidthSizing": 2,
+              "HeightSizing": 2,
+              "HorizontalPin": 0,
+              "VerticalPin": 0,
+              "OverflowX": 0,
+              "OverflowY": 0,
+              "WrapPressure": 0
+            },
+            "Typography": {
+              "SemanticClass": "pixel-text",
+              "ResolvedFontFamily": "Press Start 2P",
+              "ResolvedFontSize": 22,
+              "ResolvedLineHeight": null,
+              "ResolvedLetterSpacing": null,
+              "WrapText": false,
+              "TextGrowth": null,
+              "SizeBand": "large"
+            },
+            "Icon": null,
+            "Children": []
+          }
+        ]
+      }
+    }
+  ],
+  "MetricProfiles": [
+    {
+      "Id": "metric-1",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 24,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-2",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 12,
+        "ResolvedLineHeight": 11.399999999999999,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-3",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 14,
+        "ResolvedLineHeight": 13.299999999999999,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-4",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 16,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-5",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 13,
+        "ResolvedLineHeight": 12.35,
+        "ResolvedLetterSpacing": null,
+        "WrapText": true,
+        "TextGrowth": "fixed-width",
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-6",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 11,
+        "ResolvedLineHeight": 10.45,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-7",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 18,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-8",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 13,
+        "ResolvedLineHeight": 12.35,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-9",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 11,
+        "ResolvedLineHeight": 10.45,
+        "ResolvedLetterSpacing": null,
+        "WrapText": true,
+        "TextGrowth": "fixed-width",
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-10",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 22,
+        "ResolvedLineHeight": null,
+        "ResolvedLetterSpacing": null,
+        "WrapText": false,
+        "TextGrowth": null,
+        "SizeBand": "large"
+      },
+      "Icon": null
+    },
+    {
+      "Id": "metric-11",
+      "BackendFamily": "ugui",
+      "SemanticClass": "pixel-text",
+      "Text": {
+        "ResolvedFontFamily": "Press Start 2P",
+        "ResolvedFontSize": 12,
+        "ResolvedLineHeight": 11.399999999999999,
+        "ResolvedLetterSpacing": null,
+        "WrapText": true,
+        "TextGrowth": "fixed-width",
+        "SizeBand": "medium"
+      },
+      "Icon": null
+    }
+  ]
+}

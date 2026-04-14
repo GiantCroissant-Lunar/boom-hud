@@ -130,6 +130,12 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             files.Add(artifact);
         }
 
+        if (options.EmitSourceSemanticArtifact
+            && GenerationDocumentPreprocessor.CreateSourceSemanticArtifact(document.Name, prepared.SourceSemanticDocument) is { } sourceSemanticArtifact)
+        {
+            files.Add(sourceSemanticArtifact);
+        }
+
         if (options.EmitVisualIrArtifact
             && GenerationDocumentPreprocessor.CreateVisualIrArtifact(document.Name, prepared.VisualDocument) is { } visualIrArtifact)
         {

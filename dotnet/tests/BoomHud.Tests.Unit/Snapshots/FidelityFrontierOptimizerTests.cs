@@ -287,7 +287,8 @@ public sealed class FidelityFrontierOptimizerTests : IDisposable
             ExpectedRootStableId = "root",
             ActualRootName = "root",
             Comparisons = [],
-            Issues = surface.MeasuredIssues
+            Issues = surface.MeasuredIssues,
+            SourceSemanticSummaries = []
         };
 
     private static ImageSimilarityRecursiveScoreNode CreateRecursiveAnalysis(double penalty)

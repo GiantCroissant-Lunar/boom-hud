@@ -5,6 +5,7 @@ using System.Text.Json;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
+using BoomHud.Generators.SourceSemantics;
 using BoomHud.Generators.VisualIR;
 
 namespace BoomHud.Generators;
@@ -14,6 +15,8 @@ public sealed record PreparedGenerationDocument
     public required HudDocument Document { get; init; }
 
     public SyntheticComponentizationSummary? SyntheticComponentization { get; init; }
+
+    public required SourceSemanticDocument SourceSemanticDocument { get; init; }
 
     public required VisualDocument VisualDocument { get; init; }
 
@@ -83,7 +86,8 @@ public static class GenerationDocumentPreprocessor
                 code: "BHG1100"));
         }
 
-        var visualDocument = VisualDocumentBuilder.Build(result.Document, options, backendId);
+        var sourceSemanticDocument = SourceSemanticDocumentBuilder.Build(result.Document, options, backendId);
+        var visualDocument = VisualDocumentBuilder.Build(result.Document, options, backendId, sourceSemanticDocument);
         var visualSynthesis = VisualSynthesisPlanner.Synthesize(visualDocument);
         var visualRefinement = VisualRefinementPlanner.Plan(
             visualSynthesis.Document,
@@ -96,6 +100,7 @@ public static class GenerationDocumentPreprocessor
         {
             Document = result.Document,
             SyntheticComponentization = result.Summary,
+            SourceSemanticDocument = sourceSemanticDocument,
             VisualDocument = visualSynthesis.Document,
             VisualSynthesis = visualSynthesis.Summary,
             VisualRefinement = visualRefinement,
@@ -117,6 +122,12 @@ public static class GenerationDocumentPreprocessor
     {
         ArgumentNullException.ThrowIfNull(visualDocument);
         return JsonSerializer.Serialize(visualDocument, JsonOptions);
+    }
+
+    public static string ToJson(SourceSemanticDocument sourceSemanticDocument)
+    {
+        ArgumentNullException.ThrowIfNull(sourceSemanticDocument);
+        return JsonSerializer.Serialize(sourceSemanticDocument, JsonOptions);
     }
 
     public static string ToJson(VisualSynthesisSummary summary)
@@ -163,6 +174,21 @@ public static class GenerationDocumentPreprocessor
         {
             Path = $"{documentName}.visual-ir.json",
             Content = ToJson(visualDocument),
+            Type = GeneratedFileType.Other
+        };
+    }
+
+    public static GeneratedFile? CreateSourceSemanticArtifact(string documentName, SourceSemanticDocument? sourceSemanticDocument)
+    {
+        if (sourceSemanticDocument == null)
+        {
+            return null;
+        }
+
+        return new GeneratedFile
+        {
+            Path = $"{documentName}.source-semantics.json",
+            Content = ToJson(sourceSemanticDocument),
             Type = GeneratedFileType.Other
         };
     }

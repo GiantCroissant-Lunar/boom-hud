@@ -1,0 +1,90 @@
+{
+  "version": "2.10",
+  "children": [
+    {
+      "type": "frame",
+      "id": "TSM01",
+      "name": "TabStripMini",
+      "width": 320,
+      "height": 76,
+      "fill": "#090909",
+      "layout": "horizontal",
+      "gap": 8,
+      "padding": 10,
+      "children": [
+        {
+          "type": "frame",
+          "id": "TSM02",
+          "name": "ActiveTab",
+          "width": 96,
+          "height": "fill_container",
+          "fill": "#D9D9D9",
+          "stroke": { "thickness": 2, "fill": "#FAFAFA" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "TSM03",
+              "name": "ActiveLabel",
+              "fill": "#111111",
+              "content": "BUILD",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TSM04",
+          "name": "QueueTab",
+          "width": 96,
+          "height": "fill_container",
+          "fill": "#161616",
+          "stroke": { "thickness": 2, "fill": "#545454" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "TSM05",
+              "name": "QueueLabel",
+              "fill": "#D0D0D0",
+              "content": "QUEUE",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TSM06",
+          "name": "PartsTab",
+          "width": 96,
+          "height": "fill_container",
+          "fill": "#161616",
+          "stroke": { "thickness": 2, "fill": "#545454" },
+          "layout": "vertical",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "TSM07",
+              "name": "PartsLabel",
+              "fill": "#D0D0D0",
+              "content": "PARTS",
+              "fontFamily": "Press Start 2P",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

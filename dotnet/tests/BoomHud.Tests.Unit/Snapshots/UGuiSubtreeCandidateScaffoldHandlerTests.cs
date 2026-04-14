@@ -179,6 +179,76 @@ public sealed class UGuiSubtreeCandidateScaffoldHandlerTests : IDisposable
             .DescendantActions.Select(action => action.StableId).Should().Contain(["root/0/0", "root/0/1"]);
     }
 
+    [Fact]
+    public void Scaffold_OnLeafRightAlignedQuantity_CreatesBoundedTextRepairCatalog()
+    {
+        var visualDocument = CreateLeafQuantityVisualDocument();
+        var buildProgram = new UGuiBuildProgram
+        {
+            DocumentName = visualDocument.DocumentName,
+            BackendFamily = visualDocument.BackendFamily,
+            SourceGenerationMode = visualDocument.SourceGenerationMode,
+            RootStableId = visualDocument.Root.StableId
+        };
+
+        var updated = UGuiSubtreeCandidateScaffoldHandler.Scaffold(
+            new UGuiSubtreeCandidateScaffoldOptions
+            {
+                SubtreeStableId = "root/0"
+            },
+            visualDocument,
+            buildProgram,
+            out var report);
+
+        report.DirectChildCount.Should().Be(0);
+        report.Created.Should().ContainSingle(entry => entry.StableId == "root/0");
+
+        var catalog = updated.CandidateCatalogs.Single(candidateCatalog => candidateCatalog.StableId == "root/0");
+        catalog.Candidates.Select(candidate => candidate.CandidateId).Should().Contain([
+            "value-baseline",
+            "value-nowrap",
+            "value-font-down",
+            "value-font-up",
+            "value-letter-tight",
+            "value-letter-loose",
+            "value-right-edge-hug"
+        ]);
+    }
+
+    [Fact]
+    public void Scaffold_CreatesValueRowCatalogWithRightEdgeAndMetricRepairCandidates()
+    {
+        var visualDocument = CreateValueRowVisualDocument();
+        var buildProgram = new UGuiBuildProgram
+        {
+            DocumentName = visualDocument.DocumentName,
+            BackendFamily = visualDocument.BackendFamily,
+            SourceGenerationMode = visualDocument.SourceGenerationMode,
+            RootStableId = visualDocument.Root.StableId
+        };
+
+        var updated = UGuiSubtreeCandidateScaffoldHandler.Scaffold(
+            new UGuiSubtreeCandidateScaffoldOptions
+            {
+                SubtreeStableId = "root"
+            },
+            visualDocument,
+            buildProgram,
+            out _);
+
+        var catalog = updated.CandidateCatalogs.Single(candidateCatalog => candidateCatalog.StableId == "root/0");
+        catalog.Candidates.Select(candidate => candidate.CandidateId).Should().Contain([
+            "ingred-row-baseline",
+            "ingred-row-tight-gap",
+            "ingred-row-row-end-hug",
+            "ingred-row-metric-balance"
+        ]);
+        catalog.Candidates.Single(candidate => candidate.CandidateId == "ingred-row-row-end-hug")
+            .DescendantActions.Select(action => action.StableId).Should().Contain("root/0/2");
+        catalog.Candidates.Single(candidate => candidate.CandidateId == "ingred-row-metric-balance")
+            .DescendantActions.Select(action => action.StableId).Should().Contain(["root/0/0", "root/0/1"]);
+    }
+
     private static VisualDocument CreateVisualDocument()
         => new()
         {
@@ -590,6 +660,159 @@ public sealed class UGuiSubtreeCandidateScaffoldHandlerTests : IDisposable
                                 Box = new VisualBox
                                 {
                                     SourceType = ComponentType.Container
+                                },
+                                EdgeContract = DefaultEdgeContract()
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+    private static VisualDocument CreateLeafQuantityVisualDocument()
+        => new()
+        {
+            DocumentName = "CompactValue",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                SourceId = "root",
+                SourceNodeId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                SemanticClass = "surface",
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container,
+                    LayoutType = LayoutType.Horizontal
+                },
+                EdgeContract = DefaultEdgeContract(),
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/0",
+                        SourceId = "value",
+                        SourceNodeId = "value",
+                        Kind = VisualNodeKind.Text,
+                        SourceType = ComponentType.Label,
+                        SemanticClass = "right-aligned-quantity",
+                        Typography = new TypographyContract
+                        {
+                            SemanticClass = "right-aligned-quantity",
+                            WrapText = true,
+                            ResolvedFontSize = 11,
+                            ResolvedLetterSpacing = 0
+                        },
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Label
+                        },
+                        EdgeContract = DefaultEdgeContract()
+                    }
+                ]
+            }
+        };
+
+    private static VisualDocument CreateValueRowVisualDocument()
+        => new()
+        {
+            DocumentName = "IngredientRow",
+            BackendFamily = "ugui",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                SourceId = "root",
+                SourceNodeId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                SemanticClass = "surface",
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container,
+                    LayoutType = LayoutType.Vertical
+                },
+                EdgeContract = DefaultEdgeContract(),
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/0",
+                        SourceId = "ingred-row",
+                        SourceNodeId = "ingred-row",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        SemanticClass = "value-row",
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container,
+                            LayoutType = LayoutType.Horizontal
+                        },
+                        EdgeContract = DefaultEdgeContract(),
+                        Children =
+                        [
+                            new VisualNode
+                            {
+                                StableId = "root/0/0",
+                                SourceId = "item-icon",
+                                SourceNodeId = "item-icon",
+                                Kind = VisualNodeKind.Icon,
+                                SourceType = ComponentType.Icon,
+                                SemanticClass = "leading-icon",
+                                Icon = new IconContract
+                                {
+                                    SemanticClass = "leading-icon",
+                                    BaselineOffset = 0,
+                                    OpticalCentering = true,
+                                    SizeMode = "fit-box",
+                                    ResolvedFontSize = 18
+                                },
+                                Box = new VisualBox
+                                {
+                                    SourceType = ComponentType.Icon
+                                },
+                                EdgeContract = DefaultEdgeContract()
+                            },
+                            new VisualNode
+                            {
+                                StableId = "root/0/1",
+                                SourceId = "item-label",
+                                SourceNodeId = "item-label",
+                                Kind = VisualNodeKind.Text,
+                                SourceType = ComponentType.Label,
+                                SemanticClass = "compact-label",
+                                Typography = new TypographyContract
+                                {
+                                    SemanticClass = "compact-label",
+                                    WrapText = false,
+                                    ResolvedFontSize = 11
+                                },
+                                Box = new VisualBox
+                                {
+                                    SourceType = ComponentType.Label
+                                },
+                                EdgeContract = DefaultEdgeContract()
+                            },
+                            new VisualNode
+                            {
+                                StableId = "root/0/2",
+                                SourceId = "item-value",
+                                SourceNodeId = "item-value",
+                                Kind = VisualNodeKind.Text,
+                                SourceType = ComponentType.Label,
+                                SemanticClass = "right-aligned-quantity",
+                                Typography = new TypographyContract
+                                {
+                                    SemanticClass = "right-aligned-quantity",
+                                    WrapText = false,
+                                    ResolvedFontSize = 10
+                                },
+                                Box = new VisualBox
+                                {
+                                    SourceType = ComponentType.Label
                                 },
                                 EdgeContract = DefaultEdgeContract()
                             }

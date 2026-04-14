@@ -1,0 +1,120 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="TheAltersCrafting" class="boomhud-the-alters-crafting">
+        <ui:VisualElement name="Backdrop" class="boomhud-backdrop" />
+        <ui:VisualElement name="DimWash" class="boomhud-dim-wash" />
+        <ui:VisualElement name="TopBar" class="boomhud-top-bar">
+            <ui:Label name="SectionLabel" class="boomhud-section-label" />
+            <ui:Label name="TabOne" class="boomhud-tab-one" />
+            <ui:Label name="TabTwo" class="boomhud-tab-two" />
+            <ui:Label name="TabThree" class="boomhud-tab-three" />
+            <ui:Label name="CrewCount" class="boomhud-crew-count" />
+            <ui:Label name="EnergyText" class="boomhud-energy-text" />
+            <ui:Label name="TimeText" class="boomhud-time-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TopDivider" class="boomhud-top-divider" />
+        <ui:VisualElement name="RecipeColumn" class="boomhud-recipe-column">
+            <ui:Label name="RecipeColumnLabel" class="boomhud-recipe-column-label" />
+            <ui:VisualElement name="RecipeFilterRow" class="boomhud-recipe-filter-row">
+                <ui:VisualElement name="FilterAll" class="boomhud-filter-all">
+                    <ui:Label name="FilterAllText" class="boomhud-filter-all-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="FilterHab" class="boomhud-filter-hab" />
+                <ui:VisualElement name="FilterOps" class="boomhud-filter-ops" />
+            </ui:VisualElement>
+            <ui:VisualElement name="RecipeCards" class="boomhud-recipe-cards">
+                <ui:VisualElement name="RecipeCard01" class="boomhud-recipe-card01">
+                    <ui:Label name="RecipeCard01Title" class="boomhud-recipe-card01-title" />
+                    <ui:Label name="RecipeCard01Body" class="boomhud-recipe-card01-body" />
+                </ui:VisualElement>
+                <ui:VisualElement name="RecipeCard02" class="boomhud-recipe-card02" />
+                <ui:VisualElement name="RecipeCard03" class="boomhud-recipe-card03" />
+                <ui:VisualElement name="RecipeCard04" class="boomhud-recipe-card04" />
+                <ui:VisualElement name="RecipeCard05" class="boomhud-recipe-card05" />
+                <ui:VisualElement name="RecipeCard06" class="boomhud-recipe-card06" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="AssemblyStage" class="boomhud-assembly-stage">
+            <ui:VisualElement name="AssemblyHeader" class="boomhud-assembly-header">
+                <ui:Label name="AssemblyHeaderText" class="boomhud-assembly-header-text" />
+                <ui:Label name="AssemblyEta" class="boomhud-assembly-eta" />
+                <ui:Label name="AssemblyCrew" class="boomhud-assembly-crew" />
+            </ui:VisualElement>
+            <ui:VisualElement name="BlueprintView" class="boomhud-blueprint-view">
+                <ui:VisualElement name="BlueprintGrid" class="boomhud-blueprint-grid" />
+                <ui:VisualElement name="ModuleBody" class="boomhud-module-body" />
+                <ui:VisualElement name="ModuleTop" class="boomhud-module-top" />
+                <ui:VisualElement name="ModuleFoot" class="boomhud-module-foot" />
+                <ui:VisualElement name="ModulePipeLeft" class="boomhud-module-pipe-left" />
+                <ui:VisualElement name="ModulePipeRight" class="boomhud-module-pipe-right" />
+                <ui:VisualElement name="SpecLineOne" class="boomhud-spec-line-one" />
+                <ui:VisualElement name="SpecLineTwo" class="boomhud-spec-line-two" />
+                <ui:VisualElement name="SpecLineThree" class="boomhud-spec-line-three" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ResourceRequirements" class="boomhud-resource-requirements">
+                <ui:VisualElement name="Requirement01" class="boomhud-requirement01">
+                    <ui:VisualElement name="Requirement01Icon" class="boomhud-requirement01-icon" />
+                    <ui:Label name="Requirement01Label" class="boomhud-requirement01-label" />
+                    <ui:Label name="Requirement01Amount" class="boomhud-requirement01-amount" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Requirement02" class="boomhud-requirement02">
+                    <ui:VisualElement name="Requirement02Icon" class="boomhud-requirement02-icon" />
+                    <ui:Label name="Requirement02Label" class="boomhud-requirement02-label" />
+                    <ui:Label name="Requirement02Amount" class="boomhud-requirement02-amount" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Requirement03" class="boomhud-requirement03">
+                    <ui:VisualElement name="Requirement03Icon" class="boomhud-requirement03-icon" />
+                    <ui:Label name="Requirement03Label" class="boomhud-requirement03-label" />
+                    <ui:Label name="Requirement03Amount" class="boomhud-requirement03-amount" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Requirement04" class="boomhud-requirement04">
+                    <ui:VisualElement name="Requirement04Icon" class="boomhud-requirement04-icon" />
+                    <ui:Label name="Requirement04Label" class="boomhud-requirement04-label" />
+                    <ui:Label name="Requirement04Amount" class="boomhud-requirement04-amount" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="BottomActionStrip" class="boomhud-bottom-action-strip">
+                <ui:VisualElement name="QueueInfo" class="boomhud-queue-info">
+                    <ui:Label name="QueueInfoTitle" class="boomhud-queue-info-title" />
+                    <ui:Label name="QueueInfoItemOne" class="boomhud-queue-info-item-one" />
+                    <ui:Label name="QueueInfoItemTwo" class="boomhud-queue-info-item-two" />
+                    <ui:Label name="QueueInfoItemThree" class="boomhud-queue-info-item-three" />
+                    <ui:Label name="QueueInfoNote" class="boomhud-queue-info-note" />
+                </ui:VisualElement>
+                <ui:VisualElement name="PrimaryAction" class="boomhud-primary-action">
+                    <ui:Label name="PrimaryActionText" class="boomhud-primary-action-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="LogisticsColumn" class="boomhud-logistics-column">
+            <ui:Label name="LogisticsTitle" class="boomhud-logistics-title" />
+            <ui:Label name="LogisticsBody" class="boomhud-logistics-body" />
+            <ui:VisualElement name="LogisticsDividerOne" class="boomhud-logistics-divider-one" />
+            <ui:Label name="WorkerAllocationTitle" class="boomhud-worker-allocation-title" />
+            <ui:VisualElement name="WorkerRowOne" class="boomhud-worker-row-one">
+                <ui:VisualElement name="WorkerPortraitOne" class="boomhud-worker-portrait-one" />
+                <ui:VisualElement name="WorkerInfoOne" class="boomhud-worker-info-one" />
+            </ui:VisualElement>
+            <ui:VisualElement name="WorkerRowTwo" class="boomhud-worker-row-two">
+                <ui:VisualElement name="WorkerPortraitTwo" class="boomhud-worker-portrait-two" />
+                <ui:VisualElement name="WorkerInfoTwo" class="boomhud-worker-info-two" />
+            </ui:VisualElement>
+            <ui:VisualElement name="LogisticsDividerTwo" class="boomhud-logistics-divider-two" />
+            <ui:Label name="QueuePanelTitle" class="boomhud-queue-panel-title" />
+            <ui:Label name="QueuePanelBody" class="boomhud-queue-panel-body" />
+            <ui:VisualElement name="BottomStatsRow" class="boomhud-bottom-stats-row">
+                <ui:VisualElement name="BottomStatOne" class="boomhud-bottom-stat-one">
+                    <ui:Label name="BottomStatOneLabel" class="boomhud-bottom-stat-one-label" />
+                    <ui:Label name="BottomStatOneValue" class="boomhud-bottom-stat-one-value" />
+                </ui:VisualElement>
+                <ui:VisualElement name="BottomStatTwo" class="boomhud-bottom-stat-two">
+                    <ui:Label name="BottomStatTwoLabel" class="boomhud-bottom-stat-two-label" />
+                    <ui:Label name="BottomStatTwoValue" class="boomhud-bottom-stat-two-value" />
+                </ui:VisualElement>
+                <ui:VisualElement name="BottomStatThree" class="boomhud-bottom-stat-three">
+                    <ui:Label name="BottomStatThreeLabel" class="boomhud-bottom-stat-three-label" />
+                    <ui:Label name="BottomStatThreeValue" class="boomhud-bottom-stat-three-value" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
