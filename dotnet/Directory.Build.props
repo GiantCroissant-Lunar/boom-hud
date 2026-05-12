@@ -19,6 +19,16 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PlateSharedRoot Condition="'$(PlateSharedRoot)'==''">$(MSBuildThisFileDirectory)..\..\plate-shared\</PlateSharedRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(PlateSharedRoot)dotnet\shared\IsExternalInit.cs"
+             Link="Polyfills\IsExternalInit.cs"
+             Visible="false" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
