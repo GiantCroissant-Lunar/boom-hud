@@ -1057,6 +1057,126 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_ComponentInstanceFieldDeclaration_UsesComponentViewTypeNotRawNodeType()
+    {
+        // Without this fix CollectComponentFields would type the field as the
+        // node's raw mapping (Container -> View), hiding the synthetic View's
+        // accessors from the consumer (CS1061 on `_cardOne.Title`). The fix is
+        // to look up ComponentRefId and emit `{componentDef.Name}View`.
+        const string CardComponentId = "comp:card";
+        var card = new HudComponentDefinition
+        {
+            Id = CardComponentId,
+            Name = "Card",
+            Root = new ComponentNode
+            {
+                Id = "card-root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "title", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Outer",
+            Components = new Dictionary<string, HudComponentDefinition> { [CardComponentId] = card },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "card-one", Type = ComponentType.Container, ComponentRefId = CardComponentId }
+                ]
+            }
+        };
+
+        var options = _options with { DisableSyntheticComponentization = true };
+        var result = _generator.Generate(doc, options);
+
+        var view = result.Files.First(f => f.Path == "OuterView.g.cs").Content;
+        view.Should().Contain("private CardView _cardOne = null!;");
+        view.Should().Contain("public CardView CardOne => _cardOne;");
+        view.Should().NotContain("private View _cardOne = null!;");
+    }
+
+    [Fact]
+    public void Generate_ComponentInstanceWithDuplicateCasedOverrides_EmitsAssignmentOnce()
+    {
+        // The pencil parser temporarily writes both `text` (lowercase) and
+        // `Text` (PascalCase) into the IR during a casing migration. The
+        // componentizer faithfully records overrides under both keys. The
+        // TerminalGui emitter must dedupe by the normalized property name so
+        // the generated code has a single `.Text = …` assignment per path,
+        // not two identical adjacent lines.
+        const string CardComponentId = "comp:card";
+        var card = new HudComponentDefinition
+        {
+            Id = CardComponentId,
+            Name = "Card",
+            Root = new ComponentNode
+            {
+                Id = "card-root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "DEFAULT",
+                            ["Text"] = "DEFAULT"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var overrides = new SortedDictionary<string, SortedDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "OVERRIDDEN",
+                ["text"] = "OVERRIDDEN"
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Outer",
+            Components = new Dictionary<string, HudComponentDefinition> { [CardComponentId] = card },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "card-one",
+                        Type = ComponentType.Container,
+                        ComponentRefId = CardComponentId,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = overrides
+                        }
+                    }
+                ]
+            }
+        };
+
+        var options = _options with { DisableSyntheticComponentization = true };
+        var result = _generator.Generate(doc, options);
+
+        var view = result.Files.First(f => f.Path == "OuterView.g.cs").Content;
+        var occurrences = Regex.Matches(view, @"_cardOne\.Label\.Text = ""OVERRIDDEN"";").Count;
+        occurrences.Should().Be(1, "duplicate cased overrides must collapse to one assignment");
+    }
+
+    [Fact]
     public void Generate_ComponentInstanceWithUnresolvablePath_EmitsDiagnostic()
     {
         const string CardComponentId = "comp:card";

@@ -254,7 +254,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         // Collect all component fields
         var componentFields = new List<(string Id, string Type)>();
-        CollectComponentFields(document.Root, componentFields);
+        CollectComponentFields(document.Root, componentFields, components);
         var nameContext = BuildNameContext(componentFields);
 
         // Generate field declarations
@@ -708,7 +708,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // CollectComponentFields + BuildNameContext used inside the View).
         if (componentDef != null)
         {
-            EmitInstanceOverrides(cb, node, componentDef, varName, diagnostics);
+            EmitInstanceOverrides(cb, node, componentDef, components, varName, diagnostics);
         }
 
         // Apply layout
@@ -765,6 +765,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         CodeBuilder cb,
         ComponentNode instanceNode,
         HudComponentDefinition componentDef,
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
         string varName,
         List<Diagnostic> diagnostics)
     {
@@ -779,7 +780,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // context here so the accessor names we emit (e.g. `.TitleAlpha`)
         // exactly match what the View exposes.
         var componentFields = new List<(string Id, string Type)>();
-        CollectComponentFields(componentDef.Root, componentFields);
+        CollectComponentFields(componentDef.Root, componentFields, components);
         var componentNameContext = BuildNameContext(componentFields);
 
         foreach (var (path, properties) in propertyOverrides)
@@ -813,8 +814,21 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                 continue;
             }
 
+            // Pencil's parser temporarily writes both `text` and `Text` to the
+            // IR during the casing migration (boom-hud commit da17967e). The
+            // componentizer then records overrides for BOTH keys with identical
+            // values — emitting both yields a duplicated `.Text = "…"` line. We
+            // dedupe by the normalized property name so each effective property
+            // is assigned at most once per path.
+            var emittedNormalizedNames = new HashSet<string>(StringComparer.Ordinal);
             foreach (var (propertyName, value) in properties)
             {
+                var normalizedName = ComponentInstanceOverrideSupport.NormalizePropertyName(propertyName);
+                if (!emittedNormalizedNames.Add(normalizedName))
+                {
+                    continue;
+                }
+
                 var assignment = FormatOverrideAssignment(targetNode, memberExpr, propertyName, value);
                 if (assignment is null)
                 {
@@ -1218,17 +1232,35 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         }
     }
 
-    private static void CollectComponentFields(ComponentNode node, List<(string Id, string Type)> fields)
+    private static void CollectComponentFields(
+        ComponentNode node,
+        List<(string Id, string Type)> fields,
+        IReadOnlyDictionary<string, HudComponentDefinition>? components = null)
     {
         if (node.Id != null)
         {
-            var type = MapComponentType(node.Type);
+            // When a node references a component definition the field's static
+            // type must be the lifted `{componentDef.Name}View`, not the raw
+            // node-type mapping (which would be `View` for Container, hiding
+            // the synthetic component's accessors from consumers).
+            string type;
+            if (node.ComponentRefId != null
+                && components != null
+                && components.TryGetValue(node.ComponentRefId, out var componentDef))
+            {
+                type = $"{componentDef.Name}View";
+            }
+            else
+            {
+                type = MapComponentType(node.Type);
+            }
+
             fields.Add((node.Id, type));
         }
 
         foreach (var child in node.Children)
         {
-            CollectComponentFields(child, fields);
+            CollectComponentFields(child, fields, components);
         }
     }
 
