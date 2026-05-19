@@ -52,6 +52,47 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_DefaultsToSplitTerminalGuiNamespace()
+    {
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var view = result.Files.First(f => f.Path == "TestView.g.cs").Content;
+
+        view.Should().Contain("using Terminal.Gui.ViewBase;");
+        view.Should().Contain("Terminal.Gui.ViewBase.View");
+        view.Should().NotContain("using View = Terminal.Gui.View;");
+    }
+
+    [Fact]
+    public void Generate_WithFlatNamespace_EmitsFlatTerminalGuiBaseAndUsings()
+    {
+        var options = _options with { TerminalGuiFlatNamespace = true };
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode { Type = ComponentType.Container }
+        };
+
+        var result = _generator.Generate(doc, options);
+        var view = result.Files.First(f => f.Path == "TestView.g.cs").Content;
+
+        // Split-namespace imports must be absent on the flat path.
+        view.Should().NotContain("using Terminal.Gui.ViewBase;");
+        view.Should().NotContain("using Terminal.Gui.Drawing;");
+        view.Should().NotContain("using Terminal.Gui.Views;");
+        view.Should().NotContain("Terminal.Gui.ViewBase.View");
+
+        // Flat path must use the 2.0.0 base type and alias.
+        view.Should().Contain("using View = Terminal.Gui.View;");
+        view.Should().Contain(": Terminal.Gui.View");
+    }
+
+    [Fact]
     public void Generate_WithCompose_EmitsComposeFile_AndUsesSlotKeyLookup()
     {
         var options = _options with

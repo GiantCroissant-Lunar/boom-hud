@@ -175,10 +175,20 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         cb.AppendLine("using System;");
         cb.AppendLine("using System.Collections.Generic;");
         cb.AppendLine("using Terminal.Gui;");
-        cb.AppendLine("using Terminal.Gui.Drawing;");
-        cb.AppendLine("using Terminal.Gui.Views;");
-        cb.AppendLine("using Terminal.Gui.ViewBase;");
-        cb.AppendLine("using View = Terminal.Gui.ViewBase.View;");
+        if (!options.TerminalGuiFlatNamespace)
+        {
+            // Post-2.0.1 namespace split (default).
+            cb.AppendLine("using Terminal.Gui.Drawing;");
+            cb.AppendLine("using Terminal.Gui.Views;");
+            cb.AppendLine("using Terminal.Gui.ViewBase;");
+            cb.AppendLine("using View = Terminal.Gui.ViewBase.View;");
+        }
+        else
+        {
+            // Flat namespace (Terminal.Gui 2.0.0). Alias View for symmetry
+            // with the split-namespace path so downstream emission stays uniform.
+            cb.AppendLine("using View = Terminal.Gui.View;");
+        }
 
         if (!string.Equals(viewModelNamespace, options.Namespace, StringComparison.Ordinal))
         {
@@ -200,7 +210,10 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         }
 
         // Class declaration
-        cb.AppendLine($"public partial class {document.Name}View : Terminal.Gui.ViewBase.View");
+        var baseTypeName = options.TerminalGuiFlatNamespace
+            ? "Terminal.Gui.View"
+            : "Terminal.Gui.ViewBase.View";
+        cb.AppendLine($"public partial class {document.Name}View : {baseTypeName}");
         cb.OpenBlock();
 
         cb.AppendLine($"public const string BoomHudSourceId = \"{sourceId}\";");
@@ -557,7 +570,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         if (node.Style != null && isRoot)
         {
-            GenerateStyleSetup(cb, node.Style, "this");
+            GenerateStyleSetup(cb, node.Style, "this", options.TerminalGuiFlatNamespace);
         }
 
         string? previousChildVar = null;
@@ -723,7 +736,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Apply style
         if (node.Style != null)
         {
-            GenerateStyleSetup(cb, node.Style, varName);
+            GenerateStyleSetup(cb, node.Style, varName, options.TerminalGuiFlatNamespace);
         }
 
         // Apply component-specific properties
@@ -837,20 +850,36 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         }
     }
 
-    private static void GenerateStyleSetup(CodeBuilder cb, StyleSpec style, string varName)
+    private static void GenerateStyleSetup(CodeBuilder cb, StyleSpec style, string varName, bool flatNamespace = false)
     {
+        // Type names differ between Terminal.Gui 2.0.0 (flat) and 2.0.1+ (split):
+        // - Scheme type:  ColorScheme   (2.0.0)        vs Scheme                    (2.0.1+)
+        // - Attribute:    Terminal.Gui.Attribute       vs Terminal.Gui.Drawing.Attribute
+        // - Apply:        view.ColorScheme = ...       vs view.SetScheme(...)
+        // - Read:         view.ColorScheme            vs view.GetScheme()
+        var schemeType = flatNamespace ? "ColorScheme" : "Scheme";
+        var attributeType = flatNamespace ? "Terminal.Gui.Attribute" : "Terminal.Gui.Drawing.Attribute";
+        string ApplyScheme(string body) => flatNamespace
+            ? $"{varName}.ColorScheme = {body};"
+            : $"{varName}.SetScheme({body});";
+        var readScheme = flatNamespace
+            ? $"{varName}.ColorScheme"
+            : $"{varName}.GetScheme()";
+
         // Foreground color
         if (style.Foreground != null)
         {
             var colorExpr = ColorToTerminalGui(style.Foreground.Value);
-            cb.AppendLine($"{varName}.SetScheme(new Scheme {{ Normal = new Terminal.Gui.Drawing.Attribute({colorExpr}, {varName}.GetScheme()?.Normal.Background ?? Color.Black) }});");
+            var body = $"new {schemeType} {{ Normal = new {attributeType}({colorExpr}, {readScheme}?.Normal.Background ?? Color.Black) }}";
+            cb.AppendLine(ApplyScheme(body));
         }
 
         // Background color
         if (style.Background != null)
         {
             var colorExpr = ColorToTerminalGui(style.Background.Value);
-            cb.AppendLine($"{varName}.SetScheme(new Scheme {{ Normal = new Terminal.Gui.Drawing.Attribute({varName}.GetScheme()?.Normal.Foreground ?? Color.White, {colorExpr}) }});");
+            var body = $"new {schemeType} {{ Normal = new {attributeType}({readScheme}?.Normal.Foreground ?? Color.White, {colorExpr}) }}";
+            cb.AppendLine(ApplyScheme(body));
         }
 
         // Border

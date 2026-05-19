@@ -69,6 +69,17 @@ public sealed record GenerationOptions
     public bool UseNullableAnnotations { get; init; } = true;
 
     /// <summary>
+    /// For the Terminal.Gui backend: emit code using the legacy flat namespace
+    /// (<c>Terminal.Gui.View</c>, <c>ColorScheme</c>, <c>Terminal.Gui.Attribute</c>)
+    /// compatible with Terminal.Gui 2.0.0. When <c>false</c> (the default), emit
+    /// against the post-split 2.0.1+ namespaces (<c>Terminal.Gui.ViewBase.View</c>,
+    /// <c>Scheme</c>, <c>Terminal.Gui.Drawing.Attribute</c>). Set to <c>true</c>
+    /// for consumers pinned to Terminal.Gui 2.0.0 (e.g. .NET runtimes that
+    /// can't reach net10.0, like Godot's mono integration).
+    /// </summary>
+    public bool TerminalGuiFlatNamespace { get; init; }
+
+    /// <summary>
     /// Optional design theme (e.g., from Figma variables or design tokens).
     /// Backends may use this to emit shared resources or token-based styling.
     /// </summary>
