@@ -53,6 +53,48 @@ public class PenParserTests
     }
 
     [Fact]
+    public void Parse_TextNodeWithContent_PopulatesLowercaseTextProperty()
+    {
+        // Pen text nodes carry their static string in the top-level `content`
+        // field. The IR convention (matching FigmaParser and every downstream
+        // generator) is to store that string in Properties["text"] (lowercase).
+        // The previous PenToIrConverter wrote Properties["Text"] (capital T)
+        // which silently failed every case-sensitive consumer lookup.
+        var json = """
+            {
+                "nodes": [
+                    {
+                        "id": "root",
+                        "type": "frame",
+                        "name": "Wrapper",
+                        "children": [
+                            {
+                                "id": "label",
+                                "type": "text",
+                                "name": "VariantLabel",
+                                "content": "VARIANT"
+                            }
+                        ]
+                    }
+                ]
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+        var label = doc.Root.Children.Single();
+
+        label.Type.Should().Be(ComponentType.Label);
+        // During the casing migration the converter writes both keys.
+        // Capital-T is the legacy path; lowercase is the path every
+        // downstream generator expects. The bug was that ONLY capital-T
+        // was written, so all consumers' lowercase reads silently missed.
+        label.Properties.Should().ContainKey("text");
+        label.Properties.Should().ContainKey("Text");
+        label.Properties["text"].Value.Should().Be("VARIANT");
+        label.Properties["Text"].Value.Should().Be("VARIANT");
+    }
+
+    [Fact]
     public void Parse_FrameWithChildren_CreatesNestedComponents()
     {
         var json = """

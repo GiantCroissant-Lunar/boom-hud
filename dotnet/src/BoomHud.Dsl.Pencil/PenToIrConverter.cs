@@ -141,11 +141,22 @@ public sealed class PenToIrConverter
         var textContent = node.Content ?? node.Text?.Content ?? node.Text?.Template;
         if (!string.IsNullOrWhiteSpace(textContent))
         {
-            properties["Text"] = new BindableValue<object?> { Value = textContent };
+            // Write under BOTH keys during the casing migration. Lowercase
+            // "text" matches FigmaParser and every downstream generator
+            // (Avalonia, TerminalGui, Godot's lowercase reader) — without
+            // it, case-sensitive lookups silently dropped the text content.
+            // The capital-T key is retained because Godot's older reader
+            // (and existing PenParserTests / PencilEndToEndTests assertions)
+            // still depend on it. Once those consumers migrate, drop "Text".
+            var value = new BindableValue<object?> { Value = textContent };
+            properties["text"] = value;
+            properties["Text"] = value;
         }
         else if (componentType == ComponentType.Icon && !string.IsNullOrWhiteSpace(node.IconFontName))
         {
-            properties["Text"] = new BindableValue<object?> { Value = node.IconFontName };
+            var value = new BindableValue<object?> { Value = node.IconFontName };
+            properties["text"] = value;
+            properties["Text"] = value;
         }
 
         if (node.Image?.Src != null)
