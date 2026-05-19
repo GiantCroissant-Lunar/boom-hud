@@ -1,44 +1,73 @@
 version: "3"
 
+vars:
+  SLN_PATH: dotnet/BoomHud.sln
+  UNIFY: dotnet tool run unify-build --
+  GITVERSION_JSON: bash tools/gitversion.sh
+
 tasks:
   default:
     desc: Show available tasks
     cmds:
       - task --list
 
+  # ============================================================================
+  # Build / Pack / Test (routes through unify-build)
+  # ============================================================================
+
+  setup:
+    desc: Restore dotnet tools
+    cmds:
+      - dotnet tool restore
+
+  build:
+    desc: Build the solution via unify-build
+    deps: [setup]
+    cmds:
+      - '{{.UNIFY}} Compile'
+
+  pack:
+    desc: Create NuGet packages (version from GitVersion)
+    deps: [setup]
+    cmds:
+      - '{{.UNIFY}} PackProjects'
+    env:
+      GITVERSION_MAJORMINORPATCH:
+        sh: '{{.GITVERSION_JSON}} | python -c "import sys,json;print(json.load(sys.stdin)[''MajorMinorPatch''])"'
+
+  test:
+    desc: Run all tests
+    cmds:
+      - dotnet test {{.SLN_PATH}}
+
+  version:
+    desc: Show computed version
+    deps: [setup]
+    cmds:
+      - '{{.GITVERSION_JSON}} | python -c "import sys,json;d=json.load(sys.stdin);print(d[''FullSemVer''])"'
+
+  changelog:
+    desc: Generate changelog from conventional commits
+    cmds:
+      - git-cliff --offline -o CHANGELOG.md
+
+  # ============================================================================
+  # Agent sync
+  # ============================================================================
+
   agent:sync:
-    desc: Sync all tool-specific directories from .agent
+    desc: Sync .agent/ content to all adapters via the workspace sync-project.py
     cmds:
-      - task: agent:sync-skills
-      - task: agent:sync-rules
-      - task: agent:sync-workflows
-      - task: agent:sync-commands
-      - task: agent:sync-opencode
+      - python tools/sync-agent-resources.py
 
-  agent:sync-skills:
-    desc: Sync skill stubs/copies from .agent/skills to tool-specific directories
+  agent:sync:check:
+    desc: Dry-run agent sync — report drift without writing
     cmds:
-      - python scripts/sync_skills.py
+      - python tools/sync-agent-resources.py --check
 
-  agent:sync-rules:
-    desc: Sync rules from .agent/rules to tool-specific directories
-    cmds:
-      - python scripts/sync_rules.py
-
-  agent:sync-workflows:
-    desc: Sync workflows from .agent/workflows to tool-specific directories
-    cmds:
-      - python scripts/sync_workflows.py
-
-  agent:sync-commands:
-    desc: Sync commands from .agent/commands to tool-specific directories
-    cmds:
-      - python scripts/sync_commands.py
-
-  agent:sync-opencode:
-    desc: Generate opencode.json from .agent/adapters/opencode/permissions.yaml
-    cmds:
-      - python scripts/sync_opencode.py
+  # Legacy per-area sync tasks (sync_skills.py etc.) have been retired; the
+  # workspace sync-project.py handles skills + rules + per-adapter materialization
+  # in a single pass. See tools/sync-agent-resources.py for the wrapper.
 
   # ============================================================================
   # DTO Generation (schema → quicktype → *.g.cs)
