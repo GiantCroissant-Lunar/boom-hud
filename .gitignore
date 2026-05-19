@@ -2,15 +2,19 @@
 .vscode/
 .vs/
 
-# Local environment and tools
+# Generated agent adapter outputs (regenerate via: tools/sync-agent-resources.py)
+.agents/
 .claude/
 .cline/
 .clinerules/
 .codex/
 .cursor/
 .gemini/
+.kilo/
 .kilocode/
+.kiro/
 .opencode/
+.qwen/
 .windsurf/
 
 opencode.json

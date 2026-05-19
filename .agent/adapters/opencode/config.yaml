@@ -1,25 +1,33 @@
-# OpenCode Adapter Configuration
+# Migrated to NEW schema by .agent/scripts (workspace sync-project.py compatible).
+# Original target/strategy preserved.
 
 tool: opencode
 display_name: OpenCode
-
-rules:
-  strategy: none
-
 skills:
-  strategy: stub
   target: .opencode/skills
-  source: .agent/skills
-
-commands:
+  strategy: symlink
+  local:
+    - 03-presentation/ui-ux-pro-max
+    - 04-tooling/unity-component-fidelity
+  workspace:
+  - 00-meta/autoloop
+  - 00-meta/check-before-claim
+  - 00-meta/context-discovery
+  - 00-meta/implementation-review
+  - 00-meta/rfc-orchestrator
+  - 00-meta/rfc-review
+  - 00-meta/skill-creator
+  - 00-meta/validation-guard
+  - 04-tooling/build
+  - 04-tooling/commit
+  - 04-tooling/external-agent-delegation
+  - 04-tooling/mcp-troubleshooter
+  - 04-tooling/nuget-restore
+  - 04-tooling/repomix
+  - 04-tooling/unify-build
+  - 04-tooling/vendor-patches
+  - 04-tooling/vendor-restore
+mcp:
   enabled: false
-
-agents:
-  enabled: true
-  source: .agent/adapters/opencode/agents
-
-permissions:
-  enabled: true
-  source: .agent/adapters/opencode/permissions.yaml
-
-cleanup: []
+hooks:
+  enabled: false
