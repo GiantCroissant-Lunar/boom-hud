@@ -52,6 +52,43 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_NestedFrameWithPadding_EmitsThicknessAssignmentNotRect()
+    {
+        // Terminal.Gui's View.Padding is an Adornment and cannot be assigned
+        // a Rect literal — the correct API is `view.Padding.Thickness = new
+        // Thickness(left, top, right, bottom)`. GenerateRootLayoutSetup did
+        // this correctly, but GenerateLayoutSetup (used for nested non-root
+        // frames) emitted `view.Padding = new Rect(...)` instead, producing
+        // CS0246 "type or namespace 'Rect' not found" at consumer build time.
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "row",
+                        Type = ComponentType.Container,
+                        Layout = new LayoutSpec
+                        {
+                            Padding = new Spacing(2),
+                        },
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, _options);
+        var view = result.Files.First(f => f.Path == "TestView.g.cs").Content;
+
+        view.Should().NotContain("new Rect(", "Padding cannot be assigned a Rect");
+        view.Should().Contain("Padding.Thickness = new Thickness(");
+    }
+
+    [Fact]
     public void Generate_DefaultsToSplitTerminalGuiNamespace()
     {
         var doc = new HudDocument

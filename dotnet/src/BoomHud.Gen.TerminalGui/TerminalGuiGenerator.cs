@@ -807,11 +807,15 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
             cb.AppendLine($"{varName}.Margin.Thickness = new Thickness({(int)m.Left}, {(int)m.Top}, {(int)m.Right}, {(int)m.Bottom});");
         }
 
-        // Padding
+        // Padding — Terminal.Gui's `View.Padding` is an Adornment; you cannot
+        // assign a Rect to it. Use `Padding.Thickness = new Thickness(...)` to
+        // match the GenerateRootLayoutSetup path below. The old `new Rect(...)`
+        // emit was a long-standing typo that only bit consumers when a nested
+        // (non-root) frame carried a `padding` attribute in the design.
         if (layout.Padding != null)
         {
             var p = layout.Padding.Value;
-            cb.AppendLine($"{varName}.Padding = new Rect({(int)p.Left}, {(int)p.Top}, {(int)p.Right}, {(int)p.Bottom});");
+            cb.AppendLine($"{varName}.Padding.Thickness = new Thickness({(int)p.Left}, {(int)p.Top}, {(int)p.Right}, {(int)p.Bottom});");
         }
     }
 
