@@ -149,14 +149,17 @@ public static class GeneratorRulePlanner
             score++;
         }
 
+        // Instance-level selectors (target a single specific node) outweigh class-level
+        // selectors (target all nodes of a type/family) so a rule keyed on NodeId beats
+        // a later rule keyed on ComponentType in resolve order. CSS-style 10:1 weighting.
         if (!string.IsNullOrWhiteSpace(selector.NodeId))
         {
-            score++;
+            score += 10;
         }
 
         if (!string.IsNullOrWhiteSpace(selector.SourceNodeId))
         {
-            score++;
+            score += 10;
         }
 
         if (selector.ComponentType != null)

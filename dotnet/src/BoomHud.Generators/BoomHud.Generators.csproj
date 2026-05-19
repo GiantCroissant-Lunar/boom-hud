@@ -12,4 +12,9 @@
     <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="BoomHud.Tests.Unit" />
+    <InternalsVisibleTo Include="BoomHud.Tests.Backends" />
+  </ItemGroup>
+
 </Project>
