@@ -653,16 +653,11 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         Dictionary<string, (string FieldName, string AccessorName)> nameContext)
     {
         var terminalGuiType = MapComponentType(node.Type);
-        if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var componentDef))
+        HudComponentDefinition? componentDef = null;
+        if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var resolvedComponentDef))
         {
+            componentDef = resolvedComponentDef;
             terminalGuiType = $"{componentDef.Name}View";
-
-            if (node.InstanceOverrides.Count > 0)
-            {
-                diagnostics.Add(Diagnostic.Warning(
-                    $"Component instance overrides are not yet applied for '{componentDef.Name}'",
-                    node.Id));
-            }
         }
 
         var varName = node.Id != null ? ResolveFieldName(nameContext, node.Id) : $"_component{Guid.NewGuid():N}".Substring(0, 16);
@@ -701,6 +696,19 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         if (node.Id != null)
         {
             cb.AppendLine($"{varName}.Id = \"{node.Id}\";");
+        }
+
+        // Apply per-instance property overrides for synthetic/explicit component
+        // instances. The IR records overrides as a path-keyed map produced by
+        // ComponentInstanceOverrideSupport — paths are rooted at "$" (the
+        // component definition's Root) and step into children by index, e.g.
+        // "$/0" = root.Children[0]. We resolve each path against componentDef
+        // to find the target node's Id, then look up the accessor name that the
+        // component's own View class will expose (computed via the same
+        // CollectComponentFields + BuildNameContext used inside the View).
+        if (componentDef != null)
+        {
+            EmitInstanceOverrides(cb, node, componentDef, varName, diagnostics);
         }
 
         // Apply layout
@@ -751,6 +759,175 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         }
 
         return varName;
+    }
+
+    private static void EmitInstanceOverrides(
+        CodeBuilder cb,
+        ComponentNode instanceNode,
+        HudComponentDefinition componentDef,
+        string varName,
+        List<Diagnostic> diagnostics)
+    {
+        var propertyOverrides = ComponentInstanceOverrideSupport.GetPropertyOverrides(instanceNode);
+        if (propertyOverrides.Count == 0)
+        {
+            return;
+        }
+
+        // The component's own View class builds its name context from
+        // CollectComponentFields(componentDef.Root). We rebuild the same
+        // context here so the accessor names we emit (e.g. `.TitleAlpha`)
+        // exactly match what the View exposes.
+        var componentFields = new List<(string Id, string Type)>();
+        CollectComponentFields(componentDef.Root, componentFields);
+        var componentNameContext = BuildNameContext(componentFields);
+
+        foreach (var (path, properties) in propertyOverrides)
+        {
+            var targetNode = ResolveOverridePath(componentDef.Root, path);
+            if (targetNode is null)
+            {
+                diagnostics.Add(Diagnostic.Warning(
+                    $"Override path '{path}' did not resolve against component '{componentDef.Name}'.",
+                    instanceNode.Id));
+                continue;
+            }
+
+            // For path "$" the target is the View itself (varName). For deeper
+            // paths the target is an inner field exposed via its accessor name.
+            string memberExpr;
+            if (string.Equals(path, ComponentInstanceOverrideSupport.RootPath, StringComparison.Ordinal))
+            {
+                memberExpr = varName;
+            }
+            else if (!string.IsNullOrEmpty(targetNode.Id))
+            {
+                var accessorName = ResolveAccessorName(componentNameContext, targetNode.Id);
+                memberExpr = $"{varName}.{accessorName}";
+            }
+            else
+            {
+                diagnostics.Add(Diagnostic.Warning(
+                    $"Override path '{path}' targets an unnamed node inside component '{componentDef.Name}'; no accessor to emit.",
+                    instanceNode.Id));
+                continue;
+            }
+
+            foreach (var (propertyName, value) in properties)
+            {
+                var assignment = FormatOverrideAssignment(targetNode, memberExpr, propertyName, value);
+                if (assignment is null)
+                {
+                    diagnostics.Add(Diagnostic.Warning(
+                        $"Override property '{propertyName}' on '{componentDef.Name}'[{path}] ({targetNode.Type}) is not emittable by the TerminalGui backend.",
+                        instanceNode.Id));
+                    continue;
+                }
+
+                cb.AppendLine(assignment);
+            }
+        }
+    }
+
+    private static ComponentNode? ResolveOverridePath(ComponentNode root, string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        if (string.Equals(path, ComponentInstanceOverrideSupport.RootPath, StringComparison.Ordinal))
+        {
+            return root;
+        }
+
+        var prefix = ComponentInstanceOverrideSupport.RootPath + "/";
+        if (!path.StartsWith(prefix, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        var current = root;
+        var segments = path.Substring(prefix.Length).Split('/');
+        foreach (var segment in segments)
+        {
+            if (!int.TryParse(segment, NumberStyles.Integer, CultureInfo.InvariantCulture, out var idx))
+            {
+                return null;
+            }
+
+            if (current is null || idx < 0 || idx >= current.Children.Count)
+            {
+                return null;
+            }
+
+            current = current.Children[idx];
+        }
+
+        return current;
+    }
+
+    private static string? FormatOverrideAssignment(
+        ComponentNode targetNode,
+        string memberExpr,
+        string propertyName,
+        object? value)
+    {
+        var normalized = ComponentInstanceOverrideSupport.NormalizePropertyName(propertyName);
+        return normalized switch
+        {
+            "text" or "content" => FormatTextOverride(targetNode, memberExpr, value),
+            "value" => FormatValueOverride(targetNode, memberExpr, value),
+            _ => null
+        };
+    }
+
+    private static string? FormatTextOverride(ComponentNode targetNode, string memberExpr, object? value)
+    {
+        // Most text-bearing node types render to TGui View.Text. ProgressBar
+        // (which IsSupportedProperty accepts for "text") has no Text property
+        // in Terminal.Gui — skip to a diagnostic.
+        return targetNode.Type switch
+        {
+            ComponentType.Label
+                or ComponentType.Badge
+                or ComponentType.Button
+                or ComponentType.TextInput
+                or ComponentType.TextArea
+                or ComponentType.Checkbox
+                or ComponentType.RadioButton
+                or ComponentType.Icon
+                => $"{memberExpr}.Text = \"{EscapeString(value?.ToString() ?? string.Empty)}\";",
+            _ => null
+        };
+    }
+
+    private static string? FormatValueOverride(ComponentNode targetNode, string memberExpr, object? value)
+    {
+        switch (targetNode.Type)
+        {
+            case ComponentType.Label:
+            case ComponentType.Badge:
+            case ComponentType.Button:
+            case ComponentType.TextInput:
+            case ComponentType.TextArea:
+            case ComponentType.Checkbox:
+            case ComponentType.RadioButton:
+            case ComponentType.Icon:
+                return $"{memberExpr}.Text = \"{EscapeString(value?.ToString() ?? string.Empty)}\";";
+            case ComponentType.ProgressBar:
+                {
+                    var fraction = Convert.ToSingle(value ?? 0, CultureInfo.InvariantCulture);
+                    return $"{memberExpr}.Fraction = {fraction.ToString("R", CultureInfo.InvariantCulture)}f;";
+                }
+            case ComponentType.Slider:
+                {
+                    var slider = Convert.ToInt32(value ?? 0, CultureInfo.InvariantCulture);
+                    return $"{memberExpr}.Value = {slider.ToString(CultureInfo.InvariantCulture)};";
+                }
+            default:
+                return null;
+        }
     }
 
     private static void GenerateLayoutSetup(CodeBuilder cb, LayoutSpec layout, string varName, LayoutType? parentLayoutType)

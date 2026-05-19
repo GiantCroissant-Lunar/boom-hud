@@ -914,6 +914,208 @@ public class TerminalGuiGeneratorTests
     }
 
     [Fact]
+    public void Generate_ComponentInstanceWithTextOverride_EmitsAccessorAssignment()
+    {
+        // Component definition: a Card with a Label whose default Text is "QUEST".
+        // Outer document has TWO instances of the Card; the second carries a
+        // path-keyed override that retargets the inner label to "BONUS".
+        const string CardComponentId = "comp:card";
+        var card = new HudComponentDefinition
+        {
+            Id = CardComponentId,
+            Name = "Card",
+            Root = new ComponentNode
+            {
+                Id = "card-root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title-alpha",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["Text"] = "QUEST"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var overridesForBravo = new SortedDictionary<string, SortedDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "BONUS"
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Outer",
+            Components = new Dictionary<string, HudComponentDefinition> { [CardComponentId] = card },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "card-alpha", Type = ComponentType.Container, ComponentRefId = CardComponentId },
+                    new ComponentNode
+                    {
+                        Id = "card-bravo",
+                        Type = ComponentType.Container,
+                        ComponentRefId = CardComponentId,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = overridesForBravo
+                        }
+                    }
+                ]
+            }
+        };
+
+        // DisableSyntheticComponentization keeps the preprocessor from re-deriving
+        // components from the doc; we want our hand-built explicit component to
+        // be the only one in play.
+        var options = _options with { DisableSyntheticComponentization = true };
+        var result = _generator.Generate(doc, options);
+
+        var view = result.Files.First(f => f.Path == "OuterView.g.cs").Content;
+
+        // Override on the second instance maps to its inner accessor.
+        view.Should().Contain("_cardBravo = new CardView();");
+        view.Should().Contain("_cardBravo.TitleAlpha.Text = \"BONUS\";");
+
+        // First instance carries no overrides, so no override line for it.
+        view.Should().NotContain("_cardAlpha.TitleAlpha.Text =");
+
+        // The old "not yet applied" stub diagnostic is gone.
+        result.Diagnostics.Should().NotContain(d =>
+            d.Message.Contains("not yet applied", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Generate_ComponentInstanceWithProgressBarValueOverride_EmitsFractionAssignment()
+    {
+        const string GaugeComponentId = "comp:gauge";
+        var gauge = new HudComponentDefinition
+        {
+            Id = GaugeComponentId,
+            Name = "Gauge",
+            Root = new ComponentNode
+            {
+                Id = "gauge-root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "bar",
+                        Type = ComponentType.ProgressBar
+                    }
+                ]
+            }
+        };
+
+        var overrides = new SortedDictionary<string, SortedDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            ["$/0"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["value"] = 0.75
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Outer",
+            Components = new Dictionary<string, HudComponentDefinition> { [GaugeComponentId] = gauge },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "gauge-instance",
+                        Type = ComponentType.Container,
+                        ComponentRefId = GaugeComponentId,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = overrides
+                        }
+                    }
+                ]
+            }
+        };
+
+        var options = _options with { DisableSyntheticComponentization = true };
+        var result = _generator.Generate(doc, options);
+
+        var view = result.Files.First(f => f.Path == "OuterView.g.cs").Content;
+        view.Should().MatchRegex(@"_gaugeInstance\.Bar\.Fraction = 0\.75f;");
+    }
+
+    [Fact]
+    public void Generate_ComponentInstanceWithUnresolvablePath_EmitsDiagnostic()
+    {
+        const string CardComponentId = "comp:card";
+        var card = new HudComponentDefinition
+        {
+            Id = CardComponentId,
+            Name = "Card",
+            Root = new ComponentNode
+            {
+                Id = "card-root",
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "title", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var overrides = new SortedDictionary<string, SortedDictionary<string, object?>>(StringComparer.Ordinal)
+        {
+            // "$/9" walks off the end of root.Children — should produce a warning,
+            // not a NullReferenceException or silently-dropped override.
+            ["$/9"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["Text"] = "OOPS"
+            }
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Outer",
+            Components = new Dictionary<string, HudComponentDefinition> { [CardComponentId] = card },
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "card-one",
+                        Type = ComponentType.Container,
+                        ComponentRefId = CardComponentId,
+                        InstanceOverrides = new Dictionary<string, object?>
+                        {
+                            [BoomHudMetadataKeys.ComponentPropertyOverrides] = overrides
+                        }
+                    }
+                ]
+            }
+        };
+
+        var options = _options with { DisableSyntheticComponentization = true };
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d =>
+            d.Message.Contains("Override path '$/9'", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public void TargetFramework_ReturnsTerminalGui()
     {
         _generator.TargetFramework.Should().Be("Terminal.Gui");
