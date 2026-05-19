@@ -80,6 +80,21 @@ public sealed record GenerationOptions
     public bool TerminalGuiFlatNamespace { get; init; }
 
     /// <summary>
+    /// Skip the SyntheticComponentizer preprocessing pass entirely. When
+    /// <c>false</c> (the default), structurally-identical subtrees are
+    /// factored into a single shared reusable component to reduce duplication
+    /// in the generated output. That pass is currently lossy for nodes whose
+    /// content varies between instances (e.g. label/value rows where the
+    /// label TEXT differs per row): the synthetic component captures only the
+    /// first instance's text, and per-instance overrides are not yet emitted.
+    /// Set to <c>true</c> to keep the document verbatim and emit each subtree
+    /// inline. Useful for designs that intentionally repeat a layout with
+    /// varying text until the componentizer learns to emit per-instance
+    /// descendant overrides.
+    /// </summary>
+    public bool DisableSyntheticComponentization { get; init; }
+
+    /// <summary>
     /// Optional design theme (e.g., from Figma variables or design tokens).
     /// Backends may use this to emit shared resources or token-based styling.
     /// </summary>

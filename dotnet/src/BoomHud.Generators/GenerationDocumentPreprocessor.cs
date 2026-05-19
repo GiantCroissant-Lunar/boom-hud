@@ -74,7 +74,7 @@ public static class GenerationDocumentPreprocessor
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(options);
 
-        var result = ShouldComponentize(backendId)
+        var result = ShouldComponentize(backendId) && !options.DisableSyntheticComponentization
             ? SyntheticComponentizer.Componentize(document, options)
             : (Document: document, Summary: (SyntheticComponentizationSummary?)null);
         var diagnostics = new List<Diagnostic>();

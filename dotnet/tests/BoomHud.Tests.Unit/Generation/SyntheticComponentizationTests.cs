@@ -15,6 +15,43 @@ public sealed class SyntheticComponentizationTests
     };
 
     [Fact]
+    public void Prepare_WithDisableSyntheticComponentization_SkipsComponentizer()
+    {
+        // Same input shape as Prepare_ExactRepeatedStaticSubtrees_LiftsSyntheticComponent
+        // (two structurally-identical static subtrees) — but with the new
+        // opt-out flag set, the preprocessor must NOT factor them out.
+        // Useful for designs where the synthetic component captures only the
+        // first instance's text and downstream backends haven't learned how
+        // to emit per-instance overrides yet.
+        var document = new HudDocument
+        {
+            Name = "QuestHud",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    CreateStaticCard("card-alpha", "title-alpha", "icon-alpha", 12, 32),
+                    CreateStaticCard("card-bravo", "title-bravo", "icon-bravo", 312, 64)
+                ]
+            }
+        };
+
+        var prepared = GenerationDocumentPreprocessor.Prepare(
+            document,
+            new GenerationOptions { DisableSyntheticComponentization = true });
+
+        prepared.SyntheticComponentization.Should().BeNull();
+        prepared.Document.Components.Should().BeEmpty();
+        prepared.Document.Root.Children.Should().HaveCount(2);
+        // Both children remain inline (no ComponentRefId); each carries its
+        // own subtree verbatim from the input.
+        prepared.Document.Root.Children.Should().OnlyContain(c => c.ComponentRefId == null);
+        prepared.Document.Root.Children[0].Children.Should().HaveCount(2);
+        prepared.Document.Root.Children[1].Children.Should().HaveCount(2);
+    }
+
+    [Fact]
     public void Prepare_ExactRepeatedStaticSubtrees_LiftsSyntheticComponent()
     {
         var document = new HudDocument
