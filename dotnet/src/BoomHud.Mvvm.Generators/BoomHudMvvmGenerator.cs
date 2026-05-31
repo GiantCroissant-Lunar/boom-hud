@@ -25,7 +25,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
         Custom
     }
 
-    private sealed record GeneratorConfig(MvvmFlavor Flavor, bool GenerateConcreteViewModels);
+    private sealed record GeneratorConfig(MvvmFlavor Flavor, bool GenerateConcreteViewModels, string? ViewModelNamespace);
 
     private sealed record ViewModelTarget(INamedTypeSymbol ClassSymbol, string ViewName, Location? Location);
 
@@ -116,13 +116,13 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
                 switch (generatorConfig.Flavor)
                 {
                     case MvvmFlavor.Custom:
-                        EmitCustomConcreteViewModel(spc, compilation, target);
+                        EmitCustomConcreteViewModel(spc, compilation, generatorConfig, target);
                         break;
                     case MvvmFlavor.ReactiveUI:
-                        EmitReactiveUiConcreteViewModel(spc, compilation, target);
+                        EmitReactiveUiConcreteViewModel(spc, compilation, generatorConfig, target);
                         break;
                     case MvvmFlavor.CommunityToolkit:
-                        EmitCommunityToolkitConcreteViewModel(spc, compilation, target);
+                        EmitCommunityToolkitConcreteViewModel(spc, compilation, generatorConfig, target);
                         break;
                     default:
                         spc.ReportDiagnostic(Diagnostic.Create(FlavorNotSupportedDescriptor, Location.None, generatorConfig.Flavor.ToString()));
@@ -150,7 +150,14 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             generateConcrete = parsedBool;
         }
 
-        return new GeneratorConfig(flavor, generateConcrete);
+        string? viewModelNamespace = null;
+        if (options.TryGetValue("build_property.BoomHudMvvmNamespace", out var namespaceText) &&
+            !string.IsNullOrWhiteSpace(namespaceText))
+        {
+            viewModelNamespace = namespaceText.Trim();
+        }
+
+        return new GeneratorConfig(flavor, generateConcrete, viewModelNamespace);
     }
 
     private static ViewModelTarget? TryCreateTarget(GeneratorSyntaxContext context, System.Threading.CancellationToken ct)
@@ -181,7 +188,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
         return new ViewModelTarget(symbol, viewName, classDecl.Identifier.GetLocation());
     }
 
-    private static void EmitCustomConcreteViewModel(SourceProductionContext spc, Compilation compilation, ViewModelTarget target)
+    private static void EmitCustomConcreteViewModel(SourceProductionContext spc, Compilation compilation, GeneratorConfig config, ViewModelTarget target)
     {
         if (!IsPartial(target.ClassSymbol))
         {
@@ -189,25 +196,9 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             return;
         }
 
-        var interfaceName = "I" + target.ViewName + "ViewModel";
-        var matchingInterfaces = compilation.GetSymbolsWithName(interfaceName, SymbolFilter.Type)
-            .OfType<INamedTypeSymbol>()
-            .Where(s => s.TypeKind == TypeKind.Interface && string.Equals(s.Name, interfaceName, StringComparison.Ordinal))
-            .ToImmutableArray();
-
-        if (matchingInterfaces.Length == 0)
-        {
-            spc.ReportDiagnostic(Diagnostic.Create(MissingInterfaceDescriptor, target.Location, interfaceName, target.ViewName));
+        var iface = TryResolveViewModelInterface(spc, compilation, config, target);
+        if (iface is null)
             return;
-        }
-
-        if (matchingInterfaces.Length > 1)
-        {
-            spc.ReportDiagnostic(Diagnostic.Create(MultipleInterfacesDescriptor, target.Location, interfaceName, target.ViewName));
-            return;
-        }
-
-        var iface = matchingInterfaces[0];
 
         var ns = GetNamespace(target.ClassSymbol);
         var accessibility = GetAccessibility(target.ClassSymbol);
@@ -218,7 +209,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
         spc.AddSource(hintName, SourceText.From(source, Encoding.UTF8));
     }
 
-    private static void EmitReactiveUiConcreteViewModel(SourceProductionContext spc, Compilation compilation, ViewModelTarget target)
+    private static void EmitReactiveUiConcreteViewModel(SourceProductionContext spc, Compilation compilation, GeneratorConfig config, ViewModelTarget target)
     {
         if (!IsPartial(target.ClassSymbol))
         {
@@ -233,7 +224,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             return;
         }
 
-        var iface = TryResolveViewModelInterface(spc, compilation, target);
+        var iface = TryResolveViewModelInterface(spc, compilation, config, target);
         if (iface is null)
             return;
 
@@ -247,7 +238,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
         spc.AddSource(hintName, SourceText.From(source, Encoding.UTF8));
     }
 
-    private static void EmitCommunityToolkitConcreteViewModel(SourceProductionContext spc, Compilation compilation, ViewModelTarget target)
+    private static void EmitCommunityToolkitConcreteViewModel(SourceProductionContext spc, Compilation compilation, GeneratorConfig config, ViewModelTarget target)
     {
         if (!IsPartial(target.ClassSymbol))
         {
@@ -262,7 +253,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             return;
         }
 
-        var iface = TryResolveViewModelInterface(spc, compilation, target);
+        var iface = TryResolveViewModelInterface(spc, compilation, config, target);
         if (iface is null)
             return;
 
@@ -276,9 +267,25 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
         spc.AddSource(hintName, SourceText.From(source, Encoding.UTF8));
     }
 
-    private static INamedTypeSymbol? TryResolveViewModelInterface(SourceProductionContext spc, Compilation compilation, ViewModelTarget target)
+    private static INamedTypeSymbol? TryResolveViewModelInterface(
+        SourceProductionContext spc,
+        Compilation compilation,
+        GeneratorConfig config,
+        ViewModelTarget target)
     {
         var interfaceName = "I" + target.ViewName + "ViewModel";
+
+        if (!string.IsNullOrWhiteSpace(config.ViewModelNamespace))
+        {
+            var metadataName = config.ViewModelNamespace + "." + interfaceName;
+            var iface = compilation.GetTypeByMetadataName(metadataName);
+            if (iface is { TypeKind: TypeKind.Interface })
+                return iface;
+
+            spc.ReportDiagnostic(Diagnostic.Create(MissingInterfaceDescriptor, target.Location, metadataName, target.ViewName));
+            return null;
+        }
+
         var matchingInterfaces = compilation.GetSymbolsWithName(interfaceName, SymbolFilter.Type)
             .OfType<INamedTypeSymbol>()
             .Where(s => s.TypeKind == TypeKind.Interface && string.Equals(s.Name, interfaceName, StringComparison.Ordinal))

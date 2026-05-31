@@ -63,7 +63,8 @@ The generator reads MSBuild properties from `build_property.*` (exposed using `C
 - `BoomHudMvvmGenerateConcreteViewModels`
   - `true | false` (default: `false`)
 - `BoomHudMvvmNamespace`
-  - Reserved for future use (not required for current implementation).
+  - Optional namespace for an externally-provided `I{ViewName}ViewModel` contract.
+  - When omitted, the generator resolves the interface by simple name from the current compilation.
 
 Example:
 
@@ -72,6 +73,7 @@ Example:
   <BoomHud_EnableMvvmAdapters>true</BoomHud_EnableMvvmAdapters>
   <BoomHudMvvmFlavor>ReactiveUI</BoomHudMvvmFlavor>
   <BoomHudMvvmGenerateConcreteViewModels>true</BoomHudMvvmGenerateConcreteViewModels>
+  <BoomHudMvvmNamespace>MyProduct.Ui.Contracts</BoomHudMvvmNamespace>
 </PropertyGroup>
 ```
 
@@ -93,6 +95,8 @@ public partial class StatusBarViewModel
 The generator will look for the Layer A interface named:
 
 - `I{ViewName}ViewModel` (e.g. `IStatusBarViewModel`)
+
+If `BoomHudMvvmNamespace` is set, the generator resolves the fully-qualified metadata name instead, e.g. `MyProduct.Ui.Contracts.IStatusBarViewModel`. This allows the stable contract to live in a separate shared assembly while the concrete ReactiveUI or CommunityToolkit implementation remains in the app/plugin assembly.
 
 ## Generated output by flavor
 

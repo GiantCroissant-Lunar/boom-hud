@@ -115,6 +115,58 @@ namespace Sample
     }
 
     [Fact]
+    public void ReactiveUiFlavor_WithViewModelNamespace_ResolvesReferencedContractInterface()
+    {
+        const string contractSource = @"
+namespace Contracts
+{
+    public interface IStatusBarViewModel
+    {
+        string? Health { get; }
+    }
+}
+";
+        const string source = @"using BoomHud.Mvvm;
+
+namespace ReactiveUI
+{
+    public class ReactiveObject
+    {
+        protected bool RaiseAndSetIfChanged<T>(ref T field, T value)
+        {
+            field = value;
+            return true;
+        }
+    }
+}
+
+namespace Sample
+{
+    [BoomHudViewModelFor(""StatusBar"")]
+    public partial class StatusBarViewModel
+    {
+    }
+}
+";
+
+        var options = new Dictionary<string, string>
+        {
+            ["build_property.BoomHudMvvmFlavor"] = "ReactiveUI",
+            ["build_property.BoomHudMvvmGenerateConcreteViewModels"] = "true",
+            ["build_property.BoomHudMvvmNamespace"] = "Contracts",
+        };
+        var contractReference = CompileReference("BoomHud_MvvmAdapterGeneratorTests_Contracts", contractSource);
+
+        var result = RunGenerator(source, options, out var outputCompilation, contractReference);
+
+        Assert.Empty(outputCompilation.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error));
+
+        var run = Assert.Single(result.Results);
+        var generated = run.GeneratedSources.First(s => s.HintName.EndsWith("StatusBarViewModel.BoomHudMvvm.ReactiveUI.g.cs", StringComparison.Ordinal)).SourceText.ToString();
+        Assert.Contains("global::Contracts.IStatusBarViewModel", generated);
+    }
+
+    [Fact]
     public void CommunityToolkitFlavor_GenerateConcreteViewModels_EmitsSetPropertyProperties()
     {
         const string source = @"using BoomHud.Mvvm;
@@ -167,7 +219,8 @@ namespace Sample
     private static GeneratorDriverRunResult RunGenerator(
         string source,
         IDictionary<string, string> globalOptions,
-        out Compilation outputCompilation)
+        out Compilation outputCompilation,
+        params MetadataReference[] additionalReferences)
     {
         var parseOptions = CSharpParseOptions.Default;
         var syntaxTree = CSharpSyntaxTree.ParseText(source, parseOptions);
@@ -191,6 +244,8 @@ namespace Sample
             references.Add(MetadataReference.CreateFromFile(typeof(INotifyPropertyChanged).Assembly.Location));
         }
 
+        references.AddRange(additionalReferences);
+
         var compilation = CSharpCompilation.Create(
             assemblyName: "BoomHud_MvvmAdapterGeneratorTests",
             syntaxTrees: new[] { syntaxTree },
@@ -206,6 +261,32 @@ namespace Sample
 
         driver = driver.RunGeneratorsAndUpdateCompilation(compilation, out outputCompilation, out _);
         return driver.GetRunResult();
+    }
+
+    private static PortableExecutableReference CompileReference(string assemblyName, string source)
+    {
+        var syntaxTree = CSharpSyntaxTree.ParseText(source, CSharpParseOptions.Default);
+        var references = new List<MetadataReference>
+        {
+            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+        };
+
+        var compilation = CSharpCompilation.Create(
+            assemblyName,
+            syntaxTrees: new[] { syntaxTree },
+            references: references,
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                .WithNullableContextOptions(NullableContextOptions.Enable));
+
+        using var stream = new MemoryStream();
+        var result = compilation.Emit(stream);
+        if (!result.Success)
+        {
+            var diagnostics = string.Join(Environment.NewLine, result.Diagnostics);
+            throw new InvalidOperationException("Could not compile test reference: " + diagnostics);
+        }
+
+        return MetadataReference.CreateFromImage(stream.ToArray());
     }
 
     internal sealed class TestAnalyzerConfigOptionsProvider : AnalyzerConfigOptionsProvider
