@@ -344,7 +344,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             var fieldName = "_" + char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
 
             sb.AppendLine();
-            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(";");
+            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(" = default!;");
             sb.AppendLine();
             sb.Append("    public ").Append(propType).Append(' ').Append(prop.Name).AppendLine();
             sb.AppendLine("    {");
@@ -409,7 +409,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             var fieldName = "_" + char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
 
             sb.AppendLine();
-            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(";");
+            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(" = default!;");
             sb.AppendLine();
             sb.Append("    public ").Append(propType).Append(' ').Append(prop.Name).AppendLine();
             sb.AppendLine("    {");
@@ -467,7 +467,7 @@ public sealed class BoomHudMvvmGenerator : IIncrementalGenerator
             var fieldName = "_" + char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
 
             sb.AppendLine();
-            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(";");
+            sb.Append("    private ").Append(propType).Append(' ').Append(fieldName).AppendLine(" = default!;");
             sb.AppendLine();
             sb.Append("    public ").Append(propType).Append(' ').Append(prop.Name).AppendLine();
             sb.AppendLine("    {");
