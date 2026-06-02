@@ -27,6 +27,8 @@ public sealed class GodotGenerator : IBackendGenerator
 
         try
         {
+            SpatialCompatibilityChecker.CheckDocument(document, Capabilities, diagnostics);
+
             // 1. Generate Component Views (Partial Classes)
             foreach (var component in document.Components.Values)
             {
@@ -191,6 +193,13 @@ public sealed class GodotGenerator : IBackendGenerator
             rootType = GetContainerType(document.Root.Layout?.Type ?? LayoutType.Absolute);
         }
 
+        if (document.Root.Spatial != null
+            && document.Root.Spatial.Shape == SpatialShape.Cylinder
+            && GodotCapabilities.Instance.GetCapabilityLevel(BoomHud.Abstractions.Capabilities.Capabilities.Spatial3D) == CapabilityLevel.Native)
+        {
+            rootType = "Node3D";
+        }
+
         var rootNodeName = document.Name + "View";
 
         var extResources = new List<(string Type, string ResPath, string Id)>();
@@ -265,6 +274,11 @@ public sealed class GodotGenerator : IBackendGenerator
         IReadOnlyDictionary<string, HudComponentDefinition> components,
         List<(string Type, string ResPath, string Id)> extResources)
     {
+        bool isSpatialParent = parentNode.Spatial != null
+            && GodotCapabilities.Instance.GetCapabilityLevel(BoomHud.Abstractions.Capabilities.Capabilities.Spatial3D) == CapabilityLevel.Native
+            && parentNode.Spatial.Shape == SpatialShape.Cylinder;
+
+        int childIndex = 0;
         foreach (var child in parentNode.Children)
         {
             // Menu items are not nodes in Godot; they are items on an OptionButton.
@@ -276,6 +290,13 @@ public sealed class GodotGenerator : IBackendGenerator
             var childNodeName = GetSceneNodeName(child, nodeNames, components);
 
             sb.AppendLine();
+
+            if (isSpatialParent)
+            {
+                AppendSpatialChildTscn(sb, child, parentPath, childNodeName, childIndex, parentNode.Spatial!, nodeNames, components, extResources);
+                childIndex++;
+                continue;
+            }
 
             if (child.ComponentRefId != null && components.TryGetValue(child.ComponentRefId, out var def))
             {
@@ -301,6 +322,138 @@ public sealed class GodotGenerator : IBackendGenerator
             var nextParentPath = parentPath == "." ? childNodeName : parentPath + "/" + childNodeName;
             AppendChildNodesTscn(sb, child, nextParentPath, nodeNames, components, extResources);
         }
+    }
+
+    private static void AppendSpatialChildTscn(
+        StringBuilder sb,
+        ComponentNode child,
+        string parentPath,
+        string childNodeName,
+        int childIndex,
+        SpatialSpec spatial,
+        Dictionary<ComponentNode, string> nodeNames,
+        IReadOnlyDictionary<string, HudComponentDefinition> components,
+        List<(string Type, string ResPath, string Id)> extResources)
+    {
+        var faceNodeName = childNodeName + "Face";
+        var facePath = parentPath == "." ? faceNodeName : parentPath + "/" + faceNodeName;
+
+        // Emit MeshInstance3D as the 3D face container
+        sb.AppendLine("[node name=\"" + EscapeString(faceNodeName) + "\" type=\"MeshInstance3D\" parent=\"" + EscapeString(parentPath) + "\"]");
+
+        // Static placement transform
+        if (!IsDataDrivenSpatial(spatial))
+        {
+            var transform = ComputeCylinderTransformString(childIndex, spatial);
+            sb.AppendLine("transform = " + transform);
+        }
+
+        // SubViewport for the 2D content
+        var subViewportName = "SubViewport";
+        var subViewportPath = facePath + "/" + subViewportName;
+        sb.AppendLine();
+        sb.AppendLine("[node name=\"" + subViewportName + "\" type=\"SubViewport\" parent=\"" + EscapeString(facePath) + "\"]");
+        sb.AppendLine("size = Vector2i(256, 128)");
+
+        // Emit the actual 2D child inside the SubViewport
+        if (child.ComponentRefId != null && components.TryGetValue(child.ComponentRefId, out var def))
+        {
+            var instanceId = FindPackedSceneId(extResources, def.Name);
+            if (instanceId != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(subViewportPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
+                AppendCommonNodeProperties(sb, child);
+            }
+        }
+        else
+        {
+            var childType = MapComponentType(child.Type);
+            if (child.Type == ComponentType.Container)
+            {
+                childType = GetContainerType(child.Layout?.Type ?? LayoutType.Vertical);
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" type=\"" + EscapeString(childType) + "\" parent=\"" + EscapeString(subViewportPath) + "\"]");
+            AppendCommonNodeProperties(sb, child);
+
+            // Recurse into the 2D child (but not as spatial - nested spatial is out of scope)
+            var nextParentPath = subViewportPath + "/" + childNodeName;
+            AppendChildNodesTscn(sb, child, nextParentPath, nodeNames, components, extResources);
+        }
+    }
+
+    private static bool IsDataDrivenSpatial(SpatialSpec spatial)
+    {
+        return spatial.AngleFrom != null
+            || spatial.DepthFrom != null
+            || spatial.RadiusFrom != null
+            || spatial.LateralFrom != null;
+    }
+
+    private static string ComputeCylinderTransformString(int index, SpatialSpec spatial)
+    {
+        double angleDeg = index * spatial.AngularSpacingDeg;
+        double angleRad = angleDeg * Math.PI / 180.0;
+        double radius = spatial.Radius;
+        // TODO(RFC-0024 Phase 5): replace index-based placeholder depth with DepthFrom data from the bound collection.
+        double depth = index * spatial.DepthScale;
+
+        double x = radius * Math.Cos(angleRad);
+        double y = radius * Math.Sin(angleRad);
+        double z = depth;
+
+        // Build basis oriented according to facing direction.
+        double cosA = Math.Cos(angleRad);
+        double sinA = Math.Sin(angleRad);
+
+        // z-axis: direction the face points (inward = toward axis center, outward = away).
+        double zAxisX = spatial.Facing == SpatialFacing.Inward ? -cosA : cosA;
+        double zAxisY = spatial.Facing == SpatialFacing.Inward ? -sinA : sinA;
+        double zAxisZ = 0.0;
+
+        // Normalize z-axis (should already be unit length for cos/sin, but be explicit).
+        double zLen = Math.Sqrt(zAxisX * zAxisX + zAxisY * zAxisY + zAxisZ * zAxisZ);
+        if (zLen > 0.0)
+        {
+            zAxisX /= zLen;
+            zAxisY /= zLen;
+            zAxisZ /= zLen;
+        }
+
+        // up = (0, 0, 1) in cylinder space; xAxis = up × zAxis.
+        double upX = 0.0, upY = 0.0, upZ = 1.0;
+        double xAxisX = upY * zAxisZ - upZ * zAxisY;
+        double xAxisY = upZ * zAxisX - upX * zAxisZ;
+        double xAxisZ = upX * zAxisY - upY * zAxisX;
+
+        // Normalize xAxis; if degenerate (zAxis parallel to up), fall back to (1,0,0).
+        double xLen = Math.Sqrt(xAxisX * xAxisX + xAxisY * xAxisY + xAxisZ * xAxisZ);
+        if (xLen < 0.001)
+        {
+            xAxisX = 1.0; xAxisY = 0.0; xAxisZ = 0.0;
+        }
+        else
+        {
+            xAxisX /= xLen;
+            xAxisY /= xLen;
+            xAxisZ /= xLen;
+        }
+
+        // yAxis = zAxis × xAxis (already normalized).
+        double yAxisX = zAxisY * xAxisZ - zAxisZ * xAxisY;
+        double yAxisY = zAxisZ * xAxisX - zAxisX * xAxisZ;
+        double yAxisZ = zAxisX * xAxisY - zAxisY * xAxisX;
+
+        // Godot Transform3D is Basis(3x3 row vectors) + origin.
+        // Basis columns are the x, y, z axes. Serialized as 9 elements then 3 origin values.
+        var ci = System.Globalization.CultureInfo.InvariantCulture;
+        return $"Transform3D(" +
+            $"{xAxisX.ToString(ci)}, {yAxisX.ToString(ci)}, {zAxisX.ToString(ci)}, " +
+            $"{xAxisY.ToString(ci)}, {yAxisY.ToString(ci)}, {zAxisY.ToString(ci)}, " +
+            $"{xAxisZ.ToString(ci)}, {yAxisZ.ToString(ci)}, {zAxisZ.ToString(ci)}, " +
+            $"{x.ToString(ci)}, {y.ToString(ci)}, {z.ToString(ci)})";
     }
 
     private static void AppendCommonNodeProperties(StringBuilder sb, ComponentNode node)
@@ -627,6 +780,10 @@ public sealed class GodotGenerator : IBackendGenerator
             cb.OpenBlock();
             GenerateRootSetup(cb, document.Root, nodeNames, diagnostics);
             GenerateChildrenSetupFromScene(cb, document.Root, "this", nodeNames, diagnostics, components);
+            if (HasSpatialNodes(document))
+            {
+                cb.AppendLine("SetupSpatialFaces();");
+            }
             cb.CloseBlock();
         }
 
@@ -641,6 +798,11 @@ public sealed class GodotGenerator : IBackendGenerator
         // Children setup
         // Note: For the root node, we are adding children to *this*
         GenerateChildrenSetup(cb, document.Root, "this", nodeNames, diagnostics, components);
+
+        if (HasSpatialNodes(document))
+        {
+            cb.AppendLine("SetupSpatialFaces();");
+        }
 
         cb.CloseBlock();
 
@@ -815,6 +977,32 @@ public sealed class GodotGenerator : IBackendGenerator
                 // So use UniqueName (PascalCased).
                 cb.AppendLine($"public {type} {ToPascalCase(uniqueName)} => _{uniqueName};");
             }
+        }
+
+        if (HasSpatialNodes(document))
+        {
+            cb.AppendLine();
+            cb.AppendLine("/// <summary>");
+            cb.AppendLine("/// Sets up SubViewport textures and materials for spatial face nodes.");
+            cb.AppendLine("/// </summary>");
+            cb.AppendLine("private void SetupSpatialFaces()");
+            cb.OpenBlock();
+            cb.AppendLine("// Find all MeshInstance3D face nodes and wire up their SubViewport materials");
+            cb.AppendLine("foreach (var child in GetChildren())");
+            cb.OpenBlock();
+            cb.AppendLine("if (child is not MeshInstance3D meshInstance) continue;");
+            cb.AppendLine("var subViewport = child.GetNodeOrNull<SubViewport>(\"SubViewport\");");
+            cb.AppendLine("if (subViewport == null) continue;");
+            cb.AppendLine("var viewportTexture = new ViewportTexture();");
+            cb.AppendLine("viewportTexture.ViewportPath = subViewport.GetPath();");
+            cb.AppendLine("var material = new StandardMaterial3D();");
+            cb.AppendLine("material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;");
+            cb.AppendLine("material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;");
+            cb.AppendLine("material.AlbedoTexture = viewportTexture;");
+            cb.AppendLine("meshInstance.Mesh = new QuadMesh();");
+            cb.AppendLine("meshInstance.SetSurfaceOverrideMaterial(0, material);");
+            cb.CloseBlock();
+            cb.CloseBlock();
         }
 
         cb.CloseBlock(); // class
@@ -1133,6 +1321,26 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             CollectComponentInstances(child, components, results);
         }
+    }
+
+    private static bool HasSpatialNodes(HudDocument document)
+    {
+        if (document.Root.Spatial != null) return true;
+        foreach (var component in document.Components.Values)
+        {
+            if (component.Root.Spatial != null) return true;
+        }
+        return HasSpatialNodes(document.Root);
+    }
+
+    private static bool HasSpatialNodes(ComponentNode node)
+    {
+        if (node.Spatial != null) return true;
+        foreach (var child in node.Children)
+        {
+            if (HasSpatialNodes(child)) return true;
+        }
+        return false;
     }
 
     private static string ComputeSourceId(HudDocument document)

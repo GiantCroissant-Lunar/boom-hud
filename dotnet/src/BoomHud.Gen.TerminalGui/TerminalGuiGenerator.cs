@@ -27,6 +27,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         try
         {
+            SpatialCompatibilityChecker.CheckDocument(document, Capabilities, diagnostics);
+
             foreach (var component in document.Components.Values)
             {
                 var componentDocument = new HudDocument

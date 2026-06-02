@@ -3,6 +3,7 @@ using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Motion;
 using BoomHud.Dsl.Figma;
 using BoomHud.Gen.Godot;
+using BoomHud.Gen.TerminalGui;
 using FluentAssertions;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -449,5 +450,252 @@ public class GodotGeneratorTests
         Directory.CreateDirectory(dir);
         File.WriteAllText(global::System.IO.Path.Combine(dir, "project.godot"), "config_version=5\n");
         return dir;
+    }
+
+    [Fact]
+    public void Generate_WithCylinderSpatial_EmitsNode3DHostAndQuadFaces()
+    {
+        var options = _options with
+        {
+            EmitTscn = true,
+            EmitViewModelInterfaces = false,
+            OutputDirectory = CreateTempGodotProjectRoot()
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Tunnel",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Spatial = new SpatialSpec
+                {
+                    Shape = SpatialShape.Cylinder,
+                    Radius = 2.0,
+                    AngularSpacingDeg = 45.0,
+                    Facing = SpatialFacing.Inward
+                },
+                Children =
+                [
+                    new ComponentNode { Id = "card1", Type = ComponentType.Label, Properties = new Dictionary<string, BindableValue<object?>> { ["text"] = "Card 1" } },
+                    new ComponentNode { Id = "card2", Type = ComponentType.Label, Properties = new Dictionary<string, BindableValue<object?>> { ["text"] = "Card 2" } }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().NotContain(d => d.Severity == DiagnosticSeverity.Error);
+
+        var tscnFile = result.Files.First(f => f.Path == "TunnelView.tscn");
+        tscnFile.Content.Should().Contain("type=\"Node3D\"");
+        tscnFile.Content.Should().Contain("type=\"MeshInstance3D\"");
+        tscnFile.Content.Should().Contain("Transform3D");
+        tscnFile.Content.Should().Contain("type=\"SubViewport\"");
+
+        // Regression guard: the dead ComputeCylinderTransform runtime method was removed;
+        // all cylinder math is now in the baked .tscn transform.
+        var csFile = result.Files.First(f => f.Path == "TunnelView.cs");
+        csFile.Content.Should().Contain("SetupSpatialFaces()");
+        csFile.Content.Should().NotContain("private static Transform3D ComputeCylinderTransform");
+        csFile.Content.Should().Contain("QuadMesh");
+        csFile.Content.Should().Contain("ViewportTexture");
+        csFile.Content.Should().Contain("StandardMaterial3D");
+
+        // Assert depth VARIES per index (not all z=0 flat ring).
+        // card1 is index 0 => z=0*DepthScale=0; card2 is index 1 => z=1*1.0=1 (non-zero).
+        tscnFile.Content.Should().Contain(", 0, 0)");       // card1 at z=0
+        tscnFile.Content.Should().Contain(", 1)");           // card2 at z=1 (DepthScale=1.0 default)
+
+        // Assert Inward facing produces a non-identity basis.
+        // Identity basis would be "1, 0, 0, 0, 1, 0, 0, 0, 1". Inward facing must differ.
+        tscnFile.Content.Should().NotContain("Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1,");
+    }
+
+    [Fact]
+    public void Generate_WithCylinderSpatialOutward_ProducesDifferentBasisFromInward()
+    {
+        var options = _options with
+        {
+            EmitTscn = true,
+            EmitViewModelInterfaces = false,
+            OutputDirectory = CreateTempGodotProjectRoot()
+        };
+
+        var docInward = new HudDocument
+        {
+            Name = "Tunnel",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Spatial = new SpatialSpec
+                {
+                    Shape = SpatialShape.Cylinder,
+                    Radius = 2.0,
+                    AngularSpacingDeg = 45.0,
+                    Facing = SpatialFacing.Inward
+                },
+                Children =
+                [
+                    new ComponentNode { Id = "card1", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var docOutward = new HudDocument
+        {
+            Name = "Tunnel",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Spatial = new SpatialSpec
+                {
+                    Shape = SpatialShape.Cylinder,
+                    Radius = 2.0,
+                    AngularSpacingDeg = 45.0,
+                    Facing = SpatialFacing.Outward
+                },
+                Children =
+                [
+                    new ComponentNode { Id = "card1", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var resultInward = _generator.Generate(docInward, options);
+        var resultOutward = _generator.Generate(docOutward, options);
+
+        var tscnInward = resultInward.Files.First(f => f.Path == "TunnelView.tscn");
+        var tscnOutward = resultOutward.Files.First(f => f.Path == "TunnelView.tscn");
+
+        // Both should contain Transform3D with a non-identity basis.
+        tscnInward.Content.Should().Contain("Transform3D(");
+        tscnOutward.Content.Should().Contain("Transform3D(");
+        tscnInward.Content.Should().NotContain("Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1,");
+        tscnOutward.Content.Should().NotContain("Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1,");
+
+        // Inward and Outward basis vectors must differ.
+        // Extract the Transform3D string from each and compare.
+        var inwardTransform = ExtractTransform3D(tscnInward.Content);
+        var outwardTransform = ExtractTransform3D(tscnOutward.Content);
+        inwardTransform.Should().NotBeNullOrEmpty();
+        outwardTransform.Should().NotBeNullOrEmpty();
+        inwardTransform.Should().NotBe(outwardTransform,
+            "Inward and Outward facing must produce different Transform3D basis vectors.");
+    }
+
+    [Fact]
+    public void Generate_WithSpatialUnsupportedShape_FallsBackTo2DWithDiagnostic()
+    {
+        var options = _options with
+        {
+            EmitTscn = true,
+            EmitViewModelInterfaces = false,
+            OutputDirectory = CreateTempGodotProjectRoot()
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Tunnel",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Spatial = new SpatialSpec
+                {
+                    Shape = SpatialShape.Radial,
+                    Radius = 2.0
+                },
+                Children =
+                [
+                    new ComponentNode { Id = "card1", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d => d.Message.Contains("not supported") && d.Severity == DiagnosticSeverity.Warning);
+
+        var tscnFile = result.Files.First(f => f.Path == "TunnelView.tscn");
+        tscnFile.Content.Should().NotContain("Node3D");
+        tscnFile.Content.Should().NotContain("MeshInstance3D");
+    }
+
+    [Fact]
+    public void Generate_WithoutSpatial_Generates2DLayoutAsBefore()
+    {
+        var options = _options with
+        {
+            EmitTscn = true,
+            EmitViewModelInterfaces = false,
+            OutputDirectory = CreateTempGodotProjectRoot()
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Plain",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode { Id = "label1", Type = ComponentType.Label, Properties = new Dictionary<string, BindableValue<object?>> { ["text"] = "Hello" } }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().NotContain(d => d.Severity == DiagnosticSeverity.Error);
+
+        var tscnFile = result.Files.First(f => f.Path == "PlainView.tscn");
+        tscnFile.Content.Should().NotContain("Node3D");
+        tscnFile.Content.Should().NotContain("MeshInstance3D");
+        tscnFile.Content.Should().Contain("type=\"Control\"");
+        tscnFile.Content.Should().Contain("type=\"Label\"");
+
+        var csFile = result.Files.First(f => f.Path == "PlainView.cs");
+        csFile.Content.Should().NotContain("SetupSpatialFaces");
+        csFile.Content.Should().NotContain("ComputeCylinderTransform");
+    }
+
+    [Fact]
+    public void TerminalGuiGenerator_WithSpatial_FallsBackTo2DWithDiagnostic()
+    {
+        var generator = new TerminalGuiGenerator();
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        var doc = new HudDocument
+        {
+            Name = "Tunnel",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Spatial = new SpatialSpec
+                {
+                    Shape = SpatialShape.Cylinder,
+                    Radius = 2.0
+                },
+                Children =
+                [
+                    new ComponentNode { Id = "card1", Type = ComponentType.Label }
+                ]
+            }
+        };
+
+        var result = generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d => d.Message.Contains("Spatial layout is not supported") && d.Severity == DiagnosticSeverity.Warning);
+
+        var csFile = result.Files.First(f => f.Path == "TunnelView.g.cs");
+        csFile.Content.Should().NotContain("Node3D");
+        csFile.Content.Should().NotContain("MeshInstance3D");
+        csFile.Content.Should().NotContain("ComputeCylinderTransform");
+    }
+
+    private static string ExtractTransform3D(string tscnContent)
+    {
+        var m = Regex.Match(tscnContent, @"transform\s*=\s*Transform3D\([^)]+\)", RegexOptions.CultureInvariant);
+        return m.Success ? m.Value : string.Empty;
     }
 }
