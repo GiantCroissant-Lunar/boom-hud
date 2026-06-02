@@ -43,7 +43,8 @@ public sealed class AvaloniaCapabilities : ICapabilityManifest
         [Capabilities.MouseInput] = CapabilityLevel.Native,
         [Capabilities.KeyboardInput] = CapabilityLevel.Native,
         [Capabilities.TouchInput] = CapabilityLevel.Native,
-        [Capabilities.DragAndDrop] = CapabilityLevel.Native
+        [Capabilities.DragAndDrop] = CapabilityLevel.Native,
+        [Capabilities.Spatial3D] = CapabilityLevel.Unsupported
     };
 
     public CapabilityLevel GetCapabilityLevel(string feature)

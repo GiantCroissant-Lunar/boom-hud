@@ -46,7 +46,8 @@ public sealed class ReactCapabilities : ICapabilityManifest
         [Capabilities.MouseInput] = CapabilityLevel.Native,
         [Capabilities.KeyboardInput] = CapabilityLevel.Native,
         [Capabilities.TouchInput] = CapabilityLevel.Native,
-        [Capabilities.DragAndDrop] = CapabilityLevel.Limited
+        [Capabilities.DragAndDrop] = CapabilityLevel.Limited,
+        [Capabilities.Spatial3D] = CapabilityLevel.Native
     };
 
     public CapabilityLevel GetCapabilityLevel(string feature)

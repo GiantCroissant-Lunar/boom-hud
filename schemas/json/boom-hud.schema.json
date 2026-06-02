@@ -67,6 +67,9 @@
         "layout": {
           "$ref": "#/$defs/layoutSpec"
         },
+        "spatial": {
+          "$ref": "#/$defs/spatialSpec"
+        },
         "style": {
           "$ref": "#/$defs/styleSpec"
         },
@@ -400,6 +403,60 @@
         },
         "fallback": {
           "description": "Fallback value if binding fails"
+        }
+      }
+    },
+    "spatialSpec": {
+      "type": "object",
+      "description": "3D spatial arrangement of children",
+      "required": ["shape"],
+      "properties": {
+        "shape": {
+          "type": "string",
+          "enum": ["cylinder", "radial", "helix", "grid3D", "free"],
+          "description": "Shape of the 3D arrangement"
+        },
+        "facing": {
+          "type": "string",
+          "enum": ["inward", "outward", "camera"],
+          "default": "camera",
+          "description": "Direction each child face points"
+        },
+        "angleFrom": {
+          "$ref": "#/$defs/binding",
+          "description": "Binding expression yielding angle around the axis"
+        },
+        "depthFrom": {
+          "$ref": "#/$defs/binding",
+          "description": "Binding expression yielding position along the axis"
+        },
+        "radiusFrom": {
+          "$ref": "#/$defs/binding",
+          "description": "Binding expression yielding radial distance"
+        },
+        "lateralFrom": {
+          "$ref": "#/$defs/binding",
+          "description": "Binding expression yielding across-track offset"
+        },
+        "radius": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Base radius of the shape"
+        },
+        "angularSpacingDeg": {
+          "type": "number",
+          "default": 30.0,
+          "description": "Angular spacing between items in degrees"
+        },
+        "depthScale": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Scale factor applied to depth values"
+        },
+        "curvature": {
+          "type": "number",
+          "default": 0.0,
+          "description": "Curvature of the card face (0 = flat, 1 = fully curved)"
         }
       }
     },

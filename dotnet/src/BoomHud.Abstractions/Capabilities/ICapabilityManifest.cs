@@ -96,4 +96,8 @@ public static class Capabilities
     public const string KeyboardInput = "keyboardInput";
     public const string TouchInput = "touchInput";
     public const string DragAndDrop = "dragAndDrop";
+
+    // Spatial capabilities
+    public const string Spatial3D = "spatial3D";
+    public const string PerspectiveCamera = "perspectiveCamera";
 }

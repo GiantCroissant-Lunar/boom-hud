@@ -33,6 +33,11 @@ public sealed record ComponentNode
     public LayoutSpec? Layout { get; init; }
 
     /// <summary>
+    /// Optional spatial (3D) arrangement of this node's children. Null => standard 2D layout.
+    /// </summary>
+    public SpatialSpec? Spatial { get; init; }
+
+    /// <summary>
     /// Style specification for this component.
     /// </summary>
     public StyleSpec? Style { get; init; }

@@ -44,7 +44,8 @@ public sealed class TerminalGuiCapabilities : ICapabilityManifest
         [Capabilities.MouseInput] = CapabilityLevel.Native,
         [Capabilities.KeyboardInput] = CapabilityLevel.Native,
         [Capabilities.TouchInput] = CapabilityLevel.Unsupported,
-        [Capabilities.DragAndDrop] = CapabilityLevel.Unsupported
+        [Capabilities.DragAndDrop] = CapabilityLevel.Unsupported,
+        [Capabilities.Spatial3D] = CapabilityLevel.Unsupported
     };
 
     public CapabilityLevel GetCapabilityLevel(string feature)
