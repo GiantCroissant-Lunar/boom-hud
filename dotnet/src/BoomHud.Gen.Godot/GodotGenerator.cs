@@ -252,7 +252,7 @@ public sealed class GodotGenerator : IBackendGenerator
             sb.AppendLine("script = ExtResource(\"1_root_script\")");
         }
 
-        AppendCommonNodeProperties(sb, document.Root);
+        AppendCommonNodeProperties(sb, document.Root, parentLayoutType: null);
 
         // Inline children
         AppendChildNodesTscn(
@@ -305,7 +305,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 if (instanceId != null)
                 {
                     sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(parentPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
-                    AppendCommonNodeProperties(sb, child);
+                    AppendCommonNodeProperties(sb, child, parentNode.Layout?.Type);
                     continue;
                 }
             }
@@ -317,7 +317,7 @@ public sealed class GodotGenerator : IBackendGenerator
             }
 
             sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" type=\"" + EscapeString(childType) + "\" parent=\"" + EscapeString(parentPath) + "\"]");
-            AppendCommonNodeProperties(sb, child);
+            AppendCommonNodeProperties(sb, child, parentNode.Layout?.Type);
 
             var nextParentPath = parentPath == "." ? childNodeName : parentPath + "/" + childNodeName;
             AppendChildNodesTscn(sb, child, nextParentPath, nodeNames, components, extResources);
@@ -363,7 +363,7 @@ public sealed class GodotGenerator : IBackendGenerator
             {
                 sb.AppendLine();
                 sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(subViewportPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
-                AppendCommonNodeProperties(sb, child);
+                AppendCommonNodeProperties(sb, child, parentLayoutType: null);
             }
         }
         else
@@ -376,7 +376,7 @@ public sealed class GodotGenerator : IBackendGenerator
 
             sb.AppendLine();
             sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" type=\"" + EscapeString(childType) + "\" parent=\"" + EscapeString(subViewportPath) + "\"]");
-            AppendCommonNodeProperties(sb, child);
+            AppendCommonNodeProperties(sb, child, parentLayoutType: null);
 
             // Recurse into the 2D child (but not as spatial - nested spatial is out of scope)
             var nextParentPath = subViewportPath + "/" + childNodeName;
@@ -456,7 +456,7 @@ public sealed class GodotGenerator : IBackendGenerator
             $"{x.ToString(ci)}, {y.ToString(ci)}, {z.ToString(ci)})";
     }
 
-    private static void AppendCommonNodeProperties(StringBuilder sb, ComponentNode node)
+    private static void AppendCommonNodeProperties(StringBuilder sb, ComponentNode node, LayoutType? parentLayoutType)
     {
         if (!node.Visible.IsBound && node.Visible.Value is false)
         {
@@ -479,7 +479,83 @@ public sealed class GodotGenerator : IBackendGenerator
         }
 
         AppendAbsoluteLayoutProperties(sb, node.Layout);
+        AppendLayoutStyleTscn(sb, node, parentLayoutType);
     }
+
+    /// <summary>
+    /// Emits layout/style as native scene properties so the <c>.tscn</c> carries the
+    /// design's sizing and colors directly, instead of relying on the generated view's
+    /// <c>InitializeUiFromScene</c> to apply them at runtime. Mirrors
+    /// <see cref="GenerateLayoutSetup"/> / <see cref="GenerateStyleSetup"/> so a
+    /// script-less scene renders identically to a script-backed one.
+    /// </summary>
+    private static void AppendLayoutStyleTscn(StringBuilder sb, ComponentNode node, LayoutType? parentLayoutType)
+    {
+        var ci = System.Globalization.CultureInfo.InvariantCulture;
+        var layout = node.Layout;
+
+        if (layout != null)
+        {
+            // Custom minimum size from explicit pixel dimensions.
+            var widthPx = layout.Width is { Unit: DimensionUnit.Pixels } w ? (float?)w.Value : null;
+            var heightPx = layout.Height is { Unit: DimensionUnit.Pixels } h ? (float?)h.Value : null;
+            if (widthPx.HasValue || heightPx.HasValue)
+            {
+                sb.Append("custom_minimum_size = Vector2(")
+                    .Append((widthPx ?? 0f).ToString(ci)).Append(", ")
+                    .Append((heightPx ?? 0f).ToString(ci)).AppendLine(")");
+            }
+
+            // Size flags only matter for a child inside a flow container.
+            var insideContainer = parentLayoutType is not null
+                && parentLayoutType != LayoutType.Absolute
+                && parentLayoutType != LayoutType.Dock;
+            if (insideContainer)
+            {
+                sb.Append("size_flags_horizontal = ").AppendLine(HorizontalSizeFlagTscn(layout).ToString(ci));
+                sb.Append("size_flags_vertical = ").AppendLine(VerticalSizeFlagTscn(layout).ToString(ci));
+                if (layout.Weight.HasValue)
+                    sb.Append("size_flags_stretch_ratio = ").AppendLine(((float)layout.Weight.Value).ToString(ci));
+            }
+
+            // Gap -> container child separation (uses the primary-axis value, matching the
+            // runtime GenerateLayoutSetup behavior).
+            if (layout.Gap is { } gap)
+                sb.Append("theme_override_constants/separation = ").AppendLine(((int)gap.Top).ToString(ci));
+
+            // Padding -> MarginContainer-style overrides.
+            if (layout.Padding is { } pad)
+            {
+                sb.Append("theme_override_constants/margin_left = ").AppendLine(((int)pad.Left).ToString(ci));
+                sb.Append("theme_override_constants/margin_top = ").AppendLine(((int)pad.Top).ToString(ci));
+                sb.Append("theme_override_constants/margin_right = ").AppendLine(((int)pad.Right).ToString(ci));
+                sb.Append("theme_override_constants/margin_bottom = ").AppendLine(((int)pad.Bottom).ToString(ci));
+            }
+        }
+
+        if (node.Style?.Foreground is { } fg)
+        {
+            sb.Append("theme_override_colors/font_color = Color(")
+                .Append((fg.R / 255f).ToString(ci)).Append(", ")
+                .Append((fg.G / 255f).ToString(ci)).Append(", ")
+                .Append((fg.B / 255f).ToString(ci)).Append(", ")
+                .Append((fg.A / 255f).ToString(ci)).AppendLine(")");
+        }
+    }
+
+    // Godot Control.SizeFlags: ShrinkBegin=0, Fill=1, Expand=2, ExpandFill=3, ShrinkCenter=4, ShrinkEnd=8.
+    private static int HorizontalSizeFlagTscn(LayoutSpec layout)
+    {
+        if (layout.Width?.Unit is DimensionUnit.Fill or DimensionUnit.Star) return 3;
+        if (layout.Align == Alignment.Start || layout.Justify == Justification.Start) return 0;
+        if (layout.Align == Alignment.End || layout.Justify == Justification.End) return 8;
+        if (layout.Align == Alignment.Center || layout.Justify == Justification.Center) return 4;
+        if (layout.Align == Alignment.Stretch) return 1;
+        return 4;
+    }
+
+    private static int VerticalSizeFlagTscn(LayoutSpec layout)
+        => layout.Height?.Unit is DimensionUnit.Fill or DimensionUnit.Star ? 3 : 4;
 
     private static void AppendAbsoluteLayoutProperties(StringBuilder sb, LayoutSpec? layout)
     {

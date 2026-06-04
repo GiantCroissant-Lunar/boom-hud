@@ -441,6 +441,53 @@ public class GodotGeneratorTests
         tscnFile.Content.Should().Contain("script = ExtResource(\"1_root_script\")");
     }
 
+    [Fact]
+    public void Generate_WithTscn_EmitsLayoutAndStyleAsSceneProperties()
+    {
+        var options = _options with
+        {
+            EmitViewModelInterfaces = false,
+            EmitTscn = true,
+            EmitTscnAttachScript = false,
+            OutputDirectory = CreateTempGodotProjectRoot()
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec { Type = LayoutType.Vertical },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Type = ComponentType.Label,
+                        Id = "title",
+                        Layout = new LayoutSpec { Width = Dimension.Fill, Height = Dimension.Fill },
+                        Style = new StyleSpec { Foreground = new Color(244, 246, 248) }
+                    },
+                    new ComponentNode
+                    {
+                        Type = ComponentType.ScrollView,
+                        Id = "side",
+                        Layout = new LayoutSpec { Width = Dimension.Pixels(380), Gap = new Spacing(6) }
+                    }
+                ]
+            }
+        };
+
+        var tscn = _generator.Generate(doc, options).Files.First(f => f.Path == "RootView.tscn").Content;
+
+        // Layout/style is baked into the scene so a script-less .tscn renders like a script-backed one.
+        tscn.Should().Contain("size_flags_horizontal = 3");          // fill width -> ExpandFill
+        tscn.Should().Contain("size_flags_vertical = 3");            // fill height -> ExpandFill
+        tscn.Should().Contain("theme_override_colors/font_color = Color(");
+        tscn.Should().Contain("custom_minimum_size = Vector2(380");  // pixel width
+        tscn.Should().Contain("theme_override_constants/separation = 6");
+    }
+
     private static string CreateTempGodotProjectRoot()
     {
         var dir = global::System.IO.Path.Combine(
