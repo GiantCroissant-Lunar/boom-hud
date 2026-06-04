@@ -2,6 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using BoomHud.Abstractions.IR;
 using BoomHud.Abstractions.Snapshots;
+using BoomHud.Cli.Handlers.Pencil;
+using BoomHud.Gen.Pencil;
 using BoomHud.Generators.VisualIR;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -30,6 +32,10 @@ public sealed record ImageSimilarityOptions
 
     public FileInfo? MeasuredLayoutOutFile { get; init; }
 
+    public FileInfo? PencilSourceFile { get; init; }
+
+    public FileInfo? PatchedPenOutFile { get; init; }
+
     public string NormalizeMode { get; init; } = "off";
 
     public double? FailBelowOverallPercent { get; init; }
@@ -37,6 +43,8 @@ public sealed record ImageSimilarityOptions
     public int Tolerance { get; init; } = 8;
 
     public int VisualRefinementIterationBudget { get; init; } = 4;
+
+    public bool AutoApplyPencilPatch { get; init; }
 
     public bool PrintSummary { get; init; } = true;
 
@@ -406,6 +414,21 @@ public static class ImageSimilarityHandler
     private const string NormalizeStretch = "stretch";
     private const string NormalizeCover = "cover";
 
+    private sealed record VisualRefinementEmissionResult
+    {
+        public required string OutputPath { get; init; }
+
+        public required string BackendFamily { get; init; }
+
+        public required string DocumentName { get; init; }
+
+        public string? PencilPatchPlanPath { get; init; }
+
+        public string? PencilPatchScriptPath { get; init; }
+
+        public string? PencilBatchOpsPath { get; init; }
+    }
+
     public static int Execute(ImageSimilarityOptions options)
     {
         if (options.ReferenceFile == null)
@@ -438,6 +461,12 @@ public static class ImageSimilarityHandler
             return 1;
         }
 
+        if (options.PencilSourceFile != null && !options.PencilSourceFile.Exists)
+        {
+            Console.Error.WriteLine($"Error: Pencil source file not found: {options.PencilSourceFile.FullName}");
+            return 1;
+        }
+
         if (options.ActualLayoutFile != null && !options.ActualLayoutFile.Exists)
         {
             Console.Error.WriteLine($"Error: Actual layout snapshot not found: {options.ActualLayoutFile.FullName}");
@@ -454,6 +483,18 @@ public static class ImageSimilarityHandler
         if (options.FailBelowOverallPercent is < 0 or > 100)
         {
             Console.Error.WriteLine("Error: --fail-below must be between 0 and 100");
+            return 1;
+        }
+
+        if (options.AutoApplyPencilPatch && options.VisualIrFile == null)
+        {
+            Console.Error.WriteLine("Error: --auto-apply-pencil-patch requires --visual-ir.");
+            return 1;
+        }
+
+        if (options.AutoApplyPencilPatch && options.PencilSourceFile == null)
+        {
+            Console.Error.WriteLine("Error: --auto-apply-pencil-patch requires --pencil-source.");
             return 1;
         }
 
@@ -546,6 +587,7 @@ public static class ImageSimilarityHandler
                 File.WriteAllText(outputPath, report.ToJson());
 
                 MeasuredLayoutReport? measuredLayout = null;
+                VisualRefinementEmissionResult? visualRefinement = null;
                 if (options.VisualIrFile != null)
                 {
                     if (options.ActualLayoutFile != null)
@@ -553,12 +595,17 @@ public static class ImageSimilarityHandler
                         measuredLayout = EmitMeasuredLayoutArtifact(options.VisualIrFile, options.ActualLayoutFile, options.MeasuredLayoutOutFile);
                     }
 
-                    EmitVisualRefinementArtifact(
+                    visualRefinement = EmitVisualRefinementArtifact(
                         options.VisualIrFile,
                         options.VisualRefinementOutFile,
                         report,
                         options.VisualRefinementIterationBudget,
                         measuredLayout);
+                }
+
+                if (options.AutoApplyPencilPatch)
+                {
+                    AutoApplyPencilPatch(options, visualRefinement);
                 }
 
                 if (options.PrintSummary || options.Verbose)
@@ -1088,7 +1135,7 @@ public static class ImageSimilarityHandler
         }
     }
 
-    private static void EmitVisualRefinementArtifact(
+    private static VisualRefinementEmissionResult EmitVisualRefinementArtifact(
         FileInfo visualIrFile,
         FileInfo? requestedOutput,
         ImageSimilarityReport report,
@@ -1125,6 +1172,45 @@ public static class ImageSimilarityHandler
         }
 
         File.WriteAllText(outputPath, VisualRefinementPlanner.ToJson(summary));
+
+        string? patchPlanPath = null;
+        string? patchScriptPath = null;
+        string? batchOpsPath = null;
+
+        if (string.Equals(visualDocument.BackendFamily, "pencil", StringComparison.OrdinalIgnoreCase)
+            && PencilPatchPlanBuilder.Build(visualDocument, summary) is { } patchPlan)
+        {
+            patchPlanPath = ResolveDefaultPencilPatchPlanPath(outputPath, visualDocument);
+            File.WriteAllText(
+                patchPlanPath,
+                PencilPatchPlanBuilder.ToJson(patchPlan));
+
+            if (PencilPatchScriptBuilder.Build(patchPlan) is { } patchScript)
+            {
+                patchScriptPath = ResolveDefaultPencilPatchScriptPath(outputPath, visualDocument);
+                File.WriteAllText(
+                    patchScriptPath,
+                    patchScript);
+            }
+
+            if (PencilBatchOpsBuilder.Build(patchPlan) is { } batchOps)
+            {
+                batchOpsPath = ResolveDefaultPencilBatchOpsPath(outputPath, visualDocument);
+                File.WriteAllText(
+                    batchOpsPath,
+                    batchOps);
+            }
+        }
+
+        return new VisualRefinementEmissionResult
+        {
+            OutputPath = outputPath,
+            BackendFamily = visualDocument.BackendFamily,
+            DocumentName = visualDocument.DocumentName,
+            PencilPatchPlanPath = patchPlanPath,
+            PencilPatchScriptPath = patchScriptPath,
+            PencilBatchOpsPath = batchOpsPath
+        };
     }
 
     private static MeasuredLayoutReport EmitMeasuredLayoutArtifact(
@@ -1165,6 +1251,72 @@ public static class ImageSimilarityHandler
         => Path.Combine(
             actualLayoutFile.DirectoryName ?? Environment.CurrentDirectory,
             $"{visualDocument.DocumentName}.measured-layout.json");
+
+    private static string ResolveDefaultPencilPatchPlanPath(string refinementPath, VisualDocument visualDocument)
+        => Path.Combine(
+            Path.GetDirectoryName(refinementPath) ?? Environment.CurrentDirectory,
+            $"{visualDocument.DocumentName}.pen-patch-plan.json");
+
+    private static string ResolveDefaultPencilPatchScriptPath(string refinementPath, VisualDocument visualDocument)
+        => Path.Combine(
+            Path.GetDirectoryName(refinementPath) ?? Environment.CurrentDirectory,
+            $"{visualDocument.DocumentName}.pen-patch-script.txt");
+
+    private static string ResolveDefaultPencilBatchOpsPath(string refinementPath, VisualDocument visualDocument)
+        => Path.Combine(
+            Path.GetDirectoryName(refinementPath) ?? Environment.CurrentDirectory,
+            $"{visualDocument.DocumentName}.pen-batch-ops.txt");
+
+    private static void AutoApplyPencilPatch(ImageSimilarityOptions options, VisualRefinementEmissionResult? visualRefinement)
+    {
+        if (visualRefinement == null)
+        {
+            throw new InvalidOperationException("Visual refinement emission did not run, so there is no Pencil patch to apply.");
+        }
+
+        if (!string.Equals(visualRefinement.BackendFamily, "pencil", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"Auto-apply requires a Pencil Visual IR backend, but '{visualRefinement.DocumentName}' uses '{visualRefinement.BackendFamily}'.");
+        }
+
+        if (string.IsNullOrWhiteSpace(visualRefinement.PencilBatchOpsPath) || !File.Exists(visualRefinement.PencilBatchOpsPath))
+        {
+            if (options.PrintSummary || options.Verbose)
+            {
+                Console.WriteLine("Pencil auto-apply: no deterministic batch ops were emitted. No patched .pen file written.");
+            }
+
+            return;
+        }
+
+        var outputPath = options.PatchedPenOutFile?.FullName ?? ResolveDefaultPatchedPenOutput(options.PencilSourceFile!.FullName);
+        var exitCode = PenPatchApplyHandler.Execute(new PenPatchApplyOptions
+        {
+            PenFile = options.PencilSourceFile,
+            BatchOpsFile = new FileInfo(visualRefinement.PencilBatchOpsPath),
+            OutFile = new FileInfo(outputPath),
+            PrintSummary = false
+        });
+
+        if (exitCode != 0)
+        {
+            throw new InvalidOperationException($"Failed to auto-apply deterministic Pencil patch ops to '{options.PencilSourceFile!.FullName}'.");
+        }
+
+        if (options.PrintSummary || options.Verbose)
+        {
+            Console.WriteLine($"Pencil auto-apply: wrote patched pen to {outputPath}");
+        }
+    }
+
+    private static string ResolveDefaultPatchedPenOutput(string penFilePath)
+    {
+        var directory = Path.GetDirectoryName(penFilePath) ?? Environment.CurrentDirectory;
+        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(penFilePath);
+        var extension = Path.GetExtension(penFilePath);
+        return Path.Combine(directory, fileNameWithoutExtension + ".patched" + extension);
+    }
 
     internal static MeasuredLayoutReport BuildMeasuredLayoutReport(VisualDocument visualDocument, ActualLayoutSnapshot actualLayout)
     {

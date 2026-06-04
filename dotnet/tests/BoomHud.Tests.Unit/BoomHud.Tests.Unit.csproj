@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\src\BoomHud.Cli\BoomHud.Cli.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Dsl\BoomHud.Dsl.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Dsl.Pencil\BoomHud.Dsl.Pencil.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Gen.Pencil\BoomHud.Gen.Pencil.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Gen.React\BoomHud.Gen.React.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj" />
@@ -33,6 +34,7 @@
     <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
     <Compile Include="Generation\AvaloniaGeneratorTests.cs" />
     <Compile Include="Generation\GodotGeneratorTests.cs" />
+    <Compile Include="Generation\PencilGeneratorTests.cs" />
     <Compile Include="Generation\SyntheticComponentizationTests.cs" />
     <Compile Include="Generation\VisualDocumentBuilderTests.cs" />
     <Compile Include="Generation\VisualPlanningTests.cs" />

@@ -4,204 +4,204 @@
     {
       "type": "frame",
       "id": "TAC01",
+      "name": "TheAltersCrafting",
       "x": 0,
       "y": 0,
-      "name": "TheAltersCrafting",
       "width": 1920,
       "height": 1080,
-      "fill": "#15161A",
       "layout": "none",
+      "fill": "#1B1B1D",
       "children": [
-        { "type": "rectangle", "id": "TAC02", "name": "Backdrop", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#15161A" },
-        { "type": "rectangle", "id": "TAC03", "name": "DimWash", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#05060899" },
-        {
-          "type": "frame",
-          "id": "TAC04",
-          "x": 44,
-          "y": 28,
-          "name": "TopBar",
-          "width": 1832,
-          "height": 88,
-          "fill": "#15161A",
-          "gap": 22,
-          "children": [
-            { "type": "text", "id": "TAC05", "name": "SectionLabel", "fill": "#EEE7D8", "content": "MODULE FABRICATION", "fontFamily": "Press Start 2P", "fontSize": 18, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC06", "name": "TabOne", "fill": "#F5BE58", "content": "ASSEMBLY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC07", "name": "TabTwo", "fill": "#7D828D", "content": "RESEARCH", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC08", "name": "TabThree", "fill": "#7D828D", "content": "STORAGE", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC09", "name": "CrewCount", "fill": "#D6D7DB", "content": "CREW 11/16", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC10", "name": "EnergyText", "fill": "#C7F37A", "content": "ENERGY +35", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC11", "name": "TimeText", "fill": "#7FD7F7", "content": "06:20", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
-          ]
-        },
-        { "type": "rectangle", "id": "TAC12", "name": "TopDivider", "x": 44, "y": 126, "width": 1832, "height": 2, "fill": "#8A7149" },
-        {
-          "type": "frame",
-          "id": "TAC13",
-          "x": 44,
-          "y": 156,
-          "name": "RecipeColumn",
-          "width": 482,
-          "height": 860,
-          "fill": "#1C1E23",
-          "stroke": { "thickness": 2, "fill": "#746245" },
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 18,
-          "children": [
-            { "type": "text", "id": "TAC14", "name": "RecipeColumnLabel", "fill": "#F0E5D2", "content": "AVAILABLE PROJECTS", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
-            {
-              "type": "frame",
-              "id": "TAC15",
-              "name": "RecipeFilterRow",
-              "width": "fill_container",
-              "height": 42,
-              "fill": "#1C1E23",
-              "gap": 10,
-              "children": [
-                { "type": "frame", "id": "TAC16", "name": "FilterAll", "width": 138, "height": 42, "fill": "#F5BE58", "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC17", "name": "FilterAllText", "fill": "#1A1711", "content": "ALL", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC18", "name": "FilterHab", "width": 138, "height": 42, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC19", "name": "FilterHabText", "fill": "#C4C8D0", "content": "HAB", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC20", "name": "FilterOps", "width": 138, "height": 42, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC21", "name": "FilterOpsText", "fill": "#C4C8D0", "content": "OPS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" } ] }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "TAC22",
-              "name": "RecipeCards",
-              "width": "fill_container",
-              "height": 736,
-              "fill": "#1C1E23",
-              "layout": "vertical",
-              "gap": 10,
-              "children": [
-                { "type": "frame", "id": "TAC23", "name": "RecipeCard01", "width": "fill_container", "height": 110, "fill": "#F5BE58", "stroke": { "thickness": 2, "fill": "#F7D493" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC24", "name": "RecipeCard01Title", "fill": "#16130C", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC25", "name": "RecipeCard01Body", "fill": "#2A2419", "textGrowth": "fixed-width", "width": 420, "content": "UPGRADE THE CENTRAL AIR UNIT TO EXTEND EXTERNAL EXPEDITION WINDOWS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC26", "name": "RecipeCard02", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC27", "name": "RecipeCard02Title", "fill": "#F0E5D2", "content": "GREENHOUSE POD", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC28", "name": "RecipeCard02Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "PROVIDES FRESH FOOD AND A SMALL MORALE BONUS FOR THE WHOLE BASE.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC29", "name": "RecipeCard03", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC30", "name": "RecipeCard03Title", "fill": "#F0E5D2", "content": "WORKSHOP EXTENSION", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC31", "name": "RecipeCard03Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "ADDS AN EXTRA FABRICATION BAY FOR TOOLING AND SUIT MAINTENANCE.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC32", "name": "RecipeCard04", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC33", "name": "RecipeCard04Title", "fill": "#F0E5D2", "content": "RAPID REFINER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC34", "name": "RecipeCard04Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "SHORTENS ORGANIC MATTER PROCESSING BUT INCREASES POWER DRAW.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC35", "name": "RecipeCard05", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC36", "name": "RecipeCard05Title", "fill": "#F0E5D2", "content": "MEDBAY CABIN", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC37", "name": "RecipeCard05Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "INCREASES RECOVERY SPEED FOR EXHAUSTED ALTERS DURING STORM DAYS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC38", "name": "RecipeCard06", "width": "fill_container", "height": 110, "fill": "#2A2D34", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 8, "padding": 12, "children": [ { "type": "text", "id": "TAC39", "name": "RecipeCard06Title", "fill": "#F0E5D2", "content": "SCOUT VEHICLE BAY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC40", "name": "RecipeCard06Body", "fill": "#C0C5CE", "textGrowth": "fixed-width", "width": 420, "content": "ENABLES LONG RANGE GATHERING RUNS DURING LOW RADIATION PERIODS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TAC41",
-          "x": 558,
-          "y": 156,
-          "name": "AssemblyStage",
-          "width": 836,
-          "height": 860,
-          "fill": "#191B20",
-          "stroke": { "thickness": 2, "fill": "#746245" },
-          "layout": "vertical",
-          "gap": 16,
-          "padding": 18,
-          "children": [
-            {
-              "type": "frame",
-              "id": "TAC42",
-              "name": "AssemblyHeader",
-              "width": "fill_container",
-              "height": 56,
-              "fill": "#191B20",
-              "gap": 16,
-              "children": [
-                { "type": "text", "id": "TAC43", "name": "AssemblyHeaderText", "fill": "#EEE7D8", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 14, "fontWeight": "normal" },
-                { "type": "text", "id": "TAC44", "name": "AssemblyEta", "fill": "#93D8F8", "content": "ETA 08H 40M", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" },
-                { "type": "text", "id": "TAC45", "name": "AssemblyCrew", "fill": "#C7F37A", "content": "2 ALTERS REQUIRED", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "TAC46",
-              "name": "BlueprintView",
-              "width": "fill_container",
-              "height": 372,
-              "fill": "#121419",
-              "stroke": { "thickness": 2, "fill": "#4E5563" },
-              "layout": "none",
-              "children": [
-                { "type": "rectangle", "id": "TAC47", "name": "BlueprintGrid", "x": 24, "y": 24, "width": 760, "height": 324, "fill": "#181B21" },
-                { "type": "rectangle", "id": "TAC48", "name": "ModuleBody", "x": 230, "y": 90, "width": 320, "height": 148, "fill": "#C9C1AF" },
-                { "type": "rectangle", "id": "TAC49", "name": "ModuleTop", "x": 272, "y": 58, "width": 236, "height": 38, "fill": "#A29A88" },
-                { "type": "rectangle", "id": "TAC50", "name": "ModuleFoot", "x": 250, "y": 246, "width": 280, "height": 32, "fill": "#7A7367" },
-                { "type": "rectangle", "id": "TAC51", "name": "ModulePipeLeft", "x": 168, "y": 124, "width": 80, "height": 24, "fill": "#7E7F84" },
-                { "type": "rectangle", "id": "TAC52", "name": "ModulePipeRight", "x": 550, "y": 124, "width": 80, "height": 24, "fill": "#7E7F84" },
-                { "type": "rectangle", "id": "TAC53", "name": "SpecLineOne", "x": 80, "y": 94, "width": 110, "height": 2, "fill": "#7A7F8B" },
-                { "type": "rectangle", "id": "TAC54", "name": "SpecLineTwo", "x": 614, "y": 190, "width": 120, "height": 2, "fill": "#7A7F8B" },
-                { "type": "rectangle", "id": "TAC55", "name": "SpecLineThree", "x": 120, "y": 274, "width": 140, "height": 2, "fill": "#7A7F8B" }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "TAC56",
-              "name": "ResourceRequirements",
-              "width": "fill_container",
-              "height": 176,
-              "fill": "#191B20",
-              "gap": 10,
-              "children": [
-                { "type": "frame", "id": "TAC57", "name": "Requirement01", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC58", "name": "Requirement01Icon", "width": 56, "height": 56, "fill": "#B0B7C4" }, { "type": "text", "id": "TAC59", "name": "Requirement01Label", "fill": "#EEE7D8", "content": "METAL", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC60", "name": "Requirement01Amount", "fill": "#F5BE58", "content": "24 / 40", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC61", "name": "Requirement02", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC62", "name": "Requirement02Icon", "width": 56, "height": 56, "fill": "#8B9277" }, { "type": "text", "id": "TAC63", "name": "Requirement02Label", "fill": "#EEE7D8", "content": "ORGANICS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC64", "name": "Requirement02Amount", "fill": "#F5BE58", "content": "52 / 60", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC65", "name": "Requirement03", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC66", "name": "Requirement03Icon", "width": 56, "height": 56, "fill": "#D9B88F" }, { "type": "text", "id": "TAC67", "name": "Requirement03Label", "fill": "#EEE7D8", "content": "MINERALS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC68", "name": "Requirement03Amount", "fill": "#F5BE58", "content": "16 / 16", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC69", "name": "Requirement04", "width": 188, "height": 176, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC70", "name": "Requirement04Icon", "width": 56, "height": 56, "fill": "#7FC7D8" }, { "type": "text", "id": "TAC71", "name": "Requirement04Label", "fill": "#EEE7D8", "content": "ALLOYS", "fontFamily": "Press Start 2P", "fontSize": 9, "fontWeight": "normal" }, { "type": "text", "id": "TAC72", "name": "Requirement04Amount", "fill": "#F5BE58", "content": "08 / 18", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" } ] }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "TAC73",
-              "name": "BottomActionStrip",
-              "width": "fill_container",
-              "height": 200,
-              "fill": "#191B20",
-              "gap": 18,
-              "children": [
-                { "type": "frame", "id": "TAC74", "name": "QueueInfo", "width": 524, "height": 200, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 14, "children": [ { "type": "text", "id": "TAC75", "name": "QueueInfoTitle", "fill": "#EEE7D8", "content": "CURRENT QUEUE", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }, { "type": "text", "id": "TAC76", "name": "QueueInfoItemOne", "fill": "#C4C8D0", "content": "SOLAR SAIL PATCH", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC77", "name": "QueueInfoItemTwo", "fill": "#C4C8D0", "content": "OUTER HULL INSULATION", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC78", "name": "QueueInfoItemThree", "fill": "#C4C8D0", "content": "RADIATION FILTER", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC79", "name": "QueueInfoNote", "fill": "#94D5F5", "textGrowth": "fixed-width", "width": 490, "content": "AN AVAILABLE TECHNICIAN WILL START THE NEW JOB AS SOON AS MATERIALS ARE READY.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC80", "name": "PrimaryAction", "width": 240, "height": 200, "fill": "#F5BE58", "stroke": { "thickness": 2, "fill": "#F7D493" }, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "children": [ { "type": "text", "id": "TAC81", "name": "PrimaryActionText", "fill": "#18140C", "content": "QUEUE JOB", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" } ] }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TAC82",
-          "x": 1426,
-          "y": 156,
-          "name": "LogisticsColumn",
-          "width": 450,
-          "height": 860,
-          "fill": "#1C1E23",
-          "stroke": { "thickness": 2, "fill": "#746245" },
-          "layout": "vertical",
-          "gap": 14,
-          "padding": 18,
-          "children": [
-            { "type": "text", "id": "TAC83", "name": "LogisticsTitle", "fill": "#F0E5D2", "content": "RESOURCE BALANCE", "fontFamily": "Press Start 2P", "fontSize": 12, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC84", "name": "LogisticsBody", "fill": "#C4C8D0", "textGrowth": "fixed-width", "width": 410, "content": "THIS PROJECT PULLS INPUTS FROM BOTH MINING BAY A AND THE GREENHOUSE. EXPECT A SHORT DROP IN FOOD DURING THE BUILD WINDOW.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
-            { "type": "rectangle", "id": "TAC85", "name": "LogisticsDividerOne", "width": "fill_container", "height": 2, "fill": "#746245" },
-            { "type": "text", "id": "TAC86", "name": "WorkerAllocationTitle", "fill": "#EEE7D8", "content": "ALTER ASSIGNMENTS", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "frame", "id": "TAC87", "name": "WorkerRowOne", "width": "fill_container", "height": 86, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "gap": 12, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC88", "name": "WorkerPortraitOne", "width": 56, "height": 56, "fill": "#8A8F98" }, { "type": "frame", "id": "TAC89", "name": "WorkerInfoOne", "width": 320, "height": 56, "fill": "#24272E", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "TAC90", "name": "WorkerInfoOneName", "fill": "#F0E5D2", "content": "TECHNICIAN JAN", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC91", "name": "WorkerInfoOneMeta", "fill": "#94D5F5", "content": "EFFICIENCY 112%", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
-            { "type": "frame", "id": "TAC92", "name": "WorkerRowTwo", "width": "fill_container", "height": 86, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "gap": 12, "padding": 12, "children": [ { "type": "rectangle", "id": "TAC93", "name": "WorkerPortraitTwo", "width": 56, "height": 56, "fill": "#A3A9B0" }, { "type": "frame", "id": "TAC94", "name": "WorkerInfoTwo", "width": 320, "height": 56, "fill": "#24272E", "layout": "vertical", "gap": 6, "children": [ { "type": "text", "id": "TAC95", "name": "WorkerInfoTwoName", "fill": "#F0E5D2", "content": "ENGINEER LENA", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC96", "name": "WorkerInfoTwoMeta", "fill": "#94D5F5", "content": "EFFICIENCY 108%", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" } ] } ] },
-            { "type": "rectangle", "id": "TAC97", "name": "LogisticsDividerTwo", "width": "fill_container", "height": 2, "fill": "#746245" },
-            { "type": "text", "id": "TAC98", "name": "QueuePanelTitle", "fill": "#EEE7D8", "content": "PRODUCTION OUTLOOK", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
-            { "type": "text", "id": "TAC99", "name": "QueuePanelBody", "fill": "#C4C8D0", "textGrowth": "fixed-width", "width": 410, "content": "TOTAL EXPECTED OUTPUT THIS DAY: 2 FABRICATION JOBS, 1 RESEARCH STEP, 3 GATHERING RUNS.", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
-            {
-              "type": "frame",
-              "id": "TAC100",
-              "name": "BottomStatsRow",
-              "width": "fill_container",
-              "height": 180,
-              "fill": "#1C1E23",
-              "gap": 10,
-              "children": [
-                { "type": "frame", "id": "TAC101", "name": "BottomStatOne", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC102", "name": "BottomStatOneLabel", "fill": "#C4C8D0", "content": "FOOD", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC103", "name": "BottomStatOneValue", "fill": "#F5BE58", "content": "32", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC104", "name": "BottomStatTwo", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC105", "name": "BottomStatTwoLabel", "fill": "#C4C8D0", "content": "POWER", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC106", "name": "BottomStatTwoValue", "fill": "#C7F37A", "content": "+35", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] },
-                { "type": "frame", "id": "TAC107", "name": "BottomStatThree", "width": 130, "height": 180, "fill": "#24272E", "stroke": { "thickness": 2, "fill": "#746245" }, "layout": "vertical", "gap": 10, "padding": 12, "children": [ { "type": "text", "id": "TAC108", "name": "BottomStatThreeLabel", "fill": "#C4C8D0", "content": "MORALE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }, { "type": "text", "id": "TAC109", "name": "BottomStatThreeValue", "fill": "#94D5F5", "content": "+04", "fontFamily": "Press Start 2P", "fontSize": 16, "fontWeight": "normal" } ] }
-              ]
-            }
-          ]
-        }
+        { "type": "rectangle", "id": "TAC02", "name": "Backdrop", "x": 0, "y": 0, "width": 1920, "height": 1080, "fill": "#1B1B1D" },
+        { "type": "rectangle", "id": "TAC03", "name": "TopFade", "x": 0, "y": 0, "width": 1920, "height": 118, "fill": "#0505051A" },
+        { "type": "rectangle", "id": "TAC04", "name": "BottomFade", "x": 0, "y": 904, "width": 1920, "height": 176, "fill": "#05050518" },
+        { "type": "ellipse", "id": "TAC05", "name": "GlowLeft", "x": 78, "y": 300, "width": 96, "height": 392, "fill": "#C7CBD608" },
+        { "type": "ellipse", "id": "TAC06", "name": "GlowCenter", "x": 886, "y": 352, "width": 148, "height": 148, "fill": "#D7D9DE03" },
+        { "type": "ellipse", "id": "TAC07", "name": "GlowRight", "x": 1620, "y": 282, "width": 78, "height": 272, "fill": "#C7CBD604" },
+
+        { "type": "rectangle", "id": "TAC08", "name": "KeycapQ", "x": 472, "y": 20, "width": 22, "height": 22, "fill": "#FFFFFF", "cornerRadius": 2 },
+        { "type": "text", "id": "TAC09", "name": "KeycapQText", "x": 478, "y": 27, "fill": "#111111", "content": "Q", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC10", "name": "NavBaseOverview", "x": 516, "y": 23, "fill": "#DDDDDD", "content": "BASE OVERVIEW", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC11", "name": "NavAssignments", "x": 676, "y": 23, "fill": "#BEBEBE", "content": "ASSIGNMENTS", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "frame", "id": "TAC12", "name": "ProductionPill", "x": 825, "y": 10, "width": 160, "height": 46, "layout": "none", "fill": "#090909", "cornerRadius": 6, "children": [
+          { "type": "ellipse", "id": "TAC13", "name": "ProductionDot", "x": 21, "y": 17, "width": 10, "height": 10, "fill": "#EA1C83" },
+          { "type": "text", "id": "TAC14", "name": "ProductionText", "x": 42, "y": 19, "fill": "#FFFFFF", "content": "PRODUCTION", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" }
+        ] },
+        { "type": "text", "id": "TAC15", "name": "NavAlters", "x": 1036, "y": 23, "fill": "#BEBEBE", "content": "ALTERS", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC16", "name": "NavStorage", "x": 1158, "y": 23, "fill": "#BEBEBE", "content": "STORAGE", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC17", "name": "NavTasks", "x": 1290, "y": 23, "fill": "#BEBEBE", "content": "TASKS", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "ellipse", "id": "TAC18", "name": "ManualDot", "x": 1422, "y": 20, "width": 10, "height": 10, "fill": "#EA1C83" },
+        { "type": "text", "id": "TAC19", "name": "NavManual", "x": 1440, "y": 23, "fill": "#BEBEBE", "content": "MANUAL", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "rectangle", "id": "TAC20", "name": "KeycapE", "x": 1596, "y": 20, "width": 22, "height": 22, "fill": "#FFFFFF", "cornerRadius": 2 },
+        { "type": "text", "id": "TAC21", "name": "KeycapEText", "x": 1602, "y": 27, "fill": "#111111", "content": "E", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+
+        { "type": "rectangle", "id": "TAC22", "name": "HotkeyA", "x": 730, "y": 82, "width": 22, "height": 22, "fill": "#FFFFFF", "cornerRadius": 2 },
+        { "type": "text", "id": "TAC23", "name": "HotkeyAText", "x": 736, "y": 89, "fill": "#111111", "content": "A", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+        { "type": "frame", "id": "TAC24", "name": "WorkshopPill", "x": 764, "y": 74, "width": 142, "height": 34, "layout": "none", "fill": "#090909", "cornerRadius": 4, "children": [
+          { "type": "ellipse", "id": "TAC25", "name": "WorkshopDot", "x": 18, "y": 12, "width": 10, "height": 10, "fill": "#EA1C83" },
+          { "type": "text", "id": "TAC26", "name": "WorkshopText", "x": 40, "y": 13, "fill": "#FFFFFF", "content": "WORKSHOP", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+        { "type": "ellipse", "id": "TAC27", "name": "KitchenDot", "x": 938, "y": 86, "width": 10, "height": 10, "fill": "#EA1C83" },
+        { "type": "text", "id": "TAC28", "name": "KitchenText", "x": 958, "y": 89, "fill": "#7F7F7F", "content": "KITCHEN", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+        { "type": "rectangle", "id": "TAC29", "name": "HotkeyD", "x": 1048, "y": 82, "width": 22, "height": 22, "fill": "#FFFFFF", "cornerRadius": 2 },
+        { "type": "text", "id": "TAC30", "name": "HotkeyDText", "x": 1054, "y": 89, "fill": "#111111", "content": "D", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+
+        { "type": "text", "id": "TAC31", "name": "LeftTitle", "x": 184, "y": 129, "fill": "#F1F1F1", "content": "AVAILABLE ITEMS", "fontFamily": "Press Start 2P", "fontSize": 24, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC32", "name": "LeftUnderline", "x": 186, "y": 169, "fill": "#F1F1F1", "content": "=================", "fontFamily": "Press Start 2P", "fontSize": 7, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC33", "name": "QueueTitle", "x": 1514, "y": 129, "fill": "#F1F1F1", "content": "QUEUE", "fontFamily": "Press Start 2P", "fontSize": 24, "fontWeight": "normal" },
+        { "type": "text", "id": "TAC34", "name": "QueueUnderline", "x": 1518, "y": 169, "fill": "#F1F1F1", "content": "========", "fontFamily": "Press Start 2P", "fontSize": 7, "fontWeight": "normal" },
+
+        { "type": "text", "id": "TAC35", "name": "CategoryExploration", "x": 56, "y": 204, "fill": "#CFCFCF", "content": "EXPLORATION", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "rectangle", "id": "TAC36", "name": "CategoryExplorationDash", "x": 155, "y": 213, "width": 14, "height": 4, "fill": "#EA1C83" },
+        { "type": "text", "id": "TAC37", "name": "CategoryBase", "x": 114, "y": 484, "fill": "#CFCFCF", "content": "BASE", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "rectangle", "id": "TAC38", "name": "CategoryBaseDash", "x": 155, "y": 493, "width": 14, "height": 4, "fill": "#EA1C83" },
+        { "type": "text", "id": "TAC39", "name": "CategoryGear", "x": 94, "y": 762, "fill": "#CFCFCF", "content": "GEAR", "fontFamily": "Press Start 2P", "fontSize": 11, "fontWeight": "normal" },
+        { "type": "rectangle", "id": "TAC40", "name": "CategoryGearDash", "x": 155, "y": 771, "width": 14, "height": 4, "fill": "#EA1C83" },
+
+        { "type": "frame", "id": "TAC41", "name": "CardMiningOutpost", "x": 176, "y": 187, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC42", "name": "CardMiningTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "MINING\nOUTPOST", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "rectangle", "id": "TAC43", "name": "MiningBody", "x": 73, "y": 86, "width": 14, "height": 74, "fill": "#535558" },
+          { "type": "rectangle", "id": "TAC44", "name": "MiningArmLeft", "x": 58, "y": 111, "width": 26, "height": 6, "fill": "#535558" },
+          { "type": "rectangle", "id": "TAC45", "name": "MiningArmRight", "x": 81, "y": 100, "width": 28, "height": 6, "fill": "#535558" },
+          { "type": "ellipse", "id": "TAC46", "name": "MiningWheel", "x": 110, "y": 168, "width": 34, "height": 34, "fill": "#9D9EA1" },
+          { "type": "rectangle", "id": "TAC47", "name": "MiningCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC48", "name": "MiningCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "30", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC49", "name": "MiningCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC50", "name": "MiningCountText", "x": 128, "y": 185, "fill": "#232323", "content": "0", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC51", "name": "CardPylon", "x": 351, "y": 187, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC52", "name": "CardPylonTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "PYLON\nCOMPONENT\nPACKAGE X3", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.08 },
+          { "type": "ellipse", "id": "TAC53", "name": "PylonGearRing", "x": 82, "y": 104, "width": 34, "height": 34, "fill": "#5C5E62" },
+          { "type": "rectangle", "id": "TAC54", "name": "PylonGearCut", "x": 94, "y": 116, "width": 10, "height": 10, "fill": "#212225" },
+          { "type": "rectangle", "id": "TAC55", "name": "PylonSpokeVertical", "x": 98, "y": 97, "width": 2, "height": 48, "fill": "#5C5E62" },
+          { "type": "rectangle", "id": "TAC56", "name": "PylonSpokeHorizontal", "x": 75, "y": 120, "width": 48, "height": 2, "fill": "#5C5E62" },
+          { "type": "rectangle", "id": "TAC57", "name": "PylonCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC58", "name": "PylonCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "30", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC59", "name": "PylonCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC60", "name": "PylonCountText", "x": 126, "y": 185, "fill": "#232323", "content": "4", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC61", "name": "CardSuitBattery", "x": 526, "y": 187, "width": 165, "height": 240, "layout": "none", "fill": "#040404", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC62", "name": "CardSuitTitle", "x": 14, "y": 16, "fill": "#F5F5F5", "content": "SUIT\nBATTERY", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "ellipse", "id": "TAC63", "name": "BatteryAlertDot", "x": 134, "y": 11, "width": 20, "height": 20, "fill": "#EA1C83" },
+          { "type": "text", "id": "TAC64", "name": "BatteryAlertText", "x": 141, "y": 18, "fill": "#1A1A1A", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "rectangle", "id": "TAC65", "name": "BatteryOuter", "x": 72, "y": 72, "width": 58, "height": 88, "fill": "#00000000", "stroke": { "thickness": 3, "fill": "#EDEDED" }, "cornerRadius": 6 },
+          { "type": "rectangle", "id": "TAC66", "name": "BatteryCap", "x": 88, "y": 58, "width": 24, "height": 12, "fill": "#00000000", "stroke": { "thickness": 3, "fill": "#EDEDED" }, "cornerRadius": 3 },
+          { "type": "path", "id": "TAC67", "name": "BatteryBolt", "x": 92, "y": 91, "width": 18, "height": 34, "fill": "#EDEDED", "geometry": "M10 0 2 15h6L0 34l18-20h-7L18 0z" },
+          { "type": "rectangle", "id": "TAC68", "name": "BatteryCostDrop", "x": 12, "y": 206, "width": 18, "height": 22, "fill": "#8A867C", "cornerRadius": 9 },
+          { "type": "text", "id": "TAC69", "name": "BatteryCostText", "x": 39, "y": 210, "fill": "#F1F1F1", "content": "40", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC70", "name": "BatteryCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#BFC0C3" },
+          { "type": "text", "id": "TAC71", "name": "BatteryCountText", "x": 128, "y": 185, "fill": "#232323", "content": "0", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC72", "name": "CardRepairKit", "x": 176, "y": 437, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC73", "name": "CardRepairTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "REPAIR\nKIT", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "rectangle", "id": "TAC74", "name": "RepairCase", "x": 40, "y": 110, "width": 84, "height": 42, "fill": "#00000000", "stroke": { "thickness": 3, "fill": "#585A5E" }, "cornerRadius": 4 },
+          { "type": "rectangle", "id": "TAC75", "name": "RepairHandle", "x": 66, "y": 98, "width": 30, "height": 8, "fill": "#00000000", "stroke": { "thickness": 3, "fill": "#585A5E" }, "cornerRadius": 4 },
+          { "type": "path", "id": "TAC76", "name": "RepairWrench", "x": 78, "y": 118, "width": 26, "height": 20, "fill": "#585A5E", "geometry": "M19 0c-3 0-5 2-5 5 0 1 0 2 1 3L9 14c-1-1-2-1-3-1-3 0-5 2-5 5s2 5 5 5 5-2 5-5c0-1 0-2-1-3l6-6c1 1 2 1 3 1 3 0 5-2 5-5 0-2-2-5-5-5z" },
+          { "type": "rectangle", "id": "TAC77", "name": "RepairCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC78", "name": "RepairCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "10", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC79", "name": "RepairCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC80", "name": "RepairCountText", "x": 128, "y": 185, "fill": "#232323", "content": "0", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC81", "name": "CardRadiationFilter", "x": 351, "y": 437, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC82", "name": "CardRadiationTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "RADIATION\nFILTER", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "rectangle", "id": "TAC83", "name": "FilterBody", "x": 78, "y": 86, "width": 34, "height": 112, "fill": "#6B6C70" },
+          { "type": "rectangle", "id": "TAC84", "name": "FilterCapTop", "x": 70, "y": 78, "width": 50, "height": 10, "fill": "#55575B" },
+          { "type": "rectangle", "id": "TAC85", "name": "FilterCapBottom", "x": 70, "y": 198, "width": 50, "height": 10, "fill": "#55575B" },
+          { "type": "rectangle", "id": "TAC86", "name": "FilterCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC87", "name": "FilterCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "10", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC88", "name": "FilterDropIcon", "x": 66, "y": 204, "width": 18, "height": 22, "fill": "#8A867C", "cornerRadius": 9 },
+          { "type": "text", "id": "TAC89", "name": "FilterDropText", "x": 90, "y": 210, "fill": "#8A867C", "content": "40", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC90", "name": "FilterCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC91", "name": "FilterCountText", "x": 128, "y": 185, "fill": "#232323", "content": "1", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC92", "name": "BlankSlotOne", "x": 526, "y": 437, "width": 165, "height": 240, "layout": "none", "fill": "#1D1E2024", "cornerRadius": 8 },
+
+        { "type": "frame", "id": "TAC93", "name": "CardClimbingHook", "x": 176, "y": 687, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC94", "name": "CardHookTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "CLIMBING\nHOOK", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "ellipse", "id": "TAC95", "name": "HookAlertDot", "x": 134, "y": 11, "width": 20, "height": 20, "fill": "#EA1C83" },
+          { "type": "text", "id": "TAC96", "name": "HookAlertText", "x": 141, "y": 18, "fill": "#1A1A1A", "content": "!", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "path", "id": "TAC97", "name": "HookShape", "x": 40, "y": 103, "width": 88, "height": 70, "fill": "#585A5E", "geometry": "M44 0 88 22 72 30 46 18v46H40V18L14 30 0 22z" },
+          { "type": "rectangle", "id": "TAC98", "name": "HookStem", "x": 79, "y": 158, "width": 8, "height": 34, "fill": "#585A5E" },
+          { "type": "rectangle", "id": "TAC99", "name": "HookCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC100", "name": "HookCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "60", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC101", "name": "HookDropIcon", "x": 68, "y": 204, "width": 18, "height": 22, "fill": "#8A867C", "cornerRadius": 9 },
+          { "type": "text", "id": "TAC102", "name": "HookDropText", "x": 92, "y": 210, "fill": "#8A867C", "content": "120", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC103", "name": "HookCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC104", "name": "HookCountText", "x": 128, "y": 185, "fill": "#232323", "content": "0", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC105", "name": "CardVertaraDrill", "x": 351, "y": 687, "width": 165, "height": 240, "layout": "none", "fill": "#212225D8", "cornerRadius": 8, "children": [
+          { "type": "text", "id": "TAC106", "name": "CardDrillTitle", "x": 14, "y": 16, "fill": "#7F7F7F", "content": "VERTARA\n- DRILL", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal", "lineHeight": 1.1 },
+          { "type": "ellipse", "id": "TAC107", "name": "DrillRingOuter", "x": 56, "y": 104, "width": 54, "height": 54, "fill": "#00000000", "stroke": { "thickness": 3, "fill": "#56585C" } },
+          { "type": "path", "id": "TAC108", "name": "DrillSpokes", "x": 63, "y": 111, "width": 40, "height": 40, "fill": "#56585C", "geometry": "M19 0h2v14l10-10 1 1-10 10h14v2H22l10 10-1 1-10-10v14h-2V18L9 28l-1-1 10-10H4v-2h14L8 5l1-1 10 10z" },
+          { "type": "rectangle", "id": "TAC109", "name": "DrillCostIcon", "x": 12, "y": 206, "width": 22, "height": 18, "fill": "#8B856F", "cornerRadius": 3 },
+          { "type": "text", "id": "TAC110", "name": "DrillCostText", "x": 42, "y": 210, "fill": "#9B9171", "content": "50", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC111", "name": "DrillDropIcon", "x": 68, "y": 204, "width": 18, "height": 22, "fill": "#8A867C", "cornerRadius": 9 },
+          { "type": "text", "id": "TAC112", "name": "DrillDropText", "x": 92, "y": 210, "fill": "#8A867C", "content": "20", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "ellipse", "id": "TAC113", "name": "DrillCountBadge", "x": 119, "y": 176, "width": 30, "height": 30, "fill": "#9D9EA1" },
+          { "type": "text", "id": "TAC114", "name": "DrillCountText", "x": 128, "y": 185, "fill": "#232323", "content": "0", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" }
+        ] },
+
+        { "type": "frame", "id": "TAC115", "name": "BlankSlotTwo", "x": 526, "y": 687, "width": 165, "height": 240, "layout": "none", "fill": "#1D1E2024", "cornerRadius": 8 },
+
+        { "type": "frame", "id": "TAC116", "name": "ReticleZone", "x": 735, "y": 182, "width": 420, "height": 720, "layout": "none", "fill": "#00000000", "children": [
+          { "type": "rectangle", "id": "TAC117", "name": "BracketTopLeftH", "x": 0, "y": 0, "width": 48, "height": 3, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC118", "name": "BracketTopLeftV", "x": 0, "y": 0, "width": 3, "height": 48, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC119", "name": "BracketTopRightH", "x": 372, "y": 0, "width": 48, "height": 3, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC120", "name": "BracketTopRightV", "x": 417, "y": 0, "width": 3, "height": 48, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC121", "name": "BracketBottomLeftH", "x": 0, "y": 668, "width": 48, "height": 3, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC122", "name": "BracketBottomLeftV", "x": 0, "y": 623, "width": 3, "height": 48, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC123", "name": "BracketBottomRightH", "x": 372, "y": 668, "width": 48, "height": 3, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC124", "name": "BracketBottomRightV", "x": 417, "y": 623, "width": 3, "height": 48, "fill": "#9A9A9C" },
+          { "type": "rectangle", "id": "TAC125", "name": "BracketTopLeftInner", "x": 34, "y": 34, "width": 18, "height": 18, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC126", "name": "BracketTopRightInner", "x": 368, "y": 34, "width": 18, "height": 18, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC127", "name": "BracketBottomLeftInner", "x": 34, "y": 630, "width": 18, "height": 18, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC128", "name": "BracketBottomRightInner", "x": 368, "y": 630, "width": 18, "height": 18, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC129", "name": "MarkerUpperLeft", "x": 120, "y": 165, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "ellipse", "id": "TAC130", "name": "MarkerUpperCenter", "x": 209, "y": 162, "width": 18, "height": 18, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC131", "name": "MarkerUpperRight", "x": 316, "y": 165, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC132", "name": "MarkerMiddleLeft", "x": 120, "y": 392, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "path", "id": "TAC133", "name": "MarkerMiddleCenter", "x": 206, "y": 393, "width": 24, "height": 13, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90", "align": "center" }, "geometry": "M0 0C4 7 20 7 24 0" },
+          { "type": "rectangle", "id": "TAC134", "name": "MarkerMiddleRight", "x": 316, "y": 392, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "rectangle", "id": "TAC135", "name": "MarkerLowerLeft", "x": 120, "y": 604, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } },
+          { "type": "path", "id": "TAC136", "name": "MarkerLowerCenter", "x": 206, "y": 605, "width": 24, "height": 13, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90", "align": "center" }, "geometry": "M0 0C4 7 20 7 24 0" },
+          { "type": "rectangle", "id": "TAC137", "name": "MarkerLowerRight", "x": 316, "y": 604, "width": 12, "height": 12, "fill": "#00000000", "stroke": { "thickness": 2, "fill": "#8E8E90" } }
+        ] },
+
+        { "type": "rectangle", "id": "TAC138", "name": "QueueBar01", "x": 1162, "y": 190, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC139", "name": "QueueBar02", "x": 1162, "y": 258, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC140", "name": "QueueBar03", "x": 1162, "y": 326, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC141", "name": "QueueBar04", "x": 1162, "y": 394, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC142", "name": "QueueBar05", "x": 1162, "y": 462, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC143", "name": "QueueBar06", "x": 1162, "y": 530, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC144", "name": "QueueBar07", "x": 1162, "y": 598, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC145", "name": "QueueBar08", "x": 1162, "y": 666, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC146", "name": "QueueBar09", "x": 1162, "y": 734, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+        { "type": "rectangle", "id": "TAC162", "name": "QueueBar10", "x": 1162, "y": 802, "width": 452, "height": 50, "fill": "#2324278C", "cornerRadius": 5 },
+
+        { "type": "frame", "id": "TAC147", "name": "BottomStatusBar", "x": 486, "y": 1008, "width": 774, "height": 56, "layout": "horizontal", "gap": 20, "padding": 18, "fill": "#141517C8", "cornerRadius": 6, "children": [
+          { "type": "text", "id": "TAC148", "name": "StatusMetals", "fill": "#D3D3D3", "content": "006  METALS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC149", "name": "StatusRapidium", "fill": "#D3D3D3", "content": "030  RAPIDIUM", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC150", "name": "StatusMinerals", "fill": "#D3D3D3", "content": "000  MINERALS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC151", "name": "StatusEnriched", "fill": "#D3D3D3", "content": "000  ENRICHED", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC152", "name": "StatusRawFood", "fill": "#D3D3D3", "content": "000  RAW FOOD", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC153", "name": "StatusMush", "fill": "#D3D3D3", "content": "023  MUSH", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC154", "name": "StatusCooked", "fill": "#D3D3D3", "content": "000  COOKED", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC155", "name": "StatusStorage", "fill": "#D3D3D3", "content": "210.00/480.00  STORAGE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+        ] },
+        { "type": "frame", "id": "TAC156", "name": "BottomOrganicBar", "x": 1332, "y": 1008, "width": 160, "height": 56, "layout": "vertical", "justifyContent": "center", "alignItems": "center", "fill": "#141517C8", "cornerRadius": 6, "children": [
+          { "type": "text", "id": "TAC157", "name": "OrganicText", "fill": "#D3D3D3", "content": "300/300", "fontFamily": "Press Start 2P", "fontSize": 10, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC158", "name": "OrganicLabel", "fill": "#A7A7A7", "content": "ORGANICS", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+        ] },
+        { "type": "frame", "id": "TAC159", "name": "CloseButton", "x": 1756, "y": 1008, "width": 110, "height": 48, "layout": "horizontal", "gap": 12, "padding": 12, "fill": "#121315D0", "stroke": { "thickness": 2, "fill": "#7B7B7E" }, "cornerRadius": 4, "children": [
+          { "type": "text", "id": "TAC160", "name": "CloseKey", "fill": "#FFFFFF", "content": "ESC", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" },
+          { "type": "text", "id": "TAC161", "name": "CloseLabel", "fill": "#D8D8D8", "content": "CLOSE", "fontFamily": "Press Start 2P", "fontSize": 8, "fontWeight": "normal" }
+        ] }
       ]
     }
   ]

@@ -37,6 +37,9 @@ public static class BaselineScoreCommand
         diffOption.AddAlias("-d");
         var visualIrOption = new Option<FileInfo?>("--visual-ir", "Optional Visual IR artifact to convert the recursive score tree into a visual refinement plan");
         var visualRefinementOutOption = new Option<FileInfo?>("--visual-refinement-out", "Optional output path for the generated visual refinement artifact");
+        var pencilSourceOption = new Option<FileInfo?>("--pencil-source", "Optional source .pen file used when auto-applying deterministic Pencil refinement patches");
+        var autoApplyPencilPatchOption = new Option<bool>("--auto-apply-pencil-patch", () => false, "Automatically apply emitted deterministic Pencil patch ops to --pencil-source");
+        var patchedPenOutOption = new Option<FileInfo?>("--patched-pen-out", "Optional output path for the auto-applied patched .pen file");
         var actualLayoutOption = new Option<FileInfo?>("--actual-layout", "Optional Unity actual-layout snapshot emitted beside the candidate image");
         var measuredLayoutOutOption = new Option<FileInfo?>("--measured-layout-out", "Optional output path for the measured expected-vs-actual layout report");
 
@@ -53,6 +56,9 @@ public static class BaselineScoreCommand
         command.AddOption(diffOption);
         command.AddOption(visualIrOption);
         command.AddOption(visualRefinementOutOption);
+        command.AddOption(pencilSourceOption);
+        command.AddOption(autoApplyPencilPatchOption);
+        command.AddOption(patchedPenOutOption);
         command.AddOption(actualLayoutOption);
         command.AddOption(measuredLayoutOutOption);
         command.AddOption(normalizeOption);
@@ -72,12 +78,15 @@ public static class BaselineScoreCommand
                 DiffFile = context.ParseResult.GetValueForOption(diffOption),
                 VisualIrFile = context.ParseResult.GetValueForOption(visualIrOption),
                 VisualRefinementOutFile = context.ParseResult.GetValueForOption(visualRefinementOutOption),
+                PencilSourceFile = context.ParseResult.GetValueForOption(pencilSourceOption),
+                PatchedPenOutFile = context.ParseResult.GetValueForOption(patchedPenOutOption),
                 ActualLayoutFile = context.ParseResult.GetValueForOption(actualLayoutOption),
                 MeasuredLayoutOutFile = context.ParseResult.GetValueForOption(measuredLayoutOutOption),
                 NormalizeMode = context.ParseResult.GetValueForOption(normalizeOption) ?? "off",
                 FailBelowOverallPercent = context.ParseResult.GetValueForOption(failBelowOption),
                 Tolerance = context.ParseResult.GetValueForOption(toleranceOption),
                 VisualRefinementIterationBudget = context.ParseResult.GetValueForOption(visualRefinementBudgetOption),
+                AutoApplyPencilPatch = context.ParseResult.GetValueForOption(autoApplyPencilPatchOption),
                 PrintSummary = context.ParseResult.GetValueForOption(summaryOption),
                 Verbose = context.ParseResult.GetValueForOption(verboseOption)
             };

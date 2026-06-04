@@ -1,6 +1,7 @@
 using BoomHud.Abstractions.Generation;
 using BoomHud.Gen.Avalonia;
 using BoomHud.Gen.Godot;
+using BoomHud.Gen.Pencil;
 using BoomHud.Gen.React;
 using BoomHud.Gen.Remotion;
 using BoomHud.Gen.TerminalGui;
@@ -31,6 +32,10 @@ internal static class BackendCatalog
             CanonicalName: "React",
             Aliases: ["react", "reactjs"],
             CreateGenerator: static () => new ReactGenerator()),
+        new(
+            CanonicalName: "Pencil",
+            Aliases: ["pencil", "pen"],
+            CreateGenerator: static () => new PencilGenerator()),
         new(
             CanonicalName: "Remotion",
             Aliases: ["remotion"],

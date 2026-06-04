@@ -2,6 +2,7 @@ using System.Text.Json;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
 using BoomHud.Cli.Handlers.Baseline;
+using BoomHud.Gen.Pencil;
 using BoomHud.Generators;
 using BoomHud.Generators.VisualIR;
 using FluentAssertions;
@@ -424,6 +425,228 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         refinement.ScoreTree!.Level.Should().Be("screen/frame");
         refinement.Actions.Should().NotBeEmpty();
         refinement.Actions.Should().OnlyContain(action => !string.IsNullOrWhiteSpace(action.ReasonPhase));
+    }
+
+    [Fact]
+    public void Execute_WithPencilVisualIr_AlsoEmitsPenPatchPlan()
+    {
+        var referencePath = Path.Combine(_tempDir, "reference-pen-patch.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-pen-patch.png");
+        var reportPath = Path.Combine(_tempDir, "report-pen-patch.json");
+        var visualIrPath = Path.Combine(_tempDir, "QuestHud.visual-ir.json");
+        var refinementPath = Path.Combine(_tempDir, "QuestHud.visual-refinement.json");
+        var patchPlanPath = Path.Combine(_tempDir, "QuestHud.pen-patch-plan.json");
+        var patchScriptPath = Path.Combine(_tempDir, "QuestHud.pen-patch-script.txt");
+        var batchOpsPath = Path.Combine(_tempDir, "QuestHud.pen-batch-ops.txt");
+
+        CreatePng(referencePath, 128, 128, new Rgba32(255, 255, 255, 255));
+        CreatePng(candidatePath, 128, 128, new Rgba32(255, 255, 255, 255));
+
+        using (var candidate = Image.Load<Rgba32>(candidatePath))
+        {
+            for (var y = 64; y < 96; y++)
+            {
+                for (var x = 64; x < 96; x++)
+                {
+                    candidate[x, y] = new Rgba32(0, 0, 0, 255);
+                }
+            }
+
+            candidate.SaveAsPng(candidatePath);
+        }
+
+        var visual = VisualDocumentBuilder.Build(
+            new HudDocument
+            {
+                Name = "QuestHud",
+                Root = new ComponentNode
+                {
+                    Id = "root",
+                    Type = ComponentType.Container,
+                    Children =
+                    [
+                        new ComponentNode
+                        {
+                            Id = "title",
+                            Type = ComponentType.Label,
+                            Properties = new Dictionary<string, BindableValue<object?>>
+                            {
+                                ["Text"] = "QUEST"
+                            }
+                        }
+                    ]
+                }
+            },
+            new GenerationOptions(),
+            "pencil");
+
+        File.WriteAllText(visualIrPath, GenerationDocumentPreprocessor.ToJson(visual));
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(referencePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            VisualIrFile = new FileInfo(visualIrPath),
+            VisualRefinementOutFile = new FileInfo(refinementPath),
+            PrintSummary = false,
+            Tolerance = 0,
+            VisualRefinementIterationBudget = 2
+        });
+
+        exitCode.Should().Be(0);
+        File.Exists(refinementPath).Should().BeTrue();
+        File.Exists(patchPlanPath).Should().BeTrue();
+        File.Exists(patchScriptPath).Should().BeTrue();
+        File.Exists(batchOpsPath).Should().BeFalse();
+
+        var patchPlan = JsonSerializer.Deserialize<PencilPatchPlan>(File.ReadAllText(patchPlanPath));
+        patchPlan.Should().NotBeNull();
+        patchPlan!.TargetFormat.Should().Be("pen");
+        patchPlan.ActionCount.Should().BeGreaterThan(0);
+        patchPlan.Steps.Should().OnlyContain(step => !string.IsNullOrWhiteSpace(step.TargetPenId));
+
+        var patchScript = File.ReadAllText(patchScriptPath);
+        patchScript.Should().Contain("// Auto-generated first-pass Pen patch script.");
+        patchScript.Should().Contain("// Step ");
+        patchScript.Should().MatchRegex("U\\(|// MANUAL:");
+    }
+
+    [Fact]
+    public void Execute_WithPencilVisualIrAndAutoApply_WritesPatchedPenFile()
+    {
+        var referencePath = Path.Combine(_tempDir, "reference-pencil-auto-apply.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-pencil-auto-apply.png");
+        var reportPath = Path.Combine(_tempDir, "report-pencil-auto-apply.json");
+        var visualIrPath = Path.Combine(_tempDir, "QuestHud.visual-ir.json");
+        var refinementPath = Path.Combine(_tempDir, "QuestHud.visual-refinement.json");
+        var actualLayoutPath = Path.Combine(_tempDir, "QuestHud.layout.actual.json");
+        var measuredLayoutPath = Path.Combine(_tempDir, "QuestHud.measured-layout.json");
+        var penPath = Path.Combine(_tempDir, "QuestHud.pen");
+        var patchedPenPath = Path.Combine(_tempDir, "QuestHud.patched.pen");
+        var batchOpsPath = Path.Combine(_tempDir, "QuestHud.pen-batch-ops.txt");
+
+        CreatePng(referencePath, 64, 64, new Rgba32(255, 255, 255, 255));
+        CreatePng(candidatePath, 64, 64, new Rgba32(255, 255, 255, 255));
+
+        File.WriteAllText(penPath, """
+{
+  "version": "2.10",
+  "name": "QuestHud",
+  "children": [
+    {
+      "id": "root",
+      "type": "frame",
+      "children": [
+        {
+          "id": "title",
+          "type": "text",
+          "content": "QUEST",
+          "fontFamily": "Press Start 2P",
+          "fontSize": 12
+        }
+      ]
+    }
+  ]
+}
+""");
+
+        var visual = VisualDocumentBuilder.Build(
+            new HudDocument
+            {
+                Name = "QuestHud",
+                Root = new ComponentNode
+                {
+                    Id = "root",
+                    Type = ComponentType.Container,
+                    Children =
+                    [
+                        new ComponentNode
+                        {
+                            Id = "title",
+                            Type = ComponentType.Label,
+                            Properties = new Dictionary<string, BindableValue<object?>>
+                            {
+                                ["Text"] = "QUEST"
+                            },
+                            Style = new StyleSpec
+                            {
+                                FontFamily = "Press Start 2P",
+                                FontSize = 18
+                            }
+                        }
+                    ]
+                }
+            },
+            new GenerationOptions(),
+            "pencil");
+
+        File.WriteAllText(visualIrPath, GenerationDocumentPreprocessor.ToJson(visual));
+        File.WriteAllText(
+            actualLayoutPath,
+            JsonSerializer.Serialize(
+                new ActualLayoutSnapshot
+                {
+                    Version = "1.0",
+                    BackendFamily = "pencil",
+                    CaptureId = "quest-hud-pencil",
+                    TargetName = "QuestHud",
+                    Root = new ActualLayoutNode
+                    {
+                        LocalPath = "root",
+                        Name = "root",
+                        NodeType = "frame",
+                        X = 0,
+                        Y = 0,
+                        Width = 220,
+                        Height = 100,
+                        Children =
+                        [
+                            new ActualLayoutNode
+                            {
+                                LocalPath = "root/0",
+                                Name = "title",
+                                NodeType = "text",
+                                X = 0,
+                                Y = 0,
+                                Width = 80,
+                                Height = 20,
+                                PreferredWidth = 80,
+                                PreferredHeight = 20,
+                                FontSize = 12,
+                                WrapText = false,
+                                ClipContent = false,
+                                Text = "QUEST"
+                            }
+                        ]
+                    }
+                }));
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(referencePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            VisualIrFile = new FileInfo(visualIrPath),
+            VisualRefinementOutFile = new FileInfo(refinementPath),
+            ActualLayoutFile = new FileInfo(actualLayoutPath),
+            MeasuredLayoutOutFile = new FileInfo(measuredLayoutPath),
+            PencilSourceFile = new FileInfo(penPath),
+            PatchedPenOutFile = new FileInfo(patchedPenPath),
+            AutoApplyPencilPatch = true,
+            PrintSummary = false,
+            Tolerance = 0,
+            VisualRefinementIterationBudget = 2
+        });
+
+        exitCode.Should().Be(0);
+        File.Exists(refinementPath).Should().BeTrue();
+        File.Exists(measuredLayoutPath).Should().BeTrue();
+        File.Exists(batchOpsPath).Should().BeTrue();
+        File.Exists(patchedPenPath).Should().BeTrue();
+
+        var patchedPen = File.ReadAllText(patchedPenPath);
+        patchedPen.Should().Contain("\"fontSize\": 18");
     }
 
     [Fact]

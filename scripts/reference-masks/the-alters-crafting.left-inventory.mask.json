@@ -1,0 +1,60 @@
+{
+  "fixtures": [
+    {
+      "fixtureSlug": "slot-filled-mining",
+      "uiMaskRects": [
+        {
+          "x": 176,
+          "y": 187,
+          "width": 165,
+          "height": 240
+        }
+      ]
+    },
+    {
+      "fixtureSlug": "slot-selected-battery",
+      "uiMaskRects": [
+        {
+          "x": 526,
+          "y": 187,
+          "width": 165,
+          "height": 240
+        }
+      ]
+    },
+    {
+      "fixtureSlug": "slot-empty",
+      "uiMaskRects": [
+        {
+          "x": 526,
+          "y": 437,
+          "width": 165,
+          "height": 240
+        }
+      ]
+    },
+    {
+      "fixtureSlug": "left-inventory-precise-wide",
+      "uiMaskRects": [
+        {
+          "x": 128,
+          "y": 120,
+          "width": 575,
+          "height": 72
+        },
+        {
+          "x": 36,
+          "y": 188,
+          "width": 136,
+          "height": 620
+        },
+        {
+          "x": 128,
+          "y": 188,
+          "width": 575,
+          "height": 620
+        }
+      ]
+    }
+  ]
+}

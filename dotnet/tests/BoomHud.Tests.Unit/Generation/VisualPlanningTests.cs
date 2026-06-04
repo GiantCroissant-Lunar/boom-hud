@@ -110,6 +110,81 @@ public sealed class VisualPlanningTests
     }
 
     [Fact]
+    public void RefinementPlan_WithSyntheticRegionId_MapsToBestOverlappingVisualNode()
+    {
+        var document = new VisualDocument
+        {
+            DocumentName = "QuestHud",
+            BackendFamily = "pencil",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox
+                {
+                    SourceType = ComponentType.Container,
+                    Width = Dimension.Pixels(1920),
+                    Height = Dimension.Pixels(1080),
+                    Left = Dimension.Pixels(0),
+                    Top = Dimension.Pixels(0)
+                },
+                EdgeContract = CreateEdgeContract(),
+                Children =
+                [
+                    new VisualNode
+                    {
+                        StableId = "root/fade",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container,
+                            Width = Dimension.Pixels(1920),
+                            Height = Dimension.Pixels(168),
+                            Left = Dimension.Pixels(0),
+                            Top = Dimension.Pixels(0)
+                        },
+                        EdgeContract = CreateEdgeContract()
+                    },
+                    new VisualNode
+                    {
+                        StableId = "root/nav-cluster",
+                        Kind = VisualNodeKind.Container,
+                        SourceType = ComponentType.Container,
+                        Box = new VisualBox
+                        {
+                            SourceType = ComponentType.Container,
+                            Width = Dimension.Pixels(180),
+                            Height = Dimension.Pixels(64),
+                            Left = Dimension.Pixels(28),
+                            Top = Dimension.Pixels(24)
+                        },
+                        EdgeContract = CreateEdgeContract()
+                    }
+                ]
+            }
+        };
+
+        var scoreTree = new RecursiveFidelityScoreNode
+        {
+            Level = "panel",
+            RegionId = "atomic-motif@0,0,240x135",
+            OverallSimilarityPercent = 45,
+            Phases =
+            [
+                new RecursiveFidelityPhaseScore { Phase = "outer-frame-match", SimilarityPercent = 20 }
+            ]
+        };
+
+        var summary = VisualRefinementPlanner.Plan(document, scoreTree, iterationBudget: 1);
+
+        summary.Actions.Should().ContainSingle();
+        summary.Actions[0].TargetStableId.Should().Be("root/nav-cluster");
+    }
+
+    [Fact]
     public void RefinementPlan_WithoutScoreTree_IsImmediatelyConverged()
     {
         var document = new VisualDocument
@@ -138,6 +213,56 @@ public sealed class VisualPlanningTests
         };
 
         var summary = VisualRefinementPlanner.Plan(document, null, iterationBudget: 3);
+
+        summary.Converged.Should().BeTrue();
+        summary.IterationCount.Should().Be(0);
+        summary.Actions.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void RefinementPlan_WithPerfectScoreTree_ConvergesWithoutActions()
+    {
+        var document = new VisualDocument
+        {
+            DocumentName = "QuestHud",
+            BackendFamily = "pencil",
+            SourceGenerationMode = "test",
+            Root = new VisualNode
+            {
+                StableId = "root",
+                Kind = VisualNodeKind.Container,
+                SourceType = ComponentType.Container,
+                Box = new VisualBox { SourceType = ComponentType.Container },
+                EdgeContract = new EdgeContract
+                {
+                    Participation = LayoutParticipation.NormalFlow,
+                    WidthSizing = AxisSizing.Fill,
+                    HeightSizing = AxisSizing.Fill,
+                    HorizontalPin = EdgePin.Start,
+                    VerticalPin = EdgePin.Start,
+                    OverflowX = OverflowBehavior.Visible,
+                    OverflowY = OverflowBehavior.Visible,
+                    WrapPressure = WrapPressurePolicy.Allow
+                }
+            }
+        };
+
+        var scoreTree = new RecursiveFidelityScoreNode
+        {
+            Level = "screen/frame",
+            RegionId = "root",
+            OverallSimilarityPercent = 100,
+            Phases =
+            [
+                new RecursiveFidelityPhaseScore { Phase = "structural-match", SimilarityPercent = 100 },
+                new RecursiveFidelityPhaseScore { Phase = "outer-frame-match", SimilarityPercent = 100 },
+                new RecursiveFidelityPhaseScore { Phase = "inner-layout-match", SimilarityPercent = 100 },
+                new RecursiveFidelityPhaseScore { Phase = "text-icon-metrics", SimilarityPercent = 100 },
+                new RecursiveFidelityPhaseScore { Phase = "polish-offsets", SimilarityPercent = 100 }
+            ]
+        };
+
+        var summary = VisualRefinementPlanner.Plan(document, scoreTree, iterationBudget: 4);
 
         summary.Converged.Should().BeTrue();
         summary.IterationCount.Should().Be(0);

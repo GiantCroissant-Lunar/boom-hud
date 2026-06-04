@@ -1,3 +1,4 @@
+using BoomHud.Abstractions.IR;
 using System.Text.Json;
 
 namespace BoomHud.Generators.VisualIR;
@@ -27,23 +28,35 @@ public static class VisualRefinementPlanner
         ArgumentNullException.ThrowIfNull(document);
 
         var boundedBudget = Math.Max(0, iterationBudget);
-        if (scoreTree == null || boundedBudget == 0)
+        var normalizedMeasuredIssues = NormalizeMeasuredIssues(measuredIssues);
+        if (scoreTree != null && normalizedMeasuredIssues.Count == 0 && IsPerfectScoreTree(scoreTree))
         {
-            var normalizedIssues = NormalizeMeasuredIssues(measuredIssues);
             return new VisualRefinementSummary
             {
                 IterationBudget = boundedBudget,
-                IterationCount = boundedBudget == 0 ? 0 : Math.Min(boundedBudget, normalizedIssues.Count),
-                Converged = normalizedIssues.Count == 0,
+                IterationCount = 0,
+                Converged = true,
                 ScoreTree = scoreTree,
-                MeasuredIssues = normalizedIssues,
-                Actions = boundedBudget == 0
-                    ? []
-                    : BuildMeasuredIssueActions(document, normalizedIssues, boundedBudget)
+                MeasuredIssues = normalizedMeasuredIssues,
+                Actions = []
             };
         }
 
-        var normalizedMeasuredIssues = NormalizeMeasuredIssues(measuredIssues);
+        if (scoreTree == null || boundedBudget == 0)
+        {
+            return new VisualRefinementSummary
+            {
+                IterationBudget = boundedBudget,
+                IterationCount = boundedBudget == 0 ? 0 : Math.Min(boundedBudget, normalizedMeasuredIssues.Count),
+                Converged = normalizedMeasuredIssues.Count == 0,
+                ScoreTree = scoreTree,
+                MeasuredIssues = normalizedMeasuredIssues,
+                Actions = boundedBudget == 0
+                    ? []
+                    : BuildMeasuredIssueActions(document, normalizedMeasuredIssues, boundedBudget)
+            };
+        }
+
         var actions = BuildMeasuredIssueActions(document, normalizedMeasuredIssues, boundedBudget);
         var reservedTargets = new HashSet<string>(
             actions.Select(static action => action.TargetStableId + "|" + action.ActionType),
@@ -92,6 +105,11 @@ public static class VisualRefinementPlanner
         };
     }
 
+    private static bool IsPerfectScoreTree(RecursiveFidelityScoreNode node)
+        => node.OverallSimilarityPercent >= 100d
+           && node.Phases.All(static phase => phase.SimilarityPercent >= 100d)
+           && node.Children.All(IsPerfectScoreTree);
+
     public static string ToJson(VisualRefinementSummary summary)
     {
         ArgumentNullException.ThrowIfNull(summary);
@@ -121,6 +139,12 @@ public static class VisualRefinementPlanner
             }
 
             candidate = candidate[..slash];
+        }
+
+        if (TryParseRegionBounds(regionId, out var regionBounds)
+            && FindBestTargetByBounds(document.Root, regionBounds) is { } boundsMatch)
+        {
+            return boundsMatch;
         }
 
         return document.Root.StableId;
@@ -162,6 +186,150 @@ public static class VisualRefinementPlanner
         }
 
         return null;
+    }
+
+    private static string? FindBestTargetByBounds(VisualNode root, RegionBounds regionBounds)
+    {
+        var regionArea = regionBounds.Width * regionBounds.Height;
+        if (regionArea <= 0d)
+        {
+            return null;
+        }
+
+        NodeBoundsCandidate? best = null;
+        foreach (var node in FlattenVisualNodes(root))
+        {
+            if (!TryResolveNodeBounds(node, out var nodeBounds))
+            {
+                continue;
+            }
+
+            var intersectionWidth = Math.Max(0d, Math.Min(regionBounds.Right, nodeBounds.Right) - Math.Max(regionBounds.X, nodeBounds.X));
+            var intersectionHeight = Math.Max(0d, Math.Min(regionBounds.Bottom, nodeBounds.Bottom) - Math.Max(regionBounds.Y, nodeBounds.Y));
+            var intersectionArea = intersectionWidth * intersectionHeight;
+            if (intersectionArea <= 0d)
+            {
+                continue;
+            }
+
+            var nodeArea = nodeBounds.Width * nodeBounds.Height;
+            if (nodeArea <= 0d)
+            {
+                continue;
+            }
+
+            if (nodeArea < regionArea * 0.05d)
+            {
+                continue;
+            }
+
+            var unionArea = regionArea + nodeArea - intersectionArea;
+            var intersectionOverUnion = unionArea > 0d ? intersectionArea / unionArea : 0d;
+            var nodeCoverage = intersectionArea / nodeArea;
+            var centerInsideRegion = ContainsPoint(regionBounds, nodeBounds.X + (nodeBounds.Width / 2d), nodeBounds.Y + (nodeBounds.Height / 2d));
+            var areaPenalty = nodeArea > regionArea
+                ? Math.Log(nodeArea / regionArea)
+                : 0d;
+            var rootPenalty = string.Equals(node.StableId, root.StableId, StringComparison.Ordinal) ? 1d : 0d;
+            var score = (intersectionOverUnion * 5d)
+                        + (nodeCoverage * 2d)
+                        + (centerInsideRegion ? 1d : 0d)
+                        + (Depth(node.StableId) * 0.02d)
+                        - (areaPenalty * 0.25d)
+                        - rootPenalty;
+
+            var candidate = new NodeBoundsCandidate(node.StableId, score, intersectionOverUnion, nodeCoverage, nodeArea, Depth(node.StableId));
+            if (best == null || candidate.CompareTo(best.Value) > 0)
+            {
+                best = candidate;
+            }
+        }
+
+        return best?.StableId;
+    }
+
+    private static bool TryParseRegionBounds(string regionId, out RegionBounds bounds)
+    {
+        bounds = default;
+        var atIndex = regionId.LastIndexOf('@');
+        if (atIndex < 0 || atIndex == regionId.Length - 1)
+        {
+            return false;
+        }
+
+        var coordinatePart = regionId[(atIndex + 1)..];
+        var pieces = coordinatePart.Split([',', 'x'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (pieces.Length != 4)
+        {
+            return false;
+        }
+
+        if (!double.TryParse(pieces[0], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var x)
+            || !double.TryParse(pieces[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var y)
+            || !double.TryParse(pieces[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var width)
+            || !double.TryParse(pieces[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var height))
+        {
+            return false;
+        }
+
+        if (width <= 0d || height <= 0d)
+        {
+            return false;
+        }
+
+        bounds = new RegionBounds(x, y, width, height);
+        return true;
+    }
+
+    private static bool TryResolveNodeBounds(VisualNode node, out RegionBounds bounds)
+    {
+        bounds = default;
+
+        var width = ResolvePixelDimension(node.Box.Width);
+        var height = ResolvePixelDimension(node.Box.Height);
+        if (width is null || height is null || width <= 0d || height <= 0d)
+        {
+            return false;
+        }
+
+        var left = ResolvePixelDimension(node.Box.Left) ?? (string.Equals(node.StableId, "root", StringComparison.Ordinal) ? 0d : null);
+        var top = ResolvePixelDimension(node.Box.Top) ?? (string.Equals(node.StableId, "root", StringComparison.Ordinal) ? 0d : null);
+        if (left is null || top is null)
+        {
+            return false;
+        }
+
+        bounds = new RegionBounds(left.Value, top.Value, width.Value, height.Value);
+        return true;
+    }
+
+    private static double? ResolvePixelDimension(Dimension? dimension)
+        => dimension?.Unit switch
+        {
+            DimensionUnit.Pixels => dimension.Value.Value,
+            DimensionUnit.Cells => dimension.Value.Value,
+            _ => null
+        };
+
+    private static bool ContainsPoint(RegionBounds bounds, double x, double y)
+        => x >= bounds.X
+           && x <= bounds.Right
+           && y >= bounds.Y
+           && y <= bounds.Bottom;
+
+    private static int Depth(string stableId)
+        => stableId.Count(static c => c == '/');
+
+    private static IEnumerable<VisualNode> FlattenVisualNodes(VisualNode root)
+    {
+        yield return root;
+        foreach (var child in root.Children)
+        {
+            foreach (var descendant in FlattenVisualNodes(child))
+            {
+                yield return descendant;
+            }
+        }
     }
 
     private static List<VisualMeasuredIssue> NormalizeMeasuredIssues(IReadOnlyList<VisualMeasuredIssue>? measuredIssues)
@@ -340,4 +508,50 @@ public static class VisualRefinementPlanner
         RecursiveFidelityScoreNode Node,
         RecursiveFidelityPhaseScore Phase,
         int Priority);
+
+    private readonly record struct RegionBounds(double X, double Y, double Width, double Height)
+    {
+        public double Right => X + Width;
+
+        public double Bottom => Y + Height;
+    }
+
+    private readonly record struct NodeBoundsCandidate(
+        string StableId,
+        double Score,
+        double IntersectionOverUnion,
+        double NodeCoverage,
+        double Area,
+        int Depth)
+        : IComparable<NodeBoundsCandidate>
+    {
+        public int CompareTo(NodeBoundsCandidate other)
+        {
+            var scoreComparison = Score.CompareTo(other.Score);
+            if (scoreComparison != 0)
+            {
+                return scoreComparison;
+            }
+
+            var overlapComparison = IntersectionOverUnion.CompareTo(other.IntersectionOverUnion);
+            if (overlapComparison != 0)
+            {
+                return overlapComparison;
+            }
+
+            var coverageComparison = NodeCoverage.CompareTo(other.NodeCoverage);
+            if (coverageComparison != 0)
+            {
+                return coverageComparison;
+            }
+
+            var depthComparison = Depth.CompareTo(other.Depth);
+            if (depthComparison != 0)
+            {
+                return depthComparison;
+            }
+
+            return other.Area.CompareTo(Area);
+        }
+    }
 }

@@ -14,6 +14,7 @@ using BoomHud.Abstractions.Snapshots;
 using BoomHud.Abstractions.Tokens;
 using BoomHud.Cli.Backends;
 using BoomHud.Cli.Commands.Baseline;
+using BoomHud.Cli.Commands.Pencil;
 using BoomHud.Cli.Commands.Rules;
 using BoomHud.Cli.Handlers.Baseline;
 using BoomHud.Dsl;
@@ -45,7 +46,7 @@ public static class Program
             inputOption.AddAlias("--in");
             var rootComponentOption = new Option<string?>("--root", "Root component name to generate. For a single input, selects a reusable component from that document; for multiple inputs, selects the composition root.");
             var manifestOption = new Option<FileInfo?>("--manifest", "Compose manifest file (boom-hud.compose.json). Defines sources, root, tokens, and targets.");
-            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, remotion, unity, all)");
+            var targetOption = new Option<string>("--target", () => "terminalGui", "Target backend (terminalGui, avalonia, godot, react, pencil, remotion, unity, all)");
             var formatOption = new Option<string?>("--format", "Input format (pen, figma, ir). Auto-detected from extension if omitted.");
             var outputOption = new Option<DirectoryInfo?>("--output", "Output directory for generated files");
             var namespaceOption = new Option<string>("--namespace", () => "Generated", "Namespace for generated code");
@@ -465,6 +466,10 @@ public static class Program
             baselineCommand.AddCommand(baselineScoreCommand);
             baselineCommand.AddCommand(baselineDiffCommand);
 
+            var pencilCommand = new Command("pencil", "Pencil workflow commands");
+            pencilCommand.AddCommand(PencilApplyPatchCommand.Build());
+            pencilCommand.AddCommand(PencilRefineLoopCommand.Build());
+
             var rulesCommand = new Command("rules", "Rule planning and sweep commands");
             rulesCommand.AddCommand(RulesPlanCommand.Build());
             rulesCommand.AddCommand(RulesFrontierOptimizeCommand.Build());
@@ -482,6 +487,7 @@ public static class Program
             rootCommand.AddCommand(videoCommand);
             rootCommand.AddCommand(reviewCommand);
             rootCommand.AddCommand(baselineCommand);
+            rootCommand.AddCommand(pencilCommand);
             rootCommand.AddCommand(rulesCommand);
 
             return await rootCommand.InvokeAsync(args);

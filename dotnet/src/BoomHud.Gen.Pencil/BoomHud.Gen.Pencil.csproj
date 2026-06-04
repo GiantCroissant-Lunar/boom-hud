@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>BoomHud.Gen.Pencil</AssemblyName>
+    <RootNamespace>BoomHud.Gen.Pencil</RootNamespace>
+    <PackageId>BoomHud.Pencil</PackageId>
+    <Description>Pencil .pen generator for BoomHud</Description>
+    <PackageTags>ui;code-generation;pencil;pen;generator;boomhud</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+    <ProjectReference Include="..\BoomHud.Generators\BoomHud.Generators.csproj" />
+  </ItemGroup>
+
+</Project>
