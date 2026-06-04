@@ -37,6 +37,15 @@ ui/snapshots/
 # Test output
 _test_output/
 
+# Local agent/runtime artifacts
+.agent/run/
+.agent/tmp/
+.playwright-mcp/
+nul
+
+# Local visual inspection captures
+samples/UnityFullPenCompare/Assets/Screenshots/
+
 # Godot generated files
 .godot/
 
