@@ -16,6 +16,7 @@
         "BoomHud.Gen.Godot",
         "BoomHud.Gen.TerminalGui",
         "BoomHud.Gen.Unity",
+        "BoomHud.Godot.Runtime",
         "BoomHud.Generators",
         "BoomHud.Mvvm.Generators"
       ]

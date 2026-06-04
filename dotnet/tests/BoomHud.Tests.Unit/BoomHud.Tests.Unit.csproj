@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\src\BoomHud.Gen.Pencil\BoomHud.Gen.Pencil.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Generators\BoomHud.Generators.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Gen.React\BoomHud.Gen.React.csproj" />
+    <ProjectReference Include="..\..\src\BoomHud.Godot.Runtime\BoomHud.Godot.Runtime.csproj" />
     <ProjectReference Include="..\..\src\BoomHud.Mvvm.Generators\BoomHud.Mvvm.Generators.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyName>BoomHud.Abstractions</AssemblyName>
     <RootNamespace>BoomHud.Abstractions</RootNamespace>
     <PackageId>BoomHud.Foundation</PackageId>

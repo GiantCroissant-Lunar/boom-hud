@@ -1,6 +1,6 @@
 using BoomHud.Abstractions.Runtime;
 
-namespace BoomHud.Gen.Godot.Runtime;
+namespace BoomHud.Godot.Runtime;
 
 public static class GodotRuntimeSurfaceCatalog
 {
@@ -42,3 +42,4 @@ public static class GodotRuntimeSurfaceCatalog
             _ => "Control"
         };
 }
+

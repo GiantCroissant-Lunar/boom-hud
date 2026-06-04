@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>BoomHud.Godot.Runtime</AssemblyName>
+    <RootNamespace>BoomHud.Godot.Runtime</RootNamespace>
+    <PackageId>BoomHud.Godot.Runtime</PackageId>
+    <Description>Godot runtime renderer for BoomHud dynamic runtime surfaces</Description>
+    <PackageTags>ui;runtime;godot;boomhud</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoomHud.Abstractions\BoomHud.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GodotSharp" Version="4.6.3">
+      <Private>false</Private>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
+

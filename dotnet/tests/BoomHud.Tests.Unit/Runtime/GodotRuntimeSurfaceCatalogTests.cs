@@ -1,4 +1,4 @@
-using BoomHud.Gen.Godot.Runtime;
+using BoomHud.Godot.Runtime;
 using FluentAssertions;
 using Xunit;
 
@@ -34,5 +34,17 @@ public sealed class GodotRuntimeSurfaceCatalogTests
 
         found.Should().BeFalse();
         controlType.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void TryGetControlType_AllBasicCatalogTypes_AreMapped()
+    {
+        foreach (var componentType in GodotRuntimeSurfaceCatalog.Catalog.Components.Keys)
+        {
+            var found = GodotRuntimeSurfaceCatalog.TryGetControlType(componentType, layoutType: null, out var controlType);
+
+            found.Should().BeTrue();
+            controlType.Should().NotBeNullOrWhiteSpace();
+        }
     }
 }
