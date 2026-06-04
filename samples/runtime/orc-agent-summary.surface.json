@@ -1,0 +1,104 @@
+{
+  "protocolVersion": "0.1",
+  "surfaceId": "orc.task.summary",
+  "catalogId": "boomhud.runtime.basic.v1",
+  "revision": 1,
+  "metadata": {
+    "producer": "orc-bot",
+    "kind": "agent-result"
+  },
+  "dataModel": {
+    "summary": {
+      "title": "Readiness check",
+      "status": "passed",
+      "detail": "3 checks completed",
+      "progress": 1.0
+    },
+    "actions": {
+      "openTask": {
+        "taskId": "task-123"
+      }
+    }
+  },
+  "root": {
+    "id": "summaryRoot",
+    "type": "panel",
+    "layout": {
+      "type": "vertical",
+      "gap": 8,
+      "padding": 12
+    },
+    "properties": {
+      "title": {
+        "binding": {
+          "path": "/summary/title"
+        }
+      },
+      "variant": {
+        "literal": "agentResult"
+      }
+    },
+    "children": [
+      {
+        "id": "statusBadge",
+        "type": "badge",
+        "properties": {
+          "text": {
+            "binding": {
+              "path": "/summary/status"
+            }
+          },
+          "variant": {
+            "literal": "success"
+          }
+        }
+      },
+      {
+        "id": "detailText",
+        "type": "label",
+        "properties": {
+          "text": {
+            "binding": {
+              "path": "/summary/detail"
+            }
+          }
+        }
+      },
+      {
+        "id": "progress",
+        "type": "progressBar",
+        "properties": {
+          "value": {
+            "binding": {
+              "path": "/summary/progress"
+            }
+          },
+          "minimum": {
+            "literal": 0
+          },
+          "maximum": {
+            "literal": 1
+          }
+        }
+      },
+      {
+        "id": "openTaskButton",
+        "type": "button",
+        "properties": {
+          "text": {
+            "literal": "Open task"
+          }
+        },
+        "actions": [
+          {
+            "event": "pressed",
+            "command": "agent.task.get",
+            "payload": {
+              "task_id": "task-123"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
