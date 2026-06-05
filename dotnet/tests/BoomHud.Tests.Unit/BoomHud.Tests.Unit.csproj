@@ -34,6 +34,7 @@
     <Compile Include="Cli\GeneratedFileWriterTests.cs" />
     <Compile Include="Cli\ReactGeneratedAssetCopierTests.cs" />
     <Compile Include="Generation\AvaloniaGeneratorTests.cs" />
+    <Compile Include="Generation\GeneratorSourceIdTests.cs" />
     <Compile Include="Generation\GodotGeneratorTests.cs" />
     <Compile Include="Generation\PencilGeneratorTests.cs" />
     <Compile Include="Generation\SyntheticComponentizationTests.cs" />
