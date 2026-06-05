@@ -163,9 +163,9 @@ public sealed class UnityGenerator : IBackendGenerator
             builder.Append("ui:");
             builder.Append(node.UxmlTag);
             builder.Append(" name=\"");
-            builder.Append(XmlEscape(node.Name));
+            builder.Append(GeneratorEmit.EscapeXml(node.Name));
             builder.Append("\" class=\"");
-            builder.Append(XmlEscape(classAttribute));
+            builder.Append(GeneratorEmit.EscapeXml(classAttribute));
             builder.AppendLine("\" />");
             return;
         }
@@ -175,9 +175,9 @@ public sealed class UnityGenerator : IBackendGenerator
         builder.Append("ui:");
         builder.Append(node.UxmlTag);
         builder.Append(" name=\"");
-        builder.Append(XmlEscape(node.Name));
+        builder.Append(GeneratorEmit.EscapeXml(node.Name));
         builder.Append("\" class=\"");
-        builder.Append(XmlEscape(classAttribute));
+        builder.Append(GeneratorEmit.EscapeXml(classAttribute));
         builder.AppendLine("\">");
 
         foreach (var child in node.Children)
@@ -2474,13 +2474,6 @@ public sealed class UnityGenerator : IBackendGenerator
 
         return null;
     }
-
-    private static string XmlEscape(string value)
-        => value
-            .Replace("&", "&amp;", StringComparison.Ordinal)
-            .Replace("\"", "&quot;", StringComparison.Ordinal)
-            .Replace("<", "&lt;", StringComparison.Ordinal)
-            .Replace(">", "&gt;", StringComparison.Ordinal);
 
     private static string? BuildComponentOverrideLiteral(ComponentNode node)
     {

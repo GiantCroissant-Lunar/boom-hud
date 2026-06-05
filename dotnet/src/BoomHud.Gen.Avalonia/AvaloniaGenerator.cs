@@ -204,7 +204,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Color tokens -> SolidColorBrush resources
         foreach (var kvp in theme.Colors)
         {
-            var key = XmlEscape(kvp.Key + "Brush");
+            var key = GeneratorEmit.EscapeXml(kvp.Key + "Brush");
             var colorValue = ColorToAvalonia(kvp.Value);
             sb.AppendLine($"{innerIndent}<SolidColorBrush x:Key=\"{key}\" Color=\"{colorValue}\" />");
         }
@@ -212,14 +212,14 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Dimension tokens -> doubles
         foreach (var kvp in theme.Dimensions)
         {
-            var key = XmlEscape(kvp.Key);
+            var key = GeneratorEmit.EscapeXml(kvp.Key);
             sb.AppendLine($"{innerIndent}<x:Double x:Key=\"{key}\">{kvp.Value.ToString(CultureInfo.InvariantCulture)}</x:Double>");
         }
 
         // Font size tokens -> doubles with a clearer suffix
         foreach (var kvp in theme.FontSizes)
         {
-            var key = XmlEscape(kvp.Key + "FontSize");
+            var key = GeneratorEmit.EscapeXml(kvp.Key + "FontSize");
             sb.AppendLine($"{innerIndent}<x:Double x:Key=\"{key}\">{kvp.Value.ToString(CultureInfo.InvariantCulture)}</x:Double>");
         }
 
@@ -246,7 +246,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             var refName = node.SlotKey ?? node.Id;
             if (!string.IsNullOrWhiteSpace(refName))
             {
-                sb.Append($" x:Name=\"{XmlEscape(ToXamlName(refName))}\"");
+                sb.Append($" x:Name=\"{GeneratorEmit.EscapeXml(ToXamlName(refName))}\"");
             }
 
             GenerateLayoutAttributes(sb, node.Layout, elementName);
@@ -281,7 +281,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Add name if present
         if (!string.IsNullOrEmpty(node.Id))
         {
-            sb.Append($" x:Name=\"{XmlEscape(ToXamlName(node.Id))}\"");
+            sb.Append($" x:Name=\"{GeneratorEmit.EscapeXml(ToXamlName(node.Id))}\"");
         }
 
         // Add layout attributes
@@ -385,7 +385,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Add name if present
         if (!string.IsNullOrEmpty(node.Id))
         {
-            sb.Append($" x:Name=\"{XmlEscape(ToXamlName(node.Id))}\"");
+            sb.Append($" x:Name=\"{GeneratorEmit.EscapeXml(ToXamlName(node.Id))}\"");
         }
 
         // Add layout attributes
@@ -774,11 +774,11 @@ public sealed class AvaloniaGenerator : IBackendGenerator
                 // Avalonia MenuItem uses Header for the visible label.
                 if (node.Properties.TryGetValue("text", out var headerText) && !headerText.IsBound)
                 {
-                    sb.Append($" Header=\"{XmlEscape(headerText.Value?.ToString() ?? string.Empty)}\"");
+                    sb.Append($" Header=\"{GeneratorEmit.EscapeXml(headerText.Value?.ToString() ?? string.Empty)}\"");
                 }
                 else if (node.Properties.TryGetValue("value", out var headerValue) && !headerValue.IsBound)
                 {
-                    sb.Append($" Header=\"{XmlEscape(headerValue.Value?.ToString() ?? string.Empty)}\"");
+                    sb.Append($" Header=\"{GeneratorEmit.EscapeXml(headerValue.Value?.ToString() ?? string.Empty)}\"");
                 }
                 break;
 
@@ -811,7 +811,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             case ComponentType.Image:
                 if (node.Properties.TryGetValue("source", out var sourceValue) && !sourceValue.IsBound)
                 {
-                    sb.Append($" Source=\"{XmlEscape(sourceValue.Value?.ToString() ?? "")}\"");
+                    sb.Append($" Source=\"{GeneratorEmit.EscapeXml(sourceValue.Value?.ToString() ?? "")}\"");
                 }
                 break;
 
@@ -823,7 +823,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Tooltip
         if (node.Tooltip != null && !node.Tooltip.Value.IsBound)
         {
-            sb.Append($" ToolTip.Tip=\"{XmlEscape(node.Tooltip.Value.Value?.ToString() ?? "")}\"");
+            sb.Append($" ToolTip.Tip=\"{GeneratorEmit.EscapeXml(node.Tooltip.Value.Value?.ToString() ?? "")}\"");
         }
 
         // Visibility binding
@@ -890,7 +890,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
 
         if (!string.IsNullOrEmpty(binding.Format))
         {
-            parts.Add($"StringFormat={XmlEscape(binding.Format)}");
+            parts.Add($"StringFormat={GeneratorEmit.EscapeXml(binding.Format)}");
         }
 
         if (binding.Fallback != null)
@@ -954,7 +954,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
 
         if (content != null)
         {
-            sb.AppendLine($"{indentStr}{XmlEscape(content)}");
+            sb.AppendLine($"{indentStr}{GeneratorEmit.EscapeXml(content)}");
         }
     }
 
@@ -1142,7 +1142,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Prefer explicit token key if it exists in the theme document
         if (!string.IsNullOrWhiteSpace(tokenKey) && theme.Colors.ContainsKey(tokenKey))
         {
-            resourceKey = XmlEscape(tokenKey + "Brush");
+            resourceKey = GeneratorEmit.EscapeXml(tokenKey + "Brush");
             return true;
         }
 
@@ -1151,7 +1151,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         {
             if (kvp.Value.Equals(color))
             {
-                resourceKey = XmlEscape(kvp.Key + "Brush");
+                resourceKey = GeneratorEmit.EscapeXml(kvp.Key + "Brush");
                 return true;
             }
         }
@@ -1171,7 +1171,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Prefer explicit token key if it exists in the theme document
         if (!string.IsNullOrWhiteSpace(tokenKey) && theme.FontSizes.ContainsKey(tokenKey))
         {
-            resourceKey = XmlEscape(tokenKey + "FontSize");
+            resourceKey = GeneratorEmit.EscapeXml(tokenKey + "FontSize");
             return true;
         }
 
@@ -1181,7 +1181,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         {
             if (Math.Abs(kvp.Value - size) <= tolerance)
             {
-                resourceKey = XmlEscape(kvp.Key + "FontSize");
+                resourceKey = GeneratorEmit.EscapeXml(kvp.Key + "FontSize");
                 return true;
             }
         }
@@ -1479,13 +1479,4 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         return null;
     }
 
-    private static string XmlEscape(string value)
-    {
-        return value
-            .Replace("&", "&amp;", StringComparison.Ordinal)
-            .Replace("<", "&lt;", StringComparison.Ordinal)
-            .Replace(">", "&gt;", StringComparison.Ordinal)
-            .Replace("\"", "&quot;", StringComparison.Ordinal)
-            .Replace("'", "&apos;", StringComparison.Ordinal);
-    }
 }

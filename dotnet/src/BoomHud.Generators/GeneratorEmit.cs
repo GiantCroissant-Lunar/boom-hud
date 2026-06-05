@@ -28,4 +28,15 @@ public static class GeneratorEmit
     /// with its contents escaped by <see cref="EscapeCSharpString"/>.
     /// </summary>
     public static string CSharpStringLiteral(string value) => "\"" + EscapeCSharpString(value) + "\"";
+
+    /// <summary>
+    /// Escapes a string for use inside a double-quoted XML/XAML attribute value, using the
+    /// standard minimal attribute-escape set. Ampersand is escaped first. Apostrophes are
+    /// not escaped — they are valid unescaped inside a double-quoted attribute.
+    /// </summary>
+    public static string EscapeXml(string value) => value
+        .Replace("&", "&amp;")
+        .Replace("<", "&lt;")
+        .Replace(">", "&gt;")
+        .Replace("\"", "&quot;");
 }
