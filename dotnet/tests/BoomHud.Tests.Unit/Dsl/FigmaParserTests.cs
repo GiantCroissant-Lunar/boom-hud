@@ -911,6 +911,62 @@ public class FigmaParserTests
     }
 
     [Fact]
+    public void Parse_ComponentPropertyWithoutValue_IsSkipped_NotStampedWithTypeName()
+    {
+        // The VARIANT property carries no "value", so its DefaultValueUnion is empty.
+        // Before the fix, the parser stamped val.ToString() (the CLR type name) as the override.
+        var json = """
+            {
+                "name": "Test",
+                "document": {
+                    "id": "0:0",
+                    "type": "DOCUMENT",
+                    "children": [
+                        {
+                            "id": "0:1",
+                            "type": "CANVAS",
+                            "children": [
+                                {
+                                    "id": "1:1",
+                                    "name": "Frame",
+                                    "type": "FRAME",
+                                    "children": [
+                                        {
+                                            "id": "1:2",
+                                            "name": "Card",
+                                            "type": "INSTANCE",
+                                            "componentId": "10:5",
+                                            "componentProperties": {
+                                                "Show Label": { "type": "BOOLEAN", "value": true },
+                                                "Variant": { "type": "VARIANT" }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            """;
+
+        var doc = _parser.Parse(json);
+
+        var card = doc.Root.Children[0];
+
+        // The bool-valued property is captured normally.
+        card.InstanceOverrides.Should().ContainKey("Show Label");
+        card.InstanceOverrides["Show Label"].Should().Be(true);
+
+        // The value-less property is skipped, and the type name is never used as data.
+        card.InstanceOverrides.Should().NotContainKey("Variant");
+        var leakedTypeName = card.InstanceOverrides.Values
+            .OfType<string>()
+            .Any(s => s.Contains("DefaultValueUnion", StringComparison.Ordinal));
+        leakedTypeName.Should().BeFalse();
+    }
+
+    [Fact]
     public void Parse_AlignmentProperties_ExtractsCorrectly()
     {
         var json = """

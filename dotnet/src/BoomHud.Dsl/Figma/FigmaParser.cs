@@ -51,7 +51,7 @@ public sealed class FigmaParser : IFigmaParser
         // Find the first suitable node on the canvas as the root component
         // Accept FRAME, COMPONENT, RECTANGLE, GROUP, SECTION, or any node with children
         var rootFrame = canvas.Children?.FirstOrDefault(n => IsSuitableRoot(n));
-        
+
         if (rootFrame == null)
         {
             throw new InvalidOperationException("No suitable root node found on canvas");
@@ -407,13 +407,13 @@ public sealed class FigmaParser : IFigmaParser
                     // However, in the old parser we expected a dictionary.
                     // The standard Figma REST API "overrides" property on INSTANCE nodes describes changes.
                     // But in the new DTO, "overrides" is List<Overrides>. 
-                    
+
                     // Actually, looking at Figma API docs, INSTANCE nodes have 'overrides' which is an array of objects { id, overriddenFields }.
                     // But typically component properties (variants) are in 'componentProperties'.
                     // Let's stick to 'componentProperties' for now which is Dictionary<string, ComponentProperty>.
                 }
             }
-            
+
             // Map Component Properties (Variants/Boolean/Text props)
             if (figmaNode.ComponentProperties != null)
             {
@@ -431,10 +431,9 @@ public sealed class FigmaParser : IFigmaParser
                     {
                         instanceOverrides[kvp.Key] = val.String;
                     }
-                    else
-                    {
-                        instanceOverrides[kvp.Key] = val.ToString();
-                    }
+                    // DefaultValueUnion only carries Bool or String; when both are null the
+                    // value is absent. Skip it rather than baking the union's type name into the
+                    // override (val.ToString() has no override and yields the CLR type name).
                 }
             }
         }
@@ -547,18 +546,18 @@ public sealed class FigmaParser : IFigmaParser
             LayoutMode.Vertical => LayoutType.Vertical,
             _ => LayoutType.Vertical // Default fallback, likely absolute if not set but caught by hasLayout checks?
         };
-        
+
         // If layoutMode is null, it's typically absolute positioning (Frame/Group without AutoLayout)
         if (node.LayoutMode == null)
         {
-             // For BoomHud, if it's absolute, we might map to Absolute or Vertical default.
-             // Usually Frames without AutoLayout are Absolute.
-             // But let's stick to Vertical as default container if unknown, or maybe we should support Absolute.
-             // BoomHud LayoutType has 'Absolute'? The IR definition shows Horizontal/Vertical/Stack/Grid/Dock/Absolute (from schema earlier).
-             // Let's check IR LayoutType enum. Assuming it exists.
-             // Actually standard BoomHud might not support Absolute fully yet, but schema had "absolute".
-             // Let's assume Vertical for compatibility if not specified, or "Absolute" if supported.
-             layoutType = LayoutType.Vertical; // Fallback
+            // For BoomHud, if it's absolute, we might map to Absolute or Vertical default.
+            // Usually Frames without AutoLayout are Absolute.
+            // But let's stick to Vertical as default container if unknown, or maybe we should support Absolute.
+            // BoomHud LayoutType has 'Absolute'? The IR definition shows Horizontal/Vertical/Stack/Grid/Dock/Absolute (from schema earlier).
+            // Let's check IR LayoutType enum. Assuming it exists.
+            // Actually standard BoomHud might not support Absolute fully yet, but schema had "absolute".
+            // Let's assume Vertical for compatibility if not specified, or "Absolute" if supported.
+            layoutType = LayoutType.Vertical; // Fallback
         }
 
         Dimension? width = null;
@@ -648,9 +647,9 @@ public sealed class FigmaParser : IFigmaParser
         // Extract text color
         if (node.Type == SubcanvasNodeType.Text)
         {
-             // Text color is also in Fills for text nodes in Figma API
+            // Text color is also in Fills for text nodes in Figma API
             var textFill = node.Fills?.FirstOrDefault(f => (f.Visible ?? true) && f.Type == PaintType.Solid);
-            
+
             // Fallback to Style.Fills
             if (textFill == null && node.Style?.Fills != null)
             {
@@ -838,11 +837,11 @@ public sealed class FigmaParser : IFigmaParser
         val = val.Trim().ToLowerInvariant();
         if (val == "fill" || val == "fill()") return Dimension.Fill;
         if (val == "auto" || val == "auto()") return Dimension.Auto;
-        if (val.EndsWith('%') && float.TryParse(val.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out var p)) 
+        if (val.EndsWith('%') && float.TryParse(val.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out var p))
             return Dimension.Percent(p);
-        if (int.TryParse(val, NumberStyles.Any, CultureInfo.InvariantCulture, out var px)) 
+        if (int.TryParse(val, NumberStyles.Any, CultureInfo.InvariantCulture, out var px))
             return Dimension.Pixels(px);
-        
+
         return Dimension.Auto;
     }
 
