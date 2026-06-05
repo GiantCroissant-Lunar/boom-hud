@@ -287,7 +287,11 @@ public static class Program
             var projectNameArg = new Argument<string>("name", "Project name");
 
             initCommand.AddArgument(projectNameArg);
-            initCommand.SetHandler(HandleInit, projectNameArg);
+            initCommand.SetHandler((InvocationContext context) =>
+            {
+                var name = context.ParseResult.GetValueForArgument(projectNameArg);
+                context.ExitCode = HandleInit(name);
+            });
 
             var uiproCommand = new Command("uipro", "Run UI/UX Pro Max search/design-system tooling (python)");
             var uiproQueryArg = new Argument<string>("query", "Search query (keywords)");
@@ -930,13 +934,12 @@ public static class Program
         Console.WriteLine("OK.");
     }
 
-    private static void HandleInit(string name)
+    private static int HandleInit(string name)
     {
-        Console.WriteLine($"Initializing new BoomHud project: {name}");
-
-        // TODO: Implement scaffolding
-        Console.WriteLine();
-        Console.WriteLine("⚠️  Project scaffolding not yet implemented. Coming in Phase 6!");
+        // Scaffolding is not implemented yet. Report it on stderr and return a non-zero
+        // exit code so scripts do not treat `init` as a successful no-op.
+        Console.Error.WriteLine($"Error: project scaffolding is not yet implemented (requested project: {name}).");
+        return 1;
     }
 
     private static int HandleUiProMax(
