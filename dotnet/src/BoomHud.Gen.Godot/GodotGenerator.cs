@@ -855,7 +855,7 @@ public sealed class GodotGenerator : IBackendGenerator
             cb.AppendLine("private void InitializeUiFromScene()");
             cb.OpenBlock();
             GenerateRootSetup(cb, document.Root, nodeNames, diagnostics);
-            GenerateChildrenSetupFromScene(cb, document.Root, "this", nodeNames, diagnostics, components);
+            GenerateChildrenSetupFromScene(cb, document.Root, "this", nodeNames, diagnostics, components, options);
             if (HasSpatialNodes(document))
             {
                 cb.AppendLine("SetupSpatialFaces();");
@@ -873,7 +873,7 @@ public sealed class GodotGenerator : IBackendGenerator
 
         // Children setup
         // Note: For the root node, we are adding children to *this*
-        GenerateChildrenSetup(cb, document.Root, "this", nodeNames, diagnostics, components);
+        GenerateChildrenSetup(cb, document.Root, "this", nodeNames, diagnostics, components, options);
 
         if (HasSpatialNodes(document))
         {
@@ -1176,27 +1176,27 @@ public sealed class GodotGenerator : IBackendGenerator
         GenerateComponentProperties(cb, node, "this", isRoot: true);
     }
 
-    private static void GenerateChildrenSetup(CodeBuilder cb, ComponentNode parentNode, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, IReadOnlyDictionary<string, HudComponentDefinition> components)
+    private static void GenerateChildrenSetup(CodeBuilder cb, ComponentNode parentNode, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, IReadOnlyDictionary<string, HudComponentDefinition> components, GenerationOptions options)
     {
         var parentLayoutType = parentNode.Layout?.Type ?? LayoutType.Vertical; // Default logic
 
         foreach (var child in parentNode.Children)
         {
-            GenerateChildComponent(cb, child, parentVar, nodeNames, diagnostics, parentLayoutType, components);
+            GenerateChildComponent(cb, child, parentVar, nodeNames, diagnostics, parentLayoutType, components, options);
         }
     }
 
-    private static void GenerateChildrenSetupFromScene(CodeBuilder cb, ComponentNode parentNode, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, IReadOnlyDictionary<string, HudComponentDefinition> components)
+    private static void GenerateChildrenSetupFromScene(CodeBuilder cb, ComponentNode parentNode, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, IReadOnlyDictionary<string, HudComponentDefinition> components, GenerationOptions options)
     {
         var parentLayoutType = parentNode.Layout?.Type ?? LayoutType.Vertical;
 
         foreach (var child in parentNode.Children)
         {
-            GenerateChildComponentFromScene(cb, child, parentVar, nodeNames, diagnostics, parentLayoutType, components);
+            GenerateChildComponentFromScene(cb, child, parentVar, nodeNames, diagnostics, parentLayoutType, components, options);
         }
     }
 
-    private static void GenerateChildComponentFromScene(CodeBuilder cb, ComponentNode node, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, LayoutType parentLayoutType, IReadOnlyDictionary<string, HudComponentDefinition> components)
+    private static void GenerateChildComponentFromScene(CodeBuilder cb, ComponentNode node, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, LayoutType parentLayoutType, IReadOnlyDictionary<string, HudComponentDefinition> components, GenerationOptions options)
     {
         if (node.Type == ComponentType.MenuItem)
         {
@@ -1208,6 +1208,11 @@ public sealed class GodotGenerator : IBackendGenerator
 
             var itemId = node.Id?.GetHashCode() ?? Guid.NewGuid().GetHashCode();
             cb.AppendLine(parentVar + ".AddItem(\"" + EscapeString(text) + "\", (int)" + itemId.ToString(global::System.Globalization.CultureInfo.InvariantCulture) + ");");
+            return;
+        }
+
+        if (CheckComponentCapability(node, options, diagnostics))
+        {
             return;
         }
 
@@ -1243,11 +1248,11 @@ public sealed class GodotGenerator : IBackendGenerator
         // Recurse (skip for component references; child view handles its own structure)
         if (node.ComponentRefId == null)
         {
-            GenerateChildrenSetupFromScene(cb, node, varName, nodeNames, diagnostics, components);
+            GenerateChildrenSetupFromScene(cb, node, varName, nodeNames, diagnostics, components, options);
         }
     }
 
-    private static void GenerateChildComponent(CodeBuilder cb, ComponentNode node, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, LayoutType parentLayoutType, IReadOnlyDictionary<string, HudComponentDefinition> components)
+    private static void GenerateChildComponent(CodeBuilder cb, ComponentNode node, string parentVar, Dictionary<ComponentNode, string> nodeNames, List<Diagnostic> diagnostics, LayoutType parentLayoutType, IReadOnlyDictionary<string, HudComponentDefinition> components, GenerationOptions options)
     {
         if (node.Type == ComponentType.MenuItem)
         {
@@ -1261,6 +1266,11 @@ public sealed class GodotGenerator : IBackendGenerator
             var itemId = node.Id?.GetHashCode() ?? Guid.NewGuid().GetHashCode();
 
             cb.AppendLine($"{parentVar}.AddItem(\"{text}\", (int){itemId});");
+            return;
+        }
+
+        if (CheckComponentCapability(node, options, diagnostics))
+        {
             return;
         }
 
@@ -1309,7 +1319,7 @@ public sealed class GodotGenerator : IBackendGenerator
         // Recurse (skip for component references; child view handles its own structure)
         if (node.ComponentRefId == null)
         {
-            GenerateChildrenSetup(cb, node, varName, nodeNames, diagnostics, components);
+            GenerateChildrenSetup(cb, node, varName, nodeNames, diagnostics, components, options);
         }
     }
 
@@ -1860,6 +1870,27 @@ public sealed class GodotGenerator : IBackendGenerator
         LayoutType.Absolute => "Control",
         _ => "Control"
     };
+
+    private static bool CheckComponentCapability(ComponentNode node, GenerationOptions options, List<Diagnostic> diagnostics)
+    {
+        if (GodotCapabilities.Instance.SupportsComponent(node.Type.ToString()))
+            return false;
+
+        if (options.MissingCapabilityPolicy == MissingCapabilityPolicy.Error)
+        {
+            diagnostics.Add(Diagnostic.Error($"Component type '{node.Type}' is not supported by Godot", node.Id));
+            return true;
+        }
+        else if (options.MissingCapabilityPolicy == MissingCapabilityPolicy.Warn)
+        {
+            diagnostics.Add(Diagnostic.Warning($"Component type '{node.Type}' has limited support in Godot", node.Id));
+            return false;
+        }
+        else // Skip
+        {
+            return true;
+        }
+    }
 
     private static string ToCamelCase(string name)
     {

@@ -880,4 +880,76 @@ public class AvaloniaGeneratorTests
     {
         _generator.Capabilities.Should().BeOfType<AvaloniaCapabilities>();
     }
+
+    [Fact]
+    public void Generate_WithUnsupportedComponent_WarnPolicy_EmitsWarning()
+    {
+        var options = _options with
+        {
+            MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
+            EmitViewModelInterfaces = false
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "unsupported",
+                        Type = ComponentType.Timeline
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d =>
+            d.Severity == DiagnosticSeverity.Warning &&
+            d.Message.Contains("Timeline") &&
+            d.Message.Contains("limited support"));
+    }
+
+    [Fact]
+    public void Generate_WithUnsupportedBindingProperty_EmitsWarning()
+    {
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Bindings =
+                        [
+                            new BindingSpec
+                            {
+                                Property = "value",
+                                Path = "SomeValue"
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d =>
+            d.Severity == DiagnosticSeverity.Warning &&
+            d.Message.Contains("value") &&
+            d.Message.Contains("not supported"));
+    }
 }

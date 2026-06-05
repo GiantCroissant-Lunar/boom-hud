@@ -188,7 +188,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         }
 
         // Generate root content
-        GenerateComponentAxaml(sb, document.Root, 1, diagnostics, options.Theme, components, options.Namespace);
+        GenerateComponentAxaml(sb, document.Root, 1, diagnostics, options.Theme, components, options.Namespace, options);
 
         sb.AppendLine("</UserControl>");
 
@@ -234,7 +234,8 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         List<Diagnostic> diagnostics,
         ThemeDocument? theme,
         IReadOnlyDictionary<string, HudComponentDefinition> components,
-        string @namespace)
+        string @namespace,
+        GenerationOptions options)
     {
         var indentStr = new string(' ', indent * 4);
 
@@ -252,7 +253,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             GenerateLayoutAttributes(sb, node.Layout, elementName);
             GenerateStyleAttributes(sb, node.Style, elementName, theme);
             GenerateComponentAttributes(sb, node);
-            GenerateBindingAttributes(sb, node);
+            GenerateBindingAttributes(sb, node, diagnostics);
 
             sb.AppendLine(" />");
 
@@ -263,6 +264,11 @@ public sealed class AvaloniaGenerator : IBackendGenerator
                     node.Id));
             }
 
+            return;
+        }
+
+        if (CheckComponentCapability(node, options, diagnostics))
+        {
             return;
         }
 
@@ -295,7 +301,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         GenerateComponentAttributes(sb, node);
 
         // Add bindings
-        GenerateBindingAttributes(sb, node);
+        GenerateBindingAttributes(sb, node, diagnostics);
 
         // Check if we have children or content
         var hasChildren = node.Children.Count > 0;
@@ -324,13 +330,13 @@ public sealed class AvaloniaGenerator : IBackendGenerator
                     if (child.Type == ComponentType.Label)
                     {
                         var menuItemNode = child with { Type = ComponentType.MenuItem };
-                        GenerateComponentAxaml(sb, menuItemNode, indent + 1, diagnostics, theme, components, @namespace);
+                        GenerateComponentAxaml(sb, menuItemNode, indent + 1, diagnostics, theme, components, @namespace, options);
                         continue;
                     }
 
                     if (child.Type == ComponentType.MenuItem)
                     {
-                        GenerateComponentAxaml(sb, child, indent + 1, diagnostics, theme, components, @namespace);
+                        GenerateComponentAxaml(sb, child, indent + 1, diagnostics, theme, components, @namespace, options);
                         continue;
                     }
 
@@ -343,7 +349,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             {
                 foreach (var child in node.Children)
                 {
-                    GenerateComponentAxaml(sb, child, indent + 1, diagnostics, theme, components, @namespace);
+                    GenerateComponentAxaml(sb, child, indent + 1, diagnostics, theme, components, @namespace, options);
                 }
             }
 
@@ -365,8 +371,13 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         return string.Equals(elementName, "Border", StringComparison.Ordinal);
     }
 
-    private static void GenerateChildAxaml(StringBuilder sb, ComponentNode node, int indent, List<Diagnostic> diagnostics, ThemeDocument? theme)
+    private static void GenerateChildAxaml(StringBuilder sb, ComponentNode node, int indent, List<Diagnostic> diagnostics, ThemeDocument? theme, GenerationOptions options)
     {
+        if (CheckComponentCapability(node, options, diagnostics))
+        {
+            return;
+        }
+
         var indentStr = new string(' ', indent * 4);
         var element = MapComponentToElement(node.Type);
 
@@ -394,7 +405,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         GenerateComponentAttributes(sb, node);
 
         // Add bindings
-        GenerateBindingAttributes(sb, node);
+        GenerateBindingAttributes(sb, node, diagnostics);
 
         // Check if we have children
         var hasChildren = node.Children.Count > 0;
@@ -430,7 +441,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
 
                     foreach (var child in node.Children)
                     {
-                        GenerateChildAxaml(sb, child, indent + 2, diagnostics, theme);
+                        GenerateChildAxaml(sb, child, indent + 2, diagnostics, theme, options);
                     }
 
                     sb.AppendLine($"{wrapperIndent}</{wrapperElement}>");
@@ -439,7 +450,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
                 {
                     foreach (var child in node.Children)
                     {
-                        GenerateChildAxaml(sb, child, indent + 1, diagnostics, theme);
+                        GenerateChildAxaml(sb, child, indent + 1, diagnostics, theme, options);
                     }
                 }
             }
@@ -829,12 +840,16 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         }
     }
 
-    private static void GenerateBindingAttributes(StringBuilder sb, ComponentNode node)
+    private static void GenerateBindingAttributes(StringBuilder sb, ComponentNode node, List<Diagnostic> diagnostics)
     {
         foreach (var binding in node.Bindings)
         {
             var avaloniaProperty = MapBindingProperty(binding.Property, node.Type);
-            if (avaloniaProperty == null) continue;
+            if (avaloniaProperty == null)
+            {
+                diagnostics.Add(Diagnostic.Warning($"Binding property '{binding.Property}' is not supported for {node.Type} in Avalonia", node.Id));
+                continue;
+            }
 
             var bindingExpr = GenerateBindingExpression(binding);
             sb.Append($" {avaloniaProperty}=\"{bindingExpr}\"");
@@ -1048,6 +1063,27 @@ public sealed class AvaloniaGenerator : IBackendGenerator
             "commandparameter" => "CommandParameter",
             _ => null
         };
+    }
+
+    private static bool CheckComponentCapability(ComponentNode node, GenerationOptions options, List<Diagnostic> diagnostics)
+    {
+        if (AvaloniaCapabilities.Instance.SupportsComponent(node.Type.ToString()))
+            return false;
+
+        if (options.MissingCapabilityPolicy == MissingCapabilityPolicy.Error)
+        {
+            diagnostics.Add(Diagnostic.Error($"Component type '{node.Type}' is not supported by Avalonia", node.Id));
+            return true;
+        }
+        else if (options.MissingCapabilityPolicy == MissingCapabilityPolicy.Warn)
+        {
+            diagnostics.Add(Diagnostic.Warning($"Component type '{node.Type}' has limited support in Avalonia", node.Id));
+            return false;
+        }
+        else // Skip
+        {
+            return true;
+        }
     }
 
     private static string? DimensionToAvalonia(Dimension dim)

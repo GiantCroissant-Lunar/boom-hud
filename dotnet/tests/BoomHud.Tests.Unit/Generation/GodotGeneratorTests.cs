@@ -827,4 +827,72 @@ public class GodotGeneratorTests
         var m = Regex.Match(tscnContent, @"transform\s*=\s*Transform3D\([^)]+\)", RegexOptions.CultureInvariant);
         return m.Success ? m.Value : string.Empty;
     }
+
+    [Fact]
+    public void Generate_WithUnsupportedComponent_WarnPolicy_EmitsWarning()
+    {
+        var options = _options with
+        {
+            MissingCapabilityPolicy = MissingCapabilityPolicy.Warn,
+            EmitViewModelInterfaces = false
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "unsupported",
+                        Type = ComponentType.Timeline
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d =>
+            d.Severity == DiagnosticSeverity.Warning &&
+            d.Message.Contains("Timeline") &&
+            d.Message.Contains("limited support"));
+    }
+
+    [Fact]
+    public void Generate_WithUnsupportedComponent_ErrorPolicy_EmitsError()
+    {
+        var options = _options with
+        {
+            MissingCapabilityPolicy = MissingCapabilityPolicy.Error,
+            EmitViewModelInterfaces = false
+        };
+
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "unsupported",
+                        Type = ComponentType.Timeline
+                    }
+                ]
+            }
+        };
+
+        var result = _generator.Generate(doc, options);
+
+        result.Diagnostics.Should().Contain(d =>
+            d.Severity == DiagnosticSeverity.Error &&
+            d.Message.Contains("Timeline") &&
+            d.Message.Contains("not supported"));
+    }
 }
