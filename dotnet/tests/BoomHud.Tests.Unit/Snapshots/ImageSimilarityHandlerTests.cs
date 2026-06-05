@@ -8,6 +8,7 @@ using BoomHud.Generators.VisualIR;
 using FluentAssertions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Xunit;
 
 namespace BoomHud.Tests.Unit.Snapshots;
@@ -1597,6 +1598,91 @@ public sealed class ImageSimilarityHandlerTests : IDisposable
         converted.Should().NotBeNull();
         converted!.RegionId.Should().Be("panel@10,20,30x40");
         converted.Phases.Should().ContainSingle(phase => phase.Phase == "inner-layout-match" && phase.SimilarityPercent == 61);
+    }
+
+    [Fact]
+    public void ComputeDiffMetrics_WithKnownDiffPixels_ReportsExactDiffCount()
+    {
+        // 8x8 images: baseline all white, candidate has 4 specific pixels changed to black.
+        // This pins the numeric output of ComputeDiffMetrics so the perf refactor is provably behavior-preserving.
+        var baselinePath = Path.Combine(_tempDir, "baseline-diff-metrics.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-diff-metrics.png");
+        var reportPath = Path.Combine(_tempDir, "report-diff-metrics.json");
+
+        CreatePng(baselinePath, 8, 8, new Rgba32(255, 255, 255, 255));
+
+        // Build candidate with known diff pixels
+        using (var candidate = new Image<Rgba32>(8, 8, new Rgba32(255, 255, 255, 255)))
+        {
+            // Change 4 specific pixels
+            candidate[1, 2] = new Rgba32(0, 0, 0, 255);
+            candidate[3, 4] = new Rgba32(0, 0, 0, 255);
+            candidate[5, 6] = new Rgba32(0, 0, 0, 255);
+            candidate[7, 0] = new Rgba32(0, 0, 0, 255);
+            candidate.SaveAsPng(candidatePath);
+        }
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(baselinePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            PrintSummary = false,
+            Tolerance = 0
+        });
+
+        exitCode.Should().Be(0);
+
+        var report = LoadReport(reportPath);
+        report.Metrics.ChangedPixels.Should().Be(4);
+        report.Metrics.TotalPixels.Should().Be(64);
+        report.Metrics.ChangedPercent.Should().Be(6.25); // 4/64 * 100
+        report.Metrics.DimensionsMatch.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ComputeDiffMetrics_WithNonUniformDiff_ReportsCorrectRegionalMetrics()
+    {
+        // 8x8 images: diff pixels in different regions (top-left quadrant vs bottom-right quadrant)
+        // to exercise that spatial analysis produces distinct per-region scores.
+        var baselinePath = Path.Combine(_tempDir, "baseline-regional.png");
+        var candidatePath = Path.Combine(_tempDir, "candidate-regional.png");
+        var reportPath = Path.Combine(_tempDir, "report-regional.json");
+
+        CreatePng(baselinePath, 8, 8, new Rgba32(255, 255, 255, 255));
+
+        using (var candidate = new Image<Rgba32>(8, 8))
+        {
+            candidate.Mutate(ctx => ctx.BackgroundColor(new Rgba32(255, 255, 255, 255)));
+            // Change pixels in top-left and bottom-right quadrants
+            candidate[0, 0] = new Rgba32(0, 0, 0, 255);
+            candidate[1, 1] = new Rgba32(0, 0, 0, 255);
+            candidate[6, 6] = new Rgba32(0, 0, 0, 255);
+            candidate[7, 7] = new Rgba32(0, 0, 0, 255);
+            candidate[0, 3] = new Rgba32(0, 0, 0, 255);
+            candidate[7, 4] = new Rgba32(0, 0, 0, 255);
+            candidate.SaveAsPng(candidatePath);
+        }
+
+        var exitCode = ImageSimilarityHandler.Execute(new ImageSimilarityOptions
+        {
+            ReferenceFile = new FileInfo(baselinePath),
+            CandidateFile = new FileInfo(candidatePath),
+            OutFile = new FileInfo(reportPath),
+            PrintSummary = false,
+            Tolerance = 0
+        });
+
+        exitCode.Should().Be(0);
+
+        var report = LoadReport(reportPath);
+        report.Metrics.ChangedPixels.Should().Be(6);
+        report.Analysis.Should().NotBeNull();
+        // Verify spatial analysis produced non-zero values for multiple regions
+        report.Analysis!.LeftThirdChangedPercent.Should().BeGreaterThan(0);
+        report.Analysis.RightThirdChangedPercent.Should().BeGreaterThan(0);
+        report.Analysis.TopThirdChangedPercent.Should().BeGreaterThan(0);
+        report.Analysis.BottomThirdChangedPercent.Should().BeGreaterThan(0);
     }
 
     private static void CreatePng(string path, int width, int height, Rgba32 color)

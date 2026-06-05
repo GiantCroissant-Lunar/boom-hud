@@ -6,6 +6,7 @@ using BoomHud.Cli.Handlers.Pencil;
 using BoomHud.Gen.Pencil;
 using BoomHud.Generators.VisualIR;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -693,136 +694,142 @@ public static class ImageSimilarityHandler
         long middleThirdChanged = 0;
         long bottomThirdChanged = 0;
 
-        for (var y = 0; y < height; y++)
+        baseline.ProcessPixelRows(current, (baselineAccessor, currentAccessor) =>
         {
-            for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
             {
-                var baselinePixel = (x < baseline.Width && y < baseline.Height)
-                    ? baseline[x, y]
-                    : new Rgba32(0, 0, 0, 0);
+                var baselineRow = (y < baseline.Height) ? baselineAccessor.GetRowSpan(y) : default;
+                var currentRow = (y < current.Height) ? currentAccessor.GetRowSpan(y) : default;
 
-                var currentPixel = (x < current.Width && y < current.Height)
-                    ? current[x, y]
-                    : new Rgba32(0, 0, 0, 0);
-
-                if (baselinePixel.A > alphaThreshold)
+                for (var x = 0; x < width; x++)
                 {
-                    baselineOpaque++;
-                }
+                    var baselinePixel = (x < baseline.Width && y < baseline.Height)
+                        ? baselineRow[x]
+                        : new Rgba32(0, 0, 0, 0);
 
-                if (currentPixel.A > alphaThreshold)
-                {
-                    currentOpaque++;
-                }
+                    var currentPixel = (x < current.Width && y < current.Height)
+                        ? currentRow[x]
+                        : new Rgba32(0, 0, 0, 0);
 
-                var dr = Math.Abs(currentPixel.R - baselinePixel.R);
-                var dg = Math.Abs(currentPixel.G - baselinePixel.G);
-                var db = Math.Abs(currentPixel.B - baselinePixel.B);
-                var da = Math.Abs(currentPixel.A - baselinePixel.A);
-                var changed = Math.Max(Math.Max(dr, dg), Math.Max(db, da)) > tolerance;
-
-                var isLeftEdge = x < edgeBandWidth;
-                var isRightEdge = x >= rightBandStart;
-                var isTopEdge = y < edgeBandHeight;
-                var isBottomEdge = y >= bottomBandStart;
-                var isCenterBand = x >= centerStartX && x < centerEndX && y >= centerStartY && y < centerEndY;
-
-                if (isLeftEdge)
-                {
-                    leftEdgeTotal++;
-                    if (changed)
+                    if (baselinePixel.A > alphaThreshold)
                     {
-                        leftEdgeChanged++;
+                        baselineOpaque++;
                     }
-                }
 
-                if (isRightEdge)
-                {
-                    rightEdgeTotal++;
-                    if (changed)
+                    if (currentPixel.A > alphaThreshold)
                     {
-                        rightEdgeChanged++;
+                        currentOpaque++;
                     }
-                }
 
-                if (isTopEdge)
-                {
-                    topEdgeTotal++;
-                    if (changed)
-                    {
-                        topEdgeChanged++;
-                    }
-                }
+                    var dr = Math.Abs(currentPixel.R - baselinePixel.R);
+                    var dg = Math.Abs(currentPixel.G - baselinePixel.G);
+                    var db = Math.Abs(currentPixel.B - baselinePixel.B);
+                    var da = Math.Abs(currentPixel.A - baselinePixel.A);
+                    var changed = Math.Max(Math.Max(dr, dg), Math.Max(db, da)) > tolerance;
 
-                if (isBottomEdge)
-                {
-                    bottomEdgeTotal++;
-                    if (changed)
-                    {
-                        bottomEdgeChanged++;
-                    }
-                }
+                    var isLeftEdge = x < edgeBandWidth;
+                    var isRightEdge = x >= rightBandStart;
+                    var isTopEdge = y < edgeBandHeight;
+                    var isBottomEdge = y >= bottomBandStart;
+                    var isCenterBand = x >= centerStartX && x < centerEndX && y >= centerStartY && y < centerEndY;
 
-                if (isCenterBand)
-                {
-                    centerBandTotal++;
-                    if (changed)
+                    if (isLeftEdge)
                     {
-                        centerBandChanged++;
+                        leftEdgeTotal++;
+                        if (changed)
+                        {
+                            leftEdgeChanged++;
+                        }
                     }
-                }
 
-                if (x < width / 3)
-                {
-                    leftThirdTotal++;
-                    if (changed)
+                    if (isRightEdge)
                     {
-                        leftThirdChanged++;
+                        rightEdgeTotal++;
+                        if (changed)
+                        {
+                            rightEdgeChanged++;
+                        }
                     }
-                }
-                else if (x < (width * 2) / 3)
-                {
-                    centerThirdTotal++;
-                    if (changed)
-                    {
-                        centerThirdChanged++;
-                    }
-                }
-                else
-                {
-                    rightThirdTotal++;
-                    if (changed)
-                    {
-                        rightThirdChanged++;
-                    }
-                }
 
-                if (y < height / 3)
-                {
-                    topThirdTotal++;
-                    if (changed)
+                    if (isTopEdge)
                     {
-                        topThirdChanged++;
+                        topEdgeTotal++;
+                        if (changed)
+                        {
+                            topEdgeChanged++;
+                        }
                     }
-                }
-                else if (y < (height * 2) / 3)
-                {
-                    middleThirdTotal++;
-                    if (changed)
+
+                    if (isBottomEdge)
                     {
-                        middleThirdChanged++;
+                        bottomEdgeTotal++;
+                        if (changed)
+                        {
+                            bottomEdgeChanged++;
+                        }
                     }
-                }
-                else
-                {
-                    bottomThirdTotal++;
-                    if (changed)
+
+                    if (isCenterBand)
                     {
-                        bottomThirdChanged++;
+                        centerBandTotal++;
+                        if (changed)
+                        {
+                            centerBandChanged++;
+                        }
+                    }
+
+                    if (x < width / 3)
+                    {
+                        leftThirdTotal++;
+                        if (changed)
+                        {
+                            leftThirdChanged++;
+                        }
+                    }
+                    else if (x < (width * 2) / 3)
+                    {
+                        centerThirdTotal++;
+                        if (changed)
+                        {
+                            centerThirdChanged++;
+                        }
+                    }
+                    else
+                    {
+                        rightThirdTotal++;
+                        if (changed)
+                        {
+                            rightThirdChanged++;
+                        }
+                    }
+
+                    if (y < height / 3)
+                    {
+                        topThirdTotal++;
+                        if (changed)
+                        {
+                            topThirdChanged++;
+                        }
+                    }
+                    else if (y < (height * 2) / 3)
+                    {
+                        middleThirdTotal++;
+                        if (changed)
+                        {
+                            middleThirdChanged++;
+                        }
+                    }
+                    else
+                    {
+                        bottomThirdTotal++;
+                        if (changed)
+                        {
+                            bottomThirdChanged++;
+                        }
                     }
                 }
             }
-        }
+        });
 
         var leftEdgeChangedPercent = Percent(leftEdgeChanged, leftEdgeTotal);
         var rightEdgeChangedPercent = Percent(rightEdgeChanged, rightEdgeTotal);
@@ -2161,14 +2168,17 @@ public static class ImageSimilarityHandler
 
         for (var y = bounds.Y; y < bounds.Bottom; y++)
         {
+            var baselineRow = (y < baseline.Height) ? baseline.DangerousGetPixelRowMemory(y).Span : default;
+            var currentRow = (y < current.Height) ? current.DangerousGetPixelRowMemory(y).Span : default;
+
             for (var x = bounds.X; x < bounds.Right; x++)
             {
                 var baselinePixel = (x < baseline.Width && y < baseline.Height)
-                    ? baseline[x, y]
+                    ? baselineRow[x]
                     : new Rgba32(0, 0, 0, 0);
 
                 var currentPixel = (x < current.Width && y < current.Height)
-                    ? current[x, y]
+                    ? currentRow[x]
                     : new Rgba32(0, 0, 0, 0);
 
                 if (baselinePixel.A > alphaThreshold)

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BoomHud.Abstractions.Snapshots;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -194,37 +195,44 @@ public static class BaselineDiffHandler
 
         using var diff = new Image<Rgba32>(width, height);
 
-        for (var y = 0; y < height; y++)
+        baseline.ProcessPixelRows(current, (baselineAccessor, currentAccessor) =>
         {
-            for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
             {
-                var baselinePixel = (x < baseline.Width && y < baseline.Height)
-                    ? baseline[x, y]
-                    : new Rgba32(0, 0, 0, 0);
+                var baselineRow = (y < baseline.Height) ? baselineAccessor.GetRowSpan(y) : default;
+                var currentRow = (y < current.Height) ? currentAccessor.GetRowSpan(y) : default;
+                var diffRow = diff.DangerousGetPixelRowMemory(y).Span;
 
-                var currentPixel = (x < current.Width && y < current.Height)
-                    ? current[x, y]
-                    : new Rgba32(0, 0, 0, 0);
-
-                var dr = Math.Abs(currentPixel.R - baselinePixel.R);
-                var dg = Math.Abs(currentPixel.G - baselinePixel.G);
-                var db = Math.Abs(currentPixel.B - baselinePixel.B);
-                var da = Math.Abs(currentPixel.A - baselinePixel.A);
-
-                var maxDelta = Math.Max(Math.Max(dr, dg), Math.Max(db, da));
-
-                if (maxDelta > tolerance)
+                for (var x = 0; x < width; x++)
                 {
-                    var intensity = (byte)Math.Min(255, (dr + dg + db + da) / 2 + 128);
-                    diff[x, y] = new Rgba32(intensity, 0, intensity, 255);
-                }
-                else
-                {
-                    var gray = (byte)((currentPixel.R + currentPixel.G + currentPixel.B) / 6);
-                    diff[x, y] = new Rgba32(gray, gray, gray, 128);
+                    var baselinePixel = (x < baseline.Width && y < baseline.Height)
+                        ? baselineRow[x]
+                        : new Rgba32(0, 0, 0, 0);
+
+                    var currentPixel = (x < current.Width && y < current.Height)
+                        ? currentRow[x]
+                        : new Rgba32(0, 0, 0, 0);
+
+                    var dr = Math.Abs(currentPixel.R - baselinePixel.R);
+                    var dg = Math.Abs(currentPixel.G - baselinePixel.G);
+                    var db = Math.Abs(currentPixel.B - baselinePixel.B);
+                    var da = Math.Abs(currentPixel.A - baselinePixel.A);
+
+                    var maxDelta = Math.Max(Math.Max(dr, dg), Math.Max(db, da));
+
+                    if (maxDelta > tolerance)
+                    {
+                        var intensity = (byte)Math.Min(255, (dr + dg + db + da) / 2 + 128);
+                        diffRow[x] = new Rgba32(intensity, 0, intensity, 255);
+                    }
+                    else
+                    {
+                        var gray = (byte)((currentPixel.R + currentPixel.G + currentPixel.B) / 6);
+                        diffRow[x] = new Rgba32(gray, gray, gray, 128);
+                    }
                 }
             }
-        }
+        });
 
         using var outputStream = File.Create(outputPath);
         diff.Save(outputStream, new PngEncoder());

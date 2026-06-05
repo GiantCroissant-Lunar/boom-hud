@@ -386,34 +386,40 @@ public static class BaselineCompareHandler
         var maxDelta = 0;
         long totalDelta = 0;
 
-        for (var y = 0; y < height; y++)
+        baseline.ProcessPixelRows(current, (baselineAccessor, currentAccessor) =>
         {
-            for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
             {
-                var baselinePixel = (x < baseline.Width && y < baseline.Height)
-                    ? baseline[x, y]
-                    : new Rgba32(0, 0, 0, 0);
+                var baselineRow = (y < baseline.Height) ? baselineAccessor.GetRowSpan(y) : default;
+                var currentRow = (y < current.Height) ? currentAccessor.GetRowSpan(y) : default;
 
-                var currentPixel = (x < current.Width && y < current.Height)
-                    ? current[x, y]
-                    : new Rgba32(0, 0, 0, 0);
-
-                var dr = Math.Abs(currentPixel.R - baselinePixel.R);
-                var dg = Math.Abs(currentPixel.G - baselinePixel.G);
-                var db = Math.Abs(currentPixel.B - baselinePixel.B);
-                var da = Math.Abs(currentPixel.A - baselinePixel.A);
-
-                var pixelMaxDelta = Math.Max(Math.Max(dr, dg), Math.Max(db, da));
-                var pixelTotalDelta = dr + dg + db + da;
-
-                if (pixelMaxDelta > tolerance)
+                for (var x = 0; x < width; x++)
                 {
-                    changedPixels++;
-                    maxDelta = Math.Max(maxDelta, pixelMaxDelta);
-                    totalDelta += pixelTotalDelta;
+                    var baselinePixel = (x < baseline.Width && y < baseline.Height)
+                        ? baselineRow[x]
+                        : new Rgba32(0, 0, 0, 0);
+
+                    var currentPixel = (x < current.Width && y < current.Height)
+                        ? currentRow[x]
+                        : new Rgba32(0, 0, 0, 0);
+
+                    var dr = Math.Abs(currentPixel.R - baselinePixel.R);
+                    var dg = Math.Abs(currentPixel.G - baselinePixel.G);
+                    var db = Math.Abs(currentPixel.B - baselinePixel.B);
+                    var da = Math.Abs(currentPixel.A - baselinePixel.A);
+
+                    var pixelMaxDelta = Math.Max(Math.Max(dr, dg), Math.Max(db, da));
+                    var pixelTotalDelta = dr + dg + db + da;
+
+                    if (pixelMaxDelta > tolerance)
+                    {
+                        changedPixels++;
+                        maxDelta = Math.Max(maxDelta, pixelMaxDelta);
+                        totalDelta += pixelTotalDelta;
+                    }
                 }
             }
-        }
+        });
 
         var changedPercent = totalPixels > 0 ? (double)changedPixels / totalPixels * 100 : 0;
         var meanDelta = changedPixels > 0 ? (double)totalDelta / changedPixels / 4 : 0; // Divide by 4 for RGBA avg
