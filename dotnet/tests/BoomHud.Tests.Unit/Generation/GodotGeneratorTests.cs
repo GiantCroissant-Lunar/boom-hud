@@ -740,6 +740,88 @@ public class GodotGeneratorTests
         csFile.Content.Should().NotContain("ComputeCylinderTransform");
     }
 
+    [Fact]
+    public void Generate_CSharpView_EscapesBackslashAndTab_InTextLiterals()
+    {
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        // Text with a tab and a backslash. The old EscapeString only handled '"' and '\n',
+        // so these produced an invalid C# string literal (e.g. "val\end") in the generated view.
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "label",
+                        Type = ComponentType.Label,
+                        Properties = new Dictionary<string, BindableValue<object?>>
+                        {
+                            ["text"] = "col\tval\\end"
+                        }
+                    }
+                ]
+            }
+        };
+
+        var view = _generator.Generate(doc, options).Files.First(f => f.Path == "RootView.cs").Content;
+
+        // Tab -> \t, backslash -> \\ : the emitted literal must be well-formed C#.
+        view.Should().Contain("col\\tval\\\\end");
+        // The raw tab character must not leak into the generated source.
+        view.Should().NotContain("col\tval");
+    }
+
+    [Fact]
+    public void Generate_CSharpView_FormatsFloatsWithInvariantCulture_UnderCommaDecimalLocale()
+    {
+        var options = _options with { EmitViewModelInterfaces = false };
+
+        var doc = new HudDocument
+        {
+            Name = "Root",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Layout = new LayoutSpec { Type = LayoutType.Vertical },
+                // Foreground color -> fractional Color() floats (244/255 = 0.95686...).
+                Style = new StyleSpec { Foreground = new Color(244, 246, 248) },
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "title",
+                        Type = ComponentType.Label,
+                        // Weight -> SizeFlagsStretchRatio float.
+                        Layout = new LayoutSpec { Weight = 0.5 }
+                    }
+                ]
+            }
+        };
+
+        var original = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            // A locale whose decimal separator is ',' would, before the fix, emit "0,5f" /
+            // "Color(0,95686..." into the generated C#, which then fails to compile.
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
+            var view = _generator.Generate(doc, options).Files.First(f => f.Path == "RootView.cs").Content;
+
+            view.Should().Contain("new Color(0.9");
+            view.Should().Contain("SizeFlagsStretchRatio = 0.5f");
+            view.Should().NotContain("Color(0,");
+            view.Should().NotContain("0,5f");
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = original;
+        }
+    }
+
     private static string ExtractTransform3D(string tscnContent)
     {
         var m = Regex.Match(tscnContent, @"transform\s*=\s*Transform3D\([^)]+\)", RegexOptions.CultureInvariant);

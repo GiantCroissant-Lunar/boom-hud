@@ -1540,11 +1540,11 @@ public sealed class GodotGenerator : IBackendGenerator
 
             if (layout.Width != null && layout.Width.Value.Unit == DimensionUnit.Pixels)
             {
-                cb.AppendLine($"c.CustomMinimumSize = new Vector2({(float)layout.Width.Value.Value}, c.CustomMinimumSize.Y);");
+                cb.AppendLine($"c.CustomMinimumSize = new Vector2({Inv((float)layout.Width.Value.Value)}f, c.CustomMinimumSize.Y);");
             }
             if (layout.Height != null && layout.Height.Value.Unit == DimensionUnit.Pixels)
             {
-                cb.AppendLine($"c.CustomMinimumSize = new Vector2(c.CustomMinimumSize.X, {(float)layout.Height.Value.Value});");
+                cb.AppendLine($"c.CustomMinimumSize = new Vector2(c.CustomMinimumSize.X, {Inv((float)layout.Height.Value.Value)}f);");
             }
 
             // Size Flags (if inside a Container)
@@ -1575,7 +1575,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 // Flex weight (Stretch Ratio)
                 if (layout.Weight.HasValue)
                 {
-                    cb.AppendLine($"c.SizeFlagsStretchRatio = {layout.Weight.Value}f;");
+                    cb.AppendLine($"c.SizeFlagsStretchRatio = {Inv((float)layout.Weight.Value)}f;");
                 }
             }
 
@@ -1630,7 +1630,7 @@ public sealed class GodotGenerator : IBackendGenerator
         switch (offset.Value.Unit)
         {
             case DimensionUnit.Percent:
-                cb.AppendLine($"{controlName}.{anchorProperty} = {(float)(offset.Value.Value / 100.0)}f;");
+                cb.AppendLine($"{controlName}.{anchorProperty} = {Inv((float)(offset.Value.Value / 100.0))}f;");
                 cb.AppendLine($"{controlName}.{positionProperty} = 0f;");
                 break;
 
@@ -1638,7 +1638,7 @@ public sealed class GodotGenerator : IBackendGenerator
             case DimensionUnit.Cells:
             default:
                 cb.AppendLine($"{controlName}.{anchorProperty} = 0f;");
-                cb.AppendLine($"{controlName}.{positionProperty} = {(float)offset.Value.Value}f;");
+                cb.AppendLine($"{controlName}.{positionProperty} = {Inv((float)offset.Value.Value)}f;");
                 break;
         }
     }
@@ -1651,7 +1651,7 @@ public sealed class GodotGenerator : IBackendGenerator
         if (style.Foreground != null)
         {
             var c = style.Foreground.Value;
-            cb.AppendLine($"{varName}.AddThemeColorOverride(\"font_color\", new Color({c.R / 255f}f, {c.G / 255f}f, {c.B / 255f}f, {c.A / 255f}f));");
+            cb.AppendLine($"{varName}.AddThemeColorOverride(\"font_color\", new Color({Inv(c.R / 255f)}f, {Inv(c.G / 255f)}f, {Inv(c.B / 255f)}f, {Inv(c.A / 255f)}f));");
         }
 
         // Background - Tricky, usually requires a StyleBox.
@@ -1873,7 +1873,17 @@ public sealed class GodotGenerator : IBackendGenerator
         return char.ToUpperInvariant(name[0]) + name[1..];
     }
 
-    private static string EscapeString(string value) => value.Replace("\"", "\\\"").Replace("\n", "\\n");
+    private static string EscapeString(string value) => value
+        .Replace("\\", "\\\\")
+        .Replace("\"", "\\\"")
+        .Replace("\n", "\\n")
+        .Replace("\r", "\\r")
+        .Replace("\t", "\\t");
+
+    // Format a float into generated C# using the invariant culture so the emitted source
+    // compiles regardless of the build host's locale (e.g. de-DE would otherwise emit "0,5").
+    private static string Inv(float value) =>
+        value.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
 
     private static string? TryGetCommandBindingPath(ComponentNode node)
     {
