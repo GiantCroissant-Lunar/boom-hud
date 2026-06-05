@@ -44,7 +44,7 @@ public static class GeneratorSourceId
             return "new string[0]";
         }
 
-        return "new[] { " + string.Join(", ", items.Select(s => "\"" + EscapeCSharpString(s) + "\"")) + " }";
+        return "new[] { " + string.Join(", ", items.Select(GeneratorEmit.CSharpStringLiteral)) + " }";
     }
 
     private static void CollectNormalizedPseudoNodes(ComponentNode node, List<string> currentPath, List<string> results)
@@ -109,11 +109,4 @@ public static class GeneratorSourceId
         }
         return hex.ToString();
     }
-
-    private static string EscapeCSharpString(string value) => value
-        .Replace("\\", "\\\\")
-        .Replace("\"", "\\\"")
-        .Replace("\n", "\\n")
-        .Replace("\r", "\\r")
-        .Replace("\t", "\\t");
 }

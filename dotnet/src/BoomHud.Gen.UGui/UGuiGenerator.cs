@@ -327,22 +327,22 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine($"{indent}ConfigureRect({rect}, width: {ToNullableFloatLiteral(configuredWidth)}, height: {ToNullableFloatLiteral(configuredHeight)}, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
         if (!string.IsNullOrWhiteSpace(anchorPreset))
         {
-            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {ToStringLiteral(anchorPreset)});");
+            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {GeneratorEmit.CSharpStringLiteral(anchorPreset)});");
         }
 
         if (!string.IsNullOrWhiteSpace(pivotPreset))
         {
-            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {ToStringLiteral(pivotPreset)});");
+            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {GeneratorEmit.CSharpStringLiteral(pivotPreset)});");
         }
 
         if (!string.IsNullOrWhiteSpace(rectTransformMode))
         {
-            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {ToStringLiteral(rectTransformMode)});");
+            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {GeneratorEmit.CSharpStringLiteral(rectTransformMode)});");
         }
 
         if (!string.IsNullOrWhiteSpace(edgeInsetPolicy))
         {
-            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {ToStringLiteral(edgeInsetPolicy)});");
+            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {GeneratorEmit.CSharpStringLiteral(edgeInsetPolicy)});");
         }
 
         var contentFitHorizontal = absolute
@@ -402,7 +402,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
             var width = Pixels(widthDimension) ?? 16d;
             var height = Pixels(heightDimension) ?? 16d;
             builder.AppendLine(
-                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(iconMetric?.BaselineOffset ?? IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(iconMetric?.OpticalCentering ?? IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {ToStringLiteral(iconMetric?.SizeMode ?? IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(resolvedFontSize ?? 0d)});");
+                $"{indent}ApplyIconMetrics({accessor}, boxWidth: {ToFloatLiteral(width)}, boxHeight: {ToFloatLiteral(height)}, baselineOffset: {ToFloatLiteral(iconMetric?.BaselineOffset ?? IconPolicyService.ResolveBaselineOffset(node.Policy))}, opticalCentering: {Bool(iconMetric?.OpticalCentering ?? IconPolicyService.UseOpticalCentering(node.Policy))}, sizeMode: {GeneratorEmit.CSharpStringLiteral(iconMetric?.SizeMode ?? IconPolicyService.ResolveSizeMode(node.Policy))}, explicitFontSize: {ToFloatLiteral(resolvedFontSize ?? 0d)});");
         }
 
         if (ShouldApplyTextMetrics(node))
@@ -484,22 +484,22 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         builder.AppendLine($"{indent}ConfigureRect({rect}, width: null, height: null, left: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Left, BoomHudMetadataKeys.PencilLeft, node.Policy, "x") : null)}, top: {ToNullableFloatLiteral(absolute ? AbsoluteOffset(node.Source, static x => x.Top, BoomHudMetadataKeys.PencilTop, node.Policy, "y") : null)}, absolute: {Bool(absolute)});");
         if (!string.IsNullOrWhiteSpace(anchorPreset))
         {
-            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {ToStringLiteral(anchorPreset)});");
+            builder.AppendLine($"{indent}ApplyRectAnchorPreset({rect}, {GeneratorEmit.CSharpStringLiteral(anchorPreset)});");
         }
 
         if (!string.IsNullOrWhiteSpace(pivotPreset))
         {
-            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {ToStringLiteral(pivotPreset)});");
+            builder.AppendLine($"{indent}ApplyRectPivotPreset({rect}, {GeneratorEmit.CSharpStringLiteral(pivotPreset)});");
         }
 
         if (!string.IsNullOrWhiteSpace(rectTransformMode))
         {
-            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {ToStringLiteral(rectTransformMode)});");
+            builder.AppendLine($"{indent}ApplyRectTransformMode({rect}, {GeneratorEmit.CSharpStringLiteral(rectTransformMode)});");
         }
 
         if (!string.IsNullOrWhiteSpace(edgeInsetPolicy))
         {
-            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {ToStringLiteral(edgeInsetPolicy)});");
+            builder.AppendLine($"{indent}ApplyEdgeInsetPolicy({rect}, {GeneratorEmit.CSharpStringLiteral(edgeInsetPolicy)});");
         }
 
         if (absolute)
@@ -524,7 +524,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
                 continue;
             }
 
-            builder.AppendLine($"{indent}if (TryGetComponentOverrideValue({ToStringLiteral(node.RelativePath)}, {ToStringLiteral(property.Key)}, out var {overrideVariableName}))");
+            builder.AppendLine($"{indent}if (TryGetComponentOverrideValue({GeneratorEmit.CSharpStringLiteral(node.RelativePath)}, {GeneratorEmit.CSharpStringLiteral(property.Key)}, out var {overrideVariableName}))");
             builder.AppendLine($"{indent}{{");
             foreach (var line in assignment.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries))
             {
@@ -1965,7 +1965,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         {
             return alignmentPreset == null
                 ? $"ApplyHorizontalLayout({baseArgs});"
-                : $"ApplyHorizontalLayout({baseArgs}, {ToStringLiteral(alignmentPreset)});";
+                : $"ApplyHorizontalLayout({baseArgs}, {GeneratorEmit.CSharpStringLiteral(alignmentPreset)});";
         }
 
         return $"ApplyHorizontalLayout({baseArgs}, {ToNullableStringLiteral(alignmentPreset)}, childControlWidth: {Bool(settings.ChildControlWidth)}, childControlHeight: {Bool(settings.ChildControlHeight)});";
@@ -1978,7 +1978,7 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         {
             return alignmentPreset == null
                 ? $"ApplyVerticalLayout({baseArgs});"
-                : $"ApplyVerticalLayout({baseArgs}, {ToStringLiteral(alignmentPreset)});";
+                : $"ApplyVerticalLayout({baseArgs}, {GeneratorEmit.CSharpStringLiteral(alignmentPreset)});";
         }
 
         return $"ApplyVerticalLayout({baseArgs}, {ToNullableStringLiteral(alignmentPreset)}, childControlWidth: {Bool(settings.ChildControlWidth)}, childControlHeight: {Bool(settings.ChildControlHeight)});";
@@ -2135,23 +2135,20 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         => value switch
         {
             null => null,
-            string s => ToStringLiteral(s),
+            string s => GeneratorEmit.CSharpStringLiteral(s),
             bool b => Bool(b),
             float f => ToFloatLiteral(f),
             double d => d.ToString(CultureInfo.InvariantCulture),
             int i => i.ToString(CultureInfo.InvariantCulture),
             long l => l.ToString(CultureInfo.InvariantCulture),
-            _ => ToStringLiteral(value.ToString() ?? string.Empty)
+            _ => GeneratorEmit.CSharpStringLiteral(value.ToString() ?? string.Empty)
         };
-
-    private static string ToStringLiteral(string value)
-        => "\"" + value.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal).Replace("\r", "\\r", StringComparison.Ordinal).Replace("\n", "\\n", StringComparison.Ordinal) + "\"";
 
     private static string Bool(bool value) => value ? "true" : "false";
     private static string ToFloatLiteral(double value) => value.ToString("0.###", CultureInfo.InvariantCulture) + "f";
     private static string ToNullableFloatLiteral(double? value) => value == null ? "null" : ToFloatLiteral(value.Value);
     private static string ToNullableIntLiteral(double? value) => value == null ? "null" : Convert.ToInt32(Math.Round(value.Value, MidpointRounding.AwayFromZero), CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture);
-    private static string ToNullableStringLiteral(string? value) => value == null ? "null" : ToStringLiteral(value);
+    private static string ToNullableStringLiteral(string? value) => value == null ? "null" : GeneratorEmit.CSharpStringLiteral(value);
     private static string? BuildComponentOverrideLiteral(ComponentNode node)
     {
         var overrides = ComponentInstanceOverrideSupport.GetPropertyOverrides(node);
@@ -2163,8 +2160,8 @@ public sealed partial class UGuiGenerator : IBackendGenerator
         return "new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)\n        {\n" +
             string.Join(",\n",
                 overrides.Select(pathEntry =>
-                    $"            [{ToStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
-                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{ToStringLiteral(propertyEntry.Key)}] = {Literal(propertyEntry.Value) ?? "null"}")) +
+                    $"            [{GeneratorEmit.CSharpStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
+                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{GeneratorEmit.CSharpStringLiteral(propertyEntry.Key)}] = {Literal(propertyEntry.Value) ?? "null"}")) +
                     "\n            }")) +
             "\n        }";
     }

@@ -116,7 +116,7 @@ public sealed class RemotionGenerator : IBackendGenerator
             foreach (var item in sequence.ResolvedItems)
             {
                 builder.AppendLine("  {");
-                builder.Append("    clipId: ").Append(ToStringLiteral(item.ClipId)).AppendLine(",");
+                builder.Append("    clipId: ").Append(GeneratorEmit.CSharpStringLiteral(item.ClipId)).AppendLine(",");
 
                 if (item.StartFrame.HasValue)
                 {
@@ -130,7 +130,7 @@ public sealed class RemotionGenerator : IBackendGenerator
 
                 if (!string.IsNullOrEmpty(item.FillMode))
                 {
-                    builder.Append("    fillMode: ").Append(ToStringLiteral(item.FillMode)).AppendLine(",");
+                    builder.Append("    fillMode: ").Append(GeneratorEmit.CSharpStringLiteral(item.FillMode)).AppendLine(",");
                 }
 
                 builder.AppendLine("  },");
@@ -145,15 +145,15 @@ public sealed class RemotionGenerator : IBackendGenerator
         foreach (var sequence in sequences)
         {
             builder.AppendLine("  {");
-            builder.Append("    id: ").Append(ToStringLiteral(sequence.Id)).AppendLine(",");
-            builder.Append("    name: ").Append(ToStringLiteral(sequence.Name)).AppendLine(",");
+            builder.Append("    id: ").Append(GeneratorEmit.CSharpStringLiteral(sequence.Id)).AppendLine(",");
+            builder.Append("    name: ").Append(GeneratorEmit.CSharpStringLiteral(sequence.Name)).AppendLine(",");
             builder.Append("    sequence: ").Append(sequence.SequenceVariable).AppendLine(",");
             builder.Append("    durationInFrames: ").Append(sequence.DurationVariable).AppendLine(",");
             builder.AppendLine("  },");
         }
 
         builder.AppendLine("];\n");
-        builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequenceId")).Append(" = ").Append(ToStringLiteral(defaultSequence.Id)).AppendLine(";");
+        builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequenceId")).Append(" = ").Append(GeneratorEmit.CSharpStringLiteral(defaultSequence.Id)).AppendLine(";");
         builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionSequence")).Append(" = ").Append(defaultSequence.SequenceVariable).AppendLine(";");
         builder.Append("export const ").Append(ToSafeIdentifier(document.Name + "DefaultMotionDurationInFrames")).Append(" = ").Append(defaultSequence.DurationVariable).AppendLine(";");
         builder.Append("export const ").Append(document.Name).Append("MotionFramesPerSecond = motionDocument.framesPerSecond;").AppendLine();
@@ -402,13 +402,6 @@ public sealed class RemotionGenerator : IBackendGenerator
         => value
             .Replace("`", "\\`", StringComparison.Ordinal)
             .Replace("${", "\\${", StringComparison.Ordinal);
-
-    private static string ToStringLiteral(string value)
-        => '"' + value
-            .Replace("\\", "\\\\", StringComparison.Ordinal)
-            .Replace("\"", "\\\"", StringComparison.Ordinal)
-            .Replace("\r", "\\r", StringComparison.Ordinal)
-            .Replace("\n", "\\n", StringComparison.Ordinal) + '"';
 
     private sealed record RemotionSequence
     {

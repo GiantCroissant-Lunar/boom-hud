@@ -112,12 +112,12 @@ public static class UnityMotionExporter
         builder.AppendLine("{");
         AppendInvariantLine(builder, $"    public const int FramesPerSecond = {motion.FramesPerSecond.ToString(CultureInfo.InvariantCulture)};");
         var defaultClipId = motion.Clips.Count > 0 ? motion.Clips[0].Id : string.Empty;
-        AppendInvariantLine(builder, $"    public const string DefaultClipId = {ToStringLiteral(defaultClipId)};");
+        AppendInvariantLine(builder, $"    public const string DefaultClipId = {GeneratorEmit.CSharpStringLiteral(defaultClipId)};");
         builder.AppendLine("    public static readonly string[] ClipIds =");
         builder.AppendLine("    {");
         foreach (var clip in motion.Clips)
         {
-            AppendInvariantLine(builder, $"        {ToStringLiteral(clip.Id)},");
+            AppendInvariantLine(builder, $"        {GeneratorEmit.CSharpStringLiteral(clip.Id)},");
         }
 
         builder.AppendLine("    };");
@@ -134,7 +134,7 @@ public static class UnityMotionExporter
         builder.AppendLine("        {");
         foreach (var clip in motion.Clips)
         {
-            AppendInvariantLine(builder, $"            {ToStringLiteral(clip.Id)} => Apply{ToPascalCase(clip.Id)}(view, frame),");
+            AppendInvariantLine(builder, $"            {GeneratorEmit.CSharpStringLiteral(clip.Id)} => Apply{ToPascalCase(clip.Id)}(view, frame),");
         }
 
         builder.AppendLine("            _ => false");
@@ -152,7 +152,7 @@ public static class UnityMotionExporter
         builder.AppendLine("        {");
         foreach (var clip in motion.Clips)
         {
-            AppendInvariantLine(builder, $"            {ToStringLiteral(clip.Id)} => {clip.DurationFrames.ToString(CultureInfo.InvariantCulture)},");
+            AppendInvariantLine(builder, $"            {GeneratorEmit.CSharpStringLiteral(clip.Id)} => {clip.DurationFrames.ToString(CultureInfo.InvariantCulture)},");
         }
 
         builder.AppendLine("            _ => 0");
@@ -217,12 +217,12 @@ public static class UnityMotionExporter
     private static void AppendSequenceMetadata(StringBuilder builder, MotionDocument motion)
     {
         var defaultSequenceId = ResolveDefaultSequenceId(motion) ?? string.Empty;
-        AppendInvariantLine(builder, $"    public const string DefaultSequenceId = {ToStringLiteral(defaultSequenceId)};");
+        AppendInvariantLine(builder, $"    public const string DefaultSequenceId = {GeneratorEmit.CSharpStringLiteral(defaultSequenceId)};");
         builder.AppendLine("    public static readonly string[] SequenceIds =");
         builder.AppendLine("    {");
         foreach (var sequence in motion.Sequences)
         {
-            AppendInvariantLine(builder, $"        {ToStringLiteral(sequence.Id)},");
+            AppendInvariantLine(builder, $"        {GeneratorEmit.CSharpStringLiteral(sequence.Id)},");
         }
 
         builder.AppendLine("    };");
@@ -249,13 +249,13 @@ public static class UnityMotionExporter
         builder.AppendLine("        {");
         foreach (var sequence in motion.Sequences)
         {
-            AppendInvariantLine(builder, $"            {ToStringLiteral(sequence.Id)} => new[]");
+            AppendInvariantLine(builder, $"            {GeneratorEmit.CSharpStringLiteral(sequence.Id)} => new[]");
             builder.AppendLine("            {");
             foreach (var item in sequence.Items)
             {
                 builder.AppendLine("                new TimelineSequenceClip");
                 builder.AppendLine("                {");
-                AppendInvariantLine(builder, $"                    ClipId = {ToStringLiteral(item.ClipId)},");
+                AppendInvariantLine(builder, $"                    ClipId = {GeneratorEmit.CSharpStringLiteral(item.ClipId)},");
                 AppendInvariantLine(builder, $"                    StartFrame = {(item.StartFrame ?? 0).ToString(CultureInfo.InvariantCulture)},");
                 AppendInvariantLine(builder, $"                    DurationFrames = {(item.DurationFrames ?? 0).ToString(CultureInfo.InvariantCulture)},");
                 AppendInvariantLine(builder, $"                    FillMode = TimelineSequenceFillMode.{item.FillMode}");
@@ -338,12 +338,12 @@ public static class UnityMotionExporter
         builder.AppendLine();
         builder.AppendLine("    private static VisualElement ResolveGeneratedRoot(VisualElement root)");
         builder.AppendLine("    {");
-        AppendInvariantLine(builder, $"        if (string.Equals(root.name, {ToStringLiteral(plan.Root.Name)}, StringComparison.Ordinal))");
+        AppendInvariantLine(builder, $"        if (string.Equals(root.name, {GeneratorEmit.CSharpStringLiteral(plan.Root.Name)}, StringComparison.Ordinal))");
         builder.AppendLine("        {");
         builder.AppendLine("            return root;");
         builder.AppendLine("        }");
         builder.AppendLine();
-        AppendInvariantLine(builder, $"        return root.Q<{plan.Root.ElementType}>({ToStringLiteral(plan.Root.Name)})");
+        AppendInvariantLine(builder, $"        return root.Q<{plan.Root.ElementType}>({GeneratorEmit.CSharpStringLiteral(plan.Root.Name)})");
         AppendInvariantLine(
             builder,
             $"            ?? throw new InvalidOperationException(\"Could not find generated root element '{plan.Root.Name}'. Assign the generated VisualTreeAsset to the UIDocument or the BoomHudUiToolkitHost before binding motion.\");");
@@ -627,7 +627,7 @@ public static class UnityMotionExporter
         => fieldType switch
         {
             "BooleanKeyframe" => $"new BooleanKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {FormatBoolean(keyframe.Value.Boolean ?? false)})",
-            "StringKeyframe" => $"new StringKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {ToStringLiteral(keyframe.Value.Text ?? string.Empty)})",
+            "StringKeyframe" => $"new StringKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {GeneratorEmit.CSharpStringLiteral(keyframe.Value.Text ?? string.Empty)})",
             _ => $"new NumberKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {FormatFloat((float)(keyframe.Value.Number ?? 0d))}, EaseMode.{keyframe.Easing})"
         };
 
@@ -867,13 +867,6 @@ public static class UnityMotionExporter
 
     private static string FormatFloat(float value)
         => value.ToString("0.###", CultureInfo.InvariantCulture) + "f";
-
-    private static string ToStringLiteral(string value)
-        => "\"" + value
-            .Replace("\\", "\\\\", StringComparison.Ordinal)
-            .Replace("\"", "\\\"", StringComparison.Ordinal)
-            .Replace("\r", "\\r", StringComparison.Ordinal)
-            .Replace("\n", "\\n", StringComparison.Ordinal) + "\"";
 
     private static string ToPascalCase(string value)
     {

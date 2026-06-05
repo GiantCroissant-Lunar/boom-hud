@@ -218,7 +218,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         cb.OpenBlock();
 
         cb.AppendLine($"public const string BoomHudSourceId = \"{sourceId}\";");
-        cb.AppendLine($"public const string BoomHudContractId = \"{EscapeString(contractId)}\";");
+        cb.AppendLine($"public const string BoomHudContractId = \"{GeneratorEmit.EscapeCSharpString(contractId)}\";");
         cb.AppendLine($"public static readonly string[] BoomHudNormalizedPseudoNodes = {GeneratorSourceId.FormatStringArrayLiteral(normalizedPseudoNodes)};");
         cb.AppendLine();
 
@@ -365,8 +365,8 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                 continue;
 
             cb.AppendLine();
-            cb.AppendLine($"var childView = root.FindSlot<{def.Name}View>(\"{EscapeString(slotKey)}\");");
-            cb.AppendLine($"var childVm = resolver.Resolve<I{def.Name}ViewModel>(vm, \"{EscapeString(slotKey)}\");");
+            cb.AppendLine($"var childView = root.FindSlot<{def.Name}View>(\"{GeneratorEmit.EscapeCSharpString(slotKey)}\");");
+            cb.AppendLine($"var childVm = resolver.Resolve<I{def.Name}ViewModel>(vm, \"{GeneratorEmit.EscapeCSharpString(slotKey)}\");");
             cb.AppendLine("childView.ViewModel = childVm;");
             cb.AppendLine("d.Add(new DisposableAction(() => childView.ViewModel = null));");
         }
@@ -667,7 +667,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         if (!string.IsNullOrWhiteSpace(node.SlotKey))
         {
-            cb.AppendLine($"RegisterSlot(\"{EscapeString(node.SlotKey)}\", {varName});");
+            cb.AppendLine($"RegisterSlot(\"{GeneratorEmit.EscapeCSharpString(node.SlotKey)}\", {varName});");
         }
 
         return varName;
@@ -823,7 +823,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                 or ComponentType.Checkbox
                 or ComponentType.RadioButton
                 or ComponentType.Icon
-                => $"{memberExpr}.Text = \"{EscapeString(value?.ToString() ?? string.Empty)}\";",
+                => $"{memberExpr}.Text = \"{GeneratorEmit.EscapeCSharpString(value?.ToString() ?? string.Empty)}\";",
             _ => null
         };
     }
@@ -840,7 +840,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
             case ComponentType.Checkbox:
             case ComponentType.RadioButton:
             case ComponentType.Icon:
-                return $"{memberExpr}.Text = \"{EscapeString(value?.ToString() ?? string.Empty)}\";";
+                return $"{memberExpr}.Text = \"{GeneratorEmit.EscapeCSharpString(value?.ToString() ?? string.Empty)}\";";
             case ComponentType.ProgressBar:
                 {
                     var fraction = Convert.ToSingle(value ?? 0, CultureInfo.InvariantCulture);
@@ -1027,7 +1027,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
             {
                 case ComponentType.Icon:
                 case ComponentType.Label:
-                    cb.AppendLine($"{varName}.Text = \"{EscapeString(valueProp.Value?.ToString() ?? "")}\";");
+                    cb.AppendLine($"{varName}.Text = \"{GeneratorEmit.EscapeCSharpString(valueProp.Value?.ToString() ?? "")}\";");
                     break;
                 case ComponentType.ProgressBar:
                     cb.AppendLine($"{varName}.Fraction = {valueProp.Value ?? 0}f;");
@@ -1038,7 +1038,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         // Handle static text property
         if (node.Properties.TryGetValue("text", out var textProp) && !textProp.IsBound)
         {
-            cb.AppendLine($"{varName}.Text = \"{EscapeString(textProp.Value?.ToString() ?? "")}\";");
+            cb.AppendLine($"{varName}.Text = \"{GeneratorEmit.EscapeCSharpString(textProp.Value?.ToString() ?? "")}\";");
         }
 
         var commandPath = TryGetCommandBindingPath(node);
@@ -1107,7 +1107,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
                     case "text":
                         if (!string.IsNullOrEmpty(binding.Format))
                         {
-                            cb.AppendLine($"{varName}.Text = string.Format(\"{EscapeString(binding.Format)}\", {valueExpr});");
+                            cb.AppendLine($"{varName}.Text = string.Format(\"{GeneratorEmit.EscapeCSharpString(binding.Format)}\", {valueExpr});");
                         }
                         else
                         {
@@ -1438,13 +1438,4 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         return char.ToUpperInvariant(name[0]) + name[1..];
     }
 
-    private static string EscapeString(string value)
-    {
-        return value
-            .Replace("\\", "\\\\")
-            .Replace("\"", "\\\"")
-            .Replace("\n", "\\n")
-            .Replace("\r", "\\r")
-            .Replace("\t", "\\t");
-    }
 }

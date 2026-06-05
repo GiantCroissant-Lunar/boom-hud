@@ -236,7 +236,7 @@ public sealed class GodotGenerator : IBackendGenerator
 
         foreach (var res in extResources)
         {
-            sb.AppendLine("[ext_resource type=\"" + EscapeString(res.Type) + "\" path=\"" + EscapeString(res.ResPath) + "\" id=\"" + EscapeString(res.Id) + "\"]");
+            sb.AppendLine("[ext_resource type=\"" + GeneratorEmit.EscapeCSharpString(res.Type) + "\" path=\"" + GeneratorEmit.EscapeCSharpString(res.ResPath) + "\" id=\"" + GeneratorEmit.EscapeCSharpString(res.Id) + "\"]");
         }
 
         if (extResources.Count > 0)
@@ -245,7 +245,7 @@ public sealed class GodotGenerator : IBackendGenerator
         }
 
         // Root node
-        sb.AppendLine("[node name=\"" + EscapeString(rootNodeName) + "\" type=\"" + EscapeString(rootType) + "\"]");
+        sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(rootNodeName) + "\" type=\"" + GeneratorEmit.EscapeCSharpString(rootType) + "\"]");
         if (options.EmitTscnAttachScript && !string.IsNullOrWhiteSpace(rootScriptResPath))
         {
             sb.AppendLine("script = ExtResource(\"1_root_script\")");
@@ -303,7 +303,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 var instanceId = FindPackedSceneId(extResources, def.Name);
                 if (instanceId != null)
                 {
-                    sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(parentPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
+                    sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(childNodeName) + "\" parent=\"" + GeneratorEmit.EscapeCSharpString(parentPath) + "\" instance=ExtResource(\"" + GeneratorEmit.EscapeCSharpString(instanceId) + "\")]");
                     AppendCommonNodeProperties(sb, child, parentNode.Layout?.Type);
                     continue;
                 }
@@ -315,7 +315,7 @@ public sealed class GodotGenerator : IBackendGenerator
                 childType = GetContainerType(child.Layout?.Type ?? LayoutType.Vertical);
             }
 
-            sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" type=\"" + EscapeString(childType) + "\" parent=\"" + EscapeString(parentPath) + "\"]");
+            sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(childNodeName) + "\" type=\"" + GeneratorEmit.EscapeCSharpString(childType) + "\" parent=\"" + GeneratorEmit.EscapeCSharpString(parentPath) + "\"]");
             AppendCommonNodeProperties(sb, child, parentNode.Layout?.Type);
 
             var nextParentPath = parentPath == "." ? childNodeName : parentPath + "/" + childNodeName;
@@ -338,7 +338,7 @@ public sealed class GodotGenerator : IBackendGenerator
         var facePath = parentPath == "." ? faceNodeName : parentPath + "/" + faceNodeName;
 
         // Emit MeshInstance3D as the 3D face container
-        sb.AppendLine("[node name=\"" + EscapeString(faceNodeName) + "\" type=\"MeshInstance3D\" parent=\"" + EscapeString(parentPath) + "\"]");
+        sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(faceNodeName) + "\" type=\"MeshInstance3D\" parent=\"" + GeneratorEmit.EscapeCSharpString(parentPath) + "\"]");
 
         // Static placement transform
         if (!IsDataDrivenSpatial(spatial))
@@ -351,7 +351,7 @@ public sealed class GodotGenerator : IBackendGenerator
         var subViewportName = "SubViewport";
         var subViewportPath = facePath + "/" + subViewportName;
         sb.AppendLine();
-        sb.AppendLine("[node name=\"" + subViewportName + "\" type=\"SubViewport\" parent=\"" + EscapeString(facePath) + "\"]");
+        sb.AppendLine("[node name=\"" + subViewportName + "\" type=\"SubViewport\" parent=\"" + GeneratorEmit.EscapeCSharpString(facePath) + "\"]");
         sb.AppendLine("size = Vector2i(256, 128)");
 
         // Emit the actual 2D child inside the SubViewport
@@ -361,7 +361,7 @@ public sealed class GodotGenerator : IBackendGenerator
             if (instanceId != null)
             {
                 sb.AppendLine();
-                sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" parent=\"" + EscapeString(subViewportPath) + "\" instance=ExtResource(\"" + EscapeString(instanceId) + "\")]");
+                sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(childNodeName) + "\" parent=\"" + GeneratorEmit.EscapeCSharpString(subViewportPath) + "\" instance=ExtResource(\"" + GeneratorEmit.EscapeCSharpString(instanceId) + "\")]");
                 AppendCommonNodeProperties(sb, child, parentLayoutType: null);
             }
         }
@@ -374,7 +374,7 @@ public sealed class GodotGenerator : IBackendGenerator
             }
 
             sb.AppendLine();
-            sb.AppendLine("[node name=\"" + EscapeString(childNodeName) + "\" type=\"" + EscapeString(childType) + "\" parent=\"" + EscapeString(subViewportPath) + "\"]");
+            sb.AppendLine("[node name=\"" + GeneratorEmit.EscapeCSharpString(childNodeName) + "\" type=\"" + GeneratorEmit.EscapeCSharpString(childType) + "\" parent=\"" + GeneratorEmit.EscapeCSharpString(subViewportPath) + "\"]");
             AppendCommonNodeProperties(sb, child, parentLayoutType: null);
 
             // Recurse into the 2D child (but not as spatial - nested spatial is out of scope)
@@ -473,7 +473,7 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             if (node.Type == ComponentType.Label || node.Type == ComponentType.Button)
             {
-                sb.AppendLine("text = \"" + EscapeString(text) + "\"");
+                sb.AppendLine("text = \"" + GeneratorEmit.EscapeCSharpString(text) + "\"");
             }
         }
 
@@ -748,7 +748,7 @@ public sealed class GodotGenerator : IBackendGenerator
         cb.OpenBlock();
 
         cb.AppendLine($"public const string BoomHudSourceId = \"{sourceId}\";");
-        cb.AppendLine($"public const string BoomHudContractId = \"{EscapeString(contractId)}\";");
+        cb.AppendLine($"public const string BoomHudContractId = \"{GeneratorEmit.EscapeCSharpString(contractId)}\";");
         cb.AppendLine($"public static readonly string[] BoomHudNormalizedPseudoNodes = {GeneratorSourceId.FormatStringArrayLiteral(normalizedPseudoNodes)};");
         cb.AppendLine();
 
@@ -845,7 +845,7 @@ public sealed class GodotGenerator : IBackendGenerator
 
             foreach (var b in sceneBindings)
             {
-                cb.AppendLine($"_{b.UniqueName} = GetNode<{b.TypeName}>(\"{EscapeString(b.Path)}\");");
+                cb.AppendLine($"_{b.UniqueName} = GetNode<{b.TypeName}>(\"{GeneratorEmit.EscapeCSharpString(b.Path)}\");");
             }
 
             cb.CloseBlock();
@@ -1206,7 +1206,7 @@ public sealed class GodotGenerator : IBackendGenerator
             }
 
             var itemId = node.Id?.GetHashCode() ?? Guid.NewGuid().GetHashCode();
-            cb.AppendLine(parentVar + ".AddItem(\"" + EscapeString(text) + "\", (int)" + itemId.ToString(global::System.Globalization.CultureInfo.InvariantCulture) + ");");
+            cb.AppendLine(parentVar + ".AddItem(\"" + GeneratorEmit.EscapeCSharpString(text) + "\", (int)" + itemId.ToString(global::System.Globalization.CultureInfo.InvariantCulture) + ");");
             return;
         }
 
@@ -1380,9 +1380,9 @@ public sealed class GodotGenerator : IBackendGenerator
         {
             var slotKey = node.SlotKey ?? node.Id ?? def.Name;
             cb.AppendLine();
-            cb.AppendLine($"var childView = root.GetNodeOrNull<{def.Name}View>(\"{EscapeString(slotKey)}\");");
-            cb.AppendLine($"if (childView == null) throw new InvalidOperationException(\"Could not find child node: \" + \"{EscapeString(slotKey)}\");");
-            cb.AppendLine($"var childVm = resolver.Resolve<I{def.Name}ViewModel>(vm, \"{EscapeString(slotKey)}\");");
+            cb.AppendLine($"var childView = root.GetNodeOrNull<{def.Name}View>(\"{GeneratorEmit.EscapeCSharpString(slotKey)}\");");
+            cb.AppendLine($"if (childView == null) throw new InvalidOperationException(\"Could not find child node: \" + \"{GeneratorEmit.EscapeCSharpString(slotKey)}\");");
+            cb.AppendLine($"var childVm = resolver.Resolve<I{def.Name}ViewModel>(vm, \"{GeneratorEmit.EscapeCSharpString(slotKey)}\");");
             cb.AppendLine("childView.SetViewModel(childVm);");
             cb.AppendLine("d.Add(new DisposableAction(() => childView.SetViewModel(null)));");
         }
@@ -1593,12 +1593,12 @@ public sealed class GodotGenerator : IBackendGenerator
         // Static properties (Text, etc.)
         if (node.Properties.TryGetValue("text", out var textProp) && !textProp.IsBound)
         {
-            cb.AppendLine($"{varName}.Set(\"text\", \"{EscapeString(textProp.Value?.ToString() ?? "")}\");");
+            cb.AppendLine($"{varName}.Set(\"text\", \"{GeneratorEmit.EscapeCSharpString(textProp.Value?.ToString() ?? "")}\");");
         }
         else if (node.Properties.TryGetValue("value", out var valueProp) && !valueProp.IsBound)
         {
             // Fallback for Label/Button
-            cb.AppendLine($"{varName}.Set(\"text\", \"{EscapeString(valueProp.Value?.ToString() ?? "")}\");");
+            cb.AppendLine($"{varName}.Set(\"text\", \"{GeneratorEmit.EscapeCSharpString(valueProp.Value?.ToString() ?? "")}\");");
         }
 
         // Command Binding (Button)
@@ -1623,7 +1623,7 @@ public sealed class GodotGenerator : IBackendGenerator
         // Format
         if (!string.IsNullOrEmpty(op.Format))
         {
-            valueExpr = $"string.Format(\"{EscapeString(op.Format)}\", {valueExpr})";
+            valueExpr = $"string.Format(\"{GeneratorEmit.EscapeCSharpString(op.Format)}\", {valueExpr})";
         }
         else
         {
@@ -1813,13 +1813,6 @@ public sealed class GodotGenerator : IBackendGenerator
         if (string.IsNullOrEmpty(name)) return name;
         return char.ToUpperInvariant(name[0]) + name[1..];
     }
-
-    private static string EscapeString(string value) => value
-        .Replace("\\", "\\\\")
-        .Replace("\"", "\\\"")
-        .Replace("\n", "\\n")
-        .Replace("\r", "\\r")
-        .Replace("\t", "\\t");
 
     // Format a float into generated C# using the invariant culture so the emitted source
     // compiles regardless of the build host's locale (e.g. de-DE would otherwise emit "0,5").

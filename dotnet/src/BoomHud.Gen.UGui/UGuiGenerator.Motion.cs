@@ -86,12 +86,12 @@ public sealed partial class UGuiGenerator
         builder.AppendLine($"public static class {document.Name}Motion");
         builder.AppendLine("{");
         builder.AppendLine($"    public const int FramesPerSecond = {motion.FramesPerSecond.ToString(CultureInfo.InvariantCulture)};");
-        builder.AppendLine($"    public const string DefaultClipId = {ToStringLiteral(motion.Clips.Count > 0 ? motion.Clips[0].Id : string.Empty)};");
+        builder.AppendLine($"    public const string DefaultClipId = {GeneratorEmit.CSharpStringLiteral(motion.Clips.Count > 0 ? motion.Clips[0].Id : string.Empty)};");
         builder.AppendLine("    public static readonly string[] ClipIds =");
         builder.AppendLine("    {");
         foreach (var clip in motion.Clips)
         {
-            builder.AppendLine($"        {ToStringLiteral(clip.Id)},");
+            builder.AppendLine($"        {GeneratorEmit.CSharpStringLiteral(clip.Id)},");
         }
 
         builder.AppendLine("    };");
@@ -108,7 +108,7 @@ public sealed partial class UGuiGenerator
         builder.AppendLine("        {");
         foreach (var clip in motion.Clips)
         {
-            builder.AppendLine($"            {ToStringLiteral(clip.Id)} => Apply{Pascalize(clip.Id)}(view, frame),");
+            builder.AppendLine($"            {GeneratorEmit.CSharpStringLiteral(clip.Id)} => Apply{Pascalize(clip.Id)}(view, frame),");
         }
 
         builder.AppendLine("            _ => false");
@@ -126,7 +126,7 @@ public sealed partial class UGuiGenerator
         builder.AppendLine("        {");
         foreach (var clip in motion.Clips)
         {
-            builder.AppendLine($"            {ToStringLiteral(clip.Id)} => {clip.DurationFrames.ToString(CultureInfo.InvariantCulture)},");
+            builder.AppendLine($"            {GeneratorEmit.CSharpStringLiteral(clip.Id)} => {clip.DurationFrames.ToString(CultureInfo.InvariantCulture)},");
         }
 
         builder.AppendLine("            _ => 0");
@@ -264,12 +264,12 @@ public sealed partial class UGuiGenerator
     private static void AppendMotionSequenceMetadata(StringBuilder builder, MotionDocument motion)
     {
         var defaultSequenceId = ResolveDefaultSequenceId(motion) ?? string.Empty;
-        builder.AppendLine($"    public const string DefaultSequenceId = {ToStringLiteral(defaultSequenceId)};");
+        builder.AppendLine($"    public const string DefaultSequenceId = {GeneratorEmit.CSharpStringLiteral(defaultSequenceId)};");
         builder.AppendLine("    public static readonly string[] SequenceIds =");
         builder.AppendLine("    {");
         foreach (var sequence in motion.Sequences)
         {
-            builder.AppendLine($"        {ToStringLiteral(sequence.Id)},");
+            builder.AppendLine($"        {GeneratorEmit.CSharpStringLiteral(sequence.Id)},");
         }
 
         builder.AppendLine("    };");
@@ -296,13 +296,13 @@ public sealed partial class UGuiGenerator
         builder.AppendLine("        {");
         foreach (var sequence in motion.Sequences)
         {
-            builder.AppendLine($"            {ToStringLiteral(sequence.Id)} => new[]");
+            builder.AppendLine($"            {GeneratorEmit.CSharpStringLiteral(sequence.Id)} => new[]");
             builder.AppendLine("            {");
             foreach (var item in sequence.Items)
             {
                 builder.AppendLine("                new TimelineSequenceClip");
                 builder.AppendLine("                {");
-                builder.AppendLine($"                    ClipId = {ToStringLiteral(item.ClipId)},");
+                builder.AppendLine($"                    ClipId = {GeneratorEmit.CSharpStringLiteral(item.ClipId)},");
                 builder.AppendLine($"                    StartFrame = {(item.StartFrame ?? 0).ToString(CultureInfo.InvariantCulture)},");
                 builder.AppendLine($"                    DurationFrames = {(item.DurationFrames ?? 0).ToString(CultureInfo.InvariantCulture)},");
                 builder.AppendLine($"                    FillMode = TimelineSequenceFillMode.{item.FillMode}");
@@ -581,7 +581,7 @@ public sealed partial class UGuiGenerator
         => fieldType switch
         {
             "BooleanKeyframe" => $"new BooleanKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {Bool(keyframe.Value.Boolean ?? false)})",
-            "StringKeyframe" => $"new StringKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {ToStringLiteral(keyframe.Value.Text ?? string.Empty)})",
+            "StringKeyframe" => $"new StringKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {GeneratorEmit.CSharpStringLiteral(keyframe.Value.Text ?? string.Empty)})",
             _ => $"new NumberKeyframe({keyframe.Frame.ToString(CultureInfo.InvariantCulture)}, {ToFloatLiteral(keyframe.Value.Number ?? 0d)}, EaseMode.{keyframe.Easing})"
         };
 

@@ -1533,7 +1533,7 @@ public sealed class UnityGenerator : IBackendGenerator
                 continue;
             }
 
-            AppendInvariantLine(builder, $"        if (TryGetComponentOverrideValue({ToStringLiteral(node.RelativePath)}, {ToStringLiteral(property.Key)}, out var {overrideVariableName}))");
+            AppendInvariantLine(builder, $"        if (TryGetComponentOverrideValue({GeneratorEmit.CSharpStringLiteral(node.RelativePath)}, {GeneratorEmit.CSharpStringLiteral(property.Key)}, out var {overrideVariableName}))");
             builder.AppendLine("        {");
             foreach (var line in assignment.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries))
             {
@@ -1594,7 +1594,7 @@ public sealed class UnityGenerator : IBackendGenerator
 
         if (node.Source.Tooltip is { IsBound: false, Value: not null } tooltip)
         {
-            AppendInvariantLine(builder, $"        {accessor}.tooltip = {ToStringLiteral(tooltip.Value)};");
+            AppendInvariantLine(builder, $"        {accessor}.tooltip = {GeneratorEmit.CSharpStringLiteral(tooltip.Value)};");
         }
 
         if (TryGetStaticFontFamilyAssignment(accessor, node, out var fontAssignment))
@@ -1646,76 +1646,76 @@ public sealed class UnityGenerator : IBackendGenerator
         switch (propertyName)
         {
             case "flex-direction":
-                assignment = $"{accessor}.style.flexDirection = ParseFlexDirection({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.flexDirection = ParseFlexDirection({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "position":
-                assignment = $"{accessor}.style.position = ParsePosition({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.position = ParsePosition({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "left":
-                assignment = $"{accessor}.style.left = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.left = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "top":
-                assignment = $"{accessor}.style.top = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.top = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "width":
-                assignment = $"{accessor}.style.width = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.width = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "height":
-                assignment = $"{accessor}.style.height = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.height = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "min-width":
-                assignment = $"{accessor}.style.minWidth = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.minWidth = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "min-height":
-                assignment = $"{accessor}.style.minHeight = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.minHeight = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "max-width":
-                assignment = $"{accessor}.style.maxWidth = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.maxWidth = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "max-height":
-                assignment = $"{accessor}.style.maxHeight = ParseStyleLength({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.maxHeight = ParseStyleLength({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "margin-top":
-                assignment = $"{accessor}.style.marginTop = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.marginTop = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "margin-right":
-                assignment = $"{accessor}.style.marginRight = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.marginRight = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "margin-bottom":
-                assignment = $"{accessor}.style.marginBottom = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.marginBottom = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "margin-left":
-                assignment = $"{accessor}.style.marginLeft = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.marginLeft = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "padding-top":
-                assignment = $"{accessor}.style.paddingTop = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.paddingTop = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "padding-right":
-                assignment = $"{accessor}.style.paddingRight = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.paddingRight = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "padding-bottom":
-                assignment = $"{accessor}.style.paddingBottom = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.paddingBottom = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "padding-left":
-                assignment = $"{accessor}.style.paddingLeft = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.paddingLeft = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "overflow":
-                assignment = $"{accessor}.style.overflow = ParseOverflow({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.overflow = ParseOverflow({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "flex-grow":
-                assignment = $"{accessor}.style.flexGrow = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.flexGrow = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "flex-shrink":
-                assignment = $"{accessor}.style.flexShrink = ParseStyleFloat({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.flexShrink = ParseStyleFloat({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "align-items":
-                assignment = $"{accessor}.style.alignItems = ParseAlign({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.alignItems = ParseAlign({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "align-self":
-                assignment = $"{accessor}.style.alignSelf = ParseAlign({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.alignSelf = ParseAlign({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             case "justify-content":
-                assignment = $"{accessor}.style.justifyContent = ParseJustify({ToStringLiteral(propertyValue)});";
+                assignment = $"{accessor}.style.justifyContent = ParseJustify({GeneratorEmit.CSharpStringLiteral(propertyValue)});";
                 return true;
             default:
                 return false;
@@ -1736,7 +1736,7 @@ public sealed class UnityGenerator : IBackendGenerator
             var iconHeight = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Height) ?? GetNodePixelDimension(node.Source.Style?.Height) ?? 16d);
             var baselineOffset = ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy));
             var opticalCentering = IconPolicyService.UseOpticalCentering(node.Policy) ? "true" : "false";
-            var sizeMode = ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
+            var sizeMode = GeneratorEmit.CSharpStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
             var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(
                 node.Source,
                 node.Source.Layout?.Width ?? node.Source.Style?.Width,
@@ -1834,13 +1834,13 @@ public sealed class UnityGenerator : IBackendGenerator
         var foreground = ResolveColor(style.Foreground, style.ForegroundToken, theme);
         if (!string.IsNullOrWhiteSpace(foreground))
         {
-            AppendInvariantLine(builder, $"        {accessor}.style.color = ParseStyleColor({ToStringLiteral(foreground)}, null);");
+            AppendInvariantLine(builder, $"        {accessor}.style.color = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(foreground)}, null);");
         }
 
         var background = ResolveColor(style.Background, style.BackgroundToken, theme);
         if (!string.IsNullOrWhiteSpace(background))
         {
-            AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({ToStringLiteral(background)}, null);");
+            AppendInvariantLine(builder, $"        {accessor}.style.backgroundColor = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(background)}, null);");
         }
 
         var fontSize = TextPolicyService.ResolveFontSize(
@@ -1884,10 +1884,10 @@ public sealed class UnityGenerator : IBackendGenerator
             var borderColor = ResolveColor(border.Color, style.BorderColorToken, theme);
             if (!string.IsNullOrWhiteSpace(borderColor))
             {
-                AppendInvariantLine(builder, $"        {accessor}.style.borderLeftColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
-                AppendInvariantLine(builder, $"        {accessor}.style.borderRightColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
-                AppendInvariantLine(builder, $"        {accessor}.style.borderTopColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
-                AppendInvariantLine(builder, $"        {accessor}.style.borderBottomColor = ParseStyleColor({ToStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderLeftColor = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderRightColor = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderTopColor = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(borderColor)}, null);");
+                AppendInvariantLine(builder, $"        {accessor}.style.borderBottomColor = ParseStyleColor({GeneratorEmit.CSharpStringLiteral(borderColor)}, null);");
             }
         }
 
@@ -1918,7 +1918,7 @@ public sealed class UnityGenerator : IBackendGenerator
             node.Policy);
 
         var fontSize = ToFloatLiteral(fontSizeValue ?? 16d);
-        assignment = $"ApplyFontFamily({accessor}, {ToStringLiteral(fontFamily)}, {fontSize});";
+        assignment = $"ApplyFontFamily({accessor}, {GeneratorEmit.CSharpStringLiteral(fontFamily)}, {fontSize});";
         return true;
     }
 
@@ -1951,7 +1951,7 @@ public sealed class UnityGenerator : IBackendGenerator
             var iconHeight = ToFloatLiteral(GetNodePixelDimension(node.Source.Layout?.Height) ?? GetNodePixelDimension(node.Source.Style?.Height) ?? 16d);
             var baselineOffset = ToFloatLiteral(IconPolicyService.ResolveBaselineOffset(node.Policy));
             var opticalCentering = IconPolicyService.UseOpticalCentering(node.Policy) ? "true" : "false";
-            var sizeMode = ToStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
+            var sizeMode = GeneratorEmit.CSharpStringLiteral(IconPolicyService.ResolveSizeMode(node.Policy));
             var explicitIconFontSize = ToFloatLiteral(IconPolicyService.ResolveFontSize(
                 node.Source,
                 node.Source.Layout?.Width ?? node.Source.Style?.Width,
@@ -2388,8 +2388,8 @@ public sealed class UnityGenerator : IBackendGenerator
 
         foreach (var (key, value) in ResolveColorMap(binding.ConverterParameter, theme))
         {
-            arguments.Add(ToStringLiteral(key));
-            arguments.Add(ToStringLiteral(value));
+            arguments.Add(GeneratorEmit.CSharpStringLiteral(key));
+            arguments.Add(GeneratorEmit.CSharpStringLiteral(value));
         }
 
         return $"ResolveMappedStyleValue({string.Join(", ", arguments)})";
@@ -2493,8 +2493,8 @@ public sealed class UnityGenerator : IBackendGenerator
         return "new Dictionary<string, IReadOnlyDictionary<string, object?>>(StringComparer.Ordinal)\n        {\n" +
             string.Join(",\n",
                 overrides.Select(pathEntry =>
-                    $"            [{ToStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
-                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{ToStringLiteral(propertyEntry.Key)}] = {ToValueLiteral(propertyEntry.Value) ?? "null"}")) +
+                    $"            [{GeneratorEmit.CSharpStringLiteral(pathEntry.Key)}] = new Dictionary<string, object?>(StringComparer.Ordinal)\n            {{\n" +
+                    string.Join(",\n", pathEntry.Value.Select(propertyEntry => $"                [{GeneratorEmit.CSharpStringLiteral(propertyEntry.Key)}] = {ToValueLiteral(propertyEntry.Value) ?? "null"}")) +
                     "\n            }")) +
             "\n        }";
     }
@@ -2504,24 +2504,17 @@ public sealed class UnityGenerator : IBackendGenerator
         return value switch
         {
             null => null,
-            string stringValue => ToStringLiteral(stringValue),
+            string stringValue => GeneratorEmit.CSharpStringLiteral(stringValue),
             bool boolValue => boolValue ? "true" : "false",
             float floatValue => floatValue.ToString(CultureInfo.InvariantCulture) + "f",
             double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
             int intValue => intValue.ToString(CultureInfo.InvariantCulture),
             long longValue => longValue.ToString(CultureInfo.InvariantCulture),
             decimal decimalValue => decimalValue.ToString(CultureInfo.InvariantCulture) + "m",
-            _ => ToStringLiteral(value.ToString() ?? string.Empty)
+            _ => GeneratorEmit.CSharpStringLiteral(value.ToString() ?? string.Empty)
         };
     }
 
-    private static string ToStringLiteral(string value)
-        => "\"" + value
-            .Replace("\\", "\\\\", StringComparison.Ordinal)
-            .Replace("\"", "\\\"", StringComparison.Ordinal)
-            .Replace("\r", "\\r", StringComparison.Ordinal)
-            .Replace("\n", "\\n", StringComparison.Ordinal) + "\"";
-
     private static string ToNullableStringLiteral(string? value)
-        => value == null ? "null" : ToStringLiteral(value);
+        => value == null ? "null" : GeneratorEmit.CSharpStringLiteral(value);
 }
