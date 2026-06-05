@@ -328,27 +328,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         cb.AppendLine($"public static class {document.Name}_Compose");
         cb.OpenBlock();
-        cb.AppendLine("public interface IChildVmResolver");
-        cb.OpenBlock();
-        cb.AppendLine("T Resolve<T>(object parentVm, string slotKey) where T : class;");
-        cb.CloseBlock();
-        cb.AppendLine();
-
-        cb.AppendLine("private sealed class DisposableAction : IDisposable");
-        cb.OpenBlock();
-        cb.AppendLine("private readonly Action _dispose;");
-        cb.AppendLine("public DisposableAction(Action dispose) { _dispose = dispose; }");
-        cb.AppendLine("public void Dispose() { _dispose(); }");
-        cb.CloseBlock();
-        cb.AppendLine();
-
-        cb.AppendLine("private sealed class CompositeDisposable : IDisposable");
-        cb.OpenBlock();
-        cb.AppendLine("private readonly List<IDisposable> _items = new();");
-        cb.AppendLine("public void Add(IDisposable d) { _items.Add(d); }");
-        cb.AppendLine("public void Dispose() { for (var i = _items.Count - 1; i >= 0; i--) _items[i].Dispose(); }");
-        cb.CloseBlock();
-        cb.AppendLine();
+        ComposeEmitter.AppendHelperTypes(cb);
 
         cb.AppendLine($"public static IDisposable Apply({document.Name}View root, I{document.Name}ViewModel vm, IChildVmResolver resolver)");
         cb.OpenBlock();
@@ -357,7 +337,7 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
         cb.AppendLine("d.Add(new DisposableAction(() => root.ViewModel = null));");
 
         var childInstances = new List<(ComponentNode Node, HudComponentDefinition Def)>();
-        CollectComponentInstances(document.Root, components, childInstances);
+        ComposeEmitter.CollectComponentInstances(document.Root, components, childInstances);
         foreach (var (node, def) in childInstances)
         {
             var slotKey = node.SlotKey ?? node.Id ?? def.Name;
@@ -377,19 +357,6 @@ public sealed class TerminalGuiGenerator : IBackendGenerator
 
         cb.CloseBlock();
         return cb.ToString();
-    }
-
-    private static void CollectComponentInstances(ComponentNode node, IReadOnlyDictionary<string, HudComponentDefinition> components, List<(ComponentNode Node, HudComponentDefinition Def)> results)
-    {
-        if (node.ComponentRefId != null && components.TryGetValue(node.ComponentRefId, out var def))
-        {
-            results.Add((node, def));
-        }
-
-        foreach (var child in node.Children)
-        {
-            CollectComponentInstances(child, components, results);
-        }
     }
 
     private static string ApplyDescriptionReplacements(
