@@ -834,6 +834,42 @@ public class AvaloniaGeneratorTests
     }
 
     [Fact]
+    public void Generate_Axaml_SanitizesAndEscapesNodeIds_InXName()
+    {
+        // Ids containing characters that are illegal in a XAML x:Name (space, '&').
+        // Before the fix these were emitted raw, producing invalid AXAML.
+        var doc = new HudDocument
+        {
+            Name = "Test",
+            Root = new ComponentNode
+            {
+                Type = ComponentType.Container,
+                Children =
+                [
+                    new ComponentNode
+                    {
+                        Id = "outer panel&1",
+                        Type = ComponentType.Panel,
+                        Children =
+                        [
+                            new ComponentNode { Id = "play btn&2", Type = ComponentType.Label }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        var axaml = _generator.Generate(doc, _options)
+            .Files.First(f => f.Path.EndsWith(".axaml", StringComparison.Ordinal)).Content;
+
+        // ToXamlName replaces illegal chars with '_' (container path and leaf path).
+        axaml.Should().Contain("x:Name=\"outer_panel_1\"");
+        axaml.Should().Contain("x:Name=\"play_btn_2\"");
+        axaml.Should().NotContain("outer panel&1");
+        axaml.Should().NotContain("play btn&2");
+    }
+
+    [Fact]
     public void TargetFramework_ReturnsAvalonia()
     {
         _generator.TargetFramework.Should().Be("Avalonia");

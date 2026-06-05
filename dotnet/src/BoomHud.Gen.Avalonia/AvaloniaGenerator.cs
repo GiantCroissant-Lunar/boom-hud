@@ -276,7 +276,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Add name if present
         if (!string.IsNullOrEmpty(node.Id))
         {
-            sb.Append($" x:Name=\"{node.Id}\"");
+            sb.Append($" x:Name=\"{XmlEscape(ToXamlName(node.Id))}\"");
         }
 
         // Add layout attributes
@@ -375,7 +375,7 @@ public sealed class AvaloniaGenerator : IBackendGenerator
         // Add name if present
         if (!string.IsNullOrEmpty(node.Id))
         {
-            sb.Append($" x:Name=\"{node.Id}\"");
+            sb.Append($" x:Name=\"{XmlEscape(ToXamlName(node.Id))}\"");
         }
 
         // Add layout attributes
