@@ -1,5 +1,7 @@
 using System.Text;
 using System.IO;
+using System.Globalization;
+using System.Text.Json;
 using BoomHud.Abstractions.Capabilities;
 using BoomHud.Abstractions.Generation;
 using BoomHud.Abstractions.IR;
@@ -477,8 +479,61 @@ public sealed class GodotGenerator : IBackendGenerator
             }
         }
 
+        AppendNodeMetadataTscn(sb, node);
         AppendAbsoluteLayoutProperties(sb, node.Layout);
         AppendLayoutStyleTscn(sb, node, parentLayoutType);
+    }
+
+    private static void AppendNodeMetadataTscn(StringBuilder sb, ComponentNode node)
+    {
+        foreach (var pair in node.Metadata.OrderBy(static item => item.Key, StringComparer.Ordinal))
+        {
+            if (string.IsNullOrWhiteSpace(pair.Key))
+            {
+                continue;
+            }
+
+            sb.Append("metadata/")
+                .Append(pair.Key.Trim())
+                .Append(" = ")
+                .AppendLine(FormatTscnValue(pair.Value));
+        }
+    }
+
+    private static string FormatTscnValue(object? value)
+    {
+        return value switch
+        {
+            null => "null",
+            string s => "\"" + GeneratorEmit.EscapeCSharpString(s) + "\"",
+            bool b => b ? "true" : "false",
+            byte n => n.ToString(CultureInfo.InvariantCulture),
+            sbyte n => n.ToString(CultureInfo.InvariantCulture),
+            short n => n.ToString(CultureInfo.InvariantCulture),
+            ushort n => n.ToString(CultureInfo.InvariantCulture),
+            int n => n.ToString(CultureInfo.InvariantCulture),
+            uint n => n.ToString(CultureInfo.InvariantCulture),
+            long n => n.ToString(CultureInfo.InvariantCulture),
+            ulong n => n.ToString(CultureInfo.InvariantCulture),
+            float n => n.ToString("0.####", CultureInfo.InvariantCulture),
+            double n => n.ToString("0.####", CultureInfo.InvariantCulture),
+            decimal n => n.ToString(CultureInfo.InvariantCulture),
+            JsonElement element => FormatJsonElementTscnValue(element),
+            _ => "\"" + GeneratorEmit.EscapeCSharpString(value.ToString() ?? string.Empty) + "\""
+        };
+    }
+
+    private static string FormatJsonElementTscnValue(JsonElement element)
+    {
+        return element.ValueKind switch
+        {
+            JsonValueKind.String => "\"" + GeneratorEmit.EscapeCSharpString(element.GetString() ?? string.Empty) + "\"",
+            JsonValueKind.True => "true",
+            JsonValueKind.False => "false",
+            JsonValueKind.Number => element.GetRawText(),
+            JsonValueKind.Null => "null",
+            _ => "\"" + GeneratorEmit.EscapeCSharpString(element.GetRawText()) + "\""
+        };
     }
 
     /// <summary>
@@ -601,7 +656,7 @@ public sealed class GodotGenerator : IBackendGenerator
             }
 
             var prop = kvp.Value;
-            if (prop.IsBound || prop.Value is not string s)
+            if (prop.IsBound || !TryReadString(prop.Value, out var s))
             {
                 continue;
             }
@@ -612,6 +667,22 @@ public sealed class GodotGenerator : IBackendGenerator
 
         value = string.Empty;
         return false;
+    }
+
+    private static bool TryReadString(object? value, out string result)
+    {
+        switch (value)
+        {
+            case string text:
+                result = text;
+                return true;
+            case JsonElement { ValueKind: JsonValueKind.String } element:
+                result = element.GetString() ?? string.Empty;
+                return true;
+            default:
+                result = string.Empty;
+                return false;
+        }
     }
 
     private static string? FindPackedSceneId(List<(string Type, string ResPath, string Id)> extResources, string componentName)
@@ -1733,6 +1804,7 @@ public sealed class GodotGenerator : IBackendGenerator
         ComponentType.TabView => "TabContainer",
         ComponentType.SplitView => "HSplitContainer",
         ComponentType.ListBox => "ItemList",
+        ComponentType.NodeGraph => "GraphEdit",
         ComponentType.Spacer => "Control",
         _ => "Control"
     };

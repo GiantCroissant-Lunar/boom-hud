@@ -127,7 +127,7 @@ internal static class VisualDocumentBuilder
             ComponentType.Button or ComponentType.MenuItem or ComponentType.TextInput or ComponentType.TextArea or ComponentType.Checkbox or ComponentType.RadioButton or ComponentType.Slider
                 => VisualNodeKind.Interactive,
             ComponentType.ProgressBar => VisualNodeKind.Value,
-            ComponentType.ListBox or ComponentType.ListView or ComponentType.TreeView or ComponentType.DataGrid or ComponentType.Timeline or ComponentType.MenuBar or ComponentType.Menu
+            ComponentType.ListBox or ComponentType.ListView or ComponentType.TreeView or ComponentType.DataGrid or ComponentType.NodeGraph or ComponentType.Timeline or ComponentType.MenuBar or ComponentType.Menu
                 => VisualNodeKind.Collection,
             ComponentType.Spacer => VisualNodeKind.Spacer,
             _ => VisualNodeKind.Other

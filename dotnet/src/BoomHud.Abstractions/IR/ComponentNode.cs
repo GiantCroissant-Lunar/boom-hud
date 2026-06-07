@@ -43,6 +43,12 @@ public sealed record ComponentNode
     public StyleSpec? Style { get; init; }
 
     /// <summary>
+    /// Generator/runtime metadata attached to this component instance.
+    /// Backends decide how to materialize these values.
+    /// </summary>
+    public IReadOnlyDictionary<string, object?> Metadata { get; init; } = new Dictionary<string, object?>();
+
+    /// <summary>
     /// Child components (for containers).
     /// </summary>
     public IReadOnlyList<ComponentNode> Children { get; init; } = [];
@@ -128,6 +134,7 @@ public enum ComponentType
     ListView,
     TreeView,
     DataGrid,
+    NodeGraph,
 
     // Layout
     Stack,

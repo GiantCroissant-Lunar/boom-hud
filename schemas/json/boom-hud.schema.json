@@ -73,6 +73,9 @@
         "style": {
           "$ref": "#/$defs/styleSpec"
         },
+        "metadata": {
+          "$ref": "#/$defs/nodeMetadata"
+        },
         "bind": {
           "$ref": "#/$defs/bindingMap"
         },
@@ -149,11 +152,25 @@
         "listView",
         "treeView",
         "dataGrid",
+        "nodeGraph",
         "stack",
         "grid",
         "dock",
         "spacer"
       ]
+    },
+    "nodeMetadata": {
+      "type": "object",
+      "description": "Generator/runtime metadata to attach to this component instance.",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "integer" },
+          { "type": "boolean" },
+          { "type": "null" }
+        ]
+      }
     },
     "layoutSpec": {
       "type": "object",

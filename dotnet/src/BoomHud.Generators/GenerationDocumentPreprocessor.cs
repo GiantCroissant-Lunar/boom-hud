@@ -433,7 +433,8 @@ public static class GenerationDocumentPreprocessor
             builder.Append("|bindings=").Append(SerializeBindings(node.Bindings));
             builder.Append("|componentRef=").Append(node.ComponentRefId ?? string.Empty);
             builder.Append("|required=").Append(string.Join(",", node.RequiredCapabilities.OrderBy(static capability => capability, StringComparer.Ordinal)));
-            builder.Append("|metadata=").Append(SerializeInstanceOverrides(node.InstanceOverrides));
+            builder.Append("|metadata=").Append(SerializeMetadata(node.Metadata));
+            builder.Append("|instanceOverrides=").Append(SerializeInstanceOverrides(node.InstanceOverrides));
             builder.Append("|children=[");
             for (var index = 0; index < childSubtrees.Count; index++)
             {
@@ -570,6 +571,7 @@ public static class GenerationDocumentPreprocessor
                 static pair => pair.Value,
                 StringComparer.Ordinal);
             var clonedRequiredCapabilities = new HashSet<string>(node.RequiredCapabilities, StringComparer.Ordinal);
+            var clonedMetadata = new Dictionary<string, object?>(node.Metadata, StringComparer.Ordinal);
             var clonedOverrides = new Dictionary<string, object?>(node.InstanceOverrides, StringComparer.Ordinal);
 
             return node with
@@ -578,6 +580,7 @@ public static class GenerationDocumentPreprocessor
                 Bindings = clonedBindings,
                 Properties = clonedProperties,
                 RequiredCapabilities = clonedRequiredCapabilities,
+                Metadata = clonedMetadata,
                 InstanceOverrides = clonedOverrides
             };
         }
@@ -851,6 +854,19 @@ public static class GenerationDocumentPreprocessor
             return string.Join(",",
                 overrides
                     .Where(static pair => !ShouldIgnoreMetadata(pair.Key))
+                    .OrderBy(static pair => pair.Key, StringComparer.Ordinal)
+                    .Select(pair => pair.Key + "=" + SerializeObject(pair.Value)));
+        }
+
+        private static string SerializeMetadata(IReadOnlyDictionary<string, object?> metadata)
+        {
+            if (metadata.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            return string.Join(",",
+                metadata
                     .OrderBy(static pair => pair.Key, StringComparer.Ordinal)
                     .Select(pair => pair.Key + "=" + SerializeObject(pair.Value)));
         }

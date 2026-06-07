@@ -123,6 +123,7 @@ internal static class SourceSemanticDocumentBuilder
             ComponentType.Label or ComponentType.Badge => "text",
             ComponentType.Icon => "icon",
             ComponentType.Image => "image",
+            ComponentType.NodeGraph => "node-graph",
             ComponentType.Container or ComponentType.Panel or ComponentType.Stack or ComponentType.Grid or ComponentType.Dock
                 or ComponentType.ScrollView or ComponentType.TabView or ComponentType.SplitView => "container",
             _ => node.Type.ToString().ToLowerInvariant()
@@ -203,6 +204,7 @@ internal static class SourceSemanticDocumentBuilder
             ComponentType.Image => "image",
             ComponentType.Button or ComponentType.MenuItem or ComponentType.Checkbox or ComponentType.RadioButton or ComponentType.Slider
                 or ComponentType.TextInput or ComponentType.TextArea => "interactive",
+            ComponentType.NodeGraph => "collection",
             ComponentType.Container or ComponentType.Panel or ComponentType.Stack or ComponentType.Grid or ComponentType.Dock
                 or ComponentType.ScrollView or ComponentType.TabView or ComponentType.SplitView => "container",
             _ => "other"

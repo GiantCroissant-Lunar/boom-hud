@@ -19,7 +19,7 @@ public sealed class GodotCapabilities : ICapabilityManifest
         "label", "badge", "button", "textinput", "textarea", "checkbox", "radiobutton",
         "progressbar", "slider", "icon", "image",
         "container", "scrollview", "panel", "tabview", "splitview",
-        "listbox", "listview", "treeview", "datagrid",
+        "listbox", "listview", "treeview", "datagrid", "nodegraph",
         "stack", "grid", "dock", "spacer"
     };
 
