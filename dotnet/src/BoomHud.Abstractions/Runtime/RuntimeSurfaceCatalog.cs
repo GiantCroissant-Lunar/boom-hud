@@ -42,6 +42,11 @@ public sealed record RuntimeSurfaceCatalog
                 properties: Set("items", "selectedItem", "emptyText", "variant", "tooltip"),
                 bindableProperties: Set("items", "selectedItem", "emptyText", "visible", "enabled", "tooltip"),
                 events: Set("selected")),
+            ["nodeGraph"] = Component(
+                "nodeGraph",
+                properties: Set("items", "wires", "variant", "tooltip"),
+                bindableProperties: Set("items", "wires", "visible", "enabled", "tooltip"),
+                events: Set("connectionRequested", "disconnectionRequested", "deleteNodesRequested")),
             ["spacer"] = Component(
                 "spacer",
                 properties: Set("size"),

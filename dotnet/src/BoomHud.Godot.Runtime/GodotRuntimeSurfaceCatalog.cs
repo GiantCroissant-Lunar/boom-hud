@@ -24,6 +24,7 @@ public static class GodotRuntimeSurfaceCatalog
             "container" => MapContainer(layoutType),
             "label" => "Label",
             "list" => "ItemList",
+            "nodeGraph" => "GraphEdit",
             "panel" => "PanelContainer",
             "progressBar" => "ProgressBar",
             "spacer" => "Control",
@@ -42,4 +43,3 @@ public static class GodotRuntimeSurfaceCatalog
             _ => "Control"
         };
 }
-

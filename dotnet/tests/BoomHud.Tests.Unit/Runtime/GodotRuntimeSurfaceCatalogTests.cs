@@ -13,6 +13,7 @@ public sealed class GodotRuntimeSurfaceCatalogTests
     [InlineData("panel", null, "PanelContainer")]
     [InlineData("progressBar", null, "ProgressBar")]
     [InlineData("list", null, "ItemList")]
+    [InlineData("nodeGraph", null, "GraphEdit")]
     [InlineData("container", "vertical", "VBoxContainer")]
     [InlineData("container", "horizontal", "HBoxContainer")]
     [InlineData("container", "grid", "GridContainer")]

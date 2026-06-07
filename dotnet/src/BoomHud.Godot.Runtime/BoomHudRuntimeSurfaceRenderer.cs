@@ -72,6 +72,7 @@ public sealed class BoomHudRuntimeSurfaceRenderer
             "container" => CreateContainer(node.Layout?.Type),
             "label" => CreateLabel(),
             "list" => new ItemList(),
+            "nodeGraph" => new GraphEdit(),
             "panel" => new PanelContainer(),
             "progressBar" => new ProgressBar { ShowPercentage = false },
             "spacer" => new Control(),
