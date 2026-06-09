@@ -3,15 +3,15 @@ using Godot;
 
 namespace BoomHud.Godot.Runtime;
 
-public sealed class BoomHudRuntimeSurfaceRenderer
+public sealed class RuntimeSurfaceRenderer
 {
     private readonly RuntimeSurfaceCatalog _catalog;
     private readonly RuntimeSurfaceValidatorOptions _validatorOptions;
     private readonly RuntimeSurfaceActionHandler? _actionHandler;
 
-    public BoomHudRuntimeSurfaceRenderer(BoomHudRuntimeSurfaceRendererOptions? options = null)
+    public RuntimeSurfaceRenderer(RuntimeSurfaceRendererOptions? options = null)
     {
-        options ??= new BoomHudRuntimeSurfaceRendererOptions();
+        options ??= new RuntimeSurfaceRendererOptions();
         _catalog = options.Catalog ?? RuntimeSurfaceCatalog.Basic;
         _validatorOptions = options.ValidatorOptions ?? new RuntimeSurfaceValidatorOptions();
         _actionHandler = options.ActionHandler;

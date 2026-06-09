@@ -2,7 +2,7 @@ using BoomHud.Abstractions.Runtime;
 
 namespace BoomHud.Godot.Runtime;
 
-public sealed record BoomHudRuntimeSurfaceRendererOptions
+public sealed record RuntimeSurfaceRendererOptions
 {
     public RuntimeSurfaceCatalog? Catalog { get; init; }
 
