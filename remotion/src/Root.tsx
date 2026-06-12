@@ -27,6 +27,13 @@ import {
   GeneratedFixtureDemo,
   GeneratedFixtureDemoSchema,
 } from "./GeneratedFixtureDemo";
+import {
+  RuntimeSurfaceDemo,
+  runtimeSurfaceDemoDurationInFrames,
+  runtimeSurfaceDemoFps,
+  runtimeSurfaceDemoHeight,
+  runtimeSurfaceDemoWidth,
+} from "./RuntimeSurfaceDemo";
 
 export const RemotionRoot: React.FC = () => {
   // Default props for preview - will be overridden by CLI input
@@ -145,6 +152,14 @@ export const RemotionRoot: React.FC = () => {
         height={fixtureProps.canvasHeight}
         schema={GeneratedFixtureDemoSchema}
         defaultProps={fixtureProps}
+      />
+      <Composition
+        id="RuntimeSurfaceDemo"
+        component={RuntimeSurfaceDemo}
+        durationInFrames={runtimeSurfaceDemoDurationInFrames}
+        fps={runtimeSurfaceDemoFps}
+        width={runtimeSurfaceDemoWidth}
+        height={runtimeSurfaceDemoHeight}
       />
     </>
   );

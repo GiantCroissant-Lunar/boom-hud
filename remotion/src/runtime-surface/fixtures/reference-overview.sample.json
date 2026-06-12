@@ -1,0 +1,110 @@
+{
+  "protocolVersion": "0.1",
+  "surfaceId": "reference-overview",
+  "catalogId": "boomhud.runtime.basic.v1",
+  "revision": 1,
+  "dataModel": {
+    "status": { "text": "4 resident references bound" },
+    "viewCount": 2
+  },
+  "root": {
+    "id": "root",
+    "type": "container",
+    "layout": { "type": "vertical", "gap": 8, "padding": 12, "width": 420 },
+    "children": [
+      {
+        "id": "residents-panel",
+        "type": "panel",
+        "layout": { "gap": 4 },
+        "properties": {
+          "title": { "literal": "Resident references" }
+        },
+        "children": [
+          {
+            "id": "residents-list",
+            "type": "list",
+            "properties": {
+              "items": {
+                "literal": [
+                  "BoomHud.Godot.Runtime 0.1.18.0",
+                  "FantaSim.App.Ui.Seam",
+                  "FantaSim.App.World.Seam",
+                  "CrosscutFoundation.Messaging"
+                ]
+              },
+              "emptyText": { "literal": "(no resident references)" },
+              "selectedItem": { "literal": "FantaSim.App.Ui.Seam" }
+            }
+          }
+        ]
+      },
+      {
+        "id": "actions-row",
+        "type": "container",
+        "layout": { "type": "horizontal", "gap": 8, "align": "center" },
+        "children": [
+          {
+            "id": "hide-button",
+            "type": "button",
+            "properties": { "text": { "literal": "Hide" } },
+            "actions": [
+              { "event": "pressed", "command": "ui.hide", "payload": { "viewId": "reference-overview" } }
+            ]
+          },
+          {
+            "id": "show-button",
+            "type": "button",
+            "properties": {
+              "text": { "literal": "Show node-graph" },
+              "enabled": { "literal": true }
+            },
+            "actions": [
+              { "event": "pressed", "command": "ui.show", "payload": { "viewId": "node-graph" } }
+            ]
+          },
+          {
+            "id": "loaded-badge",
+            "type": "badge",
+            "properties": { "text": { "literal": "4 loaded" } }
+          },
+          { "id": "actions-spacer", "type": "spacer" },
+          {
+            "id": "views-badge",
+            "type": "badge",
+            "properties": {
+              "text": {
+                "binding": { "path": "/viewCount", "format": "{0} views", "fallback": "0 views" }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "load-progress",
+        "type": "progressBar",
+        "properties": {
+          "value": { "literal": 62 }
+        }
+      },
+      {
+        "id": "status-label",
+        "type": "label",
+        "properties": {
+          "text": {
+            "binding": { "path": "/status/text", "fallback": "(status unavailable)" }
+          },
+          "tooltip": { "literal": "Live status from the data model" }
+        }
+      },
+      {
+        "id": "generation-graph",
+        "type": "nodeGraph",
+        "properties": {
+          "nodes": {
+            "literal": ["generation_options", "voronoi_elements", "plate_model", "commit_topology"]
+          }
+        }
+      }
+    ]
+  }
+}
