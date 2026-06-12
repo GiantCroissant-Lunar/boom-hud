@@ -19,6 +19,11 @@ import {
   resolveText,
   resolveValue,
 } from "./resolve";
+import type {
+  RuntimeNodeGraphParameter,
+  RuntimeNodeGraphPort,
+  RuntimeNodeGraphWire,
+} from "./node-graph";
 
 export type RuntimeSurfaceViewProps = {
   document: RuntimeSurfaceDocument;
@@ -34,11 +39,7 @@ const ACCENT = "#4a9eff";
 const NODE_BG = "rgba(18, 23, 26, 0.94)";
 const NODE_MUTED_BG = "rgba(255, 255, 255, 0.06)";
 
-type GraphPort = {
-  label: string;
-  kindHint: string;
-  required: boolean;
-};
+type GraphPort = RuntimeNodeGraphPort;
 
 type GraphNodeData = {
   nodeId: string;
@@ -56,12 +57,9 @@ type GraphNodeData = {
   parameterLines: string[];
 };
 
-type GraphWireData = {
-  fromNodeId: string;
+type GraphWireData = RuntimeNodeGraphWire & {
   fromSlot: number;
-  toNodeId: string;
   toSlot: number;
-  kindHint: string;
 };
 
 type PositionedGraphNode = GraphNodeData & {
@@ -141,17 +139,51 @@ const readStringArray = (value: JsonObject[string] | undefined): string[] =>
         .filter((item) => item !== "")
     : [];
 
+const readParameterLines = (source: JsonObject): string[] => {
+  const lines = readStringArray(source.parameterLines);
+  if (lines.length > 0) {
+    return lines;
+  }
+
+  const parameters = source.parameters;
+  if (!Array.isArray(parameters)) {
+    return [];
+  }
+
+  return parameters.flatMap((item): string[] => {
+    if (!isJsonObject(item)) {
+      return [];
+    }
+
+    const parameter = item as RuntimeNodeGraphParameter;
+    const label = readString(item, "label", readString(item, "key"));
+    if (label === "") {
+      return [];
+    }
+
+    const rawValue = parameter.value;
+    const value = rawValue === null || rawValue === undefined
+      ? ""
+      : typeof rawValue === "object"
+        ? JSON.stringify(rawValue)
+        : String(rawValue);
+    return [`${label}: ${value}`];
+  });
+};
+
 const readPorts = (value: JsonObject[string] | undefined, count: number, prefix: string): GraphPort[] => {
   if (Array.isArray(value)) {
     return value.map((item, index) => {
       if (isJsonObject(item)) {
         return {
+          portId: readString(item, "portId", `${prefix}${index}`),
           label: readString(item, "label", `${prefix}${index}`),
           kindHint: readString(item, "kindHint", "value"),
           required: readBoolean(item, "required"),
         };
       }
       return {
+        portId: `${prefix}${index}`,
         label: typeof item === "string" ? item : `${prefix}${index}`,
         kindHint: "value",
         required: false,
@@ -160,6 +192,7 @@ const readPorts = (value: JsonObject[string] | undefined, count: number, prefix:
   }
 
   return Array.from({ length: Math.max(0, count) }, (_, index) => ({
+    portId: `${prefix}${index}`,
     label: `${prefix}${index}`,
     kindHint: "value",
     required: false,
@@ -187,8 +220,8 @@ const readGraphNodes = (value: JsonObject[string] | undefined): GraphNodeData[] 
         isExpensive: false,
         inputCount: 1,
         outputCount: 1,
-        inputs: [{ label: "in", kindHint: "value", required: false }],
-        outputs: [{ label: "out", kindHint: "value", required: false }],
+        inputs: [{ portId: "in", label: "in", kindHint: "value", required: false }],
+        outputs: [{ portId: "out", label: "out", kindHint: "value", required: false }],
         parameterLines: [],
       };
     }
@@ -206,8 +239,8 @@ const readGraphNodes = (value: JsonObject[string] | undefined): GraphNodeData[] 
         isExpensive: false,
         inputCount: 1,
         outputCount: 1,
-        inputs: [{ label: "in", kindHint: "value", required: false }],
-        outputs: [{ label: "out", kindHint: "value", required: false }],
+        inputs: [{ portId: "in", label: "in", kindHint: "value", required: false }],
+        outputs: [{ portId: "out", label: "out", kindHint: "value", required: false }],
         parameterLines: [],
       };
     }
@@ -231,7 +264,7 @@ const readGraphNodes = (value: JsonObject[string] | undefined): GraphNodeData[] 
       outputCount: outputs.length,
       inputs,
       outputs,
-      parameterLines: readStringArray(item.parameterLines),
+      parameterLines: readParameterLines(item),
     };
   });
 };

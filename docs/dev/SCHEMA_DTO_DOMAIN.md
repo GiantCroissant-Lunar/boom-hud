@@ -62,6 +62,16 @@ This runs quicktype on each schema and outputs to the correct `Generated/` folde
 
 **Generated files are committed** so CI doesn't need Node/quicktype at build time.
 
+Runtime-surface React types use the same quicktype pin, but target TypeScript:
+
+```bash
+task generate:runtime-surface:ts
+```
+
+This reads `schemas/json/runtime-surface.schema.json` and
+`schemas/json/runtime-node-graph.schema.json`, then updates the committed
+`remotion/src/runtime-surface/*.generated.ts` files.
+
 ## Adding a New Schema-Driven Type
 
 1. Create `schemas/<name>.schema.json`

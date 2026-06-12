@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "remotion bundle",
+    "generate:runtime-surface-types": "node scripts/generate-runtime-surface-types.mjs",
     "render": "remotion render Snapshots out/preview.mp4",
     "preview": "remotion preview",
     "test": "node --loader ./node_modules/ts-node/esm.mjs --experimental-specifier-resolution=node --test ./src/motion/runtime.contract.test.ts",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
+    "quicktype": "23.0.170",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }

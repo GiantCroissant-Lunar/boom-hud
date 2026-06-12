@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://boom-hud.dev/schemas/runtime-surface.schema.json",
+  "title": "RuntimeSurfaceDocument",
+  "description": "BoomHud runtime surface document wire contract, protocol 0.1.",
+  "type": "object",
+  "required": ["protocolVersion", "surfaceId", "catalogId", "revision", "root"],
+  "additionalProperties": false,
+  "properties": {
+    "protocolVersion": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "surfaceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "catalogId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "root": {
+      "$ref": "#/$defs/runtimeComponentNode"
+    },
+    "dataModel": {
+      "oneOf": [
+        { "$ref": "#/$defs/jsonObject" },
+        { "type": "null" }
+      ]
+    },
+    "metadata": {
+      "$ref": "#/$defs/stringMap"
+    }
+  },
+  "$defs": {
+    "jsonNode": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/jsonNode" }
+        },
+        { "$ref": "#/$defs/jsonObject" }
+      ]
+    },
+    "jsonObject": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/jsonNode" }
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "runtimeComponentNode": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layout": {
+          "oneOf": [
+            { "$ref": "#/$defs/runtimeLayoutSpec" },
+            { "type": "null" }
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/runtimeValue" }
+        },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtimeBinding" }
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtimeActionDescriptor" }
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtimeComponentNode" }
+        },
+        "metadata": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "runtimeLayoutSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "width": { "$ref": "#/$defs/nullableNumber" },
+        "height": { "$ref": "#/$defs/nullableNumber" },
+        "minWidth": { "$ref": "#/$defs/nullableNumber" },
+        "minHeight": { "$ref": "#/$defs/nullableNumber" },
+        "maxWidth": { "$ref": "#/$defs/nullableNumber" },
+        "maxHeight": { "$ref": "#/$defs/nullableNumber" },
+        "gap": { "$ref": "#/$defs/nullableNumber" },
+        "padding": { "$ref": "#/$defs/nullableNumber" },
+        "align": { "$ref": "#/$defs/nullableString" },
+        "justify": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "runtimeValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "literal": { "$ref": "#/$defs/jsonNode" },
+        "binding": {
+          "oneOf": [
+            { "$ref": "#/$defs/runtimeBinding" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "runtimeBinding": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": false,
+      "properties": {
+        "property": { "$ref": "#/$defs/nullableString" },
+        "path": {
+          "type": "string",
+          "description": "JSON Pointer into dataModel."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["oneWay", "twoWay", "oneTime"],
+          "default": "oneWay"
+        },
+        "format": { "$ref": "#/$defs/nullableString" },
+        "fallback": { "$ref": "#/$defs/jsonNode" }
+      }
+    },
+    "runtimeActionDescriptor": {
+      "type": "object",
+      "required": ["event", "command"],
+      "additionalProperties": false,
+      "properties": {
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload": {
+          "oneOf": [
+            { "$ref": "#/$defs/jsonObject" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "nullableNumber": {
+      "oneOf": [
+        { "type": "number" },
+        { "type": "null" }
+      ]
+    },
+    "nullableString": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

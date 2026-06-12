@@ -159,6 +159,17 @@ tasks:
     generates:
       - dotnet/src/BoomHud.Abstractions/Tokens/Generated/TokensDto.g.cs
 
+  generate:runtime-surface:ts:
+    desc: Generate Remotion runtime-surface TypeScript types from JSON schemas using quicktype
+    cmds:
+      - npm --prefix remotion run generate:runtime-surface-types
+    sources:
+      - schemas/json/runtime-surface.schema.json
+      - schemas/json/runtime-node-graph.schema.json
+    generates:
+      - remotion/src/runtime-surface/types.generated.ts
+      - remotion/src/runtime-surface/node-graph.generated.ts
+
   # ============================================================================
   # CI Verification
   # ============================================================================

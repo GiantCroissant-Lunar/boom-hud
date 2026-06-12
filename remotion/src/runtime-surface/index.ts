@@ -9,6 +9,13 @@ export type {
   RuntimeActionDescriptor,
   RuntimeSurfaceActionInvocation,
 } from "./types";
+export type {
+  RuntimeNodeGraphNode,
+  RuntimeNodeGraphParameter,
+  RuntimeNodeGraphPort,
+  RuntimeNodeGraphSnapshot,
+  RuntimeNodeGraphWire,
+} from "./node-graph";
 
 export {
   resolvePointer,
