@@ -5,9 +5,15 @@ namespace BoomHud.Godot.Runtime;
 
 public sealed class RuntimeSurfaceRenderer
 {
+    private static readonly string[] ButtonStyleSlots = { "normal", "hover", "pressed", "focus", "disabled" };
+    private static readonly string[] ButtonColorSlots =
+        { "font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_hover_pressed_color" };
+
     private readonly RuntimeSurfaceCatalog _catalog;
     private readonly RuntimeSurfaceValidatorOptions _validatorOptions;
     private readonly RuntimeSurfaceActionHandler? _actionHandler;
+    private readonly RuntimeSurfaceTheme? _theme;
+    private readonly Dictionary<string, Font> _fontCache = new();
 
     public RuntimeSurfaceRenderer(RuntimeSurfaceRendererOptions? options = null)
     {
@@ -15,6 +21,7 @@ public sealed class RuntimeSurfaceRenderer
         _catalog = options.Catalog ?? RuntimeSurfaceCatalog.Basic;
         _validatorOptions = options.ValidatorOptions ?? new RuntimeSurfaceValidatorOptions();
         _actionHandler = options.ActionHandler;
+        _theme = options.Theme;
     }
 
     public Control Render(RuntimeSurfaceDocument document)
@@ -55,10 +62,43 @@ public sealed class RuntimeSurfaceRenderer
         ApplyLayout(control, node.Layout);
         ApplyCommonProperties(control, node, document);
 
+        var style = StyleFor(node, document);
+        if (style is { Opacity: < 1.0 } dimmed)
+        {
+            control.Modulate = new Color(1f, 1f, 1f, (float)dimmed.Opacity);
+        }
+
         var childHost = ApplySpecificProperties(control, node, document);
+
+        // Space-between idiom: when a container holds a `spacer` child, the spacer absorbs the free space
+        // (ExpandFill on the main axis) while its siblings hug their content (ShrinkBegin) — this is how the
+        // design pushes a trailing pill/badge/button to the right edge. Containers WITHOUT a spacer keep the
+        // default equal-fill behavior, so existing surfaces are unchanged. `align: "center"` centers children
+        // on the cross axis.
+        var hasSpacer = false;
+        foreach (var c in node.Children)
+        {
+            if (string.Equals(c.Type, "spacer", StringComparison.OrdinalIgnoreCase)) { hasSpacer = true; break; }
+        }
+        var horizontal = string.Equals(node.Layout?.Type, "horizontal", StringComparison.OrdinalIgnoreCase);
+        var centerCross = string.Equals(node.Layout?.Align, "center", StringComparison.OrdinalIgnoreCase);
+
         foreach (var child in node.Children)
         {
-            childHost.AddChild(CreateControlTree(document, child));
+            var childControl = CreateControlTree(document, child);
+            if (hasSpacer)
+            {
+                var isSpacer = string.Equals(child.Type, "spacer", StringComparison.OrdinalIgnoreCase);
+                var flag = isSpacer ? Control.SizeFlags.ExpandFill : Control.SizeFlags.ShrinkBegin;
+                if (horizontal) childControl.SizeFlagsHorizontal = flag;
+                else childControl.SizeFlagsVertical = flag;
+            }
+            if (centerCross)
+            {
+                if (horizontal) childControl.SizeFlagsVertical = Control.SizeFlags.ShrinkCenter;
+                else childControl.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+            }
+            childHost.AddChild(childControl);
         }
 
         return control;
@@ -161,6 +201,28 @@ public sealed class RuntimeSurfaceRenderer
     private Button ApplyButton(Button button, RuntimeComponentNode node, RuntimeSurfaceDocument document)
     {
         button.Text = RuntimeValueResolver.ResolveText(node.Properties, "text", document.DataModel);
+
+        var style = StyleFor(node, document);
+        if (style is not null)
+        {
+            if (BuildStyleBox(style) is { } box)
+            {
+                foreach (var slot in ButtonStyleSlots)
+                {
+                    button.AddThemeStyleboxOverride(slot, box);
+                }
+            }
+            if (style.FontColor is not null)
+            {
+                var color = Color.FromHtml(style.FontColor);
+                foreach (var slot in ButtonColorSlots)
+                {
+                    button.AddThemeColorOverride(slot, color);
+                }
+            }
+            ApplyFont(button, style);
+        }
+
         foreach (var action in node.Actions.Where(action => string.Equals(action.Event, "pressed", StringComparison.OrdinalIgnoreCase)))
         {
             button.Pressed += () => Dispatch(document.SurfaceId, node.Id, action);
@@ -169,9 +231,23 @@ public sealed class RuntimeSurfaceRenderer
         return button;
     }
 
-    private static Label ApplyLabel(Label label, RuntimeComponentNode node, RuntimeSurfaceDocument document)
+    private Label ApplyLabel(Label label, RuntimeComponentNode node, RuntimeSurfaceDocument document)
     {
         label.Text = RuntimeValueResolver.ResolveText(node.Properties, "text", document.DataModel);
+
+        // A styled label doubles as a badge/pill: its `normal` stylebox gives the chip background + border +
+        // padding, and the text style sets the chip's font color/size. Plain labels (no box props) just take
+        // the font style. Untyped/unthemed labels are unchanged.
+        var style = StyleFor(node, document);
+        if (style is not null)
+        {
+            if (BuildStyleBox(style) is { } box)
+            {
+                label.AddThemeStyleboxOverride("normal", box);
+            }
+            ApplyTextStyle(label, style);
+        }
+
         return label;
     }
 
@@ -212,14 +288,24 @@ public sealed class RuntimeSurfaceRenderer
         return list;
     }
 
-    private static VBoxContainer ApplyPanel(PanelContainer panel, RuntimeComponentNode node, RuntimeSurfaceDocument document)
+    private Container ApplyPanel(PanelContainer panel, RuntimeComponentNode node, RuntimeSurfaceDocument document)
     {
-        var content = new VBoxContainer
+        // A styled panel is the card / header / row box: its `panel` stylebox gives the fill + border +
+        // corner radius, and the stylebox content margins give the inner padding. The content container's
+        // orientation follows the node's layout type so a panel can host a horizontal row (e.g. a card
+        // header: id · spacer · pill · badge · button), not just a vertical stack.
+        var style = StyleFor(node, document);
+        if (style is not null && BuildStyleBox(style) is { } box)
         {
-            Name = "Content",
-            SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            SizeFlagsVertical = Control.SizeFlags.ExpandFill,
-        };
+            panel.AddThemeStyleboxOverride("panel", box);
+        }
+
+        var horizontal = string.Equals(node.Layout?.Type, "horizontal", StringComparison.OrdinalIgnoreCase);
+        Container content = horizontal
+            ? new HBoxContainer { Name = "Content" }
+            : new VBoxContainer { Name = "Content" };
+        content.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        content.SizeFlagsVertical = Control.SizeFlags.ShrinkBegin;
 
         if (node.Layout?.Gap is not null)
         {
@@ -264,4 +350,100 @@ public sealed class RuntimeSurfaceRenderer
 
     private void Dispatch(string surfaceId, string componentId, RuntimeActionDescriptor action)
         => _actionHandler?.Invoke(new RuntimeSurfaceActionInvocation(surfaceId, componentId, action));
+
+    // ----- Theming (no-op unless a theme is configured and the node carries a matching `variant`) -----
+
+    private RuntimeComponentStyle? StyleFor(RuntimeComponentNode node, RuntimeSurfaceDocument document)
+    {
+        if (_theme is null)
+        {
+            return null;
+        }
+
+        var variant = RuntimeValueResolver.ResolveText(node.Properties, "variant", document.DataModel, fallback: string.Empty);
+        return _theme.Get(variant);
+    }
+
+    private static StyleBoxFlat? BuildStyleBox(RuntimeComponentStyle style)
+    {
+        if (!style.HasBox)
+        {
+            return null;
+        }
+
+        var box = new StyleBoxFlat
+        {
+            BgColor = style.Fill is not null ? Color.FromHtml(style.Fill) : new Color(0f, 0f, 0f, 0f),
+        };
+
+        if (style.CornerRadius > 0)
+        {
+            box.SetCornerRadiusAll(style.CornerRadius);
+        }
+
+        if (style.BorderColor is not null && (style.BorderWidth > 0 || style.BorderBottomOnly))
+        {
+            box.BorderColor = Color.FromHtml(style.BorderColor);
+            var width = style.BorderWidth > 0 ? style.BorderWidth : 1;
+            if (style.BorderBottomOnly)
+            {
+                box.BorderWidthBottom = width;
+            }
+            else
+            {
+                box.SetBorderWidthAll(width);
+            }
+        }
+
+        if (style.Padding is { Count: 4 } pad)
+        {
+            box.ContentMarginTop = pad[0];
+            box.ContentMarginRight = pad[1];
+            box.ContentMarginBottom = pad[2];
+            box.ContentMarginLeft = pad[3];
+        }
+
+        return box;
+    }
+
+    private void ApplyTextStyle(Control control, RuntimeComponentStyle style)
+    {
+        if (style.FontColor is not null)
+        {
+            control.AddThemeColorOverride("font_color", Color.FromHtml(style.FontColor));
+        }
+
+        ApplyFont(control, style);
+    }
+
+    private void ApplyFont(Control control, RuntimeComponentStyle style)
+    {
+        if (style.FontSize > 0)
+        {
+            control.AddThemeFontSizeOverride("font_size", style.FontSize);
+        }
+
+        if (style.FontFamily is not null)
+        {
+            control.AddThemeFontOverride("font", GetFont(style.FontFamily, style.FontWeight));
+        }
+    }
+
+    private Font GetFont(string family, int weight)
+    {
+        var key = $"{family}:{weight}";
+        if (_fontCache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
+
+        var font = new SystemFont { FontNames = new[] { family } };
+        if (weight > 0)
+        {
+            font.FontWeight = weight;
+        }
+
+        _fontCache[key] = font;
+        return font;
+    }
 }
