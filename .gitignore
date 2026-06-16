@@ -28,6 +28,7 @@ ref-projects/
 build/
 samples/build/
 remotion/build/
+remotion/out/
 build/_artifacts/
 *.log
 
