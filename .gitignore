@@ -51,3 +51,6 @@ samples/UnityFullPenCompare/Assets/Screenshots/
 .godot/
 
 node_modules/
+
+# CodeGraph local index
+.codegraph/
