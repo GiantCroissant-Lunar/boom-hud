@@ -13,12 +13,12 @@ public interface ICapabilityManifest
     /// <summary>
     /// Supported component types.
     /// </summary>
-    IReadOnlySet<string> SupportedComponents { get; }
+    StringSet SupportedComponents { get; }
 
     /// <summary>
     /// Supported layout types.
     /// </summary>
-    IReadOnlySet<string> SupportedLayouts { get; }
+    StringSet SupportedLayouts { get; }
 
     /// <summary>
     /// Feature capability levels.

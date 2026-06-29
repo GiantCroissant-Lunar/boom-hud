@@ -63,11 +63,11 @@ public readonly record struct Dimension
 
         if (value.EndsWith("px", StringComparison.Ordinal))
             return Pixels(double.Parse(value[..^2], CultureInfo.InvariantCulture));
-        if (value.EndsWith('%'))
+        if (value.EndsWith("%", StringComparison.Ordinal))
             return Percent(double.Parse(value[..^1], CultureInfo.InvariantCulture));
         if (value.EndsWith("cell", StringComparison.Ordinal))
             return Cells(double.Parse(value[..^4], CultureInfo.InvariantCulture));
-        if (value.EndsWith('*'))
+        if (value.EndsWith("*", StringComparison.Ordinal))
         {
             var starValue = value.Length == 1 ? 1 : double.Parse(value[..^1], CultureInfo.InvariantCulture);
             return Star(starValue);

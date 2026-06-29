@@ -39,8 +39,8 @@ public static class RuntimeSurfaceReconciler
     /// <summary>Diff two documents' roots into a patch list. The roots are assumed to share an id (e.g. "root").</summary>
     public static IReadOnlyList<RuntimeSurfacePatch> Diff(RuntimeComponentNode oldRoot, RuntimeComponentNode newRoot)
     {
-        ArgumentNullException.ThrowIfNull(oldRoot);
-        ArgumentNullException.ThrowIfNull(newRoot);
+        if (oldRoot is null) throw new ArgumentNullException(nameof(oldRoot));
+        if (newRoot is null) throw new ArgumentNullException(nameof(newRoot));
 
         var patches = new List<RuntimeSurfacePatch>();
         DiffNode(oldRoot, newRoot, patches);

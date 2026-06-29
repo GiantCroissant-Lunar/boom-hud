@@ -57,8 +57,8 @@ public static class RuntimeSurfaceValidator
         RuntimeSurfaceCatalog catalog,
         RuntimeSurfaceValidatorOptions? options = null)
     {
-        ArgumentNullException.ThrowIfNull(document);
-        ArgumentNullException.ThrowIfNull(catalog);
+        if (document is null) throw new ArgumentNullException(nameof(document));
+        if (catalog is null) throw new ArgumentNullException(nameof(catalog));
 
         options ??= new RuntimeSurfaceValidatorOptions();
 
@@ -95,7 +95,7 @@ public static class RuntimeSurfaceValidator
         RuntimeDataModelUpdate update,
         string? expectedSurfaceId = null)
     {
-        ArgumentNullException.ThrowIfNull(update);
+        if (update is null) throw new ArgumentNullException(nameof(update));
 
         var diagnostics = new List<RuntimeSurfaceValidationDiagnostic>();
         if (string.IsNullOrWhiteSpace(update.SurfaceId))
@@ -138,7 +138,7 @@ public static class RuntimeSurfaceValidator
             return true;
         }
 
-        if (!path.StartsWith('/'))
+        if (!path.StartsWith("/", StringComparison.Ordinal))
         {
             return false;
         }
@@ -359,11 +359,11 @@ public static class RuntimeSurfaceValidator
         return false;
     }
 
-    private static bool Contains(IReadOnlySet<string> set, string value)
+    private static bool Contains(StringSet set, string value)
         => set.Contains(value) || set.Any(candidate => string.Equals(candidate, value, StringComparison.OrdinalIgnoreCase));
 
     private static string EscapePathSegment(string segment)
-        => segment.Replace("~", "~0", StringComparison.Ordinal).Replace("/", "~1", StringComparison.Ordinal);
+        => segment.Replace("~", "~0").Replace("/", "~1");
 
     private static void AddError(
         List<RuntimeSurfaceValidationDiagnostic> diagnostics,

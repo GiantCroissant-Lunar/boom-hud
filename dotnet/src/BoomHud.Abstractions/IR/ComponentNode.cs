@@ -66,7 +66,7 @@ public sealed record ComponentNode
     /// <summary>
     /// Capabilities required by this component.
     /// </summary>
-    public IReadOnlySet<string> RequiredCapabilities { get; init; } = new HashSet<string>();
+    public StringSet RequiredCapabilities { get; init; } = new HashSet<string>();
 
     /// <summary>
     /// Optional tooltip text.

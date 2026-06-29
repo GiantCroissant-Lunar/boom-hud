@@ -265,7 +265,11 @@ public readonly record struct Color
 
         var functionName = value[..openParen];
         var parts = value[(openParen + 1)..closeParen]
-            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        for (var partIndex = 0; partIndex < parts.Length; partIndex++)
+        {
+            parts[partIndex] = parts[partIndex].Trim();
+        }
 
         if (string.Equals(functionName, "rgb", StringComparison.Ordinal))
         {
@@ -299,7 +303,7 @@ public readonly record struct Color
 
     private static byte ParseRgbChannel(string value)
     {
-        if (value.EndsWith('%'))
+        if (value.EndsWith("%", StringComparison.Ordinal))
         {
             var percent = double.Parse(value[..^1], CultureInfo.InvariantCulture);
             return ClampToByte(Math.Round(percent / 100d * 255d, MidpointRounding.AwayFromZero));
@@ -310,7 +314,7 @@ public readonly record struct Color
 
     private static byte ParseAlphaChannel(string value)
     {
-        if (value.EndsWith('%'))
+        if (value.EndsWith("%", StringComparison.Ordinal))
         {
             var percent = double.Parse(value[..^1], CultureInfo.InvariantCulture);
             return ClampToByte(Math.Round(percent / 100d * 255d, MidpointRounding.AwayFromZero));
@@ -329,7 +333,7 @@ public readonly record struct Color
 
     private static Color ParseHex(string hex)
     {
-        if (!hex.StartsWith('#'))
+        if (!hex.StartsWith("#", StringComparison.Ordinal))
             throw new ArgumentException($"Invalid color format: {hex}", nameof(hex));
 
         hex = hex[1..];

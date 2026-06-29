@@ -56,9 +56,9 @@ public sealed record RuntimeSurfaceCatalog
 
     private static RuntimeComponentSpec Component(
         string type,
-        IReadOnlySet<string> properties,
-        IReadOnlySet<string> bindableProperties,
-        IReadOnlySet<string>? events = null)
+        StringSet properties,
+        StringSet bindableProperties,
+        StringSet? events = null)
         => new()
         {
             Type = type,
@@ -78,11 +78,11 @@ public sealed record RuntimeComponentSpec
 {
     public required string Type { get; init; }
 
-    public IReadOnlySet<string> Properties { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public StringSet Properties { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-    public IReadOnlySet<string> BindableProperties { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public StringSet BindableProperties { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-    public IReadOnlySet<string> Events { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public StringSet Events { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
     public bool AllowUnknownProperties { get; init; }
 }

@@ -6,7 +6,7 @@ public static class HudDocumentRootSelector
 {
     public static HudDocument SelectRoot(HudDocument document, string? rootComponentName)
     {
-        ArgumentNullException.ThrowIfNull(document);
+        if (document is null) throw new ArgumentNullException(nameof(document));
 
         if (string.IsNullOrWhiteSpace(rootComponentName)
             || string.Equals(document.Name, rootComponentName, StringComparison.Ordinal)
