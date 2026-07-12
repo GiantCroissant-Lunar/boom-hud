@@ -17,6 +17,7 @@ public sealed class GodotRuntimeSurfaceCatalogTests
     [InlineData("container", "vertical", "VBoxContainer")]
     [InlineData("container", "horizontal", "HBoxContainer")]
     [InlineData("container", "grid", "GridContainer")]
+    [InlineData("scroll", null, "ScrollContainer")]
     public void TryGetControlType_KnownCatalogType_ReturnsGodotControl(
         string runtimeType,
         string? layoutType,

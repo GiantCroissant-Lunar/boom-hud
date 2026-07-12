@@ -27,6 +27,7 @@ public static class GodotRuntimeSurfaceCatalog
             "nodeGraph" => "GraphEdit",
             "panel" => "PanelContainer",
             "progressBar" => "ProgressBar",
+            "scroll" => "ScrollContainer",
             "spacer" => "Control",
             _ => "Control"
         };

@@ -115,6 +115,7 @@ public sealed class RuntimeSurfaceRenderer
             "nodeGraph" => new GraphEdit(),
             "panel" => new PanelContainer(),
             "progressBar" => new ProgressBar { ShowPercentage = false },
+            "scroll" => new ScrollContainer(),
             "spacer" => new Control(),
             _ => new Control()
         };
@@ -195,6 +196,7 @@ public sealed class RuntimeSurfaceRenderer
             Label label => ApplyLabel(label, node, document),
             PanelContainer panel => ApplyPanel(panel, node, document),
             ProgressBar progressBar => ApplyProgressBar(progressBar, node, document),
+            ScrollContainer sc => ApplyScroll(sc, node, document),
             _ => control
         };
 
@@ -333,6 +335,17 @@ public sealed class RuntimeSurfaceRenderer
         progressBar.MaxValue = RuntimeValueResolver.ResolveNumber(node.Properties, "maximum", document.DataModel, fallback: 100);
         progressBar.Value = RuntimeValueResolver.ResolveNumber(node.Properties, "value", document.DataModel);
         return progressBar;
+    }
+
+    // A `scroll` node wraps exactly one child (a vertical container) and gives it vertical room the
+    // pure-BoomHud render path otherwise lacks: it fills whatever space its parent gives it and scrolls
+    // its content vertically only (horizontal scrolling is disabled — content wraps/truncates instead).
+    private static ScrollContainer ApplyScroll(ScrollContainer scroll, RuntimeComponentNode node, RuntimeSurfaceDocument document)
+    {
+        scroll.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+        scroll.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        scroll.HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled;
+        return scroll;
     }
 
     private static int FindIndex(IReadOnlyList<string> items, string selectedItem)

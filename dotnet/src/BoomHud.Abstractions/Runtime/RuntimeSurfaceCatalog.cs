@@ -16,6 +16,10 @@ public sealed record RuntimeSurfaceCatalog
                 "container",
                 properties: Set("variant", "tooltip"),
                 bindableProperties: Set("visible", "enabled", "tooltip")),
+            ["scroll"] = Component(
+                "scroll",
+                properties: Set("variant", "tooltip"),
+                bindableProperties: Set("visible", "enabled", "tooltip")),
             ["panel"] = Component(
                 "panel",
                 properties: Set("title", "variant", "tooltip"),
