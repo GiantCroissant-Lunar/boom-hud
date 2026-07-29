@@ -24,5 +24,6 @@
   },
 
   "packIncludeSymbols": false,
-  "syncLocalNugetFeed": false
+  "syncLocalNugetFeed": true,
+  "localNugetFeedRoot": "../../packages/nuget"
 }
